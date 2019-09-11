@@ -110,7 +110,7 @@
             <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
                 @if (ViewBag.create != null && Session["chkMapEmp"].ToString().ToLower() != "hide")
                 {
-                    Html.DevExpress().CheckBoxFor(x => x.EmpMap, text =>
+                    Html.DevExpress().CheckBoxFor(x => x.chkMapEmp, text =>
                     {
                         text.Name = "empMapper";
                         text.Text = "Map employee to this user";
@@ -224,6 +224,17 @@
     <hr />
     <center><h4 style="padding:0px;"> Delivery Address</h4></center>
     <div class="row">
+
+ 
+            @if (ViewBag.create != null && Session["chkMapAddr"].ToString().ToLower() != "hide")
+            {
+                Html.DevExpress().CheckBoxFor(x => x.chkMapAddr, text =>
+                {
+                    text.Name = "chkMapEmp";
+                    text.Text = "Use my address";
+                }).GetHtml();
+            }
+
         <center>
 
             <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">

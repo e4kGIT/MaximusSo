@@ -1705,13 +1705,29 @@ namespace Maximus.Models
 
         #region usermodule
 
-        public string GetUserMapping(string busId,string userId)
+        public string PermissionSettings(string busId,string userId,string controlId)
         {
             string permisson = "";
-            if(enty.tblpermission_settings_users.Any(x => x.BusinessID == busId && x.UserID == userId && x.ControlID == "chkMapEmp"))
+            if(userId!="")
             {
-                permisson= enty.tblpermission_settings_users.Where(x => x.BusinessID == busId && x.UserID == userId && x.ControlID == "chkMapEmp").First().Permission;
+                if(enty.tblpermission_settings_users.Any(x=>x.BusinessID.ToLower().Trim()==busId.ToLower().Trim() && x.UserID.ToLower().Trim() == userId.ToLower().Trim() && x.ControlID.ToLower().Trim()== controlId.ToLower().Trim()))
+                {
+                    permisson = enty.tblpermission_settings_users.Where(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim() && x.UserID.ToLower().Trim() == userId.ToLower().Trim() && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()).First().Permission;
+                }
+                else if(enty.tblpermission_settings.Any(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim() && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()))
+                {
+                    permisson = enty.tblpermission_settings_users.Where(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim() && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()).First().Permission;
+                }
+                else if(enty.tblpermission_settings.Any(x => x.BusinessID.ToLower().Trim() =="all" && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()))
+                {
+                    permisson = enty.tblpermission_settings.Where(x => x.BusinessID.ToLower().Trim() == "all" && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()).First().Permission;
+                }
+                else
+                {
+                    permisson = enty.tblpermission_controls.Any(x => x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()) ? enty.tblpermission_controls.Where(x => x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()).First().Defaults : "HIDE";
+                }
             }
+             
             
             return permisson;
         }

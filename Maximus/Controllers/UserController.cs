@@ -129,7 +129,9 @@ namespace Maximus.Controllers
                             }
                             // Session["colLines"]=colline
                             Session["IsVisitPrivate"] = false;
-                            Session["chkMapEmp"] = dp.GetUserMapping(Session["BuisnessId"].ToString(), Session["UserName"].ToString());
+                             var s= dp.PermissionSettings(Session["BuisnessId"].ToString(), Session["UserName"].ToString(), "chkMapAddr");
+                            Session["chkMapEmp"] = dp.PermissionSettings(Session["BuisnessId"].ToString(), Session["UserName"].ToString(), "chkMapEmp");
+                            Session["chkMapAddr"] = dp.PermissionSettings(Session["BuisnessId"].ToString(), Session["UserName"].ToString(), "chkMapAddr");
                             //'Sales order
                             //Session.Add("objSalesOrder", CType(objSalesOrder, SalesOrderCollection))
                             //Session.Add("objCurrentOrder", CType(objCurrentOrder, SalesOrderHeader))

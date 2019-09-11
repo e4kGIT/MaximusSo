@@ -453,13 +453,12 @@ function getEntitlementDemandSwatch(style, orgStyl, error) {
                     if (response != "") {
                         var data = document.getElementById("Entitlement");
                         var errorMsg = "";
-                        if (error == 1)
-                        {
+                        if (error == 1) {
                             errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed entitlement exceeded</span></div>"
                         }
                         data.innerHTML = response.Result + errorMsg;
                         Entitlement.SetHeaderText("Entitlement for " + response.EmpId);
-                        Entitlement.Show(); 
+                        Entitlement.Show();
                     }
                 },
                 error: function (response) {
@@ -571,7 +570,7 @@ function addTocartSwatch(s, e) {
                 data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty, 'orgStyl': stylearr[3] },
                 success: function (response) {
                     debugger;
-                    if (response == "enabled" |( reason != "" && reason !=undefined)) {
+                    if (response == "enabled" | (reason != "" && reason != undefined)) {
                         loadPopup.Show();
 
                         $.ajax({
@@ -1618,8 +1617,7 @@ function CreateNewEmployee() {
                     EditPop.Show();
                     MVCxClientUtils.FinalizeCallback();
                 }
-                else
-                {
+                else {
                     window.location = "/User/Login";
                 }
             }
@@ -1718,8 +1716,8 @@ function UpdateEmployee(s, e) {
 }
 
 function CreateEmployee(s, e) {
-  
-   
+
+
     var EditPop = ASPxClientControl.GetControlCollection().GetByName("CreateEditPop");
     var empID = ASPxClientControl.GetControlCollection().GetByName("editEmpId");
     var frstName = ASPxClientControl.GetControlCollection().GetByName("editEmpFirstName");
@@ -1734,7 +1732,7 @@ function CreateEmployee(s, e) {
     var isAct = ASPxClientControl.GetControlCollection().GetByName("editEmpIsActive");
     var address = ASPxClientControl.GetControlCollection().GetByName("CmbAddress");
     var empMapper = ASPxClientControl.GetControlCollection().GetByName("empMapper");
-    var isMapped =empMapper==null | empMapper==undefined?false: empMapper.GetValue();
+    var isMapped = empMapper == null | empMapper == undefined ? false : empMapper.GetValue();
     if (s.name != "CreateBtn_Template") {
         if (empID.lastChangedValue != null & frstName.lastChangedValue != null & lstName.lastChangedValue != null & dept.lastSuccessText != null & selUcode.lastChangedValue != null & strtDate.date != null & address.lastSuccessText != null & endDate.date != null) {
             if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & dept.lastSuccessText.trim() != "" & selUcode.lastChangedValue.trim() != "" & strtDate.date != "" & address.lastSuccessText.trim() != "" & endDate.date != "") {
@@ -1748,7 +1746,7 @@ function CreateEmployee(s, e) {
                             if (response == "Success") {
                                 if (isAct.previousValue == false) {
                                     if (confirm("Do you want to set the employee Active")) {
-                                        data1 = { 'StartDate': strtDate.date.toJSON(), 'EndDate': endDate.date.toJSON(), 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address.lastSuccessText.trim(), 'isActive': true,'isMapped':isMapped };
+                                        data1 = { 'StartDate': strtDate.date.toJSON(), 'EndDate': endDate.date.toJSON(), 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address.lastSuccessText.trim(), 'isActive': true, 'isMapped': isMapped };
                                         $.ajax({
                                             type: "POST",
                                             url: "/Employee/CreateNewEmployee/",
@@ -1962,16 +1960,14 @@ function EditEmployee(empId) {
             data: { 'empId': empId },
             success: function (response) {
                 if (response != "") {
-                    if (!response.includes("Login"))
-                    {
+                    if (!response.includes("Login")) {
                         var EditPop = ASPxClientControl.GetControlCollection().GetByName("CreateEditPop");
                         EditPop.SetHeaderText("Edit");
                         $("#EditLayout").html("");
                         $("#EditLayout").html(response); popup.Hide();
                         EditPop.Show();
                     }
-                    else
-                    {
+                    else {
                         window.location = "/User/Login";
                     }
                 }
@@ -2174,26 +2170,26 @@ function GetEmpGrid() {
     //var startDate = ASPxClientControl.GetControlCollection().GetByName("FilterDateEdit");
     //var ucodeDesc = ASPxClientControl.GetControlCollection().GetByName("FilterUcodeDesc");
     var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
-   loadPopup.Show();
-  var empId1= "";
-  var firstName1="";
-  var roles1 = "";
-  var dept1 = "";
-  var ucodes1 = "";
-  if (empId != null) {
-      empId1 = empId.GetValue();
-  } if (firstName != null) {
-      firstName1 = firstName.GetValue();
-  } if (roles != null) {
-      roles1 = roles.GetValue();
-  } if (dept != null) {
-      dept1 = dept.GetValue();
-  } if (ucodes != null) {
-      ucodes1 = ucodes.GetValue();
-  }
+    loadPopup.Show();
+    var empId1 = "";
+    var firstName1 = "";
+    var roles1 = "";
+    var dept1 = "";
+    var ucodes1 = "";
+    if (empId != null) {
+        empId1 = empId.GetValue();
+    } if (firstName != null) {
+        firstName1 = firstName.GetValue();
+    } if (roles != null) {
+        roles1 = roles.GetValue();
+    } if (dept != null) {
+        dept1 = dept.GetValue();
+    } if (ucodes != null) {
+        ucodes1 = ucodes.GetValue();
+    }
 
 
-  if (empId1 != "" | firstName1 != "" | roles1 != "" | dept1 != "" | ucodes1 != "") {
+    if (empId1 != "" | firstName1 != "" | roles1 != "" | dept1 != "" | ucodes1 != "") {
         $.ajax({
             url: "/Employee/EmployeeGridViewPartial/",
             type: "POST",
@@ -2220,7 +2216,7 @@ function GetAllEmps() {
         url: "/Employee/EmployeeGridViewPartial/",
         type: "POST",
         success: function (response) {
-            if (response != "") {
+            if (response != "" && !response.includes("Login")) {
                 var empId = ASPxClientControl.GetControlCollection().GetByName("FilterEmployeeId");
                 var firstName = ASPxClientControl.GetControlCollection().GetByName("FilterEmpFirstName");
                 var roles = ASPxClientControl.GetControlCollection().GetByName("FilterRoles");
@@ -2243,6 +2239,9 @@ function GetAllEmps() {
                 EmployeeGrid.innerHTML = response;
                 MVCxClientUtils.FinalizeCallback();
             }
+            else {
+                window.location = "/User/Login";
+            }
         }
     });
 }
@@ -2253,15 +2252,14 @@ function GetClrImg(style) {
     $.ajax({
         url: "/Home/GetClrImg/",
         type: "POST",
-        data:{'style':style},
+        data: { 'style': style },
         success: function (response) {
             if (response != "") {
                 var imgDiv = document.getElementById(divImg);
                 imgDiv.innerHTML = "";
                 imgDiv.innerHTML = response;
             }
-            else
-            {
+            else {
 
             }
         }

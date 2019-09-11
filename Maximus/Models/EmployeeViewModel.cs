@@ -41,7 +41,8 @@ namespace Maximus.Models
         [Required]
         public BusAddress Address { get; set; }
         public bool EmpIsActive { get; set; }
-        public bool EmpMap { get; set; }
+        public bool chkMapEmp { get; set; }
+        public bool chkMapAddr { get; set; }
         public List<string> DepartmentLst { get; set; }
         public List<BusAddress> AddressLst { get; set; }
         public List<string> Ucodes { get; set; }
