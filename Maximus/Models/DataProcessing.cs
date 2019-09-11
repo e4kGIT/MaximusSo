@@ -18,6 +18,7 @@ namespace Maximus.Models
         e4kmaximusdbEntities enty = new e4kmaximusdbEntities();
         Log log = new Log();
         private static string ConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["Maximus"].ConnectionString;
+        private static string cmpId = System.Configuration.ConfigurationManager.AppSettings["CompanyId"];
         public static string appPath = System.Web.HttpContext.Current.Request.MapPath(@"~\");
         #endregion
 
@@ -267,6 +268,44 @@ namespace Maximus.Models
                 }
 
 
+            }
+            catch (Exception e)
+            {
+                log.Error(e.Message);
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return result;
+
+        }
+        #endregion
+
+        #region GetUcodeList
+        public List<string> GetUcodeList(string employeeId="",string businessId="")
+        {
+            List<string> result = new List<string>();
+            MySqlConnection conn = new MySqlConnection(ConnectionString);
+            try
+            {
+                conn.Open();
+                string sqry = "SELECT DISTINCT t1.`CompanyID`,t1.`UCodeID`,IF (Q1.`UCodeID` IS NULL,FALSE,FALSE) AS CheckIt  FROM `tblaccemp_ucodes` t1  LEFT JOIN (SELECT CompanyID,BusinessID,UCodeID FROM `tblaccemp_ucodesemployees` WHERE `EmployeeID`='" + employeeId  + "') Q1 ON t1.`CompanyID`=Q1.CompanyID AND t1.UCODEID=Q1.UCODEID  LEFT JOIN tblaccemp_ucodesemployees t2 ON t1.`CompanyID` = t2.`CompanyID` AND t1.`UCodeID` = t2.`UCodeID`  WHERE t2.BusinessID='" + businessId + "' AND t2.CompanyID='" + cmpId + "' ORDER BY t1.UCodeID";
+                MySqlCommand cmd = new MySqlCommand(sqry, conn);
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                if(dt.Rows.Count>0)
+                {
+                    foreach(DataRow dr in dt.Rows)
+                    {
+                        result.Add(dr.ItemArray[1].ToString());
+                    }
+                }
+                if(result.Count>0)
+                {
+                    return result;
+                }
             }
             catch (Exception e)
             {

@@ -52,7 +52,7 @@ namespace Maximus.Controllers
                     var result = entity.tblfsk_style_groups.Where(x => x.Description != "" && groups.Contains(x.GroupID)).ToList();
                     return PartialView("_getAllGroups", result);
                 }
-                else if(((List<string>)Session["SelectedTemplate"]).Count>0)
+                else if (((List<string>)Session["SelectedTemplate"]).Count > 0)
                 {
                     var result1 = (List<string>)Session["SelectedTemplate"];
                     var model = new List<int>();
@@ -65,8 +65,8 @@ namespace Maximus.Controllers
                 }
                 else
                 {
-                    
-                   
+
+
                     var result = entity.tblfsk_style_groups.Where(x => x.Description != "").ToList();
                     return PartialView("_getAllGroups", result);
                 }
@@ -88,7 +88,7 @@ namespace Maximus.Controllers
         public ActionResult CardViewPartial(List<int> selectedItem = null, bool pages = false, string filterText = "", bool BringImages = false, bool BringDimension = false, List<string> dataObj = null)
         {
             var appPath = System.Web.HttpContext.Current.Request.MapPath(@"~\");
-            var model = new List<styleViewmodel>();  
+            var model = new List<styleViewmodel>();
             var svm = new styleViewmodel();
             string businessId = Session["BuisnessId"].ToString();
             if (((List<string>)Session["Templates"]).Count > 0)
@@ -98,10 +98,10 @@ namespace Maximus.Controllers
                 {
                     model.AddRange(data.GetStyleViewModel(item));
                 }
-               model = model.GroupBy(x => x.StyleID).Select(y => y.First()).ToList();
+                model = model.GroupBy(x => x.StyleID).Select(y => y.First()).ToList();
                 foreach (var data1 in model)
                 {
-                    data1.Assembly = entity.getcustassemblies.Any(d => d.ParentStyleID == data1.StyleID & d.isChargeable == 0 & d.CustID ==businessId) |
+                    data1.Assembly = entity.getcustassemblies.Any(d => d.ParentStyleID == data1.StyleID & d.isChargeable == 0 & d.CustID == businessId) |
                             entity.getallassemblies.Any(d => d.ParentStyleID == data1.StyleID & d.isChargeable == 0) ? 1 : 0;
                     data1.Description = entity.tblfsk_style.Where(x => data1.StyleID.Contains(x.StyleID)).First().Description;
                     if (System.IO.File.Exists(appPath + data1.StyleImage) != true)
@@ -121,7 +121,7 @@ namespace Maximus.Controllers
                         data1.HasPreviousSize = data.GetPreviousHistory(Session["SelectedEmp"].ToString(), Session["BuisnessId"].ToString(), data1.StyleID.Split(',')[0]);
                     }
                 }
-                
+
                 //if (ColorId != "" | SizeId != "" | StyleID != "" | Description != "" | BringDimension != false | (Session["GroupdeFilter"] != null))
                 //{
                 //    var sizeStyle = new List<string>(); var colorStyle = new List<string>(); var Styles = new List<string>(); var descStyle = new List<string>();
@@ -207,7 +207,7 @@ namespace Maximus.Controllers
 
                 foreach (var data1 in model)
                 {
-                   
+
                     if (!data1.StyleID.Contains(","))
                     {
                         data1.HasPreviousSize = data.GetPreviousHistory(Session["SelectedEmp"].ToString(), Session["BuisnessId"].ToString(), data1.StyleID);
@@ -230,7 +230,7 @@ namespace Maximus.Controllers
                     model = model.Any(x => x.StyleID.ToLower().Contains(filterText.ToLower())) ? model.Where(x => x.StyleID.ToLower().Contains(filterText.ToLower())).ToList() : null;
                 }
                 model = model.GroupBy(x => x.StyleID).Select(y => y.First()).ToList();
-                if (BringImages |  Session["ImageFilter"]!=null)
+                if (BringImages | Session["ImageFilter"] != null)
                 {
                     if (BringImages | (bool)Session["ImageFilter"] != null)
                     {
@@ -265,7 +265,7 @@ namespace Maximus.Controllers
                 try
                 {
                     var freetext = Allocation.DIMALLOC.ToString();
-                   
+
                     string custId = Session["BuisnessId"].ToString();
                     int tempCount = ((List<UcodeModel>)Session["UcodeStyle"]) != null ? ((List<UcodeModel>)Session["UcodeStyle"]).Count : 0;
                     Session["Selected"] = selectedItem;
@@ -306,16 +306,16 @@ namespace Maximus.Controllers
                             SizeId = x.SizeId,
                             isAllocated = x.isAllocated,
                             Dimensions = x.Dimensions,
-                            Freetext=x.Freetext,
+                            Freetext = x.Freetext,
                             SeqNO = x.SeqNO,
                             OriginalStyleid = x.StyleID,
-                            HasPreviousSize=x.HasPreviousSize,
-                            Description=x.Description,
-                            Caption=x.Caption,
-                            Price=x.Price
+                            HasPreviousSize = x.HasPreviousSize,
+                            Description = x.Description,
+                            Caption = x.Caption,
+                            Price = x.Price
                         }).ToList();
                     }
-                    
+
                     //if (ColorId != "" | SizeId != "" | StyleID != "" | Description != "" | BringDimension != false | (Session["GroupdeFilter"] != null))
                     //{
                     //    var sizeStyle = new List<string>(); var colorStyle = new List<string>(); var Styles = new List<string>(); var descStyle = new List<string>();
@@ -413,11 +413,11 @@ namespace Maximus.Controllers
                         {
                             data1.HasPreviousSize = data.GetPreviousHistory(Session["SelectedEmp"].ToString(), Session["BuisnessId"].ToString(), data1.StyleID.Split(',')[0]);
                         }
-                        if(data1.StyleImage.Contains(":"))
+                        if (data1.StyleImage.Contains(":"))
                         {
 
                             var data = data1.StyleImage.Substring(data1.StyleImage.IndexOf(":") + 1, data1.StyleImage.Length - data1.StyleImage.IndexOf(":") - 1);
-                            if (System.IO.File.Exists(appPath + data1.StyleImage.Substring(data1.StyleImage.IndexOf(":")+1,data1.StyleImage.Length- data1.StyleImage.IndexOf(":")-1)) != true)
+                            if (System.IO.File.Exists(appPath + data1.StyleImage.Substring(data1.StyleImage.IndexOf(":") + 1, data1.StyleImage.Length - data1.StyleImage.IndexOf(":") - 1)) != true)
                             {
                                 data1.StyleImage = Url.Content("~/StyleImages/notfound.png");
                             }
@@ -437,7 +437,7 @@ namespace Maximus.Controllers
                                 data1.StyleImage = Url.Content("~/" + data1.StyleImage);
                             }
                         }
-                       
+
                     }
                     if (filterText != "")
                     {
@@ -571,7 +571,7 @@ namespace Maximus.Controllers
             var data = new FilterModel();
             List<UcodeModel> UcodeStyle = (List<UcodeModel>)Session["UcodeStyle"];
             List<string> UcodeStyle1 = new List<string>();
-            UcodeStyle1 = UcodeStyle!=null?UcodeStyle.Select(x => x.StyleId).ToList():new List<string>();
+            UcodeStyle1 = UcodeStyle != null ? UcodeStyle.Select(x => x.StyleId).ToList() : new List<string>();
             List<int> groups = new List<int>();
             if (UcodeStyle != null)
             {
@@ -693,14 +693,14 @@ namespace Maximus.Controllers
         #endregion
 
         #region  getCard
-        public ActionResult GetCard(string StyleID,string Orgstyle)
+        public ActionResult GetCard(string StyleID, string Orgstyle)
         {
-        //StyleID = "TSB LJ1/L";
+            //StyleID = "TSB LJ1/L";
             var appPath = System.Web.HttpContext.Current.Request.MapPath(@"~\");
             string ucode = Session["SelectedUcode"].ToString();
 
             var hasFit = entity.tblfsk_style_freetext.Where(x => x.StyleId == StyleID).Any(x => x.FreeTextType == "FITALLOC") ? entity.tblfsk_style_freetext.Where(x => x.StyleId == StyleID & x.FreeTextType == "FITALLOC").First().FreeText : "";
-            List <styleViewmodel> model = new List<styleViewmodel>();
+            List<styleViewmodel> model = new List<styleViewmodel>();
             if (hasFit == "")
             {
                 model.Add(entity.ucodeby_freetextview.Where(x => x.StyleID == StyleID).Select(x => new styleViewmodel
@@ -709,7 +709,7 @@ namespace Maximus.Controllers
                     ProductGroup = x.Product_Group != null ? x.Product_Group.Value : 0,
                     StyleImage = x.StyleImage == "" | x.StyleImage == null ? "/StyleImages/notfound.png" : x.StyleImage,
                     Assembly = entity.getcustassemblies.Where(d => d.ParentStyleID == x.StyleID).Any() ? entity.getcustassemblies.Where(d => d.ParentStyleID == x.StyleID && d.isChargeable == 0).Any() ? 1 : 0 : 0,
-                    OriginalStyleid= Orgstyle
+                    OriginalStyleid = Orgstyle
                 }).FirstOrDefault());
                 foreach (var data1 in model)
                 {
@@ -811,7 +811,7 @@ namespace Maximus.Controllers
             }
             return PartialView("_StyleByCardPop", model);
         }
-   
+
         #endregion
 
         #region ondemandCards
@@ -881,7 +881,7 @@ namespace Maximus.Controllers
         #endregion
 
         #region AddItemsToCart
-        public JsonResult AddToCart(string description = "", string price = "", string size = "", string color = "", string qty = "", string style = "", string orgStyl="")
+        public JsonResult AddToCart(string description = "", string price = "", string size = "", string color = "", string qty = "", string style = "", string orgStyl = "")
         {
             var appPath = System.Web.HttpContext.Current.Request.MapPath(@"~\");
             string result = "";
@@ -929,7 +929,7 @@ namespace Maximus.Controllers
             {
                 try
                 {
-                    salesOrderLines.Add(new SalesOrderLineViewModel { ColourID = color, LineNo = lineNo, Description = description, OrdQty = Convert.ToInt64(qty), Price = Convert.ToDecimal(price), SizeID = size, StyleID = style, EmployeeId = Session["SelectedEmp"].ToString(), EmployeeName = Session["EmpName"].ToString(), StyleImage = entity.ucodeby_freetextview.Where(x => x.StyleID.Contains(style)).FirstOrDefault().StyleImage,orgStyleId=orgStyl });
+                    salesOrderLines.Add(new SalesOrderLineViewModel { ColourID = color, LineNo = lineNo, Description = description, OrdQty = Convert.ToInt64(qty), Price = Convert.ToDecimal(price), SizeID = size, StyleID = style, EmployeeId = Session["SelectedEmp"].ToString(), EmployeeName = Session["EmpName"].ToString(), StyleImage = entity.ucodeby_freetextview.Where(x => x.StyleID.Contains(style)).FirstOrDefault().StyleImage, orgStyleId = orgStyl });
                 }
                 catch (Exception e)
                 {
@@ -943,7 +943,7 @@ namespace Maximus.Controllers
                     salesOrderLines.AddRange(chargableAssembs);
                 }
                 OptionalAssembs = new List<SalesOrderLineViewModel>();
-                
+
                 if ((List<string>)Session["assemList"] != null)
                 {
                     if (((List<string>)Session["assemList"]).Count > 0)
@@ -961,12 +961,12 @@ namespace Maximus.Controllers
                     if (System.IO.File.Exists(appPath + data.StyleImage) != true)
                     {
                         data.StyleImage = Url.Content("~/StyleImages/notfound.png");
-                     
+
                     }
                     else
                     {
                         data.StyleImage = Url.Content("~/" + data.StyleImage);
-                         
+
                     }
                 }
                 salesOrderHeader.Where(x => x.EmployeeID == Session["SelectedEmp"].ToString()).FirstOrDefault().SalesOrderLine = salesOrderLines;
@@ -975,7 +975,7 @@ namespace Maximus.Controllers
                 Session["SalesOrderLines"] = salesOrderLines.Where(x => x.EmployeeId == Session["SelectedEmp"].ToString()).ToList();
                 Session["qty"] = salesOrderLines.Where(x => x.EmployeeId == Session["SelectedEmp"].ToString()).Sum(x => x.OrdQty);
                 result = "<button class=\"btn\" onclick=\"GetCart()\" style=\"background-color:#009885;color:white\"><b>View Basket &nbsp;&nbsp;&nbsp;<span class=\"glyphicon glyphicon-shopping-cart\" style=\"color:white;font-size:25px\" ></span><sup class=\"badge\" id=\"lblCartCount\">" + Session["qty"].ToString() + "</sup></b></button>";
-                 
+
                 return Json(result, JsonRequestBehavior.AllowGet);
             }
             return Json(result, JsonRequestBehavior.AllowGet);
@@ -1024,29 +1024,29 @@ namespace Maximus.Controllers
         #endregion
 
         #region GetEntitlement
-        public JsonResult GetEntitlement(string StyleId = "", string ColorId = "",string orgStyl="")
+        public JsonResult GetEntitlement(string StyleId = "", string ColorId = "", string orgStyl = "")
         {
             EntitlementModel em = new EntitlementModel();
             //if(orgStyl.Contains(','))
             //{
-                
-                string Ucodes = Session["SelectedUcode"] == null ? "" : Session["SelectedUcode"].ToString();
-                em.EmpId ="<b>"+ Session["SelectedEmp"].ToString() + "</b> to style: <b>" + StyleId+ "</b>";
-                if (ColorId != "" && orgStyl != "")
-                {
-                    string result = "";
-                    var entitlement = entity.tblaccemp_ucodes.Any(x => x.StyleID == orgStyl && x.ColourID == ColorId && x.UCodeID == Ucodes) ? entity.tblaccemp_ucodes.Where(x => x.StyleID == orgStyl && x.ColourID == ColorId && x.UCodeID == Ucodes).FirstOrDefault().AnnualIssue : 0;
-                entitlement= entitlement==0? entity.tblaccemp_ucodes.Where(x => x.StyleID == orgStyl && x.UCodeID == Ucodes).FirstOrDefault().AnnualIssue : entitlement;
+
+            string Ucodes = Session["SelectedUcode"] == null ? "" : Session["SelectedUcode"].ToString();
+            em.EmpId = "<b>" + Session["SelectedEmp"].ToString() + "</b> to style: <b>" + StyleId + "</b>";
+            if (ColorId != "" && orgStyl != "")
+            {
+                string result = "";
+                var entitlement = entity.tblaccemp_ucodes.Any(x => x.StyleID == orgStyl && x.ColourID == ColorId && x.UCodeID == Ucodes) ? entity.tblaccemp_ucodes.Where(x => x.StyleID == orgStyl && x.ColourID == ColorId && x.UCodeID == Ucodes).FirstOrDefault().AnnualIssue : 0;
+                entitlement = entitlement == 0 ? entity.tblaccemp_ucodes.Where(x => x.StyleID == orgStyl && x.UCodeID == Ucodes).FirstOrDefault().AnnualIssue : entitlement;
                 string PreviousOrder = data.GetAllPreviousData(Session["SelectedEmp"].ToString(), Session["BuisnessId"].ToString(), orgStyl);
-                    PreviousOrder = PreviousOrder == "" ? "<tr><td>Issued: 0</td></tr><tr><td>Previous History: N/A</td></tr></table>" : PreviousOrder;
-                    result = "<table class=\"table\"><tr><td>Entitlement: " + entitlement + "</td></tr>" + PreviousOrder;
+                PreviousOrder = PreviousOrder == "" ? "<tr><td>Issued: 0</td></tr><tr><td>Previous History: N/A</td></tr></table>" : PreviousOrder;
+                result = "<table class=\"table\"><tr><td>Entitlement: " + entitlement + "</td></tr>" + PreviousOrder;
 
-                    em.Result = result;
+                em.Result = result;
 
-                    return Json(em);
-                }
-                em.Result = "<table class=\"table\"><tr><td>Entitlement:  0</td></tr><tr><td>Issued: 0</td></tr><tr><td>Previous History: N/A</td></tr></table>";
                 return Json(em);
+            }
+            em.Result = "<table class=\"table\"><tr><td>Entitlement:  0</td></tr><tr><td>Issued: 0</td></tr><tr><td>Previous History: N/A</td></tr></table>";
+            return Json(em);
             //}
             //else
             //{
@@ -1067,7 +1067,7 @@ namespace Maximus.Controllers
             //    em.Result = "<table class=\"table\"><tr><td>Entitlement:  0</td></tr><tr><td>Issued: 0</td></tr><tr><td>Previous History: N/A</td></tr></table>";
             //    return Json(em);
             //}
-            
+
         }
         #endregion
 
@@ -1076,11 +1076,11 @@ namespace Maximus.Controllers
         public string GetBtnStatus(string ordQty = "", string color = "", string style = "", string qty = "", string orgStyl = "")
         {
             string result = "";
-            string Ucodes = Session["SelectedUcode"]!=null? Session["SelectedUcode"].ToString():"";
+            string Ucodes = Session["SelectedUcode"] != null ? Session["SelectedUcode"].ToString() : "";
             string busId = "";
             string empId = "";
             var issuedDiff = 0;
-            var salesOrderLines = ((List<SalesOrderLineViewModel>)Session["SalesOrderLines"]).Where(X=>X.orgStyleId!=null).ToList();
+            var salesOrderLines = ((List<SalesOrderLineViewModel>)Session["SalesOrderLines"]).Where(X => X.orgStyleId != null).ToList();
             var onCartLst = salesOrderLines.Where(x => x.orgStyleId.Trim().ToLower() == orgStyl.Trim().ToLower()).ToList();
             var onCartVal = onCartLst.Sum(x => x.OrdQty);
             if (ordQty != "" & color != "" & style != "" & qty != "")
@@ -1088,7 +1088,7 @@ namespace Maximus.Controllers
                 int difference = 0;
                 int oQty = Convert.ToInt32(ordQty);
                 var entitlement = entity.tblaccemp_ucodes.Any(x => x.StyleID.ToLower().Trim() == orgStyl.ToLower().Trim() && x.UCodeID == Ucodes) ? entity.tblaccemp_ucodes.Where(x => x.StyleID.ToLower().Trim() == orgStyl.ToLower().Trim() && x.UCodeID == Ucodes).FirstOrDefault().AnnualIssue : 0;
-                var issuedLst = entity.tblaccemp_stockcard.Any(x => x.BusinessID == busId && x.ColourID.Trim().ToLower() == color.Trim().ToLower() && x.EmployeeID == empId && x.Year == 0 && x.StyleID.Trim().ToLower() == orgStyl.Trim().ToLower()) ? entity.tblaccemp_stockcard.Where(x => x.BusinessID == busId && x.ColourID.Trim().ToLower() == color.Trim().ToLower() && x.EmployeeID == empId && x.Year == 0 && x.StyleID.Trim().ToLower() == orgStyl.Trim().ToLower()).Select(x => new IssuedQtyModel { Invqty=x.InvQty.Value, SOqty=x.SOQty.Value ,Pickqty= x.PickQty.Value }).ToList():new List<IssuedQtyModel>() ;
+                var issuedLst = entity.tblaccemp_stockcard.Any(x => x.BusinessID == busId && x.ColourID.Trim().ToLower() == color.Trim().ToLower() && x.EmployeeID == empId && x.Year == 0 && x.StyleID.Trim().ToLower() == orgStyl.Trim().ToLower()) ? entity.tblaccemp_stockcard.Where(x => x.BusinessID == busId && x.ColourID.Trim().ToLower() == color.Trim().ToLower() && x.EmployeeID == empId && x.Year == 0 && x.StyleID.Trim().ToLower() == orgStyl.Trim().ToLower()).Select(x => new IssuedQtyModel { Invqty = x.InvQty.Value, SOqty = x.SOQty.Value, Pickqty = x.PickQty.Value }).ToList() : new List<IssuedQtyModel>();
                 var issued = 0;
                 if (issuedLst.Count > 0)
                 {
@@ -1096,19 +1096,20 @@ namespace Maximus.Controllers
                     {
                         issued = issued + data.Invqty + data.Pickqty + data.SOqty;
                     }
-                }else
+                }
+                else
                 {
                     issued = 0;
                 }
-                if(entitlement!=0)
+                if (entitlement != 0)
                 {
                     issuedDiff = entitlement.Value - issued;
                 }
-                if(onCartVal!=0)
+                if (onCartVal != 0)
                 {
-                    issuedDiff =(int) issuedDiff - (int)onCartVal;
+                    issuedDiff = (int)issuedDiff - (int)onCartVal;
                 }
-                
+
                 if (issuedDiff > 0)
                 {
                     result = Convert.ToInt32(qty) <= issuedDiff ? "enabled" : "";
@@ -1496,10 +1497,10 @@ namespace Maximus.Controllers
         #endregion
 
         #region  GetClrImg
-        public string GetClrImg(string style="")
+        public string GetClrImg(string style = "")
         {
             string result = "";
-            if(style!="")
+            if (style != "")
             {
                 var appPath = System.Web.HttpContext.Current.Request.MapPath(@"~\");
                 var stylClr = style.Split('-');
@@ -1507,17 +1508,17 @@ namespace Maximus.Controllers
                 var clr = stylClr[1];
                 try
                 {
-                 var   dat = entity.tblfsk_style_colour.Any(x => x.StyleID.ToLower() == styl && x.ColourID.Contains(clr)) ? entity.tblfsk_style_colour.Where(x => x.StyleID.ToLower() == styl && x.ColourID.Contains(clr)).First().StyleImage : "";
-                     
-                        if (System.IO.File.Exists(appPath + dat) != true)
-                        {
+                    var dat = entity.tblfsk_style_colour.Any(x => x.StyleID.ToLower() == styl && x.ColourID.Contains(clr)) ? entity.tblfsk_style_colour.Where(x => x.StyleID.ToLower() == styl && x.ColourID.Contains(clr)).First().StyleImage : "";
+
+                    if (System.IO.File.Exists(appPath + dat) != true)
+                    {
                         dat = Url.Content("~/StyleImages/notfound.png");
-                        }
-                        else
-                        {
+                    }
+                    else
+                    {
                         dat = Url.Content("~/" + dat);
-                        }
-                    
+                    }
+
                     result = "<img src='" + dat + "' height='230' width='200' onclick=\"Getimage('" + dat + "')\" />";
                 }
                 catch (Exception e)

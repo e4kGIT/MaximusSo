@@ -343,7 +343,7 @@ namespace Maximus.Controllers
             }
 
             result.DepartmentLst = entity.tblaccemp_departments.Where(x => x.BusinessID == busId).Select(x => x.Department).ToList();
-            result.ucodeLst = entity.tblaccemp_ucodesemployees.Where(x => x.BusinessID == busId).Select(x => x.UCodeID).Distinct().ToList();
+            result.ucodeLst = dp.GetUcodeList(empId, busId);/* entity.tblaccemp_ucodesemployees.Where(x => x.BusinessID == busId).Select(x => x.UCodeID).Distinct().ToList();*/
             int addId = dp.GetAddressId(busId, empId);
             result.Address = addId > 0 ? entity.tblbus_address.Where(x => x.AddressID == addId).Select(x => new BusAddress { Address1 = x.Address1, Address2 = x.Address2, Address3 = x.Address3, City = x.City, Country = x.CountryCode.Value, PostCode = x.Postcode, AddressDescription = x.Description, AddressId = x.AddressID }).FirstOrDefault() : new BusAddress();
             result.AddressLst = entity.tblbus_address.Where(x => x.BusinessID == busId).Select(x => new BusAddress { Address1 = x.Address1, Address2 = x.Address2, Address3 = x.Address3, City = x.City, Country = x.CountryCode.Value, PostCode = x.Postcode, AddressDescription = x.Description, AddressId = x.AddressID }).ToList();
@@ -429,9 +429,10 @@ namespace Maximus.Controllers
         #region createEmployee
         public ActionResult CreateNewEmployee()
         {
+          
             var result = new EmployeeViewModel();
             string busId = Session["BuisnessId"].ToString();
-            result.ucodeLst = entity.tblaccemp_ucodesemployees.Where(x => x.BusinessID == busId).Select(x => x.UCodeID).Distinct().ToList();
+            result.ucodeLst = dp.GetUcodeList("",busId); /*entity.tblaccemp_ucodesemployees.Where(x => x.BusinessID == busId).Select(x => x.UCodeID).Distinct().ToList();*/
             result.DepartmentLst = entity.tblaccemp_departments.Where(x => x.BusinessID == busId).Select(x => x.Department).ToList();
             result.Address = new BusAddress();
             result.EmpMap = true;
