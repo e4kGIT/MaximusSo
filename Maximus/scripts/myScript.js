@@ -459,7 +459,7 @@ function getEntitlementDemandSwatch(style, orgStyl, error) {
                         }
                         data.innerHTML = response.Result + errorMsg;
                         Entitlement.SetHeaderText("Entitlement for " + response.EmpId);
-                        Entitlement.Show();
+                        Entitlement.Show(); 
                     }
                 },
                 error: function (response) {
