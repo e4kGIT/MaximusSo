@@ -1,0 +1,45 @@
+﻿@model Maximus.Models.LoginModel
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+ 
+<h2>Login</h2>
+
+@using(Html.BeginForm()) {
+@Html.AntiForgeryToken()
+    if(ViewBag.error!=null)
+    {
+        <h4 style="color:red">@ViewBag.error</h4>
+    }
+@Html.DevExpress().TextBoxFor(m => m.UserName, tb =>
+{
+    tb.Properties.Caption = "Username";
+    tb.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+    tb.ShowModelErrors = true;
+    tb.Properties.ValidationSettings.Display = Display.Dynamic;
+    tb.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.Text;
+    tb.Properties.ValidationSettings.ErrorTextPosition = ErrorTextPosition.Bottom;
+}).GetHtml()
+
+@Html.DevExpress().TextBoxFor(m => m.Password, tb =>
+{
+    tb.Properties.Caption = "Password";
+    tb.Properties.Password = true;
+    tb.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+    tb.ShowModelErrors = true;
+    tb.Properties.ValidationSettings.Display = Display.Dynamic;
+    tb.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.Text;
+    tb.Properties.ValidationSettings.ErrorTextPosition = ErrorTextPosition.Bottom;
+}).GetHtml()
+
+ 
+<br />
+@Html.DevExpress().Button(b =>
+{
+    b.Name = "Button";
+    b.Text = "Log On";
+    b.UseSubmitBehavior = true;
+}).GetHtml()
+}

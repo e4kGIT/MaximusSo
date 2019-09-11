@@ -1,0 +1,239 @@
+﻿<br />
+<a href="/Employee/Index"><span style="color:white;font-size:30px;" class="glyphicon glyphicon-chevron-left" title="Back"></span></a>
+<br /><br />
+<div class="row backgrnd">
+    <br />
+    @*<div class="col-md-2">
+        <span class="glyphicon glyphicon-th" onclick="ShowRnC();"></span>
+
+        </div>*@
+    @*@Html.ActionLink("Return to employee grid", "Index", "Employee")*@
+
+    <div class="col-md-10 col-xs-12 col-sm-12 col-lg-10">
+        @{
+            if (Session["BuisnessId"] != null)
+            {
+                if (Session["SelectedEmp"] != null)
+                {
+                    var s = Convert.ToInt32(Session["qty"]);
+                    //string content = string.Format("<div class=\"col-md-3\" style=\"padding:0px;\" ><p><b>Employee Id:</b></p>{0}</div> <div style=\"padding:0px;\" class=\"col-md-3\"> <p><b>EmployeeName:</b></p> {2}</div><div style=\"padding:0px;\" class=\"col-md-4\"> <p><b>Ucodes:</b></p> {1}</div><div class=\"col-md-2\"> <p><b>Business Id:</b></p>" + Session["BuisnessId"].ToString() + "</div>", Session["SelectedEmp"].ToString(), Session["UcodeDesc"].ToString(), Session["EmpName"].ToString());
+                    <div class="col-md-6">
+                        <div class="row">
+                            <div class="col-md-2">
+                                <center><span style="font-size:35px;" class="glyphicon glyphicon-user"></span></center>
+                            </div>
+                            <div class="col-md-4">
+                                <span><b>Employee Id:</b> </span><br />
+                                <span><b>EmployeeName:</b> </span>
+                            </div>
+                            <div class="col-md-6">
+                                <span> @Session["SelectedEmp"].ToString()</span><br /> <span>@Session["EmpName"].ToString()</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <span><b>Ucode:</b></span>  @{ViewContext.Writer.Write(string.Format("{0}", Session["UcodeDesc"].ToString()));
+                        }
+                    </div>
+                                }
+                            }
+                            else
+                            {
+                                if (Session["SelectedEmp"] != null)
+                                {
+                                    var s = Convert.ToInt32(Session["qty"]);
+                                    string content = "";
+                                    if (((List<string>)Session["Templates"]).Count > 0)
+                                    {
+                                        content = string.Format("<div class=\"col-md-3\"><p><b>Employee Id:</b></p>{0}  </div> <div class=\"col-md-3\"> <p><b>EmployeeName:</b></p> {2}</div><div class=\"col-md-6\"> <p><b>Templates:</b></p> {1}</div><div class=\"col-md-12\"> <p><b>Ucode Description:</b></p>{3}</div>", Session["SelectedEmp"].ToString(), Session["SelectedUcode"].ToString(), Session["EmpName"].ToString(), Session["UcodeDesc"].ToString());
+                                    }
+                                    else
+                                    {
+                                        content = string.Format("<div class=\"col-md-3\"><p><b>Employee Id:</b></p>{0}  </div> <div class=\"col-md-3\"> <p><b>EmployeeName:</b></p> {2}</div><div class=\"col-md-6\"> <p><b>Ucodes:</b></p> {1}</div><div class=\"col-md-12\"> <p><b>Ucode Description:</b></p>{3}</div>", Session["SelectedEmp"].ToString(), Session["SelectedUcode"].ToString(), Session["EmpName"].ToString(), Session["UcodeDesc"].ToString());
+                                    }
+                                    ViewContext.Writer.Write(content);
+                                }
+                            }
+        }
+        @*<div class="col-md-5 pull-right">
+                <button class="btn" style=""
+            </div>*@
+    </div>
+    <div class="col-md-2 col-sm-12 col-lg-2 col-xs-12" id="CartwidCount">
+        <div class="pull-right">
+            <button class="btn" style="background-color:#009885;color:white" onclick="GetCart()"><b>View Basket &nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-shopping-cart" style="color:white;font-size:25px"></span><sup class="badge" id="lblCartCount">@Convert.ToInt32(Session["qty"])</sup></b></button>
+            <br />
+            <br />
+        </div>
+
+    </div>
+
+</div>
+<br />
+<div class="row" style="padding:0px">
+    <div class="col-md-2 col-lg-2 col-xs-2 col-sm-12" style="padding-left:0px;padding-right:3px;">
+        <center>
+            @Html.Action("GetAllGroups")
+        </center>
+    </div>
+    <div class="col-md-10 col-lg-10 col-xs-12 col-sm-12" style="padding-left:3px;padding-right:0px">
+ 
+        @Html.DevExpress().ButtonEdit(sett =>
+   {
+       sett.Name = "searchPanel";
+       sett.ControlStyle.BackColor = System.Drawing.Color.White;
+       sett.ReadOnly = false;
+       //sett.ControlStyle.CssClass = "input-group changethisone";
+       sett.Properties.Buttons.Add("<span disabled class=\"input-group-addon\"><span class=\"glyphicon glyphicon-search\"></span></span>");
+       sett.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+       sett.Properties.ClientSideEvents.TextChanged = "filterresults";
+       sett.EncodeHtml = false;
+   }).GetHtml()
+        <br />
+        <div id="resultArea">
+            @Html.Action("CardViewPartial")
+        </div>
+
+    </div>
+   
+</div>
+ 
+@*<span disabled class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>*@
+
+
+@Html.DevExpress().PopupControl(sett =>
+    {
+        sett.Width = System.Web.UI.WebControls.Unit.Pixel(700);
+        sett.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+        sett.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+        sett.Name = "RowsnColumns";
+        sett.AllowResize = true;
+        sett.ShowHeader = true;
+        sett.ShowOnPageLoad = false;
+        sett.AllowDragging = false;
+        sett.CloseAction = CloseAction.OuterMouseClick;
+        sett.CloseOnEscape = false;
+        sett.PopupAnimationType = AnimationType.Auto;
+        sett.Modal = true;
+        sett.HeaderText = "set rows and columns";
+        sett.SetContent(() =>
+        {
+            Html.RenderPartial("Model/_RnCPartial");
+        });
+    }).GetHtml()
+
+@Html.DevExpress().PopupControl(sett =>
+{
+    sett.Width = System.Web.UI.WebControls.Unit.Pixel(700);
+    sett.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+    sett.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    sett.Name = "Filter";
+    sett.AllowResize = true;
+    sett.ShowHeader = true;
+    sett.ShowOnPageLoad = false;
+    sett.AllowDragging = false;
+    sett.CloseAction = CloseAction.OuterMouseClick;
+    sett.CloseOnEscape = false;
+    sett.PopupAnimationType = AnimationType.Auto;
+    sett.Modal = true;
+    sett.HeaderText = "Filter";
+    sett.SetContent(() =>
+    {
+        ViewContext.Writer.Write("<div><div id='FilterModel'></div></div>");
+    });
+}).GetHtml()
+
+@Html.DevExpress().PopupControl(sett =>
+{
+    sett.Width = System.Web.UI.WebControls.Unit.Pixel(500);
+    sett.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+    sett.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    sett.Name = "Entitlement";
+    sett.AllowResize = true;
+    sett.ShowHeader = true;
+    sett.ShowOnPageLoad = false;
+    sett.AllowDragging = false;
+    sett.CloseAction = CloseAction.OuterMouseClick;
+    sett.CloseOnEscape = false;
+    sett.PopupAnimationType = AnimationType.Auto;
+    sett.Modal = true;
+    sett.HeaderText = "Entitlement";
+    sett.SetContent(() =>
+    {
+        ViewContext.Writer.Write("<div><div id='Entitlement'></div></div>");
+    });
+}).GetHtml()
+
+
+
+@*@Html.DevExpress().PopupControl(sett =>
+    {
+        sett.Width = System.Web.UI.WebControls.Unit.Pixel(700);
+        sett.Height = System.Web.UI.WebControls.Unit.Percentage(100);
+        sett.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+        sett.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+        sett.Name = "ImagePop";
+        sett.AllowResize = false;
+        sett.ShowHeader = true;
+        sett.ShowOnPageLoad = false;
+        sett.AllowDragging = false;
+        sett.CloseAction = CloseAction.OuterMouseClick;
+        sett.CloseOnEscape = false;
+        sett.PopupAnimationType = AnimationType.Auto;
+        sett.Modal = true;
+        sett.HeaderText = "Style Image";
+        sett.SetContent(() =>
+        {
+            ViewContext.Writer.Write("<div><div id='ImageDive'></div></div>");
+        });
+    }).GetHtml()*@
+
+@Html.DevExpress().PopupControl(sett =>
+{
+    sett.Width = System.Web.UI.WebControls.Unit.Pixel(1200);
+    sett.Height = System.Web.UI.WebControls.Unit.Percentage(100);
+    sett.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+    sett.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    sett.Name = "DimAllocPop";
+    sett.AllowResize = true;
+    sett.ShowHeader = true;
+    sett.ShowOnPageLoad = false;
+    sett.AllowDragging = true;
+    sett.CloseAction = CloseAction.OuterMouseClick;
+    sett.CloseOnEscape = false;
+    sett.PopupAnimationType = AnimationType.Auto;
+    sett.Modal = true;
+    sett.ScrollBars = System.Web.UI.WebControls.ScrollBars.Vertical;
+    //sett.ScrollBars = System.Web.UI.WebControls.ScrollBars.Horizontal;
+    sett.HeaderText = "Grouped products";
+    sett.SetContent(() =>
+    {
+        ViewContext.Writer.Write("<div><div id='DimId'></div></div>");
+    });
+}).GetHtml()
+
+@Html.DevExpress().PopupControl(sett =>
+{
+
+    sett.Width = System.Web.UI.WebControls.Unit.Pixel(700);
+    sett.Height = System.Web.UI.WebControls.Unit.Pixel(500);
+    sett.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+    sett.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    sett.Name = "AssemblyInformation";
+    sett.AllowResize = false;
+    sett.ShowHeader = true;
+    sett.ShowOnPageLoad = false;
+    sett.AllowDragging = true;
+    sett.AllowDragging = false;
+    sett.CloseAction = CloseAction.OuterMouseClick;
+    sett.CloseOnEscape = false;
+    sett.PopupAnimationType = AnimationType.Auto;
+    sett.Modal = true;
+    sett.HeaderText = "Assembly Information";
+    sett.ScrollBars = System.Web.UI.WebControls.ScrollBars.Both;
+    sett.SetContent(() =>
+    {
+        ViewContext.Writer.Write("<div id='AssemblyInfo'></div>");
+    });
+}).GetHtml()
+

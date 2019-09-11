@@ -1,0 +1,6 @@
+2019-06-03 10:37:39,441 ERROR MonitoringLogger - String was not recognized as a valid Boolean.
+2019-06-03 10:37:46,324 ERROR MonitoringLogger - String was not recognized as a valid Boolean.
+2019-06-03 10:37:51,576 ERROR MonitoringLogger - String was not recognized as a valid Boolean.
+2019-06-03 10:38:25,724 ERROR MonitoringLogger - String was not recognized as a valid Boolean.
+2019-06-03 16:12:19,419 ERROR MonitoringLogger - Object reference not set to an instance of an object.
+2019-06-03 16:14:47,331 ERROR MonitoringLogger - The SelectCommand property has not been initialized before calling 'Fill'.

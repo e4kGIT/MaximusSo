@@ -1,0 +1,63 @@
+﻿@model Maximus.Models.FilterModel
+    <h3>
+        Search Panel
+    </h3>
+<div class="row">
+    <center>
+        <div class="row">
+            <div class="col-md-6 col-xs-6 col-sm-6 col-lg-6 dropdowncontent">
+
+                @Html.DevExpress().ComboBoxFor(m => m.StyleID, s =>
+       {
+           s.Name = "StyleIDFil";
+           s.Properties.Caption = "Style";
+           s.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+           s.Properties.ClientSideEvents.SelectedIndexChanged = "getSelectedStyleFilter";
+
+       }).BindList(Model.StyleIDList).GetHtml()
+            </div>
+            <div class="col-md-6 col-xs-6 col-sm-6 col-lg-6 dropdowncontent">
+                @Html.DevExpress().ComboBoxFor(m => m.ColorId, s =>
+       {
+           s.Name = "ColorIDFil";
+           s.Properties.Caption = "Color";
+           s.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+           s.Properties.ClientSideEvents.SelectedIndexChanged = "getSelectedColorFilter";
+       }).BindList(Model.ColorIdList).GetHtml()
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 col-xs-6 col-sm-6 col-lg-6 dropdowncontent">
+                @Html.DevExpress().ComboBoxFor(m => m.SizeId, s =>
+       {
+           s.Name = "SizeIdFil";
+           s.Properties.Caption = "Size";
+           s.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+           s.Properties.ClientSideEvents.SelectedIndexChanged = "getSelectedSizeFilter";
+       }).BindList(Model.SizeIdList).GetHtml()
+            </div>
+
+            <div class="col-md-6 col-xs-6 col-sm-6 col-lg-6 dropdowncontent">
+              @Html.DevExpress().TextBoxFor(m => m.Description, s => { s.Name = "DescIdFil"; s.Properties.Caption = "Description";
+             s.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+             s.Properties.ClientSideEvents.LostFocus = "getSelectedDescFilter";
+             s.Properties.ClientSideEvents.TextChanged = "getSelectedDescFilter";
+         }).GetHtml() 
+            </div>
+        </div>
+       
+        <br />
+        <br />
+        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3"></div>
+        <div class="col-md-1 col-xs-1 col-sm-1 col-lg-1 col-xs-1 col-sm-1 col-lg-1"></div>
+        <div class="col-md-2 col-xs-2 col-sm-2 col-lg-2">
+            <center><button type="button" onclick="GetStyledata1()" class="btn btn-primary">Search</button></center>
+        </div>
+        <div class="col-md-2 col-xs-2 col-sm-2 col-lg-2">
+            <center><button type="button" onclick="RemoveFilter()" class="btn btn-danger">Reset</button></center>
+        </div>
+        <div class="col-md-1 col-xs-1 col-sm-1 col-lg-1 col-xs-1 col-sm-1 col-lg-1"></div>
+        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3"></div>
+
+    </center>
+</div>

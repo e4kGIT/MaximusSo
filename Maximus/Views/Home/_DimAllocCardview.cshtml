@@ -1,0 +1,55 @@
+@{
+    var cardView = Html.DevExpress().CardView(settings => {
+        settings.Name = "DimAllocCard ";
+        settings.CallbackRouteValues = new { Controller = "Home", Action = "DimAllocCardview" };
+
+        settings.SettingsEditing.AddNewCardRouteValues = new { Controller = "Home", Action = "DimAllocCardviewAddNew" };
+        settings.SettingsEditing.UpdateCardRouteValues = new { Controller = "Home", Action = "DimAllocCardviewUpdate" };
+        settings.SettingsEditing.DeleteCardRouteValues = new { Controller = "Home", Action = "DimAllocCardviewDelete" };
+        settings.SettingsEditing.Mode = CardViewEditingMode.EditForm;
+        settings.SettingsBehavior.ConfirmDelete = true;
+
+        settings.KeyFieldName = "StyleID1";
+
+        settings.SettingsPager.Visible = true;
+        settings.Settings.ShowHeaderPanel = true;
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.SettingsBehavior.AllowSelectByCardClick = true;
+
+        settings.Columns.Add("StyleID1");
+        settings.Columns.Add("Description1");
+        settings.Columns.Add("StyleImage1");
+        settings.Columns.Add("ColourId1");
+        settings.Columns.Add("SizeId1");
+        settings.Columns.Add("Price1");
+
+        settings.CardLayoutProperties.Items.AddCommandItem(i => {
+            i.ShowNewButton = true;
+            i.ShowEditButton = true;
+            i.ShowDeleteButton = true;
+        });
+        settings.CardLayoutProperties.Items.AddEditModeCommandItem();
+        settings.CardLayoutProperties.Items.Add("StyleID1");
+        settings.CardLayoutProperties.Items.Add(x=> {
+            x.Name = "Description1";
+            x.SetTemplateContent(s =>
+            {
+                Html.DevExpress().ComboBox(col => { col.Name = Guid.NewGuid().ToString();
+                    col.Properties.Items.Add("s");
+                    col.Properties.Items.Add("s");
+                    col.Properties.Items.Add("s");
+                    col.Properties.Items.Add("s");
+
+                });
+            });
+        });
+        settings.CardLayoutProperties.Items.Add("StyleImage1");
+        settings.CardLayoutProperties.Items.Add("ColourId1");
+        settings.CardLayoutProperties.Items.Add("SizeId1");
+        settings.CardLayoutProperties.Items.Add("Price1");
+    });
+    if (ViewData["EditError"] != null){
+        cardView.SetEditErrorText((string)ViewData["EditError"]);
+    }
+	}
+@cardView.Bind(Model).GetHtml()

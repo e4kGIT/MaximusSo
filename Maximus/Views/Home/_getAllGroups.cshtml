@@ -1,0 +1,13 @@
+﻿@model  IEnumerable<Maximus.Models.tblfsk_style_groups>
+@Html.DevExpress().CheckBoxList(settings =>
+{
+    settings.Name = "checkBoxList";
+    settings.ControlStyle.CssClass = "backgrnd";
+    settings.Properties.ValueField = "GroupID";
+    settings.Properties.TextField = "Description";
+    settings.Properties.RepeatLayout = System.Web.UI.WebControls.RepeatLayout.Table;
+    settings.Properties.RepeatDirection = System.Web.UI.WebControls.RepeatDirection.Vertical;
+    settings.Properties.RepeatColumns =1;
+    settings.Properties.ClientSideEvents.SelectedIndexChanged = "GetData";
+
+}).BindList(Model).GetHtml()

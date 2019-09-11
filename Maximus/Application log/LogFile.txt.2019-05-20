@@ -1,0 +1,3 @@
+2019-05-20 17:11:13,069 ERROR MonitoringLogger - Non-static field requires a target.
+2019-05-20 17:13:03,908 ERROR MonitoringLogger - Invalid attempt to access a field before calling Read()
+2019-05-20 17:13:26,458 ERROR MonitoringLogger - Invalid attempt to access a field before calling Read()

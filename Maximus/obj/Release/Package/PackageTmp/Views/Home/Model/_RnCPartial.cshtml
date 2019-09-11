@@ -1,0 +1,23 @@
+﻿
+<div class="row">
+    <div class="col-md-5 col-xs-5 col-sm-5 col-lg-5 col-lg-5 col-xs-5 col-sm-5" style="padding:0px">
+        <div class="col-md-2 col-xs-2 col-sm-2 col-lg-2">Rows</div>
+        <div class="col-md-1 col-xs-1 col-sm-1 col-lg-1 col-xs-1 col-sm-1 col-lg-10"><center><input id="cardRows" min="1" type="number" placeholder="no of rows per page" class="form-control" /><br /><span hidden style="color:red" id="rowVal">Please enter Row value</span></center></div>
+
+    </div>
+    <div class="col-md-5 col-xs-5 col-sm-5 col-lg-5 col-lg-5 col-xs-5 col-sm-5" style="padding:0px">
+        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3">Columns</div>
+        <div class="col-md-9"><center><input id="cardColumns" min="1" type="number" placeholder="no of columns per row" class="form-control" /> <br /> <span hidden style="color:red" id="colVal">Please enter column value</span> </center></div>
+    </div>
+    <div class="col-md-1 col-xs-1 col-sm-1 col-lg-1 col-xs-1 col-sm-1 col-lg-1 col-lg-1 col-xs-1 col-sm-1" style="padding:0px">
+        <center>
+            @Html.DevExpress().Button(x =>
+    {
+        x.Name = "RefreshButton";
+        x.Text = "Refresh";
+        x.ClientSideEvents.Click = "setCardRows";
+    }).GetHtml()
+
+        </center>
+    </div>
+</div>

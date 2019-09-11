@@ -1,0 +1,1372 @@
+﻿@model IEnumerable<Maximus.Models.styleViewmodel>
+@{
+    var cardView = Html.DevExpress().CardView(settings =>
+    {
+        #region settings
+        settings.Name = "CardView";
+        settings.CallbackRouteValues = new { Controller = "Home", Action = "CardViewPartial" };
+        settings.SettingsPager.SettingsTableLayout.ColumnCount = 2;
+        settings.SettingsEditing.Mode = CardViewEditingMode.PopupEditForm;
+        settings.SettingsBehavior.ConfirmDelete = true;
+        settings.ControlStyle.CssClass = "padder";
+        //settings.SettingsSearchPanel.Visible = true;
+        var reason = false;
+        var colc = Session["cardColumns"];
+        var template = (List<string>)Session["Templates"];
+        var businessId = Session["BuisnessId"].ToString();
+        var selUcode = Session["SelectedUcode"] == null ? "" : Session["SelectedUcode"].ToString();
+        colc = Session["ColorSizestyle"].ToString() == "SWATCHES" ? 1 : colc;
+        if (Convert.ToInt16(colc) > 0)
+        {
+            int col = Convert.ToInt16(colc);
+            settings.SettingsPager.SettingsTableLayout.ColumnCount = col;
+        }
+        else
+        {
+            settings.SettingsPager.SettingsTableLayout.ColumnCount = 2;
+        }
+        var rowc = Session["cardRows"];
+        if (Convert.ToInt16(rowc) > 0)
+        {
+            int ro = Convert.ToInt16(rowc);
+            settings.SettingsPager.SettingsTableLayout.RowsPerPage = ro;
+
+        }
+        else
+        {
+            settings.SettingsPager.SettingsTableLayout.RowsPerPage = 10;
+        }
+        //settings.SettingsPopup.EditForm.Width = 600;
+        settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+        settings.SettingsEditing.Mode = CardViewEditingMode.EditForm;
+
+        settings.SettingsBehavior.ConfirmDelete = true;
+        settings.KeyFieldName = "StyleID";
+
+        settings.SettingsPager.Mode = GridViewPagerMode.ShowPager;
+        settings.SettingsPager.Visible = true;
+        settings.Settings.ShowHeaderPanel = true;
+
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.Settings.EnableFilterControlPopupMenuScrolling = false;
+        settings.SettingsBehavior.AllowSelectByCardClick = true;
+        //settings.Settings.ShowHeaderPanel = true;
+        //settings.ClientSideEvents.BeginCallback = "BeginCallback";
+        Maximus.Models.DataProcessing hc = new Maximus.Models.DataProcessing();
+        string filterExpression = ""; string filterExpressionSTR = "";
+        Maximus.Models.e4kmaximusdbEntities entity = new Maximus.Models.e4kmaximusdbEntities();
+
+
+        #region prerendr
+        settings.PreRender = (sender, e) =>
+        {
+
+            MVCxCardView cv = sender as MVCxCardView;
+            for (int i = 0; i < cv.VisibleCardCount; i++)
+            {
+                string StyleID = (string)cv.GetCardValues(i, "StyleID");
+                if (!StyleID.Contains(','))
+                {
+                    var clr1Lst = hc.getColors(StyleID);
+                    //var size1Lst = hc.getSizes(StyleID);
+                    List<string> colorLst = new List<string>();
+                    int count1 = 0, count2 = 0;
+                    if (clr1Lst != null)
+                    {
+                        foreach (var cl in clr1Lst.Where(s => s.ObsoleteCode == 0).ToList())
+                        {
+
+                            colorLst.Add(cl.ColorId.ToString());
+                            count1 = count1 + 1;
+
+                        }
+                        foreach (string colors in colorLst)
+                        {
+                            if (entity.tblfsk_style_colour_size_obsolete.Any(y => y.StyleID == StyleID && y.ColourID == colors))
+                            {
+                                count2 = count2 + entity.tblfsk_style_colour_size_obsolete.Where(y => y.StyleID == StyleID && y.ColourID == colors && y.Obsolete_Class == 0).Select(y => y.SizeID).Count();
+                            }
+                        }
+                        if (count1 < 1 && count2 < 0)
+                        {
+                            filterExpressionSTR = filterExpressionSTR + "'" + StyleID + "',";
+
+                        }
+                    }
+                }
+            }
+            if (filterExpressionSTR.Contains(','))
+            {
+                filterExpressionSTR = filterExpressionSTR.TrimEnd(',');
+                filterExpression = "NOT [StyleID] IN (" + filterExpressionSTR + ")";
+                cv.FilterExpression = filterExpression;
+            }
+        };
+        #endregion
+
+        settings.CardLayoutCreated = (sender, e) =>
+        {
+            string BusinessId = Session["BuisnessId"].ToString();
+            var reasons = entity.tblsop_reasoncodes.Where(xs => xs.BusinessId == BusinessId).Select(c => new { c.Description }).ToList();
+            reason = reasons.Count > 0 ? true : false;
+            MVCxCardView cv = sender as MVCxCardView;
+            string StyleID = (string)cv.GetCardValues(e.VisibleIndex, "StyleID");
+            if (ViewBag.page != null)
+            {
+                if (ViewBag.page)
+                {
+                    cv.PageIndex = 0;
+                }
+            }
+            if (e.VisibleIndex >= 0)
+            {
+                bool value = (bool)cv.GetCardValues(e.VisibleIndex, "isAllocated");
+                if (value)
+                {
+
+                    //e.Properties.Items[1].ParentContainerStyle.CssClass = "itemToHide";
+                    //e.Properties.Items[2].ParentContainerStyle.CssClass = "itemToHide";
+                    e.Properties.Items[3].ParentContainerStyle.CssClass = "itemToHide";
+                    e.Properties.Items[0].ParentContainerStyle.CssClass = "itemToHide";
+                    e.Properties.Items[6].ParentContainerStyle.CssClass = "itemToHide";
+                    e.Properties.Items[1].ParentContainerStyle.CssClass = "itemToHide";
+                    //e.Properties.Items[7].ParentContainerStyle.CssClass = "itemToHide";
+                    e.Properties.Items[4].ParentContainerStyle.CssClass = "itemToHide";
+                    e.Properties.Items[5].ParentContainerStyle.CssClass = "itemToHide";
+                    //e.Properties.Items[8].ParentContainerStyle.CssClass = "itemToHide";
+                    //e.Properties.Items[9].ParentContainerStyle.CssClass = "itemToHide";
+                    //e.Properties.Items[10].ParentContainerStyle.CssClass = "itemToHide";
+                }
+                else
+                {
+
+                    if (template.Count == 0)
+                    {
+                        e.Properties.Items[1].ParentContainerStyle.CssClass = "itemToHide";
+
+                        if (reasons.Count == 0)
+                        {
+                            //e.Properties.Items[7].ParentContainerStyle.CssClass = "itemToHide";
+
+                        }
+                    }
+                    else
+                    {
+                        if (reasons.Count == 0)
+                        {
+                            //e.Properties.Items[7].ParentContainerStyle.CssClass = "itemToHide";
+
+                        }
+                    }
+
+                }
+            }
+        };
+
+        #endregion
+
+        #region cardview Column defenitions
+
+        settings.Columns.Add(c =>
+        {
+            c.FieldName = "Entitlement";
+            c.Settings.AllowHeaderFilter = DefaultBoolean.False;
+            c.Settings.AllowSort = DefaultBoolean.False;
+        });
+        settings.Columns.Add("StyleID");
+
+        settings.Columns.Add(c =>
+        {
+            c.FieldName = "SizeId";
+            c.Settings.AllowHeaderFilter = DefaultBoolean.False;
+            c.Settings.AllowSort = DefaultBoolean.False;
+        });
+        settings.Columns.Add("Description");
+        settings.Columns.Add(c =>
+        {
+            c.FieldName = "Price";
+            c.Settings.AllowHeaderFilter = DefaultBoolean.False;
+            c.Settings.AllowSort = DefaultBoolean.False;
+        });
+        settings.Columns.Add(c =>
+        {
+            c.FieldName = "StyleImage";
+            c.Settings.AllowHeaderFilter = DefaultBoolean.False;
+            c.Settings.AllowSort = DefaultBoolean.False;
+        });
+        settings.Columns.Add(c =>
+        {
+            c.FieldName = "Dimensions";
+            c.Settings.AllowHeaderFilter = DefaultBoolean.False;
+            c.Settings.AllowSort = DefaultBoolean.False;
+        });
+        settings.Columns.Add(c =>
+        {
+            c.FieldName = "Caption";
+            c.Settings.AllowHeaderFilter = DefaultBoolean.False;
+            c.Settings.AllowSort = DefaultBoolean.False;
+        });
+        settings.Columns.Add(c =>
+        {
+            c.FieldName = "Quantity";
+            c.Settings.AllowHeaderFilter = DefaultBoolean.False;
+            c.Settings.AllowSort = DefaultBoolean.False;
+        });
+        settings.Columns.Add(c =>
+        {
+            c.FieldName = "BasketButton";
+            c.Settings.AllowHeaderFilter = DefaultBoolean.False;
+            c.Settings.AllowSort = DefaultBoolean.False;
+        });
+        #endregion
+
+        #region cardviewlayoutproperties defenition
+        settings.CardLayoutProperties.ColCount = 1;
+
+        #region styleimage
+
+
+        settings.CardLayoutProperties.Items.Add(i =>
+        {
+            i.ColumnName = "StyleImage";
+            i.ShowCaption = DefaultBoolean.False;
+            i.SetTemplateContent(x =>
+            {
+                var Assembly = Convert.ToInt16(DataBinder.Eval(x.DataItem, "Assembly"));
+                var orgstyl = Convert.ToString(DataBinder.Eval(x.DataItem, "OriginalStyleid"));
+                var style = DataBinder.Eval(x.DataItem, "StyleID");
+                var styleimg = DataBinder.Eval(x.DataItem, "StyleImage");
+                var divImg = "DivImg" + style;
+                var content = "<div class='row'>";
+                content = string.Format(content + "<div class='col-md-3 pull-left'><div id='" + divImg + "'><img src=\"{0}\" height='230' width='200' onclick='Getimage(\"{0}\")' /></div></div>", styleimg);
+                ViewContext.Writer.Write(content);
+
+                ViewContext.Writer.Write("<div class='col-md-7'><br/><div class='row'><div class='col-md-12'>");
+                if (template.Count > 0)
+                {
+                    //string viewContent = string.Format("<div class='row fonter'><div class='col-md-12' style='padding:0px;'><b>Product</b>" + style + "<span>&nbsp;</span><span>-</span><span id='LbDescription" + style + "'>{0}</span></div>", entity.tblfsk_style.Where(s => s.StyleID == style.ToString()).FirstOrDefault().Description != null ? entity.tblfsk_style.Where(s => s.StyleID == style.ToString()).FirstOrDefault().Description.ToString() : "");
+                    string viewContent = string.Format("<div class='row fonter'><div class='col-md-12' style='padding:0px;'><b>Product</b> <span>&nbsp;</span><span id='LbDescription" + style + "'>{0}</span></div>", entity.tblfsk_style.Where(s => s.StyleID == style.ToString()).FirstOrDefault().Description != null ? entity.tblfsk_style.Where(s => s.StyleID == style.ToString()).FirstOrDefault().Description.ToString() : "");
+                    ViewContext.Writer.Write(viewContent);
+                }
+                else
+                {
+                    var orgStyle = (DataBinder.Eval(x.DataItem, "OriginalStyleid")).ToString();
+                    var style1 = (DataBinder.Eval(x.DataItem, "StyleID")).ToString();
+                    if (Session["ColorSizestyle"].ToString() == "SWATCHES")
+                    {
+                        if (style1.Contains(','))
+                        {
+                            var styledex = (DataBinder.Eval(x.DataItem, "StyleID")).ToString();
+
+                            var styleArr = style1.Split(',');
+                            var styleat1 = styleArr[0];
+                            //var descritption = string.Format("<div class='row'><div class='col-md-12' style='padding:0px;'><b>Product</b><hr style=\"margin: 0;\"/></br>" + style.ToString().Split('/')[0] + "<span>&nbsp;</span><span>-</span><span class='fonter' id='LbDescription" + styleat1 + "'> {0}</span></div></div>", entity.tblfsk_style.Where(s => s.StyleID == styleat1.ToString()).FirstOrDefault().Description != null ? entity.tblfsk_style.Where(s => s.StyleID == styleat1.ToString()).FirstOrDefault().Description.ToString() : "");
+                            var descritption = string.Format("<div class='row'><div class='col-md-12' style='padding:0px;'><b>Product</b><hr style=\"margin: 0;\"/></br><span>&nbsp;</span><span class='fonter' id='LbDescription" + styleat1 + "'> {0}</span></div></div>", entity.tblfsk_style.Where(s => s.StyleID == styleat1.ToString()).FirstOrDefault().Description != null ? entity.tblfsk_style.Where(s => s.StyleID == styleat1.ToString()).FirstOrDefault().Description.ToString() : "");
+
+                            ViewContext.Writer.Write(descritption);
+                            ViewContext.Writer.Write("<br/><br/></div>");
+                            ViewContext.Writer.Write("<div class='col-md-12'><div class='row'> <b>Fit</b><hr style=\"margin: 0;\"/><br/>");
+
+                            var divContent = "<fieldset class='swatch-picker' name=\"Swatch_Style_FieldSet_" + style + "\">";
+                            foreach (string styler in styleArr)
+                            {
+                                if (Array.IndexOf(styleArr, styler) == 0)
+                                {
+                                    if (styler.Contains('/'))
+                                    {
+                                        divContent = divContent + string.Format("<label class='swatchLabel'><input type='radio' checked id='radio' name=\"Swatch_Style_" + style + "\" value='{1}' onclick=\"GetDrpResultModelSwatch('{0}','{1}','{3}');\"/><span class='spanner1'><center >{2}</center></span></label>", style, styler, styler.Contains('/') ? styler.Split('/')[1] : styler, orgstyl);
+                                    }
+                                    else
+                                    {
+                                        divContent = divContent + string.Format("<label class='swatchLabel'><input type='radio' checked id='radio' name=\"Swatch_Style_" + style + "\" value='{1}' onclick=\"GetDrpResultModelSwatch('{0}','{1}','{3}');\"/><span class='spanner1'><center >{2}</center></span></label>", style, styler, entity.tblfsk_setvalues.Any(ss=> ss.StyleID.ToLower()==styler.ToLower() && ss.SettingID=="FITGROUP")? entity.tblfsk_setvalues.Where(ss => ss.StyleID.ToLower() == styler.ToLower() && ss.SettingID == "FITGROUP").First().Value : styler, orgstyl);
+                                    }
+                                }
+                                else
+                                {
+                                    if (styler.Contains('/'))
+                                    {
+                                        divContent = divContent + string.Format("<label class='swatchLabel'><input type='radio'  id='radio' name=\"Swatch_Style_" + style + "\" value='{1}' onclick=\"GetDrpResultModelSwatch('{0}','{1}','{3}');\"/><span class='spanner1'><center >{2}</center></span></label>", style, styler, styler.Contains('/') ? styler.Split('/')[1] : styler, orgstyl);
+                                    }
+                                    else
+                                    {
+                                        divContent = divContent + string.Format("<label class='swatchLabel'><input type='radio'   id='radio' name=\"Swatch_Style_" + style + "\" value='{1}' onclick=\"GetDrpResultModelSwatch('{0}','{1}','{3}');\"/><span class='spanner1'><center >{2}</center></span></label>", style, styler, entity.tblfsk_setvalues.Any(ss => ss.StyleID.ToLower() == styler.ToLower() && ss.SettingID == "FITGROUP") ? entity.tblfsk_setvalues.Where(ss => ss.StyleID.ToLower() == styler.ToLower() && ss.SettingID == "FITGROUP").First().Value : styler, orgstyl);
+                                    }
+
+                                }
+                            }
+
+
+                            divContent = divContent + "</fieldset><br/></div></div>";
+                            ViewContext.Writer.Write(divContent);
+                        }
+                        else
+                        {
+                            string viewContent = string.Format("<div class='row'><div class='col-md-12'><b>Product</b> <hr style=\"margin: 0;\"/></br><span>" + style + "</span> - <span class='fonter' id='LbDescription" + style + "'> {0}</span></div></div>", style1, entity.tblfsk_style.Where(s => s.StyleID == style.ToString()).FirstOrDefault().Description != null ? entity.tblfsk_style.Where(s => s.StyleID == style.ToString()).FirstOrDefault().Description.ToString() : "");
+                            ViewContext.Writer.Write(viewContent);
+                        }
+                    }
+                    else
+                    {
+                        if (style1.Contains(','))
+                        {
+                            Html.DevExpress().ComboBox(
+                                c =>
+                                {
+                                    var styleArr = style1.Split(',');
+                                    c.Properties.Caption = "Style";
+                                    c.Name = "styleDrp_" + style + "_" + orgStyle;
+                                    foreach (string data in (string[])styleArr)
+                                    {
+                                        c.Properties.Items.Add(data);
+
+                                    }
+                                    c.SelectedIndex = 0;
+                                    c.Properties.ClientSideEvents.SelectedIndexChanged = "GetDrpResultModel";
+                                }
+                                                ).Render();
+                        }
+                        else
+                        {
+                            string viewContent = "<div class='row'><div class='col-md-2'><b>Style: &nbsp; &nbsp;</b></div><div class='col-md-4'>" + style + "</div><div class='col-md-2'></div></div>";
+                            ViewContext.Writer.Write(viewContent);
+                        }
+                    }
+
+
+                }
+                if (style.ToString().Contains(','))
+                {
+                    ViewContext.Writer.Write("</div></div>");
+                }
+                else
+                {
+                    ViewContext.Writer.Write("</div></div></div>");
+                }
+
+
+                var content1 = "<div class='col-md-2'><div class='row'>";
+                bool value = (bool)(DataBinder.Eval(x.DataItem, "isAllocated"));
+                if (Assembly != 0)
+                {
+                    if (value != true)
+                    {
+                        if (Session["ColorSizestyle"].ToString() == "SWATCHES")
+                        {
+                            if (style.ToString().Contains(','))
+                            {
+                                content1 = content1 + string.Format("<div class='col-md-6' style='margin-top: 14px;padding:0px;'><center> <img src='/Content/Images/embroidery.png' title='Get Assembly info' height='40' width='30' onclick=\"getAssemblySwatch('{0}');\"/></center></div>", style);
+                            }
+                            else
+                            {
+                                content1 = content1 + string.Format("<div class='col-md-6' style='margin-top: 14px;padding:0px;'><center> <img src='/Content/Images/embroidery.png' title='Get Assembly info' height='40' width='30' onclick=\"getAssembly('{0}');\"/></center></div>", style);
+                            }
+                        }
+                        else
+                        {
+                            if (style.ToString().Contains(','))
+                            {
+                                content1 = content1 + string.Format("<div class='col-md-6' style='margin-top: 14px;padding:0px;'><center><img src='/Content/Images/embroidery.png' title='Get Assembly info' height='40' width='30' onclick=\"getAssembly('{0}');\"/></center></div>", style + "_" + orgstyl);
+                            }
+                            else
+                            {
+                                content1 = content1 + string.Format("<div class='col-md-6' style='margin-top: 14px;padding:0px;'><center><img src='/Content/Images/embroidery.png' title='Get Assembly info' height='40' width='30' onclick=\"getAssembly('{0}');\"/></center></div>", style);
+                            }
+                        }
+
+
+                    }
+                }
+                if (template.Count == 0)
+                {
+                    if (Session["ColorSizestyle"].ToString() == "SWATCHES")
+                    {
+                        if (value != true)
+                        {
+                            content1 = content1 + string.Format("<div class='col-md-6' style='margin-top: 14px;'><center><img src='/Content/Images/empHistory.png' title='Entitlement and previous history' height='40' width='40' onclick=\"getEntitlementSwatch('{0}','{1}');\"/></center></div>", style, orgstyl);
+                        }
+                    }
+                    else
+                    {
+                        if (value != true)
+                        {
+                            content1 = content1 + string.Format("<div class='col-md-6' style='margin-top: 14px;'><center> <img src='/Content/Images/empHistory.png' title='Entitlement and previous history' height='40' width='40' onclick=\"getEntitlement('{0}','{1}');\"/></center></div>", style, orgstyl);
+                        }
+                    }
+                }
+                content1 = content1 + "</div></div>";
+                ViewContext.Writer.Write(content1);
+
+
+                //if (style.ToString().Contains(','))
+                //{
+                //    ViewContext.Writer.Write("</div></div>");
+                //}
+                //else
+                //{
+                //    ViewContext.Writer.Write("</div></div></div>");
+                //}
+
+
+            });
+        });
+        #endregion
+
+        #region caption
+        if (template.Count == 0)
+        {
+            settings.CardLayoutProperties.Items.Add(x =>
+            {
+                x.ColumnName = "Caption";
+                x.ShowCaption = DefaultBoolean.False;
+                x.SetTemplateContent(col =>
+                {
+
+
+                    var style = (DataBinder.Eval(col.DataItem, "StyleID")).ToString();
+                    string cap = "";
+                    string desc = "";
+                    if (style.Contains(","))
+                    {
+                        var styar = style.Split(',');
+                        var sty1 = styar[0];
+                        cap = entity.style_dimfitalloc_caption.Where(s => s.StyleId == sty1).FirstOrDefault() == null ? "" : entity.style_dimfitalloc_caption.Where(s => s.StyleId == sty1).FirstOrDefault().Caption;
+                        desc = entity.getstylesviews.Where(s => s.StyleID == sty1).FirstOrDefault() == null ? "" : entity.getstylesviews.Where(s => s.StyleID == sty1).FirstOrDefault().Description;
+                    }
+                    else
+                    {
+                        cap = entity.style_dimfitalloc_caption.Where(s => s.StyleId == style).FirstOrDefault() == null ? "" : entity.style_dimfitalloc_caption.Where(s => s.StyleId == style).FirstOrDefault().Caption;
+                        desc = entity.getstylesviews.Where(s => s.StyleID == style).FirstOrDefault() == null ? "" : entity.getstylesviews.Where(s => s.StyleID == style).FirstOrDefault().Description;
+                    }
+                    if (cap != null && cap != "")
+                    {
+                        ViewContext.Writer.Write(string.Format("<center>{0}</center>", cap));
+                    }
+                    else
+                    {
+                        ViewContext.Writer.Write(string.Format("<center>{0}</center>", desc));
+                    }
+
+
+                });
+            });
+        }
+        #endregion
+
+        #region dimension
+
+        if (template.Count == 0)
+        {
+            settings.CardLayoutProperties.Items.Add(x =>
+            {
+                x.ColumnName = "Dimensions";
+                x.ShowCaption = DefaultBoolean.False;
+                x.SetTemplateContent(col =>
+                {
+
+                    var freeText = (string)(DataBinder.Eval(col.DataItem, "Dimensions"));
+
+                    if (freeText != null && freeText != "")
+                    {
+                        Maximus.Models.DataProcessing data = new Maximus.Models.DataProcessing();
+
+                        var svmLst = data.getFreeTextStyles(freeText, Session["SelectedEmp"].ToString(), Session["BuisnessId"].ToString());
+                        var content = "<div class='row'>";
+                        var orgStyle = (DataBinder.Eval(col.DataItem, "OriginalStyleid")).ToString();
+                        foreach (var svm in svmLst)
+                        {
+                            var dex = entity.tblfsk_style.Any(sa => sa.StyleID == svm.StyleID) ? entity.tblfsk_style.Where(sa => sa.StyleID == svm.StyleID).First().Description : svm.StyleID;
+                            content = content + string.Format("<div class='col-md-2'><div class='dimAllocdiv'><a style=\"cursor:pointer;\" onclick=\"getCard1('{1}','{3}')\"><center><img src='{0}'  style=\"margin:3px;\" height=\"150\" width=\"100\" /><br/>{2}</center></a></div></div>", "/"+svm.StyleImage, svm.StyleID, dex,orgStyle);
+                        }
+                        content = content + "</div>";
+                        ViewContext.Writer.Write(content);
+                        //var content = string.Format("<a onclick='getDimAlloc(\"{0}\");'>Click here to see Products</a>", freeText);
+                        //ViewContext.Writer.Write(string.Format("<center>{0}</center>", content));
+                        //settings.ClientSideEvents.CardClick = "function getDim(){getDimAlloc('" + freeText + "')}";
+                    }
+                });
+            });
+        }
+        #endregion
+
+        #region color
+        var firstColor = "";
+        settings.CardLayoutProperties.Items.Add(x =>
+        {
+            x.ColumnName = "ColourId";
+            x.ShowCaption = DefaultBoolean.False;
+            x.SetTemplateContent(col =>
+            {
+                if (template.Count > 0)
+                {
+                    var style = (DataBinder.Eval(col.DataItem, "StyleID")).ToString();
+
+                    var colorLst = entity.tblsop_customerorder_template.Where(clr => template.Contains(clr.Template) && clr.Style == style && clr.BusinessID == businessId).Distinct().Select(clr => clr.Colour).Distinct().ToList();
+                    if (Session["ColorSizestyle"].ToString() != "SWATCHES")
+                    {
+                        Html.DevExpress().ComboBox(
+                        c =>
+                        {
+                            c.Name = "Color_Template_" + style;
+                            foreach (var item in colorLst)
+                            {
+                                c.Properties.Items.Add(item);
+                            }
+                            if (c.Properties.Items.Count == 1)
+                            {
+                                c.SelectedIndex = 0; c.Enabled = true;
+                            }
+                        }).GetHtml();
+                    }
+                    else
+                    {
+                        var content = "<b>Colour<b><hr style='margin: 0;'/><br/>"; content = content + "<fieldset class='swatch-picker' name=\"Swatch_ColorTemplate_FieldSet_" + style + "\">";
+                        if (colorLst != null)
+                        {
+                            foreach (var datItem in colorLst)
+                            {
+                                var hexcode = entity.tblfsk_colour.Any(da => da.Description.Contains(datItem)) ? entity.tblfsk_colour.Where(da => da.Description.Contains(datItem)).First().Colour_hexcode : "";
+                                if (colorLst.Count > 1)
+                                {
+                                    if (datItem.ToLower().Contains("yell") | datItem.ToLower().Contains("whit"))
+                                    {
+                                        content = content + string.Format("<label class='swatchLabel'><input type='radio' id='radio' onchange=\"GetClrImg('{0}-{1}')\" name=\"Swatch_ColorTemplate_" + style + "\" value='blue'/><span class='spanner1'><center >{1}</center></span></label>", style, datItem);
+                                    }
+                                    else
+                                    {
+                                        content = content + string.Format("<label class='swatchLabel'><input type='radio' onchange=\"GetClrImg('{0}-{1}')\"  id='radio' name=\"Swatch_ColorTemplate_" + style + "\" value='blue'/><span class='spanner1'><center >{1}</center></span></label>", style, datItem);
+                                    }
+
+                                }
+                                else
+                                {
+                                    if (datItem.ToLower().Contains("yell") | datItem.ToLower().Contains("whit"))
+                                    {
+                                        content = content + string.Format("<label class='swatchLabel'><input type='radio'  onchange=\"GetClrImg('{0}-{1}')\"   id='radio' name=\"Swatch_ColorTemplate_" + style + "\" checked value='blue'/><span class='spanner1'><center >{1}</center></span></label>", style, datItem);
+                                    }
+                                    else
+                                    {
+                                        content = content + string.Format("<label class='swatchLabel'><input type='radio' onchange=\"GetClrImg('{0}-{1}')\"  id='radio' name=\"Swatch_ColorTemplate_" + style + "\" checked value='blue'/><span class='spanner1'><center >{1}</center></span></label>", style, datItem);
+
+                                    }
+
+                                }
+                            }
+
+                        }
+                        content = content + "</fieldset><br/>";
+                        ViewContext.Writer.Write(content);
+                    }
+                }
+                else
+                {
+                    var style = (DataBinder.Eval(col.DataItem, "StyleID")).ToString();
+                    var orgStyle = (DataBinder.Eval(col.DataItem, "OriginalStyleid")).ToString();
+                    var ucodeColor = entity.tblaccemp_ucodes.Where(uc => uc.UCodeID == selUcode & uc.StyleID == orgStyle).First().ColourID;
+                    if (Session["ColorSizestyle"].ToString() != "SWATCHES")
+                    {
+                        if (style.Contains(','))
+                        {
+                            Html.DevExpress().ComboBox(
+                                    c =>
+                                    {
+                                        var styleArr = style.Split(',');
+                                        string style1 = styleArr[0].ToString();
+                                        c.Name = "Color_" + "Drop_" + style;
+                                        List<Maximus.Models.ObsoleteColor> lstC = hc.getColors(style1);
+                                        if (lstC != null)
+                                        {
+                                            foreach (var dr in lstC.Where(dts => dts.ObsoleteCode == 0).ToList())
+                                            {
+                                                if (Convert.ToInt16(dr.ObsoleteCode.ToString()) == 0)
+                                                {
+                                                    if (dr.ColorId.ToString() == ucodeColor)
+                                                    {
+                                                        c.Properties.Items.Add(dr.ColorId.ToString());
+                                                    }
+                                                }
+                                            }
+                                            if (c.Properties.Items.Count == 1)
+                                            { c.SelectedIndex = 0; c.Enabled = true; }
+                                            c.Properties.ClientSideEvents.SelectedIndexChanged = "getSelectedColor";
+                                        }
+                                        else
+                                        {
+                                            c.Enabled = false;
+                                        }
+                                        firstColor = c.Properties.Items.Count > 0 ? c.Properties.Items[0].ToString() == "" || c.Properties.Items[0].ToString() == null ? "" : c.Properties.Items[0].ToString() : "";
+                                    }
+                                                    ).Render();
+                        }
+                        else
+                        {
+                            Html.DevExpress().ComboBox(
+                                    c =>
+                                    {
+                                        c.Name = "Color_" + "Drop_" + style;
+                                        List<Maximus.Models.ObsoleteColor> lstC = hc.getColors(style);
+                                        if (lstC != null)
+                                        {
+                                            foreach (var dr in lstC.Where(dts => dts.ObsoleteCode == 0).ToList())
+                                            {
+                                                if (Convert.ToInt16(dr.ObsoleteCode.ToString()) == 0)
+                                                {
+                                                    if (dr.ColorId.ToString() == ucodeColor)
+                                                    {
+                                                        c.Properties.Items.Add(dr.ColorId.ToString());
+                                                    }
+                                                }
+                                            }
+                                            if (c.Properties.Items.Count == 1)
+                                            { c.SelectedIndex = 0; c.Enabled = true; }
+                                            c.Properties.ClientSideEvents.SelectedIndexChanged = "getSelectedColor";
+                                        }
+                                        else
+                                        {
+                                            c.Enabled = false;
+                                        }
+                                        firstColor = c.Properties.Items.Count > 0 ? c.Properties.Items[0].ToString() == "" || c.Properties.Items[0].ToString() == null ? "" : c.Properties.Items[0].ToString() : "";
+                                    }
+
+                                                        ).Render();
+                        }
+                    }
+                    else
+                    {
+                        if (style.Contains(','))
+                        {
+                            var content = "<b>Colour<b><hr style='margin: 0;'/><br/>"; content = content + "<fieldset class='swatch-picker' name=\"Swatch_Color_FieldSet_" + style + "\">";
+                            var styleArr = style.Split(',');
+                            string style1 = styleArr[0].ToString();
+                            List<Maximus.Models.ObsoleteColor> lstC = hc.getColors(style1);
+                            if (lstC != null)
+                            {
+                                foreach (var dr in lstC.Where(dts => dts.ObsoleteCode == 0).ToList())
+                                {
+                                    if (lstC.IndexOf(dr) == 0)
+                                    {
+                                        firstColor = dr.ColorId.ToString();
+                                    }
+                                    if (Convert.ToInt16(dr.ObsoleteCode.ToString()) == 0 & lstC.Where(dts => dts.ObsoleteCode == 0 & dts.ColorId.ToLower() == ucodeColor.ToLower()).ToList().Count > 1)
+                                    {
+                                        if (ucodeColor == dr.ColorId.ToString())
+                                        {
+                                            var color = dr.ColorId.ToString();
+                                            var hexcode = entity.tblfsk_colour.Any(da => da.Description.Contains(color)) ? entity.tblfsk_colour.Where(da => da.Description.Contains(color)).First().Colour_hexcode : "";
+                                            if (color.ToLower().Contains("whit") | color.ToLower().Contains("yell"))
+                                            {
+                                                content = content + string.Format("<label class='swatchLabel'><input type='radio' onchange=\"GetClrImg('{0}-{1}')\"  id='radio' name=\"swatch_Color_" + style + "\" value='blue'/><span class='spanner1'><center >{1}</center></span></label>", style, color);
+                                            }
+                                            else
+                                            {
+                                                content = content + string.Format("<label class='swatchLabel'><input type='radio'  onchange=\"GetClrImg('{0}-{1}')\"   id='radio' name=\"swatch_Color_" + style + "\" value='blue'/><span class='spanner1'><center >{1}</center></span></label>", style, color);
+
+                                            }
+
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (ucodeColor == dr.ColorId.ToString())
+                                        {
+                                            var color = dr.ColorId.ToString();
+                                            var hexcode = entity.tblfsk_colour.Any(da => da.Description.Contains(color)) ? entity.tblfsk_colour.Where(da => da.Description.Contains(color)).First().Colour_hexcode : "";
+                                            if (color.ToLower().Contains("whit") | color.ToLower().Contains("yell"))
+                                            {
+                                                content = content + string.Format("<label class='swatchLabel'><input type='radio' onchange=\"GetClrImg('{0}-{1}')\"   id='radio' name=\"swatch_Color_" + style + "\" checked value='blue'/><span class='spanner1'><center >{1}</center></span></label>", style, dr.ColorId.ToString());
+                                            }
+                                            else
+                                            {
+                                                content = content + string.Format("<label class='swatchLabel'><input type='radio' onchange=\"GetClrImg('{0}-{1}')\"  id='radio' name=\"swatch_Color_" + style + "\" checked value='blue'/><span class='spanner1'><center >{1}</center></span></label>", style, dr.ColorId.ToString());
+
+                                            }
+
+                                        }
+                                    }
+                                }
+                            }
+                            content = content + "</fieldset><br/>";
+                            ViewContext.Writer.Write(content);
+                        }
+                        else
+                        {
+                            var content = "<b>Colour<b><hr style='margin: 0;'/><br/>"; content = content + "<fieldset class='swatch-picker' name=\"Swatch_Color_FieldSet_" + style + "\">";
+                            List<Maximus.Models.ObsoleteColor> lstC = hc.getColors(style);
+                            if (lstC != null)
+                            {
+                                foreach (var dr in lstC.Where(dts => dts.ObsoleteCode == 0).ToList())
+                                {
+
+                                    if (lstC.Where(dts => dts.ObsoleteCode == 0 & dts.ColorId.ToLower() == ucodeColor.ToLower()).ToList().Count > 1)
+                                    {
+                                        if (dr.ObsoleteCode == 0)
+                                        {
+                                            if (ucodeColor == dr.ColorId.ToString())
+                                            {
+                                                var color = dr.ColorId.ToString();
+                                                var hexcode = entity.tblfsk_colour.Any(da => da.Description.Contains(color)) ? entity.tblfsk_colour.Where(da => da.Description.Contains(color)).First().Colour_hexcode : "";
+                                                if (dr.ColorId.ToString().ToLower().Contains("yell") | dr.ColorId.ToString().ToLower().Contains("whit"))
+                                                {
+                                                    content = content + string.Format("<label class='swatchLabel'><input type='radio' onchange=\"GetClrImg('{0}-{1}')\" id='radio' style='color:red'  name=\"swatch_Color_" + style + "\" value='blue'  /><span class='spanner1'><center >{1}</center></span></label>", style, dr.ColorId.ToString());
+                                                }
+                                                else
+                                                {
+                                                    content = content + string.Format("<label class='swatchLabel'><input type='radio' onchange=\"GetClrImg('{0}-{1}')\" id='radio'  name=\"swatch_Color_" + style + "\" value='blue'  /><span class='spanner1'><center >{1}</center></span></label>", style, dr.ColorId.ToString());
+
+                                                }
+
+                                                firstColor = dr.ColorId.ToString();
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (dr.ObsoleteCode == 0)
+                                        {
+                                            if (ucodeColor == dr.ColorId.ToString())
+                                            {
+                                                var color = dr.ColorId.ToString();
+                                                var hexcode = entity.tblfsk_colour.Any(da => da.Description.Contains(color)) ? entity.tblfsk_colour.Where(da => da.Description.Contains(color)).First().Colour_hexcode : "";
+                                                if (dr.ColorId.ToString().ToLower().Contains("yell") | dr.ColorId.ToString().ToLower().Contains("whit"))
+                                                {
+                                                    content = content + string.Format("<label class='swatchLabel'><input type='radio' onchange=\"GetClrImg('{0}-{1}')\" style='color:red' id='radio'  name=\"swatch_Color_" + style + "\" value='blue' checked/><span class='spanner1'><center >{1}</center></span></label>", style, dr.ColorId.ToString());
+                                                }
+                                                else
+                                                {
+                                                    content = content + string.Format("<label class='swatchLabel'><input type='radio' onchange=\"GetClrImg('{0}-{1}')\" id='radio'  name=\"swatch_Color_" + style + "\" value='blue' checked/><span class='spanner1'><center >{1}</center></span></label>", style, dr.ColorId.ToString());
+                                                }
+                                                firstColor = dr.ColorId.ToString();
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                            content = content + "</fieldset><br/>";
+                            ViewContext.Writer.Write(content);
+                        }
+                    }
+                }
+            });
+
+        });
+        #endregion
+
+        #region size
+        settings.CardLayoutProperties.Items.Add(x =>
+        {
+            x.ColumnName = "SizeId";
+            x.ShowCaption = DefaultBoolean.False;
+            x.SetTemplateContent(col =>
+            {
+                if (template.Count > 0)
+                {
+                    var style = (DataBinder.Eval(col.DataItem, "StyleID")).ToString();
+                    var sizeLst = entity.tblsop_customerorder_template.Where(siz => template.Contains(siz.Template) && siz.BusinessID == businessId && siz.Style == style).Select(siz => siz.SizeiD).Distinct().ToList();
+                    if (Session["ColorSizestyle"].ToString() == "SWATCHES")
+                    {
+
+                        var content = "<b>Sizes<b><hr style='margin: 0;'/><br/>"; content = content + "<fieldset class='swatch-picker' name=\"Swatch_Size_FieldSet_" + style + "\">";
+                        if (sizeLst != null)
+                        {
+                            foreach (var dataItem in sizeLst)
+                            {
+                                if (sizeLst.Count > 1)
+                                {
+                                    content = content + string.Format("<label class='swatchLabel'><input type='radio'    id='radio' name=\"swatchTemplate_Size_" + style + "\" value='blue' /><span class='spanner1'  onclick=\"getSelectedSizeTemplateSwatch('{0}','{1}')\"><center >{1}</center></span></label>", style, dataItem);
+                                }
+                                else
+                                {
+                                    content = content + string.Format("<label class='swatchLabel'><input type='radio'  id='radio' name=\"swatchTemplate_Size_" + style + "\" value='blue'   checked /><span class='spanner1'  onclick=\"getSelectedSizeTemplateSwatch('{0}','{1}')\"><center >{1}</center></span></label>", style, dataItem);
+                                }
+                            }
+                        }
+                        content = content + "</fieldset><br/>";
+                        ViewContext.Writer.Write(content);
+
+                    }
+                    else
+                    {
+                        Html.DevExpress().ComboBox(c =>
+                        {
+                            c.Name = "Size_Template_" + style;
+                            c.Properties.ClientSideEvents.SelectedIndexChanged = "getSelectedTemplateSize";
+                            foreach (var items in sizeLst)
+                            {
+                                c.Properties.Items.Add(items);
+                            }
+                            if (c.Properties.Items.Count == 1)
+                            {
+                                c.SelectedIndex = 0; c.Enabled = true;
+                            }
+                        }).GetHtml();
+                    }
+
+                }
+                else
+                {
+                    var orgStyle = (DataBinder.Eval(col.DataItem, "OriginalStyleid")).ToString();
+                    var style = (DataBinder.Eval(col.DataItem, "StyleID")).ToString();
+                    Maximus.Models.PreviousQty prevHistory = (Maximus.Models.PreviousQty)(DataBinder.Eval(col.DataItem, "HasPreviousSize"));
+                    var styleArr = style.Split(',');
+                    string style1 = styleArr[0].ToString();
+                    //  c.Name = "Size_" + "Drop_" + style;
+                    System.Data.DataTable lstC = firstColor == "" ? hc.getSizes(style1) : hc.getColorSizes(style1);
+                    if (Session["ColorSizestyle"].ToString() == "SWATCHES")
+                    {
+                        if (style.Contains(','))
+                        {
+                            var content = "<b>Sizes<b><hr style='margin: 0;'/><br/>"; content = content + "<fieldset class='swatch-picker' name=\"Swatch_Size_FieldSet_" + style + "\">";
+                            if (lstC != null)
+                            {
+                                foreach (System.Data.DataRow dr in lstC.Rows)
+                                {
+                                    if (lstC.Rows.Count > 1)
+                                    {
+                                        if (lstC.Columns.Count > 3)
+                                        {
+                                            if (dr.ItemArray[1].ToString() == firstColor)
+                                            {
+                                                if (Convert.ToInt16(dr.ItemArray[4].ToString()) == 0)
+                                                {
+                                                    content = content + string.Format("<label class='swatchLabel'><input type='radio' id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString(), orgStyle);
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (Convert.ToInt16(dr.ItemArray[2].ToString()) == 0)
+                                            {
+                                                content = content + string.Format("<label class='swatchLabel'><input type='radio' id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[2].ToString(), orgStyle);
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (lstC.Columns.Count > 3)
+                                        {
+                                            if (dr.ItemArray[1].ToString() == firstColor)
+                                            {
+                                                if (Convert.ToInt16(dr.ItemArray[4].ToString()) == 0)
+                                                {
+                                                    content = content + string.Format("<label class='swatchLabel'><input type='radio' id='radio' name=\"swatch_Size_" + style + "\" value='blue'  checked/><span class='spanner1'  onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString());
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (Convert.ToInt16(dr.ItemArray[2].ToString()) == 0)
+                                            {
+                                                content = content + string.Format("<label class='swatchLabel'><input type='radio'   id='radio' name=\"swatch_Size_" + style + "\" value='blue'  checked/><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[2].ToString());
+                                            }
+                                        }
+                                    }
+
+                                }
+                            }
+                            content = content + "</fieldset><br/>";
+                            ViewContext.Writer.Write(content);
+                        }
+                        else
+                        {
+                            if (lstC != null)
+                            {
+                                var content = "<b>Sizes<b><hr style='margin: 0;'/><br/>"; content = content + "<fieldset class='swatch-picker' name=\"Swatch_Size_FieldSet_" + style + "\">";
+
+                                foreach (System.Data.DataRow dr in lstC.Rows)
+                                {
+                                    if (lstC.Rows.Count > 1)
+                                    {
+                                        if (lstC.Columns.Count > 3)
+                                        {
+                                            if (dr.ItemArray[1].ToString() == firstColor)
+                                            {
+                                                if (Convert.ToInt16(dr.ItemArray[4].ToString()) == 0)
+                                                {
+                                                    if (prevHistory.Size.Trim() == dr.ItemArray[3].ToString())
+                                                    {
+                                                        content = content + string.Format("<label class='swatchLabel'><input type='radio'  checked id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1'  onclick=\"getSelectedSizeSwatch('{0}','{1}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString());
+                                                    }
+                                                    else
+                                                    {
+                                                        content = content + string.Format("<label class='swatchLabel'><input type='radio'  id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1'  onclick=\"getSelectedSizeSwatch('{0}','{1}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString());
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (Convert.ToInt16(dr.ItemArray[2].ToString()) == 0)
+                                            {
+                                                if (prevHistory.Size.Trim() == dr.ItemArray[2].ToString())
+                                                {
+                                                    content = content + string.Format("<label class='swatchLabel'><input type='radio' checked  id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1'   onclick=\"getSelectedSizeSwatch('{0}','{1}')\"><center >{1}</center></span></label>", style, dr.ItemArray[2].ToString());
+                                                }
+                                                else
+                                                {
+                                                    content = content + string.Format("<label class='swatchLabel'><input type='radio' id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1'  onclick=\"getSelectedSizeSwatch('{0}','{1}')\"><center >{1}</center></span></label>", style, dr.ItemArray[2].ToString());
+                                                }
+                                            }
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (lstC.Columns.Count > 3)
+                                        {
+                                            if (dr.ItemArray[1].ToString() == firstColor)
+                                            {
+                                                if (Convert.ToInt16(dr.ItemArray[4].ToString()) == 0)
+                                                {
+
+                                                    content = content + string.Format("<label class='swatchLabel'><input type='radio'   id='radio' name=\"swatch_Size_" + style + "\" value='blue' checked/><span class='spanner1'  onclick=\"getSelectedSizeSwatch('{0}','{1}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString());
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (Convert.ToInt16(dr.ItemArray[2].ToString()) == 0)
+                                            {
+                                                content = content + string.Format("<label class='swatchLabel'><input type='radio' id='radio' name=\"swatch_Size_" + style + "\" value='blue' checked/><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}')\"><center >{1}</center></span></label>", style, dr.ItemArray[2].ToString());
+                                            }
+                                        }
+                                    }
+
+                                }
+                                content = content + "</fieldset><br/>";
+                                ViewContext.Writer.Write(content);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (style.Contains(','))
+                        {
+                            Html.DevExpress().ComboBox(
+                                    c =>
+                                    {
+                                        c.Name = "Size_" + "Drop_" + style + "_" + orgStyle;
+                                        if (lstC != null)
+                                        {
+                                            foreach (System.Data.DataRow dr in lstC.Rows)
+                                            {
+                                                if (lstC.Columns.Count > 3)
+                                                {
+                                                    if (dr.ItemArray[1].ToString() == firstColor)
+                                                    {
+                                                        if (Convert.ToInt16(dr.ItemArray[4].ToString()) == 0)
+                                                        {
+                                                            c.Properties.Items.Add(dr.ItemArray[3].ToString());
+                                                        }
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    if (Convert.ToInt16(dr.ItemArray[2].ToString()) == 0)
+                                                    {
+                                                        c.Properties.Items.Add(dr.ItemArray[1].ToString());
+                                                    }
+                                                }
+
+                                            }
+                                            if (c.Properties.Items.Count == 1)
+                                            {
+                                                c.SelectedIndex = 0; c.Enabled = false;
+                                            }
+                                            c.Properties.ClientSideEvents.SelectedIndexChanged = "getSelectedSize";
+                                        }
+                                        else
+                                        {
+                                            c.Enabled = false;
+                                        }
+                                    }
+                                                    ).Render();
+                        }
+                        else
+                        {
+                            Html.DevExpress().ComboBox(
+                                    c =>
+                                    {
+                                        c.Name = "Size_" + "Drop_" + style + "_" + orgStyle;
+                                        if (lstC != null)
+                                        {
+                                            foreach (System.Data.DataRow dr in lstC.Rows)
+                                            {
+                                                if (lstC.Columns.Count > 3)
+                                                {
+                                                    if (dr.ItemArray[1].ToString() == firstColor)
+                                                    {
+                                                        if (Convert.ToInt16(dr.ItemArray[4].ToString()) == 0)
+                                                        {
+                                                            c.Properties.Items.Add(dr.ItemArray[3].ToString());
+                                                        }
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    if (Convert.ToInt16(dr.ItemArray[2].ToString()) == 0)
+                                                    {
+                                                        c.Properties.Items.Add(dr.ItemArray[1].ToString());
+                                                    }
+                                                }
+                                            }
+                                            if (c.Properties.Items.Count == 1)
+                                            {
+                                                c.SelectedIndex = 0; c.Enabled = false;
+                                            }
+                                            c.Properties.ClientSideEvents.SelectedIndexChanged = "getSelectedSize";
+                                        }
+                                        else
+                                        {
+                                            c.Enabled = false;
+                                        }
+                                    }
+                                                        ).Render();
+                        }
+                    }
+                }
+            });
+
+        });
+        #endregion
+
+        #region price
+
+        settings.CardLayoutProperties.Items.Add(x =>
+        {
+            x.ColumnName = "Price";
+            x.ShowCaption = DefaultBoolean.False;
+            x.SetTemplateContent(col =>
+            {
+                if (template.Count > 0)
+                {
+                    var style = (DataBinder.Eval(col.DataItem, "StyleID")).ToString();
+                    ViewContext.Writer.Write(string.Format("<b>Price</b><hr style='margin: 0;'/><br/><div id='LbTemplatePrice" + style + "'>{0}</div>", ""));
+                    //ViewContext.Writer.Write(string.Format("<b>Price</b><hr style='margin: 0;'/><br/><div id='LbPrice" + style + "'>{0}</div>", price));
+                }
+                else
+                {
+                    Maximus.Models.PreviousQty prevHistory = (Maximus.Models.PreviousQty)(DataBinder.Eval(col.DataItem, "HasPreviousSize"));
+                    var style = (DataBinder.Eval(col.DataItem, "StyleID")).ToString();
+                    if (style.Contains(','))
+                    {
+
+                        var styleArr = style.Split(',');
+                        string style1 = styleArr[0].ToString();
+                        var color = entity.tblfsk_style_colour.Any(s => s.StyleID == style1) == true ? entity.tblfsk_style_colour.Where(s => s.StyleID == style1).OrderBy(s => s.ColourID).FirstOrDefault().ColourID : "";
+                        var size = entity.tblfsk_style_sizes.Any(s => s.StyleID == style1) == true ? entity.tblfsk_style_sizes.Where(s => s.StyleID == style1).OrderBy(s => s.SeqNo).Count() == 1 ? entity.tblfsk_style_sizes.Where(s => s.StyleID == style1).OrderBy(s => s.SeqNo).FirstOrDefault().SizeID : "" : "";
+                        var price = size == "" ? "" : entity.tblfsk_style_sizes_prices.Any(s => s.StyleID == style1 && s.SizeID == size && s.BusinessId == businessId) == false ? "" : System.Math.Round(entity.tblfsk_style_sizes_prices.Where(s => s.StyleID == style1 && s.SizeID == size && s.BusinessId == businessId).FirstOrDefault().Price.Value, 2).ToString();
+                        if (prevHistory.Size != "")
+                        {
+                            price = entity.tblfsk_style_sizes_prices.Any(s => s.StyleID == style1 && s.SizeID == size && s.BusinessId == businessId) == false ? "" : System.Math.Round(entity.tblfsk_style_sizes_prices.Where(s => s.StyleID == style1 && s.SizeID == prevHistory.Size && s.BusinessId == businessId && s.PriceID == 2).FirstOrDefault().Price.Value, 2).ToString();
+                            if (price == "")
+                            {
+                                price = entity.tblfsk_style_sizes_prices.Any(s => s.StyleID == style1 && s.SizeID == size && s.BusinessId == "ALL") == false ? "" : System.Math.Round(entity.tblfsk_style_sizes_prices.Where(s => s.StyleID == style1 && s.SizeID == prevHistory.Size && s.PriceID == 2 && s.BusinessId == "ALL").FirstOrDefault().Price.Value, 2).ToString();
+                            }
+                        }
+                        ViewContext.Writer.Write(string.Format("<b>Price</b><hr style='margin: 0;'/><br/><div id='LbPrice" + style + "'>{0}</div>", price));
+                    }
+                    else
+                    {
+                        // string businessId = Session["BuisnessId"].ToString();
+                        var color = entity.tblfsk_style_colour.Any(s => s.StyleID == style) == true ? entity.tblfsk_style_colour.Where(s => s.StyleID == style).OrderBy(s => s.ColourID).FirstOrDefault().ColourID : "";
+                        var size = entity.tblfsk_style_sizes.Any(s => s.StyleID == style) == true ? entity.tblfsk_style_sizes.Where(s => s.StyleID == style).OrderBy(s => s.SeqNo).Count() == 1 ? entity.tblfsk_style_sizes.Where(s => s.StyleID == style).OrderBy(s => s.SeqNo).FirstOrDefault().SizeID : "" : "";
+                        var price = size == "" ? "" : entity.tblfsk_style_sizes_prices.Any(s => s.StyleID == style && s.SizeID == size && s.BusinessId == businessId) == false ? "" : System.Math.Round(entity.tblfsk_style_sizes_prices.Where(s => s.StyleID == style && s.SizeID == size && s.BusinessId == businessId && s.PriceID == 2).FirstOrDefault().Price.Value, 2).ToString();
+                        if (prevHistory.Size != "")
+                        {
+                            price = entity.tblfsk_style_sizes_prices.Any(s => s.StyleID == style && s.SizeID == prevHistory.Size && s.BusinessId == businessId) == false ? "" : System.Math.Round(entity.tblfsk_style_sizes_prices.Where(s => s.StyleID == style && s.SizeID == prevHistory.Size && s.BusinessId == businessId && s.PriceID == 2).FirstOrDefault().Price.Value, 2).ToString();
+                            if (price == "")
+                            {
+                                price = entity.tblfsk_style_sizes_prices.Any(s => s.StyleID == style && s.SizeID == prevHistory.Size && s.BusinessId == "ALL") == false ? "" : System.Math.Round(entity.tblfsk_style_sizes_prices.Where(s => s.StyleID == style && s.PriceID == 2 && s.SizeID == prevHistory.Size && s.BusinessId == "ALL").FirstOrDefault().Price.Value, 2).ToString();
+                            }
+                        }
+                        ViewContext.Writer.Write(string.Format("<b>Price</b><hr style='margin: 0;'/><br/><div id='LbPrice" + style + "'>{0}</div>", price));
+                    }
+                }
+            });
+
+
+        });
+        #endregion
+
+        #region qty
+        settings.CardLayoutProperties.Items.Add(x =>
+        {
+            x.ShowCaption = DefaultBoolean.False;
+            x.SetTemplateContent(cont =>
+            {
+                if (template.Count > 0)
+                {
+                    var style = (DataBinder.Eval(cont.DataItem, "StyleID")).ToString();
+
+                    var content = string.Format("<div class='row'><div class='col-md-4'><b>Quantity</b><hr style='margin: 0;'/><div style='margin: 0;' class=\"center pull-left\"><p></p><div class=\"input-group\"><span class=\"input-group-btn\"><button type='button' class='qtyminus btn backg' field='{0}'><span class=\"glyphicon glyphicon-minus\"></span></button></span><input style='width:290px;text-align:center;' type='text' name='{0}'  class=\"form-control input-number\" value=\"1\" min=\"1\" max=\"10000000\"><span class=\"input-group-btn\"><button type='button' class='qtyplus  btn backg' field='{0}'><span class=\"glyphicon glyphicon-plus\"></span></button></span></div><p></p></div>", "spinEdit_" + style);
+                    content = content + "</div>";
+                    ViewContext.Writer.Write(content);
+                    if (reason)
+                    {
+                        ViewContext.Writer.Write("<div class='col-md-4'><b>Reason</b><hr style='margin:0px'/><br>");
+                        if (template.Count > 0)
+                        {
+                            //var style = (DataBinder.Eval(cont.DataItem, "StyleID")).ToString();
+                            var reasons = entity.tblsop_reasoncodes.Any(xs => xs.BusinessId == businessId) ? entity.tblsop_reasoncodes.Where(xs => xs.BusinessId == businessId).Select(c => new { c.Description }).ToList() : null;
+
+                            if (reasons != null)
+                            {
+                                Html.DevExpress().ComboBox(edit =>
+                                {
+                                    edit.Name = "CmbReasonTemplate_" + style;
+                                    if (reasons.Count > 0)
+                                    {
+                                        foreach (var dta in reasons)
+                                        {
+                                            edit.Properties.Items.Add(dta.Description);
+                                        }
+                                    }
+                                    else
+                                    {
+
+                                        edit.Enabled = false;
+                                        edit.ToolTip = "No return reasons found for the current customer";
+                                    }
+                                }).GetHtml();
+                                //ViewContext.Writer.Write("</div>");
+                            }
+                        }
+                        else
+                        {
+                            //var style = (DataBinder.Eval(cont.DataItem, "StyleID")).ToString();
+                            //ViewContext.Writer.Write("<div class='col-md-2'>");
+                            Html.DevExpress().ComboBox(edit =>
+                            {
+                                edit.Name = "CmbReason_" + style;
+                                string BusinessId = Session["BuisnessId"].ToString();
+                                var reasons = entity.tblsop_reasoncodes.Where(xs => xs.BusinessId == BusinessId).Select(c => new { c.Description }).ToList();
+                                if (reasons.Count > 0)
+                                {
+                                    foreach (var dta in reasons)
+                                    {
+                                        edit.Properties.Items.Add(dta.Description);
+                                    }
+                                }
+                                else
+                                {
+
+                                    edit.Enabled = false;
+                                    edit.ToolTip = "No return reasons found for the current customer";
+                                }
+                            }).GetHtml();
+                            //ViewContext.Writer.Write("</div>");
+                        }
+                        ViewContext.Writer.Write("</div>");
+                    }
+                    else
+                    {
+                        ViewContext.Writer.Write("<div class='col-md-4'></div>");
+                    }
+                    ViewContext.Writer.Write("<div class='col-md-3' style='margin-top:26px;'>");
+                    if (template.Count > 0)
+                    {
+                        //var style = (DataBinder.Eval(cont.DataItem, "StyleID")).ToString();
+                        Maximus.Models.PreviousQty prevHistory = (Maximus.Models.PreviousQty)(DataBinder.Eval(cont.DataItem, "HasPreviousSize"));
+                        Html.DevExpress().Button(btn =>
+                        {
+                            btn.Name = "CartbtnTemplate_" + style + "_" + prevHistory.OrdQty;
+                            btn.ControlStyle.CssClass = "btn btn-primary";
+                            btn.Text = "Add to cart &nbsp;&nbsp;<span class='glyphicon glyphicon-shopping-cart'></span>";
+                            btn.EncodeHtml = false;
+                            btn.ControlStyle.CssClass = "pull-right";
+                            if (Session["ColorSizestyle"].ToString() == "SWATCHES")
+                            {
+                                btn.ClientSideEvents.Click = "addTocartTemplateSwatch";
+                            }
+                            else
+                            {
+                                btn.ClientSideEvents.Click = "addTocartTemplate";
+                            }
+                        }).GetHtml();
+
+                    }
+                    else
+                    {
+                        //var style = (DataBinder.Eval(cont.DataItem, "StyleID")).ToString();
+                        var orgStyle = (DataBinder.Eval(cont.DataItem, "OriginalStyleid")).ToString();
+                        Maximus.Models.PreviousQty prevHistory = (Maximus.Models.PreviousQty)(DataBinder.Eval(cont.DataItem, "HasPreviousSize"));
+                        Html.DevExpress().Button(btn =>
+                        {
+                            btn.Width = System.Web.UI.WebControls.Unit.Pixel(305);
+                            btn.Name = "Cartbtn_" + style + "_" + prevHistory.OrdQty + "_" + orgStyle;
+                            btn.ControlStyle.CssClass = "btn btn-primary";
+                            btn.Text = "Add to cart &nbsp;&nbsp;<span class='glyphicon glyphicon-shopping-cart'></span>";
+                            btn.ControlStyle.CssClass = "pull-right";
+                            if (Session["ColorSizestyle"].ToString() == "SWATCHES")
+                            {
+                                btn.ClientSideEvents.Click = "addTocartSwatch";
+                            }
+                            else
+                            {
+                                btn.ClientSideEvents.Click = "addTocart";
+                            }
+                            btn.EncodeHtml = false;
+
+                        }).GetHtml();
+                    }
+                    ViewContext.Writer.Write("</div><div class='col-md-1'></div></div>");
+                }
+                else
+                {
+                    var style = (DataBinder.Eval(cont.DataItem, "StyleID")).ToString();
+                    var content = string.Format("<div class='row'><div class='col-md-4'><b>Quantity</b><hr style='margin: 0;'/><div style='margin: 0;' class=\"center pull-left\"><p></p><div class=\"input-group\"><span class=\"input-group-btn\"><button type='button' class='qtyminus btn backg' field='{0}'><span class=\"glyphicon glyphicon-minus\"></span></button></span><input  type='text' name='{0}' style='width:290px;text-align:center;' class=\"form-control input-number\" value=\"1\" min=\"1\" max=\"10000000\"><span class=\"input-group-btn\"><button type='button' class='qtyplus  btn backg' field='{0}'><span class=\"glyphicon glyphicon-plus\"></span></button></span></div><p></p></div>", "spinEdit_" + style);
+                    content = content + "</div>";
+                    ViewContext.Writer.Write(content);
+                    if (reason)
+                    {
+                        ViewContext.Writer.Write("<div class='col-md-4'><b>Reason</b><hr style='margin:0px'/><br>");
+                        if (template.Count > 0)
+                        {
+                            //var style = (DataBinder.Eval(cont.DataItem, "StyleID")).ToString();
+                            var reasons = entity.tblsop_reasoncodes.Any(xs => xs.BusinessId == businessId) ? entity.tblsop_reasoncodes.Where(xs => xs.BusinessId == businessId).Select(c => new { c.Description }).ToList() : null;
+
+                            if (reasons != null)
+                            {
+                                Html.DevExpress().ComboBox(edit =>
+                                {
+                                    edit.Name = "CmbReasonTemplate_" + style;
+                                    if (reasons.Count > 0)
+                                    {
+                                        foreach (var dta in reasons)
+                                        {
+                                            edit.Properties.Items.Add(dta.Description);
+                                        }
+                                    }
+                                    else
+                                    {
+
+                                        edit.Enabled = false;
+                                        edit.ToolTip = "No return reasons found for the current customer";
+                                    }
+                                }).GetHtml();
+                                //ViewContext.Writer.Write("</div>");
+                            }
+                        }
+                        else
+                        {
+                            //var style = (DataBinder.Eval(cont.DataItem, "StyleID")).ToString();
+                            //ViewContext.Writer.Write("<div class='col-md-2'>");
+                            Html.DevExpress().ComboBox(edit =>
+                            {
+                                edit.Name = "CmbReason_" + style;
+                                string BusinessId = Session["BuisnessId"].ToString();
+                                var reasons = entity.tblsop_reasoncodes.Where(xs => xs.BusinessId == BusinessId).Select(c => new { c.Description }).ToList();
+                                if (reasons.Count > 0)
+                                {
+                                    foreach (var dta in reasons)
+                                    {
+                                        edit.Properties.Items.Add(dta.Description);
+                                    }
+                                }
+                                else
+                                {
+
+                                    edit.Enabled = false;
+                                    edit.ToolTip = "No return reasons found for the current customer";
+                                }
+                            }).GetHtml();
+                            //ViewContext.Writer.Write("</div>");
+                        }
+                        ViewContext.Writer.Write("</div>");
+                    }
+                    else
+                    {
+                        ViewContext.Writer.Write("<div class='col-md-4'></div>");
+                    }
+                    ViewContext.Writer.Write("<div class='col-md-3' style='margin-top:26px;'>");
+                    if (template.Count > 0)
+                    {
+                        //var style = (DataBinder.Eval(cont.DataItem, "StyleID")).ToString();
+                        Maximus.Models.PreviousQty prevHistory = (Maximus.Models.PreviousQty)(DataBinder.Eval(cont.DataItem, "HasPreviousSize"));
+                        Html.DevExpress().Button(btn =>
+                        {
+                            btn.Name = "CartbtnTemplate_" + style + "_" + prevHistory.OrdQty;
+                            btn.ControlStyle.CssClass = "btn btn-primary";
+                            btn.Text = "Add to cart &nbsp;&nbsp;<span class='glyphicon glyphicon-shopping-cart'></span>";
+                            btn.EncodeHtml = false;
+                            btn.ControlStyle.CssClass = "pull-right";
+                            if (Session["ColorSizestyle"].ToString() == "SWATCHES")
+                            {
+                                btn.ClientSideEvents.Click = "addTocartTemplateSwatch";
+                            }
+                            else
+                            {
+                                btn.ClientSideEvents.Click = "addTocartTemplate";
+                            }
+                        }).GetHtml();
+
+                    }
+                    else
+                    {
+                        //var style = (DataBinder.Eval(cont.DataItem, "StyleID")).ToString();
+                        var orgStyle = (DataBinder.Eval(cont.DataItem, "OriginalStyleid")).ToString();
+                        Maximus.Models.PreviousQty prevHistory = (Maximus.Models.PreviousQty)(DataBinder.Eval(cont.DataItem, "HasPreviousSize"));
+                        Html.DevExpress().Button(btn =>
+                        {
+                            btn.Width = System.Web.UI.WebControls.Unit.Pixel(305);
+                            btn.Name = "Cartbtn_" + style + "_" + prevHistory.OrdQty + "_" + orgStyle;
+                            btn.ControlStyle.CssClass = "btn btn-primary";
+                            btn.Text = "Add to cart &nbsp;&nbsp;<span class='glyphicon glyphicon-shopping-cart'></span>";
+                            btn.ControlStyle.CssClass = "pull-right";
+                            if (Session["ColorSizestyle"].ToString() == "SWATCHES")
+                            {
+                                btn.ClientSideEvents.Click = "addTocartSwatch";
+                            }
+                            else
+                            {
+                                btn.ClientSideEvents.Click = "addTocart";
+                            }
+                            btn.EncodeHtml = false;
+
+                        }).GetHtml();
+                    }
+                    ViewContext.Writer.Write("</div><div class='col-md-1'></div></div>");
+
+                    //Html.DevExpress().SpinEdit(edit =>
+                    //{
+                    //    edit.Name = "spinEdit_" + style;
+                    //    edit.Properties.AllowMouseWheel = true;
+                    //    edit.Properties.AllowUserInput = true;
+                    //    edit.Properties.MinValue = 1;
+                    //    edit.Number = 1;
+                    //    edit.Properties.MaxValue = 1000000;
+                    //}).GetHtml();
+                }
+            });
+
+        });
+        #endregion
+
+        #endregion
+
+        #region assigning values to the combobox
+        #endregion
+    });
+    if (ViewData["EditError"] != null)
+    {
+        cardView.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@cardView.Bind(Model).GetHtml()
+
+
+
+
+
+
+@*<div class=\"input-group\">
+        <span class=\"input-group-btn\">
+            <button type='button' class='qtyminus btn' field='quantity123'>
+            <span class=\"glyphicon glyphicon-minus\"></span>
+            </button>
+        </span>
+        <input type='text' name='quantity123' class=\"form-control input-number\" value=\"1\" min=\"1\" max=\"10000000\">
+        <span class=\"input-group-btn\">
+            <button type='button' class='qtyplus  btn' field='quantity123'>
+                <span class=\"glyphicon glyphicon-plus\"></span>
+            </button>
+        </span>
+    </div>*@

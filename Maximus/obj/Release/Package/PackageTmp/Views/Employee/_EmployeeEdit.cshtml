@@ -1,0 +1,288 @@
+﻿@model Maximus.Models.EmployeeViewModel
+<center>
+    <div class="row">
+        <center><h4 style="padding:0px;">Employee</h4></center>
+        <div class="row">
+            <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                @Html.DevExpress().ComboBoxFor(x => x.Department, text =>
+                         {
+                             text.Name = "editDepartment";
+                             text.Properties.Caption = "Department";
+                             if (ViewBag.create != null)
+                             {
+                                 text.SelectedIndex = Model.DepartmentLst.Count == 1 ? 0 : -1;
+
+                             }
+                         }).BindList(Model.DepartmentLst).GetHtml()
+            </div>
+
+            <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                @Html.DevExpress().DateEditFor(m => m.StartDate, settings =>
+   {
+       settings.Properties.Caption = "Start date";
+       if (ViewBag.create != null)
+       {
+           settings.Date = DateTime.Now;
+       }
+       settings.Name = "editStartDate";
+       settings.Properties.EditFormat = EditFormat.Custom;
+       settings.Properties.DisplayFormatString = "dd.MM.yyyy";
+       settings.Properties.EditFormatString = "dd.MM.yyyy";
+
+   }).GetHtml()
+            </div>
+
+            <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                @Html.DevExpress().DateEditFor(m => m.EndDate, settings =>
+   {
+       settings.Properties.Caption = "End Date";
+       if (ViewBag.create != null)
+       {
+           settings.Date = DateTime.Now.AddYears(1);
+       }
+       settings.Name = "editEndDate";
+       settings.Properties.EditFormat = EditFormat.Custom;
+       settings.Properties.DisplayFormatString = "dd.MM.yyyy";
+       settings.Properties.EditFormatString = "dd.MM.yyyy";
+
+   }).GetHtml()
+            </div>
+        </div><br />
+
+        <div class="row">
+            <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                @Html.DevExpress().TextBoxFor(x => x.EmployeeId, text =>
+   {
+       text.Name = "editEmpId";
+       text.Properties.Caption = "EmployeeID";
+       if (ViewBag.create != null)
+       {
+           text.ReadOnly = false;
+       }
+       else
+       {
+           text.ReadOnly = true;
+       }
+   }).GetHtml()
+            </div>
+
+            <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                @Html.DevExpress().TextBoxFor(x => x.EmpFirstName, text =>
+                             {
+                                 text.Name = "editEmpFirstName";
+                                 text.Properties.Caption = "FirstName";
+                             }).GetHtml()
+            </div>
+
+            <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                @Html.DevExpress().TextBoxFor(x => x.EmpLastName, text =>
+                             {
+                                 text.Name = "editEmpLastName";
+                                 text.Properties.Caption = "LastName";
+                             }).GetHtml()
+            </div>
+        </div> 
+        <br />
+        <div class="row">
+
+            <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                @if (ViewBag.create != null)
+            {
+                Html.DevExpress().CheckBoxFor(x => x.EmpIsActive, text =>
+                {
+                    text.Name = "editEmpIsActive";
+                    text.Text = "Active";
+                    text.Checked = true;
+                }).GetHtml();
+            }
+            else
+            {
+                Html.DevExpress().CheckBoxFor(x => x.EmpIsActive, text =>
+                {
+                    text.Name = "editEmpIsActive";
+                    text.Text = "Active";
+                }).GetHtml();
+            }
+
+            </div>
+
+            <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                @if (ViewBag.create != null && Session["chkMapEmp"].ToString().ToLower() != "hide")
+                {
+                    Html.DevExpress().CheckBoxFor(x => x.EmpMap, text =>
+                    {
+                        text.Name = "empMapper";
+                        text.Text = "Map employee to this user";
+                    }).GetHtml();
+                }
+
+
+            </div>
+        </div>
+
+       
+
+      
+
+
+    </div>
+    <br />
+    @if (((List<string>)Session["Templates"]).Count == 0)
+    {
+        <hr />
+        <center><h4 style="padding:0px;">Ucodes</h4></center>
+        <div class="row">
+            <div class="col-md-6 col-xs-6 col-sm-6 col-lg-6">
+                @Html.DevExpress().MemoFor(X => X.EmpUcodes, text =>
+                       {
+                           text.Properties.Caption = "Ucodes";
+                           text.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+
+
+                       }).GetHtml()
+            </div>
+            <div class="col-md-6 col-xs-6 col-sm-6 col-lg-6">
+                <center>
+                    @Html.DevExpress().DropDownEditFor(x => x.EmpUcodes, text =>
+                           {
+                               text.Name = "checkComboEdit";
+                               text.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+                               text.Properties.Caption = "Ucodes";
+                               text.Properties.DropDownWindowStyle.BackColor = System.Drawing.Color.FromArgb(0xEDEDED);
+                               text.ControlStyle.CssClass = "pull-left";
+                               text.SetDropDownWindowTemplateContent(c =>
+                               {
+                                   Html.DevExpress().ListBox(listBoxSettings =>
+                                   {
+                                       listBoxSettings.Name = "checkListBoxEmpEdit_";
+                                       listBoxSettings.ControlStyle.Border.BorderWidth = 0;
+                                       listBoxSettings.ControlStyle.BorderBottom.BorderWidth = 1;
+                                       listBoxSettings.ControlStyle.BorderBottom.BorderColor = System.Drawing.Color.FromArgb(0xDCDCDC);
+                                       listBoxSettings.Height = System.Web.UI.WebControls.Unit.Pixel(200);
+                                       listBoxSettings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+                                       listBoxSettings.Properties.SelectionMode = ListEditSelectionMode.Multiple;
+                                       //listBoxSettings.Properties.EnableSelectAll = true;
+                                       //listBoxSettings.Properties.FilteringSettings.ShowSearchUI = true;
+                                       listBoxSettings.Properties.SelectionMode = ListEditSelectionMode.CheckColumn;
+                                       listBoxSettings.Properties.ClientSideEvents.SelectedIndexChanged = "updateTextEdit";
+                                       listBoxSettings.Properties.ClientSideEvents.Init = "updateTextEdit";
+                                       if (Model.EmployeeId != null)
+                                       {
+                                           listBoxSettings.PreRender = (sender, e) =>
+                                           {
+                                               MVCxListBox cbl = (MVCxListBox)sender;
+                                               foreach (ListEditItem item in cbl.Items)
+                                               {
+                                                   if (Model.EmpUcodes.Contains(item.Text.Trim()))
+                                                   {
+                                                       item.Selected = true;
+                                                   }
+                                               }
+                                           };
+                                       }
+                                   }).BindList(Model.ucodeLst).Render();
+                                   ViewContext.Writer.Write("<div style=\"margin: 6px; overflow hidden;\">");
+
+                                   Html.DevExpress().Button(buttonSettings =>
+                                   {
+                                       buttonSettings.Name = "buttonClose_";
+                                       buttonSettings.Text = "Close";
+                                       buttonSettings.Style.Add("float", "right");
+                                       buttonSettings.ClientSideEvents.Click = "HideCmbEdit";
+                                       buttonSettings.Height = 26;
+                                   }).Render();
+                               });
+                           }).GetHtml()
+                </center>
+            </div>
+        </div>
+    }
+
+    <hr />
+    <center><h4 style="padding:0px;"> Delivery Address</h4></center>
+    <div class="row">
+        <center>
+
+            <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                @Html.DevExpress().ComboBox(comboBoxSettings =>
+           {
+               comboBoxSettings.Name = "CmbAddress";
+               comboBoxSettings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+               comboBoxSettings.Properties.Caption = "Address";
+               comboBoxSettings.ControlStyle.CssClass = "pull-left";
+               comboBoxSettings.Properties.DropDownWidth = System.Web.UI.WebControls.Unit.Pixel(1000);
+               comboBoxSettings.Properties.DropDownStyle = DropDownStyle.DropDownList;
+               comboBoxSettings.Properties.ValueField = "AddressID";
+               comboBoxSettings.Properties.TextField = "AddressDescription";
+               comboBoxSettings.Properties.ValueType = typeof(string);
+               comboBoxSettings.Properties.TextFormatString = "{0}";
+               comboBoxSettings.Properties.Columns.Add("AddressDescription", "Description", System.Web.UI.WebControls.Unit.Percentage(100));
+               comboBoxSettings.Properties.Columns.Add("AddressID", "AddressID", System.Web.UI.WebControls.Unit.Percentage(100));
+               comboBoxSettings.Properties.Columns.Add("Address1", "Address1", System.Web.UI.WebControls.Unit.Percentage(100));
+               comboBoxSettings.Properties.Columns.Add("Address2", "Address2", System.Web.UI.WebControls.Unit.Percentage(100));
+               comboBoxSettings.Properties.Columns.Add("Address3", "Address3", System.Web.UI.WebControls.Unit.Percentage(100));
+               comboBoxSettings.Properties.Columns.Add("City", "City", System.Web.UI.WebControls.Unit.Percentage(100));
+               comboBoxSettings.Properties.Columns.Add("PostCode", "PostCode", System.Web.UI.WebControls.Unit.Percentage(100));
+               // comboBoxSettings.Properties.DataSource = ViewBag.MultiComboBoxSites;
+               if (Model.Address != null)
+               {
+                   var busAdd = Model.AddressLst.Any(x => x.AddressId == Model.Address.AddressId) ? Model.AddressLst.Where(x => x.AddressId == Model.Address.AddressId).First() : new Maximus.Models.BusAddress();
+                   comboBoxSettings.SelectedIndex = Model.AddressLst.IndexOf(busAdd);
+               }
+           }).BindList(Model.AddressLst).GetHtml()
+            </div><div class="col-md-1 col-xs-1 col-sm-1 col-lg-1 col-xs-1 col-sm-1 col-lg-1"></div>
+            <div class="col-md-1 col-xs-1 col-sm-1 col-lg-1 col-xs-1 col-sm-1 col-lg-1"></div>
+        </center>
+
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4"> </div>
+        <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+            <div class="col-md-6 col-xs-6 col-sm-6 col-lg-6">
+                @Html.DevExpress().Button(x =>
+           {
+
+
+               if (ViewBag.create == null)
+               {
+                   if(((List<string>)Session["Templates"]).Count>0)
+                   {
+                       x.Name = "UpdateBtn_Template";
+                   }
+                   else
+                   {
+                       x.Name = "UpdateBtn";
+                   }
+                   x.Text = "Update";
+                   x.ClientSideEvents.Click = "UpdateEmployee";
+               }
+               else
+               {
+                   if (((List<string>)Session["Templates"]).Count > 0)
+                   {
+                       x.Name = "CreateBtn_Template";
+                   }
+                   else
+                   {
+                       x.Name = "CreateBtn";
+                   }
+                   x.Text = "Create";
+                   x.ClientSideEvents.Click = "CreateEmployee";
+               }
+
+           }).GetHtml()
+            </div>
+            <div class="col-md-6 col-xs-6 col-sm-6 col-lg-6">
+                @Html.DevExpress().Button(x =>
+           {
+               x.Name = "cancelBtn";
+               x.Text = "Cancel";
+               x.ClientSideEvents.Click = "CancelEmployee";
+           }).GetHtml()
+            </div>
+        </div>
+        <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4"></div>
+    </div>
+</center>
+

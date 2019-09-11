@@ -1,0 +1,265 @@
+@model IEnumerable<Maximus.Models.SalesOrderLineViewModel>
+@{
+    var grid = Html.DevExpress().GridView(settings => {
+        settings.Name = "CartviewDetailGridView";
+        settings.CallbackRouteValues = new { Controller = "Basket", Action = "CartviewDetailGridViewGridViewPartial"   };
+
+        settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "Basket", Action = "CartviewDetailGridViewGridViewPartialAddNew" };
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "Basket", Action = "CartviewDetailGridViewGridViewPartialUpdate" };
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "Basket", Action = "CartviewDetailGridViewGridViewPartialDelete" };
+        settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+        settings.SettingsBehavior.ConfirmDelete = true;
+        // settings.StylesEditors.TextBox.CssClass = "textBoxStyle";
+        settings.ClientSideEvents.RowDblClick = "function(s, e) {s.StartEditRow(e.visibleIndex);}";
+        //settings.CommandColumn.Visible = true;
+        //settings.CommandColumn.ShowNewButton = true;
+        //settings.CommandColumn.ShowDeleteButton = true;
+        //settings.CommandColumn.ShowEditButton = true;
+
+        settings.KeyFieldName = "LineNo";
+
+        settings.SettingsPager.Visible = true;
+        settings.Settings.ShowGroupPanel = true;
+        settings.Settings.ShowFilterRow = true;
+        settings.SettingsBehavior.AllowSelectByRowClick = true;
+
+        settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.Off;
+        settings.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Right;
+        settings.SettingsAdaptivity.AdaptiveDetailColumnCount = 1;
+        settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = false;
+        settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
+        settings.SettingsDetail.AllowOnlyOneMasterRowExpanded = true;
+        settings.CommandColumn.Visible = true;
+        settings.SettingsDetail.ShowDetailRow = true;
+        settings.CommandColumn.ShowDeleteButton = true;
+        settings.CommandColumn.ShowEditButton = true;
+
+        settings.CommandButtonInitialize = (sender, e) =>
+        {
+            MVCxGridView cv = sender as MVCxGridView;
+            if (e.VisibleIndex > 0)
+            {
+                bool value = (bool)cv.GetRowValues(e.VisibleIndex, "Assembly");
+                bool? chagable = (bool?)cv.GetRowValues(e.VisibleIndex, "Ischargable");
+
+                if (value==true & chagable!=false)
+                {
+                    if (e.ButtonType == ColumnCommandButtonType.Edit | e.ButtonType == ColumnCommandButtonType.Delete | e.ButtonType==ColumnCommandButtonType.Cancel | e.ButtonType == ColumnCommandButtonType.Update)
+                        e.Visible = false;
+                }
+                if (chagable == false)
+                {
+                    if (e.ButtonType == ColumnCommandButtonType.Edit)
+                        e.Visible = false;
+
+                }
+            }
+        };
+        settings.PreRender = (sender, e) =>
+        {
+            string filterExpressionSTR = "";
+            string filterExpression = "";
+            MVCxGridView cv = sender as MVCxGridView;
+            for (int i = 0; i < cv.VisibleRowCount; i++)
+            {
+                string StyleID = (string)cv.GetRowValues(i, "StyleID");
+                bool Assembly = (bool)cv.GetRowValues(i, "Assembly");
+                if (Assembly)
+                {
+
+                    filterExpressionSTR = filterExpressionSTR + "'" + StyleID + "',";
+                }
+            }
+            if (filterExpressionSTR.Contains(','))
+            {
+                filterExpressionSTR = filterExpressionSTR.TrimEnd(',');
+                filterExpression = "NOT [StyleID] IN (" + filterExpressionSTR + ")";
+                cv.FilterExpression = filterExpression;
+            }
+        };
+        settings.SetDetailRowTemplateContent(x =>
+        {
+            @Html.RenderAction("CardDetailAssembly", new { LineNo = x.KeyValue });
+        });
+        settings.SettingsCommandButton.EditButton.Image.IconID = IconID.EditEdit16x16;
+        settings.SettingsCommandButton.EditButton.RenderMode = GridCommandButtonRenderMode.Image;
+
+        settings.SettingsCommandButton.DeleteButton.Image.IconID = IconID.EditDelete16x16;
+        settings.SettingsCommandButton.DeleteButton.RenderMode = GridCommandButtonRenderMode.Image;
+
+        settings.SettingsCommandButton.CancelButton.Image.IconID = IconID.ActionsCancel16x16;
+        settings.SettingsCommandButton.CancelButton.RenderMode = GridCommandButtonRenderMode.Image;
+
+        settings.SettingsCommandButton.UpdateButton.Image.IconID = IconID.OtherUpdatetable16x16gray;
+        settings.SettingsCommandButton.UpdateButton.RenderMode = GridCommandButtonRenderMode.Image;
+
+
+        settings.Columns.Add(x => { x.FieldName = "LineNo"; x.Caption = "Line no"; x.ReadOnly = true; x.Visible=false; x.EditFormSettings.Visible = DefaultBoolean.False;
+            x.SetEditItemTemplateContent(c =>
+            {
+                GridViewEditItemTemplateContainer templateContainer = c as GridViewEditItemTemplateContainer;
+
+                Html.DevExpress().Label(lblsettings =>
+                {
+                    lblsettings.Name = "LineNo";
+                    //lblsettings.ControlStyle.CssClass = "align-middle";
+                    //lblsettings.ClientVisible = visible;
+                }).Bind(templateContainer.Text).Render();
+
+            });
+
+
+        });
+        settings.Columns.Add(x =>
+        {
+            x.FieldName = "StyleImage"; x.Caption = " "; x.ReadOnly = true; x.EditFormSettings.Visible = DefaultBoolean.False;
+            x.Settings.AllowAutoFilter = DefaultBoolean.False;
+            x.SetDataItemTemplateContent(s => {
+                var styleimg = DataBinder.Eval(s.DataItem, "StyleImage");
+                //ViewContext.Writer.Write(string.Format("<img src=\"{0}\" height=\"30\" width=\"35\" />", styleimg));
+                Html.DevExpress().ImageZoom(zoom =>
+                {
+                    zoom.Name = "StyleImage"+Guid.NewGuid().ToString();
+                    zoom.ImageUrl = styleimg.ToString();
+                    zoom.Height = System.Web.UI.WebControls.Unit.Pixel(30);
+                    zoom.Width = System.Web.UI.WebControls.Unit.Pixel(35);
+                    zoom.LargeImageUrl = styleimg.ToString();
+                    zoom.EnableExpandMode = true;
+                    zoom.SettingsZoomMode.ZoomWindowHeight = System.Web.UI.WebControls.Unit.Pixel(600);
+                    zoom.SettingsZoomMode.ZoomWindowWidth = System.Web.UI.WebControls.Unit.Pixel(700);
+                    //zoom.ShowHint = Model.ShowHint;
+                    //zoom.LargeImageLoadMode = Model.LargeImageLoadMode;
+                    zoom.SettingsZoomMode.ZoomWindowPosition = ZoomWindowPosition.Right;
+                    zoom.SettingsZoomMode.MouseBoxOpacityMode = MouseBoxOpacityMode.Inside;
+                }).GetHtml();
+            });
+            x.SetEditItemTemplateContent(c =>
+            {
+                GridViewEditItemTemplateContainer templateContainer = c as GridViewEditItemTemplateContainer;
+
+
+                Html.DevExpress().Image(lblsettings =>
+                {
+                    lblsettings.Name = "StyleImage";
+                    lblsettings.Height = System.Web.UI.WebControls.Unit.Pixel(30);
+                    lblsettings.Width = System.Web.UI.WebControls.Unit.Pixel(35);
+                    //lblsettings.ControlStyle.CssClass = "align-middle";
+                    //lblsettings.ClientVisible = visible;
+                }).Bind(templateContainer.Text).Render();
+
+            });
+        });
+
+        settings.Columns.Add(x => { x.FieldName = "EmployeeID"; x.Caption = "Employee Id"; x.ReadOnly = true; x.Visible = false; x.EditFormSettings.Visible = DefaultBoolean.False; x.SetEditItemTemplateContent(c =>
+        {
+            GridViewEditItemTemplateContainer templateContainer = c as GridViewEditItemTemplateContainer;
+
+            Html.DevExpress().Label(lblsettings =>
+            {
+                lblsettings.Name = "EmployeeID";
+                //lblsettings.ControlStyle.CssClass = "align-middle";
+                //lblsettings.ClientVisible = visible;
+            }).Bind(templateContainer.Text).Render();
+
+        });
+        });
+        settings.Columns.Add(x => { x.FieldName = "StyleID"; x.Caption = "Style"; x.ReadOnly = true; x.Visible = true; x.EditFormSettings.Visible = DefaultBoolean.False;
+            x.SetEditItemTemplateContent(c =>
+            {
+                GridViewEditItemTemplateContainer templateContainer = c as GridViewEditItemTemplateContainer;
+
+                Html.DevExpress().Label(lblsettings =>
+                {
+                    lblsettings.Name = "StyleID";
+                    //lblsettings.ControlStyle.CssClass = "align-middle";
+                    //lblsettings.ClientVisible = visible;
+                }).Bind(templateContainer.Text).Render();
+
+            });
+        });
+        settings.Columns.Add(x => { x.FieldName = "Description"; x.Caption = "Description"; x.ReadOnly = true; x.Visible = true; x.EditFormSettings.Visible = DefaultBoolean.False; x.SetEditItemTemplateContent(c =>
+        {
+            GridViewEditItemTemplateContainer templateContainer = c as GridViewEditItemTemplateContainer;
+
+            Html.DevExpress().Label(lblsettings =>
+            {
+                lblsettings.Name = "Description";
+                //lblsettings.ControlStyle.CssClass = "align-middle";
+                //lblsettings.ClientVisible = visible;
+            }).Bind(templateContainer.Text).Render();
+
+        });
+        });
+        settings.Columns.Add(x => { x.FieldName = "ColourID"; x.Caption = "Colour"; x.ReadOnly = true; x.Visible = true; x.EditFormSettings.Visible = DefaultBoolean.False; x.SetEditItemTemplateContent(c =>
+        {
+            GridViewEditItemTemplateContainer templateContainer = c as GridViewEditItemTemplateContainer;
+
+            Html.DevExpress().Label(lblsettings =>
+            {
+                lblsettings.Name = "ColourID";
+                //lblsettings.ControlStyle.CssClass = "align-middle";
+                //lblsettings.ClientVisible = visible;
+            }).Bind(templateContainer.Text).Render();
+
+        });
+        });
+        settings.Columns.Add(x => { x.FieldName = "SizeID"; x.Caption = "Size"; x.ReadOnly = true; x.Visible = true; x.EditFormSettings.Visible = DefaultBoolean.False; x.SetEditItemTemplateContent(c =>
+        {
+            GridViewEditItemTemplateContainer templateContainer = c as GridViewEditItemTemplateContainer;
+
+            Html.DevExpress().Label(lblsettings =>
+            {
+                lblsettings.Name = "SizeID";
+                //lblsettings.ControlStyle.CssClass = "align-middle";
+                //lblsettings.ClientVisible = visible;
+            }).Bind(templateContainer.Text).Render();
+
+        });
+        });
+        settings.Columns.Add(x => { x.FieldName = "Price"; x.Caption = "Price"; x.ReadOnly = true; x.Visible = true; x.EditFormSettings.Visible = DefaultBoolean.False; x.SetEditItemTemplateContent(c =>
+        {
+            GridViewEditItemTemplateContainer templateContainer = c as GridViewEditItemTemplateContainer;
+
+            Html.DevExpress().Label(lblsettings =>
+            {
+                lblsettings.Name = "Price";
+                //lblsettings.ControlStyle.CssClass = "align-middle";
+                //lblsettings.ClientVisible = visible;
+            }).Bind(templateContainer.Text).Render();
+
+        });
+        });
+        settings.Columns.Add(x => { x.FieldName = "OrdQty"; x.Caption = "OrdQty";  x.Visible = true;
+            x.EditFormSettings.Visible = DefaultBoolean.True;
+            x.SetEditItemTemplateContent(c =>
+            {
+                GridViewEditItemTemplateContainer templateContainer = c as GridViewEditItemTemplateContainer;
+                bool value = (bool)(DataBinder.Eval(c.DataItem, "Assembly"));
+                if (value)
+                {
+                    Html.DevExpress().Label(lblsettings =>
+                    {
+                        lblsettings.Name = "OrdQty";
+                        //lblsettings.ControlStyle.CssClass = "align-middle";
+                        //lblsettings.ClientVisible = visible;
+                    }).Bind(templateContainer.Text).Render();
+                }
+                else
+                {
+                    Html.DevExpress().TextBox(lblsettings =>
+                    {
+                        lblsettings.Name = "OrdQty";
+                        //lblsettings.ControlStyle.CssClass = "align-middle";
+                        //lblsettings.ClientVisible = visible;
+                    }).Bind(templateContainer.Text).Render();
+                }
+            });
+        });
+
+    });
+    if (ViewData["EditError"] != null){
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()
+

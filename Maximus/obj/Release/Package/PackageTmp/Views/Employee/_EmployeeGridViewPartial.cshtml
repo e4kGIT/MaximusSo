@@ -1,0 +1,269 @@
+@model IEnumerable<Maximus.Models.EmployeeViewModel>
+@{
+    var grid = Html.DevExpress().GridView(settings =>
+    {
+        settings.Name = "EmployeeGridView";
+        settings.CallbackRouteValues = new { Controller = "Employee", Action = "EmployeeGridViewPartial" };
+
+        settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "Employee", Action = "EmployeeGridViewPartialAddNew" };
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "Employee", Action = "EmployeeGridViewPartialUpdate" };
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "Employee", Action = "EmployeeGridViewPartialDelete" };
+        settings.SettingsEditing.Mode = GridViewEditingMode.PopupEditForm;
+        settings.SettingsBehavior.ConfirmDelete = true;
+
+        //settings.CommandColumn.Visible = true;
+        //settings.CommandColumn.ShowNewButton = true;
+        //// settings.CommandColumn.ShowDeleteButton = true;
+        //settings.CommandColumn.ShowEditButton = true;
+
+        settings.KeyFieldName = "EmployeeId";
+
+        //settings.SettingsCommandButton.EditButton.Image.IconID = IconID.EditEdit16x16;
+        //settings.SettingsCommandButton.EditButton.RenderMode = GridCommandButtonRenderMode.Image;
+
+        //settings.SettingsCommandButton.NewButton.Image.IconID = IconID.ActionsAdd16x16;
+        //settings.SettingsCommandButton.NewButton.RenderMode = GridCommandButtonRenderMode.Image;
+
+        //settings.SettingsCommandButton.CancelButton.Image.IconID = IconID.ActionsCancel16x16;
+        //settings.SettingsCommandButton.CancelButton.RenderMode = GridCommandButtonRenderMode.Image;
+
+        //settings.SettingsCommandButton.UpdateButton.Image.IconID = IconID.OtherUpdatetable16x16gray;
+        //settings.SettingsCommandButton.UpdateButton.RenderMode = GridCommandButtonRenderMode.Image;
+
+        settings.SettingsPager.Visible = true;
+        // settings.Settings.ShowGroupPanel = true;
+        settings.Settings.ShowFilterRow = true;
+        settings.SettingsBehavior.AllowSelectByRowClick = true;
+
+        settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.Off;
+        settings.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Right;
+        settings.SettingsAdaptivity.AdaptiveDetailColumnCount = 1;
+        settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = false;
+        settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
+
+        settings.Columns.Add(c =>
+        {
+            c.Width = System.Web.UI.WebControls.Unit.Pixel(100);
+            c.SetHeaderTemplateContent(edit =>
+            {
+
+                var content = "<center>";
+                string addBtn = "<span style=\"cursor:pointer;\" class=\"glyphicon glyphicon-plus\" title=\"Add new employee\" onclick='CreateNewEmployee()'></span>";
+                // string editBtn = string.Format("<span style=\"cursor:pointer;\" class=\"glyphicon glyphicon-edit\" onclick=\"EditEmployee('{0}');\"></span>");
+                content = content + "{0}&nbsp;&nbsp; </center>";
+                ViewContext.Writer.Write(string.Format(content, addBtn));
+            });
+            c.SetDataItemTemplateContent(edit =>
+            {
+                string EmployeeId = (DataBinder.Eval(edit.DataItem, "EmployeeId")).ToString();
+                var content = "<center>";
+                //string addBtn = "<span style=\"cursor:pointer;\" class=\"glyphicon glyphicon-plus\" onclick='CreateNewEmployee()'></span>";
+                string editBtn =string.Format("<span style=\"cursor:pointer;\" title=\"Edit employee\" class=\"glyphicon glyphicon-edit\" onclick=\"EditEmployee('{0}');\"></span>", EmployeeId);
+                content = content + "{0}&nbsp;&nbsp;</center>";
+                ViewContext.Writer.Write(string.Format(content,editBtn));
+            });
+        });
+        settings.Columns.Add("EmployeeId");
+        settings.Columns.Add("Department");
+        //settings.Columns.Add("EmpFirstName").Caption = "First name";
+        settings.Columns.Add("EmpFirstName").Caption="Firstname";
+        settings.Columns.Add("EmpLastName").Caption = "Lastname";
+
+        //settings.Columns.Add("StartDate").PropertiesEdit.DisplayFormatString = "dd.MM.yyyy"; ;
+        //settings.Columns.Add("EndDate").PropertiesEdit.DisplayFormatString = "dd.MM.yyyy"; ;
+        if (((List<string>)Session["Templates"]).Count > 0)
+        {
+            settings.Columns.Add(col =>
+            {
+                col.FieldName = "EmpUcodes";
+                col.Caption = "Templates";
+                col.SetDataItemTemplateContent(x =>
+                {
+                    string EmployeeId = (DataBinder.Eval(x.DataItem, "EmployeeId")).ToString();
+                    List<string> Templates = (List<string>)Session["Templates"];
+                    Html.DevExpress().DropDownEdit(cmb =>
+                    {
+                        cmb.Name = "checkComboBox_" + EmployeeId;
+                        cmb.Width = 285;
+                        cmb.Properties.DropDownWindowStyle.BackColor = System.Drawing.Color.FromArgb(0xEDEDED);
+
+                        cmb.SetDropDownWindowTemplateContent(c =>
+                        {
+                            Html.DevExpress().ListBox(listBoxSettings =>
+                            {
+                                listBoxSettings.Name = "checkListBox_" + EmployeeId;
+                                listBoxSettings.ControlStyle.Border.BorderWidth = 0;
+                                listBoxSettings.ControlStyle.BorderBottom.BorderWidth = 1;
+                                listBoxSettings.ControlStyle.BorderBottom.BorderColor = System.Drawing.Color.FromArgb(0xDCDCDC);
+                                listBoxSettings.Height = System.Web.UI.WebControls.Unit.Pixel(200);
+                                listBoxSettings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+
+                                //listBoxSettings.Properties.EnableSelectAll = true;
+                                //listBoxSettings.Properties.FilteringSettings.ShowSearchUI = true;
+                                listBoxSettings.Properties.SelectionMode = ListEditSelectionMode.CheckColumn;
+                                foreach (var item in Templates)
+                                {
+                                    listBoxSettings.Properties.Items.Add(item);
+                                }
+
+                                listBoxSettings.Properties.ClientSideEvents.SelectedIndexChanged = "updateText";
+                                listBoxSettings.Properties.ClientSideEvents.Init = "updateText";
+                            }).Render();
+                            ViewContext.Writer.Write("<div style=\"margin: 6px; overflow: hidden;\">");
+                            Html.DevExpress().Button(buttonSettings =>
+                            {
+                                buttonSettings.Name = "buttonClose_" + EmployeeId;
+                                buttonSettings.Text = "Close";
+                                buttonSettings.Style.Add("float", "right");
+                                buttonSettings.ClientSideEvents.Click = "HideCmb";
+                                buttonSettings.Height = 26;
+                            }).Render();
+                            ViewContext.Writer.Write("</div>");
+                        });
+                        cmb.Properties.AnimationType = AnimationType.None;
+                        cmb.Properties.ClientSideEvents.TextChanged = "synchronizeListBoxValues";
+                        cmb.Properties.ClientSideEvents.DropDown = "synchronizeListBoxValues";
+                    }).GetHtml();
+                });
+            });
+        }
+        else
+        {
+            settings.Columns.Add(col =>
+            {
+                col.FieldName = "EmpUcodes";
+                col.Caption = "Uniforms";
+                col.SetDataItemTemplateContent(x =>
+                {
+                    string EmployeeId = (DataBinder.Eval(x.DataItem, "EmployeeId")).ToString();
+                    string  Ucodes = ( string )(DataBinder.Eval(x.DataItem, "EmpUcodes"));
+
+                    if (Ucodes.Contains(','))
+                    {
+                        var ucodesArr = Ucodes.Split(',');
+                        Html.DevExpress().ComboBox(cmb =>
+                        {
+                            cmb.Name = "checkComboBox_" + EmployeeId + Ucodes;
+                            cmb.Width = 285;
+                            foreach (var item in ucodesArr)
+                            {
+                                cmb.Properties.Items.Add(item);
+                            }
+                        }).GetHtml();
+                        //Html.DevExpress().DropDownEdit(cmb =>
+                        //{
+                        //    cmb.Name = "checkComboBox_" + EmployeeId + Ucodes;
+                        //    cmb.Width = 285;
+                        //    cmb.Properties.DropDownWindowStyle.BackColor = System.Drawing.Color.FromArgb(0xEDEDED);
+
+                        //    cmb.SetDropDownWindowTemplateContent(c =>
+                        //    {
+                        //        Html.DevExpress().ListBox(listBoxSettings =>
+                        //        {
+                        //            listBoxSettings.Name = "checkListBox_" + EmployeeId + Ucodes;
+                        //            listBoxSettings.ControlStyle.Border.BorderWidth = 0;
+                        //            listBoxSettings.ControlStyle.BorderBottom.BorderWidth = 1;
+                        //            listBoxSettings.ControlStyle.BorderBottom.BorderColor = System.Drawing.Color.FromArgb(0xDCDCDC);
+                        //            listBoxSettings.Height = System.Web.UI.WebControls.Unit.Pixel(200);
+                        //            listBoxSettings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+
+                        //            //listBoxSettings.Properties.EnableSelectAll = true;
+                        //            //listBoxSettings.Properties.FilteringSettings.ShowSearchUI = true;
+                        //            listBoxSettings.Properties.SelectionMode = ListEditSelectionMode.CheckColumn;
+                        //            foreach (var item in ucodesArr)
+                        //            {
+                        //                listBoxSettings.Properties.Items.Add(item);
+                        //            }
+
+                        //            listBoxSettings.Properties.ClientSideEvents.SelectedIndexChanged = "updateText";
+                        //            listBoxSettings.Properties.ClientSideEvents.Init = "updateText";
+                        //        }).Render();
+                        //        ViewContext.Writer.Write("<div style=\"margin: 6px; overflow: hidden;\">");
+                        //        Html.DevExpress().Button(buttonSettings =>
+                        //        {
+                        //            buttonSettings.Name = "buttonClose_" + EmployeeId + Ucodes;
+                        //            buttonSettings.Text = "Close";
+                        //            buttonSettings.Style.Add("float", "right");
+                        //            buttonSettings.ClientSideEvents.Click = "HideCmb";
+                        //            buttonSettings.Height = 26;
+                        //        }).Render();
+                        //        ViewContext.Writer.Write("</div>");
+                        //    });
+                        //    cmb.Properties.AnimationType = AnimationType.None;
+                        //    cmb.Properties.ClientSideEvents.TextChanged = "synchronizeListBoxValues";
+                        //    cmb.Properties.ClientSideEvents.DropDown = "synchronizeListBoxValues";
+                        //}).GetHtml();
+
+                    }
+                    else
+                    {
+                        Html.DevExpress().ComboBox(cmb =>
+                        {
+                            cmb.Name = "checkComboBox_" + EmployeeId + Ucodes;
+                            cmb.Properties.Items.Add(Ucodes);
+                            cmb.SelectedIndex = 0;
+                        }).GetHtml();
+                    }
+                });
+            });
+        }
+
+        settings.Columns.Add(col =>
+        {
+            Maximus.Models.e4kmaximusdbEntities enty = new Maximus.Models.e4kmaximusdbEntities();
+            col.FieldName = "Entitlement";
+            col.Caption = "Last order";
+            col.SetDataItemTemplateContent(x =>
+            {
+                string EmployeeId = (DataBinder.Eval(x.DataItem, "EmployeeId")).ToString();
+                var custId = Session["BuisnessId"].ToString();
+                try
+                {
+                    var data = enty.tblsop_salesorder_header.Where(s => s.CustID == custId && s.PinNo == EmployeeId && s.OrderType == "SO").OrderByDescending(s => s.OrderDate).Select(s => new { OrderDate = s.OrderDate, OrderNo = s.OrderNo }).FirstOrDefault();
+                }
+                catch (Exception e)
+                {
+
+                }
+                //if (data != null)
+                //{
+                //    ViewContext.Writer.Write(string.Format("Order no: {0} on {1}", data.OrderNo, data.OrderDate.Value.ToString("dd-MM-yyyy")));
+                //}
+            });
+        });
+        settings.Columns.Add(col =>
+        {
+            col.Caption = " ";
+            if (((List<string>)Session["Templates"]).Count > 0)
+            {
+                col.SetDataItemTemplateContent(x =>
+                {
+                    string EmployeeName = (DataBinder.Eval(x.DataItem, "EmpFirstName")).ToString() + " " + (DataBinder.Eval(x.DataItem, "EmpLastName")).ToString();
+                    string EmployeeId = (DataBinder.Eval(x.DataItem, "EmployeeId")).ToString();
+                    string Content = string.Format("<button style='background-color:#009885;' onclick=\"CreateTemplateOrder('{0}','{1}','{2}')\" class=\"btn btn-primary\">Create Order</button>", EmployeeId, "CmbUcode_" + EmployeeId, EmployeeName);
+                    ViewContext.Writer.Write(Content);
+                });
+            }
+            else
+            {
+                col.SetDataItemTemplateContent(x =>
+                {
+                    string UcodesName = (DataBinder.Eval(x.DataItem, "EmpUcodes")).ToString();
+                    string EmployeeName = (DataBinder.Eval(x.DataItem, "EmpFirstName")).ToString() + " " + (DataBinder.Eval(x.DataItem, "EmpLastName")).ToString();
+                    string EmployeeId = (DataBinder.Eval(x.DataItem, "EmployeeId")).ToString();
+                    string Content = string.Format("<button style='background-color:#009885;' onclick=\"CreateOrder('{0}','{1}','{2}')\" class=\"btn btn-primary\">Create Order</button>", EmployeeId, "CmbUcode_" + EmployeeId + UcodesName, EmployeeName);
+                    ViewContext.Writer.Write(Content);
+                });
+            }
+        });
+    });
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()
+
+
+
+

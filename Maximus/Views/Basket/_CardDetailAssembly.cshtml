@@ -1,0 +1,78 @@
+@{
+    var grid = Html.DevExpress().GridView(settings => {
+        settings.Name = "GridView";
+        settings.CallbackRouteValues = new { Controller = "Basket", Action = "GridViewPartial" };
+
+        settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "Basket", Action = "GridViewPartialAddNew" };
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "Basket", Action = "GridViewPartialUpdate" };
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "Basket", Action = "GridViewPartialDelete" };
+        settings.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
+        settings.SettingsBehavior.ConfirmDelete = true;
+
+        settings.CommandColumn.Visible = false;
+       
+
+        settings.KeyFieldName = "LineNo";
+
+        settings.SettingsPager.Visible = true;
+        settings.Settings.ShowGroupPanel = true;
+        settings.Settings.ShowFilterRow = true;
+        settings.SettingsBehavior.AllowSelectByRowClick = true;
+
+        settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.Off;
+        settings.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Right;
+        settings.SettingsAdaptivity.AdaptiveDetailColumnCount = 1;
+        settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = true;
+        settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
+        settings.Columns.Add(x =>
+        {
+            x.FieldName = "StyleImage"; x.Caption = " "; x.ReadOnly = true; x.EditFormSettings.Visible = DefaultBoolean.False;
+            x.Settings.AllowAutoFilter = DefaultBoolean.False;
+            x.SetDataItemTemplateContent(s =>
+            {
+                var styleimg = DataBinder.Eval(s.DataItem, "StyleImage");
+                //ViewContext.Writer.Write(string.Format("<img src=\"{0}\" height=\"30\" width=\"35\" />", styleimg));
+                Html.DevExpress().ImageZoom(zoom =>
+                {
+                    zoom.Name = "StyleImage" + Guid.NewGuid().ToString();
+                    zoom.ImageUrl = styleimg.ToString();
+                    zoom.Height = System.Web.UI.WebControls.Unit.Pixel(30);
+                    zoom.Width = System.Web.UI.WebControls.Unit.Pixel(35);
+                    zoom.LargeImageUrl = styleimg.ToString();
+                    zoom.EnableExpandMode = true;
+                    zoom.SettingsZoomMode.ZoomWindowHeight = System.Web.UI.WebControls.Unit.Pixel(600);
+                    zoom.SettingsZoomMode.ZoomWindowWidth = System.Web.UI.WebControls.Unit.Pixel(700);
+                    //zoom.ShowHint = Model.ShowHint;
+                    //zoom.LargeImageLoadMode = Model.LargeImageLoadMode;
+                    zoom.SettingsZoomMode.ZoomWindowPosition = ZoomWindowPosition.Right;
+                    zoom.SettingsZoomMode.MouseBoxOpacityMode = MouseBoxOpacityMode.Inside;
+                }).GetHtml();
+            });
+            x.SetEditItemTemplateContent(c =>
+            {
+                GridViewEditItemTemplateContainer templateContainer = c as GridViewEditItemTemplateContainer;
+
+
+                Html.DevExpress().Image(lblsettings =>
+                {
+                    lblsettings.Name = "StyleImage";
+                    lblsettings.Height = System.Web.UI.WebControls.Unit.Pixel(30);
+                    lblsettings.Width = System.Web.UI.WebControls.Unit.Pixel(35);
+                    //lblsettings.ControlStyle.CssClass = "align-middle";
+                    //lblsettings.ClientVisible = visible;
+                }).Bind(templateContainer.Text).Render();
+
+            });
+        });
+
+        settings.Columns.Add("LineNo");
+        settings.Columns.Add("StyleID");
+        settings.Columns.Add("ColourID");
+        settings.Columns.Add("SizeID");
+        settings.Columns.Add("OrdQty");
+    });
+    if (ViewData["EditError"] != null){
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()

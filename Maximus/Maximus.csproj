@@ -1,0 +1,1610 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{382256B2-FD72-4D87-A805-FF61CC91B307}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Maximus</RootNamespace>
+    <AssemblyName>Maximus</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="BouncyCastle.Crypto, Version=1.8.3.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
+      <HintPath>..\packages\BouncyCastle.1.8.3.1\lib\BouncyCastle.Crypto.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="DevExpress.Data.v16.1, Version=16.1.15.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Printing.v16.1.Core, Version=16.1.15.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.RichEdit.v16.1.Core, Version=16.1.15.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Utils.v16.1, Version=16.1.15.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Web.ASPxThemes.v16.1, Version=16.1.15.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Web.Mvc5.v16.1, Version=16.1.15.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Web.v16.1, Version=16.1.15.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Google.Protobuf, Version=3.6.1.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
+      <HintPath>..\packages\Google.Protobuf.3.6.1\lib\net45\Google.Protobuf.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="log4net, Version=2.0.8.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.8\lib\net45-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.Agent.Intercept, Version=1.2.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.1.2.1\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.DependencyCollector, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.DependencyCollector.2.0.0\lib\net45\Microsoft.AI.DependencyCollector.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.PerfCounterCollector, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.0.0\lib\net45\Microsoft.AI.PerfCounterCollector.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.ServerTelemetryChannel, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.2.0.0\lib\net45\Microsoft.AI.ServerTelemetryChannel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.Web, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Web.2.0.0\lib\net45\Microsoft.AI.Web.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.WindowsServer, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.2.0.0\lib\net45\Microsoft.AI.WindowsServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationInsights, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.2.0.0\lib\net45\Microsoft.ApplicationInsights.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="MySql.Data, Version=8.0.16.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.8.0.16\lib\net452\MySql.Data.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MySql.Data.EntityFramework, Version=8.0.16.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.EntityFramework.8.0.16\lib\net452\MySql.Data.EntityFramework.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.ComponentModel" />
+    <Reference Include="System.Configuration.Install" />
+    <Reference Include="System.Drawing.Design" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Web.Razor">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Webpages">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Webpages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Webpages.Deployment">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Webpages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Webpages.Razor">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Webpages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Helpers">
+      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Web.Infrastructure">
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\css\Media.css" />
+    <Content Include="Content\Images\dimensions.jpg" />
+    <Content Include="Content\Images\doc.png" />
+    <Content Include="Content\Images\embroidery.png" />
+    <Content Include="Content\Images\empHistory.png" />
+    <Content Include="Content\Images\saleLogo.png" />
+    <Content Include="Content\Images\salesorder.netsuite.png" />
+    <Content Include="Content\Images\search.png" />
+    <Content Include="Content\Images\ui-icons_444444_256x240.png" />
+    <Content Include="Content\Images\ui-icons_555555_256x240.png" />
+    <Content Include="Content\Images\ui-icons_777620_256x240.png" />
+    <Content Include="Content\Images\ui-icons_777777_256x240.png" />
+    <Content Include="Content\Images\ui-icons_cc0000_256x240.png" />
+    <Content Include="Content\Images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Content\jquery-ui.css" />
+    <Content Include="Content\jquery-ui.structure.css" />
+    <Content Include="Content\jquery-ui.theme.css" />
+    <Content Include="Content\Site.css" />
+    <Content Include="Content\themes\base\accordion.css" />
+    <Content Include="Content\themes\base\all.css" />
+    <Content Include="Content\themes\base\autocomplete.css" />
+    <Content Include="Content\themes\base\base.css" />
+    <Content Include="Content\themes\base\button.css" />
+    <Content Include="Content\themes\base\core.css" />
+    <Content Include="Content\themes\base\datepicker.css" />
+    <Content Include="Content\themes\base\dialog.css" />
+    <Content Include="Content\themes\base\draggable.css" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Include="Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Include="Content\themes\base\images\ui-icons_222222_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_444444_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_454545_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_555555_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_777620_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_777777_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_888888_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_cc0000_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Include="Content\themes\base\images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Content\themes\base\jquery-ui.css" />
+    <Content Include="Content\themes\base\jquery-ui.min.css" />
+    <Content Include="Content\themes\base\menu.css" />
+    <Content Include="Content\themes\base\progressbar.css" />
+    <Content Include="Content\themes\base\resizable.css" />
+    <Content Include="Content\themes\base\selectable.css" />
+    <Content Include="Content\themes\base\selectmenu.css" />
+    <Content Include="Content\themes\base\slider.css" />
+    <Content Include="Content\themes\base\sortable.css" />
+    <Content Include="Content\themes\base\spinner.css" />
+    <Content Include="Content\themes\base\tabs.css" />
+    <Content Include="Content\themes\base\theme.css" />
+    <Content Include="Content\themes\base\tooltip.css" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Global.asax" />
+    <Content Include="Models\maximusContext.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>maximusContext1.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\maximusDataContext.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>maximusDataContext.edmx</DependentUpon>
+      <LastGenOutput>maximusDataContext.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Models\maximusDataContext.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>maximusDataContext.edmx</DependentUpon>
+      <LastGenOutput>maximusDataContext.cs</LastGenOutput>
+    </Content>
+    <Content Include="scripts\ai.0.22.9-build00167.js" />
+    <Content Include="scripts\ai.0.22.9-build00167.min.js" />
+    <Content Include="scripts\bootstrap.js" />
+    <Content Include="scripts\bootstrap.min.js" />
+    <EntityDeploy Include="Models\maximusDataContext.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>maximusDataContext.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\maximusDataContext.edmx.diagram">
+      <DependentUpon>maximusDataContext.edmx</DependentUpon>
+    </Content>
+    <None Include="Properties\PublishProfiles\MaximusTestPublish.pubxml" />
+    <None Include="scripts\jquery-1.12.4.intellisense.js" />
+    <Content Include="scripts\jquery-1.12.4.js" />
+    <Content Include="scripts\jquery-1.12.4.min.js" />
+    <Content Include="scripts\jquery-ui-1.12.1.js" />
+    <Content Include="scripts\jquery-ui-1.12.1.min.js" />
+    <Content Include="scripts\jquery-ui.js" />
+    <Content Include="scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="scripts\modernizr-2.6.2.js" />
+    <Content Include="scripts\myScript.js" />
+    <Content Include="StyleImages\3MOB FLEECE2.jpg" />
+    <Content Include="StyleImages\3MOB POLO1.jpg" />
+    <Content Include="StyleImages\3MOB POLO2.jpg" />
+    <Content Include="StyleImages\82011.jpg" />
+    <Content Include="StyleImages\AMB DEMO\AMB BOMBER JKT.JPG" />
+    <Content Include="StyleImages\AMB DEMO\AMB FLE.jpg" />
+    <Content Include="StyleImages\AMB DEMO\AMB FTRS.jpg" />
+    <Content Include="StyleImages\AMB DEMO\AMB HVWLS.jpg" />
+    <Content Include="StyleImages\AMB DEMO\amb mtrs.jpg" />
+    <Content Include="StyleImages\AMB DEMO\AMB ONSHT.jpg" />
+    <Content Include="StyleImages\AMB DEMO\AMB VNTS.jpg" />
+    <Content Include="StyleImages\AMB DEMO\BullVestFr.jpg" />
+    <Content Include="StyleImages\AMB DEMO\EB AMBULANCE.jpg" />
+    <Content Include="StyleImages\AMB DEMO\O5H AMBULANCE.jpg" />
+    <Content Include="StyleImages\AMB DEMO\SF16 Ranger 2200H.jpg" />
+    <Content Include="StyleImages\AMB DEMO\UniformExpress 040309 090.jpg" />
+    <Content Include="StyleImages\AMB FR.jpg" />
+    <Content Include="StyleImages\Cordant S27\CSSS WHITE.jpg" />
+    <Content Include="StyleImages\DEMO SECURITY\BOMBJKT.jpg" />
+    <Content Include="StyleImages\DEMO SECURITY\c15.jpg" />
+    <Content Include="StyleImages\DEMO SECURITY\e30.jpg" />
+    <Content Include="StyleImages\DEMO SECURITY\FLE.jpg" />
+    <Content Include="StyleImages\DEMO SECURITY\HVE.jpg" />
+    <Content Include="StyleImages\DEMO SECURITY\j05own.jpg" />
+    <Content Include="StyleImages\DEMO SECURITY\JUMNAV.jpg" />
+    <Content Include="StyleImages\DEMO SECURITY\K115.jpg" />
+    <Content Include="StyleImages\DEMO SECURITY\LCSLS.jpg" />
+    <Content Include="StyleImages\DEMO SECURITY\LPSLS.jpg" />
+    <Content Include="StyleImages\DEMO SECURITY\LTRSUF.jpg" />
+    <Content Include="StyleImages\DEMO SECURITY\PSLS.jpg" />
+    <Content Include="StyleImages\DEMO SECURITY\SH18.jpg" />
+    <Content Include="StyleImages\DEMO SECURITY\SHOE1.jpg" />
+    <Content Include="StyleImages\DEMO SECURITY\STAB VEST.jpg" />
+    <Content Include="StyleImages\DEMO SECURITY\T07.jpg" />
+    <Content Include="StyleImages\DEMO SECURITY\v06 colours.jpg" />
+    <Content Include="StyleImages\DEMO SECURITY\w05.jpg" />
+    <Content Include="StyleImages\DEMO SECURITY\w07 22 x 14.jpg" />
+    <Content Include="StyleImages\DEMO SECURITY\w290475.jpg" />
+    <Content Include="StyleImages\DEMO WORKWEAR\BOOT1.jpg" />
+    <Content Include="StyleImages\DEMO WORKWEAR\ClassicA.jpg" />
+    <Content Include="StyleImages\DEMO WORKWEAR\ClassicB.jpg.jpg" />
+    <Content Include="StyleImages\DEMO WORKWEAR\d04.jpg" />
+    <Content Include="StyleImages\DEMO WORKWEAR\d15.jpg" />
+    <Content Include="StyleImages\DEMO WORKWEAR\E14.jpg" />
+    <Content Include="StyleImages\DEMO WORKWEAR\E15.jpg" />
+    <Content Include="StyleImages\DEMO WORKWEAR\hi viz poloro80302.jpg" />
+    <Content Include="StyleImages\DEMO WORKWEAR\n06own.jpg" />
+    <Content Include="StyleImages\DEMO WORKWEAR\R082303 TRS.jpg" />
+    <Content Include="StyleImages\DEMO WORKWEAR\Rembrandt.jpg.jpg" />
+    <Content Include="StyleImages\DEMO WORKWEAR\ro76302 cargo.jpg" />
+    <Content Include="StyleImages\DEMO WORKWEAR\ro82002 bliz fle.jpg" />
+    <Content Include="StyleImages\DEMO WORKWEAR\s01.jpg" />
+    <Content Include="StyleImages\DEMO WORKWEAR\Signal.jpg.jpg" />
+    <Content Include="StyleImages\DEMO WORKWEAR\v01 colours.jpg" />
+    <Content Include="StyleImages\DEMO WORKWEAR\v01.jpg" />
+    <Content Include="StyleImages\DEMO WORKWEAR\w08 hiviz wait.jpg" />
+    <Content Include="StyleImages\DEMO WORKWEAR\WOT2.jpg" />
+    <Content Include="StyleImages\FIRSTSEC\1074D.JPG" />
+    <Content Include="StyleImages\FIRSTSEC\2218A.JPG" />
+    <Content Include="StyleImages\FIRSTSEC\2222A.JPG" />
+    <Content Include="StyleImages\FIRSTSEC\2224A.JPG" />
+    <Content Include="StyleImages\FIRSTSEC\3125.JPG" />
+    <Content Include="StyleImages\FIRSTSEC\5984A.JPG" />
+    <Content Include="StyleImages\FIRSTSEC\5984E.JPG" />
+    <Content Include="StyleImages\FIRSTSEC\76662.JPG" />
+    <Content Include="StyleImages\FIRSTSEC\76668.JPG" />
+    <Content Include="StyleImages\FIRSTSEC\76996.JPG" />
+    <Content Include="StyleImages\FIRSTSEC\79989.JPG" />
+    <Content Include="StyleImages\FIRSTSEC\82011.JPG" />
+    <Content Include="StyleImages\FIRSTSEC\8314D.bmp" />
+    <Content Include="StyleImages\FIRSTSEC\8314D.JPG" />
+    <Content Include="StyleImages\FIRSTSEC\8314F.JPG" />
+    <Content Include="StyleImages\FIRSTSEC\8387D.JPG" />
+    <Content Include="StyleImages\FIRSTSEC\9457C.JPG" />
+    <Content Include="StyleImages\FIRSTSEC\B43 BLACK.JPG" />
+    <Content Include="StyleImages\FIRSTSEC\B43 NAVY.JPG" />
+    <Content Include="StyleImages\FIRSTSEC\B47 BLACK.JPG" />
+    <Content Include="StyleImages\FIRSTSEC\B47 NAVY.JPG" />
+    <Content Include="StyleImages\FIRSTSEC\BA3-YB.JPG" />
+    <Content Include="StyleImages\FIRSTSEC\BOOT1.JPG" />
+    <Content Include="StyleImages\FIRSTSEC\BOOTLH401.JPG" />
+    <Content Include="StyleImages\FIRSTSEC\BOOTM569A.JPG" />
+    <Content Include="StyleImages\FIRSTSEC\BOOTMAG.JPG" />
+    <Content Include="StyleImages\FIRSTSEC\BUMPCAP.JPG" />
+    <Content Include="StyleImages\FIRSTSEC\C901.JPG" />
+    <Content Include="StyleImages\FIRSTSEC\C902.JPG" />
+    <Content Include="StyleImages\FIRSTSEC\CF922.JPG" />
+    <Content Include="StyleImages\FIRSTSEC\CSLS PALE BLUE.JPG" />
+    <Content Include="StyleImages\FIRSTSEC\CSLS WHITE.JPG" />
+    <Content Include="StyleImages\FIRSTSEC\CSSS WHITE.JPG" />
+    <Content Include="StyleImages\FIRSTSEC\D1602.JPG" />
+    <Content Include="StyleImages\FIRSTSEC\E15H.JPG" />
+    <Content Include="StyleImages\FIRSTSEC\E4J0499.JPG" />
+    <Content Include="StyleImages\FIRSTSEC\E4LT499.JPG" />
+    <Content Include="StyleImages\FIRSTSEC\E4T0499.JPG" />
+    <Content Include="StyleImages\FIRSTSEC\E5J1599.JPG" />
+    <Content Include="StyleImages\FIRSTSEC\HVD.JPG" />
+    <Content Include="StyleImages\FIRSTSEC\HVW.JPG" />
+    <Content Include="StyleImages\FIRSTSEC\J256.JPG" />
+    <Content Include="StyleImages\FIRSTSEC\PWLJ.JPG" />
+    <Content Include="StyleImages\FIRSTSEC\PWLT.JPG" />
+    <Content Include="StyleImages\FLE300.jpg" />
+    <Content Include="StyleImages\HAT SQ.jpg" />
+    <Content Include="StyleImages\IRON MOUNTAIN\DSC_0075.jpg" />
+    <Content Include="StyleImages\IRON MOUNTAIN\Iron Mountain Bodywarmer.jpg" />
+    <Content Include="StyleImages\IRON MOUNTAIN\thermal long johns.jpg" />
+    <Content Include="StyleImages\IRON MOUNTAIN\thermal vest.jpg" />
+    <Content Include="StyleImages\IRON MOUNTAIN\UniformExpress 040309 185.jpg" />
+    <Content Include="StyleImages\IRON MOUNTAIN\UniformExpress 040309 187.jpg" />
+    <Content Include="StyleImages\IRON MOUNTAIN\UniformExpress 040309 190.jpg" />
+    <Content Include="StyleImages\IRON MOUNTAIN\UniformExpress 040309 194.jpg" />
+    <Content Include="StyleImages\IRON MOUNTAIN\UniformExpress 040309 195.jpg" />
+    <Content Include="StyleImages\IRON MOUNTAIN\UniformExpress 040309 196.jpg" />
+    <Content Include="StyleImages\IRON MOUNTAIN\UniformExpress 040309 198.jpg" />
+    <Content Include="StyleImages\IRON MOUNTAIN\UniformExpress 040309 200.jpg" />
+    <Content Include="StyleImages\IRON MOUNTAIN\UniformExpress 040309 201.jpg" />
+    <Content Include="StyleImages\IRON MOUNTAIN\UniformExpress 040309 202.jpg" />
+    <Content Include="StyleImages\IRON MOUNTAIN\UniformExpress 040309 203.jpg" />
+    <Content Include="StyleImages\IRON MOUNTAIN\UniformExpress 040309 204.jpg" />
+    <Content Include="StyleImages\IRON MOUNTAIN\UniformExpress 040309 206.jpg" />
+    <Content Include="StyleImages\IRON MOUNTAIN\UniformExpress 040309 207.jpg" />
+    <Content Include="StyleImages\IRON MOUNTAIN\UniformExpress 040309 208.jpg" />
+    <Content Include="StyleImages\IRON MOUNTAIN\UniformExpress 040309 210.jpg" />
+    <Content Include="StyleImages\ISSBOLT\DRESSMAT.jpg" />
+    <Content Include="StyleImages\ISSBOLT\IS BAR WTU1.png" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR BELT2.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR BSS1.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR FJ1.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR FJ2.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR FT1.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR FT2.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR HANKIE.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR MJ1.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR MJ2.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR MJK4.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR MJK5.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR MSH4.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR MSH5.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR MSH8.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR MT1.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR MT2.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR MTI1.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR MTR4.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR MTR5.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR MTR6.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR MTR7.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR MTU1.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR MTU2.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR MW2.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR MWC3.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR PPE1.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR PPE3.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR SCARF1.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR SK1.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR SK2.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR SLS1.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR TIE1.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR TIE2.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR TIE3.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR TIE4.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR UCO1.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR UCO2.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR UFJ1.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR UFJ3.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR UFJ4.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR UJK2.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR UJK3.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR UPS2.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR UPS3.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR UPS4.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR UPS7.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR USS1.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR USS2.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR UTR1.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR WBL7.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR WBL8.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR WBL9.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR WJK2.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR WJK3.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR WPS3.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR WSK2.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR WSK3.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR WTR2.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR WTR4.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR WTR5.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR WTU1.JPG" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR WTU3.jpg" />
+    <Content Include="StyleImages\ISSBOLT\ISS BAR WWC1.jpg" />
+    <Content Include="StyleImages\logos\AN POC.png" />
+    <Content Include="StyleImages\logos\CORPSE01.jpg" />
+    <Content Include="StyleImages\logos\IronMountain.gif" />
+    <Content Include="StyleImages\logos\logo.gif" />
+    <Content Include="StyleImages\logos\Mitie logo.png" />
+    <Content Include="StyleImages\logos\SJABOIIE.jpg" />
+    <Content Include="StyleImages\logos\three_logo_black.gif" />
+    <Content Include="StyleImages\logos\TSBLogo.jpg" />
+    <Content Include="StyleImages\logos\UE Logo New.jpg" />
+    <Content Include="StyleImages\logos\unelogo old.png" />
+    <Content Include="StyleImages\logos\unelogo.jpg.jpg" />
+    <Content Include="StyleImages\logos\unelogo_.png" />
+    <Content Include="StyleImages\logos\vsg01.gif" />
+    <Content Include="StyleImages\notfound.png" />
+    <Content Include="StyleImages\no_image.gif" />
+    <Content Include="StyleImages\PALMARIS PICTURES\76662.jpg" />
+    <Content Include="StyleImages\PALMARIS PICTURES\BC035.jpg" />
+    <Content Include="StyleImages\PALMARIS PICTURES\Bib &amp; Brace 500.jpg" />
+    <Content Include="StyleImages\PALMARIS PICTURES\Charcoal Suit.jpg" />
+    <Content Include="StyleImages\PALMARIS PICTURES\Hi-Vis Bodywarmer.jpg" />
+    <Content Include="StyleImages\PALMARIS PICTURES\HJ06 4-1 Hi-Vis Jacket.JPG" />
+    <Content Include="StyleImages\PALMARIS PICTURES\Leather Glove G03.jpg" />
+    <Content Include="StyleImages\PALMARIS PICTURES\N06.jpg" />
+    <Content Include="StyleImages\PALMARIS PICTURES\Nurses Tunic AM035.jpg" />
+    <Content Include="StyleImages\PALMARIS PICTURES\Pullover J710M.jpg" />
+    <Content Include="StyleImages\PALMARIS PICTURES\Waterproof Bib &amp; Brace %281%29.jpg" />
+    <Content Include="StyleImages\PALMARIS PICTURES\Waterproof Bib &amp; Brace.jpg" />
+    <Content Include="StyleImages\PARKDEAN\CT1.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDF WBL4.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH 76662.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH BLOUSE LS.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH BLOUSE SS.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH CTRS2.jpg" />
+    <Content Include="StyleImages\PARKDEAN\PDH HB720.jpg" />
+    <Content Include="StyleImages\PARKDEAN\PDH HB721.jpg" />
+    <Content Include="StyleImages\PARKDEAN\PDH HB722.jpg" />
+    <Content Include="StyleImages\PARKDEAN\PDH HB723.jpg" />
+    <Content Include="StyleImages\PARKDEAN\PDH HB724.jpg" />
+    <Content Include="StyleImages\PARKDEAN\PDH HVD.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH HVJKT1.jpg" />
+    <Content Include="StyleImages\PARKDEAN\PDH HVW.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH HVW1.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH MBS1.jpg" />
+    <Content Include="StyleImages\PARKDEAN\PDH MJK1.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH MJK2.jpg" />
+    <Content Include="StyleImages\PARKDEAN\PDH MJK4.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH MSH10.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH MSH11.jpg" />
+    <Content Include="StyleImages\PARKDEAN\PDH MSH12.jpg" />
+    <Content Include="StyleImages\PARKDEAN\PDH MSH13.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH MSH15.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH MSH16.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH MSH17.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH MSH18 SKY.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH MSH18 WHITE.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH MSH19 SKY.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH MSH19 WHITE.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH MSH9.jpg" />
+    <Content Include="StyleImages\PARKDEAN\PDH MTI 1 - TIE.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH MTR1.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH MTR2.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH MTR3.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH MTS1.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH POLOTEC.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH PS220W.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH SHELLF.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH SHELLM.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH SHIRT LS.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH SHIRT SS.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH SSHELLB.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UAP1.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UAP2.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UAP3.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UAP5.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UBC1.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UBC2.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UBC3.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UCO1.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UCO2.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UCO3.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UFJ1.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UFJ2.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UFJ3.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UFJ4.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UHA1 BLACK.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UHA1 GREEN.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UHA2.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UJK1.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UJK2.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UJK3.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UJK4.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UJK5.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UJK6.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UJK7.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UJK8.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UJU1.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UJU2.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UJU3.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UJU4 BLACK.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UJU4 GREY.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UJU4 NAVY.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UPS1.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UPS11 DIVA BLUE.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UPS11 FUSHIA.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UPS11 PURPLE.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UPS11 TURQUOISE.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UPS12 BURGUNDY.bmp" />
+    <Content Include="StyleImages\PARKDEAN\PDH UPS12 BURGUNDY.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UPS12 DIVA BLUE.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UPS12 PISTACHIO.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UPS12 SAND.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UPS2.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UPS3.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UPS5.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UPS6.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UPS7.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UPS8.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH USS3.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH USS4.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UTR1.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UTR2 BLK.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UTR2 NVY.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UTR3.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UTR4.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UTR5.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UTS1.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH UTS2.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH WAP1.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH WBL12.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH WBL19.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH WBL20.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH WBL21.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH WBL22.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH WBL23.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH WBL24.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH WBL25 SKY.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH WBL25 WHITE.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH WBL26 SKY.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH WBL26 WHITE.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH WBL5.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH WBL7.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH WCA3.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH WCA4 BLACK.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH WCA4 GREY.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH WCA4 NAVY.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH WCO1.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH WD103.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH WD109.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH WDR1.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH WDR2.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH WDR3.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH WDR4.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH WDR5.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH WJK1.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH WJK2.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH WJK3.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH WJU5 BLACK.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH WJU5 GREY.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH WJU5 NAVY.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH WPS1.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH WPS3 FUCHSIA.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH WPS3 PURPLE.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH WPS3 REAL TURQUOISE.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH WPS4 DIVA BLUE.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH WPS4 PISTACHIO.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH WPS4 PURPLE.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH WPS4.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH WS1K.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH WTR3.JPG" />
+    <Content Include="StyleImages\PARKDEAN\PDH WTS1.JPG" />
+    <Content Include="StyleImages\Photoshoot Aug 12\Photoshoot Aug 12\76348.jpg" />
+    <Content Include="StyleImages\Photoshoot Aug 12\Photoshoot Aug 12\76662.jpg" />
+    <Content Include="StyleImages\Photoshoot Aug 12\Photoshoot Aug 12\76668.jpg" />
+    <Content Include="StyleImages\Photoshoot Aug 12\Photoshoot Aug 12\76992F.jpg" />
+    <Content Include="StyleImages\Photoshoot Aug 12\Photoshoot Aug 12\76996.jpg" />
+    <Content Include="StyleImages\Photoshoot Aug 12\Photoshoot Aug 12\82011.jpg" />
+    <Content Include="StyleImages\Photoshoot Aug 12\Photoshoot Aug 12\AMB FR Shirt.jpg" />
+    <Content Include="StyleImages\Photoshoot Aug 12\Photoshoot Aug 12\AMB FR.jpg" />
+    <Content Include="StyleImages\Photoshoot Aug 12\Photoshoot Aug 12\AMB MTRS + AMB ONS +LTRS.jpg" />
+    <Content Include="StyleImages\Photoshoot Aug 12\Photoshoot Aug 12\AMB MTRS + AMB ONS.jpg" />
+    <Content Include="StyleImages\Photoshoot Aug 12\Photoshoot Aug 12\AMB ONS + LTRS.jpg" />
+    <Content Include="StyleImages\Photoshoot Aug 12\Photoshoot Aug 12\AMB ONSHT Both.jpg" />
+    <Content Include="StyleImages\Photoshoot Aug 12\Photoshoot Aug 12\AMB ONSHT M.jpg" />
+    <Content Include="StyleImages\Photoshoot Aug 12\Photoshoot Aug 12\AMB ONSHT.jpg" />
+    <Content Include="StyleImages\Photoshoot Aug 12\Photoshoot Aug 12\AMBS LTRS.jpg" />
+    <Content Include="StyleImages\Photoshoot Aug 12\Photoshoot Aug 12\BO2 M.jpg" />
+    <Content Include="StyleImages\Photoshoot Aug 12\Photoshoot Aug 12\BO2.jpg" />
+    <Content Include="StyleImages\Photoshoot Aug 12\Photoshoot Aug 12\Copy of AMB MTRS + AMB ONS +LTRS.jpg" />
+    <Content Include="StyleImages\Photoshoot Aug 12\Photoshoot Aug 12\Copy of AMB MTRS + AMB ONS.jpg" />
+    <Content Include="StyleImages\Photoshoot Aug 12\Photoshoot Aug 12\Copy of AMB ONS + LTRS.jpg" />
+    <Content Include="StyleImages\Photoshoot Aug 12\Photoshoot Aug 12\Copy of Uniform 129357.jpg" />
+    <Content Include="StyleImages\Photoshoot Aug 12\Photoshoot Aug 12\Copy of Uniform 129367.jpg" />
+    <Content Include="StyleImages\Photoshoot Aug 12\Photoshoot Aug 12\Copy of Uniform 129375.jpg" />
+    <Content Include="StyleImages\Photoshoot Aug 12\Photoshoot Aug 12\Copy of Uniform 129384.jpg" />
+    <Content Include="StyleImages\Photoshoot Aug 12\Photoshoot Aug 12\FLE300 BLK.jpg" />
+    <Content Include="StyleImages\Photoshoot Aug 12\Photoshoot Aug 12\FLE300 Both.jpg" />
+    <Content Include="StyleImages\Photoshoot Aug 12\Photoshoot Aug 12\FLE300 M.jpg" />
+    <Content Include="StyleImages\Photoshoot Aug 12\Photoshoot Aug 12\FLE300.jpg" />
+    <Content Include="StyleImages\Photoshoot Aug 12\Photoshoot Aug 12\Gist Fleece.jpg" />
+    <Content Include="StyleImages\Photoshoot Aug 12\Photoshoot Aug 12\Gist Jumper.jpg" />
+    <Content Include="StyleImages\Photoshoot Aug 12\Photoshoot Aug 12\Gist Logo.jpg" />
+    <Content Include="StyleImages\Photoshoot Aug 12\Photoshoot Aug 12\Gist Polo + Trouser.jpg" />
+    <Content Include="StyleImages\Photoshoot Aug 12\Photoshoot Aug 12\Gist Polo.jpg" />
+    <Content Include="StyleImages\Photoshoot Aug 12\Photoshoot Aug 12\PS220 + 76996.jpg" />
+    <Content Include="StyleImages\Photoshoot Aug 12\Photoshoot Aug 12\PS220 BLK + 76662 + 76992F.jpg" />
+    <Content Include="StyleImages\Photoshoot Aug 12\Photoshoot Aug 12\PS220 BLK + 76662.jpg" />
+    <Content Include="StyleImages\Photoshoot Aug 12\Photoshoot Aug 12\PS220 BLK M + 66662.jpg" />
+    <Content Include="StyleImages\Photoshoot Aug 12\Photoshoot Aug 12\PS220 BLK M.jpg" />
+    <Content Include="StyleImages\Photoshoot Aug 12\Photoshoot Aug 12\PS220 BLK.jpg" />
+    <Content Include="StyleImages\Photoshoot Aug 12\Photoshoot Aug 12\PS220 F.jpg" />
+    <Content Include="StyleImages\Photoshoot Aug 12\Photoshoot Aug 12\PS220.jpg" />
+    <Content Include="StyleImages\Photoshoot Aug 12\Photoshoot Aug 12\resized amb onsht.jpg" />
+    <Content Include="StyleImages\Photoshoot Aug 12\Photoshoot Aug 12\SJAOI Red Eps.jpg" />
+    <Content Include="StyleImages\PPE\35002.jpg" />
+    <Content Include="StyleImages\PPE\60600874310440.jpg" />
+    <Content Include="StyleImages\PPE\BUMP CAP.jpg" />
+    <Content Include="StyleImages\PPE\CAP1.jpg" />
+    <Content Include="StyleImages\PPE\COVERALL.jpg" />
+    <Content Include="StyleImages\PPE\FLEECE HAT.jpg" />
+    <Content Include="StyleImages\PPE\G05.jpg" />
+    <Content Include="StyleImages\PPE\HVE.jpg" />
+    <Content Include="StyleImages\PPE\HVJKT.jpg" />
+    <Content Include="StyleImages\PPE\HVW.jpg" />
+    <Content Include="StyleImages\PPE\latex crinkle.jpg" />
+    <Content Include="StyleImages\PPE\polka dot glove.jpg" />
+    <Content Include="StyleImages\PPE\R070001B.jpg" />
+    <Content Include="StyleImages\PPE\R07200100.jpg" />
+    <Content Include="StyleImages\PPE\r084003.jpg" />
+    <Content Include="StyleImages\PPE\RO711.jpg" />
+    <Content Include="StyleImages\PPE\RO72101.jpg" />
+    <Content Include="StyleImages\PPE\RO84102.jpg" />
+    <Content Include="StyleImages\PPE\S466_yel_grn_98x155.jpg" />
+    <Content Include="StyleImages\PPE\vinyl dis gloves.jpg" />
+    <Content Include="StyleImages\PPE\WOT2.jpg" />
+    <Content Include="StyleImages\S27CSSS WHITE.jpg.jpg" />
+    <Content Include="StyleImages\shield\100_0263.jpg" />
+    <Content Include="StyleImages\shield\100_0265.jpg" />
+    <Content Include="StyleImages\shield\100_0276.jpg" />
+    <Content Include="StyleImages\shield\100_0283.jpg" />
+    <Content Include="StyleImages\shield\100_0288.jpg" />
+    <Content Include="StyleImages\shield\J10.jpg" />
+    <Content Include="StyleImages\shield\LTRSUF.jpg" />
+    <Content Include="StyleImages\shield\SGC 001.jpg" />
+    <Content Include="StyleImages\shield\SGC 010.jpg" />
+    <Content Include="StyleImages\shield\SGC 018.jpg" />
+    <Content Include="StyleImages\shield\SGC 020.jpg" />
+    <Content Include="StyleImages\shield\SGC 024.jpg" />
+    <Content Include="StyleImages\shield\SGC 027.jpg" />
+    <Content Include="StyleImages\shield\SGC 033.jpg" />
+    <Content Include="StyleImages\shield\T07.jpg" />
+    <Content Include="StyleImages\shield\T11.jpg" />
+    <Content Include="StyleImages\shield\T18.jpg" />
+    <Content Include="StyleImages\TSB\Blouse.jpg" />
+    <Content Include="StyleImages\TSB\Cardigan.jpg" />
+    <Content Include="StyleImages\TSB\Dress.jpg" />
+    <Content Include="StyleImages\TSB\Ladies JKT.jpg" />
+    <Content Include="StyleImages\TSB\Ladies Top.jpg" />
+    <Content Include="StyleImages\TSB\Mens JKT.jpg" />
+    <Content Include="StyleImages\TSB\Mens Polo.jpg" />
+    <Content Include="StyleImages\TSB\Mens Trousers.jpg" />
+    <Content Include="StyleImages\TSB\Shirt.jpg" />
+    <Content Include="StyleImages\TSB\Skirt.jpg" />
+    <Content Include="StyleImages\TSB\TSBLogo.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\5701A Mayfair Tailcoat.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\76348.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\76662.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\76668.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\76992F.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\76996.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\82011 sq.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\82011.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\ADC CORP CSLS.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\ADC CORP CSSS.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\ADC CORP LCSLS.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\ADC FLE300.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\ADC HVD.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\ADC LSBB.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\ADC RET LPSLS.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\ADC RET LPSSS.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\ADC RET PSLS.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\ADC RET PSSS.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\ADC SBB.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\AMB BJKT.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\AMB FR Shirt.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\AMB FR.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\AMB HVWLS.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\AMB LTRS.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\AMB MTRS.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\AMB ONSHT.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\AMB PARKA.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\ambulance sq copy sq.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\ambulance sq.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\ambulance trousers sq.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\BELT SQ.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\BELT.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Belt1.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\BO2  sq.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\BO2.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\BOOT1.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\CSLS.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\CT1.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\D1202.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\E06.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\FLE.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\FLE300 BLK sq m.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\FLE300 BLK.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\FLE300 Both sq.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\FLE300 Both.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\FLE300 f sq.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\FLE300 M.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\FLE300.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Gist 69616.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Gist Fle.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Gist Polo1.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\HAT SQ.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\hi vis amb sq.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\HVE.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\HVJKT Both copy sec sq.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\HVJKT copy sq hi vis.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\HVJKT copy sq m.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\HVJKT.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\HVW.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\J05.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\jacket sq.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\JUMNAV.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\JUMPV.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\ladies amb shirt sq.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\LCSLS.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Look Five Jumper copy jumper sq.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Look Five Trouser copy.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Look Four F Blouse copy sq.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Look Nine Full copy JACKET SEX SQ.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Look One F Blouse copy sq.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Look One F Full copy f trs sq.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Look One Full copy sq shirt.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Look One Full copy TROUSER Sq SEC.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Look One Shirt copy sHIRT SEC SQ.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Look One Trouser02 copy sq.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Look Three Both copy 1.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Look Three Both copy sec sq.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Look Three Both copy small.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Look Three Both copy.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Look Three Full copy HAT SQ.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Look Three Full copy.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Look Three Full Jacket copy just jacket.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Look Three Full Jacket copy small.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Look Three Full Jacket copy sq.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Look Three Hat copy.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Look Three Skirt copy SEC SQ.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Look Three Skirt copy sq.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Look Three Skirt copy.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Look Two F Full 02 copy jacket s.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Look Two F Full 02 copy LADIES SEC SQ.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Look Two F Full 02 copy small.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Look Two F Full copy TRS SEC SQ.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Look Two F Jacket copy smaller.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Look Two Trouser 01 copy belt sq.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\LSBBR.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\LTRSUF.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\N04.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\PS220 + 76996 sq f.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\PS220 BLK + 76662 + 76992F sq.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\PS220 BLK M + 66662 sq m.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\PS220.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\PSLS %282%29.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\PSLS.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\PSSS.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\PWTR.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\ROBRPT.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\S09.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\SBBR.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\SHOE1.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\SHOE5.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\SKT.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\STAB VEST.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\SWS280 +76662 sq m mens cat.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\SWS280 +76662 sq mens.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\SWS280 +76662 sq.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\SWS280.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\TSHT + 76668 sq.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\UE jacket sq.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Uniform 129357.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Uniform 129367.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Uniform 129375.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Uniform 129384.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Uniform 129392.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Uniform 129395.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Uniform 129398.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Uniform 129399.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Uniform 129400.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Uniform 129402.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Uniform 129406.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Uniform 129407.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Uniform 129409.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Uniform 129415.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Uniform 129417.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Uniform 129427.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Uniform 129428.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Uniform 129429.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Uniform 129430.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Uniform 129433.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Uniform 129434.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\VNTS + AMB MTRS sq.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\VNTS.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Waterproof trousers.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\Workwear Blue sq.jpg" />
+    <Content Include="StyleImages\UE NEW PHOTOS\WOT2.jpg" />
+    <Content Include="StyleImages\Waitrose\Waitrose Garments 004.jpg" />
+    <Content Include="StyleImages\Waitrose\Waitrose Garments 010.jpg" />
+    <Content Include="StyleImages\Waitrose\Waitrose Garments 012.jpg" />
+    <Content Include="StyleImages\Waitrose\Waitrose Garments 019.jpg" />
+    <Content Include="StyleImages\Waitrose\Waitrose Garments 031.jpg" />
+    <Content Include="StyleImages\Waitrose\Waitrose Garments 039.jpg" />
+    <Content Include="StyleImages\Waitrose\Waitrose Garments 040.jpg" />
+    <Content Include="StyleImages\Waitrose\Waitrose Garments 054.jpg" />
+    <Content Include="StyleImages\Waitrose\Waitrose Garments 056.jpg" />
+    <Content Include="StyleImages\Waitrose\Waitrose Garments 058.jpg" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Views\Home\_getAllGroups.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\BasketController.cs" />
+    <Compile Include="Controllers\EmployeeController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\SettingsController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
+    <Compile Include="Filter\CustomFilter.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Helpers\ControllerHelperMethods.cs" />
+    <Compile Include="Models\AllEnums.cs" />
+    <Compile Include="Models\AllowUsers.cs" />
+    <Compile Include="Models\AssemblyModel.cs" />
+    <Compile Include="Models\bak_tblaccemp_employee_tsb.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Colors.cs" />
+    <Compile Include="Models\Colorsizes.cs" />
+    <Compile Include="Models\copy_tblusers.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\DataProcessing.cs" />
+    <Compile Include="Models\DrpResultModel.cs" />
+    <Compile Include="Models\EmployeeLoginModel.cs" />
+    <Compile Include="Models\EmployeeViewModel.cs" />
+    <Compile Include="Models\EntitlementModel.cs" />
+    <Compile Include="Models\FilterModel.cs" />
+    <Compile Include="Models\FreetxtStyle.cs" />
+    <Compile Include="Models\getallassembly.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\getColorProcedure_Result.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\getColors_prod_Result.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\getColors_Result.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\getcolour.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\getcustassembly.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GetEmployeeDetailsProcedure_Result.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\getproductslist.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\getsize.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\getSizeColorchangeProcedure_Result.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\getSizeProcedure_Result.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\getSize_prod_Result.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\getstylesview.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\hr_emplo_ve.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\hr_tremot02.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\hr_tremot02_derbyf.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\hr_tremot02_derbym.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\hr_tremot02_langleyf.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\hr_tremot02_langleym.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\hr_tremot02_nottmf.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\hr_tremot02_nottmm.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\hr_tremot02_suttonf.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\hr_tremot02_suttonm.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\hr_tsb_min_orderdate.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\hr_tsb_reldates.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\hr_tsb_release.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\hr_tsb_tblaccemp_ucodesemployees.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\hr_visexp01_address_map_bak.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\IssuedQtyModel.cs" />
+    <Compile Include="Models\LoginModel.cs" />
+    <Compile Include="Models\maximusContext1.cs">
+      <DependentUpon>maximusContext.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="Models\maximusDataContext.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>maximusDataContext.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\maximusDataContext.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\maximusDataContext.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>maximusDataContext.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Model1.cs" />
+    <Compile Include="Models\my_aspnet_applications.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\my_aspnet_membership.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\my_aspnet_paths.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\my_aspnet_personalizationallusers.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\my_aspnet_personalizationperuser.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\my_aspnet_profiles.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\my_aspnet_roles.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\my_aspnet_sessioncleanup.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\my_aspnet_sessions.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\my_aspnet_sitemap.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\my_aspnet_users.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\my_aspnet_usersinroles.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ObsoleteColor.cs" />
+    <Compile Include="Models\PreviousQty.cs" />
+    <Compile Include="Models\product_obsolete.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\rollout_order_detail_tsb.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\rollout_order_header_address_tsb.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\rollout_order_header_tsb.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\SalesOrderHeaderViewModel.cs" />
+    <Compile Include="Models\SalesOrderLineViewModel.cs" />
+    <Compile Include="Models\SalesOrderViewModel.cs" />
+    <Compile Include="Models\Size.cs" />
+    <Compile Include="Models\stockcard_tsb_rollout.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\styleby_freetextview.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\styleViewmodel.cs" />
+    <Compile Include="Models\style_dimfitalloc_caption.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblaccemp_budget.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblaccemp_budgetcard.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblaccemp_departments.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblaccemp_employee.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblaccemp_employee_rollout.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblaccemp_points.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblaccemp_pointscard.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblaccemp_rollout_names.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblaccemp_rollout_ucode_ref.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblaccemp_stockcard.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblaccemp_style_staticqty.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblaccemp_ucodes.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblaccemp_ucodesemployees.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblaccemp_ucodes_desc.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblaccemp_ucodes_dimension.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblaccemp_ucodes_hours.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblaccemp_ucode_reasons.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblaccesslevel.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblacc_vatcodes.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tbladmin.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblasm_assemblydetail.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblasm_assemblyheader.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblbus_account.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblbus_address.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblbus_addresstypes.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblbus_addresstype_ref.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblbus_address_copy.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblbus_address_s27.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblbus_business.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblbus_business_types.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblbus_contact.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblbus_contact_ref.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblbus_contact_s27.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblbus_countrycodes.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblbus_groups_ref.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblbus_online_orderref_nominal.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblbus_settings.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblbus_settings_copy.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblbus_setvalues.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblbus_styles.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblchildmenu.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblchildmenu_new.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblchildmenu_newlayout.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblcmp_defaults.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblcompany.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblcontent_lang.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblfsk_class.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblfsk_colour.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblfsk_features.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblfsk_price.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblfsk_seasons.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblfsk_settings.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblfsk_setvalues.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblfsk_style.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblfsk_style_colour.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblfsk_style_colour_size.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblfsk_style_colour_size_obsolete.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblfsk_style_commoditycode.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblfsk_style_customers.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblfsk_style_freetext.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblfsk_style_groups.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblfsk_style_groups_sub.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblfsk_style_locations.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblfsk_style_reps.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblfsk_style_sizes.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblfsk_style_sizes_prices.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblfsk_style_stockingtypes.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblfsk_style_stock_levels.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblfsk_style_typeofissue.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblfsk_unitofmeasure.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblfsk_unitofmeasureconversion.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblfsk_unitofmeasure_customer.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblfstk_feature.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblfstk_featureoption_type.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblgen_autonumbers.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblgen_log.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblgen_nextno.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblgen_parameters.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblgen_users.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblgen_user_defaults.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblgen_user_parameters.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tbllanguage.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblonlinesop_backorders.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblonlinesop_carriage.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblonlinesop_sitecode.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblonline_emp_address_copy.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblonline_holidays.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblonline_rolloutorders_config.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblonline_rolloutorders_reqstatus.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblonline_userid_employee.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblonline_userid_employee_s27.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblonline_userid_favourites.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblparentmenu.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblparentmenu_new.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblparentmenu_newlayout.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblpayment_gateways.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblpayment_trans.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblpermission_controls.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblpermission_controls_category.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblpermission_settings.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblpermission_settings_users.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblpermission_users_allow.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblpermission_users_deny.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblquestionanswer.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblrep_kams.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblsop_carrier.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblsop_courier_information.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblsop_customerorder_template.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblsop_customerorder_template_costcentre.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblsop_customerorder_template_img.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblsop_customerorder_template_ucodes.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblsop_customer_ref.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblsop_despatch_confirm.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblsop_despatch_status.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblsop_download_fields.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblsop_invoice_detail.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblsop_invoice_header.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblsop_manpackorders.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblsop_manpackreturns.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblsop_pickingslip_detail.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblsop_pickingslip_header.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblsop_reasoncodes.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblsop_reasons.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblsop_return_reasoncodes.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblsop_return_reasoncodes_customer.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblsop_salesorder_approved.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblsop_salesorder_detail.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblsop_salesorder_detail_bk.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblsop_salesorder_detail_console.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblsop_salesorder_detail_offline.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblsop_salesorder_detail_tremot02.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblsop_salesorder_header.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblsop_salesorder_header_bk.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblsop_salesorder_header_console.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblsop_salesorder_header_offline.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblsop_salesorder_header_tremot02.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblsqlstring.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblupdate_status_three.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblupload_orderdetail.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblupload_orderheader.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tbluser.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblwho_warehouses.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblwho_warehousesx.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tbl_employee_s27_hr.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\ucodeby_freetextview.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\UcodeModel.cs" />
+    <Compile Include="Models\ucode_employee_rollout_tsb.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\UserViewModel.cs" />
+    <Compile Include="Models\xml_salesorder_detail.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\xml_salesorder_header.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utilities\Log.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\web.config" />
+    <Content Include="packages.config" />
+    <Content Include="ApplicationInsights.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="Views\Home\_FilterModel.cshtml" />
+    <Content Include="Views\Home\_AssemblyInfo.cshtml" />
+    <Content Include="Views\Home\_GridViewPartial.cshtml" />
+    <Content Include="Views\Home\_CardViewPartial.cshtml" />
+    <Content Include="Views\Home\View.cshtml" />
+    <Content Include="Views\Home\Model\_StyleDrop.cshtml" />
+    <Content Include="Views\Home\Model\_ColorDrop.cshtml" />
+    <Content Include="Views\Home\Model\_SizeDrop.cshtml" />
+    <Content Include="Views\Home\_DimAllocDemandPartial.cshtml" />
+    <Content Include="Views\Home\_DimAllocPartial.cshtml" />
+    <Content Include="Views\Home\Model\_CardviewByStyle.cshtml" />
+    <Content Include="Views\Employee\Employee.cshtml" />
+    <Content Include="Views\Employee\_EmployeeGridViewPartial.cshtml" />
+    <Content Include="StyleImages\TSB.rar" />
+    <Content Include="Views\Employee\_multiselectCmb.cshtml" />
+    <Content Include="Views\Basket\ShowBasket.cshtml" />
+    <Content Include="Views\Basket\_CartView.cshtml" />
+    <Content Include="Views\Basket\_CartviewDetailGridViewGridViewPartial.cshtml" />
+    <Content Include="Views\Home\Model\_RnCPartial.cshtml" />
+    <Content Include="Views\Basket\_CardDetailAssembly.cshtml" />
+    <Content Include="Views\Settings\Index.cshtml" />
+    <Content Include="Views\User\Login.cshtml" />
+    <Content Include="Views\Employee\_EmployeeEdit.cshtml" />
+    <Content Include="Views\Home\_StyleByCardPop.cshtml" />
+    <Content Include="scripts\jquery-1.12.4.min.map" />
+    <None Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+    <None Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>5464</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:5464/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

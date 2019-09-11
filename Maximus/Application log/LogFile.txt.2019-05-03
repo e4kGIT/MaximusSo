@@ -1,0 +1,3 @@
+2019-05-03 12:40:01,413 ERROR MonitoringLogger - Authentication to host 'localhost' for user 'sotest' using method 'mysql_native_password' failed with message: Access denied for user 'sotest'@'localhost' (using password: YES)
+2019-05-03 12:40:23,734 ERROR MonitoringLogger - Authentication to host 'localhost' for user 'sotest' using method 'mysql_native_password' failed with message: Access denied for user 'sotest'@'localhost' (using password: YES)
+2019-05-03 12:40:33,396 ERROR MonitoringLogger - Authentication to host 'localhost' for user 'sotest' using method 'mysql_native_password' failed with message: Access denied for user 'sotest'@'localhost' (using password: YES)

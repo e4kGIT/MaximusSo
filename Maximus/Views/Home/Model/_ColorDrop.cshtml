@@ -1,0 +1,41 @@
+﻿@model Maximus.Models.styleViewmodel
+@{
+    Maximus.Models.e4kmaximusdbEntities entity = new Maximus.Models.e4kmaximusdbEntities();
+    if (Model.StyleID.Contains(','))
+    {
+        Html.DevExpress().ComboBox(
+            c =>
+            {
+                var styleArr = Model.StyleID.Split(',');
+                string style1 = styleArr[0].ToString();
+                c.Name = "ColorPop_" + "Drop_" + Model.StyleID;
+                List<string> colorIdLst = (List<string>)entity.tblfsk_style_colour_size.Where(s => s.StyleID == style1).Select(s => s.ColourID).Distinct().ToList();
+                foreach (string data in colorIdLst)
+                {
+                    c.Properties.Items.Add(data);
+                }
+                if (colorIdLst.Count() == 1)
+                { c.SelectedIndex = 0; }
+              
+            }
+                            ).Render();
+    }
+    else
+    {
+        Html.DevExpress().ComboBox(
+            c =>
+            {
+                c.Name = "ColorPop_" + "Drop_" + Model.StyleID;
+                List<string> colorIdLst = (List<string>)entity.tblfsk_style_colour_size.Where(s => s.StyleID == Model.StyleID).OrderBy(s => s.ColourID).Select(s => s.ColourID).Distinct().ToList();
+                foreach (string data in colorIdLst)
+                {
+                    c.Properties.Items.Add(data);
+
+                }
+                if (colorIdLst.Count() == 1)
+                { c.SelectedIndex = 0; }
+              
+            }
+                            ).Render();
+    }
+}

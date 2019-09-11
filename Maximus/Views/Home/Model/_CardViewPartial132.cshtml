@@ -1,0 +1,41 @@
+@{
+	var cardView = Html.DevExpress().CardView(settings => {
+        settings.Name = "CardView123";
+        settings.CallbackRouteValues = new { Controller = "Home", Action = "CardViewPartial132" };
+		
+				settings.SettingsEditing.AddNewCardRouteValues = new { Controller = "Home", Action = "CardViewPartial132AddNew" };
+        settings.SettingsEditing.UpdateCardRouteValues = new { Controller = "Home", Action = "CardViewPartial132Update" };
+        settings.SettingsEditing.DeleteCardRouteValues = new { Controller = "Home", Action = "CardViewPartial132Delete" };
+        settings.SettingsEditing.Mode = CardViewEditingMode.EditForm;
+        settings.SettingsBehavior.ConfirmDelete = true;
+				
+		settings.KeyFieldName = "StyleID";
+		
+		settings.SettingsPager.Visible = true;
+				settings.SettingsBehavior.AllowSelectByCardClick = true;
+		
+				settings.Columns.Add("StyleID");
+				settings.Columns.Add("Description");
+				settings.Columns.Add("StyleImage");
+				settings.Columns.Add("ColourId");
+				settings.Columns.Add("SizeId");
+				settings.Columns.Add("Price");
+		
+				settings.CardLayoutProperties.Items.AddCommandItem(i => {
+			i.ShowNewButton = true;
+			i.ShowEditButton = true;
+			i.ShowDeleteButton = true;
+		});
+		settings.CardLayoutProperties.Items.AddEditModeCommandItem();
+						settings.CardLayoutProperties.Items.Add("StyleID");
+				settings.CardLayoutProperties.Items.Add("Description");
+				settings.CardLayoutProperties.Items.Add("StyleImage");
+				settings.CardLayoutProperties.Items.Add("ColourId");
+				settings.CardLayoutProperties.Items.Add("SizeId");
+				settings.CardLayoutProperties.Items.Add("Price");
+			});
+		if (ViewData["EditError"] != null){
+        cardView.SetEditErrorText((string)ViewData["EditError"]);
+    }
+	}
+@cardView.Bind(Model).GetHtml()

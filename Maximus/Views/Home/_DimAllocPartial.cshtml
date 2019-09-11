@@ -1,0 +1,617 @@
+﻿
+@{
+    var cardView = Html.DevExpress().CardView(settings =>
+    {
+        #region settings
+        settings.Name = "CardView";
+        settings.CallbackRouteValues = new { Controller = "Home", Action = "GetDimAlloc" };
+        settings.SettingsPager.SettingsTableLayout.ColumnCount = 2;
+        settings.SettingsEditing.AddNewCardRouteValues = new { Controller = "Home", Action = "CardViewPartialAddNew" };
+        settings.SettingsEditing.UpdateCardRouteValues = new { Controller = "Home", Action = "CardViewPartialUpdate" };
+        settings.SettingsEditing.DeleteCardRouteValues = new { Controller = "Home", Action = "CardViewPartialDelete" };
+        settings.SettingsEditing.Mode = CardViewEditingMode.PopupEditForm;
+        settings.SettingsBehavior.ConfirmDelete = true;
+        var colc = Session["cardColumns"];
+        colc = Session["ColorSizestyle"].ToString() == "SWATCHES" ? 1 : colc;
+        var selUcode = Session["SelectedUcode"].ToString();
+        if (Convert.ToInt16(colc) > 0)
+        {
+            int col = Convert.ToInt16(colc);
+            settings.SettingsPager.SettingsTableLayout.ColumnCount = col;
+        }
+        else
+        {
+            settings.SettingsPager.SettingsTableLayout.ColumnCount = 2;
+        }
+        var rowc = Session["cardRows"];
+        if (Convert.ToInt16(rowc) > 0)
+        {
+            int ro = Convert.ToInt16(rowc);
+            settings.SettingsPager.SettingsTableLayout.RowsPerPage = ro;
+
+        }
+        else
+        {
+            settings.SettingsPager.SettingsTableLayout.RowsPerPage = 10;
+        }
+        settings.SettingsPopup.EditForm.Width = 600;
+        settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+        settings.SettingsEditing.Mode = CardViewEditingMode.EditForm;
+
+        settings.SettingsBehavior.ConfirmDelete = true;
+        settings.KeyFieldName = "StyleID";
+        settings.SettingsPager.Mode = GridViewPagerMode.ShowPager;
+        settings.SettingsPager.Visible = true;
+        settings.Settings.ShowHeaderPanel = false;
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.Settings.EnableFilterControlPopupMenuScrolling = false;
+        settings.SettingsBehavior.AllowSelectByCardClick = true;
+        Maximus.Models.e4kmaximusdbEntities entity = new Maximus.Models.e4kmaximusdbEntities();
+        //settings.ClientSideEvents.BeginCallback = "BeginCallback";
+        settings.CardLayoutCreated = (sender, e) =>
+        {
+            MVCxCardView cv = sender as MVCxCardView;
+            if (ViewBag.page)
+            {
+
+                cv.PageIndex = 0;
+            }
+            if (e.VisibleIndex >= 0)
+            {
+                bool? value = (bool?)cv.GetCardValues(e.VisibleIndex, "isAllocated");
+
+                if (value != null)
+                {
+                    if (value.Value)
+                    {
+                        e.Properties.Items[1].ParentContainerStyle.CssClass = "itemToHide";
+                        e.Properties.Items[6].ParentContainerStyle.CssClass = "itemToHide";
+                        e.Properties.Items[3].ParentContainerStyle.CssClass = "itemToHide";
+                        e.Properties.Items[4].ParentContainerStyle.CssClass = "itemToHide";
+                        e.Properties.Items[5].ParentContainerStyle.CssClass = "itemToHide";
+                        e.Properties.Items[7].ParentContainerStyle.CssClass = "itemToHide";
+                        //e.Properties.Items[9].ParentContainerStyle.CssClass = "itemToHide";
+                        e.Properties.Items[8].ParentContainerStyle.CssClass = "itemToHide";
+                    }
+                    else
+                    {
+                        string BusinessId = Session["BuisnessId"].ToString();
+                        var reasons = entity.tblsop_reasoncodes.Where(xs => xs.BusinessId == BusinessId).Select(c => new { c.Description }).ToList();
+                        //e.Properties.Items[3].ParentContainerStyle.CssClass = "itemToHide";
+                        // e.Properties.Items[2].ParentContainerStyle.CssClass = "itemToHide";
+                        if (reasons.Count == 0)
+                        {
+                            e.Properties.Items[7].ParentContainerStyle.CssClass = "itemToHide";
+                        }
+                    }
+                }
+                else
+                {
+                    // e.Properties.Items[2].ParentContainerStyle.CssClass = "itemToHide";
+                }
+
+            }
+
+        };
+
+        settings.SetHeaderPanelTemplateContent(r =>
+        {
+
+            ViewContext.Writer.Write(string.Format("<span title='filter' class=\"glyphicon glyphicon-filter\" onclick='GetFilter();'></span><span class='glyphicon glyphicon-remove pull-right' title='remove filter' onclick='RemoveFilter()'></span>"));
+
+        });
+        #endregion
+
+        #region cardview Column defenitions
+        settings.Columns.Add("StyleID");
+        settings.Columns.Add("ColourId");
+        settings.Columns.Add("SizeId");
+        settings.Columns.Add("Description");
+        settings.Columns.Add("Price");
+        settings.Columns.Add(c =>
+        {
+            c.FieldName = "StyleImage";
+        });
+        settings.Columns.Add("Quantity");
+        settings.Columns.Add("BasketButton");
+        //settings.Columns.Add("Assembly");
+        #endregion
+
+        #region cardviewlayoutproperties defenition
+        settings.CardLayoutProperties.ColCount = 2;
+        settings.CardLayoutProperties.Items.Add(i =>
+        {
+            i.ColumnName = "StyleImage";
+            i.ShowCaption = DefaultBoolean.False;
+            i.RowSpan = 8;
+            i.VerticalAlign = FormLayoutVerticalAlign.Middle;
+            i.SetTemplateContent(x =>
+            {
+                var Assembly = Convert.ToInt16(DataBinder.Eval(x.DataItem, "Assembly"));
+                var style = DataBinder.Eval(x.DataItem, "StyleID");
+                var styleimg = DataBinder.Eval(x.DataItem, "StyleImage");
+                ViewContext.Writer.Write(string.Format("<br/><br/><img src=\"{0}\"  height='250' width='200' onclick='Getimage(\"{0}\")' /> <br/><br/>", styleimg));
+                string popname = string.Format("{0}_{1}", "pop", style);
+                ViewContext.Writer.Write("<div class='row'>");
+                if (Assembly != 0)
+                {
+
+                    ViewContext.Writer.Write(string.Format("<div class='col-md-6 col-xs-6 col-sm-6 col-lg-6'><center><br/><br/><br/><img src='/Content/Images/embroidery.png' title='Get Assembly info' height='40' width='30' onclick=\"getAssembly('{0}');\"/></center>", style));
+                }
+                bool value = (bool)(DataBinder.Eval(x.DataItem, "isAllocated"));
+                if (Session["ColorSizestyle"].ToString() == "SWATCHES")
+                {
+                    if (value != true)
+                    {
+                        ViewContext.Writer.Write(string.Format("<center><img src='/Content/Images/empHistory.png' title='Entitlement and previous history' height='40' width='40' onclick=\"getEntitlementDimSwatch('{0}');\"/></center></div>", style));
+                    }
+                }
+                else
+                {
+                    if (value != true)
+                    {
+                        ViewContext.Writer.Write(string.Format("<center><img src='/Content/Images/empHistory.png' title='Entitlement and previous history' height='40' width='40' onclick=\"getEntitlement1('{0}');\"/></center></div>", style));
+                    }
+                }
+
+                ViewContext.Writer.Write("</div>");
+
+            });
+
+        });
+        //settings.CardLayoutProperties.Items.Add(i => {
+        //    i.ColumnName = " ";
+        //    i.ShowCaption = DefaultBoolean.False;
+        //    i.RowSpan = 9;
+        //    i.VerticalAlign = FormLayoutVerticalAlign.Middle;
+        //    i.SetTemplateContent(x =>
+        //    {
+        //        var Assembly = Convert.ToInt16(DataBinder.Eval(x.DataItem, "Assembly"));
+        //        var style = DataBinder.Eval(x.DataItem, "StyleID");
+        //        ViewContext.Writer.Write("<div class='row'>");
+        //        if (Assembly != 0)
+        //        {
+
+        //            ViewContext.Writer.Write(string.Format("<div class='col-md-6 col-xs-6 col-sm-6 col-lg-6'><center><br/><br/><br/><img src='/Content/Images/embroidery.png' class='pull-right' title='Get Assembly info' height='40' width='30' onclick=\"getAssembly('{0}');\"/></center>", style));
+        //        }
+        //        bool value = (bool)(DataBinder.Eval(x.DataItem, "isAllocated"));
+        //        if (Session["ColorSizestyle"].ToString() == "SWATCHES")
+        //        {
+        //            if (value != true)
+        //            {
+        //                ViewContext.Writer.Write(string.Format("<center><img src='/Content/Images/empHistory.png' title='Entitlement and previous history' class='pull-right' height='40' width='40' onclick=\"getEntitlementDimSwatch('{0}');\"/></center></div>", style));
+        //            }
+        //        }
+        //        else
+        //        {
+        //            if (value != true)
+        //            {
+        //                ViewContext.Writer.Write(string.Format("<center><img src='/Content/Images/empHistory.png' title='Entitlement and previous history' class='pull-right' height='40' width='40' onclick=\"getEntitlement1('{0}');\"/></center></div>", style));
+        //            }
+        //        }
+
+        //        ViewContext.Writer.Write("</div>");
+
+        //    });
+        //});
+        settings.CardLayoutProperties.Items.Add(x =>
+        {
+            x.ColumnName = "StyleID";
+            x.Caption = "Style";
+            x.SetTemplateContent(col =>
+            {
+                var style = (DataBinder.Eval(col.DataItem, "StyleID")).ToString();
+                if (Session["ColorSizestyle"].ToString() == "SWATCHES")
+                {
+                    if (style.Contains(','))
+                    {
+                        Html.DevExpress().ComboBox(
+                            c =>
+                            {
+                                var styleArr = style.Split(',');
+                                c.Name = "styleDimDrp_" + style;
+                                foreach (string data in (string[])styleArr)
+                                {
+                                    c.Properties.Items.Add(data);
+
+                                }
+                                c.SelectedIndex = 0;
+                                c.Properties.ClientSideEvents.SelectedIndexChanged = "GetDimDrpResultModelSwatch";
+                            }
+                                            ).Render();
+                    }
+                    else
+                    {
+                        ViewContext.Writer.Write(style);
+                    }
+                }
+                else
+                {
+                    if (style.Contains(','))
+                    {
+                        Html.DevExpress().ComboBox(
+                            c =>
+                            {
+                                var styleArr = style.Split(',');
+                                c.Name = "styleDimDrp_" + style;
+                                foreach (string data in (string[])styleArr)
+                                {
+                                    c.Properties.Items.Add(data);
+
+                                }
+                                c.SelectedIndex = 0;
+                                c.Properties.ClientSideEvents.SelectedIndexChanged = "GetDrpResultModel1";
+                            }
+                                            ).Render();
+                    }
+                    else
+                    {
+                        ViewContext.Writer.Write(style);
+                    }
+                }
+
+            });
+
+
+        });
+
+        settings.CardLayoutProperties.Items.Add(x =>
+        {
+            x.ColumnName = "Description";
+            x.SetTemplateContent(col =>
+            {
+                var style = (DataBinder.Eval(col.DataItem, "StyleID")).ToString();
+
+                if (style.Contains(','))
+                {
+                    var styleArr = style.Split(',');
+                    var style1 = styleArr[0];
+                    ViewContext.Writer.Write(string.Format("<div id='LbDescription1" + style1 + "'>{0}</div>", entity.tblfsk_style.Where(s => s.StyleID == style1).FirstOrDefault().Description));
+                }
+                else
+                {
+                    ViewContext.Writer.Write(string.Format("<div id='LbDescription1" + style + "'>{0}</div>", entity.tblfsk_style.Where(s => s.StyleID == style).FirstOrDefault().Description != null ? entity.tblfsk_style.Where(s => s.StyleID == style).FirstOrDefault().Description.ToString() : ""));
+                }
+            });
+        });
+        settings.CardLayoutProperties.Items.Add(x =>
+        {
+            x.ColumnName = "ColourId";
+            x.Caption = "Colour";
+            x.SetTemplateContent(col =>
+            {
+                var style = (DataBinder.Eval(col.DataItem, "StyleID")).ToString();
+                if (Session["ColorSizestyle"].ToString() != "SWATCHES")
+                {
+                    if (style.Contains(','))
+                    {
+                        Html.DevExpress().ComboBox(
+                            c =>
+                            {
+                                var styleArr = style.Split(',');
+                                string style1 = styleArr[0].ToString();
+                                c.Name = "ColorPop_" + "Drop_" + style;
+                                List<string> colorIdLst = (List<string>)entity.tblfsk_style_colour_size.Where(s => s.StyleID == style1).Select(s => s.ColourID).Distinct().ToList();
+                                foreach (string data in colorIdLst)
+                                {
+                                    c.Properties.Items.Add(data);
+                                }
+                                if (colorIdLst.Count() == 1)
+                                { c.SelectedIndex = 0; c.Enabled = false; }
+
+                            }
+                                            ).Render();
+                    }
+                    else
+                    {
+                        Html.DevExpress().ComboBox(
+                            c =>
+                            {
+                                c.Name = "ColorPop_" + "Drop_" + style;
+                                List<string> colorIdLst = (List<string>)entity.tblfsk_style_colour_size.Where(s => s.StyleID == style).OrderBy(s => s.ColourID).Select(s => s.ColourID).Distinct().ToList();
+                                foreach (string data in colorIdLst)
+                                {
+                                    c.Properties.Items.Add(data);
+
+                                }
+                                if (colorIdLst.Count() == 1)
+                                { c.SelectedIndex = 0; c.Enabled = false; }
+
+                            }
+                                            ).Render();
+                    }
+                }
+                else
+                {
+                    var content = "<fieldset class='swatch-picker' name=\"Swatch_DimColor_FieldSet_"+style+"\" > ";
+                    if (style.Contains(','))
+                    {
+                        var styleArr = style.Split(',');
+                        string style1 = styleArr[0].ToString();
+                        List<string> colorIdLst = (List<string>)entity.tblfsk_style_colour_size.Where(s => s.StyleID == style1).Select(s => s.ColourID).Distinct().ToList();
+                        foreach (string data in colorIdLst)
+                        {
+                            var hexcode = entity.tblfsk_colour.Any(da => da.Description.Contains(data)) ? entity.tblfsk_colour.Where(da => da.Description.Contains(data)).First().Colour_hexcode : "";
+                            if (colorIdLst.Count > 1)
+                            {
+                                content = content + string.Format("<label><input type='radio'  id='radio' name=\"swatch_DimColor_" + style + "\" value='blue'/><span style='display: block;border-radius:5px;  height:100%;width:100%;background:" + hexcode + "'><center><bold>{1}</bold></center></span></label>", style, data);
+                            }
+                            else
+                            {
+                                content = content + string.Format("<label><input type='radio'  id='radio' name=\"swatch_DimColor_" + style + "\" value='blue' checked=\"checked\"/><span style='display: block;border-radius:5px;  height:100%;width:100%;background:" + hexcode + "'><center><bold>{1}</bold></center></span></label>", style, data);
+                            }
+                        }
+                    }
+                    else
+                    {
+
+                        List<string> colorIdLst = (List<string>)entity.tblfsk_style_colour_size.Where(s => s.StyleID == style).OrderBy(s => s.ColourID).Select(s => s.ColourID).Distinct().ToList();
+                        foreach (string data in colorIdLst)
+                        {
+                            var hexcode = entity.tblfsk_colour.Any(da => da.Description.Contains(data)) ? entity.tblfsk_colour.Where(da => da.Description.Contains(data)).First().Colour_hexcode : "";
+                            if (colorIdLst.Count > 1)
+                            {
+                                content = content + string.Format("<label><input type='radio'  id='radio' name=\"swatch_DimColor_" + style + "\" value='blue'/><span style='display: block;border-radius:5px;  height:100%;width:100%;background:" + hexcode + "'><center><bold>{1}</bold></center></span></label>", style, data);
+                            }
+                            else
+                            {
+                                content = content + string.Format("<label><input type='radio'  id='radio' name=\"swatch_DimColor_" + style + "\" value='blue' checked=\"checked\"/><span style='display: block;border-radius:5px;  height:100%;width:100%;background:" + hexcode + "'><center><bold>{1}</bold></center></span></label>", style, data);
+                            }
+                        }
+                        if (colorIdLst.Count() == 1)
+                        { }
+                    }
+
+                    content = content + "</fieldset>";
+                    ViewContext.Writer.Write(content);
+                }
+
+            });
+
+        });
+        settings.CardLayoutProperties.Items.Add(x =>
+        {
+            x.ColumnName = "SizeId";
+            x.Caption = "Size";
+            x.SetTemplateContent(col =>
+            {
+                var style = (DataBinder.Eval(col.DataItem, "StyleID")).ToString();
+                Maximus.Models.PreviousQty prevHistory = (Maximus.Models.PreviousQty)(DataBinder.Eval(col.DataItem, "HasPreviousSize"));
+                if (Session["ColorSizestyle"].ToString() != "SWATCHES")
+                {
+                    if (style.Contains(','))
+                    {
+                        Html.DevExpress().ComboBox(
+                            c =>
+                            {
+                                var styleArr = style.Split(',');
+                                string style1 = styleArr[0].ToString();
+                                c.Name = "SizePop_" + "Drop_" + style;
+                                List<string> sizeIdLst = (List<string>)entity.tblfsk_style_sizes.Where(s => s.StyleID == style1).Distinct().OrderBy(s => s.SeqNo).Select(s => s.SizeID).ToList();
+                                foreach (string data in sizeIdLst)
+                                {
+                                    c.Properties.Items.Add(data);
+                                }
+                                if (sizeIdLst.Count == 1)
+                                {
+                                    c.SelectedIndex = 0; c.Enabled = false;
+                                }
+                                c.Properties.ClientSideEvents.SelectedIndexChanged = "getSelectedSize1";
+                                if (prevHistory.Size != "")
+                                {
+                                    foreach (DevExpress.Web.ListEditItem item in c.Properties.Items)
+                                    {
+                                        if (item.ToString() == prevHistory.Size)
+                                        {
+                                            c.SelectedIndex = c.Properties.Items.IndexOf(item);
+                                        }
+                                    }
+                                }
+                            }
+                                            ).Render();
+                    }
+                    else
+                    {
+                        Html.DevExpress().ComboBox(
+                            c =>
+                            {
+                                c.Name = "SizePop_" + "Drop_" + style;
+                                List<string> sizeIdLst = (List<string>)entity.tblfsk_style_sizes.Where(s => s.StyleID == style).Distinct().OrderBy(s => s.SeqNo).Select(s => s.SizeID).ToList();
+                                foreach (string data in sizeIdLst)
+                                {
+                                    c.Properties.Items.Add(data);
+
+                                }
+                                if (sizeIdLst.Count == 1)
+                                {
+                                    c.SelectedIndex = 0; c.Enabled = false;
+                                }
+                                c.Properties.ClientSideEvents.SelectedIndexChanged = "getSelectedSize1";
+                                if (prevHistory.Size != "")
+                                {
+                                    foreach (DevExpress.Web.ListEditItem item in c.Properties.Items)
+                                    {
+                                        if (item.ToString() == prevHistory.Size)
+                                        {
+                                            c.SelectedIndex = c.Properties.Items.IndexOf(item);
+                                        }
+                                    }
+                                }
+                            }
+                                            ).Render();
+                    }
+                }
+                else
+                {
+                    var content = "<fieldset class='swatch-picker'  name=\"Swatch_DimSize_FieldSet_" + style + "\">";
+                    if (style.Contains(','))
+                    {
+                        var styleArr = style.Split(',');
+                        string style1 = styleArr[0].ToString();
+                        List<string> sizeIdLst = (List<string>)entity.tblfsk_style_sizes.Where(s => s.StyleID == style1).Distinct().OrderBy(s => s.SeqNo).Select(s => s.SizeID).ToList();
+                        foreach (string data in sizeIdLst)
+                        {
+                            if (sizeIdLst.Count > 1)
+                            {
+                                if (prevHistory.Size == data)
+                                {
+                                    content = content + string.Format("<label><input type='radio'  id='radio' name=\"swatch_DimSize_" + style + "\" class='' value='blue' checked=\"checked\"/><span style='display: block;border-radius:5px;  height:100%;width:100%;'  onclick=\"getSelectedSizeDimSwatch('{0}','{1}')\"><center><bold>{1}</bold></center></span></label>", style, data);
+                                }
+                                else
+                                {
+                                    content = content + string.Format("<label><input type='radio'  id='radio' name=\"swatch_DimSize_" + style + "\" class='' value='blue'/><span style='display: block;border-radius:5px;  height:100%;width:100%;'  onclick=\"getSelectedSizeDimSwatch('{0}','{1}')\"><center><bold>{1}</bold></center></span></label>", style, data);
+                                }
+                            }
+                            else
+                            {
+                                content = content + string.Format("<label><input type='radio'  id='radio' name=\"swatch_DimSize_" + style + "\" class='' value='blue' checked=\"checked\"/><span style='display: block;border-radius:5px;  height:100%;width:100%;'  onclick=\"getSelectedSizeDimSwatch('{0}','{1}')\"><center><bold>{1}</bold></center></span></label>", style, data);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        List<string> sizeIdLst = (List<string>)entity.tblfsk_style_sizes.Where(s => s.StyleID == style).Distinct().OrderBy(s => s.SeqNo).Select(s => s.SizeID).ToList();
+                        foreach (string data in sizeIdLst)
+                        {
+                            if (sizeIdLst.Count > 1)
+                            {
+                                if (prevHistory.Size == data)
+                                {
+                                    content = content + string.Format("<label><input type='radio'  id='radio' name=\"swatch_DimSize_" + style + "\" class='' checked=\"checked\" value='blue'/><span style='display: block;border-radius:5px;  height:100%;width:100%;' onclick=\"getSelectedSizeDimSwatch('{0}','{1}')\"><center><bold>{1}</bold></center></span></label>", style, data);
+                                }
+                                else
+                                {
+                                    content = content + string.Format("<label><input type='radio'  id='radio' name=\"swatch_DimSize_" + style + "\" class=''  value='blue'/><span style='display: block;border-radius:5px;  height:100%;width:100%;' onclick=\"getSelectedSizeDimSwatch('{0}','{1}')\"><center><bold>{1}</bold></center></span></label>", style, data);
+                                }
+                            }
+                            else
+                            {
+                                content = content + string.Format("<label><input type='radio' id='radio' name=\"swatch_DimSize_" + style + "\" class='' value='blue' checked=\"checked\"/><span style='display: block;border-radius:5px;  height:100%;width:100%;' onclick=\"getSelectedSizeDimSwatch('{0}','{1}')\"><center><bold>{1}</bold></center></span></label>", style, data);
+                            }
+
+                        }
+                    }
+                    content = content + "</fieldset>";
+                    ViewContext.Writer.Write(content);
+                }
+            });
+
+        });
+        settings.CardLayoutProperties.Items.Add(x =>
+        {
+            x.ColumnName = "Price";
+            x.Caption = "Price";
+            x.SetTemplateContent(col =>
+            {
+                string businessId = Session["BuisnessId"].ToString();
+                Maximus.Models.PreviousQty prevHistory = (Maximus.Models.PreviousQty)(DataBinder.Eval(col.DataItem, "HasPreviousSize"));
+                var style = (DataBinder.Eval(col.DataItem, "StyleID")).ToString();
+                if (style.Contains(','))
+                {
+                    var styleArr = style.Split(',');
+                    string style1 = styleArr[0].ToString();
+                    var color = entity.tblfsk_style_colour.Any(s => s.StyleID == style1) == true ? entity.tblfsk_style_colour.Where(s => s.StyleID == style1).OrderBy(s => s.ColourID).FirstOrDefault().ColourID : "";
+                    var size = entity.tblfsk_style_sizes.Any(s => s.StyleID == style1) == true ? entity.tblfsk_style_sizes.Where(s => s.StyleID == style1).OrderBy(s => s.SeqNo).Count() == 1 ? entity.tblfsk_style_sizes.Where(s => s.StyleID == style1).OrderBy(s => s.SeqNo).FirstOrDefault().SizeID : "" : "";
+                    var price = size == "" ? "" : entity.tblfsk_style_sizes_prices.Any(s => s.StyleID == style1 && s.SizeID == size && s.BusinessId == businessId) == false ? "" : System.Math.Round(entity.tblfsk_style_sizes_prices.Where(s => s.StyleID == style1 && s.SizeID == size && s.BusinessId == businessId).FirstOrDefault().Price.Value, 2).ToString();
+                    if (prevHistory.Size != "")
+                    {
+                        price = entity.tblfsk_style_sizes_prices.Any(s => s.StyleID == style1 && s.SizeID == size && s.BusinessId == businessId) == false ? "" : System.Math.Round(entity.tblfsk_style_sizes_prices.Where(s => s.StyleID == style1 && s.SizeID == prevHistory.Size && s.BusinessId == businessId).FirstOrDefault().Price.Value, 2).ToString();
+                    }
+                    ViewContext.Writer.Write(string.Format("<div id='LbPrice1" + style + "'>{0}</div>", price));
+                }
+                else
+                {
+                    var color = entity.tblfsk_style_colour.Any(s => s.StyleID == style) == true ? entity.tblfsk_style_colour.Where(s => s.StyleID == style).OrderBy(s => s.ColourID).FirstOrDefault().ColourID : "";
+                    var size = entity.tblfsk_style_sizes.Any(s => s.StyleID == style) == true ? entity.tblfsk_style_sizes.Where(s => s.StyleID == style).OrderBy(s => s.SeqNo).Count() == 1 ? entity.tblfsk_style_sizes.Where(s => s.StyleID == style).OrderBy(s => s.SeqNo).FirstOrDefault().SizeID : "" : "";
+                    var price = size == "" ? "" : entity.tblfsk_style_sizes_prices.Any(s => s.StyleID == style && s.SizeID == size && s.BusinessId == businessId) == false ? "" : System.Math.Round(entity.tblfsk_style_sizes_prices.Where(s => s.StyleID == style && s.SizeID == size && s.BusinessId == businessId).FirstOrDefault().Price.Value, 2).ToString();
+                    if (prevHistory.Size != "")
+                    {
+                        price = entity.tblfsk_style_sizes_prices.Any(s => s.StyleID == style && s.SizeID == prevHistory.Size && s.BusinessId == businessId) == false ? "" : System.Math.Round(entity.tblfsk_style_sizes_prices.Where(s => s.StyleID == style && s.SizeID == prevHistory.Size && s.BusinessId == businessId).FirstOrDefault().Price.Value, 2).ToString();
+                    }
+                    ViewContext.Writer.Write(string.Format("<div id='LbPrice1" + style + "'>{0}</div>", price));
+                }
+            });
+
+
+        });
+
+        settings.CardLayoutProperties.Items.Add(x =>
+        {
+            x.Caption = "Quantity";
+            x.SetTemplateContent(cont =>
+            {
+                var style = (DataBinder.Eval(cont.DataItem, "StyleID")).ToString();
+                Html.DevExpress().SpinEdit(edit =>
+                {
+                    edit.Name = "spinEditDim_" + style;
+                    edit.Properties.AllowMouseWheel = true;
+                    edit.Properties.AllowUserInput = true;
+                    edit.Properties.MinValue = 1;
+                    edit.Number = 1;
+                    edit.Properties.MaxValue = 1000000;
+                }).GetHtml();
+            });
+
+        });
+
+        settings.CardLayoutProperties.Items.Add(x =>
+        {
+            x.Caption = "Reasons";
+            x.SetTemplateContent(cont =>
+            {
+                var style = (DataBinder.Eval(cont.DataItem, "StyleID")).ToString();
+                Html.DevExpress().ComboBox(edit =>
+                {
+                    edit.Name = "CmbReasonDim_" + style;
+                    string BusinessId = Session["BuisnessId"].ToString();
+                    var reasons = entity.tblsop_reasoncodes.Where(xs => xs.BusinessId == BusinessId).Select(c => new { c.Description }).ToList();
+                    if (reasons.Count > 0)
+                    {
+                        foreach (var dta in reasons)
+                        {
+                            edit.Properties.Items.Add(dta.Description);
+                        }
+                    }
+                    else
+                    {
+                        edit.Enabled = false;
+                        edit.ToolTip = "No return reasons found for the current customer";
+                    }
+                }).GetHtml();
+            });
+
+        });
+
+        settings.CardLayoutProperties.Items.Add(x =>
+        {
+            x.Caption = " ";
+            x.SetTemplateContent(cont =>
+            {
+                Maximus.Models.PreviousQty prevHistory = (Maximus.Models.PreviousQty)(DataBinder.Eval(cont.DataItem, "HasPreviousSize"));
+                var style = (DataBinder.Eval(cont.DataItem, "StyleID")).ToString();
+                Html.DevExpress().Button(btn =>
+                {
+                    btn.Name = "CartbtnDim_" + style + "_" + prevHistory.OrdQty;
+                    btn.ControlStyle.CssClass = "btn btn-primary";
+                    btn.Text = "<b>Add to cart &nbsp;&nbsp;<span class='glyphicon glyphicon-shopping-cart'></span></b.";
+                    btn.ClientSideEvents.Click = Session["ColorSizestyle"].ToString() != "SWATCHES"?"addTocartDim": "addTocartDimSwatch";
+                    //settings.RenderMode = ButtonRenderMode.Link;
+                    btn.EncodeHtml = false;
+                }).GetHtml();
+            });
+
+        });
+
+        #endregion
+
+        #region assigning values to the combobox
+        #endregion
+    });
+    if (ViewData["EditError"] != null)
+    {
+        cardView.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@cardView.Bind(Model).GetHtml()
+
+

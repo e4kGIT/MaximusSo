@@ -1,0 +1,25 @@
+﻿@model Maximus.Models.styleViewmodel
+@{ 
+
+    if (Model.StyleID.Contains(','))
+    {
+        Html.DevExpress().ComboBox(
+            c =>
+            {
+                var styleArr = Model.StyleID.Split(',');
+                c.Name = "styleDrp_" + Model.StyleID;
+                foreach (string data in (string[])styleArr)
+                {
+                    c.Properties.Items.Add(data);
+
+                }
+                c.SelectedIndex = 0;
+                c.Properties.ClientSideEvents.SelectedIndexChanged = "GetDrpResultModel1";
+            }
+                            ).Render();
+    }
+    else
+    {
+        ViewContext.Writer.Write(Model.StyleID);
+    }
+}

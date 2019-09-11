@@ -1,0 +1,143 @@
+﻿using DevExpress.Web.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+using System.Web.Mvc;
+using Maximus.Models;
+
+namespace Maximus.Controllers
+{
+    public class BasketController : Controller
+    {
+        DataProcessing dp = new DataProcessing();
+        e4kmaximusdbEntities entity = new e4kmaximusdbEntities();
+        // GET: Basket
+        public ActionResult ShowBasket()
+        {
+            return View();
+        }
+
+        [ValidateInput(false)]
+        public ActionResult CartView()
+        {
+            var model = new List<SalesOrderHeaderViewModel>();
+            model.Add(new SalesOrderHeaderViewModel { Address = dp.getEmployeeAddress(Session["SelectedEmp"].ToString(), Session["BuisnessId"].ToString()), EmployeeName = Session["EmpName"].ToString(), EmployeeID = Session["SelectedEmp"].ToString(), CustRef = entity.tblsop_salesorder_header.AsEnumerable().Where(x => x.CustID == Session["BuisnessId"].ToString()).First().CustRef, Comments = entity.tblsop_salesorder_header.AsEnumerable().Where(x => x.CustID == Session["BuisnessId"].ToString()).First().Comments });
+            
+            return PartialView("_CartView", model);
+        }
+
+       
+        [HttpPost, ValidateInput(false)]
+        public ActionResult CartViewUpdate([ModelBinder(typeof(DevExpressEditorsBinder))] Maximus.Models.SalesOrderLineViewModel item)
+        {
+            var model = (List<SalesOrderLineViewModel>)Session["SalesOrderLines"];
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                  var dataColl=  model.Where(x => x.LineNo == item.LineNo || x.OriginalLineNo == item.LineNo).ToList();
+                    foreach (var data in dataColl)
+                    {
+                        data.OrdQty = item.OrdQty;
+                    }
+                    Session["qty"] = model.Sum(x => x.OrdQty);
+                }
+                catch (Exception e)
+                {
+                    ViewData["EditError"] = e.Message;
+                }
+            }
+            else
+                ViewData["EditError"] = "Please, correct all errors.";
+            return PartialView("_CartView", model);
+        }
+        [HttpPost, ValidateInput(false)]
+        public ActionResult CartViewDelete([ModelBinder(typeof(DevExpressEditorsBinder))] Maximus.Models.SalesOrderLineViewModel item)
+        {
+            var model = (List<SalesOrderLineViewModel>)Session["SalesOrderLines"];
+            if (item.LineNo >= 0)
+            {
+                try
+                {
+                    var dataColl = model.Where(x => x.LineNo == item.LineNo || x.OriginalLineNo==item.LineNo).ToList();
+                    foreach (var data in dataColl)
+                    {
+                        model.Remove(data);
+                    }
+                    Session["SalesOrderLines"] = model;
+                    Session["qty"] = model.Sum(x => x.OrdQty);
+                }
+                catch (Exception e)
+                {
+                    ViewData["EditError"] = e.Message;
+                }
+            }
+            return PartialView("_CartView", model);
+        }
+
+        [ValidateInput(false)]
+        public ActionResult CartviewDetailGridViewGridViewPartial(long LineNo=0)
+        {
+            var model = (List<SalesOrderLineViewModel>)Session["SalesOrderLines"];
+            model = model.Where(x => x.LineNo == LineNo).ToList();
+            return PartialView("_CartviewDetailGridViewGridViewPartial", model);
+        }
+
+        [HttpPost, ValidateInput(false)]
+        public ActionResult CartviewDetailGridViewGridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] Maximus.Models.SalesOrderLineViewModel item)
+        {
+            var model = new object[0];
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    // Insert here a code to insert the new item in your model
+                }
+                catch (Exception e)
+                {
+                    ViewData["EditError"] = e.Message;
+                }
+            }
+            else
+                ViewData["EditError"] = "Please, correct all errors.";
+            return PartialView("_CartviewDetailGridViewGridViewPartial", model);
+        }
+        [HttpPost, ValidateInput(false)]
+        public ActionResult CartviewDetailGridViewGridViewPartialUpdate([ModelBinder(typeof(DevExpressEditorsBinder))] Maximus.Models.SalesOrderLineViewModel item)
+        {
+            var model = new object[0];
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    // Insert here a code to update the item in your model
+                }
+                catch (Exception e)
+                {
+                    ViewData["EditError"] = e.Message;
+                }
+            }
+            else
+                ViewData["EditError"] = "Please, correct all errors.";
+            return PartialView("_CartviewDetailGridViewGridViewPartial", model);
+        }
+        [HttpPost, ValidateInput(false)]
+        public ActionResult CartviewDetailGridViewGridViewPartialDelete(System.Int64 LineNo)
+        {
+            var model = new object[0];
+            if (LineNo >= 0)
+            {
+                try
+                {
+                    // Insert here a code to delete the item from your model
+                }
+                catch (Exception e)
+                {
+                    ViewData["EditError"] = e.Message;
+                }
+            }
+            return PartialView("_CartviewDetailGridViewGridViewPartial", model);
+}
+    }
+}

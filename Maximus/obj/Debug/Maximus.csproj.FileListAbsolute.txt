@@ -1,0 +1,622 @@
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\ApplicationInsights.config
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\roslyn\csc.exe
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\roslyn\Microsoft.CodeAnalysis.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\roslyn\Microsoft.CSharp.Core.targets
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\roslyn\Microsoft.VisualBasic.Core.targets
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\roslyn\System.Collections.Immutable.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\roslyn\System.Reflection.Metadata.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\roslyn\vbc.exe
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\roslyn\VBCSCompiler.exe
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\roslyn\VBCSCompiler.exe.config
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\Maximus.dll.config
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\Maximus.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\Maximus.pdb
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.Data.v16.1.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.Printing.v16.1.Core.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.RichEdit.v16.1.Core.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.Utils.v16.1.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.Web.ASPxThemes.v16.1.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.Web.Mvc5.v16.1.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.Web.v16.1.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\EntityFramework.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\Google.Protobuf.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\Microsoft.AI.Agent.Intercept.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\Microsoft.AI.DependencyCollector.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\Microsoft.AI.PerfCounterCollector.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\Microsoft.AI.ServerTelemetryChannel.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\Microsoft.AI.Web.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\Microsoft.AI.WindowsServer.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\Microsoft.ApplicationInsights.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\Microsoft.Web.Infrastructure.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\MySql.Data.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\System.Web.Helpers.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\System.Web.Mvc.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\System.Web.Razor.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\System.Web.Webpages.Deployment.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\System.Web.Webpages.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\System.Web.Webpages.Razor.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.Pdf.v16.1.Core.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.Office.v16.1.Core.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.Pdf.v16.1.Drawing.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.XtraCharts.v16.1.Web.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.XtraCharts.v16.1.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.Web.ASPxHtmlEditor.v16.1.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.Web.ASPxPivotGrid.v16.1.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.PivotGrid.v16.1.Core.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.XtraReports.v16.1.Web.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.Web.ASPxRichEdit.v16.1.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.Web.ASPxScheduler.v16.1.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.XtraScheduler.v16.1.Core.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.Web.ASPxSpellChecker.v16.1.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.Web.ASPxSpreadsheet.v16.1.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.Web.ASPxTreeList.v16.1.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.XtraReports.v16.1.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.SpellChecker.v16.1.Core.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.Spreadsheet.v16.1.Core.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.Charts.v16.1.Core.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.Web.Resources.v16.1.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.DataAccess.v16.1.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.Sparkline.v16.1.Core.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.XtraGauges.v16.1.Core.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.Xpo.v16.1.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.CodeParser.v16.1.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.Data.v16.1.xml
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.Printing.v16.1.Core.xml
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.RichEdit.v16.1.Core.xml
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.Utils.v16.1.xml
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.Web.v16.1.xml
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\EntityFramework.xml
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\Google.Protobuf.xml
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\Microsoft.AI.DependencyCollector.xml
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\Microsoft.AI.ServerTelemetryChannel.xml
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\Microsoft.AI.Web.xml
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\Microsoft.AI.WindowsServer.xml
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\Microsoft.ApplicationInsights.xml
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\MySql.Data.xml
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\System.Web.Razor.xml
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\System.Web.Webpages.xml
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\System.Web.Webpages.Deployment.xml
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\System.Web.Webpages.Razor.xml
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\System.Web.Helpers.xml
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\System.Web.Mvc.xml
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.Pdf.v16.1.Core.xml
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.Office.v16.1.Core.xml
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.Pdf.v16.1.Drawing.xml
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.XtraCharts.v16.1.Web.xml
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.XtraCharts.v16.1.xml
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.Web.ASPxHtmlEditor.v16.1.xml
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.Web.ASPxPivotGrid.v16.1.xml
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.PivotGrid.v16.1.Core.xml
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.XtraReports.v16.1.Web.xml
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.Web.ASPxRichEdit.v16.1.xml
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.Web.ASPxScheduler.v16.1.xml
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.XtraScheduler.v16.1.Core.xml
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.Web.ASPxSpellChecker.v16.1.xml
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.Web.ASPxSpreadsheet.v16.1.xml
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.Web.ASPxTreeList.v16.1.xml
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.XtraReports.v16.1.xml
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.SpellChecker.v16.1.Core.xml
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.Spreadsheet.v16.1.Core.xml
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.DataAccess.v16.1.xml
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.Sparkline.v16.1.Core.xml
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.XtraGauges.v16.1.Core.xml
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\DevExpress.Xpo.v16.1.xml
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\de\DevExpress.Data.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\es\DevExpress.Data.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\ja\DevExpress.Data.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\ru\DevExpress.Data.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\de\DevExpress.Printing.v16.1.Core.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\es\DevExpress.Printing.v16.1.Core.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\ja\DevExpress.Printing.v16.1.Core.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\ru\DevExpress.Printing.v16.1.Core.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\de\DevExpress.RichEdit.v16.1.Core.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\es\DevExpress.RichEdit.v16.1.Core.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\ja\DevExpress.RichEdit.v16.1.Core.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\ru\DevExpress.RichEdit.v16.1.Core.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\de\DevExpress.Utils.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\es\DevExpress.Utils.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\ja\DevExpress.Utils.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\ru\DevExpress.Utils.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\de\DevExpress.Web.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\es\DevExpress.Web.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\ja\DevExpress.Web.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\ru\DevExpress.Web.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\de\DevExpress.Pdf.v16.1.Core.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\es\DevExpress.Pdf.v16.1.Core.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\ja\DevExpress.Pdf.v16.1.Core.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\ru\DevExpress.Pdf.v16.1.Core.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\de\DevExpress.Office.v16.1.Core.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\es\DevExpress.Office.v16.1.Core.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\ja\DevExpress.Office.v16.1.Core.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\ru\DevExpress.Office.v16.1.Core.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\de\DevExpress.XtraCharts.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\es\DevExpress.XtraCharts.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\ja\DevExpress.XtraCharts.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\ru\DevExpress.XtraCharts.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\de\DevExpress.Web.ASPxHtmlEditor.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\es\DevExpress.Web.ASPxHtmlEditor.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\ja\DevExpress.Web.ASPxHtmlEditor.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\ru\DevExpress.Web.ASPxHtmlEditor.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\de\DevExpress.PivotGrid.v16.1.Core.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\es\DevExpress.PivotGrid.v16.1.Core.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\ja\DevExpress.PivotGrid.v16.1.Core.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\ru\DevExpress.PivotGrid.v16.1.Core.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\de\DevExpress.XtraReports.v16.1.Web.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\es\DevExpress.XtraReports.v16.1.Web.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\ja\DevExpress.XtraReports.v16.1.Web.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\ru\DevExpress.XtraReports.v16.1.Web.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\de\DevExpress.Web.ASPxRichEdit.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\es\DevExpress.Web.ASPxRichEdit.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\ja\DevExpress.Web.ASPxRichEdit.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\ru\DevExpress.Web.ASPxRichEdit.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\de\DevExpress.Web.ASPxScheduler.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\es\DevExpress.Web.ASPxScheduler.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\ja\DevExpress.Web.ASPxScheduler.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\ru\DevExpress.Web.ASPxScheduler.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\de\DevExpress.XtraScheduler.v16.1.Core.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\es\DevExpress.XtraScheduler.v16.1.Core.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\ja\DevExpress.XtraScheduler.v16.1.Core.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\ru\DevExpress.XtraScheduler.v16.1.Core.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\de\DevExpress.Web.ASPxSpellChecker.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\es\DevExpress.Web.ASPxSpellChecker.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\ja\DevExpress.Web.ASPxSpellChecker.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\ru\DevExpress.Web.ASPxSpellChecker.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\de\DevExpress.Web.ASPxSpreadsheet.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\es\DevExpress.Web.ASPxSpreadsheet.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\ja\DevExpress.Web.ASPxSpreadsheet.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\ru\DevExpress.Web.ASPxSpreadsheet.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\de\DevExpress.Web.ASPxTreeList.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\es\DevExpress.Web.ASPxTreeList.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\ja\DevExpress.Web.ASPxTreeList.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\ru\DevExpress.Web.ASPxTreeList.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\de\DevExpress.XtraReports.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\es\DevExpress.XtraReports.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\ja\DevExpress.XtraReports.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\ru\DevExpress.XtraReports.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\de\DevExpress.Spreadsheet.v16.1.Core.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\es\DevExpress.Spreadsheet.v16.1.Core.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\ja\DevExpress.Spreadsheet.v16.1.Core.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\ru\DevExpress.Spreadsheet.v16.1.Core.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\de\DevExpress.DataAccess.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\es\DevExpress.DataAccess.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\ja\DevExpress.DataAccess.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\ru\DevExpress.DataAccess.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\de\DevExpress.Sparkline.v16.1.Core.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\es\DevExpress.Sparkline.v16.1.Core.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\ja\DevExpress.Sparkline.v16.1.Core.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\ru\DevExpress.Sparkline.v16.1.Core.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\de\DevExpress.XtraGauges.v16.1.Core.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\es\DevExpress.XtraGauges.v16.1.Core.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\ja\DevExpress.XtraGauges.v16.1.Core.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\ru\DevExpress.XtraGauges.v16.1.Core.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\de\DevExpress.Xpo.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\es\DevExpress.Xpo.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\ja\DevExpress.Xpo.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\bin\ru\DevExpress.Xpo.v16.1.resources.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\obj\Debug\Maximus.csprojResolveAssemblyReference.cache
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\obj\Debug\Maximus.dll
+C:\Users\admin\Documents\Visual Studio 2015\Projects\Maximus\Maximus\obj\Debug\Maximus.pdb
+G:\Sasidharan\Maximus backup\Maximus\Maximus\obj\Debug\Maximus.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\obj\Debug\Maximus.pdb
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\ApplicationInsights.config
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\roslyn\csc.exe
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\roslyn\Microsoft.CodeAnalysis.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\roslyn\Microsoft.CSharp.Core.targets
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\roslyn\Microsoft.VisualBasic.Core.targets
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\roslyn\System.Collections.Immutable.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\roslyn\System.Reflection.Metadata.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\roslyn\vbc.exe
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\roslyn\VBCSCompiler.exe
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\roslyn\VBCSCompiler.exe.config
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\Maximus.dll.config
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\Maximus.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\Maximus.pdb
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\BouncyCastle.Crypto.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.Data.v16.1.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.Printing.v16.1.Core.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.RichEdit.v16.1.Core.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.Utils.v16.1.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.Web.ASPxThemes.v16.1.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.Web.Mvc5.v16.1.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.Web.v16.1.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\EntityFramework.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\EntityFramework.SqlServer.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\Google.Protobuf.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\log4net.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\Microsoft.AI.Agent.Intercept.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\Microsoft.AI.DependencyCollector.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\Microsoft.AI.PerfCounterCollector.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\Microsoft.AI.ServerTelemetryChannel.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\Microsoft.AI.Web.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\Microsoft.AI.WindowsServer.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\Microsoft.ApplicationInsights.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\Microsoft.Web.Infrastructure.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\MySql.Data.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\MySql.Data.EntityFramework.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\System.Web.Helpers.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\System.Web.Mvc.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\System.Web.Razor.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\System.Web.Webpages.Deployment.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\System.Web.Webpages.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\System.Web.Webpages.Razor.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.Pdf.v16.1.Core.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.Office.v16.1.Core.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.Pdf.v16.1.Drawing.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.XtraCharts.v16.1.Web.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.XtraCharts.v16.1.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.Web.ASPxHtmlEditor.v16.1.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.Web.ASPxPivotGrid.v16.1.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.PivotGrid.v16.1.Core.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.XtraReports.v16.1.Web.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.Web.ASPxRichEdit.v16.1.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.Web.ASPxScheduler.v16.1.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.XtraScheduler.v16.1.Core.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.Web.ASPxSpellChecker.v16.1.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.Web.ASPxSpreadsheet.v16.1.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.Web.ASPxTreeList.v16.1.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.XtraReports.v16.1.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.SpellChecker.v16.1.Core.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.Spreadsheet.v16.1.Core.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.Charts.v16.1.Core.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.Web.Resources.v16.1.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.DataAccess.v16.1.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.Sparkline.v16.1.Core.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.XtraGauges.v16.1.Core.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.Xpo.v16.1.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.CodeParser.v16.1.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.Data.v16.1.xml
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.Printing.v16.1.Core.xml
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.RichEdit.v16.1.Core.xml
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.Utils.v16.1.xml
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.Web.v16.1.xml
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\EntityFramework.xml
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\EntityFramework.SqlServer.xml
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\Google.Protobuf.xml
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\log4net.xml
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\Microsoft.AI.DependencyCollector.xml
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\Microsoft.AI.ServerTelemetryChannel.xml
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\Microsoft.AI.Web.xml
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\Microsoft.AI.WindowsServer.xml
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\Microsoft.ApplicationInsights.xml
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\MySql.Data.xml
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\MySql.Data.EntityFramework.xml
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\System.Web.Razor.xml
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\System.Web.Webpages.xml
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\System.Web.Webpages.Deployment.xml
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\System.Web.Webpages.Razor.xml
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\System.Web.Helpers.xml
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\System.Web.Mvc.xml
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.Pdf.v16.1.Core.xml
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.Office.v16.1.Core.xml
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.Pdf.v16.1.Drawing.xml
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.XtraCharts.v16.1.Web.xml
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.XtraCharts.v16.1.xml
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.Web.ASPxHtmlEditor.v16.1.xml
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.Web.ASPxPivotGrid.v16.1.xml
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.PivotGrid.v16.1.Core.xml
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.XtraReports.v16.1.Web.xml
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.Web.ASPxRichEdit.v16.1.xml
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.Web.ASPxScheduler.v16.1.xml
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.XtraScheduler.v16.1.Core.xml
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.Web.ASPxSpellChecker.v16.1.xml
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.Web.ASPxSpreadsheet.v16.1.xml
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.Web.ASPxTreeList.v16.1.xml
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.XtraReports.v16.1.xml
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.SpellChecker.v16.1.Core.xml
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.Spreadsheet.v16.1.Core.xml
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.DataAccess.v16.1.xml
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.Sparkline.v16.1.Core.xml
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.XtraGauges.v16.1.Core.xml
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\DevExpress.Xpo.v16.1.xml
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\de\DevExpress.Data.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\es\DevExpress.Data.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\ja\DevExpress.Data.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\ru\DevExpress.Data.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\de\DevExpress.Printing.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\es\DevExpress.Printing.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\ja\DevExpress.Printing.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\ru\DevExpress.Printing.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\de\DevExpress.RichEdit.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\es\DevExpress.RichEdit.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\ja\DevExpress.RichEdit.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\ru\DevExpress.RichEdit.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\de\DevExpress.Utils.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\es\DevExpress.Utils.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\ja\DevExpress.Utils.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\ru\DevExpress.Utils.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\de\DevExpress.Web.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\es\DevExpress.Web.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\ja\DevExpress.Web.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\ru\DevExpress.Web.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\de\DevExpress.Pdf.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\es\DevExpress.Pdf.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\ja\DevExpress.Pdf.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\ru\DevExpress.Pdf.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\de\DevExpress.Office.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\es\DevExpress.Office.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\ja\DevExpress.Office.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\ru\DevExpress.Office.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\de\DevExpress.XtraCharts.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\es\DevExpress.XtraCharts.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\ja\DevExpress.XtraCharts.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\ru\DevExpress.XtraCharts.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\de\DevExpress.Web.ASPxHtmlEditor.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\es\DevExpress.Web.ASPxHtmlEditor.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\ja\DevExpress.Web.ASPxHtmlEditor.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\ru\DevExpress.Web.ASPxHtmlEditor.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\de\DevExpress.PivotGrid.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\es\DevExpress.PivotGrid.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\ja\DevExpress.PivotGrid.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\ru\DevExpress.PivotGrid.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\de\DevExpress.XtraReports.v16.1.Web.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\es\DevExpress.XtraReports.v16.1.Web.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\ja\DevExpress.XtraReports.v16.1.Web.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\ru\DevExpress.XtraReports.v16.1.Web.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\de\DevExpress.Web.ASPxRichEdit.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\es\DevExpress.Web.ASPxRichEdit.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\ja\DevExpress.Web.ASPxRichEdit.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\ru\DevExpress.Web.ASPxRichEdit.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\de\DevExpress.Web.ASPxScheduler.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\es\DevExpress.Web.ASPxScheduler.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\ja\DevExpress.Web.ASPxScheduler.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\ru\DevExpress.Web.ASPxScheduler.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\de\DevExpress.XtraScheduler.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\es\DevExpress.XtraScheduler.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\ja\DevExpress.XtraScheduler.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\ru\DevExpress.XtraScheduler.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\de\DevExpress.Web.ASPxSpellChecker.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\es\DevExpress.Web.ASPxSpellChecker.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\ja\DevExpress.Web.ASPxSpellChecker.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\ru\DevExpress.Web.ASPxSpellChecker.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\de\DevExpress.Web.ASPxSpreadsheet.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\es\DevExpress.Web.ASPxSpreadsheet.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\ja\DevExpress.Web.ASPxSpreadsheet.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\ru\DevExpress.Web.ASPxSpreadsheet.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\de\DevExpress.Web.ASPxTreeList.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\es\DevExpress.Web.ASPxTreeList.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\ja\DevExpress.Web.ASPxTreeList.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\ru\DevExpress.Web.ASPxTreeList.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\de\DevExpress.XtraReports.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\es\DevExpress.XtraReports.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\ja\DevExpress.XtraReports.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\ru\DevExpress.XtraReports.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\de\DevExpress.Spreadsheet.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\es\DevExpress.Spreadsheet.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\ja\DevExpress.Spreadsheet.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\ru\DevExpress.Spreadsheet.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\de\DevExpress.DataAccess.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\es\DevExpress.DataAccess.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\ja\DevExpress.DataAccess.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\ru\DevExpress.DataAccess.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\de\DevExpress.Sparkline.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\es\DevExpress.Sparkline.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\ja\DevExpress.Sparkline.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\ru\DevExpress.Sparkline.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\de\DevExpress.XtraGauges.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\es\DevExpress.XtraGauges.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\ja\DevExpress.XtraGauges.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\ru\DevExpress.XtraGauges.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\de\DevExpress.Xpo.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\es\DevExpress.Xpo.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\ja\DevExpress.Xpo.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\bin\ru\DevExpress.Xpo.v16.1.resources.dll
+G:\Sasidharan\Maximus backup\Maximus\Maximus\obj\Debug\Maximus.csprojResolveAssemblyReference.cache
+G:\Sasidharan\Maximus\Maximus\bin\ApplicationInsights.config
+G:\Sasidharan\Maximus\Maximus\bin\roslyn\csc.exe
+G:\Sasidharan\Maximus\Maximus\bin\roslyn\Microsoft.Build.Tasks.CodeAnalysis.dll
+G:\Sasidharan\Maximus\Maximus\bin\roslyn\Microsoft.CodeAnalysis.CSharp.dll
+G:\Sasidharan\Maximus\Maximus\bin\roslyn\Microsoft.CodeAnalysis.dll
+G:\Sasidharan\Maximus\Maximus\bin\roslyn\Microsoft.CodeAnalysis.VisualBasic.dll
+G:\Sasidharan\Maximus\Maximus\bin\roslyn\Microsoft.CSharp.Core.targets
+G:\Sasidharan\Maximus\Maximus\bin\roslyn\Microsoft.VisualBasic.Core.targets
+G:\Sasidharan\Maximus\Maximus\bin\roslyn\System.Collections.Immutable.dll
+G:\Sasidharan\Maximus\Maximus\bin\roslyn\System.Reflection.Metadata.dll
+G:\Sasidharan\Maximus\Maximus\bin\roslyn\vbc.exe
+G:\Sasidharan\Maximus\Maximus\bin\roslyn\VBCSCompiler.exe
+G:\Sasidharan\Maximus\Maximus\bin\roslyn\VBCSCompiler.exe.config
+G:\Sasidharan\Maximus\Maximus\bin\Maximus.dll.config
+G:\Sasidharan\Maximus\Maximus\bin\Maximus.dll
+G:\Sasidharan\Maximus\Maximus\bin\Maximus.pdb
+G:\Sasidharan\Maximus\Maximus\bin\BouncyCastle.Crypto.dll
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.Data.v16.1.dll
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.Printing.v16.1.Core.dll
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.RichEdit.v16.1.Core.dll
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.Utils.v16.1.dll
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.Web.ASPxThemes.v16.1.dll
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.Web.Mvc5.v16.1.dll
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.Web.v16.1.dll
+G:\Sasidharan\Maximus\Maximus\bin\EntityFramework.dll
+G:\Sasidharan\Maximus\Maximus\bin\EntityFramework.SqlServer.dll
+G:\Sasidharan\Maximus\Maximus\bin\Google.Protobuf.dll
+G:\Sasidharan\Maximus\Maximus\bin\log4net.dll
+G:\Sasidharan\Maximus\Maximus\bin\Microsoft.AI.Agent.Intercept.dll
+G:\Sasidharan\Maximus\Maximus\bin\Microsoft.AI.DependencyCollector.dll
+G:\Sasidharan\Maximus\Maximus\bin\Microsoft.AI.PerfCounterCollector.dll
+G:\Sasidharan\Maximus\Maximus\bin\Microsoft.AI.ServerTelemetryChannel.dll
+G:\Sasidharan\Maximus\Maximus\bin\Microsoft.AI.Web.dll
+G:\Sasidharan\Maximus\Maximus\bin\Microsoft.AI.WindowsServer.dll
+G:\Sasidharan\Maximus\Maximus\bin\Microsoft.ApplicationInsights.dll
+G:\Sasidharan\Maximus\Maximus\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll
+G:\Sasidharan\Maximus\Maximus\bin\Microsoft.Web.Infrastructure.dll
+G:\Sasidharan\Maximus\Maximus\bin\MySql.Data.dll
+G:\Sasidharan\Maximus\Maximus\bin\MySql.Data.EntityFramework.dll
+G:\Sasidharan\Maximus\Maximus\bin\System.Web.Helpers.dll
+G:\Sasidharan\Maximus\Maximus\bin\System.Web.Mvc.dll
+G:\Sasidharan\Maximus\Maximus\bin\System.Web.Razor.dll
+G:\Sasidharan\Maximus\Maximus\bin\System.Web.Webpages.Deployment.dll
+G:\Sasidharan\Maximus\Maximus\bin\System.Web.Webpages.dll
+G:\Sasidharan\Maximus\Maximus\bin\System.Web.Webpages.Razor.dll
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.Pdf.v16.1.Core.dll
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.Office.v16.1.Core.dll
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.Pdf.v16.1.Drawing.dll
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.XtraCharts.v16.1.Web.dll
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.XtraCharts.v16.1.dll
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.Web.ASPxHtmlEditor.v16.1.dll
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.Web.ASPxPivotGrid.v16.1.dll
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.PivotGrid.v16.1.Core.dll
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.XtraReports.v16.1.Web.dll
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.Web.ASPxRichEdit.v16.1.dll
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.Web.ASPxScheduler.v16.1.dll
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.XtraScheduler.v16.1.Core.dll
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.Web.ASPxSpellChecker.v16.1.dll
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.Web.ASPxSpreadsheet.v16.1.dll
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.Web.ASPxTreeList.v16.1.dll
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.XtraReports.v16.1.dll
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.SpellChecker.v16.1.Core.dll
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.Spreadsheet.v16.1.Core.dll
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.Charts.v16.1.Core.dll
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.Web.Resources.v16.1.dll
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.DataAccess.v16.1.dll
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.Sparkline.v16.1.Core.dll
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.XtraGauges.v16.1.Core.dll
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.Xpo.v16.1.dll
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.CodeParser.v16.1.dll
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.Data.v16.1.xml
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.Printing.v16.1.Core.xml
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.RichEdit.v16.1.Core.xml
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.Utils.v16.1.xml
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.Web.v16.1.xml
+G:\Sasidharan\Maximus\Maximus\bin\EntityFramework.xml
+G:\Sasidharan\Maximus\Maximus\bin\EntityFramework.SqlServer.xml
+G:\Sasidharan\Maximus\Maximus\bin\Google.Protobuf.xml
+G:\Sasidharan\Maximus\Maximus\bin\log4net.xml
+G:\Sasidharan\Maximus\Maximus\bin\Microsoft.AI.DependencyCollector.xml
+G:\Sasidharan\Maximus\Maximus\bin\Microsoft.AI.ServerTelemetryChannel.xml
+G:\Sasidharan\Maximus\Maximus\bin\Microsoft.AI.Web.xml
+G:\Sasidharan\Maximus\Maximus\bin\Microsoft.AI.WindowsServer.xml
+G:\Sasidharan\Maximus\Maximus\bin\Microsoft.ApplicationInsights.xml
+G:\Sasidharan\Maximus\Maximus\bin\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.xml
+G:\Sasidharan\Maximus\Maximus\bin\MySql.Data.xml
+G:\Sasidharan\Maximus\Maximus\bin\MySql.Data.EntityFramework.xml
+G:\Sasidharan\Maximus\Maximus\bin\System.Web.Razor.xml
+G:\Sasidharan\Maximus\Maximus\bin\System.Web.Webpages.xml
+G:\Sasidharan\Maximus\Maximus\bin\System.Web.Webpages.Deployment.xml
+G:\Sasidharan\Maximus\Maximus\bin\System.Web.Webpages.Razor.xml
+G:\Sasidharan\Maximus\Maximus\bin\System.Web.Helpers.xml
+G:\Sasidharan\Maximus\Maximus\bin\System.Web.Mvc.xml
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.Pdf.v16.1.Core.xml
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.Office.v16.1.Core.xml
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.Pdf.v16.1.Drawing.xml
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.XtraCharts.v16.1.Web.xml
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.XtraCharts.v16.1.xml
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.Web.ASPxHtmlEditor.v16.1.xml
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.Web.ASPxPivotGrid.v16.1.xml
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.PivotGrid.v16.1.Core.xml
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.XtraReports.v16.1.Web.xml
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.Web.ASPxRichEdit.v16.1.xml
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.Web.ASPxScheduler.v16.1.xml
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.XtraScheduler.v16.1.Core.xml
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.Web.ASPxSpellChecker.v16.1.xml
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.Web.ASPxSpreadsheet.v16.1.xml
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.Web.ASPxTreeList.v16.1.xml
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.XtraReports.v16.1.xml
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.SpellChecker.v16.1.Core.xml
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.Spreadsheet.v16.1.Core.xml
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.DataAccess.v16.1.xml
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.Sparkline.v16.1.Core.xml
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.XtraGauges.v16.1.Core.xml
+G:\Sasidharan\Maximus\Maximus\bin\DevExpress.Xpo.v16.1.xml
+G:\Sasidharan\Maximus\Maximus\bin\de\DevExpress.Data.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\es\DevExpress.Data.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\ja\DevExpress.Data.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\ru\DevExpress.Data.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\de\DevExpress.Printing.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\es\DevExpress.Printing.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\ja\DevExpress.Printing.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\ru\DevExpress.Printing.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\de\DevExpress.RichEdit.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\es\DevExpress.RichEdit.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\ja\DevExpress.RichEdit.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\ru\DevExpress.RichEdit.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\de\DevExpress.Utils.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\es\DevExpress.Utils.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\ja\DevExpress.Utils.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\ru\DevExpress.Utils.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\de\DevExpress.Web.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\es\DevExpress.Web.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\ja\DevExpress.Web.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\ru\DevExpress.Web.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\de\DevExpress.Pdf.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\es\DevExpress.Pdf.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\ja\DevExpress.Pdf.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\ru\DevExpress.Pdf.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\de\DevExpress.Office.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\es\DevExpress.Office.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\ja\DevExpress.Office.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\ru\DevExpress.Office.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\de\DevExpress.XtraCharts.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\es\DevExpress.XtraCharts.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\ja\DevExpress.XtraCharts.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\ru\DevExpress.XtraCharts.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\de\DevExpress.Web.ASPxHtmlEditor.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\es\DevExpress.Web.ASPxHtmlEditor.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\ja\DevExpress.Web.ASPxHtmlEditor.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\ru\DevExpress.Web.ASPxHtmlEditor.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\de\DevExpress.PivotGrid.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\es\DevExpress.PivotGrid.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\ja\DevExpress.PivotGrid.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\ru\DevExpress.PivotGrid.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\de\DevExpress.XtraReports.v16.1.Web.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\es\DevExpress.XtraReports.v16.1.Web.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\ja\DevExpress.XtraReports.v16.1.Web.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\ru\DevExpress.XtraReports.v16.1.Web.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\de\DevExpress.Web.ASPxRichEdit.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\es\DevExpress.Web.ASPxRichEdit.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\ja\DevExpress.Web.ASPxRichEdit.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\ru\DevExpress.Web.ASPxRichEdit.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\de\DevExpress.Web.ASPxScheduler.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\es\DevExpress.Web.ASPxScheduler.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\ja\DevExpress.Web.ASPxScheduler.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\ru\DevExpress.Web.ASPxScheduler.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\de\DevExpress.XtraScheduler.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\es\DevExpress.XtraScheduler.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\ja\DevExpress.XtraScheduler.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\ru\DevExpress.XtraScheduler.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\de\DevExpress.Web.ASPxSpellChecker.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\es\DevExpress.Web.ASPxSpellChecker.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\ja\DevExpress.Web.ASPxSpellChecker.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\ru\DevExpress.Web.ASPxSpellChecker.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\de\DevExpress.Web.ASPxSpreadsheet.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\es\DevExpress.Web.ASPxSpreadsheet.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\ja\DevExpress.Web.ASPxSpreadsheet.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\ru\DevExpress.Web.ASPxSpreadsheet.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\de\DevExpress.Web.ASPxTreeList.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\es\DevExpress.Web.ASPxTreeList.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\ja\DevExpress.Web.ASPxTreeList.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\ru\DevExpress.Web.ASPxTreeList.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\de\DevExpress.XtraReports.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\es\DevExpress.XtraReports.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\ja\DevExpress.XtraReports.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\ru\DevExpress.XtraReports.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\de\DevExpress.Spreadsheet.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\es\DevExpress.Spreadsheet.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\ja\DevExpress.Spreadsheet.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\ru\DevExpress.Spreadsheet.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\de\DevExpress.DataAccess.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\es\DevExpress.DataAccess.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\ja\DevExpress.DataAccess.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\ru\DevExpress.DataAccess.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\de\DevExpress.Sparkline.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\es\DevExpress.Sparkline.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\ja\DevExpress.Sparkline.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\ru\DevExpress.Sparkline.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\de\DevExpress.XtraGauges.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\es\DevExpress.XtraGauges.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\ja\DevExpress.XtraGauges.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\ru\DevExpress.XtraGauges.v16.1.Core.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\de\DevExpress.Xpo.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\es\DevExpress.Xpo.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\ja\DevExpress.Xpo.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\bin\ru\DevExpress.Xpo.v16.1.resources.dll
+G:\Sasidharan\Maximus\Maximus\obj\Debug\Maximus.dll
+G:\Sasidharan\Maximus\Maximus\obj\Debug\Maximus.pdb

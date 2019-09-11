@@ -1,0 +1,66 @@
+﻿@{
+    var grid = Html.DevExpress().GridView(settings =>
+    {
+        settings.Name = "GridView";
+
+
+
+        settings.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
+        settings.SettingsBehavior.ConfirmDelete = true;
+
+        settings.CommandColumn.Visible = true;
+
+        settings.KeyFieldName = "StyleID";
+
+        settings.SettingsPager.Visible = true;
+        settings.Settings.ShowGroupPanel = true;
+        settings.Settings.ShowFilterRow = true;
+        settings.SettingsBehavior.AllowSelectByRowClick = true;
+        settings.Settings.ShowFilterRow = false;
+        settings.Settings.ShowGroupPanel = false;
+        settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCells;
+        settings.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Right;
+        settings.SettingsAdaptivity.AdaptiveDetailColumnCount = 1;
+        settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = false;
+        settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
+        settings.SettingsPager.PageSize = 550;
+
+        settings.Columns.Add(x=> { x.FieldName = "StyleID"; x.Caption = "Style"; });
+        settings.Columns.Add(x => { x.FieldName = "Instruction"; x.Caption = "Instruction"; });
+        settings.Columns.Add(x => {
+            x.FieldName = "IsChargeable";x.ReadOnly = false; x.Caption = " "; x.SetDataItemTemplateContent(d =>
+            {
+
+                int IsChargeable =(int) DataBinder.Eval(d.DataItem, "IsChargeable") ;
+                string style = DataBinder.Eval(d.DataItem, "StyleID").ToString();
+                string Instruction = DataBinder.Eval(d.DataItem, "StyleID").ToString();
+                if (IsChargeable == 1)
+                {
+                    ViewContext.Writer.Write(string.Format("<center><input type='checkbox' disabled='disabled' id=\"CHKID"+ System.Text.RegularExpressions.Regex.Replace(style, @"[^0-9a-zA-Z]+", "") + "\" onclick=\"assemblyChanged('{0}')\" checked='checked'/></center>", style));
+                }
+                else
+                {
+                    var s = string.Format("<center><input onclick=\"assemblyChanged('{0}')\" id=\"CHKID" + System.Text.RegularExpressions.Regex.Replace(style, @"[^0-9a-zA-Z]+", "") + "\"  type='checkbox'/></center>", style);
+                    ViewContext.Writer.Write(string.Format("<center><input onclick=\"assemblyChanged('{0}')\" id=\"CHKID" + System.Text.RegularExpressions.Regex.Replace(style, @"[^0-9a-zA-Z]+", "") + "\"  type='checkbox'/></center>", style));
+                }
+            });
+        });
+
+        settings.Columns.Add(x => { x.FieldName = "StyleImage"; x.Caption = "Image";x.SetDataItemTemplateContent(d =>
+        {
+            string Styleimage = DataBinder.Eval(d.DataItem, "StyleImage").ToString();
+            if (Styleimage!="")
+            {
+                ViewContext.Writer.Write(string.Format("<img src=\"{0}\" height='50' width='60'/>",Styleimage));
+            }
+        });});
+    });
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()
+
+ 
+

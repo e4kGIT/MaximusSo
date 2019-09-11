@@ -1,0 +1,45 @@
+﻿@model Maximus.Models.styleViewmodel
+@{
+    Maximus.Models.e4kmaximusdbEntities entity = new Maximus.Models.e4kmaximusdbEntities();
+    if (Model.StyleID.Contains(','))
+    {
+        Html.DevExpress().ComboBox(
+            c =>
+            {
+                var styleArr = Model.StyleID.Split(',');
+                string style1 = styleArr[0].ToString();
+                c.Name = "SizePop_" + "Drop_" + Model.StyleID;
+                List<string> sizeIdLst = (List<string>)entity.tblfsk_style_sizes.Where(s => s.StyleID == style1).Distinct().OrderBy(s => s.SeqNo).Select(s => s.SizeID).ToList();
+                foreach (string data in sizeIdLst)
+                {
+                    c.Properties.Items.Add(data);
+                }
+                if (sizeIdLst.Count == 1)
+                {
+                    c.SelectedIndex = 0;
+                }
+                c.Properties.ClientSideEvents.SelectedIndexChanged = "getSelectedSize1";
+            }
+                            ).Render();
+    }
+    else
+    {
+        Html.DevExpress().ComboBox(
+            c =>
+            {
+                c.Name = "SizePop_" + "Drop_" + Model.StyleID;
+                List<string> sizeIdLst = (List<string>)entity.tblfsk_style_sizes.Where(s => s.StyleID == Model.StyleID).Distinct().OrderBy(s => s.SeqNo).Select(s => s.SizeID).ToList();
+                foreach (string data in sizeIdLst)
+                {
+                    c.Properties.Items.Add(data);
+
+                }
+                if (sizeIdLst.Count == 1)
+                {
+                    c.SelectedIndex = 0;
+                }
+                c.Properties.ClientSideEvents.SelectedIndexChanged = "getSelectedSize1";
+            }
+                            ).Render();
+    }
+}
