@@ -21,6 +21,7 @@ namespace Maximus.Controllers
         #region ShowBasket
         public ActionResult ShowBasket()
         {
+            //dp.FillCombo_CustomerDelivery();
             return View();
         }
 
@@ -36,6 +37,12 @@ namespace Maximus.Controllers
             }
 
             return PartialView("_CartView", mod);
+        }
+
+        public ActionResult GetEmployeeDeliveryAddress()
+        {
+           var result= dp.FillCombo_CustomerDelivery();
+            return PartialView("_Deliveryaddress", result);
         }
 
         #endregion

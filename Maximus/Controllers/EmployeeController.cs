@@ -13,12 +13,14 @@ namespace Maximus.Controllers
 
     [CustomFilter]
     public class EmployeeController : Controller
-    {
-        // GET: Employee
+    {  // GET: Employee
         #region declarations
         DataProcessing dp = new DataProcessing();
         e4kmaximusdbEntities entity = new e4kmaximusdbEntities();
+
         #endregion
+
+
 
         #region Index and EmpGrid
         public ActionResult Index(string BusinessID)
@@ -50,10 +52,10 @@ namespace Maximus.Controllers
             }
             if (Session["EmployeeViewModel"] == null)
             {
-                Session["EmployeeViewModel"] = (List<EmployeeViewModel>)dp.GetEmployeeByProcedure(Session["BuisnessId"].ToString(), Session["UserName"].ToString()); 
-                if(((List<EmployeeViewModel>)Session["EmployeeViewModel"]).Count==1)
+                Session["EmployeeViewModel"] = (List<EmployeeViewModel>)dp.GetEmployeeByProcedure(Session["BuisnessId"].ToString(), Session["UserName"].ToString());
+                if (((List<EmployeeViewModel>)Session["EmployeeViewModel"]).Count == 1)
                 {
-                    if(!((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes.Contains(','))
+                    if (!((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes.Contains(','))
                     {
                         //((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().em.Contains(',')
                         //GotoCard(((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmployeeId, ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpFirstName + " " + ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpLastName, ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes);
@@ -429,20 +431,29 @@ namespace Maximus.Controllers
         #region createEmployee
         public ActionResult CreateNewEmployee()
         {
-          
+            //var s = dp.FillCombo_CustomerDelivery();
             var result = new EmployeeViewModel();
             string busId = Session["BuisnessId"].ToString();
-            result.ucodeLst = dp.GetUcodeList("",busId); /*entity.tblaccemp_ucodesemployees.Where(x => x.BusinessID == busId).Select(x => x.UCodeID).Distinct().ToList();*/
+            result.ucodeLst = dp.GetUcodeList("", busId);
+            result.Roles = dp.GetRoles(busId);
+            /*entity.tblaccemp_ucodesemployees.Where(x => x.BusinessID == busId).Select(x => x.UCodeID).Distinct().ToList();*/
             result.DepartmentLst = entity.tblaccemp_departments.Where(x => x.BusinessID == busId).Select(x => x.Department).ToList();
             result.Address = new BusAddress();
-            result.chkMapEmp = true;
+            result.chkMapEmp = dp.LimitEmpUsers(Session["Access"].ToString());
             result.chkMapAddr = Convert.ToBoolean(dp.BusinessParam("LimitUsrAddr", busId)) == true | !(dp.BusinessParam("DELADDRMAPTO", busId).ToUpper().Trim() == "EMPLOYEE" ? true : false);
             result.AddressLst = entity.tblbus_address.Where(x => x.BusinessID == busId).Select(x => new BusAddress { Address1 = x.Address1, Address2 = x.Address2, Address3 = x.Address3, City = x.City, Country = x.CountryCode.Value, PostCode = x.Postcode, AddressDescription = x.Description, AddressId = x.AddressID }).ToList();
+            Session["datestart"] = dp.ShowHourse(busId);
+            Session["leavedate"] = dp.ShowHourse(busId);
+            Session["roleid"] = dp.ShowHourse(busId);
+            //if(dp.AddressUserCreate(busId))
+            //{
+            //    result.chkMapEmp = Session["Access"].ToString().Trim().ToLower() == "manager" ? true : false;
+            //}
             ViewBag.create = true;
             return PartialView("_EmployeeEdit", result);
         }
         [HttpPost]
-        public string CreateNewEmployee(DateTime StartDate, DateTime EndDate, string EmpFirstName = "", string EmpLastName = "", string EmployeeId = "", string EmpUcodes = "", string Address = "", string Department = "", bool isActive = false,bool isMapped=false)
+        public string CreateNewEmployee(DateTime StartDate, DateTime EndDate, string EmpFirstName = "", string EmpLastName = "", string EmployeeId = "", string EmpUcodes = "", string Address = "", string Department = "", bool isActive = false, bool isMapped = false)
         {
             try
             {

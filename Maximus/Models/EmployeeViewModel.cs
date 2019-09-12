@@ -47,5 +47,7 @@ namespace Maximus.Models
         public List<BusAddress> AddressLst { get; set; }
         public List<string> Ucodes { get; set; }
         public List<string> ucodeLst { get; set; }
+        public List<string> Roles { get; set; }
+        public string roleId { get; set; }
     }
 }

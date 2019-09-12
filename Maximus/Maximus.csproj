@@ -1555,6 +1555,7 @@
     <Content Include="Views\Employee\_EmployeeEdit.cshtml" />
     <Content Include="Views\Home\_StyleByCardPop.cshtml" />
     <Content Include="scripts\jquery-1.12.4.min.map" />
+    <Content Include="Views\Basket\_Deliveryaddress.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -64,7 +64,7 @@ namespace Maximus.Models
             var freeTxtLst = enty.ucodeby_freetextview.Where(x => x.DimFreeText == freeText).Select(x => x.FreeText).Distinct().ToList();
             var styleLst = new List<string>();
             var requestContext = HttpContext.Current.Request.RequestContext;
-           
+
             try
             {
                 if (freeTxtLst.Count < 2)
@@ -86,12 +86,12 @@ namespace Maximus.Models
                     {
                         if (System.IO.File.Exists(appPath + svm.StyleImage.Substring(svm.StyleImage.IndexOf(":") + 1, svm.StyleImage.Length - svm.StyleImage.IndexOf(":") - 1)) != true)
                         {
-                            svm.StyleImage =  "/StyleImages/notfound.png";
+                            svm.StyleImage = "/StyleImages/notfound.png";
                         }
                         else
                         {
-                           var data =  svm.StyleImage.Substring(svm.StyleImage.IndexOf(":") + 1, svm.StyleImage.Length - svm.StyleImage.IndexOf(":") - 1);
-                            svm.StyleImage= data.Replace("\\","/");
+                            var data = svm.StyleImage.Substring(svm.StyleImage.IndexOf(":") + 1, svm.StyleImage.Length - svm.StyleImage.IndexOf(":") - 1);
+                            svm.StyleImage = data.Replace("\\", "/");
                         }
                     }
                     else
@@ -282,27 +282,41 @@ namespace Maximus.Models
         }
         #endregion
 
+
+
+        #endregion
+
+        #region Employee Module
+
+        #region GetOrderPermission
+        public string GetOrderPermission()
+        {
+            return System.Web.HttpContext.Current.Session["OrderPermit"].ToString() == "" ? "" : System.Web.HttpContext.Current.Session["OrderPermit"].ToString();
+        }
+
+        #endregion
+
         #region GetUcodeList
-        public List<string> GetUcodeList(string employeeId="",string businessId="")
+        public List<string> GetUcodeList(string employeeId = "", string businessId = "")
         {
             List<string> result = new List<string>();
             MySqlConnection conn = new MySqlConnection(ConnectionString);
             try
             {
                 conn.Open();
-                string sqry = "SELECT DISTINCT t1.`CompanyID`,t1.`UCodeID`,IF (Q1.`UCodeID` IS NULL,FALSE,FALSE) AS CheckIt  FROM `tblaccemp_ucodes` t1  LEFT JOIN (SELECT CompanyID,BusinessID,UCodeID FROM `tblaccemp_ucodesemployees` WHERE `EmployeeID`='" + employeeId  + "') Q1 ON t1.`CompanyID`=Q1.CompanyID AND t1.UCODEID=Q1.UCODEID  LEFT JOIN tblaccemp_ucodesemployees t2 ON t1.`CompanyID` = t2.`CompanyID` AND t1.`UCodeID` = t2.`UCodeID`  WHERE t2.BusinessID='" + businessId + "' AND t2.CompanyID='" + cmpId + "' ORDER BY t1.UCodeID";
+                string sqry = "SELECT DISTINCT t1.`CompanyID`,t1.`UCodeID`,IF (Q1.`UCodeID` IS NULL,FALSE,FALSE) AS CheckIt  FROM `tblaccemp_ucodes` t1  LEFT JOIN (SELECT CompanyID,BusinessID,UCodeID FROM `tblaccemp_ucodesemployees` WHERE `EmployeeID`='" + employeeId + "') Q1 ON t1.`CompanyID`=Q1.CompanyID AND t1.UCODEID=Q1.UCODEID  LEFT JOIN tblaccemp_ucodesemployees t2 ON t1.`CompanyID` = t2.`CompanyID` AND t1.`UCodeID` = t2.`UCodeID`  WHERE t2.BusinessID='" + businessId + "' AND t2.CompanyID='" + cmpId + "' ORDER BY t1.UCodeID";
                 MySqlCommand cmd = new MySqlCommand(sqry, conn);
                 MySqlDataAdapter da = new MySqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
                 da.Fill(dt);
-                if(dt.Rows.Count>0)
+                if (dt.Rows.Count > 0)
                 {
-                    foreach(DataRow dr in dt.Rows)
+                    foreach (DataRow dr in dt.Rows)
                     {
                         result.Add(dr.ItemArray[1].ToString());
                     }
                 }
-                if(result.Count>0)
+                if (result.Count > 0)
                 {
                     return result;
                 }
@@ -320,9 +334,86 @@ namespace Maximus.Models
         }
         #endregion
 
+        #region GetRoles 
+        public List<string> GetRoles(string busId = "")
+        {
+            var result = new List<string>();
+            MySqlConnection conn = new MySqlConnection(ConnectionString);
+            try
+            {
+                conn.Open();
+                string sqry = "SELECT RoleID, Description FROM tblaccemp_budget WHERE CompanyID = '" + cmpId + "' AND BusinessID='" + busId + "'";
+                MySqlCommand cmd = new MySqlCommand(sqry, conn);
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                if (dt.Rows.Count > 0)
+                {
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        result.Add(dr.ItemArray[1].ToString());
+                    }
+                }
+                if (result.Count > 0)
+                {
+                    return result;
+                }
+            }
+            catch (Exception e)
+            {
+                log.Error(e.Message);
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return result;
+        }
         #endregion
 
-        #region Employee Module
+        #region LimitEmpUsers
+        public bool LimitEmpUsers(string access)
+        {
+            if (AddressUserCreate())
+            {
+                return false;
+            }
+            else
+            {
+                if (access.Trim().ToUpper() == "ADMIN")
+                {
+                    return false;
+                }
+                else
+                {
+                    return Convert.ToBoolean(BusinessParam("LimitUsrEmp", System.Web.HttpContext.Current.Session["BuisnessId"].ToString().Trim()));
+                }
+            }
+
+        }
+        #endregion
+
+        #region ShowHourse
+        public bool ShowHourse(string busId = "")
+        {
+            return Convert.ToBoolean(BusinessParam("SHOW_HRS_WORK", busId.Trim()));
+
+        }
+        #endregion
+
+        #region AddressUserCreate
+        public bool AddressUserCreate(string busId = "")
+        {
+            return Convert.ToBoolean(BusinessParam("DELADDR_USER_CREATE", busId.Trim()));
+        }
+        #endregion
+
+        #region IsReasonUcodes
+        public bool IsReasonUcodes(string busId = "")
+        {
+            return Convert.ToBoolean(BusinessParam("REQ_REASONPAGE", busId.Trim()));
+        }
+        #endregion
 
         #region getPermission
         public string getPermission(controls controlId, string AccessID, string BusinessID = "", string usr = "", string userId = "")
@@ -889,7 +980,6 @@ namespace Maximus.Models
 
         #endregion
 
-
         #region GetOnlyAllowUsers
         public string GetOnlyAllowUsers(string userId, string busID, string strAccess)
         {
@@ -956,7 +1046,6 @@ namespace Maximus.Models
             return result;
         }
         #endregion
-
 
         #region GetEmployee
         public List<EmployeeViewModel> GetEmployee(string busId, string userId = "", string OrderPermission = "", string txtUcode = "", string ddlAddress = "", string txtUcodeDesc = "", string txtCDepartment = "", string txtRole = "", string txtEmpNo = "", string txtName = "", string txtStDate = "")
@@ -1118,7 +1207,7 @@ namespace Maximus.Models
                     foreach (DataRow dr in dt.Rows)
                     {
                         var empId = dr.ItemArray[0].ToString();
-                        result.Add(new EmployeeViewModel { EmployeeId = dr.ItemArray[1].ToString(), EmpFirstName = dr.ItemArray[4].ToString(), Department = dr.ItemArray[3].ToString(),EmpLastName = dr.ItemArray[5].ToString() ,EmpUcodes = dr.ItemArray[8].ToString(),StartDate=DateTime.Parse(dr.ItemArray[6].ToString()),EndDate=DateTime.Parse(dr.ItemArray[7].ToString()) ,role= dr.ItemArray[9].ToString() });
+                        result.Add(new EmployeeViewModel { EmployeeId = dr.ItemArray[1].ToString(), EmpFirstName = dr.ItemArray[4].ToString(), Department = dr.ItemArray[3].ToString(), EmpLastName = dr.ItemArray[5].ToString(), EmpUcodes = dr.ItemArray[8].ToString(), StartDate = DateTime.Parse(dr.ItemArray[6].ToString()), EndDate = DateTime.Parse(dr.ItemArray[7].ToString()), role = dr.ItemArray[9].ToString() });
                     }
                 }
             }
@@ -1705,20 +1794,20 @@ namespace Maximus.Models
 
         #region usermodule
 
-        public string PermissionSettings(string busId,string userId,string controlId)
+        public string PermissionSettings(string busId, string userId, string controlId)
         {
             string permisson = "";
-            if(userId!="")
+            if (userId != "")
             {
-                if(enty.tblpermission_settings_users.Any(x=>x.BusinessID.ToLower().Trim()==busId.ToLower().Trim() && x.UserID.ToLower().Trim() == userId.ToLower().Trim() && x.ControlID.ToLower().Trim()== controlId.ToLower().Trim()))
+                if (enty.tblpermission_settings_users.Any(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim() && x.UserID.ToLower().Trim() == userId.ToLower().Trim() && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()))
                 {
                     permisson = enty.tblpermission_settings_users.Where(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim() && x.UserID.ToLower().Trim() == userId.ToLower().Trim() && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()).First().Permission;
                 }
-                else if(enty.tblpermission_settings.Any(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim() && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()))
+                else if (enty.tblpermission_settings.Any(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim() && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()))
                 {
                     permisson = enty.tblpermission_settings_users.Where(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim() && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()).First().Permission;
                 }
-                else if(enty.tblpermission_settings.Any(x => x.BusinessID.ToLower().Trim() =="all" && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()))
+                else if (enty.tblpermission_settings.Any(x => x.BusinessID.ToLower().Trim() == "all" && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()))
                 {
                     permisson = enty.tblpermission_settings.Where(x => x.BusinessID.ToLower().Trim() == "all" && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()).First().Permission;
                 }
@@ -1727,8 +1816,8 @@ namespace Maximus.Models
                     permisson = enty.tblpermission_controls.Any(x => x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()) ? enty.tblpermission_controls.Where(x => x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()).First().Defaults : "HIDE";
                 }
             }
-             
-            
+
+
             return permisson;
         }
 
@@ -1794,6 +1883,78 @@ namespace Maximus.Models
                 conn.Close();
             }
             return result;
+        }
+        #endregion
+
+        #region basket
+        public List<BusAddress> FillCombo_CustomerDelivery(bool IsManpack = false)
+        {
+            var result = new List<BusAddress>();
+            string extraQry = "";
+            string sQry = "";
+            string busId = System.Web.HttpContext.Current.Session["BuisnessId"].ToString();
+            if (IsManpack)
+            {
+                //extraQry = extraQry + " (onusraddr.`OnlineUserId`IN (" + getPermissionUsers(GetOrderPermission(), System.Web.HttpContext.Current.Session["UserName"].ToString(), busId) + ") OR onusraddr.`Employeeid` = '" & Emplist1.CurrentEmployee & "') ";
+            }
+            else
+            {
+                extraQry = extraQry + " onusraddr.`OnlineUserId`='" + System.Web.HttpContext.Current.Session["UserName"].ToString() + "' ";
+            }
+            if (Convert.ToBoolean(BusinessParam("LIMITUSRADDR", busId)) && !IsGetAllDelAddress())
+            {
+                sQry = sQry + "SELECT DISTINCT tblbus_address.Description, tblbus_address.Address1, tblbus_address.Address2, tblbus_address.Address3, tblbus_address.Town, tblbus_address.City, tblbus_address.Postcode,  tblbus_countrycodes.Country, tblbus_address.CountryCode, tblbus_address.AddressID,tblbus_address.ContactID   FROM tblbus_countrycodes INNER JOIN (tblbus_addresstype_ref INNER JOIN (tblbus_business INNER JOIN (tblbus_addresstypes  INNER JOIN tblbus_address ON tblbus_addresstypes.AddressTypeID = tblbus_address.AddressTypeID) ON tblbus_business.BusinessID = tblbus_address.BusinessID) ON  tblbus_addresstype_ref.Actual_TypeID = tblbus_addresstypes.Actual_TypeID) ON tblbus_countrycodes.CountryID = tblbus_address.CountryCode  JOIN tblonline_emp_address onusraddr on onusraddr.AddressID=tblbus_address.AddressID AND tblbus_address.BusinessID= onusraddr.BusinessID AND onusraddr.CompanyID=tblbus_address.CompanyID   WHERE tblbus_addresstype_ref.Actual_TypeID=2 AND tblbus_business.BusinessID='" + busId + "' and tblbus_countrycodes.CompanyID ='" + cmpId + "' AND " + extraQry + "  order by tblbus_address.Description";
+            }
+            else
+            {
+                sQry = sQry + "SELECT DISTINCT tblbus_address.Description, tblbus_address.Address1, tblbus_address.Address2, tblbus_address.Address3, tblbus_address.Town, tblbus_address.City, tblbus_address.Postcode, tblbus_countrycodes.Country, tblbus_address.CountryCode, tblbus_address.AddressID,tblbus_address.ContactID   FROM tblbus_countrycodes INNER JOIN (tblbus_addresstype_ref INNER JOIN (tblbus_business INNER JOIN (tblbus_addresstypes INNER JOIN tblbus_address ON tblbus_addresstypes.AddressTypeID = tblbus_address.AddressTypeID) ON tblbus_business.BusinessID = tblbus_address.BusinessID) ON tblbus_addresstype_ref.Actual_TypeID = tblbus_addresstypes.Actual_TypeID) ON tblbus_countrycodes.CountryID = tblbus_address.CountryCode   WHERE tblbus_addresstype_ref.Actual_TypeID=2 AND tblbus_business.BusinessID='" + busId + "' and tblbus_countrycodes.CompanyID ='" + cmpId + "' order by tblbus_address.Description";
+            }
+            MySqlConnection conn = new MySqlConnection(ConnectionString);
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand(sQry, conn);
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                if (dt.Rows.Count > 0)
+                {
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        result.Add(new BusAddress { AddressDescription=dr.ItemArray[0].ToString(),Address1=dr.ItemArray[1].ToString(),Address2=dr.ItemArray[2].ToString(),Address3=dr.ItemArray[3].ToString(),City=dr.ItemArray[5].ToString(),PostCode=dr.ItemArray[6].ToString(), AddressId=Convert.ToInt32(dr.ItemArray[9].ToString()) });
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+            return result;
+        }
+
+        public bool IsGetAllDelAddress()
+        {
+            try
+            {
+                if (HttpContext.Current.Session["Access"].ToString().ToUpper() == "ADMIN")
+                {
+                    return true;
+                }
+                else
+                {
+                    return getPermission(controls.AllAddress, HttpContext.Current.Session["Access"].ToString(), HttpContext.Current.Session["BuisnessId"].ToString()).ToString().Trim().ToUpper().Equals("SHOW");
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+            return false;
         }
         #endregion
 

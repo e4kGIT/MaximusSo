@@ -1,5 +1,10 @@
 ﻿@model Maximus.Models.EmployeeViewModel
 
+
+   @*Session["datestart"] = dp.ShowHourse(busId);
+   Session["leavedate"] = dp.ShowHourse(busId);
+   Session["roleid"] = dp.ShowHourse(busId);*@
+
 <center>
     <div class="row">
         <center><h4 style="padding:0px;">Employee</h4></center>
@@ -18,35 +23,41 @@
             </div>
 
             <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                @if (Convert.ToBoolean(Session["datestart"]))
+                {
                 @Html.DevExpress().DateEditFor(m => m.StartDate, settings =>
-   {
-       settings.Properties.Caption = "Start date";
-       if (ViewBag.create != null)
-       {
-           settings.Date = DateTime.Now;
-       }
-       settings.Name = "editStartDate";
-       settings.Properties.EditFormat = EditFormat.Custom;
-       settings.Properties.DisplayFormatString = "dd.MM.yyyy";
-       settings.Properties.EditFormatString = "dd.MM.yyyy";
+           {
+               settings.Properties.Caption = "Start date";
+               if (ViewBag.create != null)
+               {
+                   settings.Date = DateTime.Now;
+               }
+               settings.Name = "editStartDate";
+               settings.Properties.EditFormat = EditFormat.Custom;
+               settings.Properties.DisplayFormatString = "dd.MM.yyyy";
+               settings.Properties.EditFormatString = "dd.MM.yyyy";
 
-   }).GetHtml()
+           }).GetHtml()
+                }
             </div>
 
             <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+@if (Convert.ToBoolean(Session["leavedate"]))
+{
                 @Html.DevExpress().DateEditFor(m => m.EndDate, settings =>
-   {
-       settings.Properties.Caption = "End Date";
-       if (ViewBag.create != null)
-       {
-           settings.Date = DateTime.Now.AddYears(1);
-       }
-       settings.Name = "editEndDate";
-       settings.Properties.EditFormat = EditFormat.Custom;
-       settings.Properties.DisplayFormatString = "dd.MM.yyyy";
-       settings.Properties.EditFormatString = "dd.MM.yyyy";
+           {
+               settings.Properties.Caption = "End Date";
+               if (ViewBag.create != null)
+               {
+                   settings.Date = DateTime.Now.AddYears(1);
+               }
+               settings.Name = "editEndDate";
+               settings.Properties.EditFormat = EditFormat.Custom;
+               settings.Properties.DisplayFormatString = "dd.MM.yyyy";
+               settings.Properties.EditFormatString = "dd.MM.yyyy";
 
-   }).GetHtml()
+           }).GetHtml()
+}
             </div>
         </div><br />
 
@@ -114,6 +125,24 @@
                     {
                         text.Name = "empMapper";
                         text.Text = "Map employee to this user";
+                    }).GetHtml();
+                }
+
+
+            </div>
+            <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                @if (Convert.ToBoolean(Session["roleid"]))
+                {
+                    Html.DevExpress().ComboBoxFor(x => x.roleId, settings =>
+                    {
+                        settings.Properties.Caption = "Role";
+                        settings.Name = "RoleId";
+                        settings.Width = 180;
+                        settings.SelectedIndex = 0;
+                        foreach (var val in Model.Roles)
+                        {
+                            settings.Properties.Items.Add(val);
+                        }
                     }).GetHtml();
                 }
 
@@ -264,7 +293,8 @@
                    comboBoxSettings.SelectedIndex = Model.AddressLst.IndexOf(busAdd);
                }
            }).BindList(Model.AddressLst).GetHtml()
-            </div><div class="col-md-1 col-xs-1 col-sm-1 col-lg-1 col-xs-1 col-sm-1 col-lg-1"></div>
+            </div>
+            <div class="col-md-1 col-xs-1 col-sm-1 col-lg-1 col-xs-1 col-sm-1 col-lg-1"></div>
             <div class="col-md-1 col-xs-1 col-sm-1 col-lg-1 col-xs-1 col-sm-1 col-lg-1"></div>
         </center>
 

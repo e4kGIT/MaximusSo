@@ -44,6 +44,10 @@
             font: 16px Arial;
         }
 
+        /*.dxeCaption_Material
+        {
+            color:white;
+        }*/
         .changethisone span {
             background-color: #FFF;
         }
@@ -1702,26 +1706,27 @@
     });
 }).GetHtml()
     @Html.DevExpress().PopupControl(sett =>
-       {
-           sett.Width = System.Web.UI.WebControls.Unit.Pixel(1000);
-           sett.Height = System.Web.UI.WebControls.Unit.Percentage(100);
-           sett.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
-           sett.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
-           sett.Name = "CreateEditPop";
-           sett.AllowResize = true;
-           sett.ShowHeader = true;
-           sett.ShowOnPageLoad = false;
-           sett.AllowDragging = true;
-           sett.CloseAction = CloseAction.OuterMouseClick;
-           sett.CloseOnEscape = false;
-           sett.PopupAnimationType = AnimationType.Auto;
-           sett.Modal = true;
-           sett.HeaderText = "Edit";
-           sett.SetContent(() =>
-           {
-               ViewContext.Writer.Write("<div><div id='EditLayout'></div></div>");
-           });
-       }).GetHtml()
+{
+    sett.Width = System.Web.UI.WebControls.Unit.Pixel(1000);
+    sett.Height = System.Web.UI.WebControls.Unit.Percentage(100);
+    sett.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+    sett.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    sett.Name = "CreateEditPop";
+    sett.AllowResize = true;
+    sett.ShowHeader = true;
+    sett.ShowOnPageLoad = false;
+    sett.AllowDragging = true;
+    sett.CloseAction = CloseAction.OuterMouseClick;
+    sett.CloseOnEscape = false;
+    sett.PopupAnimationType = AnimationType.Auto;
+    sett.Modal = true;
+    sett.HeaderText = "Edit";
+    //sett.ControlStyle.BackColor = System.Drawing.ColorTranslator.FromHtml("#5e6d82"); ;
+    sett.SetContent(() =>
+    {
+        ViewContext.Writer.Write("<div><div id='EditLayout'></div></div>");
+    });
+}).GetHtml()
     <div class="navbar navbar-inverse navbar-fixed-top checList">
         @*<div class="container">*@
         @* <div class="row">*@
