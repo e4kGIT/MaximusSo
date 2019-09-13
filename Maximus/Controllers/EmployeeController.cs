@@ -347,8 +347,8 @@ namespace Maximus.Controllers
             result.DepartmentLst = entity.tblaccemp_departments.Where(x => x.BusinessID == busId).Select(x => x.Department).ToList();
             result.ucodeLst = dp.GetUcodeList(empId, busId);/* entity.tblaccemp_ucodesemployees.Where(x => x.BusinessID == busId).Select(x => x.UCodeID).Distinct().ToList();*/
             int addId = dp.GetAddressId(busId, empId);
-            result.Address = addId > 0 ? entity.tblbus_address.Where(x => x.AddressID == addId).Select(x => new BusAddress { Address1 = x.Address1, Address2 = x.Address2, Address3 = x.Address3, City = x.City, Country = x.CountryCode.Value, PostCode = x.Postcode, AddressDescription = x.Description, AddressId = x.AddressID }).FirstOrDefault() : new BusAddress();
-            result.AddressLst = entity.tblbus_address.Where(x => x.BusinessID == busId).Select(x => new BusAddress { Address1 = x.Address1, Address2 = x.Address2, Address3 = x.Address3, City = x.City, Country = x.CountryCode.Value, PostCode = x.Postcode, AddressDescription = x.Description, AddressId = x.AddressID }).ToList();
+            result.Address = addId > 0 ? entity.tblbus_address.Where(x => x.AddressID == addId).Select(x => new BusAddress { Address1 = x.Address1, Address2 = x.Address2, Address3 = x.Address3, City = x.City, CountryCode = x.CountryCode.Value, PostCode = x.Postcode, AddressDescription = x.Description, AddressId = x.AddressID }).FirstOrDefault() : new BusAddress();
+            result.AddressLst = entity.tblbus_address.Where(x => x.BusinessID == busId).Select(x => new BusAddress { Address1 = x.Address1, Address2 = x.Address2, Address3 = x.Address3, City = x.City, CountryCode = x.CountryCode.Value, PostCode = x.Postcode, AddressDescription = x.Description, AddressId = x.AddressID }).ToList();
             return PartialView("_EmployeeEdit", result);
         }
         [HttpPost]
@@ -441,7 +441,7 @@ namespace Maximus.Controllers
             result.Address = new BusAddress();
             result.chkMapEmp = dp.LimitEmpUsers(Session["Access"].ToString());
             result.chkMapAddr = Convert.ToBoolean(dp.BusinessParam("LimitUsrAddr", busId)) == true | !(dp.BusinessParam("DELADDRMAPTO", busId).ToUpper().Trim() == "EMPLOYEE" ? true : false);
-            result.AddressLst = entity.tblbus_address.Where(x => x.BusinessID == busId).Select(x => new BusAddress { Address1 = x.Address1, Address2 = x.Address2, Address3 = x.Address3, City = x.City, Country = x.CountryCode.Value, PostCode = x.Postcode, AddressDescription = x.Description, AddressId = x.AddressID }).ToList();
+            result.AddressLst = entity.tblbus_address.Where(x => x.BusinessID == busId).Select(x => new BusAddress { Address1 = x.Address1, Address2 = x.Address2, Address3 = x.Address3, City = x.City, CountryCode = x.CountryCode.Value, PostCode = x.Postcode, AddressDescription = x.Description, AddressId = x.AddressID }).ToList();
             Session["datestart"] = dp.ShowHourse(busId);
             Session["leavedate"] = dp.ShowHourse(busId);
             Session["roleid"] = dp.ShowHourse(busId);

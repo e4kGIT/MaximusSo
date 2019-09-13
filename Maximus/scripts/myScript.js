@@ -2284,6 +2284,42 @@ function GetClrDemImg(style) {
         }
     });
 }
+function FillAlldeliveryfields(s, e) {
+    var addDescription = ASPxClientControl.GetControlCollection().GetByName(s.name);
+    var address1 = ASPxClientControl.GetControlCollection().GetByName("Address1");
+    var address2 = ASPxClientControl.GetControlCollection().GetByName("Address2");
+    var address3 = ASPxClientControl.GetControlCollection().GetByName("Address3");
+    var city = ASPxClientControl.GetControlCollection().GetByName("City");
+    var postCode = ASPxClientControl.GetControlCollection().GetByName("PostCode");
+    var country = ASPxClientControl.GetControlCollection().GetByName("Country");
+    var descAddId = parseInt(addDescription.GetValue());
+    $.ajax({
+        url: "/Basket/FillAllAddress/",
+        type: "POST",
+        data: { 'descAddId': descAddId },
+        success: function (resp) {
+            address1.SetValue(resp.Address1);
+            address2.SetValue(resp.Address2);
+            address3.SetValue(resp.Address3);
+            city.SetValue(resp.City); 
+            postCode.SetValue(resp.PostCode);
+            country.SetValue(resp.Country);
+        }
+    });
+}
+
+function AcceptOrder()
+{
+    $.ajax({
+        url: "/Basket/AcceptOrder/",
+        type: "POST",
+        data:{'addressId':102331},
+        success:function(resp)
+        {
+
+        }
+    });
+}
 
 //$(document).ready(function () {
 

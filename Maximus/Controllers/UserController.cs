@@ -129,9 +129,11 @@ namespace Maximus.Controllers
                             }
                             // Session["colLines"]=colline
                             Session["IsVisitPrivate"] = false;
-                             var s= dp.PermissionSettings(Session["BuisnessId"].ToString(), Session["UserName"].ToString(), "chkMapAddr");
-                            Session["chkMapEmp"] = dp.PermissionSettings(Session["BuisnessId"].ToString(), Session["UserName"].ToString(), "chkMapEmp");
-                            Session["chkMapAddr"] = dp.PermissionSettings(Session["BuisnessId"].ToString(), Session["UserName"].ToString(), "chkMapAddr");
+                             var s= dp.PermissionSettings(Session["BuisnessId"].ToString(), Session["UserName"].ToString(), "chkMapAddr", Session["Access"].ToString());
+                            Session["chkMapEmp"] = dp.PermissionSettings(Session["BuisnessId"].ToString(), Session["UserName"].ToString(), "chkMapEmp",Session["Access"].ToString());
+                            Session["chkMapAddr"] = dp.PermissionSettings(Session["BuisnessId"].ToString(), Session["UserName"].ToString(), "chkMapAddr", Session["Access"].ToString());
+                            var datas= dp.PermissionSettings(Session["BuisnessId"].ToString(), Session["UserName"].ToString(), "OVERRIDE_ENT_WITH_REASON", Session["Access"].ToString());  
+                            Session["OVERRIDE_ENT_WITH_REASON"] = dp.PermissionSettings(Session["BuisnessId"].ToString(), Session["UserName"].ToString(), "OVERRIDE_ENT_WITH_REASON", Session["Access"].ToString());
                             //'Sales order
                             //Session.Add("objSalesOrder", CType(objSalesOrder, SalesOrderCollection))
                             //Session.Add("objCurrentOrder", CType(objCurrentOrder, SalesOrderHeader))

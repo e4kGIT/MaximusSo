@@ -1794,7 +1794,7 @@ namespace Maximus.Models
 
         #region usermodule
 
-        public string PermissionSettings(string busId, string userId, string controlId)
+        public string PermissionSettings(string busId, string userId, string controlId,string accessId)
         {
             string permisson = "";
             if (userId != "")
@@ -1803,13 +1803,13 @@ namespace Maximus.Models
                 {
                     permisson = enty.tblpermission_settings_users.Where(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim() && x.UserID.ToLower().Trim() == userId.ToLower().Trim() && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()).First().Permission;
                 }
-                else if (enty.tblpermission_settings.Any(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim() && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()))
+                else if (enty.tblpermission_settings.Any(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim() && x.AccessID.ToLower() == accessId.Trim().ToLower() && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()))
                 {
-                    permisson = enty.tblpermission_settings_users.Where(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim() && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()).First().Permission;
+                    permisson = enty.tblpermission_settings.Where(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim() && x.AccessID.ToLower() == accessId.Trim().ToLower() && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()).First().Permission;
                 }
-                else if (enty.tblpermission_settings.Any(x => x.BusinessID.ToLower().Trim() == "all" && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()))
+                else if (enty.tblpermission_settings.Any(x => x.BusinessID.ToLower().Trim() == "all" && x.AccessID.ToLower() == accessId.Trim().ToLower() && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()))
                 {
-                    permisson = enty.tblpermission_settings.Where(x => x.BusinessID.ToLower().Trim() == "all" && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()).First().Permission;
+                    permisson = enty.tblpermission_settings.Where(x => x.BusinessID.ToLower().Trim() == "all" && x.AccessID.ToLower() == accessId.Trim().ToLower() && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()).First().Permission;
                 }
                 else
                 {
@@ -1887,6 +1887,41 @@ namespace Maximus.Models
         #endregion
 
         #region basket
+
+        public BusAddress GetAddressDetails(string qry)
+        {
+            var BusAddress = new BusAddress();
+            MySqlConnection conn = new MySqlConnection(ConnectionString);
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand(qry, conn);
+                using (var reader = cmd.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        BusAddress.AddressDescription = reader.GetString("Description") != "" ? reader.GetString("Description") : "";
+                        BusAddress.Address1 = reader.GetString("Address1") != "" ? reader.GetString("Address1") : "";
+                        BusAddress.Address2 = reader.GetString("Address2") != "" ? reader.GetString("Address2") : "";
+                        BusAddress.Address3 = reader.GetString("Address3") != "" ? reader.GetString("Address3") : "";
+                        BusAddress.AddressDescription = reader.GetString("Town") != "" ? reader.GetString("Town") : "";
+                        BusAddress.City = reader.GetString("City") != "" ? reader.GetString("City") : "";
+                        BusAddress.PostCode = reader.GetString("Postcode") != "" ? reader.GetString("Postcode") : "";
+                        BusAddress.Country = reader.GetString("Country") != "" ? reader.GetString("Country") : "";
+                    }
+                    return BusAddress;
+                }
+            }
+            catch(Exception e)
+            {
+
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return BusAddress;
+        }
         public List<BusAddress> FillCombo_CustomerDelivery(bool IsManpack = false)
         {
             var result = new List<BusAddress>();
@@ -1921,7 +1956,7 @@ namespace Maximus.Models
                 {
                     foreach (DataRow dr in dt.Rows)
                     {
-                        result.Add(new BusAddress { AddressDescription=dr.ItemArray[0].ToString(),Address1=dr.ItemArray[1].ToString(),Address2=dr.ItemArray[2].ToString(),Address3=dr.ItemArray[3].ToString(),City=dr.ItemArray[5].ToString(),PostCode=dr.ItemArray[6].ToString(), AddressId=Convert.ToInt32(dr.ItemArray[9].ToString()) });
+                        result.Add(new BusAddress { AddressDescription=dr.ItemArray[0].ToString(),Address1=dr.ItemArray[1].ToString(),Address2=dr.ItemArray[2].ToString(),Address3=dr.ItemArray[3].ToString(),City=dr.ItemArray[5].ToString(),PostCode=dr.ItemArray[6].ToString(), AddressId=Convert.ToInt32(dr.ItemArray[9].ToString()),Country=dr.ItemArray[7].ToString(),contactId=dr.ItemArray[10].ToString() });
                     }
                 }
             }

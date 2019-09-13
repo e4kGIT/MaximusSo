@@ -3,12 +3,32 @@
     ViewBag.Title = "ShowBasket";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
- <h2>ShowBasket</h2>
+<h2>ShowBasket</h2>
 @Html.Action("CartView")
 <br />
 <br />
 <br />
-@Html.Action("GetEmployeeDeliveryAddress")
+<div class="row" style="background-color:white;">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+        <br />
+        <br />
+        <br />
+        @Html.Action("GetEmployeeDeliveryAddress")   
+        <br />
+        <br />
+        <br />
+    </div>
+    <div class="col-md-1"></div>
+</div>
+<br />
+<br />
+@Html.DevExpress().Button(sett => {
+    sett.Name = "Acceptorders";
+    sett.ClientSideEvents.Click = "AcceptOrder";
+    sett.ControlStyle.CssClass = "pull-right";
+    sett.Text = "Accept order";
+}).GetHtml()
 <br />
 <br />
 <div class="row">

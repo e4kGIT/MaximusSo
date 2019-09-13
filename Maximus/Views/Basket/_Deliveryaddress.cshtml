@@ -1,23 +1,25 @@
-﻿    @Html.DevExpress().ComboBox(comboBoxSettings =>
+﻿
+<div class="row">
+    @Html.DevExpress().ComboBox(comboBoxSettings =>
 {
     comboBoxSettings.Name = "CmbAddress";
     comboBoxSettings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
     comboBoxSettings.Properties.Caption = "Employee delivery address";
-   
+    comboBoxSettings.Properties.ClientSideEvents.SelectedIndexChanged = "FillAlldeliveryfields";
     comboBoxSettings.ControlStyle.CssClass = "pull-left";
-    comboBoxSettings.Properties.DropDownWidth = System.Web.UI.WebControls.Unit.Pixel(1000);
+    comboBoxSettings.Properties.DropDownWidth = System.Web.UI.WebControls.Unit.Percentage(100);
     comboBoxSettings.Properties.DropDownStyle = DropDownStyle.DropDownList;
     comboBoxSettings.Properties.ValueField = "AddressID";
     comboBoxSettings.Properties.TextField = "AddressDescription";
     comboBoxSettings.Properties.ValueType = typeof(string);
     comboBoxSettings.Properties.TextFormatString = "{0}";
     comboBoxSettings.Properties.Columns.Add("AddressDescription", "Description", System.Web.UI.WebControls.Unit.Percentage(100));
-    comboBoxSettings.Properties.Columns.Add("AddressID", "AddressID", System.Web.UI.WebControls.Unit.Percentage(100));
-    comboBoxSettings.Properties.Columns.Add("Address1", "Address1", System.Web.UI.WebControls.Unit.Percentage(100));
-    comboBoxSettings.Properties.Columns.Add("Address2", "Address2", System.Web.UI.WebControls.Unit.Percentage(100));
-    comboBoxSettings.Properties.Columns.Add("Address3", "Address3", System.Web.UI.WebControls.Unit.Percentage(100));
-    comboBoxSettings.Properties.Columns.Add("City", "City", System.Web.UI.WebControls.Unit.Percentage(100));
-    comboBoxSettings.Properties.Columns.Add("PostCode", "PostCode", System.Web.UI.WebControls.Unit.Percentage(100));
+    //comboBoxSettings.Properties.Columns.Add("AddressID", "AddressID", System.Web.UI.WebControls.Unit.Percentage(100));
+    //comboBoxSettings.Properties.Columns.Add("Address1", "Address1", System.Web.UI.WebControls.Unit.Percentage(100));
+    //comboBoxSettings.Properties.Columns.Add("Address2", "Address2", System.Web.UI.WebControls.Unit.Percentage(100));
+    //comboBoxSettings.Properties.Columns.Add("Address3", "Address3", System.Web.UI.WebControls.Unit.Percentage(100));
+    //comboBoxSettings.Properties.Columns.Add("City", "City", System.Web.UI.WebControls.Unit.Percentage(100));
+    //comboBoxSettings.Properties.Columns.Add("PostCode", "PostCode", System.Web.UI.WebControls.Unit.Percentage(100));
     //// comboBoxSettings.Properties.DataSource = ViewBag.MultiComboBoxSites;
     //if (Model.Address != null)
     //{
@@ -25,4 +27,21 @@
     //    comboBoxSettings.SelectedIndex = Model.AddressLst.IndexOf(busAdd);
     //}
 }).BindList(Model).GetHtml()
- 
+</div>
+<br />
+<br />
+<div class="row">
+    <div class="col-md-3">@Html.DevExpress().TextBox(settings => { settings.Name = "Address1"; settings.Properties.Caption = "Address1"; }).GetHtml()</div>
+    <div class="col-md-3">@Html.DevExpress().TextBox(settings => { settings.Name = "Address2"; settings.Properties.Caption = "Address2"; }).GetHtml()</div>
+    <div class="col-md-3">@Html.DevExpress().TextBox(settings => { settings.Name = "Address3"; settings.Properties.Caption = "Address3"; }).GetHtml()</div>
+    <div class="col-md-3">@Html.DevExpress().TextBox(settings => { settings.Name = "City"; settings.Properties.Caption = "City"; }).GetHtml()</div>
+</div>
+<br />
+<div class="row">
+    <div class="col-md-3">@Html.DevExpress().TextBox(settings => { settings.Name = "PostCode"; settings.Properties.Caption = "Postcode"; }).GetHtml()</div>
+
+    <div class="col-md-3">
+        @Html.DevExpress().TextBox(settings => { settings.Name = "Country"; settings.Properties.Caption = "Country"; }).GetHtml()
+    </div>
+</div>
+

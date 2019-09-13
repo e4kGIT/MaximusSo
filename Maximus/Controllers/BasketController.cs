@@ -9,7 +9,7 @@ using Maximus.Filter;
 
 namespace Maximus.Controllers
 {
-   
+
     [CustomFilter]
     public class BasketController : Controller
     {
@@ -41,7 +41,8 @@ namespace Maximus.Controllers
 
         public ActionResult GetEmployeeDeliveryAddress()
         {
-           var result= dp.FillCombo_CustomerDelivery();
+            var result = dp.FillCombo_CustomerDelivery();
+            Session["DeliveryAddress"] = result;
             return PartialView("_Deliveryaddress", result);
         }
 
@@ -56,7 +57,7 @@ namespace Maximus.Controllers
             {
                 Session["thisEmp"] = empId;
             }
-             
+
             var buss = Session["BuisnessId"].ToString();
             var emp = Session["SelectedEmp"].ToString();
             var salesHeaders = (List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"];
@@ -143,8 +144,8 @@ namespace Maximus.Controllers
                     foreach (var data in model)
                     {
                         var parentStyle = model.Where(s => s.LineNo == item.LineNo).First().StyleID;
-                        var assemblyID = entity.tblasm_assemblyheader.Any(x => x.StyleID == parentStyle  && x.CustID == businessId) ? entity.tblasm_assemblyheader.Where(x => x.StyleID == parentStyle && x.CustID == businessId).First().AssemblyID : 0;
-                        var qty = assemblyID!=0?entity.tblasm_assemblydetail.Any(x => x.StyleID == data.StyleID && x.AssemblyID == assemblyID) ? entity.tblasm_assemblydetail.Where(x => x.StyleID == data.StyleID && x.AssemblyID == assemblyID).First().Qty : 1:1;
+                        var assemblyID = entity.tblasm_assemblyheader.Any(x => x.StyleID == parentStyle && x.CustID == businessId) ? entity.tblasm_assemblyheader.Where(x => x.StyleID == parentStyle && x.CustID == businessId).First().AssemblyID : 0;
+                        var qty = assemblyID != 0 ? entity.tblasm_assemblydetail.Any(x => x.StyleID == data.StyleID && x.AssemblyID == assemblyID) ? entity.tblasm_assemblydetail.Where(x => x.StyleID == data.StyleID && x.AssemblyID == assemblyID).First().Qty : 1 : 1;
                         data.OrdQty = qty * item.OrdQty;
                     }
                 }
@@ -181,6 +182,8 @@ namespace Maximus.Controllers
         }
         #endregion
 
+        #region CardDetailAssembly
+
         [ValidateInput(false)]
         public ActionResult CardDetailAssembly(int LineNo)
         {
@@ -189,7 +192,9 @@ namespace Maximus.Controllers
             //string businessId = Session["BuisnessId"].ToString();
             return PartialView("_CardDetailAssembly", model);
         }
+        #endregion
 
+        #region  GridViewPartialAddNew
         [HttpPost, ValidateInput(false)]
         public ActionResult GridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] Maximus.Models.SalesOrderLineViewModel item)
         {
@@ -209,6 +214,11 @@ namespace Maximus.Controllers
                 ViewData["EditError"] = "Please, correct all errors.";
             return PartialView("_GridViewPartial", model);
         }
+
+        #endregion
+
+        #region GridViewPartialUpdate
+
         [HttpPost, ValidateInput(false)]
         public ActionResult GridViewPartialUpdate([ModelBinder(typeof(DevExpressEditorsBinder))] Maximus.Models.SalesOrderLineViewModel item)
         {
@@ -228,6 +238,10 @@ namespace Maximus.Controllers
                 ViewData["EditError"] = "Please, correct all errors.";
             return PartialView("_GridViewPartial", model);
         }
+        #endregion
+
+        #region  GridViewPartialDelete
+
         [HttpPost, ValidateInput(false)]
         public ActionResult GridViewPartialDelete(System.Int64 LineNo)
         {
@@ -245,6 +259,70 @@ namespace Maximus.Controllers
             }
             return PartialView("_GridViewPartial", model);
         }
+        #endregion
+
+        #region FillAllAddress
+        public JsonResult FillAllAddress(int descAddId)
+        {
+            var result =((List<BusAddress>)Session["DeliveryAddress"]).Where(x => x.AddressId == descAddId).First();
+            
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+        #endregion
+
+        #region AcceptOrders
+        public ActionResult AcceptOrder(int addressId)
+        {
+           string cmpId= System.Configuration.ConfigurationManager.AppSettings["CompanyId"].ToString();
+            bool booCheck = true; bool booAutoConfirm = false; long mStackManPack = 0;
+            string busId = Session["BuisnessId"].ToString();
+            long intSalesOrderNo = 0;
+            long intnext = 0;
+            string tmpMsg = "";
+            bool EditFlag = false;
+            bool StrSQL = false;
+            long i = 0;
+            string mCDate;
+            bool booNotSAP = true;
+            long intManPackNext = 0;
+            string mOrdDate = "";
+            string mySqlInv = "";
+            string myInvDesc = "";
+            string myInvAddress1 = "";
+            string myInvAddress2 = "";
+            string myInvAddress3 = "";
+            string myInvTown = "";
+            string myInvCity = "";
+            string myInvPostCode = "";
+            string myInvCountry = "";
+            bool isPersonalOrder = false;
+
+            Session["EditOrdContent"] = "";
+            bool booStackOrder;
+            booStackOrder = Convert.ToBoolean(dp.BusinessParam("STACKORDERS", busId));
+            //if(manpac)
+            //{
+            //}
+            //if(booCheck)
+            //{
+            //}
+            //if (Session["POINTSREQD"] && rolledoutorder)
+            //{
+            //}
+            int myAddressID = 0, myContactID = 0, myCountryID = 0;
+            myAddressID = addressId;
+            myContactID =Convert.ToInt32( ((List<BusAddress>)Session["DeliveryAddress"]).Where(x => x.AddressId ==  addressId).First().contactId);
+            myCountryID=Convert.ToInt32(((List<BusAddress>)Session["DeliveryAddress"]).Where(x => x.AddressId == addressId).First().Country);
+            if(!isPersonalOrder)
+            {
+                
+              string  SQL = "SELECT tblbus_address.Description, tblbus_address.Address1, tblbus_address.Address2, tblbus_address.Address3, tblbus_address.Town, tblbus_address.City, tblbus_address.Postcode, tblbus_countrycodes.Country, tblbus_address.countrycode  FROM tblbus_countrycodes INNER JOIN (tblbus_addresstype_ref INNER JOIN (tblbus_business INNER JOIN (tblbus_addresstypes INNER JOIN tblbus_address ON tblbus_addresstypes.AddressTypeID = tblbus_address.AddressTypeID) ON tblbus_business.BusinessID = tblbus_address.BusinessID) ON tblbus_addresstype_ref.Actual_TypeID = tblbus_addresstypes.Actual_TypeID) ON tblbus_countrycodes.CountryID = tblbus_address.CountryCode  WHERE tblbus_addresstype_ref.Actual_TypeID=3 AND tblbus_business.BusinessID='" + busId + "' and tblbus_countrycodes.CompanyID = '" + cmpId + "' Order By tblbus_address.Description";
+              var data=  dp.GetAddressDetails(SQL);
+            }
+            return View();
+        }
+        #endregion
+
     }
 }
 
