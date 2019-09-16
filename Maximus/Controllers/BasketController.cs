@@ -22,6 +22,8 @@ namespace Maximus.Controllers
         public ActionResult ShowBasket()
         {
             //dp.FillCombo_CustomerDelivery();
+            ViewData["carrierFill"] = FillCarrierDropdown();
+            ViewData["carrierStyleFill"] = FillCarrierStyle();
             return View();
         }
 
@@ -65,6 +67,23 @@ namespace Maximus.Controllers
             return PartialView("_CartviewDetailGridViewGridViewPartial", model);
         }
 
+        #endregion
+
+        #region GetCarriers
+        public ActionResult GetCarriers()
+        {
+            ViewData["carrierFill"] = FillCarrierDropdown();
+            ViewData["carrierStyleFill"] = FillCarrierStyle();
+            return View("_CarriageandResons");
+        }
+        #endregion
+        #region GetCarriers
+        public ActionResult GetCarrierandreason()
+        {
+            ViewData["carrierFill"] = FillCarrierDropdown();
+            ViewData["carrierStyleFill"] = FillCarrierStyle();
+            return PartialView("model/_CarriageView");
+        }
         #endregion
 
         #region cart Update
@@ -264,8 +283,8 @@ namespace Maximus.Controllers
         #region FillAllAddress
         public JsonResult FillAllAddress(int descAddId)
         {
-            var result =((List<BusAddress>)Session["DeliveryAddress"]).Where(x => x.AddressId == descAddId).First();
-            
+            var result = ((List<BusAddress>)Session["DeliveryAddress"]).Where(x => x.AddressId == descAddId).First();
+
             return Json(result, JsonRequestBehavior.AllowGet);
         }
         #endregion
@@ -273,7 +292,7 @@ namespace Maximus.Controllers
         #region AcceptOrders
         public ActionResult AcceptOrder(int addressId)
         {
-           string cmpId= System.Configuration.ConfigurationManager.AppSettings["CompanyId"].ToString();
+            string cmpId = System.Configuration.ConfigurationManager.AppSettings["CompanyId"].ToString();
             bool booCheck = true; bool booAutoConfirm = false; long mStackManPack = 0;
             string busId = Session["BuisnessId"].ToString();
             long intSalesOrderNo = 0;
@@ -296,7 +315,7 @@ namespace Maximus.Controllers
             string myInvPostCode = "";
             string myInvCountry = "";
             bool isPersonalOrder = false;
-
+            bool booExistInManpack;
             Session["EditOrdContent"] = "";
             bool booStackOrder;
             booStackOrder = Convert.ToBoolean(dp.BusinessParam("STACKORDERS", busId));
@@ -311,16 +330,118 @@ namespace Maximus.Controllers
             //}
             int myAddressID = 0, myContactID = 0, myCountryID = 0;
             myAddressID = addressId;
-            myContactID =Convert.ToInt32( ((List<BusAddress>)Session["DeliveryAddress"]).Where(x => x.AddressId ==  addressId).First().contactId);
-            myCountryID=Convert.ToInt32(((List<BusAddress>)Session["DeliveryAddress"]).Where(x => x.AddressId == addressId).First().Country);
-            if(!isPersonalOrder)
+            myContactID = Convert.ToInt32(((List<BusAddress>)Session["DeliveryAddress"]).Where(x => x.AddressId == addressId).First().contactId);
+            myCountryID = Convert.ToInt32(((List<BusAddress>)Session["DeliveryAddress"]).Where(x => x.AddressId == addressId).First().Country);
+            if (!isPersonalOrder)
             {
-                
-              string  SQL = "SELECT tblbus_address.Description, tblbus_address.Address1, tblbus_address.Address2, tblbus_address.Address3, tblbus_address.Town, tblbus_address.City, tblbus_address.Postcode, tblbus_countrycodes.Country, tblbus_address.countrycode  FROM tblbus_countrycodes INNER JOIN (tblbus_addresstype_ref INNER JOIN (tblbus_business INNER JOIN (tblbus_addresstypes INNER JOIN tblbus_address ON tblbus_addresstypes.AddressTypeID = tblbus_address.AddressTypeID) ON tblbus_business.BusinessID = tblbus_address.BusinessID) ON tblbus_addresstype_ref.Actual_TypeID = tblbus_addresstypes.Actual_TypeID) ON tblbus_countrycodes.CountryID = tblbus_address.CountryCode  WHERE tblbus_addresstype_ref.Actual_TypeID=3 AND tblbus_business.BusinessID='" + busId + "' and tblbus_countrycodes.CompanyID = '" + cmpId + "' Order By tblbus_address.Description";
-              var data=  dp.GetAddressDetails(SQL);
+
+                string SQL = "SELECT tblbus_address.Description, tblbus_address.Address1, tblbus_address.Address2, tblbus_address.Address3, tblbus_address.Town, tblbus_address.City, tblbus_address.Postcode, tblbus_countrycodes.Country, tblbus_address.countrycode  FROM tblbus_countrycodes INNER JOIN (tblbus_addresstype_ref INNER JOIN (tblbus_business INNER JOIN (tblbus_addresstypes INNER JOIN tblbus_address ON tblbus_addresstypes.AddressTypeID = tblbus_address.AddressTypeID) ON tblbus_business.BusinessID = tblbus_address.BusinessID) ON tblbus_addresstype_ref.Actual_TypeID = tblbus_addresstypes.Actual_TypeID) ON tblbus_countrycodes.CountryID = tblbus_address.CountryCode  WHERE tblbus_addresstype_ref.Actual_TypeID=3 AND tblbus_business.BusinessID='" + busId + "' and tblbus_countrycodes.CompanyID = '" + cmpId + "' Order By tblbus_address.Description";
+                var data = dp.GetAddressDetails(SQL);
             }
+            //if(!checkCarriage())
+            //{
+
+            //}
             return View();
         }
+        #endregion
+
+        #region get carrier cmbo
+        public List<string> FillCarrierDropdown()
+        {
+            var result = new List<string>();
+            result = dp.GetCarrierCmbValue();
+            return result;
+        }
+        #endregion
+
+        #region Carrier style
+
+        public List<string> FillCarrierStyle()
+        {
+            var result = new List<string>();
+            result = dp.GetCarrierStyleCmbValue();
+            return result;
+        }
+        #endregion
+
+        #region checkCarriage
+        //public bool CheckCarriage()
+        //{
+        //    bool checkCarriage = false;
+        //    if(IsManpack==false)
+        //    {
+        //        if(( checkBulkCarriageLine()==false)
+        //        {
+        //            if((int)Session["CARRPERCENT"]>0)
+        //            {
+        //                checkCarriage = false;
+        //            }
+        //            else
+        //            {
+        //                if()
+        //            }
+        //        }
+        //    }
+
+        //        checkCarriage = False
+        //    If IsManpack = False Then
+        //        If checkBulkCarriageLine() = False Then
+        //            If Val(Session.Item("CARRPERCENT")) > 0 Then
+        //                checkCarriage = False
+        //            Else
+        //                If CDbl(Val(txtTotalGoods.Text)) < CDbl(Val(Session.Item("CARRREQAMT"))) Then
+        //                    checkCarriage = False
+        //                Else
+        //                    checkCarriage = True
+        //                End If
+        //            End If
+        //        Else
+        //            checkCarriage = True
+        //        End If
+        //    Else
+        //        If checkCarriageLine() = False Then
+        //            If Val(Session.Item("CARRPERCENT")) > 0 Then
+        //                checkCarriage = False
+        //            Else
+        //                If CDbl(Val(txtTotalGoods.Text)) < CDbl(Val(Session.Item("CARRREQAMT"))) Then
+        //                    checkCarriage = False
+        //                Else
+        //                    checkCarriage = True
+        //                End If
+        //            End If
+        //        Else
+        //            checkCarriage = True
+        //        End If
+        //    End If
+        //End Function
+        //}
+        #endregion
+
+        #region checkBulkCarriageLine
+
+        //public bool checkBulkCarriageLine()
+        //{
+        //    string carrstr = "";
+        //    long irow = 0;
+        //    bool checkBulkCarriageLine = false;
+         
+        ////    Dim carrstr As String
+        ////Dim irow As Long
+        ////Dim rs_carr As New ADODB.Recordset
+        ////checkBulkCarriageLine = False
+        ////For irow = 1 To Session.Item("objCurrentOrder").SalesOrderLine.Count
+        ////    With Session.Item("objCurrentOrder").SalesOrderLine.item(irow)
+        ////        carrstr = "SELECT * FROM tblonlinesop_carriage WHERE StyleID='" & .StyleID & "' AND CompanyID='" & strCompanyID & "'"
+        ////        rs_carr.Open(LCase(carrstr), Conn)
+        ////        If Not rs_carr.EOF Then
+        ////            checkBulkCarriageLine = True
+        ////            Exit Function
+        ////        End If
+        ////        rs_carr.Close()
+        ////    End With
+        ////Next
+        //}
         #endregion
 
     }

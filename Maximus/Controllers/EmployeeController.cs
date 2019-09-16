@@ -25,6 +25,7 @@ namespace Maximus.Controllers
         #region Index and EmpGrid
         public ActionResult Index(string BusinessID)
         {
+            ViewBag.HideSearch = true;
             Session["cardRows"] = 10;
             Session["cardColumns"] = 1;
             Session["ColorSizestyle"] = Session["ColorSizestyle"] == null ? "SWATCHES" : Session["ColorSizestyle"].ToString();
@@ -55,11 +56,34 @@ namespace Maximus.Controllers
                 Session["EmployeeViewModel"] = (List<EmployeeViewModel>)dp.GetEmployeeByProcedure(Session["BuisnessId"].ToString(), Session["UserName"].ToString());
                 if (((List<EmployeeViewModel>)Session["EmployeeViewModel"]).Count == 1)
                 {
+                    ViewBag.HideSearch = false;
                     if (!((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes.Contains(','))
                     {
+                        return RedirectToAction("Action", new { EmployeeId = ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmployeeId, EmpName = ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpFirstName+ " "+ ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpLastName, Ucodes = ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes });
                         //((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().em.Contains(',')
                         //GotoCard(((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmployeeId, ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpFirstName + " " + ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpLastName, ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes);
                     }
+                }
+                else
+                {
+                    ViewBag.HideSearch = true;
+                }
+            }
+            else
+            {
+                if (((List<EmployeeViewModel>)Session["EmployeeViewModel"]).Count == 1)
+                {
+                    ViewBag.HideSearch = false;
+                    if (!((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes.Contains(','))
+                    {
+                        return RedirectToAction("Action", new { EmployeeId = ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmployeeId, EmpName = ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpFirstName + " " + ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpLastName, Ucodes = ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes });
+                        //((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().em.Contains(',')
+                        //GotoCard(((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmployeeId, ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpFirstName + " " + ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpLastName, ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes);
+                    }
+                }
+                else
+                {
+                    ViewBag.HideSearch = true;
                 }
             }
             return View("Employee");

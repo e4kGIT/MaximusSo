@@ -178,6 +178,8 @@
     <Content Include="Content\jquery-ui.css" />
     <Content Include="Content\jquery-ui.structure.css" />
     <Content Include="Content\jquery-ui.theme.css" />
+    <Content Include="Content\jquery.jgrowl.css" />
+    <Content Include="Content\jquery.jgrowl.min.css" />
     <Content Include="Content\Site.css" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
@@ -254,6 +256,9 @@
     <Content Include="scripts\jquery-ui-1.12.1.js" />
     <Content Include="scripts\jquery-ui-1.12.1.min.js" />
     <Content Include="scripts\jquery-ui.js" />
+    <Content Include="scripts\jquery.jgrowl.js" />
+    <Content Include="scripts\jquery.jgrowl.min.js" />
+    <Content Include="scripts\jquery.toaster.js" />
     <Content Include="scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="scripts\modernizr-2.6.2.js" />
@@ -1556,6 +1561,9 @@
     <Content Include="Views\Home\_StyleByCardPop.cshtml" />
     <Content Include="scripts\jquery-1.12.4.min.map" />
     <Content Include="Views\Basket\_Deliveryaddress.cshtml" />
+    <Content Include="Views\Basket\_CarriageandResons.cshtml" />
+    <Content Include="Views\Basket\model\_CarriageView.cshtml" />
+    <Content Include="scripts\jquery.jgrowl.map" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

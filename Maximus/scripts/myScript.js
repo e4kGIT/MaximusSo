@@ -582,16 +582,19 @@ function addTocartSwatch(s, e) {
                                     $("#CartwidCount").html("");
                                     $("#CartwidCount").html(response);
                                     loadPopup.Hide();
-                                    alert("Successfully added to the cart!");
+                                    $.growl.notice({ message: "Added to cart!" });
+                                    //alert("Successfully added to the cart!");
                                 }
                                 else {
                                     loadPopup.Hide();
-                                    alert("Try again!");
+                                    $.growl.warning({ message: "Try again!" });
+                                    //alert("Try again!");
                                 }
                             },
                             error: function () {
                                 loadPopup.Hide();
-                                alert("Try again!");
+                                $.growl.warning({ message: "Try again!" });
+                                //alert("Try again!");
                             }
                         })
                     }
@@ -2321,7 +2324,13 @@ function AcceptOrder()
     });
 }
 
-//$(document).ready(function () {
+function SettbxValue(s, e) {
+    var cmbBox = ASPxClientControl.GetControlCollection().GetByName(s.name);
+    var carrTextbox = ASPxClientControl.GetControlCollection().GetByName("CarriageTexbox");
+    var data = cmbBox.GetValue().split("|");
+    carrTextbox.SetValue(data[1]);
+
+}//$(document).ready(function () {
 
 //    $("#FilterEmployeeId_I").autocomplete({
 //            source: function (request, response) {

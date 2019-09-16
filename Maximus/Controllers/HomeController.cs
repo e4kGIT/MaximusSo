@@ -973,7 +973,7 @@ namespace Maximus.Controllers
                 Session["SalesOrderHeader"] = salesOrderHeader;
                 Session["assemList"] = null;
                 Session["SalesOrderLines"] = salesOrderLines.Where(x => x.EmployeeId == Session["SelectedEmp"].ToString()).ToList();
-                Session["qty"] = salesOrderLines.Where(x => x.EmployeeId == Session["SelectedEmp"].ToString()).Sum(x => x.OrdQty);
+                Session["qty"] = salesOrderLines.Where(x => x.EmployeeId == Session["SelectedEmp"].ToString() && x.OriginalLineNo==null).Sum(x => x.OrdQty);
                 result = "<button class=\"btn\" onclick=\"GetCart()\" style=\"background-color:#009885;color:white\"><b>View Basket &nbsp;&nbsp;&nbsp;<span class=\"glyphicon glyphicon-shopping-cart\" style=\"color:white;font-size:25px\" ></span><sup class=\"badge\" id=\"lblCartCount\">" + Session["qty"].ToString() + "</sup></b></button>";
 
                 return Json(result, JsonRequestBehavior.AllowGet);
