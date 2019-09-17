@@ -562,7 +562,7 @@ function addTocartSwatch(s, e) {
     description = document.getElementById("LbDescription" + desc).innerHTML;
     price = document.getElementById("LbPrice" + stylearr[1]).innerHTML;
     qty = Spin[0].value;
-    if (description != "" && price != "" && size != "" && color != "" && qty != "") {
+    if (description != "" && price != "" && size != "" && color != "" && qty != "" && qty!="0") {
         if (stylearr[2] != "") {
             $.ajax({
                 url: "/Home/GetBtnStatus/",
@@ -582,18 +582,18 @@ function addTocartSwatch(s, e) {
                                     $("#CartwidCount").html("");
                                     $("#CartwidCount").html(response);
                                     loadPopup.Hide();
-                                    $.growl.notice({ message: "Added to cart!" });
+                                    myFunction("Added to cart..!");
                                     //alert("Successfully added to the cart!");
                                 }
                                 else {
                                     loadPopup.Hide();
-                                    $.growl.warning({ message: "Try again!" });
+                                    myFunction("Try again..!");
                                     //alert("Try again!");
                                 }
                             },
                             error: function () {
                                 loadPopup.Hide();
-                                $.growl.warning({ message: "Try again!" });
+                                myFunction("Try again..!");
                                 //alert("Try again!");
                             }
                         })
@@ -723,7 +723,7 @@ function addTocartDimSwatch(s, e) {
     description = document.getElementById("LbDescription1" + desc).innerHTML;
     price = document.getElementById("LbPrice1" + stylearr[1]).innerHTML;
     qty = Spin.lastValue;
-    if (description != "" && price != "" && size != "" && color != "" && qty != "") {
+    if (description != "" && price != "" && size != "" && color != "" && qty != "" && qty!="0") {
         if (stylearr[2] != "") {
             $.ajax({
                 url: "/Home/GetBtnStatus/",
@@ -889,7 +889,7 @@ function addTocartDemandSwatch(s, e) {
     description = document.getElementById("LbdemandDescription" + desc).innerHTML;
     price = document.getElementById("DimviewPrice" + stylearr[1]).innerHTML;
     qty = Spin[0].value;
-    if (description != "" && price != "" && size != undefined && price != undefined && color != undefined && size != "" && color != "" && qty != "") {
+    if (description != "" && price != "" && size != undefined && price != undefined && color != undefined && size != "" && color != "" && qty != "" && qty!="0") {
         if (stylearr[2] != "") {
             $.ajax({
                 url: "/Home/GetBtnStatus/",
@@ -1520,7 +1520,7 @@ function addTocartTemplateSwatch(s, e) {
     description = document.getElementById("LbDescription" + desc).innerHTML;
     price = document.getElementById("LbTemplatePrice" + stylearr[1]).innerHTML;
     qty = Spin.lastValue;
-    if (description != "" && price != "" && size != "" && color != "" && qty != "") {
+    if (description != "" && price != "" && size != "" && color != "" && qty != "" && qty!="0") {
         loadPopup.Show();
         $.ajax({
             url: "/Home/AddToCart/",
@@ -1570,7 +1570,7 @@ function addTocartTemplate(s, e) {
     size = sizedrp[0].value == undefined ? sizedrp[0].defaultValue : sizedrp[0].value;
     color = colorDrp[0].value == undefined ? colorDrp[0].defaultValue : colorDrp[0].value;
     qty = Spin.lastValue;
-    if (description != "" && price != "" && size != "" && color != "" && qty != "") {
+    if (description != "" && price != "" && size != "" && color != "" && qty != "" && qty!="0") {
         loadPopup.Show();
         $.ajax({
             url: "/Home/Addtocart/",
@@ -2150,10 +2150,15 @@ function getAssemblySwatch(style) {
     });
 
 }
-
-
+function myFunction(msg) {
+    var x = document.getElementById("snackbar");
+    x.innerHTML = msg;
+    x.className = "show";
+    setTimeout(function () { x.className = x.className.replace("show", ""); }, 3000);
+}
 
 function openNav() {
+    
     document.getElementById("mySidebar").style.width = "600px";
     //document.getElementById("main").style.marginLeft = "500px";
 }

@@ -9,18 +9,22 @@
 
     <link href="~/Content/css/Media.css" rel="stylesheet" />
     <link href="~/Content/bootstrap.css" rel="stylesheet" />
-    <link href="~/Content/jquery.jgrowl.css" rel="stylesheet" />
+    @*<link href="~/Content/jquery.jgrowl.css" rel="stylesheet" /*@>
     <script src="~/scripts/jquery-1.12.4.min.js"></script>
+    <link href="~/Content/snackbar.css" rel="stylesheet" />
+  @*  <script src="~/scripts/jquery.jgrowl.js"></script>*@
+    <script src="~/scripts/jquery.growl.js"></script>
+    <link href="~/Content/jquery.growl.css" rel="stylesheet" />
     <script src="~/scripts/jquery.unobtrusive-ajax.min.js"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
     <script src="~/Scripts/modernizr-2.6.2.js"></script>
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
     
-    <script src="~/scripts/jquery.jgrowl.js"></script>
+  
     <script src="~/scripts/myScript.js"></script>
 
-
+    
 
 
 
@@ -1792,6 +1796,6 @@
             @RenderBody()
         </div><div class="col-md-1"></div>
     </div>
-
+    <div id="snackbar"> </div>
 </body>
 </html>

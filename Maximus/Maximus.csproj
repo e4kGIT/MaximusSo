@@ -178,9 +178,11 @@
     <Content Include="Content\jquery-ui.css" />
     <Content Include="Content\jquery-ui.structure.css" />
     <Content Include="Content\jquery-ui.theme.css" />
+    <Content Include="Content\jquery.growl.css" />
     <Content Include="Content\jquery.jgrowl.css" />
     <Content Include="Content\jquery.jgrowl.min.css" />
     <Content Include="Content\Site.css" />
+    <Content Include="Content\snackbar.css" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Content\themes\base\all.css" />
     <Content Include="Content\themes\base\autocomplete.css" />
@@ -256,6 +258,7 @@
     <Content Include="scripts\jquery-ui-1.12.1.js" />
     <Content Include="scripts\jquery-ui-1.12.1.min.js" />
     <Content Include="scripts\jquery-ui.js" />
+    <Content Include="scripts\jquery.growl.js" />
     <Content Include="scripts\jquery.jgrowl.js" />
     <Content Include="scripts\jquery.jgrowl.min.js" />
     <Content Include="scripts\jquery.toaster.js" />
@@ -1063,6 +1066,7 @@
     <Compile Include="Models\SalesOrderHeaderViewModel.cs" />
     <Compile Include="Models\SalesOrderLineViewModel.cs" />
     <Compile Include="Models\SalesOrderViewModel.cs" />
+    <Compile Include="Models\SiteCodeModel.cs" />
     <Compile Include="Models\Size.cs" />
     <Compile Include="Models\stockcard_tsb_rollout.cs">
       <DependentUpon>maximusDataContext.tt</DependentUpon>

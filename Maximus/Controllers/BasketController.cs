@@ -22,7 +22,8 @@ namespace Maximus.Controllers
         public ActionResult ShowBasket()
         {
             //dp.FillCombo_CustomerDelivery();
-            ViewData["carrierFill"] = FillCarrierDropdown();
+            ViewData["SiteCodes"] =    FillSiteCode();
+             ViewData["carrierFill"] = FillCarrierDropdown();
             ViewData["carrierStyleFill"] = FillCarrierStyle();
             return View();
         }
@@ -365,6 +366,14 @@ namespace Maximus.Controllers
         }
         #endregion
 
+        #region GetSitecodes
+        public List<SiteCodeModel> FillSiteCode()
+        {
+            var result = dp.GetSitecodes(Session["BuisnessId"].ToString());
+            return result;
+        }
+        #endregion
+
         #region checkCarriage
         //public bool CheckCarriage()
         //{
@@ -425,7 +434,7 @@ namespace Maximus.Controllers
         //    string carrstr = "";
         //    long irow = 0;
         //    bool checkBulkCarriageLine = false;
-         
+
         ////    Dim carrstr As String
         ////Dim irow As Long
         ////Dim rs_carr As New ADODB.Recordset

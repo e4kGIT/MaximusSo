@@ -1,4 +1,10 @@
 ﻿@model Maximus.Models.EmployeeViewModel
+
+
+   @*Session["datestart"] = dp.ShowHourse(busId);
+   Session["leavedate"] = dp.ShowHourse(busId);
+   Session["roleid"] = dp.ShowHourse(busId);*@
+
 <center>
     <div class="row">
         <center><h4 style="padding:0px;">Employee</h4></center>
@@ -17,35 +23,41 @@
             </div>
 
             <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                @if (Convert.ToBoolean(Session["datestart"]))
+                {
                 @Html.DevExpress().DateEditFor(m => m.StartDate, settings =>
-   {
-       settings.Properties.Caption = "Start date";
-       if (ViewBag.create != null)
-       {
-           settings.Date = DateTime.Now;
-       }
-       settings.Name = "editStartDate";
-       settings.Properties.EditFormat = EditFormat.Custom;
-       settings.Properties.DisplayFormatString = "dd.MM.yyyy";
-       settings.Properties.EditFormatString = "dd.MM.yyyy";
+           {
+               settings.Properties.Caption = "Start date";
+               if (ViewBag.create != null)
+               {
+                   settings.Date = DateTime.Now;
+               }
+               settings.Name = "editStartDate";
+               settings.Properties.EditFormat = EditFormat.Custom;
+               settings.Properties.DisplayFormatString = "dd.MM.yyyy";
+               settings.Properties.EditFormatString = "dd.MM.yyyy";
 
-   }).GetHtml()
+           }).GetHtml()
+                }
             </div>
 
             <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+@if (Convert.ToBoolean(Session["leavedate"]))
+{
                 @Html.DevExpress().DateEditFor(m => m.EndDate, settings =>
-   {
-       settings.Properties.Caption = "End Date";
-       if (ViewBag.create != null)
-       {
-           settings.Date = DateTime.Now.AddYears(1);
-       }
-       settings.Name = "editEndDate";
-       settings.Properties.EditFormat = EditFormat.Custom;
-       settings.Properties.DisplayFormatString = "dd.MM.yyyy";
-       settings.Properties.EditFormatString = "dd.MM.yyyy";
+           {
+               settings.Properties.Caption = "End Date";
+               if (ViewBag.create != null)
+               {
+                   settings.Date = DateTime.Now.AddYears(1);
+               }
+               settings.Name = "editEndDate";
+               settings.Properties.EditFormat = EditFormat.Custom;
+               settings.Properties.DisplayFormatString = "dd.MM.yyyy";
+               settings.Properties.EditFormatString = "dd.MM.yyyy";
 
-   }).GetHtml()
+           }).GetHtml()
+}
             </div>
         </div><br />
 
@@ -81,7 +93,7 @@
                                  text.Properties.Caption = "LastName";
                              }).GetHtml()
             </div>
-        </div> 
+        </div>
         <br />
         <div class="row">
 
@@ -109,7 +121,7 @@
             <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
                 @if (ViewBag.create != null && Session["chkMapEmp"].ToString().ToLower() != "hide")
                 {
-                    Html.DevExpress().CheckBoxFor(x => x.EmpMap, text =>
+                    Html.DevExpress().CheckBoxFor(x => x.chkMapEmp, text =>
                     {
                         text.Name = "empMapper";
                         text.Text = "Map employee to this user";
@@ -118,11 +130,29 @@
 
 
             </div>
+            <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                @if (Convert.ToBoolean(Session["roleid"]))
+                {
+                    Html.DevExpress().ComboBoxFor(x => x.roleId, settings =>
+                    {
+                        settings.Properties.Caption = "Role";
+                        settings.Name = "RoleId";
+                        settings.Width = 180;
+                        settings.SelectedIndex = 0;
+                        foreach (var val in Model.Roles)
+                        {
+                            settings.Properties.Items.Add(val);
+                        }
+                    }).GetHtml();
+                }
+
+
+            </div>
         </div>
 
-       
 
-      
+
+
 
 
     </div>
@@ -134,73 +164,106 @@
         <div class="row">
             <div class="col-md-6 col-xs-6 col-sm-6 col-lg-6">
                 @Html.DevExpress().MemoFor(X => X.EmpUcodes, text =>
-                       {
-                           text.Properties.Caption = "Ucodes";
-                           text.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+           {
+               text.Properties.Caption = "Ucodes";
+               text.Width = System.Web.UI.WebControls.Unit.Percentage(100);
 
 
-                       }).GetHtml()
+           }).GetHtml()
             </div>
             <div class="col-md-6 col-xs-6 col-sm-6 col-lg-6">
                 <center>
-                    @Html.DevExpress().DropDownEditFor(x => x.EmpUcodes, text =>
-                           {
-                               text.Name = "checkComboEdit";
-                               text.Width = System.Web.UI.WebControls.Unit.Percentage(100);
-                               text.Properties.Caption = "Ucodes";
-                               text.Properties.DropDownWindowStyle.BackColor = System.Drawing.Color.FromArgb(0xEDEDED);
-                               text.ControlStyle.CssClass = "pull-left";
-                               text.SetDropDownWindowTemplateContent(c =>
-                               {
-                                   Html.DevExpress().ListBox(listBoxSettings =>
-                                   {
-                                       listBoxSettings.Name = "checkListBoxEmpEdit_";
-                                       listBoxSettings.ControlStyle.Border.BorderWidth = 0;
-                                       listBoxSettings.ControlStyle.BorderBottom.BorderWidth = 1;
-                                       listBoxSettings.ControlStyle.BorderBottom.BorderColor = System.Drawing.Color.FromArgb(0xDCDCDC);
-                                       listBoxSettings.Height = System.Web.UI.WebControls.Unit.Pixel(200);
-                                       listBoxSettings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
-                                       listBoxSettings.Properties.SelectionMode = ListEditSelectionMode.Multiple;
-                                       //listBoxSettings.Properties.EnableSelectAll = true;
-                                       //listBoxSettings.Properties.FilteringSettings.ShowSearchUI = true;
-                                       listBoxSettings.Properties.SelectionMode = ListEditSelectionMode.CheckColumn;
-                                       listBoxSettings.Properties.ClientSideEvents.SelectedIndexChanged = "updateTextEdit";
-                                       listBoxSettings.Properties.ClientSideEvents.Init = "updateTextEdit";
-                                       if (Model.EmployeeId != null)
-                                       {
-                                           listBoxSettings.PreRender = (sender, e) =>
-                                           {
-                                               MVCxListBox cbl = (MVCxListBox)sender;
-                                               foreach (ListEditItem item in cbl.Items)
-                                               {
-                                                   if (Model.EmpUcodes.Contains(item.Text.Trim()))
-                                                   {
-                                                       item.Selected = true;
-                                                   }
-                                               }
-                                           };
-                                       }
-                                   }).BindList(Model.ucodeLst).Render();
-                                   ViewContext.Writer.Write("<div style=\"margin: 6px; overflow hidden;\">");
+                    @{
+                        Maximus.Models.e4kmaximusdbEntities enty = new Maximus.Models.e4kmaximusdbEntities();
+                        var busID = Session["BuisnessId"].ToString();
+                        var data = enty.tblbus_setvalues.Any(x => x.BusinessID == busID && x.SettingID == "SHOW_HRS_WORK") ? enty.tblbus_setvalues.Where(x => x.SettingID == "SHOW_HRS_WORK" && x.BusinessID.ToLower() == busID.ToLower()).First().Value.ToLower() == "true" ? true : false : false;
+                        if (!data)
+                        {
+                            @Html.DevExpress().DropDownEditFor(x => x.EmpUcodes, text =>
+                            {
+                                text.Name = "checkComboEdit";
+                                text.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+                                text.Properties.Caption = "Ucodes";
+                                text.Properties.DropDownWindowStyle.BackColor = System.Drawing.Color.FromArgb(0xEDEDED);
+                                text.ControlStyle.CssClass = "pull-left";
+                                text.SetDropDownWindowTemplateContent(c =>
+                                {
+                                    Html.DevExpress().ListBox(listBoxSettings =>
+                                    {
+                                        listBoxSettings.Name = "checkListBoxEmpEdit_";
+                                        listBoxSettings.ControlStyle.Border.BorderWidth = 0;
+                                        listBoxSettings.ControlStyle.BorderBottom.BorderWidth = 1;
+                                        listBoxSettings.ControlStyle.BorderBottom.BorderColor = System.Drawing.Color.FromArgb(0xDCDCDC);
+                                        listBoxSettings.Height = System.Web.UI.WebControls.Unit.Pixel(200);
+                                        listBoxSettings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+                                        listBoxSettings.Properties.SelectionMode = ListEditSelectionMode.Multiple;
+                                        //listBoxSettings.Properties.EnableSelectAll = true;
+                                        //listBoxSettings.Properties.FilteringSettings.ShowSearchUI = true;
+                                        listBoxSettings.Properties.SelectionMode = ListEditSelectionMode.CheckColumn;
+                                        listBoxSettings.Properties.ClientSideEvents.SelectedIndexChanged = "updateTextEdit";
+                                        listBoxSettings.Properties.ClientSideEvents.Init = "updateTextEdit";
+                                        if (Model.EmployeeId != null)
+                                        {
+                                            listBoxSettings.PreRender = (sender, e) =>
+                                            {
+                                                MVCxListBox cbl = (MVCxListBox)sender;
+                                                foreach (ListEditItem item in cbl.Items)
+                                                {
+                                                    if (Model.EmpUcodes.Contains(item.Text.Trim()))
+                                                    {
+                                                        item.Selected = true;
+                                                    }
+                                                }
+                                            };
+                                        }
+                                    }).BindList(Model.ucodeLst).Render();
+                                    ViewContext.Writer.Write("<div style=\"margin: 6px; overflow hidden;\">");
 
-                                   Html.DevExpress().Button(buttonSettings =>
-                                   {
-                                       buttonSettings.Name = "buttonClose_";
-                                       buttonSettings.Text = "Close";
-                                       buttonSettings.Style.Add("float", "right");
-                                       buttonSettings.ClientSideEvents.Click = "HideCmbEdit";
-                                       buttonSettings.Height = 26;
-                                   }).Render();
-                               });
-                           }).GetHtml()
+                                    Html.DevExpress().Button(buttonSettings =>
+                                    {
+                                        buttonSettings.Name = "buttonClose_";
+                                        buttonSettings.Text = "Close";
+                                        buttonSettings.Style.Add("float", "right");
+                                        buttonSettings.ClientSideEvents.Click = "HideCmbEdit";
+                                        buttonSettings.Height = 26;
+                                    }).Render();
+                                });
+                            }).GetHtml()
+                        }
+                        else
+                        {
+                            @Html.DevExpress().ComboBoxFor(model => model.EmpUcodes,
+                          settings =>
+                          {
+                              settings.Name = "checkListBoxEmpEdit_";
+                              settings.Width = 180;
+                              settings.SelectedIndex = 0;
+                              foreach (var val in Model.ucodeLst)
+                              {
+                                  settings.Properties.Items.Add(val);
+                              }
+                          }).GetHtml()
+                                              }
+                    }
                 </center>
             </div>
         </div>
-    }
+                        }
 
     <hr />
     <center><h4 style="padding:0px;"> Delivery Address</h4></center>
     <div class="row">
+
+ 
+            @if (ViewBag.create != null && Session["chkMapAddr"].ToString().ToLower() != "hide")
+            {
+                Html.DevExpress().CheckBoxFor(x => x.chkMapAddr, text =>
+                {
+                    text.Name = "chkMapEmp";
+                    text.Text = "Use my address";
+                }).GetHtml();
+            }
+
         <center>
 
             <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
@@ -230,7 +293,8 @@
                    comboBoxSettings.SelectedIndex = Model.AddressLst.IndexOf(busAdd);
                }
            }).BindList(Model.AddressLst).GetHtml()
-            </div><div class="col-md-1 col-xs-1 col-sm-1 col-lg-1 col-xs-1 col-sm-1 col-lg-1"></div>
+            </div>
+            <div class="col-md-1 col-xs-1 col-sm-1 col-lg-1 col-xs-1 col-sm-1 col-lg-1"></div>
             <div class="col-md-1 col-xs-1 col-sm-1 col-lg-1 col-xs-1 col-sm-1 col-lg-1"></div>
         </center>
 
@@ -246,7 +310,7 @@
 
                if (ViewBag.create == null)
                {
-                   if(((List<string>)Session["Templates"]).Count>0)
+                   if (((List<string>)Session["Templates"]).Count > 0)
                    {
                        x.Name = "UpdateBtn_Template";
                    }
@@ -285,4 +349,3 @@
         <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4"></div>
     </div>
 </center>
-

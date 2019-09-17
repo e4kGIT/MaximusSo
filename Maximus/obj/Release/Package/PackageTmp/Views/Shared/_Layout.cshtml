@@ -9,15 +9,22 @@
 
     <link href="~/Content/css/Media.css" rel="stylesheet" />
     <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    @*<link href="~/Content/jquery.jgrowl.css" rel="stylesheet" /*@>
     <script src="~/scripts/jquery-1.12.4.min.js"></script>
+    <link href="~/Content/snackbar.css" rel="stylesheet" />
+  @*  <script src="~/scripts/jquery.jgrowl.js"></script>*@
+    <script src="~/scripts/jquery.growl.js"></script>
+    <link href="~/Content/jquery.growl.css" rel="stylesheet" />
     <script src="~/scripts/jquery.unobtrusive-ajax.min.js"></script>
     <script src="~/Scripts/bootstrap.min.js"></script>
     <script src="~/Scripts/modernizr-2.6.2.js"></script>
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+    
+  
     <script src="~/scripts/myScript.js"></script>
 
-
+    
 
 
 
@@ -44,8 +51,16 @@
             font: 16px Arial;
         }
 
+        /*.dxeCaption_Material
+        {
+            color:white;
+        }*/
         .changethisone span {
             background-color: #FFF;
+        }
+        .colrer{
+            color:black;
+            background-color:gainsboro;
         }
 
         .changethisone input {
@@ -111,13 +126,11 @@
             background-color: DodgerBlue !important;
             color: #ffffff;
         }
-
-
-
-
-
-
-
+        
+        .styler {
+            margin:-7px;
+        }
+        
         .center {
             width: 150px;
             margin: 40px auto;
@@ -1702,26 +1715,27 @@
     });
 }).GetHtml()
     @Html.DevExpress().PopupControl(sett =>
-       {
-           sett.Width = System.Web.UI.WebControls.Unit.Pixel(1000);
-           sett.Height = System.Web.UI.WebControls.Unit.Percentage(100);
-           sett.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
-           sett.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
-           sett.Name = "CreateEditPop";
-           sett.AllowResize = true;
-           sett.ShowHeader = true;
-           sett.ShowOnPageLoad = false;
-           sett.AllowDragging = true;
-           sett.CloseAction = CloseAction.OuterMouseClick;
-           sett.CloseOnEscape = false;
-           sett.PopupAnimationType = AnimationType.Auto;
-           sett.Modal = true;
-           sett.HeaderText = "Edit";
-           sett.SetContent(() =>
-           {
-               ViewContext.Writer.Write("<div><div id='EditLayout'></div></div>");
-           });
-       }).GetHtml()
+{
+    sett.Width = System.Web.UI.WebControls.Unit.Pixel(1000);
+    sett.Height = System.Web.UI.WebControls.Unit.Percentage(100);
+    sett.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+    sett.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    sett.Name = "CreateEditPop";
+    sett.AllowResize = true;
+    sett.ShowHeader = true;
+    sett.ShowOnPageLoad = false;
+    sett.AllowDragging = true;
+    sett.CloseAction = CloseAction.OuterMouseClick;
+    sett.CloseOnEscape = false;
+    sett.PopupAnimationType = AnimationType.Auto;
+    sett.Modal = true;
+    sett.HeaderText = "Edit";
+    //sett.ControlStyle.BackColor = System.Drawing.ColorTranslator.FromHtml("#5e6d82"); ;
+    sett.SetContent(() =>
+    {
+        ViewContext.Writer.Write("<div><div id='EditLayout'></div></div>");
+    });
+}).GetHtml()
     <div class="navbar navbar-inverse navbar-fixed-top checList">
         @*<div class="container">*@
         @* <div class="row">*@
@@ -1782,6 +1796,6 @@
             @RenderBody()
         </div><div class="col-md-1"></div>
     </div>
-
+    <div id="snackbar"> </div>
 </body>
 </html>

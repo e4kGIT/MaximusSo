@@ -245,7 +245,7 @@
                 if (template.Count > 0)
                 {
                     //string viewContent = string.Format("<div class='row fonter'><div class='col-md-12' style='padding:0px;'><b>Product</b>" + style + "<span>&nbsp;</span><span>-</span><span id='LbDescription" + style + "'>{0}</span></div>", entity.tblfsk_style.Where(s => s.StyleID == style.ToString()).FirstOrDefault().Description != null ? entity.tblfsk_style.Where(s => s.StyleID == style.ToString()).FirstOrDefault().Description.ToString() : "");
-                    string viewContent = string.Format("<div class='row fonter'><div class='col-md-12' style='padding:0px;'><b>Product</b> <span>&nbsp;</span><span id='LbDescription" + style + "'>{0}</span></div>", entity.tblfsk_style.Where(s => s.StyleID == style.ToString()).FirstOrDefault().Description != null ? entity.tblfsk_style.Where(s => s.StyleID == style.ToString()).FirstOrDefault().Description.ToString() : "");
+                    string viewContent = string.Format("<div class='row fonter'><div class='col-md-12' style='padding:0px;'><b>Product</b> <span>&nbsp;</span><span id='LbDescription" + style + "'>{0}</span></div>", entity.tblfsk_style.Where(s => s.StyleID == style.ToString()).FirstOrDefault().Description != null | entity.tblfsk_style.Where(s => s.StyleID == style.ToString()).FirstOrDefault().Description != ""? entity.tblfsk_style.Where(s => s.StyleID == style.ToString()).FirstOrDefault().Description.ToString() : "");
                     ViewContext.Writer.Write(viewContent);
                 }
                 else
@@ -301,7 +301,7 @@
                         }
                         else
                         {
-                            string viewContent = string.Format("<div class='row'><div class='col-md-12'><b>Product</b> <hr style=\"margin: 0;\"/></br><span>" + style + "</span> - <span class='fonter' id='LbDescription" + style + "'> {0}</span></div></div>", style1, entity.tblfsk_style.Where(s => s.StyleID == style.ToString()).FirstOrDefault().Description != null ? entity.tblfsk_style.Where(s => s.StyleID == style.ToString()).FirstOrDefault().Description.ToString() : "");
+                            string viewContent = string.Format("<div class='row'><div class='col-md-12'><b>Product</b> <hr style=\"margin: 0;\"/></br><span>" + style + "</span> - <span class='fonter' id='LbDescription" + style + "'> {1}</span></div></div>", style1, entity.tblfsk_style.Where(s => s.StyleID == style.ToString()).FirstOrDefault().Description != null ? entity.tblfsk_style.Where(s => s.StyleID == style.ToString()).FirstOrDefault().Description.ToString() : "");
                             ViewContext.Writer.Write(viewContent);
                         }
                     }
@@ -1099,9 +1099,9 @@
                     var content = string.Format("<div class='row'><div class='col-md-4'><b>Quantity</b><hr style='margin: 0;'/><div style='margin: 0;' class=\"center pull-left\"><p></p><div class=\"input-group\"><span class=\"input-group-btn\"><button type='button' class='qtyminus btn backg' field='{0}'><span class=\"glyphicon glyphicon-minus\"></span></button></span><input style='width:290px;text-align:center;' type='text' name='{0}'  class=\"form-control input-number\" value=\"1\" min=\"1\" max=\"10000000\"><span class=\"input-group-btn\"><button type='button' class='qtyplus  btn backg' field='{0}'><span class=\"glyphicon glyphicon-plus\"></span></button></span></div><p></p></div>", "spinEdit_" + style);
                     content = content + "</div>";
                     ViewContext.Writer.Write(content);
-                    if (reason)
+                    if (Session["OVERRIDE_ENT_WITH_REASON"].ToString().ToLower()=="show" && reason)
                     {
-                        ViewContext.Writer.Write("<div class='col-md-4'><b>Reason</b><hr style='margin:0px'/><br>");
+                        ViewContext.Writer.Write("<div class='col-md-4'><b>Reason</b><hr style='margin:0px'/><br><center  class='styler'>");
                         if (template.Count > 0)
                         {
                             //var style = (DataBinder.Eval(cont.DataItem, "StyleID")).ToString();
@@ -1111,6 +1111,8 @@
                             {
                                 Html.DevExpress().ComboBox(edit =>
                                 {
+                                    edit.Width = System.Web.UI.WebControls.Unit.Pixel(350);
+                                    edit.ControlStyle.CssClass = "styler";
                                     edit.Name = "CmbReasonTemplate_" + style;
                                     if (reasons.Count > 0)
                                     {
@@ -1135,7 +1137,9 @@
                             //ViewContext.Writer.Write("<div class='col-md-2'>");
                             Html.DevExpress().ComboBox(edit =>
                             {
-                                edit.Name = "CmbReason_" + style;
+                                edit.Width = System.Web.UI.WebControls.Unit.Pixel(350);
+                                edit.ControlStyle.CssClass = "styler";
+                                edit.Name = "CmbReason_" + style; edit.Width = System.Web.UI.WebControls.Unit.Pixel(300);
                                 string BusinessId = Session["BuisnessId"].ToString();
                                 var reasons = entity.tblsop_reasoncodes.Where(xs => xs.BusinessId == BusinessId).Select(c => new { c.Description }).ToList();
                                 if (reasons.Count > 0)
@@ -1154,7 +1158,7 @@
                             }).GetHtml();
                             //ViewContext.Writer.Write("</div>");
                         }
-                        ViewContext.Writer.Write("</div>");
+                        ViewContext.Writer.Write("</center></div>");
                     }
                     else
                     {
@@ -1215,7 +1219,7 @@
                     var content = string.Format("<div class='row'><div class='col-md-4'><b>Quantity</b><hr style='margin: 0;'/><div style='margin: 0;' class=\"center pull-left\"><p></p><div class=\"input-group\"><span class=\"input-group-btn\"><button type='button' class='qtyminus btn backg' field='{0}'><span class=\"glyphicon glyphicon-minus\"></span></button></span><input  type='text' name='{0}' style='width:290px;text-align:center;' class=\"form-control input-number\" value=\"1\" min=\"1\" max=\"10000000\"><span class=\"input-group-btn\"><button type='button' class='qtyplus  btn backg' field='{0}'><span class=\"glyphicon glyphicon-plus\"></span></button></span></div><p></p></div>", "spinEdit_" + style);
                     content = content + "</div>";
                     ViewContext.Writer.Write(content);
-                    if (reason)
+                    if (Session["OVERRIDE_ENT_WITH_REASON"].ToString().ToLower()== "show" && reason)
                     {
                         ViewContext.Writer.Write("<div class='col-md-4'><b>Reason</b><hr style='margin:0px'/><br>");
                         if (template.Count > 0)
@@ -1228,6 +1232,8 @@
                                 Html.DevExpress().ComboBox(edit =>
                                 {
                                     edit.Name = "CmbReasonTemplate_" + style;
+                                    edit.Width = System.Web.UI.WebControls.Unit.Pixel(350);
+                                    edit.ControlStyle.CssClass = "styler";
                                     if (reasons.Count > 0)
                                     {
                                         foreach (var dta in reasons)
@@ -1254,6 +1260,8 @@
                                 edit.Name = "CmbReason_" + style;
                                 string BusinessId = Session["BuisnessId"].ToString();
                                 var reasons = entity.tblsop_reasoncodes.Where(xs => xs.BusinessId == BusinessId).Select(c => new { c.Description }).ToList();
+                                edit.Width = System.Web.UI.WebControls.Unit.Pixel(350);
+                                edit.ControlStyle.CssClass = "styler";
                                 if (reasons.Count > 0)
                                 {
                                     foreach (var dta in reasons)

@@ -1306,7 +1306,7 @@ namespace Maximus.Models
             }
             else
             {
-                data = enty.tblbus_settings.Where(x => x.SettingID == paramId).First().DefaultValue;
+                data = enty.tblbus_settings.Any(x => x.SettingID == paramId)? enty.tblbus_settings.Where(x => x.SettingID == paramId).First().DefaultValue:"";
                 if (data != "" && data != null)
                 {
                     return data;
@@ -1832,6 +1832,10 @@ namespace Maximus.Models
                     {
                         permisson = enty.tblpermission_settings_users.Where(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim() && x.UserID.ToLower().Trim() == userId.ToLower().Trim() && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()).First().Permission;
                     }
+                    else
+                    {
+                        permisson = "HIDE";
+                    }
                 }
             }
 
@@ -1924,7 +1928,7 @@ namespace Maximus.Models
                 {
                    foreach(DataRow dr in dt.Rows)
                     {
-                        result.Add(dr.ItemArray[0] + "|" + dr.ItemArray[1] + "|" + dr.ItemArray[2]);
+                        result.Add(dr.ItemArray[0] + "|" + dr.ItemArray[1] );
                     }
                 }
             }
@@ -1973,6 +1977,52 @@ namespace Maximus.Models
             }
             return result;
         }
+        #endregion
+
+        #region GetSitecodes
+
+        public List<SiteCodeModel> GetSitecodes(string businessId)
+        {
+            var result =new List<SiteCodeModel>();
+            string sortString = BusinessParam("SITECODE_SORTING", businessId);
+            string sortFld = "t1.SiteName,' | ',t1.SiteCode";
+            string sSqry = "";
+            if(sortString=="")
+            {
+                sortString = "SiteName";
+            }
+            if (sortString == "SiteCode") {
+                sortFld = "t1.SiteCode,' | ',t1.SiteName";
+            } 
+            sSqry =string.Format( "SELECT DISTINCT t1.SiteCode, CAST(Concat(" + sortFld + ") AS CHAR) AS SiteCodeInfo  FROM tblonlinesop_sitecode t1  WHERE t1.Businessid='{0}' ",businessId);
+            sSqry = sSqry + "ORDER BY t1." + sortString + " ASC";
+            MySqlConnection conn = new MySqlConnection(ConnectionString);
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand(sSqry, conn);
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                if(dt.Rows.Count>0)
+                {
+                    foreach(DataRow dr in dt.Rows)
+                    {
+                        result.Add(new SiteCodeModel { SiteCode = dr.ItemArray[0].ToString(), SiteCodeInfo = dr.ItemArray[1].ToString() });
+                    }
+                }
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return result;
+        }
+
         #endregion
 
         public BusAddress GetAddressDetails(string qry)

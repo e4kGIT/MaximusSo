@@ -56,6 +56,7 @@ namespace Maximus.Controllers
                             string busId = "";
                             string startPage = "";
                             string cmpId = System.Configuration.ConfigurationManager.AppSettings["CompanyId"].ToString();
+                            Session["CmpId"] = cmpId;
                             Session["UserName"] = data.First().UserName;
                             Session["Password"] = data.First().Password;
                             Session["Name"] = data.First().ForeName + " " + data.First().SurName;
@@ -129,11 +130,25 @@ namespace Maximus.Controllers
                             }
                             // Session["colLines"]=colline
                             Session["IsVisitPrivate"] = false;
-                             var s= dp.PermissionSettings(Session["BuisnessId"].ToString(), Session["UserName"].ToString(), "chkMapAddr", Session["Access"].ToString());
-                            Session["chkMapEmp"] = dp.PermissionSettings(Session["BuisnessId"].ToString(), Session["UserName"].ToString(), "chkMapEmp",Session["Access"].ToString());
+
+                            Session["chkMapEmp"] = dp.PermissionSettings(Session["BuisnessId"].ToString(), Session["UserName"].ToString(), "chkMapEmp", Session["Access"].ToString());
                             Session["chkMapAddr"] = dp.PermissionSettings(Session["BuisnessId"].ToString(), Session["UserName"].ToString(), "chkMapAddr", Session["Access"].ToString());
-                            var datas= dp.PermissionSettings(Session["BuisnessId"].ToString(), Session["UserName"].ToString(), "OVERRIDE_ENT_WITH_REASON", Session["Access"].ToString());  
                             Session["OVERRIDE_ENT_WITH_REASON"] = dp.PermissionSettings(Session["BuisnessId"].ToString(), Session["UserName"].ToString(), "OVERRIDE_ENT_WITH_REASON", Session["Access"].ToString());
+                            Session["ONLNEREQNOM1"] = dp.CompanyParam("ONLNEREQNOM1", cmpId);
+                            Session["ONLNEREQNOM2"] = dp.CompanyParam("ONLNEREQNOM2", cmpId);
+                            Session["ONLNEREQNOM3"] = dp.CompanyParam("ONLNEREQNOM3", cmpId);
+                            Session["ONLNEREQNOM4"] = dp.CompanyParam("ONLNEREQNOM4", cmpId);
+                            Session["ONLNEREQNOM5"] = dp.CompanyParam("ONLNEREQNOM5", cmpId);
+                            Session["ONLNEDEFNOM1"] = dp.CompanyParam("ONLNEDEFNOM1", cmpId);
+                            Session["ONLNEDEFNOM2"] = dp.CompanyParam("ONLNEDEFNOM2", cmpId);
+                            Session["ONLNEDEFNOM3"] = dp.CompanyParam("ONLNEDEFNOM3", cmpId);
+                            Session["ONLNEDEFNOM4"] = dp.CompanyParam("ONLNEDEFNOM4", cmpId);
+                            Session["ONLNEDEFNOM5"] = dp.CompanyParam("ONLNEDEFNOM5", cmpId);
+                            Session["ONLNETXTNOM1"] = dp.BusinessParam("ONLNETXTNOM1", busId);
+                            Session["ONLNETXTNOM2"] = dp.BusinessParam("ONLNETXTNOM2", busId);
+                            Session["ONLNETXTNOM3"] = dp.BusinessParam("ONLNETXTNOM3", busId);
+                            Session["ONLNETXTNOM4"] = dp.BusinessParam("ONLNETXTNOM4", busId);
+                            Session["ONLNETXTNOM5"] = dp.BusinessParam("ONLNETXTNOM5", busId);
                             //'Sales order
                             //Session.Add("objSalesOrder", CType(objSalesOrder, SalesOrderCollection))
                             //Session.Add("objCurrentOrder", CType(objCurrentOrder, SalesOrderHeader))
