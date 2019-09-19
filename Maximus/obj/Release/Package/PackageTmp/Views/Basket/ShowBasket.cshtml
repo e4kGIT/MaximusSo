@@ -3,6 +3,9 @@
     ViewBag.Title = "ShowBasket";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@{
+    Maximus.Models.DataProcessing dp = new Maximus.Models.DataProcessing();
+}
 <h2>ShowBasket</h2>
 @Html.Action("CartView")
 <br />
@@ -20,38 +23,38 @@
     <div class="row">
         <div class="col-md-1"></div>
         <div class="col-md-10">
-             
+
             <br />
             <div class="col-md-4">
                 @Html.DevExpress().ComboBox(x =>
-   {
-       x.Name = "CarriageCmbbox";
-       x.Properties.Caption = "Carrier";
-       foreach (var dat in (List<string>)ViewData["carrierFill"])
-       {
-           x.Properties.Items.Add(dat);
-       }
-       x.Properties.ClientSideEvents.SelectedIndexChanged = "SettbxValue";
-   }).GetHtml();
+           {
+               x.Name = "CarriageCmbbox";
+               x.Properties.Caption = "Carrier";
+               foreach (var dat in (List<string>)ViewData["carrierFill"])
+               {
+                   x.Properties.Items.Add(dat);
+               }
+               x.Properties.ClientSideEvents.SelectedIndexChanged = "SettbxValue";
+           }).GetHtml();
             </div>
             <div class="col-md-4">
                 @Html.DevExpress().TextBox(x =>
-                     {
-                         x.Name = "CarriageTexbox";
-                         x.ReadOnly = true;
-                     }).GetHtml();
+           {
+               x.Name = "CarriageTexbox";
+               x.ReadOnly = true;
+           }).GetHtml();
             </div>
             <div class="col-md-4">
                 @Html.DevExpress().ComboBox(x =>
-   {
-       x.Name = "CarriageStyleCmbbox";
-       x.Properties.Caption = "Carrier style";
-       foreach (var dat in (List<string>)ViewData["carrierStyleFill"])
-       {
-           x.Properties.Items.Add(dat);
-       }
-       
-   }).GetHtml();
+           {
+               x.Name = "CarriageStyleCmbbox";
+               x.Properties.Caption = "Carrier style";
+               foreach (var dat in (List<string>)ViewData["carrierStyleFill"])
+               {
+                   x.Properties.Items.Add(dat);
+               }
+
+           }).GetHtml();
             </div>
             <br />
             <br />
@@ -59,8 +62,119 @@
         </div>
         <div class="col-md-1"></div>
     </div>
+</div>
+<br />
+<br />
+<div class="row" style="background-color:white;">
+    <div class="row colrer" style="margin:0px;">
+        <br /> <center>
+            <b>
+                Comments and Analysis code
+            </b>
+        </center>
+        <br />
     </div>
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+            <br />
+            @{
+                if (Convert.ToBoolean(Session["ONLNEREQNOM1"]))
+                {
+                    if (((List<Maximus.Models.SiteCodeModel>)ViewData["SiteCodes"]).Count > 0)
+                    {
+                        <div class="col-md-4">
+                            @Html.DevExpress().ComboBox(txt =>
+                       {
+                           txt.Name = "cboSiteCode";
+                           txt.Properties.Caption = Session["ONLNETXTNOM1"].ToString() == "" ? dp.CompanyParam("ONLNETXTNOM1", Session["CmpId"].ToString()) == "" ? "Site Code" : dp.CompanyParam("ONLNETXTNOM1", Session["CmpId"].ToString()) : Session["ONLNETXTNOM1"].ToString();
+                       }).GetHtml();
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-md-4">
+                            @Html.DevExpress().TextBox(txt =>
+                   {
+                       txt.Name = "txtNomCode";
+                       txt.Properties.Caption = Session["ONLNETXTNOM1"].ToString() == "" ? dp.CompanyParam("ONLNETXTNOM1", Session["CmpId"].ToString()) == "" ? "Site Code" : dp.CompanyParam("ONLNETXTNOM1", Session["CmpId"].ToString()) : Session["ONLNETXTNOM1"].ToString();
+                       txt.Text = dp.CompanyParam("ONLNEDEFNOM1", Session["CmpId"].ToString());
+                   }).GetHtml();
+                        </div>
+                    }
+                }
 
+            }
+            @{
+                if (Convert.ToBoolean(Session["ONLNEREQNOM2"]))
+                {
+                    <div class="col-md-4">
+                        @Html.DevExpress().TextBox(txt =>
+                   {
+                       txt.Name = "txtNomCode2";
+                       txt.Properties.Caption = Session["ONLNETXTNOM2"].ToString();
+                       txt.Text = dp.CompanyParam("ONLNEDEFNOM2", Session["CmpId"].ToString());
+                   }).GetHtml();
+                    </div>
+                }
+            }
+
+            <br />
+            <br />
+            <br />
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+            <br />
+            @{ 
+                if (Convert.ToBoolean(Session["ONLNEREQNOM3"]))
+                {
+            <div class="col-md-4">
+                @Html.DevExpress().TextBox(txt =>
+           {
+               txt.Name = "txtNomCode3";
+               txt.Properties.Caption = Session["ONLNETXTNOM3"].ToString();
+               txt.Text = dp.CompanyParam("ONLNEDEFNOM3", Session["CmpId"].ToString());
+           }).GetHtml();
+            </div>
+                }
+                }
+            @{ 
+                if (Convert.ToBoolean(Session["ONLNEREQNOM4"]))
+                {
+            <div class="col-md-4">
+                @Html.DevExpress().TextBox(txt =>
+           {
+               txt.Name = "txtNomCode4";
+               txt.Properties.Caption = Session["ONLNETXTNOM4"].ToString();
+               txt.Text = dp.CompanyParam("ONLNEDEFNOM4", Session["CmpId"].ToString());
+           }).GetHtml();
+            </div>
+                    }
+                }
+            @{ 
+                if (Convert.ToBoolean(Session["ONLNEREQNOM5"]))
+                {
+            <div class="col-md-4">
+                @Html.DevExpress().TextBox(txt =>
+           {
+               txt.Name = "txtNomCode5";
+               txt.Properties.Caption = Session["ONLNETXTNOM5"].ToString();
+               txt.Text = dp.CompanyParam("ONLNEDEFNOM5", Session["CmpId"].ToString());
+           }).GetHtml();
+            </div>
+                    }
+                }
+            <br />
+            <br />
+            <br />
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+</div>
 <br />
 <br />
 <div class="row" style="background-color:white;">
@@ -75,7 +189,7 @@
     <div class="row">
         <div class="col-md-1"></div>
         <div class="col-md-10">
-            
+
             <br />
             @Html.Action("GetEmployeeDeliveryAddress")
             <br />

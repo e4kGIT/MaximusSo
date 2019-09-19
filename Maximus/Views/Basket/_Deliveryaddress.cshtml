@@ -31,13 +31,38 @@
 <br />
 <br />
 <div class="row">
+    @{
+        if ((bool)ViewData["booAddrDef"])
+        {
+            if ((bool)ViewData["booAddrEdit"])
+            {
+                <div class="col-md-3">
+                    @Html.DevExpress().CheckBox(sett =>
+           {
+               sett.Name = "optNewAddr";
+               sett.Text = "New";
+           }).GetHtml()
+                </div>
+                <div class="col-md-3"  style="display:none;">
+                    @Html.DevExpress().CheckBox(sett =>
+           {
+               sett.Name = "chkAddress";
+               sett.Text = "Map this address to employee";
+           }).GetHtml()
+                </div>
+                <div class="col-md-3">@Html.DevExpress().TextBox(settings => { settings.Name = "txtAddrChange"; settings.Properties.Caption = "txtAddrChange"; }).GetHtml()</div>
+            }
+        }
+    }
     <div class="col-md-3">@Html.DevExpress().TextBox(settings => { settings.Name = "Address1"; settings.Properties.Caption = "Address1"; }).GetHtml()</div>
     <div class="col-md-3">@Html.DevExpress().TextBox(settings => { settings.Name = "Address2"; settings.Properties.Caption = "Address2"; }).GetHtml()</div>
     <div class="col-md-3">@Html.DevExpress().TextBox(settings => { settings.Name = "Address3"; settings.Properties.Caption = "Address3"; }).GetHtml()</div>
-    <div class="col-md-3">@Html.DevExpress().TextBox(settings => { settings.Name = "City"; settings.Properties.Caption = "City"; }).GetHtml()</div>
+
 </div>
 <br />
+<
 <div class="row">
+    <div class="col-md-3">@Html.DevExpress().TextBox(settings => { settings.Name = "City"; settings.Properties.Caption = "City"; }).GetHtml()</div>
     <div class="col-md-3">@Html.DevExpress().TextBox(settings => { settings.Name = "PostCode"; settings.Properties.Caption = "Postcode"; }).GetHtml()</div>
 
     <div class="col-md-3">

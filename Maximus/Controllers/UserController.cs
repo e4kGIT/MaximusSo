@@ -149,6 +149,7 @@ namespace Maximus.Controllers
                             Session["ONLNETXTNOM3"] = dp.BusinessParam("ONLNETXTNOM3", busId);
                             Session["ONLNETXTNOM4"] = dp.BusinessParam("ONLNETXTNOM4", busId);
                             Session["ONLNETXTNOM5"] = dp.BusinessParam("ONLNETXTNOM5", busId);
+                            Session["IsManPack"] = true;
                             //'Sales order
                             //Session.Add("objSalesOrder", CType(objSalesOrder, SalesOrderCollection))
                             //Session.Add("objCurrentOrder", CType(objCurrentOrder, SalesOrderHeader))

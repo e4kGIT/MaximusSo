@@ -75,9 +75,18 @@
         <br />
     </div>
     <div class="row">
-        <div class="col-md-1"></div>
+        <div class="col-md-1">
+          
+        </div>
         <div class="col-md-10">
             <br />
+            <div class="col-md-4">
+                @Html.DevExpress().TextBox(sett =>
+             {
+                 sett.Name = "txtCommentsExternal";
+                 sett.Properties.Caption = "Comments";
+             }).GetHtml()
+            </div>
             @{
                 if (Convert.ToBoolean(Session["ONLNEREQNOM1"]))
                 {
@@ -192,6 +201,51 @@
 
             <br />
             @Html.Action("GetEmployeeDeliveryAddress")
+            <br />
+            <br />
+            <br />
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+</div>
+<br />
+<br />
+<div class="row" style="background-color:white;">
+    <div class="row colrer" style="margin:0px;">
+        <br /> <center>
+            <b>
+                Date & Customer Ref
+            </b>
+        </center>
+        <br />
+    </div>
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+            <div class="row">
+                <br />
+                <div class="col-md-3" >
+                    @Html.DevExpress().TextBox(sett => { sett.Name = "txtOrdDate"; }).GetHtml()
+                </div>
+                <div class="col-md-3">
+                    @Html.DevExpress().ComboBox(set => { set.Name = "ddlCustRef"; }).GetHtml()
+                </div>
+                <div class="col-md-3" style="display:none;">
+                    @Html.DevExpress().TextBox(sett => { sett.Name = "txtCustID"; }).GetHtml()
+                </div>
+                <div class="col-md-3" style="display:none;">
+                    @Html.DevExpress().TextBox(sett => { sett.Name = "txtCustName"; }).GetHtml()
+                </div>
+            </div>
+            <div class="row">
+                <br />
+                <div class="col-md-3" style="display:none;">
+                    @Html.DevExpress().TextBox(sett => { sett.Name = "txtBudget"; }).GetHtml()
+                </div>
+                <div class="col-md-3" style="display:none;">
+                    @Html.DevExpress().TextBox(sett => { sett.Name = "txtCurrBudget"; }).GetHtml()
+                </div>
+            </div>
             <br />
             <br />
             <br />

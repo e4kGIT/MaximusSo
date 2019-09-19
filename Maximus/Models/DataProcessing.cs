@@ -8,11 +8,13 @@ using System.Configuration;
 using System.Data.SqlClient;
 using Maximus.Utilities;
 using System.Text.RegularExpressions;
+using static Maximus.Models.Structrues;
 
 namespace Maximus.Models
 {
     public class DataProcessing
     {
+
         #region parameter Declaration
         List<AllowUsers> result1 = new List<AllowUsers>();
         e4kmaximusdbEntities enty = new e4kmaximusdbEntities();
@@ -20,6 +22,18 @@ namespace Maximus.Models
         private static string ConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["Maximus"].ConnectionString;
         private static string cmpId = System.Configuration.ConfigurationManager.AppSettings["CompanyId"];
         public static string appPath = System.Web.HttpContext.Current.Request.MapPath(@"~\");
+        public List<TBusinessAccount> tBusinessAccount;
+        public List<TBusinessAccount> TbusinessAccount
+        {
+            get
+            {
+                return tBusinessAccount;
+            }
+            set
+            {
+                tBusinessAccount = SetBuisnessAccount();
+            }
+        }
         #endregion
 
         #region Home Module
@@ -1306,7 +1320,7 @@ namespace Maximus.Models
             }
             else
             {
-                data = enty.tblbus_settings.Any(x => x.SettingID == paramId)? enty.tblbus_settings.Where(x => x.SettingID == paramId).First().DefaultValue:"";
+                data = enty.tblbus_settings.Any(x => x.SettingID == paramId) ? enty.tblbus_settings.Where(x => x.SettingID == paramId).First().DefaultValue : "";
                 if (data != "" && data != null)
                 {
                     return data;
@@ -1818,15 +1832,15 @@ namespace Maximus.Models
                 if (enty.tblpermission_controls.Any(x => x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()))
                 {
                     permisson = enty.tblpermission_controls.Any(x => x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()) ? enty.tblpermission_controls.Where(x => x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()).First().Defaults : "HIDE";
-                    if(enty.tblpermission_settings.Any(x => x.BusinessID.ToLower().Trim() == "all" && x.AccessID.ToLower() == accessId.Trim().ToLower() && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()))
+                    if (enty.tblpermission_settings.Any(x => x.BusinessID.ToLower().Trim() == "all" && x.AccessID.ToLower() == accessId.Trim().ToLower() && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()))
                     {
                         permisson = enty.tblpermission_settings.Where(x => x.BusinessID.ToLower().Trim() == "all" && x.AccessID.ToLower() == accessId.Trim().ToLower() && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()).First().Permission;
-                      
+
                     }
-                    else if(enty.tblpermission_settings.Any(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim() && x.AccessID.ToLower() == accessId.Trim().ToLower() && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()))
+                    else if (enty.tblpermission_settings.Any(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim() && x.AccessID.ToLower() == accessId.Trim().ToLower() && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()))
                     {
                         permisson = enty.tblpermission_settings.Where(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim() && x.AccessID.ToLower() == accessId.Trim().ToLower() && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()).First().Permission;
-                      
+
                     }
                     else if (enty.tblpermission_settings_users.Any(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim() && x.UserID.ToLower().Trim() == userId.ToLower().Trim() && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()))
                     {
@@ -1924,11 +1938,11 @@ namespace Maximus.Models
                 MySqlDataAdapter da = new MySqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
                 da.Fill(dt);
-                if(dt.Rows.Count>0)
+                if (dt.Rows.Count > 0)
                 {
-                   foreach(DataRow dr in dt.Rows)
+                    foreach (DataRow dr in dt.Rows)
                     {
-                        result.Add(dr.ItemArray[0] + "|" + dr.ItemArray[1] );
+                        result.Add(dr.ItemArray[0] + "|" + dr.ItemArray[1]);
                     }
                 }
             }
@@ -1963,7 +1977,7 @@ namespace Maximus.Models
                 {
                     foreach (DataRow dr in dt.Rows)
                     {
-                        result.Add(dr.ItemArray[0] + "|" + dr.ItemArray[1] );
+                        result.Add(dr.ItemArray[0] + "|" + dr.ItemArray[1]);
                     }
                 }
             }
@@ -1983,18 +1997,19 @@ namespace Maximus.Models
 
         public List<SiteCodeModel> GetSitecodes(string businessId)
         {
-            var result =new List<SiteCodeModel>();
+            var result = new List<SiteCodeModel>();
             string sortString = BusinessParam("SITECODE_SORTING", businessId);
             string sortFld = "t1.SiteName,' | ',t1.SiteCode";
             string sSqry = "";
-            if(sortString=="")
+            if (sortString == "")
             {
                 sortString = "SiteName";
             }
-            if (sortString == "SiteCode") {
+            if (sortString == "SiteCode")
+            {
                 sortFld = "t1.SiteCode,' | ',t1.SiteName";
-            } 
-            sSqry =string.Format( "SELECT DISTINCT t1.SiteCode, CAST(Concat(" + sortFld + ") AS CHAR) AS SiteCodeInfo  FROM tblonlinesop_sitecode t1  WHERE t1.Businessid='{0}' ",businessId);
+            }
+            sSqry = string.Format("SELECT DISTINCT t1.SiteCode, CAST(Concat(" + sortFld + ") AS CHAR) AS SiteCodeInfo  FROM tblonlinesop_sitecode t1  WHERE t1.Businessid='{0}' ", businessId);
             sSqry = sSqry + "ORDER BY t1." + sortString + " ASC";
             MySqlConnection conn = new MySqlConnection(ConnectionString);
             try
@@ -2004,9 +2019,9 @@ namespace Maximus.Models
                 MySqlDataAdapter da = new MySqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
                 da.Fill(dt);
-                if(dt.Rows.Count>0)
+                if (dt.Rows.Count > 0)
                 {
-                    foreach(DataRow dr in dt.Rows)
+                    foreach (DataRow dr in dt.Rows)
                     {
                         result.Add(new SiteCodeModel { SiteCode = dr.ItemArray[0].ToString(), SiteCodeInfo = dr.ItemArray[1].ToString() });
                     }
@@ -2025,6 +2040,7 @@ namespace Maximus.Models
 
         #endregion
 
+        #region GetAddressDetails
         public BusAddress GetAddressDetails(string qry)
         {
             var BusAddress = new BusAddress();
@@ -2059,6 +2075,9 @@ namespace Maximus.Models
             }
             return BusAddress;
         }
+        #endregion
+
+        #region FillCombo_CustomerDelivery
         public List<BusAddress> FillCombo_CustomerDelivery(bool IsManpack = false)
         {
             var result = new List<BusAddress>();
@@ -2108,7 +2127,9 @@ namespace Maximus.Models
 
             return result;
         }
+        #endregion
 
+        #region IsGetAllDelAddress
         public bool IsGetAllDelAddress()
         {
             try
@@ -2128,6 +2149,593 @@ namespace Maximus.Models
             }
             return false;
         }
+        #endregion
+
+        #region checkBulkCarriageLine
+
+        public bool checkBulkCarriageLine(List<SalesOrderHeaderViewModel> currentOrder)
+        {
+            bool checkBulkCarriageLine = false;
+            string carrstr = "";
+            long irow = 0;
+
+            var headers = currentOrder;
+            var salesLines = headers.Select(x => x.SalesOrderLine).First();
+            foreach (var data in salesLines)
+            {
+                carrstr = "SELECT * FROM tblonlinesop_carriage WHERE StyleID='" + data.StyleID + "' AND CompanyID='" + cmpId + "'";
+                if (qryResult(carrstr) > 0)
+                {
+                    checkBulkCarriageLine = true;
+                }
+            }
+            return checkBulkCarriageLine;
+        }
+        #endregion
+
+        #region checkCarriageLine
+        public bool checkCarriageLine(List<SalesOrderHeaderViewModel> currentOrder)
+        {
+            bool checkCarriageLine = false;
+            string carrstr = "";
+            long irow = 0;
+
+            var headers = currentOrder;
+            var salesLines = headers.Select(x => x.SalesOrderLine).First();
+            foreach (var data in salesLines)
+            {
+                carrstr = "SELECT * FROM tblonlinesop_carriage WHERE StyleID='" + data.StyleID + "' AND CompanyID='" + cmpId + "'";
+                if (qryResult(carrstr) > 0)
+                {
+                    checkCarriageLine = true;
+                }
+            }
+            return checkCarriageLine;
+        }
+
+        #endregion
+
+        #region  getbusienssAccounts
+        public TBusinessAccount GetBusinessAccount(List<TBusinessAccount> colBuis, string business)
+        {
+            int i;
+            TBusinessAccount getBusinessAccount = new TBusinessAccount();
+            string sSqry = "";
+            sSqry = BusinessAccountSQL() + " AND tblbus_account.businessid='" + business + "'";
+            MySqlConnection conn = new MySqlConnection(ConnectionString);
+            TBusinessAccount tmpType;
+            for (i = 0; i < colBuis.Count(); i++)
+            {
+                tmpType = colBuis[i];
+                if (tmpType.BusinessID == business)
+                {
+                    return tmpType;
+                }
+            }
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand(sSqry, conn);
+                var reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    getBusinessAccount = readBusinessAccount(reader);
+                }
+                colBuis[colBuis.Count - 1] = getBusinessAccount;
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return getBusinessAccount;
+        }
+        #endregion
+
+        #region readBusinessAccount
+        public TBusinessAccount readBusinessAccount(MySqlDataReader reader)
+        {
+            TBusinessAccount tmpType;
+            tmpType.BusinessID = reader.GetString("BusinessID");
+            tmpType.Credit_Limit = Convert.ToDouble(reader.GetString("Credit_Limit"));
+            tmpType.Cash_Days1 = Convert.ToInt32(reader.GetString("Cash_Days1"));
+            tmpType.Cash_Days2 = Convert.ToInt32(reader.GetString("Cash_Days2"));
+            tmpType.Currency = reader.GetString("Currency");
+            tmpType.VatCode = Convert.ToInt32(reader.GetString("VATCode"));
+            if (reader.GetString("VATFlag") == "")
+            {
+                tmpType.VatFlag = "";
+            }
+            else
+            {
+                tmpType.VatFlag = reader.GetString("VATFlag");
+            }
+            tmpType.Balance = Convert.ToDouble(reader.GetString("Balance"));
+            tmpType.RepID = Convert.ToInt32(reader.GetString("RepID"));
+            tmpType.Rep_Comission = Convert.ToSingle(reader.GetString("Rep_Comission"));
+            tmpType.KAM_Comission = Convert.ToSingle(reader.GetString("KAM_Comission"));
+            tmpType.Balance = Convert.ToDouble(reader.GetString("Balance"));
+            tmpType.PaymentTermsID = Convert.ToInt32(reader.GetString("PaymentTermsID"));
+            tmpType.Country_CurrencyID = Convert.ToInt32(reader.GetString("Country_Currency"));
+            tmpType.CurrencyName = reader.GetString("Currency_name");
+            tmpType.ExchangeRate = Convert.ToDouble(reader.GetString("Currency_Exchange_Rate"));
+            tmpType.booSet = true;
+            return tmpType;
+        }
+        #endregion
+
+        #region Setbusinessaccount
+
+        public List<TBusinessAccount> SetBuisnessAccount()
+        {
+
+            List<TBusinessAccount> tmpcolBusiness = new List<TBusinessAccount>();
+            TBusinessAccount tmpType;
+            string sSqry = "";
+            string sSqry1 = "";
+            sSqry = BusinessAccountSQL();
+            sSqry1 = " SELECT count(*) FROM (" + sSqry + ")";
+            long i = 0;
+            MySqlConnection conn = new MySqlConnection(ConnectionString);
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand(sSqry, conn);
+                DataTable dt = new DataTable();
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                da.Fill(dt);
+                if (dt.Rows.Count > 0)
+                {
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        tmpcolBusiness.Add(new TBusinessAccount { BusinessID = dr.ItemArray[1].ToString(), Credit_Limit = Convert.ToDouble(dr.ItemArray[8].ToString()), Cash_Days1 = Convert.ToInt32(dr.ItemArray[9].ToString()), Cash_Days2 = Convert.ToInt32(dr.ItemArray[10].ToString()), Currency = dr.ItemArray[13].ToString(), VatCode = Convert.ToInt32(dr.ItemArray[14].ToString()), VatFlag = dr.ItemArray[15].ToString(), RepID = Convert.ToInt32(dr.ItemArray[26].ToString()), Rep_Comission = Convert.ToInt32(dr.ItemArray[27].ToString()), KAM_Comission = Convert.ToInt32(dr.ItemArray[28].ToString()), Balance = Convert.ToDouble(dr.ItemArray[8].ToString()), PaymentTermsID = Convert.ToInt32(dr.ItemArray[29].ToString()), Country_CurrencyID = Convert.ToInt32(dr.ItemArray[30].ToString()), CurrencyName = dr.ItemArray[31].ToString(), ExchangeRate = Convert.ToDouble(dr.ItemArray[32].ToString()), booSet = true });
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return tmpcolBusiness;
+        }
+
+        #endregion
+
+        #region  getCount
+        public int GetCount(string sSqry)
+        {
+            int result = 0;
+            MySqlConnection conn = new MySqlConnection(ConnectionString);
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand(sSqry, conn);
+                result = Convert.ToInt32(cmd.ExecuteScalar());
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return result;
+        }
+
+        //    Public Function getCount(ByVal sql As String) As Long
+        //    Dim adoRecordSet As New ADODB.Recordset
+        //    If Conn Is Nothing Then
+        //        Conn = OpenDatabase()
+        //    End If
+        //    If Conn.State = 0 Then
+        //        Conn.Open()
+        //    End If
+        //    adoRecordSet.Open(LCase(sql), Conn)
+        //    If adoRecordSet.EOF Then
+        //        getCount = 0
+        //    Else
+        //        getCount = adoRecordSet(0).Value
+        //    End If
+        //    adoRecordSet.Close()
+        //End Function
+        #endregion
+
+        #region BusinessAccountSQL
+        public string BusinessAccountSQL()
+        {
+            string result = "";
+            result = " SELECT tblbus_account.*, tblbus_business.Country_Currency, tblbus_countrycodes.Currency_Name, tblbus_countrycodes.Currency_Exchange_Rate FROM (tblbus_business INNER JOIN tblbus_account ON (tblbus_business.CompanyID = tblbus_account.CompanyID) AND (tblbus_business.BusinessID = tblbus_account.BusinessID)) INNER JOIN tblbus_countrycodes ON (tblbus_business.CompanyID = tblbus_countrycodes.CompanyID) AND (tblbus_business.Country_Currency = tblbus_countrycodes.CountryID) WHERE tblbus_account.CompanyID='" + cmpId + "'";
+            return result;
+        }
+        #endregion
+
+        #region InsertManpackCarriage
+        public void InsertManpackCarriage(SalesOrderHeaderViewModel header, string carrPrice1, bool CarrZero = false, string busId = "", string txtTotalGoods = "")
+        {
+            SalesOrderLineViewModel objOrderLine = new SalesOrderLineViewModel();
+            long lastLine = 0;
+            Structrues.TStyle tmpStyle;
+            Structrues.TBusinessAccount tmpBusiness;
+            Structrues.TStyleReps tmpStyleRep;
+            double dblCostPrice;
+            double carrPrice;
+            string reqData1;
+            lastLine = header.SalesOrderLine.Count();
+            if (lastLine <= 0)
+            {
+                return;
+            }
+            if (carrPrice1 == "")
+            {
+                return;
+            }
+            //    objOrderLine = .SalesOrderLine.Add
+            //    objOrderLine.WarehouseID = .SalesOrderLine.Item(LastLine).WarehouseID
+            objOrderLine.LineNo = lastLine + 1;
+            objOrderLine.StyleID = carrPrice1;
+            objOrderLine.ColourID = GetCarrClr(carrPrice1);
+            objOrderLine.SizeID = GetCarrSize(carrPrice1);
+            tmpBusiness = GetBusinessAccount(tBusinessAccount, busId);
+            if (Convert.ToInt32(HttpContext.Current.Session["CARRPERCENT"]) > 0)
+            {
+                if (Convert.ToDouble(txtTotalGoods) < Convert.ToDouble(HttpContext.Current.Session["CARRREQAMT"]))
+                {
+                    carrPrice = ItemPrice(objOrderLine.StyleID, objOrderLine.ColourID, objOrderLine.SizeID, tmpBusiness.Country_CurrencyID, Convert.ToInt32(BusinessParam("PriceList", busId)), 0);
+                    objOrderLine.Price = Math.Round(Convert.ToDouble(carrPrice), 2);
+                }
+                else
+                {
+                    carrPrice = Convert.ToDouble(txtTotalGoods) * Convert.ToDouble(HttpContext.Current.Session["CARRPERCENT"]) / 100;
+                    objOrderLine.Price = Math.Round(Convert.ToDouble(carrPrice), 2);
+                }
+            }
+            else
+            {
+                carrPrice = ItemPrice(objOrderLine.StyleID, objOrderLine.ColourID, objOrderLine.SizeID, tmpBusiness.Country_CurrencyID, Convert.ToInt32(BusinessParam("PriceList", busId)), 0);
+                objOrderLine.Price = Math.Round(Convert.ToDouble(carrPrice), 2);
+            }
+            objOrderLine.OrdQty = 1;
+            objOrderLine.DeliveryDate = DateTime.Now.AddDays(1);
+            tmpStyle = GetStyle(SetStyle(objOrderLine.StyleID), objOrderLine.StyleID, objOrderLine.SizeID);
+            objOrderLine.Description = tmpStyle.Description;
+            objOrderLine.NomCode1 = tmpStyle.NominalCode == "" ? 0 : Convert.ToInt32(tmpStyle.NominalCode);
+            objOrderLine.DeliveryDate = DateTime.Now.Date.AddDays(1);
+            //    objOrderLine.DeliveryDate = DateAdd(DateInterval.Day, 1, Today)
+            //    'colStyle = Structures.SetStyle(objOrderLine.StyleID)
+            //    tmpStyle = Structures.GetStyle(colStyle(objOrderLine.StyleID), objOrderLine.StyleID, objOrderLine.SizeID)
+            //    objOrderLine.Description = tmpStyle.Description
+            //    objOrderLine.NomCode = IIf(tmpStyle.NominalCode = "", 0, tmpStyle.NominalCode)
+            //    dblCostPrice = ItemPrice(objOrderLine.StyleID, objOrderLine.ColourID, objOrderLine.SizeID, tmpBusiness.Country_CurrencyID, BusinessParam("PriceList", strCustID), 0)
+            //    objOrderLine.Cost = dblCostPrice
+            //    'VatCode centralised on 04/12/07
+            //    objOrderLine.VatCode = Structures.UseVatCode(tmpBusiness.VatFlag, tmpStyle.VatCode, tmpBusiness.VatCode)
+            //    'objOrderLine.RepID = tmpBusiness.RepID
+            //    tmpStyleRep = Structures.GetStyleReps(colStyleReps(objOrderLine.StyleID), objOrderLine.StyleID)
+            //    If tmpStyleRep.RepID <> 0 Then
+            //        objOrderLine.RepID = tmpStyleRep.RepID
+            //    Else
+            //        objOrderLine.RepID = tmpBusiness.RepID
+            //    End If
+            //    objOrderLine.KAMID = Structures.getKAM(colKam, .RepID).KamID
+            //    objOrderLine.RepRate = tmpBusiness.Rep_Comission
+            //    objOrderLine.KAMRate = tmpBusiness.KAM_Comission
+            //    objOrderLine.Currency_Exchange_Rate = .SalesOrderLine.Item(LastLine).Currency_Exchange_Rate
+            //    objOrderLine.VatPercent = Structures.GetVatCodes(colVatCode, .VATCode).VatPercent
+            //    reqData1 = StyleParam("REQDATA1", objOrderLine.StyleID)
+            //    If reqData1 <> "" Then
+            //        objOrderLine.FreeText = "(" & reqData1 & ")"
+            //        objOrderLine.RequireData = reqData1
+            //    End If
+            //    objOrderLine.IssueUOM = 1
+            //    objOrderLine.IssueQty = 1
+            //    objOrderLine.StockingUOM = 1
+            //    objOrderLine.Ratio = 1
+            //End With
+        }
+        #endregion
+
+        #region getStyle
+        public TStyle GetStyle(List<TStyle> colStyle, string strStyle, string strSize)
+        {
+            long i;
+            TStyle tmpStyle = new TStyle();
+            foreach (var data in colStyle)
+            {
+                tmpStyle = data;
+                if (tmpStyle.StyleID.ToUpper() == strStyle.ToUpper() & tmpStyle.SizeID == strSize.ToUpper())
+                {
+                    return tmpStyle;
+                }
+            }
+            return tmpStyle;
+        }
+
+        #endregion
+
+        #region getCarrClr
+        public string GetCarrClr(string StyleID)
+        {
+            string result = "";
+            string sQry = "";
+            sQry = "SELECT ColourID FROM tblfsk_style_colour WHERE CompanyID='" + cmpId + "' AND StyleID='" + StyleID + "'";
+            MySqlConnection conn = new MySqlConnection(ConnectionString);
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand(sQry, conn);
+                result = cmd.ExecuteScalar().ToString();
+
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return result;
+        }
+
+        #endregion
+
+        #region getCarrSize
+        public string GetCarrSize(string StyleID)
+        {
+            string result = "";
+            string sQry = "";
+            sQry = "SELECT SizeID FROM tblfsk_style_sizes WHERE CompanyID='" + cmpId + "' AND StyleID='" + StyleID + "'";
+            MySqlConnection conn = new MySqlConnection(ConnectionString);
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand(sQry, conn);
+                result = cmd.ExecuteScalar().ToString();
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return result;
+        }
+
+        #endregion
+
+        #region qryResult
+        public int qryResult(string sSqry)
+        {
+            int i = 0;
+            MySqlConnection conn = new MySqlConnection(ConnectionString);
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand(sSqry);
+                DataTable dt = new DataTable();
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                da.Fill(dt);
+                i = dt.Rows.Count;
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return i;
+        }
+        #endregion
+
+        #region SetStyle
+        public List<TStyle> SetStyle(string styleId)
+        {
+            TStyle tmpStyleType = new TStyle();
+            List<TVATCODE> tmpColVatCode = new List<TVATCODE>();
+            int tmpVATCode = 0;
+            string sSqry1 = "";
+            string sSqry = "";
+            sSqry = " SELECT tblfsk_style.Description, tblfsk_style.StyleID, tblfsk_style_sizes.SizeID, tblfsk_style.Nominal_Code, tblfsk_style.Product_Group   FROM tblfsk_style INNER JOIN tblfsk_style_sizes ON (tblfsk_style.StyleID = tblfsk_style_sizes.StyleID) AND (tblfsk_style.CompanyID = tblfsk_style_sizes.CompanyID)   WHERE tblfsk_style.Live<>0 and tblfsk_style.CompanyID='" + cmpId + "' and tblfsk_style.StyleID = '" + styleId + "'";
+            sSqry1 = " SELECT Count(*)   FROM tblfsk_style INNER JOIN tblfsk_style_sizes ON (tblfsk_style.StyleID = tblfsk_style_sizes.StyleID) AND (tblfsk_style.CompanyID = tblfsk_style_sizes.CompanyID)   WHERE tblfsk_style.Live<>0 and tblfsk_style.CompanyID='" + cmpId + "'  and tblfsk_style.StyleID = '" + styleId + "'";
+            List<TStyle> tmpcolStyle = new List<TStyle>();
+            MySqlConnection conn = new MySqlConnection(ConnectionString);
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand(sSqry, conn);
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                if (dt.Rows.Count > 0)
+                {
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        tmpVATCode = 0;
+                        tmpStyleType.StyleID = dr["StyleID"].ToString();
+                        tmpStyleType.SizeID = dr["SizeID"].ToString();
+                        tmpStyleType.NominalCode = dr["Nominal_Code"].ToString();
+                        tmpStyleType.Description = dr["Description"].ToString();
+                        tmpStyleType.VatCode = tmpVATCode.ToString();
+                        tmpStyleType.GroupID = dr["Product_Group"].ToString();
+                        tmpColVatCode = SetVatCodes();
+                        tmpStyleType.VatPercent = Convert.ToString(GetVatCodes(tmpColVatCode, tmpVATCode).VatPercent);
+                        tmpStyleType.booSet = true;
+                        tmpcolStyle.Add(tmpStyleType);
+                    }
+                }
+
+                sSqry = " SELECT tblfsk_style_sizes_prices.StyleID, tblfsk_style_sizes_prices.SizeID, tblfsk_style.Description, tblfsk_style_sizes_prices.Price, tblfsk_style_sizes_prices.PriceID, tblacc_vatcodes.VATPercent, tblfsk_style.Nominal_Code   FROM (tblfsk_style LEFT JOIN tblfsk_style_sizes_prices ON (tblfsk_style.StyleID = tblfsk_style_sizes_prices.StyleID) AND (tblfsk_style.CompanyID = tblfsk_style_sizes_prices.CompanyID)) LEFT JOIN tblacc_vatcodes ON (tblfsk_style_sizes_prices.Price = tblacc_vatcodes.VATCode) AND (tblfsk_style_sizes_prices.CompanyID = tblacc_vatcodes.CompanyID)   WHERE tblfsk_style_sizes_prices.PriceID=6 AND tblfsk_style_sizes_prices.CompanyID='" + cmpId + "' AND tblfsk_style_sizes_prices.BusinessID='ALL' and tblfsk_style_sizes_prices.StyleID = '" + styleId + "'";
+                MySqlCommand cmd2 = new MySqlCommand(sSqry, conn);
+                MySqlDataAdapter da1 = new MySqlDataAdapter(cmd);
+                DataTable dt1 = new DataTable();
+                da1.Fill(dt1);
+                if (dt1.Rows.Count > 0)
+                {
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        var i = FindStyleIndex(tmpcolStyle, dr["StyleID"].ToString(), dr["SizeID"].ToString());
+                        tmpcolStyle.Add(new TStyle { VatCode = dr["Price"].ToString(), VatPercent = dr["VATPercent"].ToString() == "" ? "0" : dr["VATPercent"].ToString() });
+                    }
+                }
+
+            }
+            catch (Exception e)
+            {
+
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return tmpcolStyle;
+        }
+        #endregion
+
+        #region 
+        public int FindStyleIndex(List<TStyle> tmpcolStyle, string StyleID, string size)
+        {
+            int FindStyleIndex = 0;
+            foreach (var data in tmpcolStyle)
+            {
+                if (data.StyleID == StyleID && data.SizeID == size)
+                {
+                    FindStyleIndex = tmpcolStyle.IndexOf(data);
+                }
+            }
+            return FindStyleIndex;
+        }
+
+        #endregion
+
+        #region GetVatCodes
+        public TVATCODE GetVatCodes(List<TVATCODE> colVatCode, int VatCode)
+        {
+
+            TVATCODE tmpType = new TVATCODE();
+            foreach (var data in colVatCode)
+            {
+                tmpType = data;
+            }
+            return tmpType;
+        }
+        #endregion
+
+        #region SetVatCodes
+        public List<TVATCODE> SetVatCodes()
+        {
+            List<TVATCODE> SetVatCodes = new List<TVATCODE>();
+            TVATCODE tmpType = new TVATCODE();
+            string sSqry = "";
+            string sSqry1 = "";
+            sSqry = "Select * from tblacc_vatcodes where CompanyID ='" + cmpId + "' ORDER BY VATCode";
+            sSqry1 = "Select count(*) from tblacc_vatcodes where CompanyID ='" + cmpId + "' ORDER BY VATCode";
+            List<TVATCODE> tmpcolVatCode = new List<TVATCODE>();
+            MySqlConnection conn = new MySqlConnection(ConnectionString);
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand(sSqry, conn);
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                if (dt.Rows.Count > 0)
+                {
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        tmpType.VatCode = Convert.ToInt32(dr.ItemArray[1].ToString());
+                        tmpType.VatPercent = Convert.ToDouble(dr.ItemArray[3].ToString());
+                        tmpType.booSet = true;
+                        SetVatCodes.Add(tmpType);
+                    }
+                }
+
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return SetVatCodes;
+        }
+
+        #endregion
+
+        #region ItemPrice
+        public double ItemPrice(string mStyle, string mColour, string mSizeid, double mCustCountry, long mPriceList, double mSeqNo)
+        {
+            TBusinessAccount tmpBusiness;
+            double ItemPrice = 0;
+            string sSqry = "";
+            sSqry = "SELECT tblfsk_style_sizes.StyleID, tblfsk_style_sizes.SizeID, tblfsk_style_sizes.SeqNo, tblfsk_style_sizes.CompanyID, tblfsk_style_sizes_prices.Price, tblfsk_price.Description, tblfsk_price.PriceID   FROM (tblfsk_price INNER JOIN tblfsk_style_sizes_prices ON (tblfsk_price.PriceID = tblfsk_style_sizes_prices.PriceID) AND (tblfsk_price.CompanyID = tblfsk_style_sizes_prices.CompanyID))   INNER JOIN tblfsk_style_sizes ON (tblfsk_style_sizes.CompanyID = tblfsk_style_sizes_prices.CompanyID) AND (tblfsk_style_sizes.SizeID = tblfsk_style_sizes_prices.SizeID) AND (tblfsk_style_sizes.StyleID = tblfsk_style_sizes_prices.StyleID)   AND (tblfsk_style_sizes_prices.SizeID = tblfsk_style_sizes.SizeID) AND (tblfsk_style_sizes_prices.StyleID = tblfsk_style_sizes.StyleID) AND (tblfsk_style_sizes_prices.CompanyID = tblfsk_style_sizes.CompanyID)   Where (((tblfsk_style_sizes.StyleID) = '" + mStyle + "') And BusinessId='" + HttpContext.Current.Session["BuisnessId"].ToString() + "' And tblfsk_style_sizes.SizeID='" + mSizeid + "' and  Country_Currency=" + mCustCountry + " and ((tblfsk_style_sizes.CompanyID) = '" + cmpId + "') And ((tblfsk_price.PriceId) = " + mPriceList + "))  ORDER BY tblfsk_style_sizes.SeqNo, tblfsk_price.Price_Type";
+            tmpBusiness = GetBusinessAccount(tBusinessAccount, HttpContext.Current.Session["BuisnessId"].ToString());
+            MySqlConnection conn = new MySqlConnection(ConnectionString);
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand(sSqry, conn);
+                var reader = cmd.ExecuteReader();
+
+                if (reader.Read())
+                {
+                    sSqry = "SELECT tblfsk_style_sizes.StyleID, tblfsk_style_sizes.SizeID, tblfsk_style_sizes.SeqNo, tblfsk_style_sizes.CompanyID, tblfsk_style_sizes_prices.Price, tblfsk_price.Description, tblfsk_price.PriceID   FROM (tblfsk_price INNER JOIN tblfsk_style_sizes_prices ON (tblfsk_price.PriceID = tblfsk_style_sizes_prices.PriceID) AND (tblfsk_price.CompanyID = tblfsk_style_sizes_prices.CompanyID))   INNER JOIN tblfsk_style_sizes ON (tblfsk_style_sizes.CompanyID = tblfsk_style_sizes_prices.CompanyID) AND (tblfsk_style_sizes.SizeID = tblfsk_style_sizes_prices.SizeID) AND (tblfsk_style_sizes.StyleID = tblfsk_style_sizes_prices.StyleID)  AND (tblfsk_style_sizes_prices.SizeID = tblfsk_style_sizes.SizeID) AND (tblfsk_style_sizes_prices.StyleID = tblfsk_style_sizes.StyleID) AND (tblfsk_style_sizes_prices.CompanyID = tblfsk_style_sizes.CompanyID)   Where (((tblfsk_style_sizes.StyleID) = '" + mStyle + "') And BusinessId='ALL' And tblfsk_style_sizes.SizeID='" + mSizeid + "' and  Country_Currency=" + mCustCountry + " and ((tblfsk_style_sizes.CompanyID) = '" + cmpId + "') And ((tblfsk_price.PriceId) = " + mPriceList + "))  ORDER BY tblfsk_style_sizes.SeqNo, tblfsk_price.Price_Type";
+                    MySqlCommand cmd1 = new MySqlCommand(sSqry, conn);
+                    var reader1 = cmd.ExecuteReader();
+                    if (reader1.Read())
+                    {
+                        sSqry = "SELECT tblfsk_style_sizes.StyleID, tblfsk_style_sizes.SizeID, tblfsk_style_sizes.SeqNo, tblfsk_style_sizes.CompanyID, tblfsk_style_sizes_prices.Price, tblfsk_price.Description, tblfsk_price.PriceID   FROM (tblfsk_price INNER JOIN tblfsk_style_sizes_prices ON (tblfsk_price.PriceID = tblfsk_style_sizes_prices.PriceID) AND (tblfsk_price.CompanyID = tblfsk_style_sizes_prices.CompanyID))   INNER JOIN tblfsk_style_sizes ON (tblfsk_style_sizes.CompanyID = tblfsk_style_sizes_prices.CompanyID) AND (tblfsk_style_sizes.SizeID = tblfsk_style_sizes_prices.SizeID) AND (tblfsk_style_sizes.StyleID = tblfsk_style_sizes_prices.StyleID)   AND (tblfsk_style_sizes_prices.SizeID = tblfsk_style_sizes.SizeID) AND (tblfsk_style_sizes_prices.StyleID = tblfsk_style_sizes.StyleID) AND (tblfsk_style_sizes_prices.CompanyID = tblfsk_style_sizes.CompanyID)   Where (((tblfsk_style_sizes.StyleID) = '" + mStyle + "') And tblfsk_style_sizes.SizeID='" + mSizeid + "' And ((tblfsk_style_sizes.CompanyID) = '" + cmpId + "') And ((tblfsk_price.priceid) = " + mPriceList + "))  ORDER BY tblfsk_style_sizes.SeqNo, tblfsk_price.Price_Type";
+                        MySqlCommand cmd2 = new MySqlCommand(sSqry, conn);
+                        MySqlDataAdapter da2 = new MySqlDataAdapter(cmd2);
+                        DataTable dt2 = new DataTable();
+                        da2.Fill(dt2);
+                        if (dt2.Rows.Count > 0)
+                        {
+                            foreach (DataRow dr in dt2.Rows)
+                            {
+                                tmpBusiness.ExchangeRate = tmpBusiness.ExchangeRate == 0 ? 1 : tmpBusiness.ExchangeRate;
+                                ItemPrice = Math.Round((Convert.ToDouble(dr.ItemArray[4].ToString())) * tmpBusiness.ExchangeRate, 2);
+                            }
+                        }
+                        else
+                        {
+                            ItemPrice = 0;
+                        }
+                    }
+                    else
+                    {
+                        ItemPrice = Convert.ToDouble(reader1.GetString("Price"));
+                    }
+                }
+                else
+                {
+                    ItemPrice = Convert.ToDouble(reader.GetString("Price"));
+                }
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+
+            }
+            return ItemPrice;
+        }
+        #endregion
         #endregion
 
 

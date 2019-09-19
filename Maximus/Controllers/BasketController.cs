@@ -16,18 +16,22 @@ namespace Maximus.Controllers
         #region declarations
         DataProcessing dp = new DataProcessing();
         e4kmaximusdbEntities entity = new e4kmaximusdbEntities();
+        public string cmpId = System.Configuration.ConfigurationManager.AppSettings["CompanyId"].ToString();
         #endregion
 
         #region ShowBasket
         public ActionResult ShowBasket()
         {
             //dp.FillCombo_CustomerDelivery();
-            ViewData["SiteCodes"] =    FillSiteCode();
-             ViewData["carrierFill"] = FillCarrierDropdown();
+
+            ViewData["SiteCodes"] = FillSiteCode();
+            ViewData["carrierFill"] = FillCarrierDropdown();
             ViewData["carrierStyleFill"] = FillCarrierStyle();
             return View();
         }
+        #endregion
 
+        #region cartview
         [ValidateInput(false)]
         public ActionResult CartView()
         {
@@ -41,9 +45,14 @@ namespace Maximus.Controllers
 
             return PartialView("_CartView", mod);
         }
+        #endregion
 
+        #region delivery address
         public ActionResult GetEmployeeDeliveryAddress()
         {
+            ViewData["booAddrDef"] = Convert.ToBoolean(dp.BusinessParam("DEFEMPDELADDR", Session["BuisnessId"].ToString()));
+            ViewData["booAddrEdit"] = Convert.ToBoolean(dp.BusinessParam("DEFEMPDELADDR_EDIT", Session["BuisnessId"].ToString()));
+            ViewData["booAddrView"] = Convert.ToBoolean(dp.BusinessParam("DEFEMPDELADDR_VIEW", Session["BuisnessId"].ToString()));
             var result = dp.FillCombo_CustomerDelivery();
             Session["DeliveryAddress"] = result;
             return PartialView("_Deliveryaddress", result);
@@ -78,7 +87,8 @@ namespace Maximus.Controllers
             return View("_CarriageandResons");
         }
         #endregion
-        #region GetCarriers
+
+        #region GetCarriernReasons
         public ActionResult GetCarrierandreason()
         {
             ViewData["carrierFill"] = FillCarrierDropdown();
@@ -291,8 +301,9 @@ namespace Maximus.Controllers
         #endregion
 
         #region AcceptOrders
-        public ActionResult AcceptOrder(int addressId)
+        public ActionResult AcceptOrder(int addressId, string txtTotalGoods)
         {
+            bool IsManpack = Convert.ToBoolean(Session["IsManPack"]);
             string cmpId = System.Configuration.ConfigurationManager.AppSettings["CompanyId"].ToString();
             bool booCheck = true; bool booAutoConfirm = false; long mStackManPack = 0;
             string busId = Session["BuisnessId"].ToString();
@@ -319,6 +330,7 @@ namespace Maximus.Controllers
             bool booExistInManpack;
             Session["EditOrdContent"] = "";
             bool booStackOrder;
+            var lastObj = ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Last();
             booStackOrder = Convert.ToBoolean(dp.BusinessParam("STACKORDERS", busId));
             //if(manpac)
             //{
@@ -339,13 +351,83 @@ namespace Maximus.Controllers
                 string SQL = "SELECT tblbus_address.Description, tblbus_address.Address1, tblbus_address.Address2, tblbus_address.Address3, tblbus_address.Town, tblbus_address.City, tblbus_address.Postcode, tblbus_countrycodes.Country, tblbus_address.countrycode  FROM tblbus_countrycodes INNER JOIN (tblbus_addresstype_ref INNER JOIN (tblbus_business INNER JOIN (tblbus_addresstypes INNER JOIN tblbus_address ON tblbus_addresstypes.AddressTypeID = tblbus_address.AddressTypeID) ON tblbus_business.BusinessID = tblbus_address.BusinessID) ON tblbus_addresstype_ref.Actual_TypeID = tblbus_addresstypes.Actual_TypeID) ON tblbus_countrycodes.CountryID = tblbus_address.CountryCode  WHERE tblbus_addresstype_ref.Actual_TypeID=3 AND tblbus_business.BusinessID='" + busId + "' and tblbus_countrycodes.CompanyID = '" + cmpId + "' Order By tblbus_address.Description";
                 var data = dp.GetAddressDetails(SQL);
             }
-            //if(!checkCarriage())
-            //{
+            if (!CheckCarriage(txtTotalGoods))
+            {
+                //SetTempData()
+                if (IsManpack)
+                {
+                    if (booStackOrder == false)
+                    {
+                       dp.InsertManpackCarriage(lastObj, Session["CARRPRICE"].ToString());
+                    }
 
-            //}
+                }
+
+            }
             return View();
         }
         #endregion
+
+        #region checkCarriage
+        public bool CheckCarriage(string txtTotalGoods)
+        {
+            bool IsManpack = Convert.ToBoolean(Session["IsManPack"]);
+            bool checkCarriage = false;
+            if (IsManpack == false)
+            {
+                if ((dp.checkBulkCarriageLine((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"])) == false)
+                {
+                    if ((int)Session["CARRPERCENT"] > 0)
+                    {
+                        checkCarriage = false;
+                    }
+                    else
+                    {
+                        if (Convert.ToDouble(txtTotalGoods) < Convert.ToDouble(Session["CARRREQAMT"]))
+                        {
+                            checkCarriage = false;
+                        }
+                        else
+                        {
+                            checkCarriage = true;
+                        }
+                    }
+                }
+                else
+                {
+                    checkCarriage = true;
+                }
+            }
+            else
+            {
+                if (dp.checkCarriageLine((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]) == false)
+                {
+                    if ((int)Session["CARRPERCENT"] > 0)
+                    {
+                        checkCarriage = false;
+                    }
+                    else
+                    {
+                        if (Convert.ToDouble(txtTotalGoods) < Convert.ToDouble(Session["CARRREQAMT"]))
+                        {
+                            checkCarriage = false;
+                        }
+                        else
+                        {
+                            checkCarriage = true;
+                        }
+                    }
+                }
+                else
+                {
+                    checkCarriage = true;
+                }
+            }
+            return checkCarriage;
+        }
+        #endregion
+
+
 
         #region get carrier cmbo
         public List<string> FillCarrierDropdown()
@@ -374,85 +456,9 @@ namespace Maximus.Controllers
         }
         #endregion
 
-        #region checkCarriage
-        //public bool CheckCarriage()
-        //{
-        //    bool checkCarriage = false;
-        //    if(IsManpack==false)
-        //    {
-        //        if(( checkBulkCarriageLine()==false)
-        //        {
-        //            if((int)Session["CARRPERCENT"]>0)
-        //            {
-        //                checkCarriage = false;
-        //            }
-        //            else
-        //            {
-        //                if()
-        //            }
-        //        }
-        //    }
 
-        //        checkCarriage = False
-        //    If IsManpack = False Then
-        //        If checkBulkCarriageLine() = False Then
-        //            If Val(Session.Item("CARRPERCENT")) > 0 Then
-        //                checkCarriage = False
-        //            Else
-        //                If CDbl(Val(txtTotalGoods.Text)) < CDbl(Val(Session.Item("CARRREQAMT"))) Then
-        //                    checkCarriage = False
-        //                Else
-        //                    checkCarriage = True
-        //                End If
-        //            End If
-        //        Else
-        //            checkCarriage = True
-        //        End If
-        //    Else
-        //        If checkCarriageLine() = False Then
-        //            If Val(Session.Item("CARRPERCENT")) > 0 Then
-        //                checkCarriage = False
-        //            Else
-        //                If CDbl(Val(txtTotalGoods.Text)) < CDbl(Val(Session.Item("CARRREQAMT"))) Then
-        //                    checkCarriage = False
-        //                Else
-        //                    checkCarriage = True
-        //                End If
-        //            End If
-        //        Else
-        //            checkCarriage = True
-        //        End If
-        //    End If
-        //End Function
-        //}
-        #endregion
 
-        #region checkBulkCarriageLine
 
-        //public bool checkBulkCarriageLine()
-        //{
-        //    string carrstr = "";
-        //    long irow = 0;
-        //    bool checkBulkCarriageLine = false;
-
-        ////    Dim carrstr As String
-        ////Dim irow As Long
-        ////Dim rs_carr As New ADODB.Recordset
-        ////checkBulkCarriageLine = False
-        ////For irow = 1 To Session.Item("objCurrentOrder").SalesOrderLine.Count
-        ////    With Session.Item("objCurrentOrder").SalesOrderLine.item(irow)
-        ////        carrstr = "SELECT * FROM tblonlinesop_carriage WHERE StyleID='" & .StyleID & "' AND CompanyID='" & strCompanyID & "'"
-        ////        rs_carr.Open(LCase(carrstr), Conn)
-        ////        If Not rs_carr.EOF Then
-        ////            checkBulkCarriageLine = True
-        ////            Exit Function
-        ////        End If
-        ////        rs_carr.Close()
-        ////    End With
-        ////Next
-        //}
-        #endregion
 
     }
 }
-

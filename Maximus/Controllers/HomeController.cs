@@ -929,7 +929,7 @@ namespace Maximus.Controllers
             {
                 try
                 {
-                    salesOrderLines.Add(new SalesOrderLineViewModel { ColourID = color, LineNo = lineNo, Description = description, OrdQty = Convert.ToInt64(qty), Price = Convert.ToDecimal(price), SizeID = size, StyleID = style, EmployeeId = Session["SelectedEmp"].ToString(), EmployeeName = Session["EmpName"].ToString(), StyleImage = entity.ucodeby_freetextview.Where(x => x.StyleID.Contains(style)).FirstOrDefault().StyleImage, orgStyleId = orgStyl });
+                    salesOrderLines.Add(new SalesOrderLineViewModel { ColourID = color, LineNo = lineNo, Description = description, OrdQty = Convert.ToInt64(qty), Price = Convert.ToDouble(price), SizeID = size, StyleID = style, EmployeeId = Session["SelectedEmp"].ToString(), EmployeeName = Session["EmpName"].ToString(), StyleImage = entity.ucodeby_freetextview.Where(x => x.StyleID.Contains(style)).FirstOrDefault().StyleImage, orgStyleId = orgStyl });
                 }
                 catch (Exception e)
                 {

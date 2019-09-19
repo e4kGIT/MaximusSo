@@ -7,6 +7,7 @@ namespace Maximus.Models
 {
     public class SalesOrderLineViewModel
     {
+        public DateTime DeliveryDate { get; set; }
         public static string CompanyID { get { return "001"; } }
         public static string Warehouseid { get { return "MAX01"; } }
         public long OrderNo { get { return 10000; } }
@@ -16,7 +17,7 @@ namespace Maximus.Models
         public string ColourID { get; set; }
         public string SizeID { get; set; }
         public string Description { get; set; }
-        public Nullable<decimal> Price { get; set; }
+        public Nullable<double> Price { get; set; }
         public Nullable<decimal> Cost { get {return 100; } }
         public  Nullable<long> OrdQty { get; set; }
         public static Nullable<long> AllQty { get { return 0; } }
@@ -27,6 +28,7 @@ namespace Maximus.Models
         public static Nullable<System.DateTime> Deliverydate { get { return DateTime.Now.Date; } }
         public static Nullable<int> VatCode { get { return 2; } }
         public Nullable<int> NomCode { get { return 3011; } }
+        public Nullable<int> NomCode1 { get; set; }
         public static Nullable<sbyte> PartShip { get { return null; } }
         public static Nullable<float> LineNoRef { get { return 0; } }
         public Nullable<double> Currency_Exchange_Rate { get { return 1.4; } }

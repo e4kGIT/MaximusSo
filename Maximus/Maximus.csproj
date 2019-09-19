@@ -1071,6 +1071,7 @@
     <Compile Include="Models\stockcard_tsb_rollout.cs">
       <DependentUpon>maximusDataContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Structrues.cs" />
     <Compile Include="Models\styleby_freetextview.cs">
       <DependentUpon>maximusDataContext.tt</DependentUpon>
     </Compile>
