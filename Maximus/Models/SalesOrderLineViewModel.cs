@@ -18,7 +18,8 @@ namespace Maximus.Models
         public string SizeID { get; set; }
         public string Description { get; set; }
         public Nullable<double> Price { get; set; }
-        public Nullable<decimal> Cost { get {return 100; } }
+        public Nullable<decimal> Cost { get { return 100; }  }
+        public Nullable<decimal> Cost1 { get; set; }
         public  Nullable<long> OrdQty { get; set; }
         public static Nullable<long> AllQty { get { return 0; } }
         public static Nullable<long> InvQty { get { return 0; } }
@@ -27,6 +28,7 @@ namespace Maximus.Models
         public static Nullable<double> Discount { get { return 0; } }
         public static Nullable<System.DateTime> Deliverydate { get { return DateTime.Now.Date; } }
         public static Nullable<int> VatCode { get { return 2; } }
+        public  Nullable<int> VatCode1 { get; set; }
         public Nullable<int> NomCode { get { return 3011; } }
         public Nullable<int> NomCode1 { get; set; }
         public static Nullable<sbyte> PartShip { get { return null; } }

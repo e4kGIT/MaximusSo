@@ -2407,15 +2407,9 @@ namespace Maximus.Models
             tmpStyle = GetStyle(SetStyle(objOrderLine.StyleID), objOrderLine.StyleID, objOrderLine.SizeID);
             objOrderLine.Description = tmpStyle.Description;
             objOrderLine.NomCode1 = tmpStyle.NominalCode == "" ? 0 : Convert.ToInt32(tmpStyle.NominalCode);
-            objOrderLine.DeliveryDate = DateTime.Now.Date.AddDays(1);
-            //    objOrderLine.DeliveryDate = DateAdd(DateInterval.Day, 1, Today)
-            //    'colStyle = Structures.SetStyle(objOrderLine.StyleID)
-            //    tmpStyle = Structures.GetStyle(colStyle(objOrderLine.StyleID), objOrderLine.StyleID, objOrderLine.SizeID)
-            //    objOrderLine.Description = tmpStyle.Description
-            //    objOrderLine.NomCode = IIf(tmpStyle.NominalCode = "", 0, tmpStyle.NominalCode)
-            //    dblCostPrice = ItemPrice(objOrderLine.StyleID, objOrderLine.ColourID, objOrderLine.SizeID, tmpBusiness.Country_CurrencyID, BusinessParam("PriceList", strCustID), 0)
-            //    objOrderLine.Cost = dblCostPrice
-            //    'VatCode centralised on 04/12/07
+            dblCostPrice = ItemPrice(objOrderLine.StyleID, objOrderLine.ColourID, objOrderLine.SizeID, tmpBusiness.Country_CurrencyID, Convert.ToInt32(BusinessParam("PriceList", busId)), 0);
+            objOrderLine.Cost1 =Convert.ToDecimal(dblCostPrice);
+           
             //    objOrderLine.VatCode = Structures.UseVatCode(tmpBusiness.VatFlag, tmpStyle.VatCode, tmpBusiness.VatCode)
             //    'objOrderLine.RepID = tmpBusiness.RepID
             //    tmpStyleRep = Structures.GetStyleReps(colStyleReps(objOrderLine.StyleID), objOrderLine.StyleID)
