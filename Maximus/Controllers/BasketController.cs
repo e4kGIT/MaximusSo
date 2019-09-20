@@ -301,7 +301,7 @@ namespace Maximus.Controllers
         #endregion
 
         #region AcceptOrders
-        public ActionResult AcceptOrder(int addressId, string txtTotalGoods)
+        public ActionResult AcceptOrder(int addressId, string txtTotalGoods, string txtOrderNo)
         {
             bool IsManpack = Convert.ToBoolean(Session["IsManPack"]);
             string cmpId = System.Configuration.ConfigurationManager.AppSettings["CompanyId"].ToString();
@@ -327,7 +327,7 @@ namespace Maximus.Controllers
             string myInvPostCode = "";
             string myInvCountry = "";
             bool isPersonalOrder = false;
-            bool booExistInManpack;
+            bool booExistInManpack=false;
             Session["EditOrdContent"] = "";
             bool booStackOrder;
             var lastObj = ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Last();
@@ -358,14 +358,66 @@ namespace Maximus.Controllers
                 {
                     if (booStackOrder == false)
                     {
-                       dp.InsertManpackCarriage(lastObj, Session["CARRPRICE"].ToString());
+                        dp.InsertManpackCarriage(lastObj, Session["CARRPRICE"].ToString());
                     }
-
                 }
-
+                else
+                {
+                    if (booStackOrder == false)
+                    {
+                        if (Convert.ToBoolean(dp.BusinessParam("CarrierPrompt", busId)))
+                        {
+                            //    Collaps_pnlCarriageReason.Collapsed = False
+                            //    Collaps_pnlCarriageReason.ClientState = "false"
+                            //    validateCarrStyle.Visible = True
+                            //    lbl_crtxt.Visible = True
+                            //    divData2.Style("display") = "block"
+                            //    ClientScript.RegisterStartupScript(Me.GetType(), "hash", "location.hash = '#CElnk_finalusertitl';", True)
+                        }
+                        else
+                        {
+                            //    validateCarrStyle.Visible = False
+                            //    divData2.Style("display") = "block"
+                            //    Collaps_pnlCarriageReason.Collapsed = True
+                            //    Collaps_pnlCarriageReason.ClientState = "true"
+                            //    lbl_crtxt.Visible = False
+                            if (Convert.ToInt32(txtOrderNo) > 0)
+                            {
+                                string sSqry = "SELECT * FROM tblsop_manpackorders WHERE OrderNo=" + txtOrderNo;
+                                booExistInManpack = dp.GetBooValue(sSqry);
+                            }
+                            if(booExistInManpack==false)
+                            {
+                                dp.InsertManpackCarriage(((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Last());
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+            //    validateCarrStyle.Visible = False
+            //divData2.Style("display") = "block"
+            }
+            if(Convert.ToInt32(txtOrderNo)==0)
+            {
+                EditFlag = false;
+            }
+            else
+            {
+                EditFlag = true;
+            }
+            double currentBudget;
+            if(IsManpack==false)
+            {
+                //if(dp.SetSalesHeader()==false)
+                //{
+                     
+                //}
             }
             return View();
         }
+
         #endregion
 
         #region checkCarriage

@@ -79,6 +79,7 @@ namespace Maximus.Models
         public string OrderType { get; set; }
         public string EmailID { get; set; }
         public string ContactName { get; set; }
+        public int VatCode { get; set; }
         public List<SalesOrderLineViewModel> SalesOrderLine { get; set; }
     }
 }

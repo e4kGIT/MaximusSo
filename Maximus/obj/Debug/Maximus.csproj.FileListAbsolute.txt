@@ -620,3 +620,4 @@ G:\Sasidharan\Maximus\Maximus\bin\ja\DevExpress.Xpo.v16.1.resources.dll
 G:\Sasidharan\Maximus\Maximus\bin\ru\DevExpress.Xpo.v16.1.resources.dll
 G:\Sasidharan\Maximus\Maximus\obj\Debug\Maximus.dll
 G:\Sasidharan\Maximus\Maximus\obj\Debug\Maximus.pdb
+G:\Sasidharan\Maximus\Maximus\obj\Debug\Maximus.csprojResolveAssemblyReference.cache

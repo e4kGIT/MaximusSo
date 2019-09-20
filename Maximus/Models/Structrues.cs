@@ -20,10 +20,18 @@ namespace Maximus.Models
         }
         public struct TVATCODE
         {
-           public int VatCode;
-           public double VatPercent;
+            public int VatCode;
+            public double VatPercent;
             public bool booSet;
         }
+
+        public struct TKAM
+        {
+            public int RepID;
+            public int KamID;
+            public bool booSet;
+        }
+
         public struct TBusinessAccount
         {
             public string BusinessID;
@@ -34,7 +42,7 @@ namespace Maximus.Models
             public int VatCode;
             public string VatFlag;
             public double Balance;
-            public long RepID;
+            public int RepID;
             public Single Rep_Comission;
             public Single KAM_Comission;
             //s  Rep_Comission As Single
@@ -52,6 +60,6 @@ namespace Maximus.Models
             public int SeqNo;
             public bool booSet;
         }
- 
+
     }
 }
