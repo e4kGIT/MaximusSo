@@ -22,8 +22,9 @@ namespace Maximus.Models
         private static string ConnectionString = System.Configuration.ConfigurationManager.ConnectionStrings["Maximus"].ConnectionString;
         private static string cmpId = System.Configuration.ConfigurationManager.AppSettings["CompanyId"];
         public static string appPath = System.Web.HttpContext.Current.Request.MapPath(@"~\");
+        public bool isRolloutOrder;
         public List<TBusinessAccount> tBusinessAccount;
-        string strCustID = HttpContext.Current.Session["BuisnessId"]==null?"": HttpContext.Current.Session["BuisnessId"].ToString();
+        string strCustID = HttpContext.Current.Session["BuisnessId"] == null ? "" : HttpContext.Current.Session["BuisnessId"].ToString();
 
         public List<TBusinessAccount> TbusinessAccount
         {
@@ -36,6 +37,30 @@ namespace Maximus.Models
                 tBusinessAccount = SetBuisnessAccount();
             }
         }
+
+        public bool IsRolloutOrder
+        {
+            get
+            {
+                return isRolloutOrder;
+            }
+            set
+            {
+                if (HttpContext.Current.Session["RolloutName"] != null)
+                {
+                    if (HttpContext.Current.Session["RolloutName"].ToString() != "")
+                    {
+                        isRolloutOrder = true;
+                    }
+                }
+                else
+                {
+                    isRolloutOrder = false;
+                }
+
+            }
+        }
+
         #endregion
 
         #region Home Module
@@ -2473,6 +2498,119 @@ namespace Maximus.Models
         }
         #endregion
 
+        #region displayOrderListGrid
+
+        public void displayOrderListGrid(bool booShowManpack=false)
+        {
+            string sql = "";
+            long i;
+            string xmlOrderList = "";
+            string Employee = "";
+          var data= ( (SalesOrderHeaderViewModel)HttpContext.Current.Session["objCurrentOrder"]).SalesOrderLine;
+            //    If IIf(Request.QueryString("Pinno") = "", Session.Item("EmpID"), Request.QueryString("Pinno")) <> vbNullString Then
+            //        Employee = IIf(Request.QueryString("Pinno") = "", Session.Item("EmpID"), Request.QueryString("Pinno")) & " - " & getEmpName(strCompanyID, strCustID, IIf(Request.QueryString("Pinno") = "", Session.Item("EmpID"), Request.QueryString("Pinno")))
+            //    Else
+            //        Employee = "XXX"
+            //    End If
+            xmlOrderList = "<SalesOrders>";
+            for(i=1;i<=data.Count();i++)
+            {
+                //xmlOrderList = xmlOrderList + "<OrderLine OrderLineNo=" + (char)(34) + i + (char)(34) + " lineno=" + (char)(34) + .Item(i).LineNo + (char)(34) + " basestyle=" + (char)(34) + Server.HtmlEncode(.Item(i).BaseStyleID) + (char)(34) + " style=" + (char)(34) + Server.HtmlEncode(.Item(i).StyleID) + " - " + Server.HtmlEncode(.Item(i).Description) + (char)(34) + " colour=" + (char)(34) + Server.HtmlEncode(.Item(i).ColourID) + (char)(34) + " size=" + (char)(34) + Server.HtmlEncode(.Item(i).SizeID) + (char)(34) + " issuom=" + (char)(34)
+            }
+            //    Dim SQL As String
+            //Dim rs As New ADODB.Recordset
+            //Dim i As Long
+            //Dim xmlOrderList As String
+            //Dim ds As New DataSet
+            //Dim Employee As String
+            //With Session.Item("objCurrentOrder").SalesOrderLine
+            //    If IIf(Request.QueryString("Pinno") = "", Session.Item("EmpID"), Request.QueryString("Pinno")) <> vbNullString Then
+            //        Employee = IIf(Request.QueryString("Pinno") = "", Session.Item("EmpID"), Request.QueryString("Pinno")) & " - " & getEmpName(strCompanyID, strCustID, IIf(Request.QueryString("Pinno") = "", Session.Item("EmpID"), Request.QueryString("Pinno")))
+            //    Else
+            //        Employee = "XXX"
+            //    End If
+            //    xmlOrderList = "<SalesOrders>"
+            //    For i = 1 To.Count
+            //        'If .Item(i).OrdQty > 0 Then
+            //        ' xmlOrderList = xmlOrderList & "<OrderLine lineno=" & Chr(34) & .Item(i).LineNo & Chr(34) & " style=" & Chr(34) & Server.HtmlEncode(.Item(i).StyleID) & " - " & Server.HtmlEncode(.Item(i).Description) & Chr(34) & " colour=" & Chr(34) & Server.HtmlEncode(.Item(i).ColourID) & Chr(34) & " size=" & Chr(34) & Server.HtmlEncode(.Item(i).SizeID) & Chr(34) & " issuom=" & Chr(34)
+            //        xmlOrderList = xmlOrderList & "<OrderLine OrderLineNo=" & Chr(34) & i & Chr(34) & " lineno=" & Chr(34) & .Item(i).LineNo & Chr(34) & " basestyle=" & Chr(34) & Server.HtmlEncode(.Item(i).BaseStyleID) & Chr(34) & " style=" & Chr(34) & Server.HtmlEncode(.Item(i).StyleID) & " - " & Server.HtmlEncode(.Item(i).Description) & Chr(34) & " colour=" & Chr(34) & Server.HtmlEncode(.Item(i).ColourID) & Chr(34) & " size=" & Chr(34) & Server.HtmlEncode(.Item(i).SizeID) & Chr(34) & " issuom=" & Chr(34)
+            //        ' xmlOrderList = xmlOrderList & "<OrderLine OrderLineNo=" & Chr(34) & i & Chr(34) & " lineno=" & Chr(34) & i & Chr(34) & " basestyle=" & Chr(34) & Server.HtmlEncode(.Item(i).BaseStyleID) & Chr(34) & " style=" & Chr(34) & Server.HtmlEncode(.Item(i).StyleID) & " - " & Server.HtmlEncode(.Item(i).Description) & Chr(34) & " colour=" & Chr(34) & Server.HtmlEncode(.Item(i).ColourID) & Chr(34) & " size=" & Chr(34) & Server.HtmlEncode(.Item(i).SizeID) & Chr(34) & " issuom=" & Chr(34)
+            //        SQL = "SELECT UnitDescription FROM tblfsk_unitofmeasure WHERE UnitID=" & .Item(i).IssueUOM & " AND CompanyID='" & strCompanyID & "'"
+            //        rs.Open(LCase(SQL), Conn)
+            //        If Not rs.EOF Then
+            //            xmlOrderList = xmlOrderList & Server.HtmlEncode(rs("UnitDescription").Value) & Chr(34)
+            //        Else
+            //            xmlOrderList = xmlOrderList & .Item(i).IssueUOM & Chr(34)
+            //        End If
+            //        rs.Close()
+            //        xmlOrderList = xmlOrderList & " ordqty=" & Chr(34) & .Item(i).IssueQty & Chr(34) & " stkuom=" & Chr(34)
+            //        SQL = "SELECT UnitDescription FROM tblfsk_unitofmeasure WHERE UnitID=" & .Item(i).StockingUOM & " AND CompanyID='" & strCompanyID & "'"
+            //        rs.Open(LCase(SQL), Conn)
+            //        If Not rs.EOF Then
+            //            xmlOrderList = xmlOrderList & Server.HtmlEncode(rs("UnitDescription").Value) & Chr(34)
+            //        Else
+            //            xmlOrderList = xmlOrderList & .Item(i).StockingUOM & Chr(34)
+            //        End If
+            //        rs.Close()
+            //        'xmlOrderList = xmlOrderList & " freetext=" & Chr(34) & Server.HtmlEncode(.Item(i).FreeText) & Chr(34) & " price=" & Chr(34) & Math.Round(.Item(i).Price, 2) & Chr(34) & " value=" & Chr(34) & Math.Round(.Item(i).IssueQty * .Item(i).Price, 2) & Chr(34) & " orderno=" & Chr(34) & 1 & Chr(34) & " empid=" & Chr(34) & Server.HtmlEncode(Employee) & Chr(34) & " reasonsorderline=" & Chr(34)
+            //        xmlOrderList = xmlOrderList & " freetext=" & Chr(34) & Server.HtmlEncode(.Item(i).FreeText) & Chr(34) & " price=" & Chr(34) & Format(Val(.Item(i).Price), NumFormat) & Chr(34) & " value=" & Chr(34) & Format(Val(.Item(i).IssueQty) * Val(.Item(i).Price), NumFormat) & Chr(34) & " orderno=" & Chr(34) & 1 & Chr(34) & " empid=" & Chr(34) & Server.HtmlEncode(Employee) & Chr(34) & " reasonsorderline=" & Chr(34)
+            //        If Session("OrderReason") <> "" Then
+            //            SQL = "SELECT ReasonCode, Description FROM tblsop_reasoncodes WHERE ReasonCode=" & .Item(i).ReasonCodeLine & " AND BusinessID='" & strCustID & "' ORDER BY SeqNo"
+            //        Else
+            //            SQL = "SELECT ReasonCode, Description FROM tblsop_reasoncodes WHERE ReasonCode=" & .Item(i).ReasonCodeLine & " AND BusinessID='ALL' ORDER BY SeqNo"
+            //        End If
+            //        rs.Open(LCase(SQL), Conn)
+            //        If Not rs.EOF Then
+            //            xmlOrderList = xmlOrderList & Server.HtmlEncode(rs("Description").Value) & Chr(34)
+            //        Else
+            //            xmlOrderList = xmlOrderList & .Item(i).ReasonCodeLine & Chr(34)
+            //        End If
+            //        rs.Close()
+            //        xmlOrderList = xmlOrderList & " projectcodeline=" & Chr(34) & Server.HtmlEncode(.Item(i).ProjectCode) & Chr(34)
+            //        xmlOrderList = xmlOrderList & " sopdetail4=" & Chr(34) & Server.HtmlEncode(.Item(i).SOPDetail4) & Chr(34)
+            //        xmlOrderList = xmlOrderList & " />"
+            //        'End If
+            //    Next
+            //    xmlOrderList = xmlOrderList & "</SalesOrders>"
+            //End With
+            //If booShowManpack = False Then
+            //    If xmlOrderList <> "<SalesOrders></SalesOrders>" Then
+            //        ds.ReadXml(New IO.StringReader(xmlOrderList))
+            //        OrderGrid1.Visible = True
+            //        OrderGrid1.DataSource = ds.Tables(0)
+            //        OrderGrid1.DataBind()
+            //        'Code by Senthilprabhu for Amplifon Edit Order Mail on 04/07/2016
+            //        'If Session("EditOrderNo") IsNot Nothing Then
+            //        '    If Session("EditOrderNo").ToString.Trim <> "" Then
+            //        '        If Session("OriginalOrderLines") Is Nothing Then
+            //        '            Session("OriginalOrderLines") = ds.Tables(0)
+            //        '        End If
+            //        '        Session("ChangedOrderLines") = ds.Tables(0)
+            //        '    End If
+            //        'End If
+            //    Else
+            //        OrderGrid1.Visible = False
+            //    End If
+            //    If BusBudgetReq Then
+            //        If Request("Pinno") <> "" Then
+            //            If EmpBudgetCheckGrid(Request("Pinno"), BudgetMax, BudgetCurr(Request("Pinno")), CurrentOrder.TotalGoodsAmount - getCarriageAmt()) = False Then
+            //                lblBudgetExceed.Visible = True
+            //                lblBudgetExceed.Text = BusinessParam("BUDGETMSG", strCustID)
+            //            Else
+            //                lblBudgetExceed.Visible = False
+            //                lblBudgetExceed.Text = ""
+            //            End If
+            //        Else
+            //            lblBudgetExceed.Visible = False
+            //            lblBudgetExceed.Text = ""
+            //        End If
+            //    End If
+            //End If
+            //WorkOutTotals()
+
+        }
+        #endregion
+
         #region getSiteCodes
         public bool GetSiteCodes()
         {
@@ -2520,13 +2658,14 @@ namespace Maximus.Models
 
         #region SetSalesHeader
 
-        public bool SetSalesHeader(string txtCustRef = "", string txtDelAddDesc = "", bool optNewAddr = false, string cboSiteCode = "", string txtNomCode = "",string txtNomCode1="",string txtNomCode2="")
+        public bool SetSalesHeader(string txtCustRef = "", string txtDelAddDesc = "", bool optNewAddr = false, string cboSiteCode = "", string txtNomCode = "", string txtNomCode1 = "", string txtNomCode2 = "", string txtNomCode3 = "", string txtNomCode4 = "", string isBulk = "", bool booBulk = false,string txtCarrierCharge="",string txtOrdDate="",string txtCarrier="",string txtCommentsExternal="",string txtReasoncode="",string txtCustAddDesc="",string txtCustAdd1="",string txtCustAdd2="",string txtCustAdd3="",string txtCustTown="",string txtCustCity="",string txtCustPost="",string txtCustCountry="",string txtDelAdd1 = "",string txtDelAdd2="",string txtDelAdd3="",string txtDelTown="",string txtDelCity="",string txtDelPost="",string txtDelCountry="")
         {
             var busID = System.Web.HttpContext.Current.Session["BuisnessId"].ToString().Trim();
 
             TBusinessAccount tmpbusiness;
             List<object> carrArr = new List<object>();
             bool setSalesOrderHeader = false;
+            string strWarehouse = "";
             if (BusinessParam("CusRefMan", busID) != "")
             {
                 if (Convert.ToBoolean(BusinessParam("CusRefMan", busID)))
@@ -2616,9 +2755,9 @@ namespace Maximus.Models
                         //validateSiteCode.Visible = False
                     }
 
-                    if(Convert.ToBoolean(HttpContext.Current.Session["ONLNEREQNOM2"]))
+                    if (Convert.ToBoolean(HttpContext.Current.Session["ONLNEREQNOM2"]))
                     {
-                        if(txtNomCode1=="")
+                        if (txtNomCode1 == "")
                         {
                             return setSalesOrderHeader = false;
                         }
@@ -2631,9 +2770,9 @@ namespace Maximus.Models
                     {
                         //lblNomCode2.Visible = False
                     }
-                    if(Convert.ToBoolean(HttpContext.Current.Session["ONLNEREQNOM3"]))
+                    if (Convert.ToBoolean(HttpContext.Current.Session["ONLNEREQNOM3"]))
                     {
-                        if(txtNomCode2=="")
+                        if (txtNomCode2 == "")
                         {
                             setSalesOrderHeader = false;
                         }
@@ -2646,161 +2785,165 @@ namespace Maximus.Models
                     {
                         //lblNomCode3.Visible = False
                     }
-                    if(Convert.ToBoolean(HttpContext.Current.Session["ONLNEREQNOM4"]))
+                    if (Convert.ToBoolean(HttpContext.Current.Session["ONLNEREQNOM4"]))
+                    {
+                        if (txtNomCode3.Trim() == "")
+                        {
+                            //lblNomCode4.Visible = True
+                            setSalesOrderHeader = false;
+                            return setSalesOrderHeader;
+                        }
+                        else
+                        {
+                            //lblNomCode3.Visible = False
+                        }
+                    }
+                    else
+                    {
+                        // lblNomCode4.Visible = False
+                    }
+                    if (Convert.ToBoolean(HttpContext.Current.Session["ONLNEREQNOM5"]))
+                    {
+                        if (txtNomCode4.Trim() != "")
+                        {
+                            setSalesOrderHeader = false;
+                            return setSalesOrderHeader;
+                        }
+                        else
+                        {
+                            //                lblNomCode5.Visible = False
+                        }
+                    }
+                    else
+                    {
+                        //            lblNomCode5.Visible = False
+                    }
+                    if (!CheckFreetext())
+                    {
+                        setSalesOrderHeader = false;
+                        return setSalesOrderHeader;
+                    }
+                    else
                     {
 
                     }
+                    string booCheckLine = "";
+                    int AnnualIssue = 0;
+                    if (isBulk != "")
+                    {
+                        if (!Convert.ToBoolean(booBulk))
+                        {
+                            if (Convert.ToBoolean(HttpContext.Current.Session["POINTSREQD"]) & IsRolloutOrder)
+                            {
+                                booCheckLine = "";
+                            }
+                            else
+                            {
+                                //booCheckLine= EmpEntilementGridCheck(, AnnualIssue)
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (Convert.ToBoolean(HttpContext.Current.Session["POINTSREQD"]) & IsRolloutOrder)
+                        {
+                            booCheckLine = "";
+                        }
+                        else
+                        {
+                            //booCheckLine= EmpEntilementGridCheck(, AnnualIssue)
+                        }
+                    }
+                    if (booCheckLine != "")
+                    {
+                        setSalesOrderHeader = false;
+                        return setSalesOrderHeader;
+                    }
+                    else
+                    {
+
+                    }
+                    string InvalidEmpId = "";
+                    InvalidEmpId = CheckValidEmployee();
+                    if (InvalidEmpId != "")
+                    {
+                        //    If Not modMain.ControlHidden("CreateEmployee") Then
+                        //        If CBoolstr(BusinessParam("CUSTCREATEEMP", strCustID)) Then
+                        //            WriteScript("<script language='javascript'> var win1; if(win1==null || win1.closed) win1=window.open('CreateEmployee.aspx?pagefrom=1&empid=" & InvalidEmpID & "','','resizable=yes,scrollbars=yes,width=700,height=500,top=200,left=100'); </script>")
+                        //        End If
+                        //    End If
+                        //    SetSalesHeader = False
+                        //    Exit Function
+                    }
+                    tmpbusiness = GetBusinessAccount(tBusinessAccount, strCustID);
+                    var dat = (SalesOrderHeaderViewModel)HttpContext.Current.Session["objCurrentOrder"];
+                    dat.CompanyID = cmpId;
+                    dat.WarehouseID = strWarehouse;
+                    dat.CustID = strCustID;
+                    if (strCustID == "")
+                    {
+                        //        WriteScript("<script language='javascript'> alert('" & Convert.ToString(GetLocalResourceObject("Alert1.Text")) & "'); document.location.href='Online_Login.aspx'; </script>")
+                    }
+                    //    If cboCarrier.Items.Count > 0 Then
+                    //        carrArr = Split(cboCarrier.Items(cboCarrier.SelectedIndex).Value, "|")
+                    //        .Carrier = carrArr(0)
+                    //    Else
+                    //        .Carrier = 0
+                    //    End If
+                    dat.CarrierCharge =Convert.ToDecimal(txtCarrierCharge);
+                    dat.CustRef = txtCustRef == "" ? BusinessParam("CustRefDef", strCustID) : txtCustRef;
+                    dat.Currency_Exchange_Code = tmpbusiness.CurrencyName;
+                    dat.VatFlag = tmpbusiness.VatFlag;
+                    dat.VATPercent = GetVatCodes(SetVatCodes(), tmpbusiness.VatCode).VatPercent;
+                    dat.RepID = tmpbusiness.RepID;
+                    dat.OrderDate =DateTime.Parse(txtOrdDate);
+                    dat.UserID = HttpContext.Current.Session["UserName"] == null ? "" : HttpContext.Current.Session["UserName"].ToString();
+                    dat.Currency_Exchange_Rate = Convert.ToInt32(tmpbusiness.ExchangeRate) == 0 ? 1 : tmpbusiness.ExchangeRate;
+                    dat.Carrier = txtCarrier;
+                    dat.VatCode = tmpbusiness.VatCode;
+                    dat.KAMid = getKAM(SetKam(), Convert.ToInt32(dat.RepID)).KamID;
+                    //    .EmployeeID = IIf(IIf(Request.QueryString("Pinno") = "", Session.Item("EmpID"), Request.QueryString("Pinno")) = vbNullString, "", IIf(Request.QueryString("Pinno") = "", Session.Item("EmpID"), Request.QueryString("Pinno")))
+                    if(dat.EmployeeID==strCustID)
+                    {
+                        dat.EmployeeID = "";
+                    }
+                    dat.UCodeId = HttpContext.Current.Session["Ucode"] == null ? "" : HttpContext.Current.Session["Ucode"].ToString();
+                    dat.CommentsExternal = txtCommentsExternal;
+                    //dat.ReasonCode = txtReasoncode!=""?Convert.ToInt32(txtReasoncode):0;
+                    dat.NomCode = txtNomCode;
+                    dat.NomCode1 = txtNomCode1;
+                    dat.NomCode2 = txtNomCode2;
+                    dat.NomCode3 = txtNomCode3;
+                    dat.NomCode4 = txtNomCode4;
+                    dat.OrderType = "SO";
+                    dat.InvDesc     = txtCustAddDesc;
+                    dat.InvAddress1 = txtCustAdd1   ;
+                    dat.InvAddress2 = txtCustAdd2   ;
+                    dat.InvAddress3 = txtCustAdd3   ;
+                    dat.DelAddress1 = txtDelAdd1    ;
+                    dat.DelAddress2 = txtDelAdd2    ;
+                    dat.DelAddress3 = txtDelAdd3    ;
+                    dat.DelTown     = txtDelTown    ;
+                    dat.DelCity     = txtDelCity    ;
+                    dat.DelPostCode = txtDelPost    ;
+                    dat.DelCountry  = txtDelCountry ;
+                    dat.DelDesc = txtDelAddDesc;
+                    dat.InvPostCode = txtCustCountry;
+                    dat.InvCountry = txtCustCountry;
+                    dat.InvCity = txtCustCity;
+                    dat.InvPostCode = txtCustPost;
                 }
             }
+          if(HttpContext.Current.Session["objCurrentOrder"]=="")
+            {
+                setSalesOrderHeader = false;
+            }
+          else
+            {
 
-           
-
-            //        If CBool(Session("ONLNEREQNOM3")) Then
-            //            If Trim(txtNomCode2.Text) = vbNullString Then
-            //                lblNomCode3.Visible = True
-            //                SetSalesHeader = False
-            //                Exit Function
-            //            Else
-            //                lblNomCode3.Visible = False
-            //            End If
-            //        Else
-            //            lblNomCode3.Visible = False
-            //        End If
-
-            //        If CBool(Session("ONLNEREQNOM4")) Then
-            //            If Trim(txtNomCode3.Text) = vbNullString Then
-            //                lblNomCode4.Visible = True
-            //                SetSalesHeader = False
-            //                Exit Function
-            //            Else
-            //                lblNomCode4.Visible = False
-            //            End If
-            //        Else
-            //            lblNomCode4.Visible = False
-            //        End If
-
-            //        If CBool(Session("ONLNEREQNOM5")) Then
-            //            If Trim(txtNomCode4.Text) = vbNullString Then
-            //                lblNomCode5.Visible = True
-            //                SetSalesHeader = False
-            //                Exit Function
-            //            Else
-            //                lblNomCode5.Visible = False
-            //            End If
-            //        Else
-            //            lblNomCode5.Visible = False
-            //        End If
-            //    End If
-            //End If
-
-            //If Not CheckFreetext() Then
-            //    validateSizeMessage.Visible = True
-            //    SetSalesHeader = False
-            //    Exit Function
-            //Else
-            //    validateSizeMessage.Visible = False
-            //End If
-            //Dim booCheckLine As String = ""
-            //Dim AnnualIssue As Integer
-            //If Request.QueryString("bulk") IsNot Nothing Then
-            //    If Not CBoolstr(Request.QueryString("bulk")) Then
-            //        If Session.Item("POINTSREQD") And IsRolloutOrder Then
-            //            booCheckLine = ""
-            //        Else
-            //            booCheckLine = EmpEntilementGridCheck(, AnnualIssue)
-            //        End If
-            //    End If
-            //Else
-            //    If Session.Item("POINTSREQD") And IsRolloutOrder Then
-            //        booCheckLine = ""
-            //    Else
-            //        booCheckLine = EmpEntilementGridCheck(, AnnualIssue)
-            //    End If
-            //End If
-
-            //If booCheckLine <> "" Then
-            //    validateEntileMessage.Visible = True
-
-            //    validateEntileMessage.Text = "Maximum Allowed : (" & AnnualIssue & ")" & vbNewLine & "Entile Exceeded at Line (" & booCheckLine & " - click edit to update exceed reason of that line"
-            //    SetSalesHeader = False
-            //    Exit Function
-            //Else
-            //    validateEntileMessage.Visible = False
-            //    validateEntileMessage.Text = ""
-            //End If
-
-            //Dim InvalidEmpID As String
-            //InvalidEmpID = CheckValidEmployee()
-            //If InvalidEmpID <> vbNullString Then
-            //    'WriteScript("<script language='javascript'> alert('" & Convert.ToString(GetLocalResourceObject("Alert10.Text")) & ":" & InvalidEmpID & "');</script>")
-            //    If Not modMain.ControlHidden("CreateEmployee") Then
-            //        If CBoolstr(BusinessParam("CUSTCREATEEMP", strCustID)) Then
-            //            WriteScript("<script language='javascript'> var win1; if(win1==null || win1.closed) win1=window.open('CreateEmployee.aspx?pagefrom=1&empid=" & InvalidEmpID & "','','resizable=yes,scrollbars=yes,width=700,height=500,top=200,left=100'); </script>")
-            //        End If
-            //    End If
-            //    SetSalesHeader = False
-            //    Exit Function
-            //End If
-
-            //tmpBusiness = Structures.getBusinessAccount(colBusiness, strCustID)
-            //With Session.Item("objCurrentOrder")
-            //    .Edited = False
-            //    .CompanyID = strCompanyID
-            //    .WarehouseID = strWarehouse
-            //    .CustID = strCustID
-            //    If strCustID = "" Then
-            //        WriteScript("<script language='javascript'> alert('" & Convert.ToString(GetLocalResourceObject("Alert1.Text")) & "'); document.location.href='Online_Login.aspx'; </script>")
-            //    End If
-
-            //    If cboCarrier.Items.Count > 0 Then
-            //        carrArr = Split(cboCarrier.Items(cboCarrier.SelectedIndex).Value, "|")
-            //        .Carrier = carrArr(0)
-            //    Else
-            //        .Carrier = 0
-            //    End If
-
-            //    .CarrierCharge = Val(txtCarrierCharge.Text)
-            //    .CustRef = IIf(Trim(txtCustRef.Text) = vbNullString, BusinessParam("CustRefDef", strCustID), txtCustRef.Text)
-            //    .Currency_Exchange_Code = tmpBusiness.CurrencyName
-
-            //    .VATFlag = tmpBusiness.VatFlag
-            //    .VATPercent = Structures.GetVatCodes(colVatCode, tmpBusiness.VatCode).VatPercent
-            //    .RepID = tmpBusiness.RepID
-            //    .OrderDate = txtOrdDate.Text
-            //    .UserID = IIf(Session.Item("UserID") = vbNullString, "", Session.Item("UserID"))
-            //    .Currency_Exchange_Rate = IIf(Val(tmpBusiness.ExchangeRate) = 0, 1, tmpBusiness.ExchangeRate)
-            //    .CarrierName = txtCarrierDesc.Text
-            //    .VATCode = tmpBusiness.VatCode
-            //    .KamID = Structures.getKAM(colKam, .RepID).KamID
-            //    .EmployeeID = IIf(IIf(Request.QueryString("Pinno") = "", Session.Item("EmpID"), Request.QueryString("Pinno")) = vbNullString, "", IIf(Request.QueryString("Pinno") = "", Session.Item("EmpID"), Request.QueryString("Pinno")))
-            //    If.EmployeeID.Equals(strCustID) Then
-            //       .EmployeeID = ""
-            //    End If
-            //    .UcodeID = IIf(Session.Item("Ucode") = vbNullString, "", Session.Item("Ucode"))
-            //    .CommentsExternal = txtCommentsExternal.Text
-            //    .comments = txtCommentsExternal.Text
-            //    'Code added on 11/05/06
-            //    If cboReasons.Visible Then
-            //        .ReasonCode = Val(cboReasons.SelectedValue)
-            //    End If
-            //    ' .ReasonCode = Val(cboReasons.SelectedValue)
-            //    'Code added on 25/08/06
-            //    If IsSiteCode Then
-            //        .NominalCode = Trim(cboSiteCode.SelectedValue)
-            //    Else
-            //        .NominalCode = Trim(txtNomCode.Text)
-            //    End If
-            //    .NominalCode1 = Trim(txtNomCode1.Text)
-            //    .NominalCode2 = Trim(txtNomCode2.Text)
-            //    If.NominalCode3 = "" Then
-            //       .NominalCode3 = Trim(txtNomCode3.Text)
-            //    End If
-            //    .NominalCode4 = Trim(txtNomCode4.Text)
-            //    .OrderType = "SO"
-            //End With
-            //SetSalesOrderAddress()
+            }
             //If cboDelAddress.Items.Count > 1 And Session.Item("objCurrentOrder").DelDesc = "" Then
-            //    SetSalesHeader = False
+            //    SetSalesHeader = Falsec
             //    divData4.Style("display") = "block"
             //    lbl_ValidAddress.Visible = True
             //    Collaps_delAdrs.Collapsed = False
@@ -2815,6 +2958,210 @@ namespace Maximus.Models
             //End If
             return false;
         }
+
+        #endregion
+
+        #region CheckValidEmployee
+        public string CheckValidEmployee(string empId = "")
+        {
+            string myEmpId = "", sql = "", booValidEmp = ""; MySqlConnection conn = new MySqlConnection(ConnectionString);
+            bool isManpack = false;
+            if (isManpack == false)
+            {
+                if (((SalesOrderHeaderViewModel)HttpContext.Current.Session["objCurrentOrder"]).SalesOrderLine.Count > 0)
+                {
+                    myEmpId = ((SalesOrderHeaderViewModel)HttpContext.Current.Session["objCurrentOrder"]).EmployeeID;
+                    if (myEmpId != "")
+                    {
+                        sql = "SELECT EmployeeID,Title,Forename,Surname,EmployeeClosed FROM tblaccemp_employee WHERE CompanyID='" + cmpId + "' and BusinessID='" + strCustID + "' and EmployeeID = '" + myEmpId + "' order by EmployeeID";
+                        try
+                        {
+                            conn.Open();
+                            MySqlCommand cmd = new MySqlCommand(sql, conn);
+                            MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                            DataTable dt = new DataTable();
+                            da.Fill(dt);
+                            if (dt.Rows.Count > 0)
+                            {
+                                sql = "SELECT BusinessID FROM tblaccemp_employee WHERE CompanyID='" + cmpId + "' and BusinessID='" + myEmpId + "'";
+                                MySqlCommand cmd1 = new MySqlCommand(sql, conn);
+                                MySqlDataAdapter da1 = new MySqlDataAdapter(cmd1);
+                                DataTable dt1 = new DataTable();
+                                da1.Fill(dt1);
+                                if (dt1.Rows.Count > 0)
+                                {
+                                    booValidEmp = myEmpId;
+                                }
+                            }
+                        }
+                        catch
+                        {
+
+                        }
+                        finally
+                        {
+                            conn.Close();
+                        }
+                    }
+                }
+            }
+            else if (isManpack)
+            {
+                if (((List<SalesOrderHeaderViewModel>)HttpContext.Current.Session["objManPackOrderCollection"]).Count > 0)
+                {
+                    var data = ((List<SalesOrderHeaderViewModel>)HttpContext.Current.Session["objManPackOrderCollection"]);
+                    for (int i = 0; i < data.Count; i++)
+                    {
+                        if (data[i].SalesOrderLine.Count > 0)
+                        {
+                            myEmpId = data[i].EmployeeID;
+                            if (myEmpId != "")
+                            {
+                                sql = "SELECT EmployeeID,Title,Forename,Surname,EmployeeClosed FROM tblaccemp_employee WHERE CompanyID='" + cmpId + "' and BusinessID='" + strCustID + "' and EmployeeID = '" + myEmpId + "' order by EmployeeID";
+                                try
+                                {
+                                    conn.Open();
+                                    MySqlCommand cmd = new MySqlCommand(sql, conn);
+                                    MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                                    DataTable dt = new DataTable();
+                                    da.Fill(dt);
+                                    if (dt.Rows.Count > 0)
+                                    {
+                                        booValidEmp = myEmpId;
+                                    }
+                                }
+                                catch
+                                {
+
+                                }
+                                finally
+                                {
+                                    conn.Close();
+                                }
+                            }
+                        }
+                    }
+                    if (((SalesOrderHeaderViewModel)HttpContext.Current.Session["objCurrentOrder"]).SalesOrderLine.Count > 0)
+                    {
+                        myEmpId = ((SalesOrderHeaderViewModel)HttpContext.Current.Session["objCurrentOrder"]).EmployeeID;
+                        if (myEmpId != "")
+                        {
+                            sql = "SELECT EmployeeID,Title,Forename,Surname,EmployeeClosed FROM tblaccemp_employee WHERE CompanyID='" + cmpId + "' and BusinessID='" + strCustID + "' and EmployeeID = '" + myEmpId + "' order by EmployeeID";
+                            try
+                            {
+                                conn.Open();
+                                MySqlCommand cmd1 = new MySqlCommand(sql, conn);
+                                MySqlDataAdapter da1 = new MySqlDataAdapter(cmd1);
+                                DataTable dt1 = new DataTable();
+                                da1.Fill(dt1);
+                                if (dt1.Rows.Count > 0)
+                                {
+                                    booValidEmp = myEmpId;
+                                }
+                            }
+                            catch
+                            {
+
+                            }
+                            finally
+                            {
+                                conn.Close();
+                            }
+                        }
+                        else
+                        {
+                            if (((SalesOrderHeaderViewModel)HttpContext.Current.Session["objCurrentOrder"]).SalesOrderLine.Count > 0)
+                            {
+                                myEmpId = ((SalesOrderHeaderViewModel)HttpContext.Current.Session["objCurrentOrder"]).EmployeeID;
+                                if (myEmpId != "")
+                                {
+                                    sql = "SELECT EmployeeID,Title,Forename,Surname,EmployeeClosed FROM tblaccemp_employee WHERE CompanyID='" + cmpId + "' and BusinessID='" + strCustID + "' and EmployeeID = '" + myEmpId + "' order by EmployeeID";
+                                    MySqlCommand cmd = new MySqlCommand(sql, conn);
+                                    MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                                    DataTable dt = new DataTable();
+                                    if (dt.Rows.Count > 0)
+                                    {
+                                        booValidEmp = myEmpId;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            return booValidEmp;
+        }
+        #endregion
+
+        #region EmpEntilementGridCheck
+        //public string EmpEntilementGridCheck(long indx=0,int annualIssue=0)
+        //{
+
+        //}
+        #endregion
+
+        #region CheckFreetext
+        public bool CheckFreetext(int mIndex = 0)
+        {
+            int errorIndx = -1;
+            SalesOrderLineViewModel mline = new SalesOrderLineViewModel();
+            if (mIndex == 0)
+            {
+                var data = ((List<SalesOrderLineViewModel>)HttpContext.Current.Session["SalesOrderLines"]);
+                var count = ((List<SalesOrderLineViewModel>)HttpContext.Current.Session["SalesOrderLines"]).Count;
+                for (int i = 0; i < count; i++)
+                {
+                    if (data[i].FreeText1 == "" | data[i].FreeText1.Contains("*"))
+                    {
+                        try
+                        {
+                            SalesOrderHeaderViewModel sh = new SalesOrderHeaderViewModel();
+                            sh = ((List<SalesOrderHeaderViewModel>)HttpContext.Current.Session["SalesOrderHeader"])[i];
+                            if (sh.EmployeeID != "")
+                            {
+
+                            }
+                            else
+                            {
+
+                            }
+                        }
+                        catch (Exception e)
+                        {
+
+                        }
+                        errorIndx = i - 1;
+                        return false;
+                    }
+                }
+
+            }
+            else
+            {
+                var data = ((List<SalesOrderLineViewModel>)HttpContext.Current.Session["SalesOrderLines"]);
+                var count = ((List<SalesOrderLineViewModel>)HttpContext.Current.Session["SalesOrderLines"]).Count;
+                for (int i = 1; i < count; i++)
+                {
+                    if (data[i].FreeText1 == "" | data[i].FreeText1.Contains("*"))
+                    {
+                        SalesOrderHeaderViewModel sh = new SalesOrderHeaderViewModel();
+                        sh = ((List<SalesOrderHeaderViewModel>)HttpContext.Current.Session["SalesOrderHeader"])[i];
+                        if (mIndex > 1)
+                        {
+                            for (int iss = 1; iss < mIndex - 1; iss++)
+                            {
+                                errorIndx += ((List<SalesOrderHeaderViewModel>)HttpContext.Current.Session["SalesOrderHeader"])[i].SalesOrderLine.Count();
+                            }
+                        }
+                        errorIndx += i;
+                        errorIndx -= 1;
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
 
         #endregion
 
@@ -3292,6 +3639,12 @@ namespace Maximus.Models
             return ItemPrice;
         }
         #endregion
+
+        #region GetEmpOrUserAddress
+
+
+        #endregion
+
         #endregion
 
 

@@ -5,7 +5,14 @@
     comboBoxSettings.Name = "CmbAddress";
     comboBoxSettings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
     comboBoxSettings.Properties.Caption = "Address description";
-    comboBoxSettings.Properties.ClientSideEvents.SelectedIndexChanged = "FillAlldeliveryfields";
+    if ((bool)Session["DELREFREQ"] == false)
+    {
+        comboBoxSettings.Properties.ClientSideEvents.SelectedIndexChanged = "FillAlldeliveryfields";
+    }
+    else
+    {
+        comboBoxSettings.Properties.ClientSideEvents.SelectedIndexChanged = "FillCustRefandDeliveryFields";
+    }
     comboBoxSettings.ControlStyle.CssClass = "pull-left";
     comboBoxSettings.Properties.DropDownWidth = System.Web.UI.WebControls.Unit.Percentage(100);
     comboBoxSettings.Properties.DropDownStyle = DropDownStyle.DropDownList;
@@ -31,7 +38,7 @@
 <br />
 <br />
 <div class="row">
-    @{
+    @*@{
         if ((bool)ViewData["booAddrDef"])
         {
             if ((bool)ViewData["booAddrEdit"])
@@ -53,7 +60,7 @@
                 <div class="col-md-3">@Html.DevExpress().TextBox(settings => { settings.Name = "txtAddrChange"; settings.Properties.Caption = "txtAddrChange"; }).GetHtml()</div>
             }
         }
-    }
+    }*@
     <div class="col-md-3">@Html.DevExpress().TextBox(settings => { settings.Name = "Address1"; settings.Properties.Caption = "Address1"; }).GetHtml()</div>
     <div class="col-md-3">@Html.DevExpress().TextBox(settings => { settings.Name = "Address2"; settings.Properties.Caption = "Address2"; }).GetHtml()</div>
     <div class="col-md-3">@Html.DevExpress().TextBox(settings => { settings.Name = "Address3"; settings.Properties.Caption = "Address3"; }).GetHtml()</div>

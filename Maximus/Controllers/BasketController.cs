@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using Maximus.Models;
 using Maximus.Filter;
+using System.Configuration;
 
 namespace Maximus.Controllers
 {
@@ -100,7 +101,7 @@ namespace Maximus.Controllers
         #region cart Update
 
         [HttpPost, ValidateInput(false)]
-        public ActionResult CartViewUpdate([ModelBinder(typeof(DevExpressEditorsBinder))] Maximus.Models.SalesOrderHeaderViewModel item)
+        public ActionResult CartViewUpdate( Maximus.Models.SalesOrderHeaderViewModel item)
         {
             var model = ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.EmployeeID == Session["SelectedEmp"].ToString()).ToList();
             if (ModelState.IsValid)
@@ -134,7 +135,7 @@ namespace Maximus.Controllers
 
         #region CartViewDelete
         [HttpPost, ValidateInput(false)]
-        public ActionResult CartViewDelete([ModelBinder(typeof(DevExpressEditorsBinder))] Maximus.Models.SalesOrderHeaderViewModel item)
+        public ActionResult CartViewDelete(Maximus.Models.SalesOrderHeaderViewModel item)
         {
             var model = ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]);
             if (item.EmployeeID != "")
@@ -161,7 +162,7 @@ namespace Maximus.Controllers
         #region CartviewDetailGridViewGridViewPartialUpdate
 
         [HttpPost, ValidateInput(false)]
-        public ActionResult CartviewDetailGridViewGridViewPartialUpdate([ModelBinder(typeof(DevExpressEditorsBinder))] Maximus.Models.SalesOrderLineViewModel item)
+        public ActionResult CartviewDetailGridViewGridViewPartialUpdate(Maximus.Models.SalesOrderLineViewModel item)
         {
             var result = ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.EmployeeID == Session["thisEmp"].ToString()).FirstOrDefault().SalesOrderLine.ToList();
             var model = result.Where(x => x.LineNo == item.LineNo | x.OriginalLineNo == item.LineNo).ToList();
@@ -192,7 +193,7 @@ namespace Maximus.Controllers
 
         #region CartviewDetailGridViewGridViewPartialDelete
         [HttpPost, ValidateInput(false)]
-        public ActionResult CartviewDetailGridViewGridViewPartialDelete([ModelBinder(typeof(DevExpressEditorsBinder))] Maximus.Models.SalesOrderLineViewModel item)
+        public ActionResult CartviewDetailGridViewGridViewPartialDelete(Maximus.Models.SalesOrderLineViewModel item)
         {
             var result = ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.EmployeeID == Session["thisEmp"].ToString()).FirstOrDefault();
             var model = result.SalesOrderLine.Where(x => x.LineNo == item.LineNo | x.OriginalLineNo == item.LineNo).ToList();
@@ -226,7 +227,7 @@ namespace Maximus.Controllers
 
         #region  GridViewPartialAddNew
         [HttpPost, ValidateInput(false)]
-        public ActionResult GridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] Maximus.Models.SalesOrderLineViewModel item)
+        public ActionResult GridViewPartialAddNew(Maximus.Models.SalesOrderLineViewModel item)
         {
             var model = new object[0];
             if (ModelState.IsValid)
@@ -250,7 +251,7 @@ namespace Maximus.Controllers
         #region GridViewPartialUpdate
 
         [HttpPost, ValidateInput(false)]
-        public ActionResult GridViewPartialUpdate([ModelBinder(typeof(DevExpressEditorsBinder))] Maximus.Models.SalesOrderLineViewModel item)
+        public ActionResult GridViewPartialUpdate(Maximus.Models.SalesOrderLineViewModel item)
         {
             var model = new object[0];
             if (ModelState.IsValid)
@@ -294,9 +295,32 @@ namespace Maximus.Controllers
         #region FillAllAddress
         public JsonResult FillAllAddress(int descAddId)
         {
+            var FillAddressModel = new FillAddressModel();
             var result = ((List<BusAddress>)Session["DeliveryAddress"]).Where(x => x.AddressId == descAddId).First();
-
+            var data = Session["CUSTREFDEF"].ToString();
+            var nomCode = (bool)Session["DEFDELREFNOM"] == false ? "" : Session["ONLINEDEFNOM"].ToString();
+            FillAddressModel.BusAdd = result;
+            FillAddressModel.custRef = data;
+            FillAddressModel.nomCode = nomCode;
             return Json(result, JsonRequestBehavior.AllowGet);
+        }
+        #endregion
+
+        #region FillAllAddress
+        public JsonResult FillAllAddresswidCustRef(int descAddId)
+        {
+            var FillAddressModel = new FillAddressModel();
+            var contactType = Convert.ToInt32(ConfigurationManager.AppSettings["ContactType_Id"].ToString()); 
+            var result = ((List<BusAddress>)Session["DeliveryAddress"]).Where(x => x.AddressId == descAddId).First();
+            var contactId =Convert.ToInt32(result.contactId);
+            var data = entity.tblbus_contact.Any(x => x.ContactID == contactId && x.ContactType_ID == contactType)? entity.tblbus_contact.Where(x => x.ContactID == contactId && x.ContactType_ID == contactType).First().Value:"";
+           
+            FillAddressModel.BusAdd = result;
+            FillAddressModel.custRef = data;
+            FillAddressModel.nomCode = data;
+            //Session["SelectedEmp"]
+
+            return Json(FillAddressModel, JsonRequestBehavior.AllowGet);
         }
         #endregion
 
@@ -410,10 +434,10 @@ namespace Maximus.Controllers
             double currentBudget;
             if(IsManpack==false)
             {
-                //if(dp.SetSalesHeader()==false)
-                //{
-                     
-                //}
+                if (dp.SetSalesHeader() == false)
+                {
+                    dp.displayOrderListGrid();
+                }
             }
             return View();
         }

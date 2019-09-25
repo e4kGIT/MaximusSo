@@ -607,7 +607,7 @@ namespace Maximus.Controllers
         }
 
         [HttpPost, ValidateInput(false)]
-        public ActionResult CardViewPartialxcccccAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] Maximus.Models.my_aspnet_users item)
+        public ActionResult CardViewPartialxcccccAddNew(Maximus.Models.my_aspnet_users item)
         {
             var model = new object[0];
             if (ModelState.IsValid)
@@ -626,7 +626,7 @@ namespace Maximus.Controllers
             return PartialView("~/Views/Shared/_CardViewPartialxccccc.cshtml", model);
         }
         [HttpPost, ValidateInput(false)]
-        public ActionResult CardViewPartialxcccccUpdate([ModelBinder(typeof(DevExpressEditorsBinder))] Maximus.Models.my_aspnet_users item)
+        public ActionResult CardViewPartialxcccccUpdate(Maximus.Models.my_aspnet_users item)
         {
             var model = new object[0];
             if (ModelState.IsValid)

@@ -43,6 +43,11 @@ namespace Maximus.Models
         public Nullable<int> SettlementDays { get; set; }
         public Nullable<byte> OrderConfirm { get; set; }
         public string CommentsExternal { get; set; }
+        public string NomCode { get; set; }
+        public string NomCode1 { get; set; }
+        public string NomCode2 { get; set; }
+        public string NomCode3 { get; set; }
+        public string NomCode4 { get; set; }
         public Nullable<sbyte> Cancelled { get; set; }
         public Nullable<sbyte> ProForma { get; set; }
         public Nullable<sbyte> Completed { get; set; }
@@ -56,6 +61,8 @@ namespace Maximus.Models
         public string PinNo { get; set; }
         public string UCodeId { get; set; }
         public string ContractNo { get; set; }
+        public string VatFlag { get; set; }
+       public double VATPercent { get; set; }
         public string Currency_Exchange_Code { get; set; }
         public Nullable<System.TimeSpan> TIMEOFENTRY { get; set; }
         public Nullable<long> RepID { get; set; }
@@ -80,6 +87,7 @@ namespace Maximus.Models
         public string EmailID { get; set; }
         public string ContactName { get; set; }
         public int VatCode { get; set; }
+        public int KAMid { get; set; }
         public List<SalesOrderLineViewModel> SalesOrderLine { get; set; }
     }
 }

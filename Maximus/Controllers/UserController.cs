@@ -38,12 +38,15 @@ namespace Maximus.Controllers
                     {
                         if (data.Any(x => x.UserName.ToLower() == logDetails.UserName.ToLower() && x.Password == logDetails.Password && x.Active.ToLower() == "y"))
                         {
+                            string custrefdef = "";
+                            string onlineDefNom = "";
                             string booNom = "";
                             string booDefDelAddr = "";
                             string booDefDelRef = "";
                             string booDivBudget = "";
                             string booDefNomCode = "";
                             string booBudgetEmail = "";
+                            string booCusRefMan = "";
                             string booPointsReq = "";
                             string booDespConfirm = "";
                             string booRea = "";
@@ -80,38 +83,43 @@ namespace Maximus.Controllers
                             Session["DELADDR_SAVE"] = dp.BusinessParam("DELADDR_SAVE", data.First().BusinessID.ToUpper().Trim());
                             Session["ONL_REORDER_REQ"] = dp.BusinessParam("ONL_REORDER_REQ", data.First().BusinessID.ToUpper().Trim());
                             booNom = dp.CompanyParam("ONLNEREQNOM1", cmpId);
-                            Session["ONLNEREQNOM1"] = booNom == "" ? false : booNom == "True" ? true : false;
+                            Session["ONLNEREQNOM1"] = booNom == "" ? false : booNom.ToLower() == "true" ? true : false;
                             booNom = dp.CompanyParam("ONLNEREQNOM2", cmpId);
-                            Session["ONLNEREQNOM2"] = booNom == "" ? false : booNom == "True" ? true : false;
+                            Session["ONLNEREQNOM2"] = booNom == "" ? false : booNom.ToLower() == "true" ? true : false;
                             booNom = dp.CompanyParam("ONLNEREQNOM3", cmpId);
-                            Session["ONLNEREQNOM3"] = booNom == "" ? false : booNom == "True" ? true : false;
+                            Session["ONLNEREQNOM3"] = booNom == "" ? false : booNom.ToLower() == "true" ? true : false;
                             booNom = dp.CompanyParam("ONLNEREQNOM4", cmpId);
-                            Session["ONLNEREQNOM4"] = booNom == "" ? false : booNom == "True" ? true : false;
+                            Session["ONLNEREQNOM4"] = booNom == "" ? false : booNom.ToLower() == "true" ? true : false;
                             booNom = dp.CompanyParam("ONLNEREQNOM5", cmpId);
-                            Session["ONLNEREQNOM5"] = booNom == "" ? false : booNom == "True" ? true : false;
+                            Session["ONLNEREQNOM5"] = booNom == "" ? false : booNom.ToLower() == "true" ? true : false;
                             booDefDelAddr = dp.BusinessParam("DEFINVADDR", data.First().BusinessID.Trim().ToUpper());
-                            Session["DEFINVADDR"] = booDefDelAddr == "" ? false : booDefDelAddr == "True" ? true : false;
+                            Session["DEFINVADDR"] = booDefDelAddr == "" ? false : booDefDelAddr.ToLower() == "true" ? true : false;
                             booDefDelRef = dp.BusinessParam("DELREFREQ", data.First().BusinessID.Trim().ToUpper());
-                            Session["DELREFREQ"] = booDefDelRef == "" ? false : booDefDelAddr == "True" ? true : false;
+                            Session["DELREFREQ"] = booDefDelRef == "" ? false : booDefDelRef.ToLower() == "true" ? true : false;
+                            onlineDefNom = dp.BusinessParam("ONLINEDEFNOM", data.First().BusinessID.Trim().ToUpper());
+                            Session["CUSTREFDEF"] =dp.BusinessParam("CUSTREFDEF", data.First().BusinessID.Trim().ToUpper());
+                            Session["ONLINEDEFNOM"] = onlineDefNom;
                             booDefNomCode = dp.BusinessParam("DEFDELREFNOM", data.First().BusinessID.Trim().ToUpper());
-                            Session["DEFDELREFNOM"] = booDefNomCode == "" ? false : booDefDelAddr == "True" ? true : false;
+                            Session["DEFDELREFNOM"] = booDefNomCode == "" ? false : booDefDelAddr.ToLower() == "true" ? true : false;
                             booDivBudget = dp.BusinessParam("REQDIVBUDGET", data.First().BusinessID.Trim().ToUpper());
-                            Session["REQDIVBUDGET"] = booDivBudget == "" ? false : booDefDelAddr == "True" ? true : false;
+                            Session["REQDIVBUDGET"] = booDivBudget == "" ? false : booDefDelAddr.ToLower() == "true" ? true : false;
                             strDefNomCode = dp.BusinessParam("ONLINEDEFNOM", data.First().BusinessID.Trim().ToUpper());
-                            Session["ONLINEDEFNOM"] = strDefNomCode == "" ? false : booDefDelAddr == "True" ? true : false;
+                            Session["ONLINEDEFNOM"] = strDefNomCode == "" ? false : booDefDelAddr.ToLower() == "true" ? true : false;
                             booBudgetEmail = dp.BusinessParam("REQBUDGETEMAIL", data.First().BusinessID.Trim().ToUpper());
-                            Session["REQBUDGETEMAIL"] = booBudgetEmail == "" ? false : booDefDelAddr == "True" ? true : false;
+                            Session["REQBUDGETEMAIL"] = booBudgetEmail == "" ? false : booDefDelAddr.ToLower() == "true" ? true : false;
                             booPointsReq = dp.BusinessParam("POINTSREQ", data.First().BusinessID.Trim().ToUpper());
-                            Session["POINTSREQD"] = booPointsReq == "" ? false : booDefDelAddr == "True" ? true : false;
+                            Session["POINTSREQD"] = booPointsReq == "" ? false : booDefDelAddr.ToLower() == "true" ? true : false;
+                            booCusRefMan = dp.BusinessParam("CusRefMan", data.First().BusinessID.Trim().ToUpper());
+                            Session["CusRefMan"] = booCusRefMan == "" ? false : booCusRefMan.ToLower() == "true" ? true : false;
                             booRea = dp.BusinessParam("SOPREAREQ", data.First().BusinessID.Trim().ToUpper());
                             if (booRea != "")
                             {
-                                Session["SOPREAREQ"] = booRea == "" ? false : booDefDelAddr == "True" ? true : false;
+                                Session["SOPREAREQ"] = booRea == "" ? false : booDefDelAddr.ToLower() == "true" ? true : false;
                             }
                             else
                             {
                                 booCmpRea = dp.CompanyParam("SOPREAREQ", cmpId);
-                                Session["SOPREAREQ"] = booCmpRea == "" ? false : booDefDelAddr == "True" ? true : false;
+                                Session["SOPREAREQ"] = booCmpRea == "" ? false : booDefDelAddr.ToLower() == "true" ? true : false;
                             }
                             //booStkLevel = dp.BusinessParam("REQSTKLEVEL", Session["BuisnessId"].ToString());
                             //Session["REQSTKLEVEL"] = booStkLevel == "" ? false : Convert.ToBoolean(booStkLevel);
@@ -150,6 +158,8 @@ namespace Maximus.Controllers
                             Session["ONLNETXTNOM4"] = dp.BusinessParam("ONLNETXTNOM4", busId);
                             Session["ONLNETXTNOM5"] = dp.BusinessParam("ONLNETXTNOM5", busId);
                             Session["IsManPack"] = true;
+                            SalesOrderHeaderViewModel saleHeads = new SalesOrderHeaderViewModel();
+                            Session["objCurrentOrder"] = saleHeads;
                             //'Sales order
                             //Session.Add("objSalesOrder", CType(objSalesOrder, SalesOrderCollection))
                             //Session.Add("objCurrentOrder", CType(objCurrentOrder, SalesOrderHeader))

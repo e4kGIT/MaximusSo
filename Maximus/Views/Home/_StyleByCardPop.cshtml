@@ -235,7 +235,7 @@
                 var divImg = "DivImgDem" + style;
                 var styleimg = DataBinder.Eval(x.DataItem, "StyleImage");
                 var content = "<div class='row'>";
-                content = string.Format(content + "<div class='col-md-3 col-xs-3 col-sm-3 col-lg-3 pull-left'><div Id="+ divImg + "><img src=\"{0}\" height='230' width='200' onclick='Getimage(\"{0}\")' /></div></div>", styleimg);
+                content = string.Format(content + "<div class='col-md-3 col-xs-3 col-sm-3 col-lg-3 pull-left'><div Id=" + divImg + "><img src=\"{0}\" height='230' width='200' onclick='Getimage(\"{0}\")' /></div></div>", styleimg);
                 ViewContext.Writer.Write(content);
                 ViewContext.Writer.Write("<div class='col-md-7 col-xs-7 col-sm-7 col-lg-7'><br/><div class='row'><div class='col-md-12 col-xs-12 col-sm-12 col-lg-12'>");
                 if (template.Count > 0)
@@ -669,9 +669,9 @@
 
 
 
-                        if(style.Contains(','))
+                        if (style.Contains(','))
                         {
-                            string  style1 =   style.Split(',')[0];
+                            string style1 = style.Split(',')[0];
                             List<string> lstC = (List<string>)entity.tblfsk_style_colour_size.Where(s => s.StyleID == style1).OrderBy(s => s.ColourID).Select(s => s.ColourID).Distinct().ToList();
                             if (lstC != null)
                             {
@@ -941,7 +941,7 @@
                     var content = string.Format("<div class='row'><div class='col-md-4 col-xs-4 col-sm-4 col-lg-4'><b>Quantity</b><hr style='margin: 0;'/><div style='margin: 0;' class=\"center pull-left\"><p></p><div class=\"input-group\"><span class=\"input-group-btn\"><button type='button' onclick=\"minus('{0}')\" class='btn backg' field='{0}'><span class=\"glyphicon glyphicon-minus\"></span></button></span><input style='width:290px;text-align:center;' type='text' name='{0}' style=\"text-align:center\" class=\"form-control input-number\" value=\"1\" min=\"1\" max=\"10000000\"><span class=\"input-group-btn\"><button type='button' onclick=\"plus('{0}')\" class='btn backg' field='{0}'><span class=\"glyphicon glyphicon-plus\"></span></button></span></div><p></p></div>", "spinDemandEdit_" + style);
                     content = content + "</div>";
                     ViewContext.Writer.Write(content);
-                    if (reason)
+                    if (Session["OVERRIDE_ENT_WITH_REASON"].ToString().ToLower() == "show" && reason)
                     {
                         ViewContext.Writer.Write("<div class='col-md-4 col-xs-4 col-sm-4 col-lg-4'><b>Reason</b><hr style='margin:0px'/><br>");
                         if (template.Count > 0)
@@ -977,6 +977,8 @@
                             //ViewContext.Writer.Write("<div class='col-md-2 col-xs-2 col-sm-2 col-lg-2'>");
                             Html.DevExpress().ComboBox(edit =>
                             {
+                                edit.Width = System.Web.UI.WebControls.Unit.Pixel(350);
+                                edit.ControlStyle.CssClass = "styler";
                                 edit.Name = "CmbDemandReason_" + style;
                                 string BusinessId = Session["BuisnessId"].ToString();
                                 var reasons = entity.tblsop_reasoncodes.Where(xs => xs.BusinessId == BusinessId).Select(c => new { c.Description }).ToList();
@@ -1009,7 +1011,7 @@
                         Maximus.Models.PreviousQty prevHistory = (Maximus.Models.PreviousQty)(DataBinder.Eval(cont.DataItem, "HasPreviousSize"));
                         Html.DevExpress().Button(btn =>
                         {
-                            btn.Name = "CartbtnTemplate_" + style + "_" + prevHistory.OrdQty+"_"+orgstyl;
+                            btn.Name = "CartbtnTemplate_" + style + "_" + prevHistory.OrdQty + "_" + orgstyl;
                             btn.ControlStyle.CssClass = "btn btn-primary";
                             btn.Text = "Add to cart &nbsp;&nbsp;<span class='glyphicon glyphicon-shopping-cart'></span>";
                             btn.EncodeHtml = false;
@@ -1098,4 +1100,4 @@
     </div>*@
 
 
- 
+

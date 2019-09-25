@@ -19,6 +19,12 @@ namespace Maximus.Models
         public string contactId { get; set; }
         public string AddressDescription { get; set; }
     }
+    public class FillAddressModel
+    {
+        public BusAddress BusAdd { get; set; }
+        public string custRef { get; set; }
+        public string nomCode { get; set; }
+    }
     public class EmployeeViewModel
     {
         public string role { get; set; }
