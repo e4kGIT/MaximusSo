@@ -238,7 +238,8 @@
             {
                 col.SetDataItemTemplateContent(x =>
                 {
-                    string EmployeeName = (DataBinder.Eval(x.DataItem, "EmpFirstName")).ToString() + " " + (DataBinder.Eval(x.DataItem, "EmpLastName")).ToString();
+                    string EmployeeName = (DataBinder.Eval(x.DataItem, "EmpFirstName")).ToString() ;
+
                     string EmployeeId = (DataBinder.Eval(x.DataItem, "EmployeeId")).ToString();
                     string Content = string.Format("<button style='background-color:#009885;' onclick=\"CreateTemplateOrder('{0}','{1}','{2}')\" class=\"btn btn-primary\">Create Order</button>", EmployeeId, "CmbUcode_" + EmployeeId, EmployeeName);
                     ViewContext.Writer.Write(Content);

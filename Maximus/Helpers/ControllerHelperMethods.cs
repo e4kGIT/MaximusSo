@@ -41,7 +41,7 @@ namespace Maximus.Helpers
                     EmployeeName = empName,
                     Assembly = true,
                     Ischargable = true,
-                    StyleImage = entity.tblfsk_style.Where(x => x.StyleID.Contains(res.StyleID)).FirstOrDefault().StyleImage
+                    StyleImage = entity.tblfsk_style.Any(x => x.StyleID.Contains(res.StyleID)) ? entity.tblfsk_style.Where(x => x.StyleID.Contains(res.StyleID)).FirstOrDefault().StyleImage : "~/StyleImages/notfound.png"
                 });
                 curLine = curLine + 1;
             }
@@ -52,7 +52,8 @@ namespace Maximus.Helpers
         }
         public List<SalesOrderLineViewModel> GetOptionalAssembly(List<string> assemList = null, string style = "", long lineNo = 0, long qty = 0, string empId = "", string empName = "", int lastLino = 0, string busId = "")
         {
-            var optionalAsm = new List<SalesOrderLineViewModel>();
+            System.Web.Mvc.UrlHelper helper = new System.Web.Mvc.UrlHelper();
+               var optionalAsm = new List<SalesOrderLineViewModel>();
             long curLine = lineNo;
             try
             {
@@ -63,9 +64,9 @@ namespace Maximus.Helpers
                         ColourID = entity.tblfsk_style_colour.Any(x => x.StyleID == res) ? entity.tblfsk_style_colour.Where(x => x.StyleID == res).FirstOrDefault().ColourID : "",
                         OriginalLineNo = lineNo,
                         LineNo = curLine + 1,
-                        Description = entity.getcustassemblies.Where(x => x.ParentStyleID == style && x.StyleID == res).FirstOrDefault().Instruction == "" |
-                         entity.getcustassemblies.Where(x => x.ParentStyleID == style && x.StyleID == res).FirstOrDefault().Instruction == null ? "" : entity.getcustassemblies.Where(x => x.ParentStyleID == style && x.StyleID == res).FirstOrDefault().Instruction,
-                        OrdQty = dp.Getqty(busId, style, res, qty),
+                        Description = entity.getcustassemblies.Any(x => x.ParentStyleID == style && x.StyleID == res)? entity.getcustassemblies.Where(x => x.ParentStyleID == style && x.StyleID == res).FirstOrDefault().Instruction == "" |
+                         entity.getcustassemblies.Where(x => x.ParentStyleID == style && x.StyleID == res).FirstOrDefault().Instruction == null ? "" : entity.getcustassemblies.Where(x => x.ParentStyleID == style && x.StyleID == res).FirstOrDefault().Instruction:"",
+                        OrdQty = dp.Getqty(busId, style, res, qty) * qty,
                         Price = 0,
                         SizeID = entity.tblfsk_style_sizes.Any(x => x.StyleID == res) ? entity.tblfsk_style_sizes.Where(x => x.StyleID == res).FirstOrDefault().SizeID : "",
                         StyleID = res,
@@ -73,8 +74,8 @@ namespace Maximus.Helpers
                         EmployeeName = empName,
                         Assembly = true,
                         Ischargable = false,
-                        StyleImage = entity.tblfsk_style.Where(x => x.StyleID.Contains(res)).FirstOrDefault().StyleImage
-                    });
+                        StyleImage = entity.tblfsk_style.Any(x => x.StyleID.Contains(res)) ? entity.tblfsk_style.Where(x => x.StyleID.Contains(res)).FirstOrDefault().StyleImage :   "~/StyleImages/notfound.png"
+                });
                     curLine = curLine + 1;
                 }
 

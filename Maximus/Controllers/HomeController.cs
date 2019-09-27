@@ -28,7 +28,7 @@ namespace Maximus.Controllers
         {
             if (((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Count() > 0)
             {
-                Session["qty"] = ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Any(x => x.EmployeeID == Session["SelectedEmp"].ToString()) ? ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.EmployeeID == Session["SelectedEmp"].ToString()).First().SalesOrderLine != null ? ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.EmployeeID == Session["SelectedEmp"].ToString()).First().SalesOrderLine.Sum(x => x.OrdQty) : 0 : 0;
+                Session["qty"] = ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Any(x => x.EmployeeID == Session["SelectedEmp"].ToString()) ? ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.EmployeeID == Session["SelectedEmp"].ToString()).First().SalesOrderLine != null ? ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.EmployeeID == Session["SelectedEmp"].ToString()).First().SalesOrderLine.Where(x=>x.OriginalLineNo==null).Sum(x => x.OrdQty) : 0 : 0;
             }
             else
             {
@@ -96,7 +96,7 @@ namespace Maximus.Controllers
                 List<string> result = (List<string>)Session["SelectedTemplate"];
                 foreach (var item in result)
                 {
-                    model.AddRange(data.GetStyleViewModel(item));
+                    model.AddRange(data.GetStyleViewModel(item,businessId));
                 }
                 model = model.GroupBy(x => x.StyleID).Select(y => y.First()).ToList();
                 foreach (var data1 in model)
@@ -890,8 +890,9 @@ namespace Maximus.Controllers
             long lineNo = 0;
             if (salesOrderHeader.Count != 0)
             {
-                salesOrderLines = salesOrderHeader.Where(x => x.EmployeeID == Session["SelectedEmp"].ToString()).FirstOrDefault().SalesOrderLine != null ?
-                  salesOrderHeader.Where(x => x.EmployeeID == Session["SelectedEmp"].ToString()).FirstOrDefault().SalesOrderLine.ToList() : new List<SalesOrderLineViewModel>();
+                var sss = Session["SelectedEmp"].ToString();
+                salesOrderLines =salesOrderHeader.Any(x => x.EmployeeID == Session["SelectedEmp"].ToString())? salesOrderHeader.Where(x => x.EmployeeID == Session["SelectedEmp"].ToString()).FirstOrDefault().SalesOrderLine != null ?
+                  salesOrderHeader.Where(x => x.EmployeeID == Session["SelectedEmp"].ToString()).FirstOrDefault().SalesOrderLine.ToList() : new List<SalesOrderLineViewModel>() : new List<SalesOrderLineViewModel>();
             }
             else
             {
@@ -929,7 +930,7 @@ namespace Maximus.Controllers
             {
                 try
                 {
-                    salesOrderLines.Add(new SalesOrderLineViewModel { ColourID = color, LineNo = lineNo, Description = description, OrdQty = Convert.ToInt64(qty), Price = Convert.ToDouble(price), SizeID = size, StyleID = style, EmployeeId = Session["SelectedEmp"].ToString(), EmployeeName = Session["EmpName"].ToString(), StyleImage = entity.ucodeby_freetextview.Where(x => x.StyleID.Contains(style)).FirstOrDefault().StyleImage, orgStyleId = orgStyl });
+                    salesOrderLines.Add(new SalesOrderLineViewModel { ColourID = color, LineNo = lineNo, Description = description, OrdQty = Convert.ToInt64(qty), Price = Convert.ToDouble(price), SizeID = size, StyleID = style, EmployeeId = Session["SelectedEmp"].ToString(), EmployeeName = Session["EmpName"].ToString(), StyleImage = entity.ucodeby_freetextview.Any(x => x.StyleID.Contains(style))? entity.ucodeby_freetextview.Where(x => x.StyleID.Contains(style)).FirstOrDefault().StyleImage : Url.Content("~/StyleImages/notfound.png"), orgStyleId = orgStyl });
                 }
                 catch (Exception e)
                 {
@@ -1151,7 +1152,7 @@ namespace Maximus.Controllers
                 List<string> result = (List<string>)Session["SelectedTemplate"];
                 foreach (var item in result)
                 {
-                    model.AddRange(data.GetStyleViewModel(item));
+                    model.AddRange(data.GetStyleViewModel(item,businessId));
                 }
                 model = model.GroupBy(x => x.StyleID).Select(y => y.First()).ToList();
                 foreach (var data1 in model)

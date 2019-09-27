@@ -1088,6 +1088,140 @@ namespace Maximus.Models
         }
         #endregion
 
+        #region GetEmployeeTemplate 
+        public List<EmployeeViewModel> GetEmployeeTemplate(string busId, string userId = "", string OrderPermission = "", string txtUcode = "", string ddlAddress = "", string txtUcodeDesc = "", string txtCDepartment = "", string txtRole = "", string txtEmpNo = "", string txtName = "", string txtStDate = "")
+        {
+            List<EmployeeViewModel> result = new List<EmployeeViewModel>();
+            string strCompanyID = ConfigurationManager.AppSettings["CompanyId"].ToString();
+            string strsql = "";
+            bool booBudget = false;
+            string StDate = "";
+            string EdDate = "";
+            string CustBudgetType = "";
+            string CustBudgetPeriodDays = "";
+            string allUsers = "";
+            bool booPoints = false;
+            //CustBudgetType = BusinessParam("BudgetType", busId);
+            //CustBudgetPeriodDays = BusinessParam("BudgetPeriodDays", busId);
+            booBudget = Convert.ToBoolean(BusinessParam("BUDGETREQ", busId));
+            booPoints = Convert.ToBoolean(BusinessParam("POINTSREQ", busId));
+            strsql = "SELECT e.employeeid, concat(concat(e.forename,' '),e.surname) as employeename, e.EmployeeClosed AS `STATUS` ";
+            if (booBudget)
+            {
+                strsql = strsql + ",t1.Budget as EntBudget,b.CurrBudget";
+            }
+            if (booPoints)
+            {
+                strsql = strsql + ",t2.TotalPoints as EntPoints,p.CurrPoints ";
+            }
+            if (Convert.ToBoolean(BusinessParam("REQ_REASONPAGE", busId.Trim().ToUpper())))
+            {
+                strsql = strsql + ",if(s.CurrStock IS NULL,0,s.CurrStock) as empStock ";
+            }
+            strsql = strsql + ",e.departmentid FROM tblaccemp_employee e ";
+            if (Convert.ToBoolean(BusinessParam("REQ_REASONPAGE", busId.Trim().ToUpper())))
+            {
+                strsql = strsql + "LEFT JOIN (SELECT employeeid,SUM(if(SOQty IS NULL,0,SOQty))+SUM(if(PickQty IS NULL,0,PickQty))+SUM(if(InvQty IS NULL,0,InvQty)) AS CurrStock FROM tblaccemp_stockcard " + "WHERE CompanyID='" + strCompanyID + "' AND BusinessID='" + busId + "' GROUP BY CompanyID, BusinessID, EmployeeID) s ON e.employeeid=s.employeeid ";
+            }
+            if (booBudget)
+            {
+                strsql = strsql + "LEFT JOIN (SELECT employeeid,SUM(if(SOValue IS NULL,0,SOValue))+SUM(if(PickValue IS NULL,0,PickValue))+SUM(if(InvValue IS NULL,0,InvValue)) AS CurrBudget FROM tblaccemp_budgetcard " + "WHERE CompanyID='" + strCompanyID + "' AND BusinessID='" + busId + "' GROUP BY CompanyID, BusinessID, EmployeeID) b ON e.employeeid=b.employeeid " + "LEFT JOIN tblaccemp_budget t1 ON (t1.BusinessID = e.BusinessID) AND (t1.CompanyID = e.CompanyID) AND (t1.RoleID = e.RoleID) ";
+            }
+            if (booPoints)
+            {
+                strsql = strsql + "LEFT JOIN (SELECT employeeid,SUM(if(SOPoints IS NULL,0,SOPoints))+SUM(if(PickPoints IS NULL,0,PickPoints))+SUM(if(InvPoints IS NULL,0,InvPoints)) AS CurrPoints FROM tblaccemp_pointscard " + "WHERE CompanyID='" + strCompanyID + "' AND BusinessID='" + busId + "' AND Year=0 GROUP BY CompanyID, BusinessID, EmployeeID) p ON e.employeeid=p.employeeid " + "LEFT JOIN tblaccemp_points t2 ON (t2.BusinessID = e.BusinessID) AND (t2.CompanyID = e.CompanyID) AND (t2.RoleID = e.RoleID) ";
+
+            }
+            if (txtUcode != "")
+            {
+                strsql += " JOIN (SELECT DISTINCT employeeid FROM tblaccemp_ucodesemployees WHERE companyid='" + strCompanyID + "' AND businessid='" + busId + "' AND ucodeid='" + txtUcodeDesc.Trim() + "') u ON e.employeeid=u.employeeid";
+            }
+            if (Convert.ToBoolean(BusinessParam("LimitUsrEmp", busId)))
+            {
+                allUsers = getPermissionUsers(OrderPermission, userId, busId);
+                strsql += " JOIN (SELECT DISTINCT employeeid FROM tblonline_userid_employee WHERE CompanyID='" + strCompanyID + "' AND onlineuserid in (" + allUsers + ") AND onlineuserid not in (" + getDenyPermissionUsers(OrderPermission, userId, busId) + ") AND businessid='" + busId + "') onlemp ON e.employeeid=onlemp.employeeid ";
+            }
+            if (ddlAddress != "")
+            {
+                strsql += " JOIN tblonline_emp_address ea ON e.businessid=ea.businessid AND e.employeeid=ea.employeeid AND ea.addressid=" + ddlAddress + "";
+            }
+            if (txtUcodeDesc.Trim() != "")
+            {
+                strsql += " JOIN (SELECT DISTINCT employeeid FROM tblaccemp_ucodesemployees t1 left join tblaccemp_ucodes_desc t2 on (t2.UcodeID=t1.UcodeID) WHERE t1.companyid='" + strCompanyID + "' AND t1.businessid='" + busId + "' and if(isnull(t2.Description),t1.UCodeID,t2.Description) like '% " + txtUcodeDesc.Trim() + "%') u1  ON e.employeeid=u1.employeeid";
+            }
+            strsql += " WHERE e.companyid='" + strCompanyID + "' AND  e.businessid='" + busId + "'";
+
+            if (txtCDepartment != "")
+            {
+                strsql += " AND e.departmentid='" + txtCDepartment + "'";
+            }
+            if (txtRole != "")
+            {
+                strsql += " AND e.roleid='" + txtRole + "'";
+            }
+            if (txtEmpNo != "")
+            {
+                strsql += " AND e.employeeid LIKE '" + txtEmpNo + "%'";
+            }
+            if (txtName != "")
+            {
+                strsql += " AND concat(forename,' ', surname) LIKE '%" + txtName + "%'";
+            }
+            if (txtStDate != "")
+            {
+                var mDate = txtStDate.Split('/');
+                StDate = mDate[2] + "-" + mDate[1] + "-" + mDate[0];
+                strsql += " AND e.StartDate>='" + StDate + "'";
+            }
+            strsql += " AND e.EmployeeClosed = '0'";
+            //if (Convert.ToBoolean(help.BusinessParam("REQ_REASONPAGE", busId.Trim().ToUpper())) & Convert.ToInt32(Session["OrderReason"]) == 3)
+            if (Convert.ToBoolean(BusinessParam("REQ_REASONPAGE", busId.Trim().ToUpper())))
+            {
+                strsql += " AND if(s.CurrStock IS NULL,0,s.CurrStock)=0";
+                strsql += " ORDER BY e.StartDate DESC, e.employeeid ASC";
+            }
+            else
+            {
+                strsql += " ORDER BY e.employeeid";
+            }
+            try
+            {
+                //strsql = string.Format(strsql, strCompanyID, busId, txtUcode, txtCDepartment, txtRole, txtEmpNo, txtName, userId, Convert.ToInt32(ddlAddress), txtUcodeDesc.Trim());
+            }
+            catch (Exception e)
+            {
+
+            }
+            //strsql = string.Format(strsql, strCompanyID, busId, txtUcode, txtCDepartment, txtRole, txtEmpNo, txtName, userId, Convert.ToInt32(ddlAddress), txtUcodeDesc.Trim());
+            string chkit = ", 0 as chekit, 0 as SelectSeq, 0 as Abort ";
+            strsql = strsql.Insert(strsql.IndexOf("FROM"), chkit);
+            strsql = strsql.Insert(strsql.IndexOf("FROM"), chkit);
+            DataTable dt = new DataTable();
+            dt = GetDataTable(strsql);
+            try
+            {
+                if (dt.Rows.Count > 0)
+                {
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        var empId = dr.ItemArray[0].ToString();
+                        result.Add(new EmployeeViewModel { EmployeeId = dr.ItemArray[0].ToString(), EmpFirstName = dr.ItemArray[1].ToString(), Department = dr.ItemArray[3].ToString(), EmpIsActive = dr.ItemArray[3].ToString() == "0" ? true : false });
+                    }
+                }
+                else
+                {
+
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+            return result;
+        }
+
+        #endregion
+
         #region GetEmployee
         public List<EmployeeViewModel> GetEmployee(string busId, string userId = "", string OrderPermission = "", string txtUcode = "", string ddlAddress = "", string txtUcodeDesc = "", string txtCDepartment = "", string txtRole = "", string txtEmpNo = "", string txtName = "", string txtStDate = "")
         {
@@ -1566,10 +1700,10 @@ namespace Maximus.Models
 
         #region getstyleviewmodel
 
-        public List<styleViewmodel> GetStyleViewModel(string Template)
+        public List<styleViewmodel> GetStyleViewModel(string Template,string busId)
         {
             List<styleViewmodel> svm = new List<styleViewmodel>();
-            foreach (var item in enty.tblsop_customerorder_template.Where(x => x.Template == Template).Select(x => new { x.Style }).Distinct().ToList())
+            foreach (var item in enty.tblsop_customerorder_template.Where(x => x.Template == Template && x.BusinessID.ToLower().Trim()==busId.ToLower().Trim()).Select(x => new { x.Style }).Distinct().ToList())
             {
                 svm.Add(new styleViewmodel
                 {
@@ -1816,11 +1950,19 @@ namespace Maximus.Models
         public int Getqty(string BusinessId = "", string ParentStyle = "", string StyleId = "", long qty = 0)
         {
             int quanty = 1;
+            int assmId = 0;
             try
             {
                 var S = Convert.ToSByte(true);
-                var assemblyId = enty.tblasm_assemblyheader.Where(x => x.StyleID == ParentStyle && x.CustID == BusinessId && x.Live == 1 && x.Enabled == 1).FirstOrDefault().AssemblyID;
-                int qtity = enty.tblasm_assemblydetail.Any(x => x.StyleID == StyleId && x.AssemblyID == assemblyId) ? enty.tblasm_assemblydetail.Where(x => x.StyleID == StyleId && x.AssemblyID == assemblyId).FirstOrDefault().Qty.Value : 0;
+                if (enty.tblasm_assemblyheader.Any(x => x.StyleID == ParentStyle && x.CustID == BusinessId && x.Live == 1 && x.Enabled == 1))
+                {
+                    assmId= enty.tblasm_assemblyheader.Where(x => x.StyleID == ParentStyle && x.CustID == BusinessId && x.Live == 1 && x.Enabled == 1).FirstOrDefault().AssemblyID;
+                }
+                else if(enty.tblasm_assemblyheader.Any(x => x.StyleID == ParentStyle && x.CustID.ToLower() == "all" && x.Live == 1 && x.Enabled == 1))
+                {
+                    assmId = enty.tblasm_assemblyheader.Where(x => x.StyleID == ParentStyle && x.CustID.ToLower() == "all" && x.Live == 1 && x.Enabled == 1).FirstOrDefault().AssemblyID;
+                }
+                int qtity = enty.tblasm_assemblydetail.Any(x => x.StyleID == StyleId && x.AssemblyID == assmId) ? enty.tblasm_assemblydetail.Where(x => x.StyleID == StyleId && x.AssemblyID == assmId).FirstOrDefault().Qty.Value : 0;
                 quanty = qtity;
                 return quanty;
             }

@@ -579,7 +579,7 @@
                                             {
                                                 if (Convert.ToInt16(dr.ObsoleteCode.ToString()) == 0)
                                                 {
-                                                    if (dr.ColorId.ToString() == ucodeColor)
+                                                    if (dr.ColorId.ToString().ToUpper().Trim() == ucodeColor.ToUpper().Trim())
                                                     {
                                                         c.Properties.Items.Add(dr.ColorId.ToString());
                                                     }
@@ -610,7 +610,7 @@
                                             {
                                                 if (Convert.ToInt16(dr.ObsoleteCode.ToString()) == 0)
                                                 {
-                                                    if (dr.ColorId.ToString() == ucodeColor)
+                                                    if (dr.ColorId.ToString().ToUpper().Trim() == ucodeColor.ToUpper().Trim())
                                                     {
                                                         c.Properties.Items.Add(dr.ColorId.ToString());
                                                     }
@@ -648,7 +648,7 @@
                                     }
                                     if (Convert.ToInt16(dr.ObsoleteCode.ToString()) == 0 & lstC.Where(dts => dts.ObsoleteCode == 0 & dts.ColorId.ToLower() == ucodeColor.ToLower()).ToList().Count > 1)
                                     {
-                                        if (ucodeColor == dr.ColorId.ToString())
+                                        if (ucodeColor.ToUpper().Trim() == dr.ColorId.ToString().ToUpper().Trim())
                                         {
                                             var color = dr.ColorId.ToString();
                                             var hexcode = entity.tblfsk_colour.Any(da => da.Description.Contains(color)) ? entity.tblfsk_colour.Where(da => da.Description.Contains(color)).First().Colour_hexcode : "";
@@ -666,7 +666,7 @@
                                     }
                                     else
                                     {
-                                        if (ucodeColor == dr.ColorId.ToString())
+                                        if (ucodeColor.ToUpper().Trim() == dr.ColorId.ToString().ToUpper().Trim())
                                         {
                                             var color = dr.ColorId.ToString();
                                             var hexcode = entity.tblfsk_colour.Any(da => da.Description.Contains(color)) ? entity.tblfsk_colour.Where(da => da.Description.Contains(color)).First().Colour_hexcode : "";
@@ -696,11 +696,11 @@
                                 foreach (var dr in lstC.Where(dts => dts.ObsoleteCode == 0).ToList())
                                 {
 
-                                    if (lstC.Where(dts => dts.ObsoleteCode == 0 & dts.ColorId.ToLower() == ucodeColor.ToLower()).ToList().Count > 1)
+                                    if (lstC.Where(dts => dts.ObsoleteCode == 0 & dts.ColorId.ToLower().ToUpper().Trim() == ucodeColor.ToLower().ToUpper().Trim()).ToList().Count > 1)
                                     {
                                         if (dr.ObsoleteCode == 0)
                                         {
-                                            if (ucodeColor == dr.ColorId.ToString())
+                                            if (ucodeColor.ToUpper().Trim() == dr.ColorId.ToString().ToUpper().Trim())
                                             {
                                                 var color = dr.ColorId.ToString();
                                                 var hexcode = entity.tblfsk_colour.Any(da => da.Description.Contains(color)) ? entity.tblfsk_colour.Where(da => da.Description.Contains(color)).First().Colour_hexcode : "";
@@ -722,7 +722,7 @@
                                     {
                                         if (dr.ObsoleteCode == 0)
                                         {
-                                            if (ucodeColor == dr.ColorId.ToString())
+                                            if (ucodeColor.ToUpper().Trim() == dr.ColorId.ToString().ToUpper().Trim())
                                             {
                                                 var color = dr.ColorId.ToString();
                                                 var hexcode = entity.tblfsk_colour.Any(da => da.Description.Contains(color)) ? entity.tblfsk_colour.Where(da => da.Description.Contains(color)).First().Colour_hexcode : "";
@@ -823,7 +823,7 @@
                                     {
                                         if (lstC.Columns.Count > 3)
                                         {
-                                            if (dr.ItemArray[1].ToString() == firstColor)
+                                            if (dr.ItemArray[1].ToString().ToUpper().Trim() == firstColor.ToUpper().Trim())
                                             {
                                                 if (Convert.ToInt16(dr.ItemArray[4].ToString()) == 0)
                                                 {
@@ -843,7 +843,7 @@
                                     {
                                         if (lstC.Columns.Count > 3)
                                         {
-                                            if (dr.ItemArray[1].ToString() == firstColor)
+                                            if (dr.ItemArray[1].ToString().ToUpper().Trim() == firstColor.ToUpper().Trim())
                                             {
                                                 if (Convert.ToInt16(dr.ItemArray[4].ToString()) == 0)
                                                 {
@@ -1171,6 +1171,7 @@
                         Maximus.Models.PreviousQty prevHistory = (Maximus.Models.PreviousQty)(DataBinder.Eval(cont.DataItem, "HasPreviousSize"));
                         Html.DevExpress().Button(btn =>
                         {
+                            btn.Width = System.Web.UI.WebControls.Unit.Pixel(305);
                             btn.Name = "CartbtnTemplate_" + style + "_" + prevHistory.OrdQty;
                             btn.ControlStyle.CssClass = "btn btn-primary";
                             btn.Text = "Add to cart &nbsp;&nbsp;<span class='glyphicon glyphicon-shopping-cart'></span>";
@@ -1291,6 +1292,7 @@
                         Maximus.Models.PreviousQty prevHistory = (Maximus.Models.PreviousQty)(DataBinder.Eval(cont.DataItem, "HasPreviousSize"));
                         Html.DevExpress().Button(btn =>
                         {
+                            btn.Width = System.Web.UI.WebControls.Unit.Pixel(305);
                             btn.Name = "CartbtnTemplate_" + style + "_" + prevHistory.OrdQty;
                             btn.ControlStyle.CssClass = "btn btn-primary";
                             btn.Text = "Add to cart &nbsp;&nbsp;<span class='glyphicon glyphicon-shopping-cart'></span>";

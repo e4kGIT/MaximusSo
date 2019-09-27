@@ -115,7 +115,8 @@ namespace Maximus.Controllers
             if (templates.Count > 0)
             {
                 Session["Templates"] = templates;
-                result = dp.getEmployeeDetailsTemplates(Session["BuisnessId"].ToString());
+                result = dp.GetEmployeeTemplate(businessId, Session["UserName"].ToString(), Session["OrderPermit"].ToString(), txtUcode, ddlAddress, txtUcodeDesc, txtCDepartment, txtRole, txtEmpNo, txtName, txtStDate);
+                //result = dp.getEmployeeDetailsTemplates(Session["BuisnessId"].ToString());
             }
             else
             {
@@ -284,7 +285,24 @@ namespace Maximus.Controllers
             string templateHtml = "<ol style=\"padding:0px;\">";
             if (((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Count() > 0)
             {
-                Session["qty"] = ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Any(x => x.SalesOrderLine != null) ? ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.EmployeeID == Session["SelectedEmp"].ToString()).First().SalesOrderLine != null ? ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.EmployeeID == Session["SelectedEmp"].ToString()).First().SalesOrderLine.Sum(x => x.OrdQty) : 0 : 0;
+                if(((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Any(x => x.SalesOrderLine != null))
+                {
+                    if(((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Any(x => x.EmployeeID == Session["SelectedEmp"].ToString()))
+                    {
+                        var jvj= ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.EmployeeID == Session["SelectedEmp"].ToString()).First().SalesOrderLine.ToList() ;
+                        var jvj1 = jvj.Where(x => x.OriginalLineNo == null).ToList();
+                        var jvj12 = jvj1.Sum(x => x.OrdQty);
+                        Session["qty"] = jvj12;
+                    }
+                    else
+                    {
+                        Session["qty"] = 0;
+                    }
+                }
+                else
+                {
+                    Session["qty"] = 0;
+                }
             }
             else
             {

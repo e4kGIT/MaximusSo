@@ -583,7 +583,7 @@ function addTocartSwatch(s, e) {
                                     $("#CartwidCount").html(response);
                                     loadPopup.Hide();
                                     myFunction("Added to cart..!");
-                                    //alert("Successfully added to the cart!");
+                                    //myFunction("Added to cart..!");  ;
                                 }
                                 else {
                                     loadPopup.Hide();
@@ -607,7 +607,7 @@ function addTocartSwatch(s, e) {
                 },
                 error: function () {
                     loadPopup.Hide();
-                    alert("Try again!");
+                    myFunction("Added to cart..!"); ("Try again!");
                 }
             });
         }
@@ -628,7 +628,7 @@ function addTocartSwatch(s, e) {
                                 if (response != "") {
                                     $("#CartwidCount").html("");
                                     $("#CartwidCount").html(response);
-                                    alert("Successfully added to the cart!");
+                                    myFunction("Added to cart..!");  
                                 }
                                 else {
                                     loadPopup.Hide();
@@ -743,7 +743,7 @@ function addTocartDimSwatch(s, e) {
                                     $("#CartwidCount").html("");
                                     $("#CartwidCount").html(response);
                                     loadPopup.Hide();
-                                    alert("Successfully added to the cart!");
+                                    myFunction("Added to cart..!");
                                 }
                                 else {
                                     loadPopup.Hide();
@@ -786,7 +786,7 @@ function addTocartDimSwatch(s, e) {
                                 if (response != "") {
                                     $("#CartwidCount").html("");
                                     $("#CartwidCount").html(response);
-                                    alert("Successfully added to the cart!");
+                                    myFunction("Added to cart..!");
                                 }
                                 else {
                                     loadPopup.Hide();
@@ -909,7 +909,7 @@ function addTocartDemandSwatch(s, e) {
                                     $("#CartwidCount").html("");
                                     $("#CartwidCount").html(response);
                                     loadPopup.Hide();
-                                    alert("Successfully added to the cart!");
+                                    myFunction("Added to cart..!");
                                 }
                                 else {
                                     loadPopup.Hide();
@@ -952,7 +952,7 @@ function addTocartDemandSwatch(s, e) {
                                 if (response != "") {
                                     $("#CartwidCount").html("");
                                     $("#CartwidCount").html(response);
-                                    alert("Successfully added to the cart!");
+                                    myFunction("Added to cart..!");
                                 }
                                 else {
                                     loadPopup.Hide();
@@ -1516,10 +1516,11 @@ function addTocartTemplateSwatch(s, e) {
     color = colorValue != undefined & colorValue != "" ? colorValue : "";
     sStyle = stylearr[1];
     var desc = descStyle == undefined ? stylearr[1] : descStyle[0];
-    var Spin = ASPxClientControl.GetControlCollection().GetByName("spinEdit_" + stylearr[1]);
+    var Spin = "spinEdit_" + stylearr[1];
+    var qty1 = document.getElementsByName(Spin);
     description = document.getElementById("LbDescription" + desc).innerHTML;
     price = document.getElementById("LbTemplatePrice" + stylearr[1]).innerHTML;
-    qty = Spin.lastValue;
+    qty = qty1[0].value;
     if (description != "" && price != "" && size != "" && color != "" && qty != "" && qty != "0") {
         loadPopup.Show();
         $.ajax({
@@ -1531,7 +1532,7 @@ function addTocartTemplateSwatch(s, e) {
                     $("#CartwidCount").html("");
                     $("#CartwidCount").html(response);
                     loadPopup.Hide();
-                    alert("Successfully added to the cart!");
+                    myFunction("Added to cart..!");  ;
                 }
                 else {
                     loadPopup.Hide();
@@ -1581,7 +1582,7 @@ function addTocartTemplate(s, e) {
                     $("#CartwidCount").html("");
                     $("#CartwidCount").html(response);
                     loadPopup.Hide();
-                    alert("Successfully added to the cart!");
+                    myFunction("Added to cart..!");  ;
                 }
                 else {
                     loadPopup.Hide();
