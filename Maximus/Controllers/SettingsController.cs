@@ -6,7 +6,8 @@ using System.Web.Mvc;
 using Maximus.Filter;
 namespace Maximus.Controllers
 {
-    [CustomFilter]
+    [Authorize]
+     
     public class SettingsController : Controller
     {
         // GET: Settings

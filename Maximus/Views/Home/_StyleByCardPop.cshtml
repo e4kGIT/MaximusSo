@@ -235,7 +235,7 @@
                 var divImg = "DivImgDem" + style;
                 var styleimg = DataBinder.Eval(x.DataItem, "StyleImage");
                 var content = "<div class='row'>";
-                content = string.Format(content + "<div class='col-md-3 col-xs-3 col-sm-3 col-lg-3 pull-left'><div Id=" + divImg + "><img src=\"{0}\" height='230' width='200' onclick='Getimage(\"{0}\")' /></div></div>", styleimg);
+                content = string.Format(content + "<div class='col-md-3 col-xs-3 col-sm-3 col-lg-3 pull-left'><div Id=" + divImg + "><img src=\"{0}\" height='70%' width='70%' onclick='Getimage(\"{0}\")' /></div></div>", styleimg);
                 ViewContext.Writer.Write(content);
                 ViewContext.Writer.Write("<div class='col-md-7 col-xs-7 col-sm-7 col-lg-7'><br/><div class='row'><div class='col-md-12 col-xs-12 col-sm-12 col-lg-12'>");
                 if (template.Count > 0)

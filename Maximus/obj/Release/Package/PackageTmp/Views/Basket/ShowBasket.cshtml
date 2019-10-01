@@ -75,9 +75,21 @@
         <br />
     </div>
     <div class="row">
-        <div class="col-md-1"></div>
+        <div class="col-md-1">
+
+        </div>
         <div class="col-md-10">
             <br />
+            <div class="col-md-5">
+                @Html.DevExpress().TextBox(sett =>
+           {
+               sett.Name = "txtCommentsExternal";
+               sett.Properties.Caption = "Comments";
+               sett.ControlStyle.CssClass = "editor";
+               sett.Height = System.Web.UI.WebControls.Unit.Pixel(100);
+               sett.Width = System.Web.UI.WebControls.Unit.Pixel(200);
+           }).GetHtml()
+            </div>
             @{
                 if (Convert.ToBoolean(Session["ONLNEREQNOM1"]))
                 {
@@ -129,45 +141,45 @@
         <div class="col-md-1"></div>
         <div class="col-md-10">
             <br />
-            @{ 
+            @{
                 if (Convert.ToBoolean(Session["ONLNEREQNOM3"]))
                 {
-            <div class="col-md-4">
-                @Html.DevExpress().TextBox(txt =>
+                    <div class="col-md-4">
+                        @Html.DevExpress().TextBox(txt =>
            {
                txt.Name = "txtNomCode3";
                txt.Properties.Caption = Session["ONLNETXTNOM3"].ToString();
                txt.Text = dp.CompanyParam("ONLNEDEFNOM3", Session["CmpId"].ToString());
            }).GetHtml();
-            </div>
+                    </div>
                 }
-                }
-            @{ 
+            }
+            @{
                 if (Convert.ToBoolean(Session["ONLNEREQNOM4"]))
                 {
-            <div class="col-md-4">
-                @Html.DevExpress().TextBox(txt =>
+                    <div class="col-md-4">
+                        @Html.DevExpress().TextBox(txt =>
            {
                txt.Name = "txtNomCode4";
                txt.Properties.Caption = Session["ONLNETXTNOM4"].ToString();
                txt.Text = dp.CompanyParam("ONLNEDEFNOM4", Session["CmpId"].ToString());
            }).GetHtml();
-            </div>
-                    }
+                    </div>
                 }
-            @{ 
+            }
+            @{
                 if (Convert.ToBoolean(Session["ONLNEREQNOM5"]))
                 {
-            <div class="col-md-4">
-                @Html.DevExpress().TextBox(txt =>
+                    <div class="col-md-4">
+                        @Html.DevExpress().TextBox(txt =>
            {
                txt.Name = "txtNomCode5";
                txt.Properties.Caption = Session["ONLNETXTNOM5"].ToString();
                txt.Text = dp.CompanyParam("ONLNEDEFNOM5", Session["CmpId"].ToString());
            }).GetHtml();
-            </div>
-                    }
+                    </div>
                 }
+            }
             <br />
             <br />
             <br />
@@ -192,6 +204,67 @@
 
             <br />
             @Html.Action("GetEmployeeDeliveryAddress")
+            <br />
+            <br />
+            <br />
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+</div>
+<br />
+<br />
+<div class="row" style="background-color:white;">
+    <div class="row colrer" style="margin:0px;">
+        <br /> <center>
+            <b>
+                Date & Customer Ref
+            </b>
+        </center>
+        <br />
+    </div>
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+            <div class="row">
+                <br />
+                <div class="col-md-3">
+                    @Html.DevExpress().DateEdit(settings =>
+               {
+                   settings.Properties.Caption = "Order date";
+                   settings.Name = "DateEdit";
+                   settings.Properties.NullText = DateTime.Now.Date.ToString("dd-MMM-yyyy");
+                   settings.ReadOnly = true;
+               }).GetHtml()
+                </div>
+                <div class="col-md-3">
+                    @Html.DevExpress().TextBox(set =>
+               {
+                   set.Name = "ddlCustRef";
+                   set.Properties.Caption = "Your Po reference";
+                   if ((bool)Session["CusRefMan"])
+                   {
+                       set.Properties.ValidationSettings.RequiredField.IsRequired = true;
+                       set.Properties.ValidationSettings.RequiredField.ErrorText = "*";
+                   }
+               }
+               ).GetHtml()
+                </div>
+                <div class="col-md-3" style="display:none;">
+                    @Html.DevExpress().TextBox(sett => { sett.Name = "txtCustID"; }).GetHtml()
+                </div>
+                <div class="col-md-3" style="display:none;">
+                    @Html.DevExpress().TextBox(sett => { sett.Name = "txtCustName"; }).GetHtml()
+                </div>
+            </div>
+            <div class="row">
+                <br />
+                <div class="col-md-3" style="display:none;">
+                    @Html.DevExpress().TextBox(sett => { sett.Name = "txtBudget"; }).GetHtml()
+                </div>
+                <div class="col-md-3" style="display:none;">
+                    @Html.DevExpress().TextBox(sett => { sett.Name = "txtCurrBudget"; }).GetHtml()
+                </div>
+            </div>
             <br />
             <br />
             <br />

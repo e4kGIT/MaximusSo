@@ -17,8 +17,8 @@ namespace Maximus.Models
         public string CustID { get; set; }
         public Nullable<int> OrderNo { get; set; }
         public Nullable<short> OrderLine { get; set; }
-        public Nullable<int> PickingSlipNo { get; set; }
-        public Nullable<int> LineNo { get; set; }
+        public int PickingSlipNo { get; set; }
+        public int LineNo { get; set; }
         public string StyleID { get; set; }
         public string ColourID { get; set; }
         public string SizeID { get; set; }
@@ -34,7 +34,7 @@ namespace Maximus.Models
         public string DelDesc { get; set; }
         public string DelAddress1 { get; set; }
         public string CustRef { get; set; }
-        public Nullable<decimal> Value1 { get; set; }
+        public Nullable<double> Value1 { get; set; }
         public Nullable<System.DateTime> DueDate { get; set; }
         public string CommentsExternal { get; set; }
     }

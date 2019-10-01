@@ -238,14 +238,14 @@
                 var styleimg = DataBinder.Eval(x.DataItem, "StyleImage");
                 var divImg = "DivImg" + style;
                 var content = "<div class='row'>";
-                content = string.Format(content + "<div class='col-md-3 pull-left'><div id='" + divImg + "'><img src=\"{0}\" height='230' width='200' onclick='Getimage(\"{0}\")' /></div></div>", styleimg);
+                content = string.Format(content + "<div class='col-md-3 pull-left'><div id='" + divImg + "'><img src=\"{0}\" height='70%' width='70%' onclick='Getimage(\"{0}\")' /></div></div>", styleimg);
                 ViewContext.Writer.Write(content);
 
                 ViewContext.Writer.Write("<div class='col-md-7'><br/><div class='row'><div class='col-md-12'>");
                 if (template.Count > 0)
                 {
                     //string viewContent = string.Format("<div class='row fonter'><div class='col-md-12' style='padding:0px;'><b>Product</b>" + style + "<span>&nbsp;</span><span>-</span><span id='LbDescription" + style + "'>{0}</span></div>", entity.tblfsk_style.Where(s => s.StyleID == style.ToString()).FirstOrDefault().Description != null ? entity.tblfsk_style.Where(s => s.StyleID == style.ToString()).FirstOrDefault().Description.ToString() : "");
-                    string viewContent = string.Format("<div class='row fonter'><div class='col-md-12' style='padding:0px;'><b>Product</b> <span>&nbsp;</span><span id='LbDescription" + style + "'>{0}</span></div>", entity.tblfsk_style.Where(s => s.StyleID == style.ToString()).FirstOrDefault().Description != null | entity.tblfsk_style.Where(s => s.StyleID == style.ToString()).FirstOrDefault().Description != ""? entity.tblfsk_style.Where(s => s.StyleID == style.ToString()).FirstOrDefault().Description.ToString() : "");
+                    string viewContent = string.Format("<div class='row fonter'><div class='col-md-12' style='padding:0px;'><b>Product</b> <span>&nbsp;</span><span id='LbDescription" + style + "'>{0}</span></div>", entity.tblfsk_style.Where(s => s.StyleID == style.ToString()).FirstOrDefault().Description != null | entity.tblfsk_style.Where(s => s.StyleID == style.ToString()).FirstOrDefault().Description != "" ? entity.tblfsk_style.Where(s => s.StyleID == style.ToString()).FirstOrDefault().Description.ToString() : "");
                     ViewContext.Writer.Write(viewContent);
                 }
                 else
@@ -278,7 +278,7 @@
                                     }
                                     else
                                     {
-                                        divContent = divContent + string.Format("<label class='swatchLabel'><input type='radio' checked id='radio' name=\"Swatch_Style_" + style + "\" value='{1}' onclick=\"GetDrpResultModelSwatch('{0}','{1}','{3}');\"/><span class='spanner1'><center >{2}</center></span></label>", style, styler, entity.tblfsk_setvalues.Any(ss=> ss.StyleID.ToLower()==styler.ToLower() && ss.SettingID=="FITGROUP")? entity.tblfsk_setvalues.Where(ss => ss.StyleID.ToLower() == styler.ToLower() && ss.SettingID == "FITGROUP").First().Value : styler, orgstyl);
+                                        divContent = divContent + string.Format("<label class='swatchLabel'><input type='radio' checked id='radio' name=\"Swatch_Style_" + style + "\" value='{1}' onclick=\"GetDrpResultModelSwatch('{0}','{1}','{3}');\"/><span class='spanner1'><center >{2}</center></span></label>", style, styler, entity.tblfsk_setvalues.Any(ss => ss.StyleID.ToLower() == styler.ToLower() && ss.SettingID == "FITGROUP") ? entity.tblfsk_setvalues.Where(ss => ss.StyleID.ToLower() == styler.ToLower() && ss.SettingID == "FITGROUP").First().Value : styler, orgstyl);
                                     }
                                 }
                                 else
@@ -464,20 +464,67 @@
                 {
 
                     var freeText = (string)(DataBinder.Eval(col.DataItem, "Dimensions"));
-
+                    var style = (DataBinder.Eval(col.DataItem, "StyleID")).ToString();
+                    string appPath = System.Web.HttpContext.Current.Request.MapPath(@"~\");
+                    var orgStyle = (DataBinder.Eval(col.DataItem, "OriginalStyleid")).ToString();
                     if (freeText != null && freeText != "")
                     {
-                        Maximus.Models.DataProcessing data = new Maximus.Models.DataProcessing();
-
-                        var svmLst = data.getFreeTextStyles(freeText, Session["SelectedEmp"].ToString(), Session["BuisnessId"].ToString());
-                        var content = "<div class='row'>";
-                        var orgStyle = (DataBinder.Eval(col.DataItem, "OriginalStyleid")).ToString();
+                        var svmLst = entity.tblfskstyle_dimension1.Where(s => s.FreeText.ToLower() == freeText.ToLower()).Select(s => new Maximus.Models.styleViewmodel { StyleID = s.StyleId, Description = s.Description, StyleImage = s.StyleImage }).ToList();
+                        //var svm=entity.styleby_freetextview.Where(s=>s.FreeText==f)
+                        var data1 = entity.tblfsk_setvalues.Any(sas => sas.SettingID.ToUpper().Trim() == "FITDIM_STYLE_DESC" && sas.StyleID.ToLower().Trim() == orgStyle.ToLower().Trim())? entity.tblfsk_setvalues.Where(sas => sas.SettingID.ToUpper().Trim() == "FITDIM_STYLE_DESC" && sas.StyleID.ToLower().Trim()==orgStyle.ToLower().Trim()).First().Value:"";
+                        var content = "<div class='row'><div class='col-md-11'><div class='row'><center>"+ data1 + "</center><hr/>";
                         foreach (var svm in svmLst)
                         {
-                            var dex = entity.tblfsk_style.Any(sa => sa.StyleID == svm.StyleID) ? entity.tblfsk_style.Where(sa => sa.StyleID == svm.StyleID).First().Description : svm.StyleID;
-                            content = content + string.Format("<div class='col-md-2'><div class='dimAllocdiv'><a style=\"cursor:pointer;\" onclick=\"getCard1('{1}','{3}')\"><center><img src='{0}'  style=\"margin:3px;\" height=\"150\" width=\"100\" /><br/>{2}</center></a></div></div>", "/"+svm.StyleImage, svm.StyleID, dex,orgStyle);
+                            if (svm.StyleImage != null)
+                            {
+                                if (svm.StyleImage.Contains(":"))
+                                {
+                                    if (System.IO.File.Exists(appPath + svm.StyleImage.Substring(svm.StyleImage.IndexOf(":") + 1, svm.StyleImage.Length - svm.StyleImage.IndexOf(":") - 1)) != true)
+                                    {
+                                        svm.StyleImage = "/StyleImages/notfound.png";
+                                    }
+                                    else
+                                    {
+                                        var data = svm.StyleImage.Substring(svm.StyleImage.IndexOf(":") + 1, svm.StyleImage.Length - svm.StyleImage.IndexOf(":") - 1);
+                                        svm.StyleImage = data.Replace("\\", "/");
+                                    }
+                                }
+                                else
+                                {
+                                    if (System.IO.File.Exists(appPath + svm.StyleImage) != true)
+                                    {
+                                        svm.StyleImage = "/StyleImages/notfound.png";
+                                    }
+                                    else
+                                    {
+                                        svm.StyleImage = svm.StyleImage;
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                svm.StyleImage = "/StyleImages/notfound.png";
+                            }
+                            content = content + string.Format("<div class='col-md-2'><div class='dimAllocdiv'><a style=\"cursor:pointer;\" onclick=\"getCard1('{1}','{3}')\"><center><img src='{0}'  style=\"margin:3px;\" height=\"150\" width=\"100\" /><br/>{2}</center></a></div></div>", svm.StyleImage, svm.StyleID, svm.Description, orgStyle);
                         }
-                        content = content + "</div>";
+                        content = content + "</div></div><div class='col-md-1'>"+string.Format("<div style='margin-top: 14px;'><center> <img src='/Content/Images/empHistory.png' title='Entitlement and previous history' height='40' width='40' onclick=\"getEntitlementDIMENSION('{0}','{1}');\"/></center></div>",style,orgStyle)+"</div></div>";
+                        //Maximus.Models.DataProcessing data = new Maximus.Models.DataProcessing();
+
+                        //var svmLst = entity.ucodeby_freetextview.Where(ss => ss.DimFreeText == freeText).Select(ss => new Maximus.Models.styleViewmodel { StyleID = ss.StyleID, OriginalStyleid = ss.StyleID, StyleImage = ss.StyleImage, Freetext = freeText, ProductGroup = ss.Product_Group.Value }).Distinct().ToList(); /*data.getFreeTextStyles(freeText, Session["SelectedEmp"].ToString(), Session["BuisnessId"].ToString());*/
+                        //var content = "<div class='row'>";
+                        //var orgStyle = (DataBinder.Eval(col.DataItem, "OriginalStyleid")).ToString();
+                        //foreach (var svm in svmLst)
+                        //{
+                        //    var dex = entity.tblfsk_style.Any(sa => sa.StyleID == svm.StyleID) ? entity.tblfsk_style.Where(sa => sa.StyleID == svm.StyleID).First().Description : svm.StyleID;
+                        //    content = content + string.Format("<div class='col-md-2'><div class='dimAllocdiv'><a style=\"cursor:pointer;\" onclick=\"getCard1('{1}','{3}')\"><center><img src='{0}'  style=\"margin:3px;\" height=\"150\" width=\"100\" /><br/>{2}</center></a></div></div>", "/"+svm.StyleImage, svm.StyleID, dex,orgStyle);
+                        //}
+                        //content = content + "</div>";
+                        //var style = entity.ucodeby_freetextview.Where(ss => ss.DimFreeText == freeText).First().StyleID;
+                        //var dex = entity.tblfsk_style.Where(xsa => xsa.StyleID.Trim().ToLower() == style.Trim().ToLower()).First().Description;
+                        //string content = "";
+                        ////content = "<center>" + dex + "</center>";
+                        //var content1 = string.Format("<a onclick='getDimAlloc(\"{0}\");'>" + dex+"</a>", freeText);
+                        //ViewContext.Writer.Write(string.Format("<center>{0}</center>", content1));
                         ViewContext.Writer.Write(content);
                         //var content = string.Format("<a onclick='getDimAlloc(\"{0}\");'>Click here to see Products</a>", freeText);
                         //ViewContext.Writer.Write(string.Format("<center>{0}</center>", content));
@@ -1099,7 +1146,7 @@
                     var content = string.Format("<div class='row'><div class='col-md-4'><b>Quantity</b><hr style='margin: 0;'/><div style='margin: 0;' class=\"center pull-left\"><p></p><div class=\"input-group\"><span class=\"input-group-btn\"><button type='button' class='qtyminus btn backg' field='{0}'><span class=\"glyphicon glyphicon-minus\"></span></button></span><input style='width:290px;text-align:center;' type='text' name='{0}'  class=\"form-control input-number\" value=\"1\" min=\"1\" max=\"10000000\"><span class=\"input-group-btn\"><button type='button' class='qtyplus  btn backg' field='{0}'><span class=\"glyphicon glyphicon-plus\"></span></button></span></div><p></p></div>", "spinEdit_" + style);
                     content = content + "</div>";
                     ViewContext.Writer.Write(content);
-                    if (Session["OVERRIDE_ENT_WITH_REASON"].ToString().ToLower()=="show" && reason)
+                    if (Session["OVERRIDE_ENT_WITH_REASON"].ToString().ToLower() == "show" && reason)
                     {
                         ViewContext.Writer.Write("<div class='col-md-4'><b>Reason</b><hr style='margin:0px'/><br><center  class='styler'>");
                         if (template.Count > 0)
@@ -1220,7 +1267,7 @@
                     var content = string.Format("<div class='row'><div class='col-md-4'><b>Quantity</b><hr style='margin: 0;'/><div style='margin: 0;' class=\"center pull-left\"><p></p><div class=\"input-group\"><span class=\"input-group-btn\"><button type='button' class='qtyminus btn backg' field='{0}'><span class=\"glyphicon glyphicon-minus\"></span></button></span><input  type='text' name='{0}' style='width:290px;text-align:center;' class=\"form-control input-number\" value=\"1\" min=\"1\" max=\"10000000\"><span class=\"input-group-btn\"><button type='button' class='qtyplus  btn backg' field='{0}'><span class=\"glyphicon glyphicon-plus\"></span></button></span></div><p></p></div>", "spinEdit_" + style);
                     content = content + "</div>";
                     ViewContext.Writer.Write(content);
-                    if (Session["OVERRIDE_ENT_WITH_REASON"].ToString().ToLower()== "show" && reason)
+                    if (Session["OVERRIDE_ENT_WITH_REASON"].ToString().ToLower() == "show" && reason)
                     {
                         ViewContext.Writer.Write("<div class='col-md-4'><b>Reason</b><hr style='margin:0px'/><br>");
                         if (template.Count > 0)

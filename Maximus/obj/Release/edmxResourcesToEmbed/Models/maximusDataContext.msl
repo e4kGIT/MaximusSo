@@ -142,14 +142,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="tbl_employee_s27_hr">
-      <EntityTypeMapping TypeName="e4kmaximusdbModel.tbl_employee_s27_hr">
-        <MappingFragment StoreEntitySet="tbl_employee_s27_hr">
-          <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
-          <ScalarProperty Name="BusinessID" ColumnName="BusinessID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="tblacc_vatcodes">
       <EntityTypeMapping TypeName="e4kmaximusdbModel.tblacc_vatcodes">
         <MappingFragment StoreEntitySet="tblacc_vatcodes">
@@ -216,9 +208,40 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="tblaccemp_employee_atlasfm">
+      <EntityTypeMapping TypeName="e4kmaximusdbModel.tblaccemp_employee_atlasfm">
+        <MappingFragment StoreEntitySet="tblaccemp_employee_atlasfm">
+          <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+          <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+          <ScalarProperty Name="BusinessID" ColumnName="BusinessID" />
+          <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
+          <ScalarProperty Name="GroupID" ColumnName="GroupID" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="Forename" ColumnName="Forename" />
+          <ScalarProperty Name="Surname" ColumnName="Surname" />
+          <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+          <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+          <ScalarProperty Name="EmployeeClosed" ColumnName="EmployeeClosed" />
+          <ScalarProperty Name="roleid" ColumnName="roleid" />
+          <ScalarProperty Name="IsDefault" ColumnName="IsDefault" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="tblaccemp_employee_rollout">
       <EntityTypeMapping TypeName="e4kmaximusdbModel.tblaccemp_employee_rollout">
         <MappingFragment StoreEntitySet="tblaccemp_employee_rollout">
+          <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+          <ScalarProperty Name="BusinessID" ColumnName="BusinessID" />
+          <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+          <ScalarProperty Name="IsProcessed" ColumnName="IsProcessed" />
+          <ScalarProperty Name="PrevOrder" ColumnName="PrevOrder" />
+          <ScalarProperty Name="RolloutName" ColumnName="RolloutName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblaccemp_employee_rollout_atlasfm">
+      <EntityTypeMapping TypeName="e4kmaximusdbModel.tblaccemp_employee_rollout_atlasfm">
+        <MappingFragment StoreEntitySet="tblaccemp_employee_rollout_atlasfm">
           <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
           <ScalarProperty Name="BusinessID" ColumnName="BusinessID" />
           <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
@@ -298,6 +321,42 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="tblaccemp_stockcard_atlasfm">
+      <EntityTypeMapping TypeName="e4kmaximusdbModel.tblaccemp_stockcard_atlasfm">
+        <MappingFragment StoreEntitySet="tblaccemp_stockcard_atlasfm">
+          <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+          <ScalarProperty Name="BusinessID" ColumnName="BusinessID" />
+          <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+          <ScalarProperty Name="StyleID" ColumnName="StyleID" />
+          <ScalarProperty Name="ColourID" ColumnName="ColourID" />
+          <ScalarProperty Name="Year" ColumnName="Year" />
+          <ScalarProperty Name="SOQty" ColumnName="SOQty" />
+          <ScalarProperty Name="PickQty" ColumnName="PickQty" />
+          <ScalarProperty Name="InvQty" ColumnName="InvQty" />
+          <ScalarProperty Name="TotalIssues" ColumnName="TotalIssues" />
+          <ScalarProperty Name="FirstIssueDate" ColumnName="FirstIssueDate" />
+          <ScalarProperty Name="StartIssueDate" ColumnName="StartIssueDate" />
+          <ScalarProperty Name="LastIssueDate" ColumnName="LastIssueDate" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblaccemp_stylepoints">
+      <EntityTypeMapping TypeName="e4kmaximusdbModel.tblaccemp_stylepoints">
+        <MappingFragment StoreEntitySet="tblaccemp_stylepoints">
+          <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+          <ScalarProperty Name="BusinessID" ColumnName="BusinessID" />
+          <ScalarProperty Name="UcodeID" ColumnName="UcodeID" />
+          <ScalarProperty Name="StyleID" ColumnName="StyleID" />
+          <ScalarProperty Name="ColourID" ColumnName="ColourID" />
+          <ScalarProperty Name="FromDate" ColumnName="FromDate" />
+          <ScalarProperty Name="ToDate" ColumnName="ToDate" />
+          <ScalarProperty Name="Points" ColumnName="Points" />
+          <ScalarProperty Name="MandatoryQty" ColumnName="MandatoryQty" />
+          <ScalarProperty Name="MinPts" ColumnName="MinPts" />
+          <ScalarProperty Name="MaxPts" ColumnName="MaxPts" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="tblaccemp_ucode_reasons">
       <EntityTypeMapping TypeName="e4kmaximusdbModel.tblaccemp_ucode_reasons">
         <MappingFragment StoreEntitySet="tblaccemp_ucode_reasons">
@@ -305,6 +364,18 @@
           <ScalarProperty Name="BusinessID" ColumnName="BusinessID" />
           <ScalarProperty Name="ReasonCodeID" ColumnName="ReasonCodeID" />
           <ScalarProperty Name="ReasonDesc" ColumnName="ReasonDesc" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblaccemp_ucodepoints">
+      <EntityTypeMapping TypeName="e4kmaximusdbModel.tblaccemp_ucodepoints">
+        <MappingFragment StoreEntitySet="tblaccemp_ucodepoints">
+          <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+          <ScalarProperty Name="BusinessID" ColumnName="BusinessID" />
+          <ScalarProperty Name="UcodeID" ColumnName="UcodeID" />
+          <ScalarProperty Name="FromDate" ColumnName="FromDate" />
+          <ScalarProperty Name="ToDate" ColumnName="ToDate" />
+          <ScalarProperty Name="TotalPoints" ColumnName="TotalPoints" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -359,6 +430,16 @@
     <EntitySetMapping Name="tblaccemp_ucodesemployees">
       <EntityTypeMapping TypeName="e4kmaximusdbModel.tblaccemp_ucodesemployees">
         <MappingFragment StoreEntitySet="tblaccemp_ucodesemployees">
+          <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+          <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+          <ScalarProperty Name="BusinessID" ColumnName="BusinessID" />
+          <ScalarProperty Name="UCodeID" ColumnName="UCodeID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblaccemp_ucodesemployees_atlasfm">
+      <EntityTypeMapping TypeName="e4kmaximusdbModel.tblaccemp_ucodesemployees_atlasfm">
+        <MappingFragment StoreEntitySet="tblaccemp_ucodesemployees_atlasfm">
           <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
           <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
           <ScalarProperty Name="BusinessID" ColumnName="BusinessID" />
@@ -475,23 +556,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="tblbus_address_copy">
-      <EntityTypeMapping TypeName="e4kmaximusdbModel.tblbus_address_copy">
-        <MappingFragment StoreEntitySet="tblbus_address_copy">
-          <ScalarProperty Name="Description" ColumnName="Description" />
-          <ScalarProperty Name="BusinessID" ColumnName="BusinessID" />
-          <ScalarProperty Name="Address1" ColumnName="Address1" />
-          <ScalarProperty Name="Address2" ColumnName="Address2" />
-          <ScalarProperty Name="Address3" ColumnName="Address3" />
-          <ScalarProperty Name="Town" ColumnName="Town" />
-          <ScalarProperty Name="City" ColumnName="City" />
-          <ScalarProperty Name="Postcode" ColumnName="Postcode" />
-          <ScalarProperty Name="CountryCode" ColumnName="CountryCode" />
-          <ScalarProperty Name="AddressTypeID" ColumnName="AddressTypeID" />
-          <ScalarProperty Name="ContactID" ColumnName="ContactID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="tblbus_addresstype_ref">
       <EntityTypeMapping TypeName="e4kmaximusdbModel.tblbus_addresstype_ref">
         <MappingFragment StoreEntitySet="tblbus_addresstype_ref">
@@ -589,36 +653,6 @@
           <ScalarProperty Name="BusinessID" ColumnName="BusinessID" />
           <ScalarProperty Name="OrderRef" ColumnName="OrderRef" />
           <ScalarProperty Name="NominalCode" ColumnName="NominalCode" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="tblbus_settings">
-      <EntityTypeMapping TypeName="e4kmaximusdbModel.tblbus_settings">
-        <MappingFragment StoreEntitySet="tblbus_settings">
-          <ScalarProperty Name="SettingID" ColumnName="SettingID" />
-          <ScalarProperty Name="BusType" ColumnName="BusType" />
-          <ScalarProperty Name="SettingName1" ColumnName="SettingName1" />
-          <ScalarProperty Name="Type" ColumnName="Type" />
-          <ScalarProperty Name="Category" ColumnName="Category" />
-          <ScalarProperty Name="DefaultValue" ColumnName="DefaultValue" />
-          <ScalarProperty Name="SeqNo" ColumnName="SeqNo" />
-          <ScalarProperty Name="Lookup_Table" ColumnName="Lookup_Table" />
-          <ScalarProperty Name="Lookup_Text" ColumnName="Lookup_Text" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="tblbus_settings_copy">
-      <EntityTypeMapping TypeName="e4kmaximusdbModel.tblbus_settings_copy">
-        <MappingFragment StoreEntitySet="tblbus_settings_copy">
-          <ScalarProperty Name="SettingID" ColumnName="SettingID" />
-          <ScalarProperty Name="BusType" ColumnName="BusType" />
-          <ScalarProperty Name="SettingName1" ColumnName="SettingName1" />
-          <ScalarProperty Name="Type" ColumnName="Type" />
-          <ScalarProperty Name="Category" ColumnName="Category" />
-          <ScalarProperty Name="DefaultValue" ColumnName="DefaultValue" />
-          <ScalarProperty Name="SeqNo" ColumnName="SeqNo" />
-          <ScalarProperty Name="Lookup_Table" ColumnName="Lookup_Table" />
-          <ScalarProperty Name="Lookup_Text" ColumnName="Lookup_Text" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -730,6 +764,16 @@
           <ScalarProperty Name="ClassID" ColumnName="ClassID" />
           <ScalarProperty Name="Description" ColumnName="Description" />
           <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblfsk_colour">
+      <EntityTypeMapping TypeName="e4kmaximusdbModel.tblfsk_colour">
+        <MappingFragment StoreEntitySet="tblfsk_colour">
+          <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+          <ScalarProperty Name="ColourID" ColumnName="ColourID" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Colour_hexcode" ColumnName="Colour_hexcode" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -1037,6 +1081,28 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="tblfskstyle_dimension">
+      <EntityTypeMapping TypeName="e4kmaximusdbModel.tblfskstyle_dimension">
+        <MappingFragment StoreEntitySet="tblfskstyle_dimension">
+          <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+          <ScalarProperty Name="DimensionId" ColumnName="DimensionId" />
+          <ScalarProperty Name="StyleId" ColumnName="StyleId" />
+          <ScalarProperty Name="Freetexttype" ColumnName="Freetexttype" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblfskstyle_dimension1_">
+      <EntityTypeMapping TypeName="e4kmaximusdbModel.tblfskstyle_dimension1_">
+        <MappingFragment StoreEntitySet="tblfskstyle_dimension1_">
+          <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+          <ScalarProperty Name="DimensionId" ColumnName="DimensionId" />
+          <ScalarProperty Name="StyleId" ColumnName="StyleId" />
+          <ScalarProperty Name="FreeTextType" ColumnName="FreeTextType" />
+          <ScalarProperty Name="StyleImage" ColumnName="StyleImage" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="tblfstk_feature">
       <EntityTypeMapping TypeName="e4kmaximusdbModel.tblfstk_feature">
         <MappingFragment StoreEntitySet="tblfstk_feature">
@@ -1153,17 +1219,6 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="tblonline_emp_address_copy">
-      <EntityTypeMapping TypeName="e4kmaximusdbModel.tblonline_emp_address_copy">
-        <MappingFragment StoreEntitySet="tblonline_emp_address_copy">
-          <ScalarProperty Name="Companyid" ColumnName="Companyid" />
-          <ScalarProperty Name="BusinessId" ColumnName="BusinessId" />
-          <ScalarProperty Name="OnlineUserId" ColumnName="OnlineUserId" />
-          <ScalarProperty Name="Employeeid" ColumnName="Employeeid" />
-          <ScalarProperty Name="AddressId" ColumnName="AddressId" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <EntitySetMapping Name="tblonline_holidays">
       <EntityTypeMapping TypeName="e4kmaximusdbModel.tblonline_holidays">
         <MappingFragment StoreEntitySet="tblonline_holidays">
@@ -1203,9 +1258,28 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="tblonline_rolloutorders_reqstatus_atlasfm">
+      <EntityTypeMapping TypeName="e4kmaximusdbModel.tblonline_rolloutorders_reqstatus_atlasfm">
+        <MappingFragment StoreEntitySet="tblonline_rolloutorders_reqstatus_atlasfm">
+          <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+          <ScalarProperty Name="OrderNo" ColumnName="OrderNo" />
+          <ScalarProperty Name="IsReq" ColumnName="IsReq" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="tblonline_userid_employee">
       <EntityTypeMapping TypeName="e4kmaximusdbModel.tblonline_userid_employee">
         <MappingFragment StoreEntitySet="tblonline_userid_employee">
+          <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+          <ScalarProperty Name="BusinessID" ColumnName="BusinessID" />
+          <ScalarProperty Name="OnlineUserID" ColumnName="OnlineUserID" />
+          <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblonline_userid_employee_atlasfm">
+      <EntityTypeMapping TypeName="e4kmaximusdbModel.tblonline_userid_employee_atlasfm">
+        <MappingFragment StoreEntitySet="tblonline_userid_employee_atlasfm">
           <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
           <ScalarProperty Name="BusinessID" ColumnName="BusinessID" />
           <ScalarProperty Name="OnlineUserID" ColumnName="OnlineUserID" />
@@ -1864,6 +1938,58 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="tblsop_salesorder_detail_atlasfm">
+      <EntityTypeMapping TypeName="e4kmaximusdbModel.tblsop_salesorder_detail_atlasfm">
+        <MappingFragment StoreEntitySet="tblsop_salesorder_detail_atlasfm">
+          <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+          <ScalarProperty Name="Warehouseid" ColumnName="Warehouseid" />
+          <ScalarProperty Name="OrderNo" ColumnName="OrderNo" />
+          <ScalarProperty Name="LineNo" ColumnName="LineNo" />
+          <ScalarProperty Name="LineType" ColumnName="LineType" />
+          <ScalarProperty Name="StyleID" ColumnName="StyleID" />
+          <ScalarProperty Name="ColourID" ColumnName="ColourID" />
+          <ScalarProperty Name="SizeID" ColumnName="SizeID" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="Price" ColumnName="Price" />
+          <ScalarProperty Name="Cost" ColumnName="Cost" />
+          <ScalarProperty Name="OrdQty" ColumnName="OrdQty" />
+          <ScalarProperty Name="AllQty" ColumnName="AllQty" />
+          <ScalarProperty Name="InvQty" ColumnName="InvQty" />
+          <ScalarProperty Name="DespQty" ColumnName="DespQty" />
+          <ScalarProperty Name="CommissionRate" ColumnName="CommissionRate" />
+          <ScalarProperty Name="Discount" ColumnName="Discount" />
+          <ScalarProperty Name="Deliverydate" ColumnName="Deliverydate" />
+          <ScalarProperty Name="VatCode" ColumnName="VatCode" />
+          <ScalarProperty Name="NomCode" ColumnName="NomCode" />
+          <ScalarProperty Name="PartShip" ColumnName="PartShip" />
+          <ScalarProperty Name="LineNoRef" ColumnName="LineNoRef" />
+          <ScalarProperty Name="Currency_Exchange_Rate" ColumnName="Currency_Exchange_Rate" />
+          <ScalarProperty Name="StyleIDref" ColumnName="StyleIDref" />
+          <ScalarProperty Name="FreeText" ColumnName="FreeText" />
+          <ScalarProperty Name="RepID" ColumnName="RepID" />
+          <ScalarProperty Name="RepRate" ColumnName="RepRate" />
+          <ScalarProperty Name="KamID" ColumnName="KamID" />
+          <ScalarProperty Name="KAMRate" ColumnName="KAMRate" />
+          <ScalarProperty Name="IssueUOM" ColumnName="IssueUOM" />
+          <ScalarProperty Name="IssueQty" ColumnName="IssueQty" />
+          <ScalarProperty Name="StockingUOM" ColumnName="StockingUOM" />
+          <ScalarProperty Name="OriginalOrderNo" ColumnName="OriginalOrderNo" />
+          <ScalarProperty Name="OriginalLineNo" ColumnName="OriginalLineNo" />
+          <ScalarProperty Name="SOPDETAIL1" ColumnName="SOPDETAIL1" />
+          <ScalarProperty Name="SOPDETAIL2" ColumnName="SOPDETAIL2" />
+          <ScalarProperty Name="SOPDETAIL3" ColumnName="SOPDETAIL3" />
+          <ScalarProperty Name="SOPDETAIL4" ColumnName="SOPDETAIL4" />
+          <ScalarProperty Name="SOPDETAIL5" ColumnName="SOPDETAIL5" />
+          <ScalarProperty Name="Jobsheetno" ColumnName="Jobsheetno" />
+          <ScalarProperty Name="JobsheetLineNo" ColumnName="JobsheetLineNo" />
+          <ScalarProperty Name="AssemblyID" ColumnName="AssemblyID" />
+          <ScalarProperty Name="AsmLineNo" ColumnName="AsmLineNo" />
+          <ScalarProperty Name="ReasonCode" ColumnName="ReasonCode" />
+          <ScalarProperty Name="ReturnOrderNo" ColumnName="ReturnOrderNo" />
+          <ScalarProperty Name="ReturnLineNo" ColumnName="ReturnLineNo" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="tblsop_salesorder_detail_offline">
       <EntityTypeMapping TypeName="e4kmaximusdbModel.tblsop_salesorder_detail_offline">
         <MappingFragment StoreEntitySet="tblsop_salesorder_detail_offline">
@@ -1971,6 +2097,81 @@
     <EntitySetMapping Name="tblsop_salesorder_header">
       <EntityTypeMapping TypeName="e4kmaximusdbModel.tblsop_salesorder_header">
         <MappingFragment StoreEntitySet="tblsop_salesorder_header">
+          <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+          <ScalarProperty Name="WarehouseID" ColumnName="WarehouseID" />
+          <ScalarProperty Name="OrderNo" ColumnName="OrderNo" />
+          <ScalarProperty Name="CustID" ColumnName="CustID" />
+          <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+          <ScalarProperty Name="InvDesc" ColumnName="InvDesc" />
+          <ScalarProperty Name="InvAddress1" ColumnName="InvAddress1" />
+          <ScalarProperty Name="InvAddress2" ColumnName="InvAddress2" />
+          <ScalarProperty Name="InvAddress3" ColumnName="InvAddress3" />
+          <ScalarProperty Name="InvCity" ColumnName="InvCity" />
+          <ScalarProperty Name="InvTown" ColumnName="InvTown" />
+          <ScalarProperty Name="InvPostCode" ColumnName="InvPostCode" />
+          <ScalarProperty Name="InvCountry" ColumnName="InvCountry" />
+          <ScalarProperty Name="DelDesc" ColumnName="DelDesc" />
+          <ScalarProperty Name="DelAddress1" ColumnName="DelAddress1" />
+          <ScalarProperty Name="DelAddress2" ColumnName="DelAddress2" />
+          <ScalarProperty Name="DelAddress3" ColumnName="DelAddress3" />
+          <ScalarProperty Name="DelCity" ColumnName="DelCity" />
+          <ScalarProperty Name="DelTown" ColumnName="DelTown" />
+          <ScalarProperty Name="DelPostCode" ColumnName="DelPostCode" />
+          <ScalarProperty Name="DelCountry" ColumnName="DelCountry" />
+          <ScalarProperty Name="CustRef" ColumnName="CustRef" />
+          <ScalarProperty Name="ContractRef" ColumnName="ContractRef" />
+          <ScalarProperty Name="Comments" ColumnName="Comments" />
+          <ScalarProperty Name="InvoiceDate" ColumnName="InvoiceDate" />
+          <ScalarProperty Name="Carrier" ColumnName="Carrier" />
+          <ScalarProperty Name="CarrierCharge" ColumnName="CarrierCharge" />
+          <ScalarProperty Name="CustDisc" ColumnName="CustDisc" />
+          <ScalarProperty Name="SettDisc" ColumnName="SettDisc" />
+          <ScalarProperty Name="VolDisc" ColumnName="VolDisc" />
+          <ScalarProperty Name="SettlementDays" ColumnName="SettlementDays" />
+          <ScalarProperty Name="OrderConfirm" ColumnName="OrderConfirm" />
+          <ScalarProperty Name="CommentsExternal" ColumnName="CommentsExternal" />
+          <ScalarProperty Name="Cancelled" ColumnName="Cancelled" />
+          <ScalarProperty Name="ProForma" ColumnName="ProForma" />
+          <ScalarProperty Name="Completed" ColumnName="Completed" />
+          <ScalarProperty Name="WorksOrderNo" ColumnName="WorksOrderNo" />
+          <ScalarProperty Name="AllowPartShipment" ColumnName="AllowPartShipment" />
+          <ScalarProperty Name="TotalGoods" ColumnName="TotalGoods" />
+          <ScalarProperty Name="OrderGoods" ColumnName="OrderGoods" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="pRINTINVOICE" ColumnName="pRINTINVOICE" />
+          <ScalarProperty Name="Currency_Exchange_Rate" ColumnName="Currency_Exchange_Rate" />
+          <ScalarProperty Name="PinNo" ColumnName="PinNo" />
+          <ScalarProperty Name="UCodeId" ColumnName="UCodeId" />
+          <ScalarProperty Name="ContractNo" ColumnName="ContractNo" />
+          <ScalarProperty Name="Currency_Exchange_Code" ColumnName="Currency_Exchange_Code" />
+          <ScalarProperty Name="TIMEOFENTRY" ColumnName="TIMEOFENTRY" />
+          <ScalarProperty Name="RepID" ColumnName="RepID" />
+          <ScalarProperty Name="RepNo" ColumnName="RepNo" />
+          <ScalarProperty Name="OnlineConfirm" ColumnName="OnlineConfirm" />
+          <ScalarProperty Name="OnlineConfirmDate" ColumnName="OnlineConfirmDate" />
+          <ScalarProperty Name="OnlineConfirmedBy" ColumnName="OnlineConfirmedBy" />
+          <ScalarProperty Name="OnlineProcessed" ColumnName="OnlineProcessed" />
+          <ScalarProperty Name="OnlineProcessedDate" ColumnName="OnlineProcessedDate" />
+          <ScalarProperty Name="OnlineProcessedBy" ColumnName="OnlineProcessedBy" />
+          <ScalarProperty Name="ReasonCode" ColumnName="ReasonCode" />
+          <ScalarProperty Name="OnlineUserID" ColumnName="OnlineUserID" />
+          <ScalarProperty Name="OrderAnalysisCode1" ColumnName="OrderAnalysisCode1" />
+          <ScalarProperty Name="OrderAnalysisCode2" ColumnName="OrderAnalysisCode2" />
+          <ScalarProperty Name="OrderAnalysisCode3" ColumnName="OrderAnalysisCode3" />
+          <ScalarProperty Name="OrderAnalysisCode4" ColumnName="OrderAnalysisCode4" />
+          <ScalarProperty Name="OrderAnalysisCode5" ColumnName="OrderAnalysisCode5" />
+          <ScalarProperty Name="PrintLabel" ColumnName="PrintLabel" />
+          <ScalarProperty Name="ProFormaPrint" ColumnName="ProFormaPrint" />
+          <ScalarProperty Name="ConfirmPrint" ColumnName="ConfirmPrint" />
+          <ScalarProperty Name="OrderType" ColumnName="OrderType" />
+          <ScalarProperty Name="EmailID" ColumnName="EmailID" />
+          <ScalarProperty Name="ContactName" ColumnName="ContactName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblsop_salesorder_header_atlasfm">
+      <EntityTypeMapping TypeName="e4kmaximusdbModel.tblsop_salesorder_header_atlasfm">
+        <MappingFragment StoreEntitySet="tblsop_salesorder_header_atlasfm">
           <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
           <ScalarProperty Name="WarehouseID" ColumnName="WarehouseID" />
           <ScalarProperty Name="OrderNo" ColumnName="OrderNo" />
@@ -2410,176 +2611,116 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="hr_visexp01_address_map_bak">
-      <EntityTypeMapping TypeName="e4kmaximusdbModel.hr_visexp01_address_map_bak">
-        <MappingFragment StoreEntitySet="hr_visexp01_address_map_bak">
-          <ScalarProperty Name="Companyid" ColumnName="Companyid" />
-          <ScalarProperty Name="BusinessId" ColumnName="BusinessId" />
-          <ScalarProperty Name="OnlineUserId" ColumnName="OnlineUserId" />
-          <ScalarProperty Name="Employeeid" ColumnName="Employeeid" />
-          <ScalarProperty Name="AddressId" ColumnName="AddressId" />
-          <ScalarProperty Name="MapUser" ColumnName="MapUser" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="rollout_order_detail_tsb">
-      <EntityTypeMapping TypeName="e4kmaximusdbModel.rollout_order_detail_tsb">
-        <MappingFragment StoreEntitySet="rollout_order_detail_tsb">
+    <EntitySetMapping Name="bak_tblaccemp_employee_tsb">
+      <EntityTypeMapping TypeName="e4kmaximusdbModel.bak_tblaccemp_employee_tsb">
+        <MappingFragment StoreEntitySet="bak_tblaccemp_employee_tsb">
           <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
-          <ScalarProperty Name="Warehouseid" ColumnName="Warehouseid" />
-          <ScalarProperty Name="OrderNo" ColumnName="OrderNo" />
-          <ScalarProperty Name="LineNo" ColumnName="LineNo" />
-          <ScalarProperty Name="LineType" ColumnName="LineType" />
-          <ScalarProperty Name="StyleID" ColumnName="StyleID" />
-          <ScalarProperty Name="ColourID" ColumnName="ColourID" />
-          <ScalarProperty Name="SizeID" ColumnName="SizeID" />
-          <ScalarProperty Name="Description" ColumnName="Description" />
-          <ScalarProperty Name="Price" ColumnName="Price" />
-          <ScalarProperty Name="Cost" ColumnName="Cost" />
-          <ScalarProperty Name="OrdQty" ColumnName="OrdQty" />
-          <ScalarProperty Name="AllQty" ColumnName="AllQty" />
-          <ScalarProperty Name="InvQty" ColumnName="InvQty" />
-          <ScalarProperty Name="DespQty" ColumnName="DespQty" />
-          <ScalarProperty Name="CommissionRate" ColumnName="CommissionRate" />
-          <ScalarProperty Name="Discount" ColumnName="Discount" />
-          <ScalarProperty Name="Deliverydate" ColumnName="Deliverydate" />
-          <ScalarProperty Name="VatCode" ColumnName="VatCode" />
-          <ScalarProperty Name="NomCode" ColumnName="NomCode" />
-          <ScalarProperty Name="PartShip" ColumnName="PartShip" />
-          <ScalarProperty Name="LineNoRef" ColumnName="LineNoRef" />
-          <ScalarProperty Name="Currency_Exchange_Rate" ColumnName="Currency_Exchange_Rate" />
-          <ScalarProperty Name="StyleIDref" ColumnName="StyleIDref" />
-          <ScalarProperty Name="FreeText" ColumnName="FreeText" />
-          <ScalarProperty Name="RepID" ColumnName="RepID" />
-          <ScalarProperty Name="RepRate" ColumnName="RepRate" />
-          <ScalarProperty Name="KamID" ColumnName="KamID" />
-          <ScalarProperty Name="KAMRate" ColumnName="KAMRate" />
-          <ScalarProperty Name="IssueUOM" ColumnName="IssueUOM" />
-          <ScalarProperty Name="IssueQty" ColumnName="IssueQty" />
-          <ScalarProperty Name="StockingUOM" ColumnName="StockingUOM" />
-          <ScalarProperty Name="OriginalOrderNo" ColumnName="OriginalOrderNo" />
-          <ScalarProperty Name="OriginalLineNo" ColumnName="OriginalLineNo" />
-          <ScalarProperty Name="SOPDETAIL1" ColumnName="SOPDETAIL1" />
-          <ScalarProperty Name="SOPDETAIL2" ColumnName="SOPDETAIL2" />
-          <ScalarProperty Name="SOPDETAIL3" ColumnName="SOPDETAIL3" />
-          <ScalarProperty Name="SOPDETAIL4" ColumnName="SOPDETAIL4" />
-          <ScalarProperty Name="SOPDETAIL5" ColumnName="SOPDETAIL5" />
-          <ScalarProperty Name="Jobsheetno" ColumnName="Jobsheetno" />
-          <ScalarProperty Name="JobsheetLineNo" ColumnName="JobsheetLineNo" />
-          <ScalarProperty Name="AssemblyID" ColumnName="AssemblyID" />
-          <ScalarProperty Name="AsmLineNo" ColumnName="AsmLineNo" />
-          <ScalarProperty Name="ReasonCode" ColumnName="ReasonCode" />
-          <ScalarProperty Name="ReturnOrderNo" ColumnName="ReturnOrderNo" />
-          <ScalarProperty Name="ReturnLineNo" ColumnName="ReturnLineNo" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="rollout_order_header_address_tsb">
-      <EntityTypeMapping TypeName="e4kmaximusdbModel.rollout_order_header_address_tsb">
-        <MappingFragment StoreEntitySet="rollout_order_header_address_tsb">
           <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
           <ScalarProperty Name="BusinessID" ColumnName="BusinessID" />
-          <ScalarProperty Name="OnlineUserID" ColumnName="OnlineUserID" />
-          <ScalarProperty Name="AddressID" ColumnName="AddressID" />
-          <ScalarProperty Name="Description" ColumnName="Description" />
-          <ScalarProperty Name="Address1" ColumnName="Address1" />
-          <ScalarProperty Name="Address2" ColumnName="Address2" />
-          <ScalarProperty Name="Address3" ColumnName="Address3" />
-          <ScalarProperty Name="City" ColumnName="City" />
-          <ScalarProperty Name="Town" ColumnName="Town" />
-          <ScalarProperty Name="Postcode" ColumnName="Postcode" />
+          <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
+          <ScalarProperty Name="GroupID" ColumnName="GroupID" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="Forename" ColumnName="Forename" />
+          <ScalarProperty Name="Surname" ColumnName="Surname" />
+          <ScalarProperty Name="StartDate" ColumnName="StartDate" />
+          <ScalarProperty Name="EndDate" ColumnName="EndDate" />
+          <ScalarProperty Name="EmployeeClosed" ColumnName="EmployeeClosed" />
+          <ScalarProperty Name="roleid" ColumnName="roleid" />
+          <ScalarProperty Name="IsDefault" ColumnName="IsDefault" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="rollout_order_header_tsb">
-      <EntityTypeMapping TypeName="e4kmaximusdbModel.rollout_order_header_tsb">
-        <MappingFragment StoreEntitySet="rollout_order_header_tsb">
+    <EntitySetMapping Name="copy_tblusers">
+      <EntityTypeMapping TypeName="e4kmaximusdbModel.copy_tblusers">
+        <MappingFragment StoreEntitySet="copy_tblusers">
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="ForeName" ColumnName="ForeName" />
+          <ScalarProperty Name="SurName" ColumnName="SurName" />
+          <ScalarProperty Name="ContactNo" ColumnName="ContactNo" />
+          <ScalarProperty Name="AccessID" ColumnName="AccessID" />
+          <ScalarProperty Name="Active" ColumnName="Active" />
+          <ScalarProperty Name="BusinessID" ColumnName="BusinessID" />
+          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
+          <ScalarProperty Name="LastIPAddress" ColumnName="LastIPAddress" />
+          <ScalarProperty Name="LastLoggedDate" ColumnName="LastLoggedDate" />
+          <ScalarProperty Name="Createdby" ColumnName="Createdby" />
+          <ScalarProperty Name="Email_ID" ColumnName="Email_ID" />
+          <ScalarProperty Name="AspUserID" ColumnName="AspUserID" />
+          <ScalarProperty Name="BusinessName" ColumnName="BusinessName" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="hr_demo_address">
+      <EntityTypeMapping TypeName="e4kmaximusdbModel.hr_demo_address">
+        <MappingFragment StoreEntitySet="hr_demo_address">
           <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
-          <ScalarProperty Name="WarehouseID" ColumnName="WarehouseID" />
-          <ScalarProperty Name="OrderNo" ColumnName="OrderNo" />
+          <ScalarProperty Name="BusinessID" ColumnName="BusinessID" />
+          <ScalarProperty Name="OldAddressID" ColumnName="OldAddressID" />
+          <ScalarProperty Name="NewAddressID" ColumnName="NewAddressID" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+          <ScalarProperty Name="PostCode" ColumnName="PostCode" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="hr_demo_employee">
+      <EntityTypeMapping TypeName="e4kmaximusdbModel.hr_demo_employee">
+        <MappingFragment StoreEntitySet="hr_demo_employee">
+          <ScalarProperty Name="BusinessID" ColumnName="BusinessID" />
+          <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+          <ScalarProperty Name="NewEmployeeID" ColumnName="NewEmployeeID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="hr_demo_invoices">
+      <EntityTypeMapping TypeName="e4kmaximusdbModel.hr_demo_invoices">
+        <MappingFragment StoreEntitySet="hr_demo_invoices">
+          <ScalarProperty Name="SalesOrder" ColumnName="SalesOrder" />
+          <ScalarProperty Name="NewOrderNo" ColumnName="NewOrderNo" />
+          <ScalarProperty Name="PickingSlipNo" ColumnName="PickingSlipNo" />
+          <ScalarProperty Name="NewPickSlipNo" ColumnName="NewPickSlipNo" />
+          <ScalarProperty Name="InvoiceNo" ColumnName="InvoiceNo" />
+          <ScalarProperty Name="NewInvoiceNo" ColumnName="NewInvoiceNo" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="hr_demo_orders">
+      <EntityTypeMapping TypeName="e4kmaximusdbModel.hr_demo_orders">
+        <MappingFragment StoreEntitySet="hr_demo_orders">
           <ScalarProperty Name="CustID" ColumnName="CustID" />
-          <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
-          <ScalarProperty Name="InvDesc" ColumnName="InvDesc" />
-          <ScalarProperty Name="InvAddress1" ColumnName="InvAddress1" />
-          <ScalarProperty Name="InvAddress2" ColumnName="InvAddress2" />
-          <ScalarProperty Name="InvAddress3" ColumnName="InvAddress3" />
-          <ScalarProperty Name="InvCity" ColumnName="InvCity" />
-          <ScalarProperty Name="InvTown" ColumnName="InvTown" />
-          <ScalarProperty Name="InvPostCode" ColumnName="InvPostCode" />
-          <ScalarProperty Name="InvCountry" ColumnName="InvCountry" />
-          <ScalarProperty Name="DelDesc" ColumnName="DelDesc" />
-          <ScalarProperty Name="DelAddress1" ColumnName="DelAddress1" />
-          <ScalarProperty Name="DelAddress2" ColumnName="DelAddress2" />
-          <ScalarProperty Name="DelAddress3" ColumnName="DelAddress3" />
-          <ScalarProperty Name="DelCity" ColumnName="DelCity" />
-          <ScalarProperty Name="DelTown" ColumnName="DelTown" />
-          <ScalarProperty Name="DelPostCode" ColumnName="DelPostCode" />
-          <ScalarProperty Name="DelCountry" ColumnName="DelCountry" />
-          <ScalarProperty Name="CustRef" ColumnName="CustRef" />
-          <ScalarProperty Name="ContractRef" ColumnName="ContractRef" />
-          <ScalarProperty Name="Comments" ColumnName="Comments" />
-          <ScalarProperty Name="InvoiceDate" ColumnName="InvoiceDate" />
-          <ScalarProperty Name="Carrier" ColumnName="Carrier" />
-          <ScalarProperty Name="CarrierCharge" ColumnName="CarrierCharge" />
-          <ScalarProperty Name="CustDisc" ColumnName="CustDisc" />
-          <ScalarProperty Name="SettDisc" ColumnName="SettDisc" />
-          <ScalarProperty Name="VolDisc" ColumnName="VolDisc" />
-          <ScalarProperty Name="SettlementDays" ColumnName="SettlementDays" />
-          <ScalarProperty Name="OrderConfirm" ColumnName="OrderConfirm" />
-          <ScalarProperty Name="CommentsExternal" ColumnName="CommentsExternal" />
-          <ScalarProperty Name="Cancelled" ColumnName="Cancelled" />
-          <ScalarProperty Name="ProForma" ColumnName="ProForma" />
-          <ScalarProperty Name="Completed" ColumnName="Completed" />
-          <ScalarProperty Name="WorksOrderNo" ColumnName="WorksOrderNo" />
-          <ScalarProperty Name="AllowPartShipment" ColumnName="AllowPartShipment" />
-          <ScalarProperty Name="TotalGoods" ColumnName="TotalGoods" />
-          <ScalarProperty Name="OrderGoods" ColumnName="OrderGoods" />
-          <ScalarProperty Name="UserID" ColumnName="UserID" />
-          <ScalarProperty Name="pRINTINVOICE" ColumnName="pRINTINVOICE" />
-          <ScalarProperty Name="Currency_Exchange_Rate" ColumnName="Currency_Exchange_Rate" />
           <ScalarProperty Name="PinNo" ColumnName="PinNo" />
-          <ScalarProperty Name="UCodeId" ColumnName="UCodeId" />
-          <ScalarProperty Name="ContractNo" ColumnName="ContractNo" />
-          <ScalarProperty Name="Currency_Exchange_Code" ColumnName="Currency_Exchange_Code" />
-          <ScalarProperty Name="TIMEOFENTRY" ColumnName="TIMEOFENTRY" />
-          <ScalarProperty Name="RepID" ColumnName="RepID" />
-          <ScalarProperty Name="RepNo" ColumnName="RepNo" />
-          <ScalarProperty Name="OnlineConfirm" ColumnName="OnlineConfirm" />
-          <ScalarProperty Name="OnlineConfirmDate" ColumnName="OnlineConfirmDate" />
-          <ScalarProperty Name="OnlineConfirmedBy" ColumnName="OnlineConfirmedBy" />
-          <ScalarProperty Name="OnlineProcessed" ColumnName="OnlineProcessed" />
-          <ScalarProperty Name="OnlineProcessedDate" ColumnName="OnlineProcessedDate" />
-          <ScalarProperty Name="OnlineProcessedBy" ColumnName="OnlineProcessedBy" />
-          <ScalarProperty Name="ReasonCode" ColumnName="ReasonCode" />
-          <ScalarProperty Name="OnlineUserID" ColumnName="OnlineUserID" />
-          <ScalarProperty Name="OrderAnalysisCode1" ColumnName="OrderAnalysisCode1" />
-          <ScalarProperty Name="OrderAnalysisCode2" ColumnName="OrderAnalysisCode2" />
-          <ScalarProperty Name="OrderAnalysisCode3" ColumnName="OrderAnalysisCode3" />
-          <ScalarProperty Name="OrderAnalysisCode4" ColumnName="OrderAnalysisCode4" />
-          <ScalarProperty Name="OrderAnalysisCode5" ColumnName="OrderAnalysisCode5" />
-          <ScalarProperty Name="PrintLabel" ColumnName="PrintLabel" />
-          <ScalarProperty Name="ProFormaPrint" ColumnName="ProFormaPrint" />
-          <ScalarProperty Name="ConfirmPrint" ColumnName="ConfirmPrint" />
-          <ScalarProperty Name="OrderType" ColumnName="OrderType" />
+          <ScalarProperty Name="OrderNo" ColumnName="OrderNo" />
+          <ScalarProperty Name="NewOrderNo" ColumnName="NewOrderNo" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="stockcard_tsb_rollout">
-      <EntityTypeMapping TypeName="e4kmaximusdbModel.stockcard_tsb_rollout">
-        <MappingFragment StoreEntitySet="stockcard_tsb_rollout">
-          <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
-          <ScalarProperty Name="BusinessID" ColumnName="BusinessID" />
-          <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+    <EntitySetMapping Name="hr_demo_pickslips">
+      <EntityTypeMapping TypeName="e4kmaximusdbModel.hr_demo_pickslips">
+        <MappingFragment StoreEntitySet="hr_demo_pickslips">
+          <ScalarProperty Name="CustID" ColumnName="CustID" />
+          <ScalarProperty Name="PinNo" ColumnName="PinNo" />
+          <ScalarProperty Name="OrderNo" ColumnName="OrderNo" />
+          <ScalarProperty Name="NewOrderNo" ColumnName="NewOrderNo" />
+          <ScalarProperty Name="PickingSlipNo" ColumnName="PickingSlipNo" />
+          <ScalarProperty Name="NewPickSlipNo" ColumnName="NewPickSlipNo" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="hr_demo_style">
+      <EntityTypeMapping TypeName="e4kmaximusdbModel.hr_demo_style">
+        <MappingFragment StoreEntitySet="hr_demo_style">
           <ScalarProperty Name="StyleID" ColumnName="StyleID" />
-          <ScalarProperty Name="ColourID" ColumnName="ColourID" />
-          <ScalarProperty Name="Year" ColumnName="Year" />
-          <ScalarProperty Name="SOQty" ColumnName="SOQty" />
-          <ScalarProperty Name="PickQty" ColumnName="PickQty" />
-          <ScalarProperty Name="InvQty" ColumnName="InvQty" />
-          <ScalarProperty Name="TotalIssues" ColumnName="TotalIssues" />
-          <ScalarProperty Name="FirstIssueDate" ColumnName="FirstIssueDate" />
-          <ScalarProperty Name="StartIssueDate" ColumnName="StartIssueDate" />
-          <ScalarProperty Name="LastIssueDate" ColumnName="LastIssueDate" />
+          <ScalarProperty Name="NewStyleID" ColumnName="NewStyleID" />
+          <ScalarProperty Name="NewDescription" ColumnName="NewDescription" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="hr_demo_ucode">
+      <EntityTypeMapping TypeName="e4kmaximusdbModel.hr_demo_ucode">
+        <MappingFragment StoreEntitySet="hr_demo_ucode">
+          <ScalarProperty Name="BusinessID" ColumnName="BusinessID" />
+          <ScalarProperty Name="UcodeID" ColumnName="UcodeID" />
+          <ScalarProperty Name="NewUCodeID" ColumnName="NewUCodeID" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -2598,42 +2739,18 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="tblbus_address_s27">
-      <EntityTypeMapping TypeName="e4kmaximusdbModel.tblbus_address_s27">
-        <MappingFragment StoreEntitySet="tblbus_address_s27">
-          <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
-          <ScalarProperty Name="BusinessID" ColumnName="BusinessID" />
-          <ScalarProperty Name="AddressID" ColumnName="AddressID" />
-          <ScalarProperty Name="Description" ColumnName="Description" />
-          <ScalarProperty Name="Address1" ColumnName="Address1" />
-          <ScalarProperty Name="Address2" ColumnName="Address2" />
-          <ScalarProperty Name="Address3" ColumnName="Address3" />
-          <ScalarProperty Name="Town" ColumnName="Town" />
-          <ScalarProperty Name="City" ColumnName="City" />
-          <ScalarProperty Name="Postcode" ColumnName="Postcode" />
-          <ScalarProperty Name="CountryCode" ColumnName="CountryCode" />
-          <ScalarProperty Name="AddressTypeID" ColumnName="AddressTypeID" />
-          <ScalarProperty Name="ContactID" ColumnName="ContactID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="tblbus_contact_s27">
-      <EntityTypeMapping TypeName="e4kmaximusdbModel.tblbus_contact_s27">
-        <MappingFragment StoreEntitySet="tblbus_contact_s27">
-          <ScalarProperty Name="ID" ColumnName="ID" />
-          <ScalarProperty Name="ContactID" ColumnName="ContactID" />
-          <ScalarProperty Name="ContactType_ID" ColumnName="ContactType_ID" />
-          <ScalarProperty Name="Value" ColumnName="Value" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="tblonline_userid_employee_s27">
-      <EntityTypeMapping TypeName="e4kmaximusdbModel.tblonline_userid_employee_s27">
-        <MappingFragment StoreEntitySet="tblonline_userid_employee_s27">
-          <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
-          <ScalarProperty Name="BusinessID" ColumnName="BusinessID" />
-          <ScalarProperty Name="OnlineUserID" ColumnName="OnlineUserID" />
-          <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+    <EntitySetMapping Name="tblbus_settings">
+      <EntityTypeMapping TypeName="e4kmaximusdbModel.tblbus_settings">
+        <MappingFragment StoreEntitySet="tblbus_settings">
+          <ScalarProperty Name="SettingID" ColumnName="SettingID" />
+          <ScalarProperty Name="BusType" ColumnName="BusType" />
+          <ScalarProperty Name="SettingName1" ColumnName="SettingName1" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="Category" ColumnName="Category" />
+          <ScalarProperty Name="DefaultValue" ColumnName="DefaultValue" />
+          <ScalarProperty Name="SeqNo" ColumnName="SeqNo" />
+          <ScalarProperty Name="Lookup_Table" ColumnName="Lookup_Table" />
+          <ScalarProperty Name="Lookup_Text" ColumnName="Lookup_Text" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -2663,58 +2780,6 @@
           <ScalarProperty Name="Value1" ColumnName="Value1" />
           <ScalarProperty Name="DueDate" ColumnName="DueDate" />
           <ScalarProperty Name="CommentsExternal" ColumnName="CommentsExternal" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="tblsop_salesorder_detail_bk">
-      <EntityTypeMapping TypeName="e4kmaximusdbModel.tblsop_salesorder_detail_bk">
-        <MappingFragment StoreEntitySet="tblsop_salesorder_detail_bk">
-          <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
-          <ScalarProperty Name="Warehouseid" ColumnName="Warehouseid" />
-          <ScalarProperty Name="OrderNo" ColumnName="OrderNo" />
-          <ScalarProperty Name="LineNo" ColumnName="LineNo" />
-          <ScalarProperty Name="LineType" ColumnName="LineType" />
-          <ScalarProperty Name="StyleID" ColumnName="StyleID" />
-          <ScalarProperty Name="ColourID" ColumnName="ColourID" />
-          <ScalarProperty Name="SizeID" ColumnName="SizeID" />
-          <ScalarProperty Name="Description" ColumnName="Description" />
-          <ScalarProperty Name="Price" ColumnName="Price" />
-          <ScalarProperty Name="Cost" ColumnName="Cost" />
-          <ScalarProperty Name="OrdQty" ColumnName="OrdQty" />
-          <ScalarProperty Name="AllQty" ColumnName="AllQty" />
-          <ScalarProperty Name="InvQty" ColumnName="InvQty" />
-          <ScalarProperty Name="DespQty" ColumnName="DespQty" />
-          <ScalarProperty Name="CommissionRate" ColumnName="CommissionRate" />
-          <ScalarProperty Name="Discount" ColumnName="Discount" />
-          <ScalarProperty Name="Deliverydate" ColumnName="Deliverydate" />
-          <ScalarProperty Name="VatCode" ColumnName="VatCode" />
-          <ScalarProperty Name="NomCode" ColumnName="NomCode" />
-          <ScalarProperty Name="PartShip" ColumnName="PartShip" />
-          <ScalarProperty Name="LineNoRef" ColumnName="LineNoRef" />
-          <ScalarProperty Name="Currency_Exchange_Rate" ColumnName="Currency_Exchange_Rate" />
-          <ScalarProperty Name="StyleIDref" ColumnName="StyleIDref" />
-          <ScalarProperty Name="FreeText" ColumnName="FreeText" />
-          <ScalarProperty Name="RepID" ColumnName="RepID" />
-          <ScalarProperty Name="RepRate" ColumnName="RepRate" />
-          <ScalarProperty Name="KamID" ColumnName="KamID" />
-          <ScalarProperty Name="KAMRate" ColumnName="KAMRate" />
-          <ScalarProperty Name="IssueUOM" ColumnName="IssueUOM" />
-          <ScalarProperty Name="IssueQty" ColumnName="IssueQty" />
-          <ScalarProperty Name="StockingUOM" ColumnName="StockingUOM" />
-          <ScalarProperty Name="OriginalOrderNo" ColumnName="OriginalOrderNo" />
-          <ScalarProperty Name="OriginalLineNo" ColumnName="OriginalLineNo" />
-          <ScalarProperty Name="SOPDETAIL1" ColumnName="SOPDETAIL1" />
-          <ScalarProperty Name="SOPDETAIL2" ColumnName="SOPDETAIL2" />
-          <ScalarProperty Name="SOPDETAIL3" ColumnName="SOPDETAIL3" />
-          <ScalarProperty Name="SOPDETAIL4" ColumnName="SOPDETAIL4" />
-          <ScalarProperty Name="SOPDETAIL5" ColumnName="SOPDETAIL5" />
-          <ScalarProperty Name="Jobsheetno" ColumnName="Jobsheetno" />
-          <ScalarProperty Name="JobsheetLineNo" ColumnName="JobsheetLineNo" />
-          <ScalarProperty Name="AssemblyID" ColumnName="AssemblyID" />
-          <ScalarProperty Name="AsmLineNo" ColumnName="AsmLineNo" />
-          <ScalarProperty Name="ReasonCode" ColumnName="ReasonCode" />
-          <ScalarProperty Name="ReturnOrderNo" ColumnName="ReturnOrderNo" />
-          <ScalarProperty Name="ReturnLineNo" ColumnName="ReturnLineNo" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -2767,79 +2832,6 @@
           <ScalarProperty Name="ReasonCode" ColumnName="ReasonCode" />
           <ScalarProperty Name="ReturnOrderNo" ColumnName="ReturnOrderNo" />
           <ScalarProperty Name="ReturnLineNo" ColumnName="ReturnLineNo" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="tblsop_salesorder_header_bk">
-      <EntityTypeMapping TypeName="e4kmaximusdbModel.tblsop_salesorder_header_bk">
-        <MappingFragment StoreEntitySet="tblsop_salesorder_header_bk">
-          <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
-          <ScalarProperty Name="WarehouseID" ColumnName="WarehouseID" />
-          <ScalarProperty Name="OrderNo" ColumnName="OrderNo" />
-          <ScalarProperty Name="CustID" ColumnName="CustID" />
-          <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
-          <ScalarProperty Name="InvDesc" ColumnName="InvDesc" />
-          <ScalarProperty Name="InvAddress1" ColumnName="InvAddress1" />
-          <ScalarProperty Name="InvAddress2" ColumnName="InvAddress2" />
-          <ScalarProperty Name="InvAddress3" ColumnName="InvAddress3" />
-          <ScalarProperty Name="InvCity" ColumnName="InvCity" />
-          <ScalarProperty Name="InvTown" ColumnName="InvTown" />
-          <ScalarProperty Name="InvPostCode" ColumnName="InvPostCode" />
-          <ScalarProperty Name="InvCountry" ColumnName="InvCountry" />
-          <ScalarProperty Name="DelDesc" ColumnName="DelDesc" />
-          <ScalarProperty Name="DelAddress1" ColumnName="DelAddress1" />
-          <ScalarProperty Name="DelAddress2" ColumnName="DelAddress2" />
-          <ScalarProperty Name="DelAddress3" ColumnName="DelAddress3" />
-          <ScalarProperty Name="DelCity" ColumnName="DelCity" />
-          <ScalarProperty Name="DelTown" ColumnName="DelTown" />
-          <ScalarProperty Name="DelPostCode" ColumnName="DelPostCode" />
-          <ScalarProperty Name="DelCountry" ColumnName="DelCountry" />
-          <ScalarProperty Name="CustRef" ColumnName="CustRef" />
-          <ScalarProperty Name="ContractRef" ColumnName="ContractRef" />
-          <ScalarProperty Name="Comments" ColumnName="Comments" />
-          <ScalarProperty Name="InvoiceDate" ColumnName="InvoiceDate" />
-          <ScalarProperty Name="Carrier" ColumnName="Carrier" />
-          <ScalarProperty Name="CarrierCharge" ColumnName="CarrierCharge" />
-          <ScalarProperty Name="CustDisc" ColumnName="CustDisc" />
-          <ScalarProperty Name="SettDisc" ColumnName="SettDisc" />
-          <ScalarProperty Name="VolDisc" ColumnName="VolDisc" />
-          <ScalarProperty Name="SettlementDays" ColumnName="SettlementDays" />
-          <ScalarProperty Name="OrderConfirm" ColumnName="OrderConfirm" />
-          <ScalarProperty Name="CommentsExternal" ColumnName="CommentsExternal" />
-          <ScalarProperty Name="Cancelled" ColumnName="Cancelled" />
-          <ScalarProperty Name="ProForma" ColumnName="ProForma" />
-          <ScalarProperty Name="Completed" ColumnName="Completed" />
-          <ScalarProperty Name="WorksOrderNo" ColumnName="WorksOrderNo" />
-          <ScalarProperty Name="AllowPartShipment" ColumnName="AllowPartShipment" />
-          <ScalarProperty Name="TotalGoods" ColumnName="TotalGoods" />
-          <ScalarProperty Name="OrderGoods" ColumnName="OrderGoods" />
-          <ScalarProperty Name="UserID" ColumnName="UserID" />
-          <ScalarProperty Name="pRINTINVOICE" ColumnName="pRINTINVOICE" />
-          <ScalarProperty Name="Currency_Exchange_Rate" ColumnName="Currency_Exchange_Rate" />
-          <ScalarProperty Name="PinNo" ColumnName="PinNo" />
-          <ScalarProperty Name="UCodeId" ColumnName="UCodeId" />
-          <ScalarProperty Name="ContractNo" ColumnName="ContractNo" />
-          <ScalarProperty Name="Currency_Exchange_Code" ColumnName="Currency_Exchange_Code" />
-          <ScalarProperty Name="TIMEOFENTRY" ColumnName="TIMEOFENTRY" />
-          <ScalarProperty Name="RepID" ColumnName="RepID" />
-          <ScalarProperty Name="RepNo" ColumnName="RepNo" />
-          <ScalarProperty Name="OnlineConfirm" ColumnName="OnlineConfirm" />
-          <ScalarProperty Name="OnlineConfirmDate" ColumnName="OnlineConfirmDate" />
-          <ScalarProperty Name="OnlineConfirmedBy" ColumnName="OnlineConfirmedBy" />
-          <ScalarProperty Name="OnlineProcessed" ColumnName="OnlineProcessed" />
-          <ScalarProperty Name="OnlineProcessedDate" ColumnName="OnlineProcessedDate" />
-          <ScalarProperty Name="OnlineProcessedBy" ColumnName="OnlineProcessedBy" />
-          <ScalarProperty Name="ReasonCode" ColumnName="ReasonCode" />
-          <ScalarProperty Name="OnlineUserID" ColumnName="OnlineUserID" />
-          <ScalarProperty Name="OrderAnalysisCode1" ColumnName="OrderAnalysisCode1" />
-          <ScalarProperty Name="OrderAnalysisCode2" ColumnName="OrderAnalysisCode2" />
-          <ScalarProperty Name="OrderAnalysisCode3" ColumnName="OrderAnalysisCode3" />
-          <ScalarProperty Name="OrderAnalysisCode4" ColumnName="OrderAnalysisCode4" />
-          <ScalarProperty Name="OrderAnalysisCode5" ColumnName="OrderAnalysisCode5" />
-          <ScalarProperty Name="PrintLabel" ColumnName="PrintLabel" />
-          <ScalarProperty Name="ProFormaPrint" ColumnName="ProFormaPrint" />
-          <ScalarProperty Name="ConfirmPrint" ColumnName="ConfirmPrint" />
-          <ScalarProperty Name="OrderType" ColumnName="OrderType" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -3032,6 +3024,28 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="dim_fit_nongroup_styles">
+      <EntityTypeMapping TypeName="e4kmaximusdbModel.dim_fit_nongroup_styles">
+        <MappingFragment StoreEntitySet="dim_fit_nongroup_styles">
+          <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+          <ScalarProperty Name="WareHouseID" ColumnName="WareHouseID" />
+          <ScalarProperty Name="FreeTextType" ColumnName="FreeTextType" />
+          <ScalarProperty Name="FreeText" ColumnName="FreeText" />
+          <ScalarProperty Name="StyleId" ColumnName="StyleId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="dim_fit_styles">
+      <EntityTypeMapping TypeName="e4kmaximusdbModel.dim_fit_styles">
+        <MappingFragment StoreEntitySet="dim_fit_styles">
+          <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+          <ScalarProperty Name="WareHouseID" ColumnName="WareHouseID" />
+          <ScalarProperty Name="FreeTextType" ColumnName="FreeTextType" />
+          <ScalarProperty Name="FreeText" ColumnName="FreeText" />
+          <ScalarProperty Name="StyleIDs" ColumnName="StyleIDs" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="getallassemblies">
       <EntityTypeMapping TypeName="e4kmaximusdbModel.getallassembly">
         <MappingFragment StoreEntitySet="getallassemblies">
@@ -3140,6 +3154,17 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
+    <EntitySetMapping Name="productlists">
+      <EntityTypeMapping TypeName="e4kmaximusdbModel.productlist">
+        <MappingFragment StoreEntitySet="productlist">
+          <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+          <ScalarProperty Name="StyleID" ColumnName="StyleID" />
+          <ScalarProperty Name="ColourID" ColumnName="ColourID" />
+          <ScalarProperty Name="SizeID" ColumnName="SizeID" />
+          <ScalarProperty Name="SeqNo" ColumnName="SeqNo" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
     <EntitySetMapping Name="style_dimfitalloc_caption">
       <EntityTypeMapping TypeName="e4kmaximusdbModel.style_dimfitalloc_caption">
         <MappingFragment StoreEntitySet="style_dimfitalloc_caption">
@@ -3148,17 +3173,376 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="ucodeby_freetextview">
-      <EntityTypeMapping TypeName="e4kmaximusdbModel.ucodeby_freetextview">
-        <MappingFragment StoreEntitySet="ucodeby_freetextview">
-          <ScalarProperty Name="DimFreeText" ColumnName="DimFreeText" />
-          <ScalarProperty Name="SeqNo" ColumnName="SeqNo" />
+    <EntitySetMapping Name="styleby_freetextview">
+      <EntityTypeMapping TypeName="e4kmaximusdbModel.styleby_freetextview">
+        <MappingFragment StoreEntitySet="styleby_freetextview">
           <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
           <ScalarProperty Name="StyleID" ColumnName="StyleID" />
           <ScalarProperty Name="StyleImage" ColumnName="StyleImage" />
           <ScalarProperty Name="Product_Group" ColumnName="Product_Group" />
           <ScalarProperty Name="FreeText" ColumnName="FreeText" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="tblfskstyle_dimension1">
+      <EntityTypeMapping TypeName="e4kmaximusdbModel.tblfskstyle_dimension1">
+        <MappingFragment StoreEntitySet="tblfskstyle_dimension1">
+          <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+          <ScalarProperty Name="FreeText" ColumnName="FreeText" />
+          <ScalarProperty Name="StyleId" ColumnName="StyleId" />
+          <ScalarProperty Name="freetexttype" ColumnName="freetexttype" />
+          <ScalarProperty Name="StyleImage" ColumnName="StyleImage" />
+          <ScalarProperty Name="Description" ColumnName="Description" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ucodeby_freetextview">
+      <EntityTypeMapping TypeName="e4kmaximusdbModel.ucodeby_freetextview">
+        <MappingFragment StoreEntitySet="ucodeby_freetextview">
+          <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+          <ScalarProperty Name="StyleID" ColumnName="StyleID" />
+          <ScalarProperty Name="StyleImage" ColumnName="StyleImage" />
+          <ScalarProperty Name="Product_Group" ColumnName="Product_Group" />
+          <ScalarProperty Name="FreeText" ColumnName="FreeText" />
+          <ScalarProperty Name="DimFreeText" ColumnName="DimFreeText" />
           <ScalarProperty Name="UCodeID" ColumnName="UCodeID" />
+          <ScalarProperty Name="SeqNo" ColumnName="SeqNo" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="unrelatedorders">
+      <EntityTypeMapping TypeName="e4kmaximusdbModel.unrelatedorder">
+        <MappingFragment StoreEntitySet="unrelatedorders">
+          <ScalarProperty Name="OrderNo" ColumnName="OrderNo" />
+          <ScalarProperty Name="CustID" ColumnName="CustID" />
+          <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+          <ScalarProperty Name="PinNo" ColumnName="PinNo" />
+          <ScalarProperty Name="Forename" ColumnName="Forename" />
+          <ScalarProperty Name="Surname" ColumnName="Surname" />
+          <ScalarProperty Name="UCodeId" ColumnName="UCodeId" />
+          <ScalarProperty Name="StyleID" ColumnName="StyleID" />
+          <ScalarProperty Name="OrdQty" ColumnName="OrdQty" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="view_manpack">
+      <EntityTypeMapping TypeName="e4kmaximusdbModel.view_manpack">
+        <MappingFragment StoreEntitySet="view_manpack">
+          <ScalarProperty Name="ManPackNo" ColumnName="ManPackNo" />
+          <ScalarProperty Name="ManpackDate" ColumnName="ManpackDate" />
+          <ScalarProperty Name="TotalGoods" ColumnName="TotalGoods" />
+          <ScalarProperty Name="OrderGoods" ColumnName="OrderGoods" />
+          <ScalarProperty Name="CustID" ColumnName="CustID" />
+          <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+          <ScalarProperty Name="OnlineUserID" ColumnName="OnlineUserID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="view_noorderplacedforthisemployee">
+      <EntityTypeMapping TypeName="e4kmaximusdbModel.view_noorderplacedforthisemployee">
+        <MappingFragment StoreEntitySet="view_noorderplacedforthisemployee">
+          <ScalarProperty Name="BusinessID" ColumnName="BusinessID" />
+          <ScalarProperty Name="UCodeID" ColumnName="UCodeID" />
+          <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+          <ScalarProperty Name="Forename" ColumnName="Forename" />
+          <ScalarProperty Name="Surname" ColumnName="Surname" />
+          <ScalarProperty Name="UserName" ColumnName="UserName" />
+          <ScalarProperty Name="Password" ColumnName="Password" />
+          <ScalarProperty Name="AccessID" ColumnName="AccessID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="view_normatucodereissueorder">
+      <EntityTypeMapping TypeName="e4kmaximusdbModel.view_normatucodereissueorder">
+        <MappingFragment StoreEntitySet="view_normatucodereissueorder">
+          <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+          <ScalarProperty Name="WarehouseID" ColumnName="WarehouseID" />
+          <ScalarProperty Name="OrderNo" ColumnName="OrderNo" />
+          <ScalarProperty Name="CustID" ColumnName="CustID" />
+          <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+          <ScalarProperty Name="InvDesc" ColumnName="InvDesc" />
+          <ScalarProperty Name="InvAddress1" ColumnName="InvAddress1" />
+          <ScalarProperty Name="InvAddress2" ColumnName="InvAddress2" />
+          <ScalarProperty Name="InvAddress3" ColumnName="InvAddress3" />
+          <ScalarProperty Name="InvCity" ColumnName="InvCity" />
+          <ScalarProperty Name="InvTown" ColumnName="InvTown" />
+          <ScalarProperty Name="InvPostCode" ColumnName="InvPostCode" />
+          <ScalarProperty Name="InvCountry" ColumnName="InvCountry" />
+          <ScalarProperty Name="DelDesc" ColumnName="DelDesc" />
+          <ScalarProperty Name="DelAddress1" ColumnName="DelAddress1" />
+          <ScalarProperty Name="DelAddress2" ColumnName="DelAddress2" />
+          <ScalarProperty Name="DelAddress3" ColumnName="DelAddress3" />
+          <ScalarProperty Name="DelCity" ColumnName="DelCity" />
+          <ScalarProperty Name="DelTown" ColumnName="DelTown" />
+          <ScalarProperty Name="DelPostCode" ColumnName="DelPostCode" />
+          <ScalarProperty Name="DelCountry" ColumnName="DelCountry" />
+          <ScalarProperty Name="CustRef" ColumnName="CustRef" />
+          <ScalarProperty Name="ContractRef" ColumnName="ContractRef" />
+          <ScalarProperty Name="Comments" ColumnName="Comments" />
+          <ScalarProperty Name="InvoiceDate" ColumnName="InvoiceDate" />
+          <ScalarProperty Name="Carrier" ColumnName="Carrier" />
+          <ScalarProperty Name="CarrierCharge" ColumnName="CarrierCharge" />
+          <ScalarProperty Name="CustDisc" ColumnName="CustDisc" />
+          <ScalarProperty Name="SettDisc" ColumnName="SettDisc" />
+          <ScalarProperty Name="VolDisc" ColumnName="VolDisc" />
+          <ScalarProperty Name="SettlementDays" ColumnName="SettlementDays" />
+          <ScalarProperty Name="OrderConfirm" ColumnName="OrderConfirm" />
+          <ScalarProperty Name="CommentsExternal" ColumnName="CommentsExternal" />
+          <ScalarProperty Name="Cancelled" ColumnName="Cancelled" />
+          <ScalarProperty Name="ProForma" ColumnName="ProForma" />
+          <ScalarProperty Name="Completed" ColumnName="Completed" />
+          <ScalarProperty Name="WorksOrderNo" ColumnName="WorksOrderNo" />
+          <ScalarProperty Name="AllowPartShipment" ColumnName="AllowPartShipment" />
+          <ScalarProperty Name="TotalGoods" ColumnName="TotalGoods" />
+          <ScalarProperty Name="OrderGoods" ColumnName="OrderGoods" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="pRINTINVOICE" ColumnName="pRINTINVOICE" />
+          <ScalarProperty Name="Currency_Exchange_Rate" ColumnName="Currency_Exchange_Rate" />
+          <ScalarProperty Name="PinNo" ColumnName="PinNo" />
+          <ScalarProperty Name="UCodeId" ColumnName="UCodeId" />
+          <ScalarProperty Name="ContractNo" ColumnName="ContractNo" />
+          <ScalarProperty Name="Currency_Exchange_Code" ColumnName="Currency_Exchange_Code" />
+          <ScalarProperty Name="TIMEOFENTRY" ColumnName="TIMEOFENTRY" />
+          <ScalarProperty Name="RepID" ColumnName="RepID" />
+          <ScalarProperty Name="RepNo" ColumnName="RepNo" />
+          <ScalarProperty Name="OnlineConfirm" ColumnName="OnlineConfirm" />
+          <ScalarProperty Name="OnlineConfirmDate" ColumnName="OnlineConfirmDate" />
+          <ScalarProperty Name="OnlineConfirmedBy" ColumnName="OnlineConfirmedBy" />
+          <ScalarProperty Name="OnlineProcessed" ColumnName="OnlineProcessed" />
+          <ScalarProperty Name="OnlineProcessedDate" ColumnName="OnlineProcessedDate" />
+          <ScalarProperty Name="OnlineProcessedBy" ColumnName="OnlineProcessedBy" />
+          <ScalarProperty Name="ReasonCode" ColumnName="ReasonCode" />
+          <ScalarProperty Name="OnlineUserID" ColumnName="OnlineUserID" />
+          <ScalarProperty Name="OrderAnalysisCode1" ColumnName="OrderAnalysisCode1" />
+          <ScalarProperty Name="OrderAnalysisCode2" ColumnName="OrderAnalysisCode2" />
+          <ScalarProperty Name="OrderAnalysisCode3" ColumnName="OrderAnalysisCode3" />
+          <ScalarProperty Name="OrderAnalysisCode4" ColumnName="OrderAnalysisCode4" />
+          <ScalarProperty Name="OrderAnalysisCode5" ColumnName="OrderAnalysisCode5" />
+          <ScalarProperty Name="PrintLabel" ColumnName="PrintLabel" />
+          <ScalarProperty Name="ProFormaPrint" ColumnName="ProFormaPrint" />
+          <ScalarProperty Name="ConfirmPrint" ColumnName="ConfirmPrint" />
+          <ScalarProperty Name="OrderType" ColumnName="OrderType" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="view_order_freetext_tsb_rollout">
+      <EntityTypeMapping TypeName="e4kmaximusdbModel.view_order_freetext_tsb_rollout">
+        <MappingFragment StoreEntitySet="view_order_freetext_tsb_rollout">
+          <ScalarProperty Name="OrderNo" ColumnName="OrderNo" />
+          <ScalarProperty Name="PinNo" ColumnName="PinNo" />
+          <ScalarProperty Name="UCodeId" ColumnName="UCodeId" />
+          <ScalarProperty Name="FreeText" ColumnName="FreeText" />
+          <ScalarProperty Name="OrdQty" ColumnName="OrdQty" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="view_privateorder_pendings">
+      <EntityTypeMapping TypeName="e4kmaximusdbModel.view_privateorder_pendings">
+        <MappingFragment StoreEntitySet="view_privateorder_pendings">
+          <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+          <ScalarProperty Name="CustID" ColumnName="CustID" />
+          <ScalarProperty Name="OrderNo" ColumnName="OrderNo" />
+          <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+          <ScalarProperty Name="TotalGoods" ColumnName="TotalGoods" />
+          <ScalarProperty Name="VAT" ColumnName="VAT" />
+          <ScalarProperty Name="OrderGoods" ColumnName="OrderGoods" />
+          <ScalarProperty Name="txn_id" ColumnName="txn_id" />
+          <ScalarProperty Name="txn_Ip" ColumnName="txn_Ip" />
+          <ScalarProperty Name="rsp_date" ColumnName="rsp_date" />
+          <ScalarProperty Name="rsp_status" ColumnName="rsp_status" />
+          <ScalarProperty Name="GatewayImg" ColumnName="GatewayImg" />
+          <ScalarProperty Name="GatewayName" ColumnName="GatewayName" />
+          <ScalarProperty Name="SeqNo" ColumnName="SeqNo" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="view_privateorders">
+      <EntityTypeMapping TypeName="e4kmaximusdbModel.view_privateorders">
+        <MappingFragment StoreEntitySet="view_privateorders">
+          <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+          <ScalarProperty Name="WarehouseID" ColumnName="WarehouseID" />
+          <ScalarProperty Name="OrderNo" ColumnName="OrderNo" />
+          <ScalarProperty Name="CustID" ColumnName="CustID" />
+          <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+          <ScalarProperty Name="InvDesc" ColumnName="InvDesc" />
+          <ScalarProperty Name="InvAddress1" ColumnName="InvAddress1" />
+          <ScalarProperty Name="InvAddress2" ColumnName="InvAddress2" />
+          <ScalarProperty Name="InvAddress3" ColumnName="InvAddress3" />
+          <ScalarProperty Name="InvCity" ColumnName="InvCity" />
+          <ScalarProperty Name="InvTown" ColumnName="InvTown" />
+          <ScalarProperty Name="InvPostCode" ColumnName="InvPostCode" />
+          <ScalarProperty Name="InvCountry" ColumnName="InvCountry" />
+          <ScalarProperty Name="DelDesc" ColumnName="DelDesc" />
+          <ScalarProperty Name="DelAddress1" ColumnName="DelAddress1" />
+          <ScalarProperty Name="DelAddress2" ColumnName="DelAddress2" />
+          <ScalarProperty Name="DelAddress3" ColumnName="DelAddress3" />
+          <ScalarProperty Name="DelCity" ColumnName="DelCity" />
+          <ScalarProperty Name="DelTown" ColumnName="DelTown" />
+          <ScalarProperty Name="DelPostCode" ColumnName="DelPostCode" />
+          <ScalarProperty Name="DelCountry" ColumnName="DelCountry" />
+          <ScalarProperty Name="CustRef" ColumnName="CustRef" />
+          <ScalarProperty Name="ContractRef" ColumnName="ContractRef" />
+          <ScalarProperty Name="Comments" ColumnName="Comments" />
+          <ScalarProperty Name="InvoiceDate" ColumnName="InvoiceDate" />
+          <ScalarProperty Name="Carrier" ColumnName="Carrier" />
+          <ScalarProperty Name="CarrierCharge" ColumnName="CarrierCharge" />
+          <ScalarProperty Name="CustDisc" ColumnName="CustDisc" />
+          <ScalarProperty Name="SettDisc" ColumnName="SettDisc" />
+          <ScalarProperty Name="VolDisc" ColumnName="VolDisc" />
+          <ScalarProperty Name="SettlementDays" ColumnName="SettlementDays" />
+          <ScalarProperty Name="OrderConfirm" ColumnName="OrderConfirm" />
+          <ScalarProperty Name="CommentsExternal" ColumnName="CommentsExternal" />
+          <ScalarProperty Name="Cancelled" ColumnName="Cancelled" />
+          <ScalarProperty Name="ProForma" ColumnName="ProForma" />
+          <ScalarProperty Name="Completed" ColumnName="Completed" />
+          <ScalarProperty Name="WorksOrderNo" ColumnName="WorksOrderNo" />
+          <ScalarProperty Name="AllowPartShipment" ColumnName="AllowPartShipment" />
+          <ScalarProperty Name="TotalGoods" ColumnName="TotalGoods" />
+          <ScalarProperty Name="OrderGoods" ColumnName="OrderGoods" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="pRINTINVOICE" ColumnName="pRINTINVOICE" />
+          <ScalarProperty Name="Currency_Exchange_Rate" ColumnName="Currency_Exchange_Rate" />
+          <ScalarProperty Name="PinNo" ColumnName="PinNo" />
+          <ScalarProperty Name="UCodeId" ColumnName="UCodeId" />
+          <ScalarProperty Name="ContractNo" ColumnName="ContractNo" />
+          <ScalarProperty Name="Currency_Exchange_Code" ColumnName="Currency_Exchange_Code" />
+          <ScalarProperty Name="TIMEOFENTRY" ColumnName="TIMEOFENTRY" />
+          <ScalarProperty Name="RepID" ColumnName="RepID" />
+          <ScalarProperty Name="RepNo" ColumnName="RepNo" />
+          <ScalarProperty Name="OnlineConfirm" ColumnName="OnlineConfirm" />
+          <ScalarProperty Name="OnlineConfirmDate" ColumnName="OnlineConfirmDate" />
+          <ScalarProperty Name="OnlineConfirmedBy" ColumnName="OnlineConfirmedBy" />
+          <ScalarProperty Name="OnlineProcessed" ColumnName="OnlineProcessed" />
+          <ScalarProperty Name="OnlineProcessedDate" ColumnName="OnlineProcessedDate" />
+          <ScalarProperty Name="OnlineProcessedBy" ColumnName="OnlineProcessedBy" />
+          <ScalarProperty Name="ReasonCode" ColumnName="ReasonCode" />
+          <ScalarProperty Name="OnlineUserID" ColumnName="OnlineUserID" />
+          <ScalarProperty Name="OrderAnalysisCode1" ColumnName="OrderAnalysisCode1" />
+          <ScalarProperty Name="OrderAnalysisCode2" ColumnName="OrderAnalysisCode2" />
+          <ScalarProperty Name="OrderAnalysisCode3" ColumnName="OrderAnalysisCode3" />
+          <ScalarProperty Name="OrderAnalysisCode4" ColumnName="OrderAnalysisCode4" />
+          <ScalarProperty Name="OrderAnalysisCode5" ColumnName="OrderAnalysisCode5" />
+          <ScalarProperty Name="PrintLabel" ColumnName="PrintLabel" />
+          <ScalarProperty Name="ProFormaPrint" ColumnName="ProFormaPrint" />
+          <ScalarProperty Name="ConfirmPrint" ColumnName="ConfirmPrint" />
+          <ScalarProperty Name="OrderType" ColumnName="OrderType" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="view_reissueorderwithnormalucode">
+      <EntityTypeMapping TypeName="e4kmaximusdbModel.view_reissueorderwithnormalucode">
+        <MappingFragment StoreEntitySet="view_reissueorderwithnormalucode">
+          <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+          <ScalarProperty Name="WarehouseID" ColumnName="WarehouseID" />
+          <ScalarProperty Name="OrderNo" ColumnName="OrderNo" />
+          <ScalarProperty Name="CustID" ColumnName="CustID" />
+          <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+          <ScalarProperty Name="InvDesc" ColumnName="InvDesc" />
+          <ScalarProperty Name="InvAddress1" ColumnName="InvAddress1" />
+          <ScalarProperty Name="InvAddress2" ColumnName="InvAddress2" />
+          <ScalarProperty Name="InvAddress3" ColumnName="InvAddress3" />
+          <ScalarProperty Name="InvCity" ColumnName="InvCity" />
+          <ScalarProperty Name="InvTown" ColumnName="InvTown" />
+          <ScalarProperty Name="InvPostCode" ColumnName="InvPostCode" />
+          <ScalarProperty Name="InvCountry" ColumnName="InvCountry" />
+          <ScalarProperty Name="DelDesc" ColumnName="DelDesc" />
+          <ScalarProperty Name="DelAddress1" ColumnName="DelAddress1" />
+          <ScalarProperty Name="DelAddress2" ColumnName="DelAddress2" />
+          <ScalarProperty Name="DelAddress3" ColumnName="DelAddress3" />
+          <ScalarProperty Name="DelCity" ColumnName="DelCity" />
+          <ScalarProperty Name="DelTown" ColumnName="DelTown" />
+          <ScalarProperty Name="DelPostCode" ColumnName="DelPostCode" />
+          <ScalarProperty Name="DelCountry" ColumnName="DelCountry" />
+          <ScalarProperty Name="CustRef" ColumnName="CustRef" />
+          <ScalarProperty Name="ContractRef" ColumnName="ContractRef" />
+          <ScalarProperty Name="Comments" ColumnName="Comments" />
+          <ScalarProperty Name="InvoiceDate" ColumnName="InvoiceDate" />
+          <ScalarProperty Name="Carrier" ColumnName="Carrier" />
+          <ScalarProperty Name="CarrierCharge" ColumnName="CarrierCharge" />
+          <ScalarProperty Name="CustDisc" ColumnName="CustDisc" />
+          <ScalarProperty Name="SettDisc" ColumnName="SettDisc" />
+          <ScalarProperty Name="VolDisc" ColumnName="VolDisc" />
+          <ScalarProperty Name="SettlementDays" ColumnName="SettlementDays" />
+          <ScalarProperty Name="OrderConfirm" ColumnName="OrderConfirm" />
+          <ScalarProperty Name="CommentsExternal" ColumnName="CommentsExternal" />
+          <ScalarProperty Name="Cancelled" ColumnName="Cancelled" />
+          <ScalarProperty Name="ProForma" ColumnName="ProForma" />
+          <ScalarProperty Name="Completed" ColumnName="Completed" />
+          <ScalarProperty Name="WorksOrderNo" ColumnName="WorksOrderNo" />
+          <ScalarProperty Name="AllowPartShipment" ColumnName="AllowPartShipment" />
+          <ScalarProperty Name="TotalGoods" ColumnName="TotalGoods" />
+          <ScalarProperty Name="OrderGoods" ColumnName="OrderGoods" />
+          <ScalarProperty Name="UserID" ColumnName="UserID" />
+          <ScalarProperty Name="pRINTINVOICE" ColumnName="pRINTINVOICE" />
+          <ScalarProperty Name="Currency_Exchange_Rate" ColumnName="Currency_Exchange_Rate" />
+          <ScalarProperty Name="PinNo" ColumnName="PinNo" />
+          <ScalarProperty Name="UCodeId" ColumnName="UCodeId" />
+          <ScalarProperty Name="ContractNo" ColumnName="ContractNo" />
+          <ScalarProperty Name="Currency_Exchange_Code" ColumnName="Currency_Exchange_Code" />
+          <ScalarProperty Name="TIMEOFENTRY" ColumnName="TIMEOFENTRY" />
+          <ScalarProperty Name="RepID" ColumnName="RepID" />
+          <ScalarProperty Name="RepNo" ColumnName="RepNo" />
+          <ScalarProperty Name="OnlineConfirm" ColumnName="OnlineConfirm" />
+          <ScalarProperty Name="OnlineConfirmDate" ColumnName="OnlineConfirmDate" />
+          <ScalarProperty Name="OnlineConfirmedBy" ColumnName="OnlineConfirmedBy" />
+          <ScalarProperty Name="OnlineProcessed" ColumnName="OnlineProcessed" />
+          <ScalarProperty Name="OnlineProcessedDate" ColumnName="OnlineProcessedDate" />
+          <ScalarProperty Name="OnlineProcessedBy" ColumnName="OnlineProcessedBy" />
+          <ScalarProperty Name="ReasonCode" ColumnName="ReasonCode" />
+          <ScalarProperty Name="OnlineUserID" ColumnName="OnlineUserID" />
+          <ScalarProperty Name="OrderAnalysisCode1" ColumnName="OrderAnalysisCode1" />
+          <ScalarProperty Name="OrderAnalysisCode2" ColumnName="OrderAnalysisCode2" />
+          <ScalarProperty Name="OrderAnalysisCode3" ColumnName="OrderAnalysisCode3" />
+          <ScalarProperty Name="OrderAnalysisCode4" ColumnName="OrderAnalysisCode4" />
+          <ScalarProperty Name="OrderAnalysisCode5" ColumnName="OrderAnalysisCode5" />
+          <ScalarProperty Name="PrintLabel" ColumnName="PrintLabel" />
+          <ScalarProperty Name="ProFormaPrint" ColumnName="ProFormaPrint" />
+          <ScalarProperty Name="ConfirmPrint" ColumnName="ConfirmPrint" />
+          <ScalarProperty Name="OrderType" ColumnName="OrderType" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="view_ucode_freetext_tsb_rollout">
+      <EntityTypeMapping TypeName="e4kmaximusdbModel.view_ucode_freetext_tsb_rollout">
+        <MappingFragment StoreEntitySet="view_ucode_freetext_tsb_rollout">
+          <ScalarProperty Name="UCodeID" ColumnName="UCodeID" />
+          <ScalarProperty Name="FreeText" ColumnName="FreeText" />
+          <ScalarProperty Name="AnnualIssue" ColumnName="AnnualIssue" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="view_unmatchedcolourwithorgcolour">
+      <EntityTypeMapping TypeName="e4kmaximusdbModel.view_unmatchedcolourwithorgcolour">
+        <MappingFragment StoreEntitySet="view_unmatchedcolourwithorgcolour">
+          <ScalarProperty Name="PinNo" ColumnName="PinNo" />
+          <ScalarProperty Name="UCodeId" ColumnName="UCodeId" />
+          <ScalarProperty Name="CustID" ColumnName="CustID" />
+          <ScalarProperty Name="OrderNo" ColumnName="OrderNo" />
+          <ScalarProperty Name="ReturnOrderNo" ColumnName="ReturnOrderNo" />
+          <ScalarProperty Name="OriginalOrderNo" ColumnName="OriginalOrderNo" />
+          <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+          <ScalarProperty Name="StyleID" ColumnName="StyleID" />
+          <ScalarProperty Name="ColourID" ColumnName="ColourID" />
+          <ScalarProperty Name="SizeID" ColumnName="SizeID" />
+          <ScalarProperty Name="OrdQty" ColumnName="OrdQty" />
+          <ScalarProperty Name="OrgColourID" ColumnName="OrgColourID" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="view_unmatchedordercolourid">
+      <EntityTypeMapping TypeName="e4kmaximusdbModel.view_unmatchedordercolourid">
+        <MappingFragment StoreEntitySet="view_unmatchedordercolourid">
+          <ScalarProperty Name="UCodeId" ColumnName="UCodeId" />
+          <ScalarProperty Name="CustID" ColumnName="CustID" />
+          <ScalarProperty Name="OrderNo" ColumnName="OrderNo" />
+          <ScalarProperty Name="ReturnOrderNo" ColumnName="ReturnOrderNo" />
+          <ScalarProperty Name="OriginalOrderNo" ColumnName="OriginalOrderNo" />
+          <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
+          <ScalarProperty Name="StyleID" ColumnName="StyleID" />
+          <ScalarProperty Name="ColourID" ColumnName="ColourID" />
+          <ScalarProperty Name="SizeID" ColumnName="SizeID" />
+          <ScalarProperty Name="OrdQty" ColumnName="OrdQty" />
+          <ScalarProperty Name="PinNo" ColumnName="PinNo" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
@@ -3185,295 +3569,12 @@
         <ComplexTypeMapping TypeName="e4kmaximusdbModel.getColors_prod_Result" />
       </ResultMapping>
     </FunctionImportMapping>
-    <FunctionImportMapping FunctionImportName="GetEmployeeDetailnAddProcedure" FunctionName="e4kmaximusdbModel.Store.GetEmployeeDetailnAddProcedure" />
-    <FunctionImportMapping FunctionImportName="GetEmployeeDetailsProcedure" FunctionName="e4kmaximusdbModel.Store.GetEmployeeDetailsProcedure">
+    <FunctionImportMapping FunctionImportName="GetEmployeebyId" FunctionName="e4kmaximusdbModel.Store.GetEmployeebyId">
       <ResultMapping>
-        <ComplexTypeMapping TypeName="e4kmaximusdbModel.GetEmployeeDetailsProcedure_Result" />
+        <ComplexTypeMapping TypeName="e4kmaximusdbModel.GetEmployeebyId_Result" />
       </ResultMapping>
     </FunctionImportMapping>
-    <FunctionImportMapping FunctionImportName="getSizeColorchangeProcedure" FunctionName="e4kmaximusdbModel.Store.getSizeColorchangeProcedure">
-      <ResultMapping>
-        <ComplexTypeMapping TypeName="e4kmaximusdbModel.getSizeColorchangeProcedure_Result" />
-      </ResultMapping>
-    </FunctionImportMapping>
-    <FunctionImportMapping FunctionImportName="getSizeProcedure" FunctionName="e4kmaximusdbModel.Store.getSizeProcedure">
-      <ResultMapping>
-        <ComplexTypeMapping TypeName="e4kmaximusdbModel.getSizeProcedure_Result" />
-      </ResultMapping>
-    </FunctionImportMapping>
-    <FunctionImportMapping FunctionImportName="getSize_prod" FunctionName="e4kmaximusdbModel.Store.getSize_prod">
-      <ResultMapping>
-        <ComplexTypeMapping TypeName="e4kmaximusdbModel.getSize_prod_Result" />
-      </ResultMapping>
-    </FunctionImportMapping>
-    <EntitySetMapping Name="styleby_freetextview">
-      <EntityTypeMapping TypeName="e4kmaximusdbModel.styleby_freetextview">
-        <MappingFragment StoreEntitySet="styleby_freetextview">
-          <ScalarProperty Name="FreeText" ColumnName="FreeText" />
-          <ScalarProperty Name="Product_Group" ColumnName="Product_Group" />
-          <ScalarProperty Name="StyleImage" ColumnName="StyleImage" />
-          <ScalarProperty Name="StyleID" ColumnName="StyleID" />
-          <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="tblfsk_colour">
-      <EntityTypeMapping TypeName="e4kmaximusdbModel.tblfsk_colour">
-        <MappingFragment StoreEntitySet="tblfsk_colour">
-          <ScalarProperty Name="Colour_hexcode" ColumnName="Colour_hexcode" />
-          <ScalarProperty Name="Description" ColumnName="Description" />
-          <ScalarProperty Name="ColourID" ColumnName="ColourID" />
-          <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="hr_emplo_ve">
-      <EntityTypeMapping TypeName="e4kmaximusdbModel.hr_emplo_ve">
-        <MappingFragment StoreEntitySet="hr_emplo_ve">
-          <ScalarProperty Name="Businessid" ColumnName="Businessid" />
-          <ScalarProperty Name="Username" ColumnName="Username" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="hr_tremot02">
-      <EntityTypeMapping TypeName="e4kmaximusdbModel.hr_tremot02">
-        <MappingFragment StoreEntitySet="hr_tremot02">
-          <ScalarProperty Name="Qty2" ColumnName="Qty2" />
-          <ScalarProperty Name="Size2" ColumnName="Size2" />
-          <ScalarProperty Name="Colour2" ColumnName="Colour2" />
-          <ScalarProperty Name="Style2" ColumnName="Style2" />
-          <ScalarProperty Name="Qty1" ColumnName="Qty1" />
-          <ScalarProperty Name="Size1" ColumnName="Size1" />
-          <ScalarProperty Name="Colour1" ColumnName="Colour1" />
-          <ScalarProperty Name="Style1" ColumnName="Style1" />
-          <ScalarProperty Name="Pinno" ColumnName="Pinno" />
-          <ScalarProperty Name="BusinessID" ColumnName="BusinessID" />
-          <ScalarProperty Name="WarehouseID" ColumnName="WarehouseID" />
-          <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
-          <ScalarProperty Name="OrderNo" ColumnName="OrderNo" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="hr_tremot02_derbyf">
-      <EntityTypeMapping TypeName="e4kmaximusdbModel.hr_tremot02_derbyf">
-        <MappingFragment StoreEntitySet="hr_tremot02_derbyf">
-          <ScalarProperty Name="Qty2" ColumnName="Qty2" />
-          <ScalarProperty Name="Size2" ColumnName="Size2" />
-          <ScalarProperty Name="Colour2" ColumnName="Colour2" />
-          <ScalarProperty Name="Style2" ColumnName="Style2" />
-          <ScalarProperty Name="Qty1" ColumnName="Qty1" />
-          <ScalarProperty Name="Size1" ColumnName="Size1" />
-          <ScalarProperty Name="Colour1" ColumnName="Colour1" />
-          <ScalarProperty Name="Style1" ColumnName="Style1" />
-          <ScalarProperty Name="Pinno" ColumnName="Pinno" />
-          <ScalarProperty Name="BusinessID" ColumnName="BusinessID" />
-          <ScalarProperty Name="WarehouseID" ColumnName="WarehouseID" />
-          <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="hr_tremot02_derbym">
-      <EntityTypeMapping TypeName="e4kmaximusdbModel.hr_tremot02_derbym">
-        <MappingFragment StoreEntitySet="hr_tremot02_derbym">
-          <ScalarProperty Name="Qty2" ColumnName="Qty2" />
-          <ScalarProperty Name="Size2" ColumnName="Size2" />
-          <ScalarProperty Name="Colour2" ColumnName="Colour2" />
-          <ScalarProperty Name="Style2" ColumnName="Style2" />
-          <ScalarProperty Name="Qty1" ColumnName="Qty1" />
-          <ScalarProperty Name="Size1" ColumnName="Size1" />
-          <ScalarProperty Name="Colour1" ColumnName="Colour1" />
-          <ScalarProperty Name="Style1" ColumnName="Style1" />
-          <ScalarProperty Name="Pinno" ColumnName="Pinno" />
-          <ScalarProperty Name="BusinessID" ColumnName="BusinessID" />
-          <ScalarProperty Name="WarehouseID" ColumnName="WarehouseID" />
-          <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="hr_tremot02_langleyf">
-      <EntityTypeMapping TypeName="e4kmaximusdbModel.hr_tremot02_langleyf">
-        <MappingFragment StoreEntitySet="hr_tremot02_langleyf">
-          <ScalarProperty Name="Qty2" ColumnName="Qty2" />
-          <ScalarProperty Name="Size2" ColumnName="Size2" />
-          <ScalarProperty Name="Colour2" ColumnName="Colour2" />
-          <ScalarProperty Name="Style2" ColumnName="Style2" />
-          <ScalarProperty Name="Qty1" ColumnName="Qty1" />
-          <ScalarProperty Name="Size1" ColumnName="Size1" />
-          <ScalarProperty Name="Colour1" ColumnName="Colour1" />
-          <ScalarProperty Name="Style1" ColumnName="Style1" />
-          <ScalarProperty Name="Pinno" ColumnName="Pinno" />
-          <ScalarProperty Name="BusinessID" ColumnName="BusinessID" />
-          <ScalarProperty Name="WarehouseID" ColumnName="WarehouseID" />
-          <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="hr_tremot02_langleym">
-      <EntityTypeMapping TypeName="e4kmaximusdbModel.hr_tremot02_langleym">
-        <MappingFragment StoreEntitySet="hr_tremot02_langleym">
-          <ScalarProperty Name="Qty2" ColumnName="Qty2" />
-          <ScalarProperty Name="Size2" ColumnName="Size2" />
-          <ScalarProperty Name="Colour2" ColumnName="Colour2" />
-          <ScalarProperty Name="Style2" ColumnName="Style2" />
-          <ScalarProperty Name="Qty1" ColumnName="Qty1" />
-          <ScalarProperty Name="Size1" ColumnName="Size1" />
-          <ScalarProperty Name="Colour1" ColumnName="Colour1" />
-          <ScalarProperty Name="Style1" ColumnName="Style1" />
-          <ScalarProperty Name="Pinno" ColumnName="Pinno" />
-          <ScalarProperty Name="BusinessID" ColumnName="BusinessID" />
-          <ScalarProperty Name="WarehouseID" ColumnName="WarehouseID" />
-          <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="hr_tremot02_nottmf">
-      <EntityTypeMapping TypeName="e4kmaximusdbModel.hr_tremot02_nottmf">
-        <MappingFragment StoreEntitySet="hr_tremot02_nottmf">
-          <ScalarProperty Name="Qty2" ColumnName="Qty2" />
-          <ScalarProperty Name="Size2" ColumnName="Size2" />
-          <ScalarProperty Name="Colour2" ColumnName="Colour2" />
-          <ScalarProperty Name="Style2" ColumnName="Style2" />
-          <ScalarProperty Name="Qty1" ColumnName="Qty1" />
-          <ScalarProperty Name="Size1" ColumnName="Size1" />
-          <ScalarProperty Name="Colour1" ColumnName="Colour1" />
-          <ScalarProperty Name="Style1" ColumnName="Style1" />
-          <ScalarProperty Name="Pinno" ColumnName="Pinno" />
-          <ScalarProperty Name="BusinessID" ColumnName="BusinessID" />
-          <ScalarProperty Name="WarehouseID" ColumnName="WarehouseID" />
-          <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="hr_tremot02_nottmm">
-      <EntityTypeMapping TypeName="e4kmaximusdbModel.hr_tremot02_nottmm">
-        <MappingFragment StoreEntitySet="hr_tremot02_nottmm">
-          <ScalarProperty Name="Qty2" ColumnName="Qty2" />
-          <ScalarProperty Name="Size2" ColumnName="Size2" />
-          <ScalarProperty Name="Colour2" ColumnName="Colour2" />
-          <ScalarProperty Name="Style2" ColumnName="Style2" />
-          <ScalarProperty Name="Qty1" ColumnName="Qty1" />
-          <ScalarProperty Name="Size1" ColumnName="Size1" />
-          <ScalarProperty Name="Colour1" ColumnName="Colour1" />
-          <ScalarProperty Name="Style1" ColumnName="Style1" />
-          <ScalarProperty Name="Pinno" ColumnName="Pinno" />
-          <ScalarProperty Name="BusinessID" ColumnName="BusinessID" />
-          <ScalarProperty Name="WarehouseID" ColumnName="WarehouseID" />
-          <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="hr_tremot02_suttonf">
-      <EntityTypeMapping TypeName="e4kmaximusdbModel.hr_tremot02_suttonf">
-        <MappingFragment StoreEntitySet="hr_tremot02_suttonf">
-          <ScalarProperty Name="Qty2" ColumnName="Qty2" />
-          <ScalarProperty Name="Size2" ColumnName="Size2" />
-          <ScalarProperty Name="Colour2" ColumnName="Colour2" />
-          <ScalarProperty Name="Style2" ColumnName="Style2" />
-          <ScalarProperty Name="Qty1" ColumnName="Qty1" />
-          <ScalarProperty Name="Size1" ColumnName="Size1" />
-          <ScalarProperty Name="Colour1" ColumnName="Colour1" />
-          <ScalarProperty Name="Style1" ColumnName="Style1" />
-          <ScalarProperty Name="Pinno" ColumnName="Pinno" />
-          <ScalarProperty Name="BusinessID" ColumnName="BusinessID" />
-          <ScalarProperty Name="WarehouseID" ColumnName="WarehouseID" />
-          <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="hr_tremot02_suttonm">
-      <EntityTypeMapping TypeName="e4kmaximusdbModel.hr_tremot02_suttonm">
-        <MappingFragment StoreEntitySet="hr_tremot02_suttonm">
-          <ScalarProperty Name="Qty2" ColumnName="Qty2" />
-          <ScalarProperty Name="Size2" ColumnName="Size2" />
-          <ScalarProperty Name="Colour2" ColumnName="Colour2" />
-          <ScalarProperty Name="Style2" ColumnName="Style2" />
-          <ScalarProperty Name="Qty1" ColumnName="Qty1" />
-          <ScalarProperty Name="Size1" ColumnName="Size1" />
-          <ScalarProperty Name="Colour1" ColumnName="Colour1" />
-          <ScalarProperty Name="Style1" ColumnName="Style1" />
-          <ScalarProperty Name="Pinno" ColumnName="Pinno" />
-          <ScalarProperty Name="BusinessID" ColumnName="BusinessID" />
-          <ScalarProperty Name="WarehouseID" ColumnName="WarehouseID" />
-          <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="hr_tsb_reldates">
-      <EntityTypeMapping TypeName="e4kmaximusdbModel.hr_tsb_reldates">
-        <MappingFragment StoreEntitySet="hr_tsb_reldates">
-          <ScalarProperty Name="date_orderconfirm" ColumnName="date_orderconfirm" />
-          <ScalarProperty Name="Release_date" ColumnName="Release_date" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="hr_tsb_release">
-      <EntityTypeMapping TypeName="e4kmaximusdbModel.hr_tsb_release">
-        <MappingFragment StoreEntitySet="hr_tsb_release">
-          <ScalarProperty Name="Release_date" ColumnName="Release_date" />
-          <ScalarProperty Name="OrderNo" ColumnName="OrderNo" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="bak_tblaccemp_employee_tsb">
-      <EntityTypeMapping TypeName="e4kmaximusdbModel.bak_tblaccemp_employee_tsb">
-        <MappingFragment StoreEntitySet="bak_tblaccemp_employee_tsb">
-          <ScalarProperty Name="IsDefault" ColumnName="IsDefault" />
-          <ScalarProperty Name="roleid" ColumnName="roleid" />
-          <ScalarProperty Name="EmployeeClosed" ColumnName="EmployeeClosed" />
-          <ScalarProperty Name="EndDate" ColumnName="EndDate" />
-          <ScalarProperty Name="StartDate" ColumnName="StartDate" />
-          <ScalarProperty Name="Surname" ColumnName="Surname" />
-          <ScalarProperty Name="Forename" ColumnName="Forename" />
-          <ScalarProperty Name="Title" ColumnName="Title" />
-          <ScalarProperty Name="GroupID" ColumnName="GroupID" />
-          <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
-          <ScalarProperty Name="BusinessID" ColumnName="BusinessID" />
-          <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
-          <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="copy_tblusers">
-      <EntityTypeMapping TypeName="e4kmaximusdbModel.copy_tblusers">
-        <MappingFragment StoreEntitySet="copy_tblusers">
-          <ScalarProperty Name="BusinessName" ColumnName="BusinessName" />
-          <ScalarProperty Name="AspUserID" ColumnName="AspUserID" />
-          <ScalarProperty Name="Email_ID" ColumnName="Email_ID" />
-          <ScalarProperty Name="Createdby" ColumnName="Createdby" />
-          <ScalarProperty Name="LastLoggedDate" ColumnName="LastLoggedDate" />
-          <ScalarProperty Name="LastIPAddress" ColumnName="LastIPAddress" />
-          <ScalarProperty Name="CreateDate" ColumnName="CreateDate" />
-          <ScalarProperty Name="BusinessID" ColumnName="BusinessID" />
-          <ScalarProperty Name="Active" ColumnName="Active" />
-          <ScalarProperty Name="AccessID" ColumnName="AccessID" />
-          <ScalarProperty Name="ContactNo" ColumnName="ContactNo" />
-          <ScalarProperty Name="SurName" ColumnName="SurName" />
-          <ScalarProperty Name="ForeName" ColumnName="ForeName" />
-          <ScalarProperty Name="Password" ColumnName="Password" />
-          <ScalarProperty Name="UserName" ColumnName="UserName" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="hr_tsb_min_orderdate">
-      <EntityTypeMapping TypeName="e4kmaximusdbModel.hr_tsb_min_orderdate">
-        <MappingFragment StoreEntitySet="hr_tsb_min_orderdate">
-          <ScalarProperty Name="Min_OrderDate_" ColumnName="Min(OrderDate)" />
-          <ScalarProperty Name="Pinno" ColumnName="Pinno" />
-          <ScalarProperty Name="CustID" ColumnName="CustID" />
-          <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
-    <EntitySetMapping Name="hr_tsb_tblaccemp_ucodesemployees">
-      <EntityTypeMapping TypeName="e4kmaximusdbModel.hr_tsb_tblaccemp_ucodesemployees">
-        <MappingFragment StoreEntitySet="hr_tsb_tblaccemp_ucodesemployees">
-          <ScalarProperty Name="UCodeID" ColumnName="UCodeID" />
-          <ScalarProperty Name="BusinessID" ColumnName="BusinessID" />
-          <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
-          <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
-        </MappingFragment>
-      </EntityTypeMapping>
-    </EntitySetMapping>
     <FunctionImportMapping FunctionImportName="GetEmployeeByRole" FunctionName="e4kmaximusdbModel.Store.GetEmployeeByRole" />
+    <FunctionImportMapping FunctionImportName="GetEmployeeByRoles1" FunctionName="e4kmaximusdbModel.Store.GetEmployeeByRoles1" />
   </EntityContainerMapping>
 </Mapping>

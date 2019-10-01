@@ -11,6 +11,7 @@
                x.Text = "Swatch layout";
                x.Name = "ModernSWATCHES";
                x.Properties.ClientSideEvents.CheckedChanged = "CheckedChanged";
+               x.ControlStyle.ForeColor = System.Drawing.Color.White;
                x.Checked = Session["ColorSizestyle"] == null | Session["ColorSizestyle"].ToString() == "COMBOBOXES" ? false : true;
            }).GetHtml()
             </div>
@@ -21,6 +22,7 @@
                x.Name = "TraditionalCOMBOBOXES";
                x.Text = "Dropdownbox layout";
                x.Properties.ClientSideEvents.CheckedChanged = "CheckedChanged";
+               x.ControlStyle.ForeColor = System.Drawing.Color.White;
                x.Checked = Session["ColorSizestyle"] == null | Session["ColorSizestyle"].ToString() == "SWATCHES" ? false : true;
            }).GetHtml()
             </div>
@@ -38,6 +40,7 @@
        m.Name = "ImageIdFil";
        m.Text = "Show Products only with images";
        m.Properties.ClientSideEvents.CheckedChanged = "getSelectedImgFilter";
+       m.ControlStyle.ForeColor = System.Drawing.Color.White;
        m.Checked = Session["ImageFilter"] == null ? false : (bool)Session["ImageFilter"];
    }).GetHtml()
     </div>
@@ -63,6 +66,7 @@
        check.Text = "Dimension products in treeview layout";
        check.Checked = Session["onDemand"] != null ? (bool)Session["onDemand"] : false;
        check.Properties.ClientSideEvents.CheckedChanged = "setDimensionalView";
+       check.ControlStyle.ForeColor = System.Drawing.Color.White;
        check.Checked = Session["onDemand"] == null ? false : (bool)Session["onDemand"];
    }).GetHtml()
     </div>

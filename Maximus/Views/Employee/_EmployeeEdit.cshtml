@@ -1,9 +1,9 @@
 ﻿@model Maximus.Models.EmployeeViewModel
 
 
-   @*Session["datestart"] = dp.ShowHourse(busId);
-   Session["leavedate"] = dp.ShowHourse(busId);
-   Session["roleid"] = dp.ShowHourse(busId);*@
+@*Session["datestart"] = dp.ShowHourse(busId);
+    Session["leavedate"] = dp.ShowHourse(busId);
+    Session["roleid"] = dp.ShowHourse(busId);*@
 
 <center>
     <div class="row">
@@ -25,7 +25,7 @@
             <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
                 @if (Convert.ToBoolean(Session["datestart"]))
                 {
-                @Html.DevExpress().DateEditFor(m => m.StartDate, settings =>
+                    @Html.DevExpress().DateEditFor(m => m.StartDate, settings =>
            {
                settings.Properties.Caption = "Start date";
                if (ViewBag.create != null)
@@ -42,9 +42,9 @@
             </div>
 
             <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
-@if (Convert.ToBoolean(Session["leavedate"]))
-{
-                @Html.DevExpress().DateEditFor(m => m.EndDate, settings =>
+                @if (Convert.ToBoolean(Session["leavedate"]))
+                {
+                    @Html.DevExpress().DateEditFor(m => m.EndDate, settings =>
            {
                settings.Properties.Caption = "End Date";
                if (ViewBag.create != null)
@@ -57,7 +57,7 @@
                settings.Properties.EditFormatString = "dd.MM.yyyy";
 
            }).GetHtml()
-}
+                }
             </div>
         </div><br />
 
@@ -243,7 +243,7 @@
                                   settings.Properties.Items.Add(val);
                               }
                           }).GetHtml()
-                                              }
+                        }
                     }
                 </center>
             </div>
@@ -254,8 +254,8 @@
     <center><h4 style="padding:0px;"> Delivery Address</h4></center>
     <div class="row">
 
- 
-            @if (ViewBag.create != null && Session["chkMapAddr"].ToString().ToLower() != "hide")
+
+        @if (ViewBag.create != null && Session["chkMapAddr"].ToString().ToLower() != "hide")
             {
                 Html.DevExpress().CheckBoxFor(x => x.chkMapAddr, text =>
                 {
@@ -269,6 +269,7 @@
             <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
                 @Html.DevExpress().ComboBox(comboBoxSettings =>
            {
+               Maximus.Models.DataProcessing dp = new Maximus.Models.DataProcessing();
                comboBoxSettings.Name = "CmbAddress";
                comboBoxSettings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
                comboBoxSettings.Properties.Caption = "Address";
@@ -292,6 +293,16 @@
                    var busAdd = Model.AddressLst.Any(x => x.AddressId == Model.Address.AddressId) ? Model.AddressLst.Where(x => x.AddressId == Model.Address.AddressId).First() : new Maximus.Models.BusAddress();
                    comboBoxSettings.SelectedIndex = Model.AddressLst.IndexOf(busAdd);
                }
+               var add = dp.GetEmpAddress(Session["UserName"].ToString());
+               if(add!=0)
+               {
+                   var busAdd = Model.AddressLst.Any(x => x.AddressId == add) ? Model.AddressLst.Where(x => x.AddressId == add).First() : new Maximus.Models.BusAddress();
+                   if (busAdd.AddressId != 0)
+                   {
+                       comboBoxSettings.SelectedIndex = Model.AddressLst.IndexOf(busAdd);
+                   }
+               }
+
            }).BindList(Model.AddressLst).GetHtml()
             </div>
             <div class="col-md-1 col-xs-1 col-sm-1 col-lg-1 col-xs-1 col-sm-1 col-lg-1"></div>

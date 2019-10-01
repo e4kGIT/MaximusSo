@@ -21,6 +21,6 @@ namespace Maximus.Models
         public Nullable<short> VATCode { get; set; }
         public int PriceOptionID { get; set; }
         public string StockingType { get; set; }
-        public sbyte IsStatic { get; set; }
+        public bool IsStatic { get; set; }
     }
 }

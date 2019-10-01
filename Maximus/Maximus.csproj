@@ -900,6 +900,12 @@
       <DependentUpon>maximusDataContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\DataProcessing.cs" />
+    <Compile Include="Models\dim_fit_nongroup_styles.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\dim_fit_styles.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\DrpResultModel.cs" />
     <Compile Include="Models\EmployeeLoginModel.cs" />
     <Compile Include="Models\EmployeeViewModel.cs" />
@@ -924,7 +930,7 @@
     <Compile Include="Models\getcustassembly.cs">
       <DependentUpon>maximusDataContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\GetEmployeeDetailsProcedure_Result.cs">
+    <Compile Include="Models\GetEmployeebyId_Result.cs">
       <DependentUpon>maximusDataContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\getproductslist.cs">
@@ -933,61 +939,28 @@
     <Compile Include="Models\getsize.cs">
       <DependentUpon>maximusDataContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\getSizeColorchangeProcedure_Result.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\getSizeProcedure_Result.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\getSize_prod_Result.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\getstylesview.cs">
       <DependentUpon>maximusDataContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\hr_emplo_ve.cs">
+    <Compile Include="Models\hr_demo_address.cs">
       <DependentUpon>maximusDataContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\hr_tremot02.cs">
+    <Compile Include="Models\hr_demo_employee.cs">
       <DependentUpon>maximusDataContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\hr_tremot02_derbyf.cs">
+    <Compile Include="Models\hr_demo_invoices.cs">
       <DependentUpon>maximusDataContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\hr_tremot02_derbym.cs">
+    <Compile Include="Models\hr_demo_orders.cs">
       <DependentUpon>maximusDataContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\hr_tremot02_langleyf.cs">
+    <Compile Include="Models\hr_demo_pickslips.cs">
       <DependentUpon>maximusDataContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\hr_tremot02_langleym.cs">
+    <Compile Include="Models\hr_demo_style.cs">
       <DependentUpon>maximusDataContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\hr_tremot02_nottmf.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\hr_tremot02_nottmm.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\hr_tremot02_suttonf.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\hr_tremot02_suttonm.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\hr_tsb_min_orderdate.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\hr_tsb_reldates.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\hr_tsb_release.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\hr_tsb_tblaccemp_ucodesemployees.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\hr_visexp01_address_map_bak.cs">
+    <Compile Include="Models\hr_demo_ucode.cs">
       <DependentUpon>maximusDataContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\IssuedQtyModel.cs" />
@@ -1051,16 +1024,10 @@
     </Compile>
     <Compile Include="Models\ObsoleteColor.cs" />
     <Compile Include="Models\PreviousQty.cs" />
+    <Compile Include="Models\productlist.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\product_obsolete.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\rollout_order_detail_tsb.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\rollout_order_header_address_tsb.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\rollout_order_header_tsb.cs">
       <DependentUpon>maximusDataContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\SalesOrderHeaderViewModel.cs" />
@@ -1068,9 +1035,6 @@
     <Compile Include="Models\SalesOrderViewModel.cs" />
     <Compile Include="Models\SiteCodeModel.cs" />
     <Compile Include="Models\Size.cs" />
-    <Compile Include="Models\stockcard_tsb_rollout.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\Structrues.cs" />
     <Compile Include="Models\styleby_freetextview.cs">
       <DependentUpon>maximusDataContext.tt</DependentUpon>
@@ -1091,7 +1055,13 @@
     <Compile Include="Models\tblaccemp_employee.cs">
       <DependentUpon>maximusDataContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\tblaccemp_employee_atlasfm.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\tblaccemp_employee_rollout.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblaccemp_employee_rollout_atlasfm.cs">
       <DependentUpon>maximusDataContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tblaccemp_points.cs">
@@ -1109,13 +1079,25 @@
     <Compile Include="Models\tblaccemp_stockcard.cs">
       <DependentUpon>maximusDataContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\tblaccemp_stockcard_atlasfm.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblaccemp_stylepoints.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\tblaccemp_style_staticqty.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblaccemp_ucodepoints.cs">
       <DependentUpon>maximusDataContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tblaccemp_ucodes.cs">
       <DependentUpon>maximusDataContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tblaccemp_ucodesemployees.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblaccemp_ucodesemployees_atlasfm.cs">
       <DependentUpon>maximusDataContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tblaccemp_ucodes_desc.cs">
@@ -1157,12 +1139,6 @@
     <Compile Include="Models\tblbus_addresstype_ref.cs">
       <DependentUpon>maximusDataContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\tblbus_address_copy.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblbus_address_s27.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\tblbus_business.cs">
       <DependentUpon>maximusDataContext.tt</DependentUpon>
     </Compile>
@@ -1175,9 +1151,6 @@
     <Compile Include="Models\tblbus_contact_ref.cs">
       <DependentUpon>maximusDataContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\tblbus_contact_s27.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\tblbus_countrycodes.cs">
       <DependentUpon>maximusDataContext.tt</DependentUpon>
     </Compile>
@@ -1188,9 +1161,6 @@
       <DependentUpon>maximusDataContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tblbus_settings.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblbus_settings_copy.cs">
       <DependentUpon>maximusDataContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tblbus_setvalues.cs">
@@ -1215,6 +1185,15 @@
       <DependentUpon>maximusDataContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tblcontent_lang.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblfskstyle_dimension.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblfskstyle_dimension1.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\tblfskstyle_dimension1_.cs">
       <DependentUpon>maximusDataContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tblfsk_class.cs">
@@ -1334,9 +1313,6 @@
     <Compile Include="Models\tblonlinesop_sitecode.cs">
       <DependentUpon>maximusDataContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\tblonline_emp_address_copy.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\tblonline_holidays.cs">
       <DependentUpon>maximusDataContext.tt</DependentUpon>
     </Compile>
@@ -1346,10 +1322,13 @@
     <Compile Include="Models\tblonline_rolloutorders_reqstatus.cs">
       <DependentUpon>maximusDataContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\tblonline_rolloutorders_reqstatus_atlasfm.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\tblonline_userid_employee.cs">
       <DependentUpon>maximusDataContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\tblonline_userid_employee_s27.cs">
+    <Compile Include="Models\tblonline_userid_employee_atlasfm.cs">
       <DependentUpon>maximusDataContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tblonline_userid_favourites.cs">
@@ -1460,7 +1439,7 @@
     <Compile Include="Models\tblsop_salesorder_detail.cs">
       <DependentUpon>maximusDataContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\tblsop_salesorder_detail_bk.cs">
+    <Compile Include="Models\tblsop_salesorder_detail_atlasfm.cs">
       <DependentUpon>maximusDataContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tblsop_salesorder_detail_console.cs">
@@ -1475,7 +1454,7 @@
     <Compile Include="Models\tblsop_salesorder_header.cs">
       <DependentUpon>maximusDataContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\tblsop_salesorder_header_bk.cs">
+    <Compile Include="Models\tblsop_salesorder_header_atlasfm.cs">
       <DependentUpon>maximusDataContext.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\tblsop_salesorder_header_console.cs">
@@ -1508,9 +1487,6 @@
     <Compile Include="Models\tblwho_warehousesx.cs">
       <DependentUpon>maximusDataContext.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\tbl_employee_s27_hr.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\ucodeby_freetextview.cs">
       <DependentUpon>maximusDataContext.tt</DependentUpon>
     </Compile>
@@ -1518,7 +1494,40 @@
     <Compile Include="Models\ucode_employee_rollout_tsb.cs">
       <DependentUpon>maximusDataContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\unrelatedorder.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\UserViewModel.cs" />
+    <Compile Include="Models\view_manpack.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\view_noorderplacedforthisemployee.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\view_normatucodereissueorder.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\view_order_freetext_tsb_rollout.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\view_privateorders.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\view_privateorder_pendings.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\view_reissueorderwithnormalucode.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\view_ucode_freetext_tsb_rollout.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\view_unmatchedcolourwithorgcolour.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\view_unmatchedordercolourid.cs">
+      <DependentUpon>maximusDataContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\xml_salesorder_detail.cs">
       <DependentUpon>maximusDataContext.tt</DependentUpon>
     </Compile>
@@ -1581,6 +1590,9 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

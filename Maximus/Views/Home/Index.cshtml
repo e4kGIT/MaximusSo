@@ -32,7 +32,14 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <span><b>Ucode:</b></span>  @{ViewContext.Writer.Write(string.Format("{0}", Session["UcodeDesc"].ToString()));
+                      @{if (((List<string>)Session["Templates"]).Count() > 0)
+                          {
+                            <span><b>Template:</b></span>ViewContext.Writer.Write(string.Format("{0}", Session["UcodeDesc"].ToString()));
+                          }
+                          else
+                          { <span><b>Ucode:</b></span>
+                              ViewContext.Writer.Write(string.Format("{0}", Session["UcodeDesc"].ToString()));
+                          }
                         }
                     </div>
                                 }
@@ -190,9 +197,9 @@
 
 @Html.DevExpress().PopupControl(sett =>
 {
-    sett.Width = System.Web.UI.WebControls.Unit.Pixel(1300);
+    sett.Width = System.Web.UI.WebControls.Unit.Pixel(1500);
     sett.Height = System.Web.UI.WebControls.Unit.Percentage(100);
-    sett.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+    sett.PopupVerticalAlign = PopupVerticalAlign.Middle;
     sett.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
     sett.Name = "DimAllocPop";
     sett.AllowResize = true;
@@ -203,6 +210,7 @@
     sett.CloseOnEscape = false;
     sett.PopupAnimationType = AnimationType.Auto;
     sett.Modal = true;
+   
     sett.ScrollBars = System.Web.UI.WebControls.ScrollBars.Vertical;
     //sett.ScrollBars = System.Web.UI.WebControls.ScrollBars.Horizontal;
     sett.HeaderText = "Grouped products";

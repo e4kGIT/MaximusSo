@@ -131,14 +131,6 @@
     <Property Name="userId" Type="Int32" Nullable="false" />
     <Property Name="roleId" Type="Int32" Nullable="false" />
   </EntityType>
-  <EntityType Name="tbl_employee_s27_hr">
-    <Key>
-      <PropertyRef Name="EmployeeID" />
-      <PropertyRef Name="BusinessID" />
-    </Key>
-    <Property Name="EmployeeID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="BusinessID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
-  </EntityType>
   <EntityType Name="tblacc_vatcodes">
     <Key>
       <PropertyRef Name="CompanyID" />
@@ -211,7 +203,41 @@
     <Property Name="roleid" Type="Int32" />
     <Property Name="IsDefault" Type="SByte" Nullable="false" />
   </EntityType>
+  <EntityType Name="tblaccemp_employee_atlasfm">
+    <Key>
+      <PropertyRef Name="CompanyID" />
+      <PropertyRef Name="EmployeeID" />
+      <PropertyRef Name="BusinessID" />
+    </Key>
+    <Property Name="CompanyID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="EmployeeID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="BusinessID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="DepartmentID" Type="Int32" />
+    <Property Name="GroupID" Type="Int32" />
+    <Property Name="Title" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+    <Property Name="Forename" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+    <Property Name="Surname" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+    <Property Name="StartDate" Type="DateTime" />
+    <Property Name="EndDate" Type="DateTime" />
+    <Property Name="EmployeeClosed" Type="SByte" Nullable="false" />
+    <Property Name="roleid" Type="Int32" />
+    <Property Name="IsDefault" Type="SByte" Nullable="false" />
+  </EntityType>
   <EntityType Name="tblaccemp_employee_rollout">
+    <Key>
+      <PropertyRef Name="CompanyID" />
+      <PropertyRef Name="BusinessID" />
+      <PropertyRef Name="EmployeeID" />
+      <PropertyRef Name="RolloutName" />
+    </Key>
+    <Property Name="CompanyID" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="BusinessID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="EmployeeID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="IsProcessed" Type="Boolean" Nullable="false" />
+    <Property Name="PrevOrder" Type="Int32" />
+    <Property Name="RolloutName" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+  </EntityType>
+  <EntityType Name="tblaccemp_employee_rollout_atlasfm">
     <Key>
       <PropertyRef Name="CompanyID" />
       <PropertyRef Name="BusinessID" />
@@ -308,6 +334,51 @@
     <Property Name="StartIssueDate" Type="DateTime" />
     <Property Name="LastIssueDate" Type="DateTime" />
   </EntityType>
+  <EntityType Name="tblaccemp_stockcard_atlasfm">
+    <Key>
+      <PropertyRef Name="CompanyID" />
+      <PropertyRef Name="BusinessID" />
+      <PropertyRef Name="EmployeeID" />
+      <PropertyRef Name="StyleID" />
+      <PropertyRef Name="ColourID" />
+      <PropertyRef Name="Year" />
+    </Key>
+    <Property Name="CompanyID" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="BusinessID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="EmployeeID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="StyleID" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="ColourID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Year" Type="Int16" Nullable="false" />
+    <Property Name="SOQty" Type="Int32" />
+    <Property Name="PickQty" Type="Int32" />
+    <Property Name="InvQty" Type="Int32" />
+    <Property Name="TotalIssues" Type="Int32" />
+    <Property Name="FirstIssueDate" Type="DateTime" />
+    <Property Name="StartIssueDate" Type="DateTime" />
+    <Property Name="LastIssueDate" Type="DateTime" />
+  </EntityType>
+  <EntityType Name="tblaccemp_stylepoints">
+    <Key>
+      <PropertyRef Name="CompanyID" />
+      <PropertyRef Name="BusinessID" />
+      <PropertyRef Name="UcodeID" />
+      <PropertyRef Name="StyleID" />
+      <PropertyRef Name="ColourID" />
+      <PropertyRef Name="FromDate" />
+      <PropertyRef Name="ToDate" />
+    </Key>
+    <Property Name="CompanyID" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="BusinessID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="UcodeID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="StyleID" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="ColourID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="FromDate" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ToDate" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Points" Type="Int32" />
+    <Property Name="MandatoryQty" Type="Int32" />
+    <Property Name="MinPts" Type="Int32" />
+    <Property Name="MaxPts" Type="Int32" />
+  </EntityType>
   <EntityType Name="tblaccemp_ucode_reasons">
     <Key>
       <PropertyRef Name="CompanyID" />
@@ -318,6 +389,21 @@
     <Property Name="BusinessID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="ReasonCodeID" Type="Int32" Nullable="false" />
     <Property Name="ReasonDesc" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="tblaccemp_ucodepoints">
+    <Key>
+      <PropertyRef Name="CompanyID" />
+      <PropertyRef Name="BusinessID" />
+      <PropertyRef Name="UcodeID" />
+      <PropertyRef Name="FromDate" />
+      <PropertyRef Name="ToDate" />
+    </Key>
+    <Property Name="CompanyID" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="BusinessID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="UcodeID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="FromDate" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="ToDate" Type="DateTime" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="TotalPoints" Type="Int32" />
   </EntityType>
   <EntityType Name="tblaccemp_ucodes">
     <Key>
@@ -377,6 +463,18 @@
     <Property Name="UCodeID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
   </EntityType>
   <EntityType Name="tblaccemp_ucodesemployees">
+    <Key>
+      <PropertyRef Name="CompanyID" />
+      <PropertyRef Name="EmployeeID" />
+      <PropertyRef Name="BusinessID" />
+      <PropertyRef Name="UCodeID" />
+    </Key>
+    <Property Name="CompanyID" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="EmployeeID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="BusinessID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="UCodeID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+  </EntityType>
+  <EntityType Name="tblaccemp_ucodesemployees_atlasfm">
     <Key>
       <PropertyRef Name="CompanyID" />
       <PropertyRef Name="EmployeeID" />
@@ -497,24 +595,6 @@
     <Property Name="AddressTypeID" Type="Int32" />
     <Property Name="ContactID" Type="Int32" />
   </EntityType>
-  <EntityType Name="tblbus_address_copy">
-    <Key>
-      <PropertyRef Name="Description" />
-      <PropertyRef Name="BusinessID" />
-      <PropertyRef Name="Address1" />
-    </Key>
-    <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="BusinessID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="Address1" Type="String" MaxLength="75" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="Address2" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
-    <Property Name="Address3" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
-    <Property Name="Town" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
-    <Property Name="City" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
-    <Property Name="Postcode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-    <Property Name="CountryCode" Type="Int32" />
-    <Property Name="AddressTypeID" Type="Int32" />
-    <Property Name="ContactID" Type="Int32" />
-  </EntityType>
   <EntityType Name="tblbus_addresstype_ref">
     <Key>
       <PropertyRef Name="Actual_TypeID" />
@@ -541,14 +621,14 @@
     <Property Name="BusType" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
     <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
     <Property Name="Country_Currency" Type="Int32" />
-    <Property Name="Live" Type="SByte" Nullable="false" />
+    <Property Name="Live" Type="Boolean" Nullable="false" />
     <Property Name="AnalysisCodeID" Type="Int32" />
     <Property Name="Default_Nominal" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
     <Property Name="Factoring_No" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
     <Property Name="Comments" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
     <Property Name="GroupID" Type="Int32" />
     <Property Name="CoupleID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="IsExtract" Type="SByte" Nullable="false" />
+    <Property Name="IsExtract" Type="Boolean" Nullable="false" />
   </EntityType>
   <EntityType Name="tblbus_business_types">
     <Key>
@@ -609,36 +689,6 @@
     <Property Name="BusinessID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="OrderRef" Type="String" MaxLength="250" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="NominalCode" Type="String" MaxLength="250" FixedLength="false" Unicode="false" Nullable="false" />
-  </EntityType>
-  <EntityType Name="tblbus_settings">
-    <Key>
-      <PropertyRef Name="SettingID" />
-      <PropertyRef Name="BusType" />
-    </Key>
-    <Property Name="SettingID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="BusType" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="SettingName1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="Type" Type="Int32" />
-    <Property Name="Category" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-    <Property Name="DefaultValue" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="SeqNo" Type="Int32" />
-    <Property Name="Lookup_Table" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-    <Property Name="Lookup_Text" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-  </EntityType>
-  <EntityType Name="tblbus_settings_copy">
-    <Key>
-      <PropertyRef Name="SettingID" />
-      <PropertyRef Name="BusType" />
-    </Key>
-    <Property Name="SettingID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="BusType" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="SettingName1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="Type" Type="Int32" />
-    <Property Name="Category" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-    <Property Name="DefaultValue" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="SeqNo" Type="Int32" />
-    <Property Name="Lookup_Table" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-    <Property Name="Lookup_Text" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="tblbus_setvalues">
     <Key>
@@ -751,6 +801,16 @@
     <Property Name="Description" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
     <Property Name="CompanyID" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
   </EntityType>
+  <EntityType Name="tblfsk_colour">
+    <Key>
+      <PropertyRef Name="CompanyID" />
+      <PropertyRef Name="ColourID" />
+    </Key>
+    <Property Name="CompanyID" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="ColourID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Colour_hexcode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+  </EntityType>
   <EntityType Name="tblfsk_features">
     <Key>
       <PropertyRef Name="CompanyID" />
@@ -834,9 +894,9 @@
     <Property Name="Season" Type="Int32" />
     <Property Name="ClassID" Type="Int32" />
     <Property Name="Obsolete_Class" Type="Int32" />
-    <Property Name="Live" Type="SByte" Nullable="false" />
+    <Property Name="Live" Type="Boolean" Nullable="false" />
     <Property Name="StyleImage" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-    <Property Name="BatchControl" Type="SByte" Nullable="false" />
+    <Property Name="BatchControl" Type="Boolean" Nullable="false" />
     <Property Name="StockingUOM" Type="Int32" />
     <Property Name="IssueUOM" Type="Int32" />
     <Property Name="StockingType" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
@@ -930,7 +990,7 @@
     <Property Name="GroupID" Type="Int32" Nullable="false" />
     <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="CompanyID" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="ImagePath" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="ImagePath" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="tblfsk_style_groups_sub">
     <Key>
@@ -940,7 +1000,7 @@
     <Property Name="SubGroupID" Type="Int32" Nullable="false" />
     <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Name="CompanyID" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="ImagePath" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="ImagePath" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="tblfsk_style_locations">
     <Key>
@@ -993,7 +1053,7 @@
     <Property Name="VATCode" Type="Int16" />
     <Property Name="PriceOptionID" Type="Int32" Nullable="false" />
     <Property Name="StockingType" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
-    <Property Name="IsStatic" Type="SByte" Nullable="false" />
+    <Property Name="IsStatic" Type="Boolean" Nullable="false" />
   </EntityType>
   <EntityType Name="tblfsk_style_sizes_prices">
     <Key>
@@ -1081,6 +1141,32 @@
     <Property Name="SmallerUnit" Type="Int32" />
     <Property Name="Ratio" Type="Int32" />
     <Property Name="BaseRatio" Type="Int32" />
+  </EntityType>
+  <EntityType Name="tblfskstyle_dimension">
+    <Key>
+      <PropertyRef Name="CompanyId" />
+      <PropertyRef Name="DimensionId" />
+      <PropertyRef Name="StyleId" />
+      <PropertyRef Name="Freetexttype" />
+    </Key>
+    <Property Name="CompanyId" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="DimensionId" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="StyleId" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Freetexttype" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+  </EntityType>
+  <EntityType Name="tblfskstyle_dimension1_">
+    <Key>
+      <PropertyRef Name="CompanyId" />
+      <PropertyRef Name="DimensionId" />
+      <PropertyRef Name="StyleId" />
+      <PropertyRef Name="FreeTextType" />
+    </Key>
+    <Property Name="CompanyId" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="DimensionId" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="StyleId" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="FreeTextType" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="StyleImage" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="Description" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="tblfstk_feature">
     <Key>
@@ -1194,20 +1280,6 @@
     <Property Name="LanguageName" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
     <Property Name="ImageName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
   </EntityType>
-  <EntityType Name="tblonline_emp_address_copy">
-    <Key>
-      <PropertyRef Name="Companyid" />
-      <PropertyRef Name="BusinessId" />
-      <PropertyRef Name="OnlineUserId" />
-      <PropertyRef Name="Employeeid" />
-      <PropertyRef Name="AddressId" />
-    </Key>
-    <Property Name="Companyid" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="BusinessId" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="OnlineUserId" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="Employeeid" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="AddressId" Type="Int32" Nullable="false" />
-  </EntityType>
   <EntityType Name="tblonline_holidays">
     <Key>
       <PropertyRef Name="CompanyID" />
@@ -1248,7 +1320,28 @@
     <Property Name="OrderNo" Type="Int32" Nullable="false" />
     <Property Name="IsReq" Type="Int32" />
   </EntityType>
+  <EntityType Name="tblonline_rolloutorders_reqstatus_atlasfm">
+    <Key>
+      <PropertyRef Name="CompanyID" />
+      <PropertyRef Name="OrderNo" />
+    </Key>
+    <Property Name="CompanyID" Type="String" MaxLength="5" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="OrderNo" Type="Int32" Nullable="false" />
+    <Property Name="IsReq" Type="Int32" />
+  </EntityType>
   <EntityType Name="tblonline_userid_employee">
+    <Key>
+      <PropertyRef Name="CompanyID" />
+      <PropertyRef Name="BusinessID" />
+      <PropertyRef Name="OnlineUserID" />
+      <PropertyRef Name="EmployeeID" />
+    </Key>
+    <Property Name="CompanyID" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="BusinessID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="OnlineUserID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="EmployeeID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+  </EntityType>
+  <EntityType Name="tblonline_userid_employee_atlasfm">
     <Key>
       <PropertyRef Name="CompanyID" />
       <PropertyRef Name="BusinessID" />
@@ -1938,6 +2031,59 @@
     <Property Name="ReturnOrderNo" Type="Int64" />
     <Property Name="ReturnLineNo" Type="Int64" />
   </EntityType>
+  <EntityType Name="tblsop_salesorder_detail_atlasfm">
+    <Key>
+      <PropertyRef Name="CompanyID" />
+      <PropertyRef Name="OrderNo" />
+      <PropertyRef Name="LineNo" />
+    </Key>
+    <Property Name="CompanyID" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Warehouseid" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="OrderNo" Type="Int64" Nullable="false" />
+    <Property Name="LineNo" Type="Int64" Nullable="false" />
+    <Property Name="LineType" Type="Int32" />
+    <Property Name="StyleID" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+    <Property Name="ColourID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+    <Property Name="SizeID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Price" Type="Decimal" />
+    <Property Name="Cost" Type="Decimal" />
+    <Property Name="OrdQty" Type="Int64" />
+    <Property Name="AllQty" Type="Int64" />
+    <Property Name="InvQty" Type="Int64" />
+    <Property Name="DespQty" Type="Int64" />
+    <Property Name="CommissionRate" Type="Double" />
+    <Property Name="Discount" Type="Double" />
+    <Property Name="Deliverydate" Type="DateTime" />
+    <Property Name="VatCode" Type="Int32" />
+    <Property Name="NomCode" Type="Int32" />
+    <Property Name="PartShip" Type="SByte" />
+    <Property Name="LineNoRef" Type="Single" />
+    <Property Name="Currency_Exchange_Rate" Type="Double" />
+    <Property Name="StyleIDref" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+    <Property Name="FreeText" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <Property Name="RepID" Type="Int64" />
+    <Property Name="RepRate" Type="Double" />
+    <Property Name="KamID" Type="Int64" />
+    <Property Name="KAMRate" Type="Double" />
+    <Property Name="IssueUOM" Type="Int64" />
+    <Property Name="IssueQty" Type="Double" />
+    <Property Name="StockingUOM" Type="Int64" />
+    <Property Name="OriginalOrderNo" Type="Int64" />
+    <Property Name="OriginalLineNo" Type="Int64" />
+    <Property Name="SOPDETAIL1" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="SOPDETAIL2" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="SOPDETAIL3" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="SOPDETAIL4" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="SOPDETAIL5" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="Jobsheetno" Type="Int32" />
+    <Property Name="JobsheetLineNo" Type="Int32" />
+    <Property Name="AssemblyID" Type="Int32" />
+    <Property Name="AsmLineNo" Type="Int32" />
+    <Property Name="ReasonCode" Type="Int32" />
+    <Property Name="ReturnOrderNo" Type="Int64" />
+    <Property Name="ReturnLineNo" Type="Int64" />
+  </EntityType>
   <EntityType Name="tblsop_salesorder_detail_offline">
     <Key>
       <PropertyRef Name="CompanyID" />
@@ -2045,6 +2191,81 @@
     <Property Name="ReturnLineNo" Type="Int64" />
   </EntityType>
   <EntityType Name="tblsop_salesorder_header">
+    <Key>
+      <PropertyRef Name="CompanyID" />
+      <PropertyRef Name="OrderNo" />
+    </Key>
+    <Property Name="CompanyID" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="WarehouseID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="OrderNo" Type="Int64" Nullable="false" />
+    <Property Name="CustID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="OrderDate" Type="DateTime" />
+    <Property Name="InvDesc" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="InvAddress1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="InvAddress2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="InvAddress3" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="InvCity" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="InvTown" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="InvPostCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="InvCountry" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DelDesc" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DelAddress1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DelAddress2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DelAddress3" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DelCity" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DelTown" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DelPostCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DelCountry" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="CustRef" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ContractRef" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Comments" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <Property Name="InvoiceDate" Type="DateTime" />
+    <Property Name="Carrier" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
+    <Property Name="CarrierCharge" Type="Decimal" />
+    <Property Name="CustDisc" Type="Double" />
+    <Property Name="SettDisc" Type="Double" />
+    <Property Name="VolDisc" Type="Double" />
+    <Property Name="SettlementDays" Type="Int32" />
+    <Property Name="OrderConfirm" Type="Byte" />
+    <Property Name="CommentsExternal" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <Property Name="Cancelled" Type="SByte" />
+    <Property Name="ProForma" Type="SByte" />
+    <Property Name="Completed" Type="SByte" />
+    <Property Name="WorksOrderNo" Type="Double" />
+    <Property Name="AllowPartShipment" Type="SByte" />
+    <Property Name="TotalGoods" Type="Double" />
+    <Property Name="OrderGoods" Type="Double" />
+    <Property Name="UserID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="pRINTINVOICE" Type="SByte" />
+    <Property Name="Currency_Exchange_Rate" Type="Double" />
+    <Property Name="PinNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="UCodeId" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ContractNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Currency_Exchange_Code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="TIMEOFENTRY" Type="Time" />
+    <Property Name="RepID" Type="Int64" />
+    <Property Name="RepNo" Type="Int64" />
+    <Property Name="OnlineConfirm" Type="SByte" />
+    <Property Name="OnlineConfirmDate" Type="DateTime" />
+    <Property Name="OnlineConfirmedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="OnlineProcessed" Type="SByte" />
+    <Property Name="OnlineProcessedDate" Type="DateTime" />
+    <Property Name="OnlineProcessedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ReasonCode" Type="Int32" />
+    <Property Name="OnlineUserID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="OrderAnalysisCode1" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="OrderAnalysisCode2" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="OrderAnalysisCode3" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="OrderAnalysisCode4" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="OrderAnalysisCode5" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="PrintLabel" Type="SByte" />
+    <Property Name="ProFormaPrint" Type="SByte" />
+    <Property Name="ConfirmPrint" Type="SByte" />
+    <Property Name="OrderType" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+    <Property Name="EmailID" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+    <Property Name="ContactName" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="tblsop_salesorder_header_atlasfm">
     <Key>
       <PropertyRef Name="CompanyID" />
       <PropertyRef Name="OrderNo" />
@@ -2485,182 +2706,120 @@
     <Property Name="OrderAnalysisCode5" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
     <Property Name="ordertype" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
   </EntityType>
-  <EntityType Name="hr_visexp01_address_map_bak">
-    <Key>
-      <PropertyRef Name="MapUser" />
-    </Key>
-    <Property Name="Companyid" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
-    <Property Name="BusinessId" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="OnlineUserId" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-    <Property Name="Employeeid" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="AddressId" Type="Int32" />
-    <Property Name="MapUser" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
-  </EntityType>
-  <EntityType Name="rollout_order_detail_tsb">
+  <EntityType Name="bak_tblaccemp_employee_tsb">
     <Key>
       <PropertyRef Name="CompanyID" />
-      <PropertyRef Name="OrderNo" />
-      <PropertyRef Name="LineNo" />
-    </Key>
-    <Property Name="CompanyID" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="Warehouseid" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="OrderNo" Type="Int64" Nullable="false" />
-    <Property Name="LineNo" Type="Int64" Nullable="false" />
-    <Property Name="LineType" Type="Int32" />
-    <Property Name="StyleID" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
-    <Property Name="ColourID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-    <Property Name="SizeID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-    <Property Name="Price" Type="Decimal" />
-    <Property Name="Cost" Type="Decimal" />
-    <Property Name="OrdQty" Type="Int64" />
-    <Property Name="AllQty" Type="Int64" />
-    <Property Name="InvQty" Type="Int64" />
-    <Property Name="DespQty" Type="Int64" />
-    <Property Name="CommissionRate" Type="Double" />
-    <Property Name="Discount" Type="Double" />
-    <Property Name="Deliverydate" Type="DateTime" />
-    <Property Name="VatCode" Type="Int32" />
-    <Property Name="NomCode" Type="Int32" />
-    <Property Name="PartShip" Type="SByte" />
-    <Property Name="LineNoRef" Type="Single" />
-    <Property Name="Currency_Exchange_Rate" Type="Double" />
-    <Property Name="StyleIDref" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-    <Property Name="FreeText" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
-    <Property Name="RepID" Type="Int64" />
-    <Property Name="RepRate" Type="Double" />
-    <Property Name="KamID" Type="Int64" />
-    <Property Name="KAMRate" Type="Double" />
-    <Property Name="IssueUOM" Type="Int64" />
-    <Property Name="IssueQty" Type="Double" />
-    <Property Name="StockingUOM" Type="Int64" />
-    <Property Name="OriginalOrderNo" Type="Int64" />
-    <Property Name="OriginalLineNo" Type="Int64" />
-    <Property Name="SOPDETAIL1" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-    <Property Name="SOPDETAIL2" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-    <Property Name="SOPDETAIL3" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-    <Property Name="SOPDETAIL4" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-    <Property Name="SOPDETAIL5" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-    <Property Name="Jobsheetno" Type="Int32" />
-    <Property Name="JobsheetLineNo" Type="Int32" />
-    <Property Name="AssemblyID" Type="Int32" />
-    <Property Name="AsmLineNo" Type="Int32" />
-    <Property Name="ReasonCode" Type="Int32" />
-    <Property Name="ReturnOrderNo" Type="Int64" />
-    <Property Name="ReturnLineNo" Type="Int64" />
-  </EntityType>
-  <EntityType Name="rollout_order_header_address_tsb">
-    <Key>
       <PropertyRef Name="EmployeeID" />
       <PropertyRef Name="BusinessID" />
+      <PropertyRef Name="EmployeeClosed" />
+      <PropertyRef Name="IsDefault" />
     </Key>
+    <Property Name="CompanyID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="EmployeeID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="BusinessID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="OnlineUserID" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-    <Property Name="AddressID" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="DepartmentID" Type="Int32" />
+    <Property Name="GroupID" Type="Int32" />
+    <Property Name="Title" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+    <Property Name="Forename" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+    <Property Name="Surname" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+    <Property Name="StartDate" Type="DateTime" />
+    <Property Name="EndDate" Type="DateTime" />
+    <Property Name="EmployeeClosed" Type="SByte" Nullable="false" />
+    <Property Name="roleid" Type="Int32" />
+    <Property Name="IsDefault" Type="SByte" Nullable="false" />
+  </EntityType>
+  <EntityType Name="copy_tblusers">
+    <Key>
+      <PropertyRef Name="UserName" />
+      <PropertyRef Name="BusinessID" />
+    </Key>
+    <Property Name="UserName" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ForeName" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+    <Property Name="SurName" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+    <Property Name="ContactNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="AccessID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Active" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
+    <Property Name="BusinessID" Type="String" MaxLength="200" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="CreateDate" Type="DateTime" />
+    <Property Name="LastIPAddress" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="LastLoggedDate" Type="DateTime" />
+    <Property Name="Createdby" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Email_ID" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="AspUserID" Type="String" MaxLength="256" FixedLength="false" Unicode="false" />
+    <Property Name="BusinessName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="hr_demo_address">
+    <Key>
+      <PropertyRef Name="CompanyID" />
+      <PropertyRef Name="BusinessID" />
+      <PropertyRef Name="OldAddressID" />
+    </Key>
+    <Property Name="CompanyID" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="BusinessID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="OldAddressID" Type="Int32" Nullable="false" />
+    <Property Name="NewAddressID" Type="Int64" />
     <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="Address1" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
-    <Property Name="Address2" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
-    <Property Name="Address3" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
-    <Property Name="City" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
-    <Property Name="Town" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
-    <Property Name="Postcode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="PostCode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
   </EntityType>
-  <EntityType Name="rollout_order_header_tsb">
+  <EntityType Name="hr_demo_employee">
     <Key>
-      <PropertyRef Name="CompanyID" />
-      <PropertyRef Name="OrderNo" />
-    </Key>
-    <Property Name="CompanyID" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="WarehouseID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="OrderNo" Type="Int64" Nullable="false" />
-    <Property Name="CustID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="OrderDate" Type="DateTime" />
-    <Property Name="InvDesc" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="InvAddress1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="InvAddress2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="InvAddress3" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="InvCity" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="InvTown" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="InvPostCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="InvCountry" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="DelDesc" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="DelAddress1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="DelAddress2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="DelAddress3" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="DelCity" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="DelTown" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="DelPostCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="DelCountry" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="CustRef" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="ContractRef" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="Comments" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
-    <Property Name="InvoiceDate" Type="DateTime" />
-    <Property Name="Carrier" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
-    <Property Name="CarrierCharge" Type="Decimal" />
-    <Property Name="CustDisc" Type="Double" />
-    <Property Name="SettDisc" Type="Double" />
-    <Property Name="VolDisc" Type="Double" />
-    <Property Name="SettlementDays" Type="Int32" />
-    <Property Name="OrderConfirm" Type="Byte" />
-    <Property Name="CommentsExternal" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
-    <Property Name="Cancelled" Type="SByte" />
-    <Property Name="ProForma" Type="SByte" />
-    <Property Name="Completed" Type="SByte" />
-    <Property Name="WorksOrderNo" Type="Double" />
-    <Property Name="AllowPartShipment" Type="SByte" />
-    <Property Name="TotalGoods" Type="Double" />
-    <Property Name="OrderGoods" Type="Double" />
-    <Property Name="UserID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-    <Property Name="pRINTINVOICE" Type="SByte" />
-    <Property Name="Currency_Exchange_Rate" Type="Double" />
-    <Property Name="PinNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="UCodeId" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="ContractNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="Currency_Exchange_Code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="TIMEOFENTRY" Type="Time" />
-    <Property Name="RepID" Type="Int64" />
-    <Property Name="RepNo" Type="Int64" />
-    <Property Name="OnlineConfirm" Type="SByte" />
-    <Property Name="OnlineConfirmDate" Type="DateTime" />
-    <Property Name="OnlineConfirmedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="OnlineProcessed" Type="SByte" />
-    <Property Name="OnlineProcessedDate" Type="DateTime" />
-    <Property Name="OnlineProcessedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="ReasonCode" Type="Int32" />
-    <Property Name="OnlineUserID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-    <Property Name="OrderAnalysisCode1" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-    <Property Name="OrderAnalysisCode2" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-    <Property Name="OrderAnalysisCode3" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-    <Property Name="OrderAnalysisCode4" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-    <Property Name="OrderAnalysisCode5" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-    <Property Name="PrintLabel" Type="SByte" />
-    <Property Name="ProFormaPrint" Type="SByte" />
-    <Property Name="ConfirmPrint" Type="SByte" />
-    <Property Name="OrderType" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
-  </EntityType>
-  <EntityType Name="stockcard_tsb_rollout">
-    <Key>
-      <PropertyRef Name="CompanyID" />
       <PropertyRef Name="BusinessID" />
       <PropertyRef Name="EmployeeID" />
-      <PropertyRef Name="StyleID" />
-      <PropertyRef Name="ColourID" />
-      <PropertyRef Name="Year" />
     </Key>
-    <Property Name="CompanyID" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="BusinessID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="EmployeeID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="NewEmployeeID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="hr_demo_invoices">
+    <Key>
+      <PropertyRef Name="InvoiceNo" />
+    </Key>
+    <Property Name="SalesOrder" Type="Int32" />
+    <Property Name="NewOrderNo" Type="Int64" />
+    <Property Name="PickingSlipNo" Type="Int32" />
+    <Property Name="NewPickSlipNo" Type="Int64" />
+    <Property Name="InvoiceNo" Type="Int32" Nullable="false" />
+    <Property Name="NewInvoiceNo" Type="Int64" />
+  </EntityType>
+  <EntityType Name="hr_demo_orders">
+    <Key>
+      <PropertyRef Name="OrderNo" />
+    </Key>
+    <Property Name="CustID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="PinNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="OrderNo" Type="Int32" Nullable="false" />
+    <Property Name="NewOrderNo" Type="Int64" />
+  </EntityType>
+  <EntityType Name="hr_demo_pickslips">
+    <Key>
+      <PropertyRef Name="PickingSlipNo" />
+    </Key>
+    <Property Name="CustID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="PinNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="OrderNo" Type="Int32" />
+    <Property Name="NewOrderNo" Type="Int64" />
+    <Property Name="PickingSlipNo" Type="Int32" Nullable="false" />
+    <Property Name="NewPickSlipNo" Type="Int64" />
+  </EntityType>
+  <EntityType Name="hr_demo_style">
+    <Key>
+      <PropertyRef Name="StyleID" />
+      <PropertyRef Name="NewStyleID" />
+    </Key>
     <Property Name="StyleID" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="ColourID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="Year" Type="Int16" Nullable="false" />
-    <Property Name="SOQty" Type="Int32" />
-    <Property Name="PickQty" Type="Int32" />
-    <Property Name="InvQty" Type="Int32" />
-    <Property Name="TotalIssues" Type="Int32" />
-    <Property Name="FirstIssueDate" Type="DateTime" />
-    <Property Name="StartIssueDate" Type="DateTime" />
-    <Property Name="LastIssueDate" Type="DateTime" />
+    <Property Name="NewStyleID" Type="String" MaxLength="33" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="NewDescription" Type="String" MaxLength="66" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="hr_demo_ucode">
+    <Key>
+      <PropertyRef Name="BusinessID" />
+      <PropertyRef Name="UcodeID" />
+      <PropertyRef Name="NewUCodeID" />
+    </Key>
+    <Property Name="BusinessID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="UcodeID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="NewUCodeID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
   </EntityType>
   <EntityType Name="tblaccemp_style_staticqty">
     <Key>
@@ -2679,129 +2838,52 @@
     <Property Name="RolloutName" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
     <Property Name="ID" Type="Int32" />
   </EntityType>
-  <EntityType Name="tblbus_address_s27">
+  <EntityType Name="tblbus_settings">
     <Key>
-      <PropertyRef Name="CompanyID" />
-      <PropertyRef Name="BusinessID" />
-      <PropertyRef Name="AddressID" />
+      <PropertyRef Name="SettingID" />
+      <PropertyRef Name="BusType" />
     </Key>
-    <Property Name="CompanyID" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="BusinessID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="AddressID" Type="Int32" Nullable="false" />
-    <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="Address1" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
-    <Property Name="Address2" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
-    <Property Name="Address3" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
-    <Property Name="Town" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
-    <Property Name="City" Type="String" MaxLength="75" FixedLength="false" Unicode="false" />
-    <Property Name="Postcode" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-    <Property Name="CountryCode" Type="Int32" />
-    <Property Name="AddressTypeID" Type="Int32" />
-    <Property Name="ContactID" Type="Int32" />
-  </EntityType>
-  <EntityType Name="tblbus_contact_s27">
-    <Key>
-      <PropertyRef Name="ID" />
-    </Key>
-    <Property Name="ID" Type="Int32" Nullable="false" />
-    <Property Name="ContactID" Type="Int32" />
-    <Property Name="ContactType_ID" Type="Int32" />
-    <Property Name="Value" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-  </EntityType>
-  <EntityType Name="tblonline_userid_employee_s27">
-    <Key>
-      <PropertyRef Name="CompanyID" />
-      <PropertyRef Name="BusinessID" />
-      <PropertyRef Name="OnlineUserID" />
-      <PropertyRef Name="EmployeeID" />
-    </Key>
-    <Property Name="CompanyID" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="BusinessID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="OnlineUserID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="EmployeeID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="SettingID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="BusType" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="SettingName1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Type" Type="Int32" />
+    <Property Name="Category" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="DefaultValue" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="SeqNo" Type="Int32" />
+    <Property Name="Lookup_Table" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="Lookup_Text" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="tblonlinesop_backorders">
     <Key>
+      <PropertyRef Name="PickingSlipNo" />
+      <PropertyRef Name="LineNo" />
       <PropertyRef Name="PickSlipPrinted" />
       <PropertyRef Name="DelNotePrinted" />
       <PropertyRef Name="Cancelled" />
     </Key>
-    <Property Name="CustID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="CustID" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
     <Property Name="OrderNo" Type="Int32" />
     <Property Name="OrderLine" Type="Int16" />
-    <Property Name="PickingSlipNo" Type="Int32" />
-    <Property Name="LineNo" Type="Int32" />
-    <Property Name="StyleID" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
-    <Property Name="ColourID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-    <Property Name="SizeID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="PickingSlipNo" Type="Int32" Nullable="false" />
+    <Property Name="LineNo" Type="Int32" Nullable="false" />
+    <Property Name="StyleID" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="ColourID" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="SizeID" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
     <Property Name="DatePicked" Type="DateTime" />
     <Property Name="OrdQty" Type="Int32" />
     <Property Name="AllQty" Type="Int32" />
     <Property Name="PickSlipPrinted" Type="Boolean" Nullable="false" />
     <Property Name="DelNotePrinted" Type="Boolean" Nullable="false" />
     <Property Name="Cancelled" Type="Boolean" Nullable="false" />
-    <Property Name="CustomerName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-    <Property Name="CompanyName" Type="String" MaxLength="40" FixedLength="false" Unicode="false" />
+    <Property Name="CustomerName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="CompanyName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
     <Property Name="FullDate" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-    <Property Name="DelDesc" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="DelAddress1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="CustRef" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="Value1" Type="Decimal" />
+    <Property Name="DelDesc" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="DelAddress1" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="CustRef" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="Value1" Type="Double" />
     <Property Name="DueDate" Type="DateTime" />
-    <Property Name="CommentsExternal" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-  </EntityType>
-  <EntityType Name="tblsop_salesorder_detail_bk">
-    <Key>
-      <PropertyRef Name="CompanyID" />
-      <PropertyRef Name="OrderNo" />
-      <PropertyRef Name="LineNo" />
-    </Key>
-    <Property Name="CompanyID" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="Warehouseid" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="OrderNo" Type="Int64" Nullable="false" />
-    <Property Name="LineNo" Type="Int64" Nullable="false" />
-    <Property Name="LineType" Type="Int32" />
-    <Property Name="StyleID" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
-    <Property Name="ColourID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-    <Property Name="SizeID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-    <Property Name="Price" Type="Decimal" />
-    <Property Name="Cost" Type="Decimal" />
-    <Property Name="OrdQty" Type="Int64" />
-    <Property Name="AllQty" Type="Int64" />
-    <Property Name="InvQty" Type="Int64" />
-    <Property Name="DespQty" Type="Int64" />
-    <Property Name="CommissionRate" Type="Double" />
-    <Property Name="Discount" Type="Double" />
-    <Property Name="Deliverydate" Type="DateTime" />
-    <Property Name="VatCode" Type="Int32" />
-    <Property Name="NomCode" Type="Int32" />
-    <Property Name="PartShip" Type="SByte" />
-    <Property Name="LineNoRef" Type="Single" />
-    <Property Name="Currency_Exchange_Rate" Type="Double" />
-    <Property Name="StyleIDref" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-    <Property Name="FreeText" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
-    <Property Name="RepID" Type="Int64" />
-    <Property Name="RepRate" Type="Double" />
-    <Property Name="KamID" Type="Int64" />
-    <Property Name="KAMRate" Type="Double" />
-    <Property Name="IssueUOM" Type="Int64" />
-    <Property Name="IssueQty" Type="Double" />
-    <Property Name="StockingUOM" Type="Int64" />
-    <Property Name="OriginalOrderNo" Type="Int64" />
-    <Property Name="OriginalLineNo" Type="Int64" />
-    <Property Name="SOPDETAIL1" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-    <Property Name="SOPDETAIL2" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-    <Property Name="SOPDETAIL3" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-    <Property Name="SOPDETAIL4" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-    <Property Name="SOPDETAIL5" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-    <Property Name="Jobsheetno" Type="Int32" />
-    <Property Name="JobsheetLineNo" Type="Int32" />
-    <Property Name="AssemblyID" Type="Int32" />
-    <Property Name="AsmLineNo" Type="Int32" />
-    <Property Name="ReasonCode" Type="Int32" />
-    <Property Name="ReturnOrderNo" Type="Int64" />
-    <Property Name="ReturnLineNo" Type="Int64" />
+    <Property Name="CommentsExternal" Type="String" MaxLength="1073741823" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="tblsop_salesorder_detail_console">
     <Key>
@@ -2855,79 +2937,6 @@
     <Property Name="ReasonCode" Type="Int32" />
     <Property Name="ReturnOrderNo" Type="Int64" />
     <Property Name="ReturnLineNo" Type="Int64" />
-  </EntityType>
-  <EntityType Name="tblsop_salesorder_header_bk">
-    <Key>
-      <PropertyRef Name="CompanyID" />
-      <PropertyRef Name="OrderNo" />
-    </Key>
-    <Property Name="CompanyID" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
-    <Property Name="WarehouseID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="OrderNo" Type="Int64" Nullable="false" />
-    <Property Name="CustID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="OrderDate" Type="DateTime" />
-    <Property Name="InvDesc" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="InvAddress1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="InvAddress2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="InvAddress3" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="InvCity" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="InvTown" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="InvPostCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="InvCountry" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="DelDesc" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="DelAddress1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="DelAddress2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="DelAddress3" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="DelCity" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="DelTown" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="DelPostCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="DelCountry" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="CustRef" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="ContractRef" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="Comments" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
-    <Property Name="InvoiceDate" Type="DateTime" />
-    <Property Name="Carrier" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
-    <Property Name="CarrierCharge" Type="Decimal" />
-    <Property Name="CustDisc" Type="Double" />
-    <Property Name="SettDisc" Type="Double" />
-    <Property Name="VolDisc" Type="Double" />
-    <Property Name="SettlementDays" Type="Int32" />
-    <Property Name="OrderConfirm" Type="Byte" />
-    <Property Name="CommentsExternal" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
-    <Property Name="Cancelled" Type="SByte" />
-    <Property Name="ProForma" Type="SByte" />
-    <Property Name="Completed" Type="SByte" />
-    <Property Name="WorksOrderNo" Type="Double" />
-    <Property Name="AllowPartShipment" Type="SByte" />
-    <Property Name="TotalGoods" Type="Double" />
-    <Property Name="OrderGoods" Type="Double" />
-    <Property Name="UserID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-    <Property Name="pRINTINVOICE" Type="SByte" />
-    <Property Name="Currency_Exchange_Rate" Type="Double" />
-    <Property Name="PinNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="UCodeId" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="ContractNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="Currency_Exchange_Code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="TIMEOFENTRY" Type="Time" />
-    <Property Name="RepID" Type="Int64" />
-    <Property Name="RepNo" Type="Int64" />
-    <Property Name="OnlineConfirm" Type="SByte" />
-    <Property Name="OnlineConfirmDate" Type="DateTime" />
-    <Property Name="OnlineConfirmedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="OnlineProcessed" Type="SByte" />
-    <Property Name="OnlineProcessedDate" Type="DateTime" />
-    <Property Name="OnlineProcessedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="ReasonCode" Type="Int32" />
-    <Property Name="OnlineUserID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-    <Property Name="OrderAnalysisCode1" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-    <Property Name="OrderAnalysisCode2" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-    <Property Name="OrderAnalysisCode3" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-    <Property Name="OrderAnalysisCode4" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-    <Property Name="OrderAnalysisCode5" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-    <Property Name="PrintLabel" Type="SByte" />
-    <Property Name="ProFormaPrint" Type="SByte" />
-    <Property Name="ConfirmPrint" Type="SByte" />
-    <Property Name="OrderType" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="tblsop_salesorder_header_console">
     <Key>
@@ -3123,6 +3132,31 @@
     <Property Name="BusinessID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="UCodeID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
   </EntityType>
+  <EntityType Name="dim_fit_nongroup_styles">
+    <Key>
+      <PropertyRef Name="CompanyID" />
+      <PropertyRef Name="WareHouseID" />
+      <PropertyRef Name="FreeTextType" />
+      <PropertyRef Name="StyleId" />
+    </Key>
+    <Property Name="CompanyID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="WareHouseID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="FreeTextType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="FreeText" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="StyleId" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+  </EntityType>
+  <EntityType Name="dim_fit_styles">
+    <Key>
+      <PropertyRef Name="CompanyID" />
+      <PropertyRef Name="WareHouseID" />
+      <PropertyRef Name="FreeTextType" />
+    </Key>
+    <Property Name="CompanyID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="WareHouseID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="FreeTextType" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="FreeText" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="StyleIDs" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+  </EntityType>
   <EntityType Name="getallassembly">
     <Key>
       <PropertyRef Name="CompanyID" />
@@ -3249,12 +3283,48 @@
     <Property Name="SizeID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="obsoletecode" Type="Int64" />
   </EntityType>
+  <EntityType Name="productlist">
+    <Key>
+      <PropertyRef Name="CompanyID" />
+      <PropertyRef Name="StyleID" />
+      <PropertyRef Name="ColourID" />
+      <PropertyRef Name="SizeID" />
+    </Key>
+    <Property Name="CompanyID" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="StyleID" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="ColourID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="SizeID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="SeqNo" Type="Int16" />
+  </EntityType>
   <EntityType Name="style_dimfitalloc_caption">
     <Key>
       <PropertyRef Name="StyleId" />
     </Key>
     <Property Name="StyleId" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="Caption" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="styleby_freetextview">
+    <Key>
+      <PropertyRef Name="CompanyID" />
+    </Key>
+    <Property Name="CompanyID" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="StyleID" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="StyleImage" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="Product_Group" Type="Int32" />
+    <Property Name="FreeText" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="tblfskstyle_dimension1">
+    <Key>
+      <PropertyRef Name="CompanyId" />
+      <PropertyRef Name="StyleId" />
+      <PropertyRef Name="freetexttype" />
+    </Key>
+    <Property Name="CompanyId" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="FreeText" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="StyleId" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="freetexttype" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="StyleImage" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+    <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityType Name="ucodeby_freetextview">
     <Key>
@@ -3266,9 +3336,344 @@
     <Property Name="StyleImage" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
     <Property Name="Product_Group" Type="Int32" />
     <Property Name="FreeText" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="DimFreeText" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
     <Property Name="UCodeID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
     <Property Name="SeqNo" Type="Int32" />
-    <Property Name="DimFreeText" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="unrelatedorder">
+    <Key>
+      <PropertyRef Name="OrderNo" />
+    </Key>
+    <Property Name="OrderNo" Type="Int64" Nullable="false" />
+    <Property Name="CustID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="OrderDate" Type="DateTime" />
+    <Property Name="PinNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Forename" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+    <Property Name="Surname" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+    <Property Name="UCodeId" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="StyleID" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+    <Property Name="OrdQty" Type="Int64" />
+  </EntityType>
+  <EntityType Name="view_manpack">
+    <Key>
+      <PropertyRef Name="ManPackNo" />
+      <PropertyRef Name="CompanyID" />
+    </Key>
+    <Property Name="ManPackNo" Type="Int64" Nullable="false" />
+    <Property Name="ManpackDate" Type="DateTime" />
+    <Property Name="TotalGoods" Type="Double" />
+    <Property Name="OrderGoods" Type="Double" />
+    <Property Name="CustID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="CompanyID" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="OnlineUserID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="view_noorderplacedforthisemployee">
+    <Key>
+      <PropertyRef Name="BusinessID" />
+      <PropertyRef Name="UCodeID" />
+      <PropertyRef Name="EmployeeID" />
+      <PropertyRef Name="UserName" />
+    </Key>
+    <Property Name="BusinessID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="UCodeID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="EmployeeID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Forename" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+    <Property Name="Surname" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
+    <Property Name="UserName" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="AccessID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="view_normatucodereissueorder">
+    <Key>
+      <PropertyRef Name="CompanyID" />
+      <PropertyRef Name="OrderNo" />
+    </Key>
+    <Property Name="CompanyID" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="WarehouseID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="OrderNo" Type="Int64" Nullable="false" />
+    <Property Name="CustID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="OrderDate" Type="DateTime" />
+    <Property Name="InvDesc" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="InvAddress1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="InvAddress2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="InvAddress3" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="InvCity" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="InvTown" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="InvPostCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="InvCountry" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DelDesc" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DelAddress1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DelAddress2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DelAddress3" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DelCity" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DelTown" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DelPostCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DelCountry" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="CustRef" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ContractRef" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Comments" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <Property Name="InvoiceDate" Type="DateTime" />
+    <Property Name="Carrier" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
+    <Property Name="CarrierCharge" Type="Decimal" />
+    <Property Name="CustDisc" Type="Double" />
+    <Property Name="SettDisc" Type="Double" />
+    <Property Name="VolDisc" Type="Double" />
+    <Property Name="SettlementDays" Type="Int32" />
+    <Property Name="OrderConfirm" Type="Byte" />
+    <Property Name="CommentsExternal" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <Property Name="Cancelled" Type="SByte" />
+    <Property Name="ProForma" Type="SByte" />
+    <Property Name="Completed" Type="SByte" />
+    <Property Name="WorksOrderNo" Type="Double" />
+    <Property Name="AllowPartShipment" Type="SByte" />
+    <Property Name="TotalGoods" Type="Double" />
+    <Property Name="OrderGoods" Type="Double" />
+    <Property Name="UserID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="pRINTINVOICE" Type="SByte" />
+    <Property Name="Currency_Exchange_Rate" Type="Double" />
+    <Property Name="PinNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="UCodeId" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ContractNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Currency_Exchange_Code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="TIMEOFENTRY" Type="Time" />
+    <Property Name="RepID" Type="Int64" />
+    <Property Name="RepNo" Type="Int64" />
+    <Property Name="OnlineConfirm" Type="SByte" />
+    <Property Name="OnlineConfirmDate" Type="DateTime" />
+    <Property Name="OnlineConfirmedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="OnlineProcessed" Type="SByte" />
+    <Property Name="OnlineProcessedDate" Type="DateTime" />
+    <Property Name="OnlineProcessedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ReasonCode" Type="Int32" />
+    <Property Name="OnlineUserID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="OrderAnalysisCode1" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="OrderAnalysisCode2" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="OrderAnalysisCode3" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="OrderAnalysisCode4" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="OrderAnalysisCode5" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="PrintLabel" Type="SByte" />
+    <Property Name="ProFormaPrint" Type="SByte" />
+    <Property Name="ConfirmPrint" Type="SByte" />
+    <Property Name="OrderType" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="view_order_freetext_tsb_rollout">
+    <Key>
+      <PropertyRef Name="OrderNo" />
+    </Key>
+    <Property Name="OrderNo" Type="Int64" Nullable="false" />
+    <Property Name="PinNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="UCodeId" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="FreeText" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="OrdQty" Type="Decimal" />
+  </EntityType>
+  <EntityType Name="view_privateorder_pendings">
+    <Key>
+      <PropertyRef Name="CompanyID" />
+      <PropertyRef Name="OrderNo" />
+      <PropertyRef Name="SeqNo" />
+    </Key>
+    <Property Name="CompanyID" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="CustID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="OrderNo" Type="Int64" Nullable="false" />
+    <Property Name="OrderDate" Type="DateTime" />
+    <Property Name="TotalGoods" Type="Double" />
+    <Property Name="VAT" Type="Double" />
+    <Property Name="OrderGoods" Type="Double" />
+    <Property Name="txn_id" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="txn_Ip" Type="String" MaxLength="45" FixedLength="false" Unicode="false" />
+    <Property Name="rsp_date" Type="DateTime" />
+    <Property Name="rsp_status" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="GatewayImg" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="GatewayName" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+    <Property Name="SeqNo" Type="Int32" Nullable="false" />
+  </EntityType>
+  <EntityType Name="view_privateorders">
+    <Key>
+      <PropertyRef Name="CompanyID" />
+      <PropertyRef Name="OrderNo" />
+    </Key>
+    <Property Name="CompanyID" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="WarehouseID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="OrderNo" Type="Int64" Nullable="false" />
+    <Property Name="CustID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="OrderDate" Type="DateTime" />
+    <Property Name="InvDesc" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="InvAddress1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="InvAddress2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="InvAddress3" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="InvCity" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="InvTown" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="InvPostCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="InvCountry" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DelDesc" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DelAddress1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DelAddress2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DelAddress3" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DelCity" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DelTown" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DelPostCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DelCountry" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="CustRef" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ContractRef" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Comments" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <Property Name="InvoiceDate" Type="DateTime" />
+    <Property Name="Carrier" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
+    <Property Name="CarrierCharge" Type="Decimal" />
+    <Property Name="CustDisc" Type="Double" />
+    <Property Name="SettDisc" Type="Double" />
+    <Property Name="VolDisc" Type="Double" />
+    <Property Name="SettlementDays" Type="Int32" />
+    <Property Name="OrderConfirm" Type="Byte" />
+    <Property Name="CommentsExternal" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <Property Name="Cancelled" Type="SByte" />
+    <Property Name="ProForma" Type="SByte" />
+    <Property Name="Completed" Type="SByte" />
+    <Property Name="WorksOrderNo" Type="Double" />
+    <Property Name="AllowPartShipment" Type="SByte" />
+    <Property Name="TotalGoods" Type="Double" />
+    <Property Name="OrderGoods" Type="Double" />
+    <Property Name="UserID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="pRINTINVOICE" Type="SByte" />
+    <Property Name="Currency_Exchange_Rate" Type="Double" />
+    <Property Name="PinNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="UCodeId" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ContractNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Currency_Exchange_Code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="TIMEOFENTRY" Type="Time" />
+    <Property Name="RepID" Type="Int64" />
+    <Property Name="RepNo" Type="Int64" />
+    <Property Name="OnlineConfirm" Type="SByte" />
+    <Property Name="OnlineConfirmDate" Type="DateTime" />
+    <Property Name="OnlineConfirmedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="OnlineProcessed" Type="SByte" />
+    <Property Name="OnlineProcessedDate" Type="DateTime" />
+    <Property Name="OnlineProcessedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ReasonCode" Type="Int32" />
+    <Property Name="OnlineUserID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="OrderAnalysisCode1" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="OrderAnalysisCode2" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="OrderAnalysisCode3" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="OrderAnalysisCode4" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="OrderAnalysisCode5" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="PrintLabel" Type="SByte" />
+    <Property Name="ProFormaPrint" Type="SByte" />
+    <Property Name="ConfirmPrint" Type="SByte" />
+    <Property Name="OrderType" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="view_reissueorderwithnormalucode">
+    <Key>
+      <PropertyRef Name="CompanyID" />
+      <PropertyRef Name="OrderNo" />
+    </Key>
+    <Property Name="CompanyID" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="WarehouseID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="OrderNo" Type="Int64" Nullable="false" />
+    <Property Name="CustID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="OrderDate" Type="DateTime" />
+    <Property Name="InvDesc" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="InvAddress1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="InvAddress2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="InvAddress3" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="InvCity" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="InvTown" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="InvPostCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="InvCountry" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DelDesc" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DelAddress1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DelAddress2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DelAddress3" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DelCity" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DelTown" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DelPostCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="DelCountry" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="CustRef" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ContractRef" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Comments" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <Property Name="InvoiceDate" Type="DateTime" />
+    <Property Name="Carrier" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
+    <Property Name="CarrierCharge" Type="Decimal" />
+    <Property Name="CustDisc" Type="Double" />
+    <Property Name="SettDisc" Type="Double" />
+    <Property Name="VolDisc" Type="Double" />
+    <Property Name="SettlementDays" Type="Int32" />
+    <Property Name="OrderConfirm" Type="Byte" />
+    <Property Name="CommentsExternal" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+    <Property Name="Cancelled" Type="SByte" />
+    <Property Name="ProForma" Type="SByte" />
+    <Property Name="Completed" Type="SByte" />
+    <Property Name="WorksOrderNo" Type="Double" />
+    <Property Name="AllowPartShipment" Type="SByte" />
+    <Property Name="TotalGoods" Type="Double" />
+    <Property Name="OrderGoods" Type="Double" />
+    <Property Name="UserID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
+    <Property Name="pRINTINVOICE" Type="SByte" />
+    <Property Name="Currency_Exchange_Rate" Type="Double" />
+    <Property Name="PinNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="UCodeId" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ContractNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="Currency_Exchange_Code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="TIMEOFENTRY" Type="Time" />
+    <Property Name="RepID" Type="Int64" />
+    <Property Name="RepNo" Type="Int64" />
+    <Property Name="OnlineConfirm" Type="SByte" />
+    <Property Name="OnlineConfirmDate" Type="DateTime" />
+    <Property Name="OnlineConfirmedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="OnlineProcessed" Type="SByte" />
+    <Property Name="OnlineProcessedDate" Type="DateTime" />
+    <Property Name="OnlineProcessedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="ReasonCode" Type="Int32" />
+    <Property Name="OnlineUserID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="OrderAnalysisCode1" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="OrderAnalysisCode2" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="OrderAnalysisCode3" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="OrderAnalysisCode4" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="OrderAnalysisCode5" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+    <Property Name="PrintLabel" Type="SByte" />
+    <Property Name="ProFormaPrint" Type="SByte" />
+    <Property Name="ConfirmPrint" Type="SByte" />
+    <Property Name="OrderType" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
+  </EntityType>
+  <EntityType Name="view_ucode_freetext_tsb_rollout">
+    <Key>
+      <PropertyRef Name="UCodeID" />
+    </Key>
+    <Property Name="UCodeID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+    <Property Name="FreeText" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+    <Property Name="AnnualIssue" Type="Decimal" />
+  </EntityType>
+  <EntityType Name="view_unmatchedcolourwithorgcolour">
+    <Key>
+      <PropertyRef Name="OrderNo" />
+      <PropertyRef Name="OrgColourID" />
+    </Key>
+    <Property Name="PinNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="UCodeId" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="CustID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="OrderNo" Type="Int64" Nullable="false" />
+    <Property Name="ReturnOrderNo" Type="Int64" />
+    <Property Name="OriginalOrderNo" Type="Int64" />
+    <Property Name="OrderDate" Type="DateTime" />
+    <Property Name="StyleID" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+    <Property Name="ColourID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+    <Property Name="SizeID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="OrdQty" Type="Int64" />
+    <Property Name="OrgColourID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+  </EntityType>
+  <EntityType Name="view_unmatchedordercolourid">
+    <Key>
+      <PropertyRef Name="OrderNo" />
+    </Key>
+    <Property Name="UCodeId" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+    <Property Name="CustID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="OrderNo" Type="Int64" Nullable="false" />
+    <Property Name="ReturnOrderNo" Type="Int64" />
+    <Property Name="OriginalOrderNo" Type="Int64" />
+    <Property Name="OrderDate" Type="DateTime" />
+    <Property Name="StyleID" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+    <Property Name="ColourID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+    <Property Name="SizeID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+    <Property Name="OrdQty" Type="Int64" />
+    <Property Name="PinNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
   </EntityType>
   <EntityContainer Name="e4kmaximusdbEntities" annotation:LazyLoadingEnabled="true">
     <EntitySet Name="my_aspnet_applications" EntityType="Self.my_aspnet_applications" />
@@ -3283,31 +3688,35 @@
     <EntitySet Name="my_aspnet_sitemap" EntityType="Self.my_aspnet_sitemap" />
     <EntitySet Name="my_aspnet_users" EntityType="Self.my_aspnet_users" />
     <EntitySet Name="my_aspnet_usersinroles" EntityType="Self.my_aspnet_usersinroles" />
-    <EntitySet Name="tbl_employee_s27_hr" EntityType="Self.tbl_employee_s27_hr" />
     <EntitySet Name="tblacc_vatcodes" EntityType="Self.tblacc_vatcodes" />
     <EntitySet Name="tblaccemp_budget" EntityType="Self.tblaccemp_budget" />
     <EntitySet Name="tblaccemp_budgetcard" EntityType="Self.tblaccemp_budgetcard" />
     <EntitySet Name="tblaccemp_departments" EntityType="Self.tblaccemp_departments" />
     <EntitySet Name="tblaccemp_employee" EntityType="Self.tblaccemp_employee" />
+    <EntitySet Name="tblaccemp_employee_atlasfm" EntityType="Self.tblaccemp_employee_atlasfm" />
     <EntitySet Name="tblaccemp_employee_rollout" EntityType="Self.tblaccemp_employee_rollout" />
+    <EntitySet Name="tblaccemp_employee_rollout_atlasfm" EntityType="Self.tblaccemp_employee_rollout_atlasfm" />
     <EntitySet Name="tblaccemp_points" EntityType="Self.tblaccemp_points" />
     <EntitySet Name="tblaccemp_pointscard" EntityType="Self.tblaccemp_pointscard" />
     <EntitySet Name="tblaccemp_rollout_names" EntityType="Self.tblaccemp_rollout_names" />
     <EntitySet Name="tblaccemp_rollout_ucode_ref" EntityType="Self.tblaccemp_rollout_ucode_ref" />
     <EntitySet Name="tblaccemp_stockcard" EntityType="Self.tblaccemp_stockcard" />
+    <EntitySet Name="tblaccemp_stockcard_atlasfm" EntityType="Self.tblaccemp_stockcard_atlasfm" />
+    <EntitySet Name="tblaccemp_stylepoints" EntityType="Self.tblaccemp_stylepoints" />
     <EntitySet Name="tblaccemp_ucode_reasons" EntityType="Self.tblaccemp_ucode_reasons" />
+    <EntitySet Name="tblaccemp_ucodepoints" EntityType="Self.tblaccemp_ucodepoints" />
     <EntitySet Name="tblaccemp_ucodes" EntityType="Self.tblaccemp_ucodes" />
     <EntitySet Name="tblaccemp_ucodes_desc" EntityType="Self.tblaccemp_ucodes_desc" />
     <EntitySet Name="tblaccemp_ucodes_dimension" EntityType="Self.tblaccemp_ucodes_dimension" />
     <EntitySet Name="tblaccemp_ucodes_hours" EntityType="Self.tblaccemp_ucodes_hours" />
     <EntitySet Name="tblaccemp_ucodesemployees" EntityType="Self.tblaccemp_ucodesemployees" />
+    <EntitySet Name="tblaccemp_ucodesemployees_atlasfm" EntityType="Self.tblaccemp_ucodesemployees_atlasfm" />
     <EntitySet Name="tblaccesslevels" EntityType="Self.tblaccesslevel" />
     <EntitySet Name="tbladmins" EntityType="Self.tbladmin" />
     <EntitySet Name="tblasm_assemblydetail" EntityType="Self.tblasm_assemblydetail" />
     <EntitySet Name="tblasm_assemblyheader" EntityType="Self.tblasm_assemblyheader" />
     <EntitySet Name="tblbus_account" EntityType="Self.tblbus_account" />
     <EntitySet Name="tblbus_address" EntityType="Self.tblbus_address" />
-    <EntitySet Name="tblbus_address_copy" EntityType="Self.tblbus_address_copy" />
     <EntitySet Name="tblbus_addresstype_ref" EntityType="Self.tblbus_addresstype_ref" />
     <EntitySet Name="tblbus_addresstypes" EntityType="Self.tblbus_addresstypes" />
     <EntitySet Name="tblbus_business" EntityType="Self.tblbus_business" />
@@ -3317,8 +3726,6 @@
     <EntitySet Name="tblbus_countrycodes" EntityType="Self.tblbus_countrycodes" />
     <EntitySet Name="tblbus_groups_ref" EntityType="Self.tblbus_groups_ref" />
     <EntitySet Name="tblbus_online_orderref_nominal" EntityType="Self.tblbus_online_orderref_nominal" />
-    <EntitySet Name="tblbus_settings" EntityType="Self.tblbus_settings" />
-    <EntitySet Name="tblbus_settings_copy" EntityType="Self.tblbus_settings_copy" />
     <EntitySet Name="tblbus_setvalues" EntityType="Self.tblbus_setvalues" />
     <EntitySet Name="tblbus_styles" EntityType="Self.tblbus_styles" />
     <EntitySet Name="tblchildmenus" EntityType="Self.tblchildmenu" />
@@ -3328,6 +3735,7 @@
     <EntitySet Name="tblcompanies" EntityType="Self.tblcompany" />
     <EntitySet Name="tblcontent_lang" EntityType="Self.tblcontent_lang" />
     <EntitySet Name="tblfsk_class" EntityType="Self.tblfsk_class" />
+    <EntitySet Name="tblfsk_colour" EntityType="Self.tblfsk_colour" />
     <EntitySet Name="tblfsk_features" EntityType="Self.tblfsk_features" />
     <EntitySet Name="tblfsk_price" EntityType="Self.tblfsk_price" />
     <EntitySet Name="tblfsk_seasons" EntityType="Self.tblfsk_seasons" />
@@ -3352,6 +3760,8 @@
     <EntitySet Name="tblfsk_unitofmeasure" EntityType="Self.tblfsk_unitofmeasure" />
     <EntitySet Name="tblfsk_unitofmeasure_customer" EntityType="Self.tblfsk_unitofmeasure_customer" />
     <EntitySet Name="tblfsk_unitofmeasureconversion" EntityType="Self.tblfsk_unitofmeasureconversion" />
+    <EntitySet Name="tblfskstyle_dimension" EntityType="Self.tblfskstyle_dimension" />
+    <EntitySet Name="tblfskstyle_dimension1_" EntityType="Self.tblfskstyle_dimension1_" />
     <EntitySet Name="tblfstk_feature" EntityType="Self.tblfstk_feature" />
     <EntitySet Name="tblfstk_featureoption_type" EntityType="Self.tblfstk_featureoption_type" />
     <EntitySet Name="tblgen_autonumbers" EntityType="Self.tblgen_autonumbers" />
@@ -3362,11 +3772,12 @@
     <EntitySet Name="tblgen_user_parameters" EntityType="Self.tblgen_user_parameters" />
     <EntitySet Name="tblgen_users" EntityType="Self.tblgen_users" />
     <EntitySet Name="tbllanguages" EntityType="Self.tbllanguage" />
-    <EntitySet Name="tblonline_emp_address_copy" EntityType="Self.tblonline_emp_address_copy" />
     <EntitySet Name="tblonline_holidays" EntityType="Self.tblonline_holidays" />
     <EntitySet Name="tblonline_rolloutorders_config" EntityType="Self.tblonline_rolloutorders_config" />
     <EntitySet Name="tblonline_rolloutorders_reqstatus" EntityType="Self.tblonline_rolloutorders_reqstatus" />
+    <EntitySet Name="tblonline_rolloutorders_reqstatus_atlasfm" EntityType="Self.tblonline_rolloutorders_reqstatus_atlasfm" />
     <EntitySet Name="tblonline_userid_employee" EntityType="Self.tblonline_userid_employee" />
+    <EntitySet Name="tblonline_userid_employee_atlasfm" EntityType="Self.tblonline_userid_employee_atlasfm" />
     <EntitySet Name="tblonline_userid_favourites" EntityType="Self.tblonline_userid_favourites" />
     <EntitySet Name="tblonlinesop_carriage" EntityType="Self.tblonlinesop_carriage" />
     <EntitySet Name="tblonlinesop_sitecode" EntityType="Self.tblonlinesop_sitecode" />
@@ -3405,9 +3816,11 @@
     <EntitySet Name="tblsop_return_reasoncodes_customer" EntityType="Self.tblsop_return_reasoncodes_customer" />
     <EntitySet Name="tblsop_salesorder_approved" EntityType="Self.tblsop_salesorder_approved" />
     <EntitySet Name="tblsop_salesorder_detail" EntityType="Self.tblsop_salesorder_detail" />
+    <EntitySet Name="tblsop_salesorder_detail_atlasfm" EntityType="Self.tblsop_salesorder_detail_atlasfm" />
     <EntitySet Name="tblsop_salesorder_detail_offline" EntityType="Self.tblsop_salesorder_detail_offline" />
     <EntitySet Name="tblsop_salesorder_detail_tremot02" EntityType="Self.tblsop_salesorder_detail_tremot02" />
     <EntitySet Name="tblsop_salesorder_header" EntityType="Self.tblsop_salesorder_header" />
+    <EntitySet Name="tblsop_salesorder_header_atlasfm" EntityType="Self.tblsop_salesorder_header_atlasfm" />
     <EntitySet Name="tblsop_salesorder_header_offline" EntityType="Self.tblsop_salesorder_header_offline" />
     <EntitySet Name="tblsop_salesorder_header_tremot02" EntityType="Self.tblsop_salesorder_header_tremot02" />
     <EntitySet Name="tblsqlstrings" EntityType="Self.tblsqlstring" />
@@ -3417,23 +3830,25 @@
     <EntitySet Name="tblwho_warehousesx" EntityType="Self.tblwho_warehousesx" />
     <EntitySet Name="xml_salesorder_detail" EntityType="Self.xml_salesorder_detail" />
     <EntitySet Name="xml_salesorder_header" EntityType="Self.xml_salesorder_header" />
-    <EntitySet Name="hr_visexp01_address_map_bak" EntityType="Self.hr_visexp01_address_map_bak" />
-    <EntitySet Name="rollout_order_detail_tsb" EntityType="Self.rollout_order_detail_tsb" />
-    <EntitySet Name="rollout_order_header_address_tsb" EntityType="Self.rollout_order_header_address_tsb" />
-    <EntitySet Name="rollout_order_header_tsb" EntityType="Self.rollout_order_header_tsb" />
-    <EntitySet Name="stockcard_tsb_rollout" EntityType="Self.stockcard_tsb_rollout" />
+    <EntitySet Name="bak_tblaccemp_employee_tsb" EntityType="Self.bak_tblaccemp_employee_tsb" />
+    <EntitySet Name="copy_tblusers" EntityType="Self.copy_tblusers" />
+    <EntitySet Name="hr_demo_address" EntityType="Self.hr_demo_address" />
+    <EntitySet Name="hr_demo_employee" EntityType="Self.hr_demo_employee" />
+    <EntitySet Name="hr_demo_invoices" EntityType="Self.hr_demo_invoices" />
+    <EntitySet Name="hr_demo_orders" EntityType="Self.hr_demo_orders" />
+    <EntitySet Name="hr_demo_pickslips" EntityType="Self.hr_demo_pickslips" />
+    <EntitySet Name="hr_demo_style" EntityType="Self.hr_demo_style" />
+    <EntitySet Name="hr_demo_ucode" EntityType="Self.hr_demo_ucode" />
     <EntitySet Name="tblaccemp_style_staticqty" EntityType="Self.tblaccemp_style_staticqty" />
-    <EntitySet Name="tblbus_address_s27" EntityType="Self.tblbus_address_s27" />
-    <EntitySet Name="tblbus_contact_s27" EntityType="Self.tblbus_contact_s27" />
-    <EntitySet Name="tblonline_userid_employee_s27" EntityType="Self.tblonline_userid_employee_s27" />
+    <EntitySet Name="tblbus_settings" EntityType="Self.tblbus_settings" />
     <EntitySet Name="tblonlinesop_backorders" EntityType="Self.tblonlinesop_backorders" />
-    <EntitySet Name="tblsop_salesorder_detail_bk" EntityType="Self.tblsop_salesorder_detail_bk" />
     <EntitySet Name="tblsop_salesorder_detail_console" EntityType="Self.tblsop_salesorder_detail_console" />
-    <EntitySet Name="tblsop_salesorder_header_bk" EntityType="Self.tblsop_salesorder_header_bk" />
     <EntitySet Name="tblsop_salesorder_header_console" EntityType="Self.tblsop_salesorder_header_console" />
     <EntitySet Name="tblupload_orderdetail" EntityType="Self.tblupload_orderdetail" />
     <EntitySet Name="tblupload_orderheader" EntityType="Self.tblupload_orderheader" />
     <EntitySet Name="ucode_employee_rollout_tsb" EntityType="Self.ucode_employee_rollout_tsb" />
+    <EntitySet Name="dim_fit_nongroup_styles" EntityType="Self.dim_fit_nongroup_styles" />
+    <EntitySet Name="dim_fit_styles" EntityType="Self.dim_fit_styles" />
     <EntitySet Name="getallassemblies" EntityType="Self.getallassembly" />
     <EntitySet Name="getcolours" EntityType="Self.getcolour" />
     <EntitySet Name="getcustassemblies" EntityType="Self.getcustassembly" />
@@ -3441,8 +3856,22 @@
     <EntitySet Name="getsizes" EntityType="Self.getsize" />
     <EntitySet Name="getstylesviews" EntityType="Self.getstylesview" />
     <EntitySet Name="product_obsolete" EntityType="Self.product_obsolete" />
+    <EntitySet Name="productlists" EntityType="Self.productlist" />
     <EntitySet Name="style_dimfitalloc_caption" EntityType="Self.style_dimfitalloc_caption" />
+    <EntitySet Name="styleby_freetextview" EntityType="Self.styleby_freetextview" />
+    <EntitySet Name="tblfskstyle_dimension1" EntityType="Self.tblfskstyle_dimension1" />
     <EntitySet Name="ucodeby_freetextview" EntityType="Self.ucodeby_freetextview" />
+    <EntitySet Name="unrelatedorders" EntityType="Self.unrelatedorder" />
+    <EntitySet Name="view_manpack" EntityType="Self.view_manpack" />
+    <EntitySet Name="view_noorderplacedforthisemployee" EntityType="Self.view_noorderplacedforthisemployee" />
+    <EntitySet Name="view_normatucodereissueorder" EntityType="Self.view_normatucodereissueorder" />
+    <EntitySet Name="view_order_freetext_tsb_rollout" EntityType="Self.view_order_freetext_tsb_rollout" />
+    <EntitySet Name="view_privateorder_pendings" EntityType="Self.view_privateorder_pendings" />
+    <EntitySet Name="view_privateorders" EntityType="Self.view_privateorders" />
+    <EntitySet Name="view_reissueorderwithnormalucode" EntityType="Self.view_reissueorderwithnormalucode" />
+    <EntitySet Name="view_ucode_freetext_tsb_rollout" EntityType="Self.view_ucode_freetext_tsb_rollout" />
+    <EntitySet Name="view_unmatchedcolourwithorgcolour" EntityType="Self.view_unmatchedcolourwithorgcolour" />
+    <EntitySet Name="view_unmatchedordercolourid" EntityType="Self.view_unmatchedordercolourid" />
     <FunctionImport Name="bk_CreateCube_OrderDetail" />
     <FunctionImport Name="CreateCube_EmployeeCard" />
     <FunctionImport Name="CreateCube_OrderDetail" />
@@ -3460,40 +3889,17 @@
     <FunctionImport Name="getColors_prod" ReturnType="Collection(e4kmaximusdbModel.getColors_prod_Result)">
       <Parameter Name="style" Mode="In" Type="String" />
     </FunctionImport>
-    <FunctionImport Name="GetEmployeeDetailnAddProcedure">
+    <FunctionImport Name="GetEmployeebyId" ReturnType="Collection(e4kmaximusdbModel.GetEmployeebyId_Result)">
       <Parameter Name="busId" Mode="In" Type="String" />
+      <Parameter Name="empId" Mode="In" Type="String" />
     </FunctionImport>
-    <FunctionImport Name="GetEmployeeDetailsProcedure" ReturnType="Collection(e4kmaximusdbModel.GetEmployeeDetailsProcedure_Result)">
-      <Parameter Name="busId" Mode="In" Type="String" />
-    </FunctionImport>
-    <FunctionImport Name="getSizeColorchangeProcedure" ReturnType="Collection(e4kmaximusdbModel.getSizeColorchangeProcedure_Result)">
-      <Parameter Name="style" Mode="In" Type="String" />
-    </FunctionImport>
-    <FunctionImport Name="getSizeProcedure" ReturnType="Collection(e4kmaximusdbModel.getSizeProcedure_Result)">
-      <Parameter Name="style" Mode="In" Type="String" />
-    </FunctionImport>
-    <FunctionImport Name="getSize_prod" ReturnType="Collection(e4kmaximusdbModel.getSize_prod_Result)">
-      <Parameter Name="style" Mode="In" Type="String" />
-    </FunctionImport>
-    <EntitySet Name="styleby_freetextview" EntityType="e4kmaximusdbModel.styleby_freetextview" />
-    <EntitySet Name="tblfsk_colour" EntityType="e4kmaximusdbModel.tblfsk_colour" />
-    <EntitySet Name="hr_emplo_ve" EntityType="e4kmaximusdbModel.hr_emplo_ve" />
-    <EntitySet Name="hr_tremot02" EntityType="e4kmaximusdbModel.hr_tremot02" />
-    <EntitySet Name="hr_tremot02_derbyf" EntityType="e4kmaximusdbModel.hr_tremot02_derbyf" />
-    <EntitySet Name="hr_tremot02_derbym" EntityType="e4kmaximusdbModel.hr_tremot02_derbym" />
-    <EntitySet Name="hr_tremot02_langleyf" EntityType="e4kmaximusdbModel.hr_tremot02_langleyf" />
-    <EntitySet Name="hr_tremot02_langleym" EntityType="e4kmaximusdbModel.hr_tremot02_langleym" />
-    <EntitySet Name="hr_tremot02_nottmf" EntityType="e4kmaximusdbModel.hr_tremot02_nottmf" />
-    <EntitySet Name="hr_tremot02_nottmm" EntityType="e4kmaximusdbModel.hr_tremot02_nottmm" />
-    <EntitySet Name="hr_tremot02_suttonf" EntityType="e4kmaximusdbModel.hr_tremot02_suttonf" />
-    <EntitySet Name="hr_tremot02_suttonm" EntityType="e4kmaximusdbModel.hr_tremot02_suttonm" />
-    <EntitySet Name="hr_tsb_reldates" EntityType="e4kmaximusdbModel.hr_tsb_reldates" />
-    <EntitySet Name="hr_tsb_release" EntityType="e4kmaximusdbModel.hr_tsb_release" />
-    <EntitySet Name="bak_tblaccemp_employee_tsb" EntityType="e4kmaximusdbModel.bak_tblaccemp_employee_tsb" />
-    <EntitySet Name="copy_tblusers" EntityType="e4kmaximusdbModel.copy_tblusers" />
-    <EntitySet Name="hr_tsb_min_orderdate" EntityType="e4kmaximusdbModel.hr_tsb_min_orderdate" />
-    <EntitySet Name="hr_tsb_tblaccemp_ucodesemployees" EntityType="e4kmaximusdbModel.hr_tsb_tblaccemp_ucodesemployees" />
     <FunctionImport Name="GetEmployeeByRole">
+      <Parameter Name="pCompanyID" Mode="In" Type="String" />
+      <Parameter Name="pCustID" Mode="In" Type="String" />
+      <Parameter Name="pUserID" Mode="In" Type="String" />
+      <Parameter Name="pRole" Mode="In" Type="String" />
+    </FunctionImport>
+    <FunctionImport Name="GetEmployeeByRoles1">
       <Parameter Name="pCompanyID" Mode="In" Type="String" />
       <Parameter Name="pCustID" Mode="In" Type="String" />
       <Parameter Name="pUserID" Mode="In" Type="String" />
@@ -3503,296 +3909,5 @@
   <ComplexType Name="getColorProcedure_Result" />
   <ComplexType Name="getColors_Result" />
   <ComplexType Name="getColors_prod_Result" />
-  <ComplexType Name="GetEmployeeDetailsProcedure_Result" />
-  <ComplexType Name="getSizeColorchangeProcedure_Result" />
-  <ComplexType Name="getSizeProcedure_Result" />
-  <ComplexType Name="getSize_prod_Result" />
-  <EntityType Name="styleby_freetextview">
-    <Key>
-      <PropertyRef Name="CompanyID" />
-    </Key>
-    <Property Name="CompanyID" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
-    <Property Name="StyleID" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-    <Property Name="StyleImage" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-    <Property Name="Product_Group" Type="Int32" />
-    <Property Name="FreeText" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-  </EntityType>
-  <EntityType Name="tblfsk_colour">
-    <Key>
-      <PropertyRef Name="CompanyID" />
-      <PropertyRef Name="ColourID" />
-    </Key>
-    <Property Name="CompanyID" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
-    <Property Name="ColourID" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
-    <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="Colour_hexcode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-  </EntityType>
-  <EntityType Name="hr_emplo_ve">
-    <Key>
-      <PropertyRef Name="Username" />
-    </Key>
-    <Property Name="Username" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-    <Property Name="Businessid" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-  </EntityType>
-  <EntityType Name="hr_tremot02">
-    <Key>
-      <PropertyRef Name="OrderNo" />
-      <PropertyRef Name="CompanyID" />
-      <PropertyRef Name="WarehouseID" />
-      <PropertyRef Name="BusinessID" />
-      <PropertyRef Name="Pinno" />
-    </Key>
-    <Property Name="OrderNo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-    <Property Name="CompanyID" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
-    <Property Name="WarehouseID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="BusinessID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-    <Property Name="Pinno" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
-    <Property Name="Style1" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-    <Property Name="Colour1" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
-    <Property Name="Size1" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-    <Property Name="Qty1" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="Style2" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-    <Property Name="Colour2" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
-    <Property Name="Size2" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-    <Property Name="Qty2" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-  </EntityType>
-  <EntityType Name="hr_tremot02_derbyf">
-    <Key>
-      <PropertyRef Name="CompanyID" />
-      <PropertyRef Name="WarehouseID" />
-      <PropertyRef Name="BusinessID" />
-      <PropertyRef Name="Pinno" />
-    </Key>
-    <Property Name="CompanyID" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
-    <Property Name="WarehouseID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="BusinessID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-    <Property Name="Pinno" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
-    <Property Name="Style1" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-    <Property Name="Colour1" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
-    <Property Name="Size1" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-    <Property Name="Qty1" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="Style2" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-    <Property Name="Colour2" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
-    <Property Name="Size2" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-    <Property Name="Qty2" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-  </EntityType>
-  <EntityType Name="hr_tremot02_derbym">
-    <Key>
-      <PropertyRef Name="CompanyID" />
-      <PropertyRef Name="WarehouseID" />
-      <PropertyRef Name="BusinessID" />
-      <PropertyRef Name="Pinno" />
-    </Key>
-    <Property Name="CompanyID" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
-    <Property Name="WarehouseID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="BusinessID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-    <Property Name="Pinno" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
-    <Property Name="Style1" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-    <Property Name="Colour1" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
-    <Property Name="Size1" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-    <Property Name="Qty1" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="Style2" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-    <Property Name="Colour2" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
-    <Property Name="Size2" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-    <Property Name="Qty2" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-  </EntityType>
-  <EntityType Name="hr_tremot02_langleyf">
-    <Key>
-      <PropertyRef Name="CompanyID" />
-      <PropertyRef Name="WarehouseID" />
-      <PropertyRef Name="BusinessID" />
-      <PropertyRef Name="Pinno" />
-    </Key>
-    <Property Name="CompanyID" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
-    <Property Name="WarehouseID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="BusinessID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-    <Property Name="Pinno" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
-    <Property Name="Style1" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-    <Property Name="Colour1" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
-    <Property Name="Size1" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-    <Property Name="Qty1" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="Style2" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-    <Property Name="Colour2" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
-    <Property Name="Size2" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-    <Property Name="Qty2" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-  </EntityType>
-  <EntityType Name="hr_tremot02_langleym">
-    <Key>
-      <PropertyRef Name="CompanyID" />
-      <PropertyRef Name="WarehouseID" />
-      <PropertyRef Name="BusinessID" />
-      <PropertyRef Name="Pinno" />
-    </Key>
-    <Property Name="CompanyID" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
-    <Property Name="WarehouseID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="BusinessID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-    <Property Name="Pinno" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
-    <Property Name="Style1" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-    <Property Name="Colour1" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
-    <Property Name="Size1" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-    <Property Name="Qty1" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="Style2" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-    <Property Name="Colour2" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
-    <Property Name="Size2" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-    <Property Name="Qty2" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-  </EntityType>
-  <EntityType Name="hr_tremot02_nottmf">
-    <Key>
-      <PropertyRef Name="CompanyID" />
-      <PropertyRef Name="WarehouseID" />
-      <PropertyRef Name="BusinessID" />
-      <PropertyRef Name="Pinno" />
-    </Key>
-    <Property Name="CompanyID" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
-    <Property Name="WarehouseID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="BusinessID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-    <Property Name="Pinno" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
-    <Property Name="Style1" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-    <Property Name="Colour1" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
-    <Property Name="Size1" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-    <Property Name="Qty1" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="Style2" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-    <Property Name="Colour2" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
-    <Property Name="Size2" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-    <Property Name="Qty2" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-  </EntityType>
-  <EntityType Name="hr_tremot02_nottmm">
-    <Key>
-      <PropertyRef Name="CompanyID" />
-      <PropertyRef Name="WarehouseID" />
-      <PropertyRef Name="BusinessID" />
-      <PropertyRef Name="Pinno" />
-    </Key>
-    <Property Name="CompanyID" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
-    <Property Name="WarehouseID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="BusinessID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-    <Property Name="Pinno" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
-    <Property Name="Style1" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-    <Property Name="Colour1" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
-    <Property Name="Size1" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-    <Property Name="Qty1" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="Style2" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-    <Property Name="Colour2" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
-    <Property Name="Size2" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-    <Property Name="Qty2" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-  </EntityType>
-  <EntityType Name="hr_tremot02_suttonf">
-    <Key>
-      <PropertyRef Name="CompanyID" />
-      <PropertyRef Name="WarehouseID" />
-      <PropertyRef Name="BusinessID" />
-      <PropertyRef Name="Pinno" />
-    </Key>
-    <Property Name="CompanyID" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
-    <Property Name="WarehouseID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="BusinessID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-    <Property Name="Pinno" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
-    <Property Name="Style1" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-    <Property Name="Colour1" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
-    <Property Name="Size1" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-    <Property Name="Qty1" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="Style2" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-    <Property Name="Colour2" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
-    <Property Name="Size2" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-    <Property Name="Qty2" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-  </EntityType>
-  <EntityType Name="hr_tremot02_suttonm">
-    <Key>
-      <PropertyRef Name="CompanyID" />
-      <PropertyRef Name="WarehouseID" />
-      <PropertyRef Name="BusinessID" />
-      <PropertyRef Name="Pinno" />
-    </Key>
-    <Property Name="CompanyID" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
-    <Property Name="WarehouseID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="BusinessID" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
-    <Property Name="Pinno" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
-    <Property Name="Style1" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-    <Property Name="Colour1" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
-    <Property Name="Size1" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-    <Property Name="Qty1" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="Style2" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-    <Property Name="Colour2" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
-    <Property Name="Size2" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-    <Property Name="Qty2" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-  </EntityType>
-  <EntityType Name="hr_tsb_reldates">
-    <Key>
-      <PropertyRef Name="Release_date" />
-      <PropertyRef Name="date_orderconfirm" />
-    </Key>
-    <Property Name="Release_date" Type="DateTime" Nullable="false" />
-    <Property Name="date_orderconfirm" Type="DateTime" Nullable="false" />
-  </EntityType>
-  <EntityType Name="hr_tsb_release">
-    <Key>
-      <PropertyRef Name="OrderNo" />
-    </Key>
-    <Property Name="OrderNo" Type="Int64" Nullable="false" />
-    <Property Name="Release_date" Type="DateTime" />
-  </EntityType>
-  <EntityType Name="bak_tblaccemp_employee_tsb">
-    <Key>
-      <PropertyRef Name="CompanyID" />
-      <PropertyRef Name="EmployeeID" />
-      <PropertyRef Name="BusinessID" />
-      <PropertyRef Name="EmployeeClosed" />
-      <PropertyRef Name="IsDefault" />
-    </Key>
-    <Property Name="CompanyID" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="EmployeeID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="BusinessID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="DepartmentID" Type="Int32" />
-    <Property Name="GroupID" Type="Int32" />
-    <Property Name="Title" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
-    <Property Name="Forename" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
-    <Property Name="Surname" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
-    <Property Name="StartDate" Type="DateTime" />
-    <Property Name="EndDate" Type="DateTime" />
-    <Property Name="EmployeeClosed" Type="SByte" Nullable="false" />
-    <Property Name="roleid" Type="Int32" />
-    <Property Name="IsDefault" Type="SByte" Nullable="false" />
-  </EntityType>
-  <EntityType Name="copy_tblusers">
-    <Key>
-      <PropertyRef Name="UserName" />
-      <PropertyRef Name="BusinessID" />
-    </Key>
-    <Property Name="UserName" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="false" />
-    <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="ForeName" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
-    <Property Name="SurName" Type="String" MaxLength="80" FixedLength="false" Unicode="false" />
-    <Property Name="ContactNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="AccessID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="Active" Type="String" MaxLength="1" FixedLength="false" Unicode="false" />
-    <Property Name="BusinessID" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="false" />
-    <Property Name="CreateDate" Type="DateTime" />
-    <Property Name="LastIPAddress" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="LastLoggedDate" Type="DateTime" />
-    <Property Name="Createdby" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="Email_ID" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-    <Property Name="AspUserID" Type="String" MaxLength="256" FixedLength="false" Unicode="false" />
-    <Property Name="BusinessName" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-  </EntityType>
-  <EntityType Name="hr_tsb_min_orderdate">
-    <Key>
-      <PropertyRef Name="CompanyID" />
-    </Key>
-    <Property Name="CompanyID" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
-    <Property Name="CustID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="Pinno" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-    <Property Name="Min_OrderDate_" Type="DateTime" />
-  </EntityType>
-  <EntityType Name="hr_tsb_tblaccemp_ucodesemployees">
-    <Key>
-      <PropertyRef Name="CompanyID" />
-      <PropertyRef Name="EmployeeID" />
-      <PropertyRef Name="BusinessID" />
-      <PropertyRef Name="UCodeID" />
-    </Key>
-    <Property Name="CompanyID" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
-    <Property Name="EmployeeID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="BusinessID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-    <Property Name="UCodeID" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
-  </EntityType>
+  <ComplexType Name="GetEmployeebyId_Result" />
 </Schema>

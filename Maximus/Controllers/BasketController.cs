@@ -11,7 +11,8 @@ using System.Configuration;
 namespace Maximus.Controllers
 {
 
-    [CustomFilter]
+    [Authorize]
+    [AllowAnonymous]
     public class BasketController : Controller
     {
         #region declarations
@@ -19,7 +20,7 @@ namespace Maximus.Controllers
         e4kmaximusdbEntities entity = new e4kmaximusdbEntities();
         public string cmpId = System.Configuration.ConfigurationManager.AppSettings["CompanyId"].ToString();
         #endregion
-
+        [AllowAnonymous]
         #region ShowBasket
         public ActionResult ShowBasket()
         {

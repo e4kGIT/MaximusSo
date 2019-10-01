@@ -5,8 +5,10 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
+using System.Security.Principal;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 
 namespace Maximus.Controllers
 {
@@ -18,12 +20,12 @@ namespace Maximus.Controllers
         // GET: User
         public ActionResult Login()
         {
-            Session.Clear();
-            if (Request.Cookies["Username"] != null)
-            {
-                Response.Cookies["Username"].Expires = DateTime.Now.AddDays(-1);
-                Response.Cookies["Password"].Expires = DateTime.Now.AddDays(-1);
-            }
+
+     //       FormsAuthentication.SignOut();
+     //       System.Web.HttpContext.Current.User =
+     //new GenericPrincipal(new GenericIdentity(string.Empty), null);
+     //       var sss1 = User.Identity.IsAuthenticated;
+
             return View();
         }
         [HttpPost]
@@ -38,6 +40,7 @@ namespace Maximus.Controllers
                     {
                         if (data.Any(x => x.UserName.ToLower() == logDetails.UserName.ToLower() && x.Password == logDetails.Password && x.Active.ToLower() == "y"))
                         {
+                            FormsAuthentication.SetAuthCookie(logDetails.UserName, false);
                             string custrefdef = "";
                             string onlineDefNom = "";
                             string booNom = "";
@@ -67,7 +70,7 @@ namespace Maximus.Controllers
                             Session["Email"] = data.First().Email_ID;
                             busId = data.First().BusinessID;
                             Session["BuisnessId"] = data.First().BusinessID;
-                            Session["Buisness"] = entity.tblbus_business.Where(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim()).First().Name;
+                           Session["Buisness"] = entity.tblbus_business.Where(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim()).First().Name;
                             Session["WareHouseID"] = dp.SetDefaultWarehouse(logDetails.UserName, data.First().BusinessID);
                             Session["UseMatrix"] = dp.CompanyParam("UseMatrix", cmpId);
                             Session["BudgetReq"] = dp.CompanyParam("BUDGETREQ", cmpId);
@@ -97,7 +100,7 @@ namespace Maximus.Controllers
                             booDefDelRef = dp.BusinessParam("DELREFREQ", data.First().BusinessID.Trim().ToUpper());
                             Session["DELREFREQ"] = booDefDelRef == "" ? false : booDefDelRef.ToLower() == "true" ? true : false;
                             onlineDefNom = dp.BusinessParam("ONLINEDEFNOM", data.First().BusinessID.Trim().ToUpper());
-                            Session["CUSTREFDEF"] =dp.BusinessParam("CUSTREFDEF", data.First().BusinessID.Trim().ToUpper());
+                            Session["CUSTREFDEF"] = dp.BusinessParam("CUSTREFDEF", data.First().BusinessID.Trim().ToUpper());
                             Session["ONLINEDEFNOM"] = onlineDefNom;
                             booDefNomCode = dp.BusinessParam("DEFDELREFNOM", data.First().BusinessID.Trim().ToUpper());
                             Session["DEFDELREFNOM"] = booDefNomCode == "" ? false : booDefDelAddr.ToLower() == "true" ? true : false;
@@ -263,19 +266,21 @@ namespace Maximus.Controllers
 
         public ActionResult Logoff()
         {
-            if (HttpContext.Request.Cookies.AllKeys.Contains("Username"))
-            {
-                if (HttpContext.Request.Cookies["Username"].Value != "" && HttpContext.Request.Cookies["Username"].Value != null)
-                {
-                    Session.Clear();
-                    HttpCookie cookie1 = new HttpCookie("Username", "");
-                    HttpCookie cookie2 = new HttpCookie("Password", "");
-                    cookie1.Expires = DateTime.Now.AddDays(-1);
-                    cookie2.Expires = DateTime.Now.AddDays(-1);
-                    HttpContext.Response.Cookies.Add(cookie1);
-                    HttpContext.Response.Cookies.Add(cookie2);
-                }
-            }
+            Session.Clear();
+            FormsAuthentication.SignOut();
+            //if (HttpContext.Request.Cookies.AllKeys.Contains("Username"))
+            //{
+            //    if (HttpContext.Request.Cookies["Username"].Value != "" && HttpContext.Request.Cookies["Username"].Value != null)
+            //    {
+            //        Session.Clear();
+            //        //HttpCookie cookie1 = new HttpCookie("Username", "");
+            //        //HttpCookie cookie2 = new HttpCookie("Password", "");
+            //        //cookie1.Expires = DateTime.Now.AddDays(-1);
+            //        //cookie2.Expires = DateTime.Now.AddDays(-1);
+            //        //HttpContext.Response.Cookies.Add(cookie1);
+            //        //HttpContext.Response.Cookies.Add(cookie2);
+            //    }
+            //}
             return RedirectToAction("Login", "User");
         }
     }

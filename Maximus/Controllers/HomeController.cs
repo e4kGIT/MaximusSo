@@ -14,7 +14,8 @@ using Maximus.Filter;
 namespace Maximus.Controllers
 {
 
-    [CustomFilter]
+    [Authorize] 
+
     public class HomeController : Controller
     {
         e4kmaximusdbEntities entity = new e4kmaximusdbEntities();
@@ -23,7 +24,7 @@ namespace Maximus.Controllers
         AllEnums enus = new AllEnums();
         //private int cardColumns = 0, cardRows = 0;
         #region Index
-        [CustomFilter]
+        [Authorize] 
         public ActionResult Index()
         {
             if (((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Count() > 0)
@@ -638,8 +639,9 @@ namespace Maximus.Controllers
             if (Session["onDemand"] != null && (bool)Session["onDemand"] == true)
             {
                 var result1 = entity.tblfsk_style_freetext.Where(x => x.FreeText == freeText & x.FreeTextType == freeTxtType).Select(x => x.StyleId).ToList();
-                //var s = (bool)Session["onDemand"];
+                //var s = (bool)Session["onDemand"];_StyleByCardPop
                 return PartialView("_DimAllocDemandPartial", result1);
+                //return PartialView("_StyleByCardPop", result1);
             }
             else
             {
@@ -848,7 +850,7 @@ namespace Maximus.Controllers
                     data1.StyleImage = Url.Content("~/" + data1.StyleImage);
                 }
             }
-            return PartialView("Model/_CardviewByStyle", model);
+            return PartialView("_StyleByCardPop", model);
         }
         #endregion
 
@@ -1025,6 +1027,7 @@ namespace Maximus.Controllers
         #endregion
 
         #region GetEntitlement
+        
         public JsonResult GetEntitlement(string StyleId = "", string ColorId = "", string orgStyl = "")
         {
             EntitlementModel em = new EntitlementModel();
@@ -1046,8 +1049,21 @@ namespace Maximus.Controllers
 
                 return Json(em);
             }
+            else if(ColorId == "" && orgStyl != "")
+            {
+                string result = "";
+                var entitlement = entity.tblaccemp_ucodes.Any(x => x.StyleID == orgStyl   && x.UCodeID == Ucodes) ? entity.tblaccemp_ucodes.Where(x => x.StyleID == orgStyl  && x.UCodeID == Ucodes).FirstOrDefault().AnnualIssue : 0;
+                entitlement = entitlement == 0 ? entity.tblaccemp_ucodes.Where(x => x.StyleID == orgStyl && x.UCodeID == Ucodes).FirstOrDefault().AnnualIssue : entitlement;
+                string PreviousOrder = data.GetAllPreviousData(Session["SelectedEmp"].ToString(), Session["BuisnessId"].ToString(), orgStyl);
+                PreviousOrder = PreviousOrder == "" ? "<tr><td>Issued: 0</td></tr><tr><td>Previous History: N/A</td></tr></table>" : PreviousOrder;
+                result = "<table class=\"table\"><tr><td>Entitlement: " + entitlement + "</td></tr>" + PreviousOrder;
+
+                em.Result = result;
+
+                return Json(em);
+            }
             em.Result = "<table class=\"table\"><tr><td>Entitlement:  0</td></tr><tr><td>Issued: 0</td></tr><tr><td>Previous History: N/A</td></tr></table>";
-            return Json(em);
+            return Json(em,JsonRequestBehavior.AllowGet);
             //}
             //else
             //{
@@ -1520,7 +1536,7 @@ namespace Maximus.Controllers
                         dat = Url.Content("~/" + dat);
                     }
 
-                    result = "<img src='" + dat + "' height='230' width='200' onclick=\"Getimage('" + dat + "')\" />";
+                    result = "<img src='" + dat + "' height='70%' width='70%' onclick=\"Getimage('" + dat + "')\" />";
                 }
                 catch (Exception e)
                 {

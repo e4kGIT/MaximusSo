@@ -99,64 +99,70 @@ namespace Maximus.Models
         #region getFreeTextStyles
         public List<styleViewmodel> getFreeTextStyles(string freeText, string selectedEmp, string buisnessId)
         {
+
             var result = new List<styleViewmodel>();
             List<string> getFreTxt = new List<string>();
             var freeTxtType = Allocation.DIMALLOC.ToString();
-            var freeTxtLst = enty.ucodeby_freetextview.Where(x => x.DimFreeText == freeText).Select(x => x.FreeText).Distinct().ToList();
-            var styleLst = new List<string>();
-            var requestContext = HttpContext.Current.Request.RequestContext;
+            var freeTxtLst = enty.ucodeby_freetextview.Where(x => x.DimFreeText == freeText).Select(x => new styleViewmodel { StyleID = x.StyleID, OriginalStyleid = x.StyleID, StyleImage = x.StyleImage, Freetext = freeText, ProductGroup = x.Product_Group.Value }).Distinct().ToList();
+            return freeTxtLst;
+            //var result = new List<styleViewmodel>();
+            //List<string> getFreTxt = new List<string>();
+            //var freeTxtType = Allocation.DIMALLOC.ToString();
+            //var freeTxtLst = enty.ucodeby_freetextview.Where(x => x.DimFreeText == freeText).Select(x => x.FreeText).Distinct().ToList();
+            //var styleLst = new List<string>();
+            //var requestContext = HttpContext.Current.Request.RequestContext;
 
-            try
-            {
-                if (freeTxtLst.Count < 2)
-                {
-                    styleLst.AddRange(enty.tblfsk_style_freetext.Where(x => x.FreeText == freeText && x.FreeTextType == freeTxtType).Select(x => x.StyleId).ToList());
-                }
-                else
-                {
-                    foreach (var fretxt in freeTxtLst)
-                    {
-                        styleLst.Add(getStyleFromFretxt(fretxt));
-                    }
-                }
-                foreach (var styles in styleLst)
-                {
-                    styleViewmodel svm = new styleViewmodel();
-                    svm = getDimStylandImg(styles);
-                    if (svm.StyleImage.Contains(":"))
-                    {
-                        if (System.IO.File.Exists(appPath + svm.StyleImage.Substring(svm.StyleImage.IndexOf(":") + 1, svm.StyleImage.Length - svm.StyleImage.IndexOf(":") - 1)) != true)
-                        {
-                            svm.StyleImage = "/StyleImages/notfound.png";
-                        }
-                        else
-                        {
-                            var data = svm.StyleImage.Substring(svm.StyleImage.IndexOf(":") + 1, svm.StyleImage.Length - svm.StyleImage.IndexOf(":") - 1);
-                            svm.StyleImage = data.Replace("\\", "/");
-                        }
-                    }
-                    else
-                    {
-                        if (System.IO.File.Exists(appPath + svm.StyleImage) != true)
-                        {
-                            svm.StyleImage = "/StyleImages/notfound.png";
-                        }
-                        else
-                        {
-                            svm.StyleImage = svm.StyleImage;
-                        }
-                    }
-                    if (svm != null)
-                    {
-                        result.Add(svm);
-                    }
-                }
-            }
-            catch (Exception e)
-            {
+            //try
+            //{
+            //    if (freeTxtLst.Count < 2)
+            //    {
+            //        styleLst.AddRange(enty.tblfsk_style_freetext.Where(x => x.FreeText == freeText && x.FreeTextType == freeTxtType).Select(x => x.StyleId).ToList());
+            //    }
+            //    else
+            //    {
+            //        foreach (var fretxt in freeTxtLst)
+            //        {
+            //            styleLst.Add(getStyleFromFretxt(fretxt));
+            //        }
+            //    }
+            //    foreach (var styles in styleLst)
+            //    {
+            //        styleViewmodel svm = new styleViewmodel();
+            //        svm = getDimStylandImg(styles);
+            //        if (svm.StyleImage.Contains(":"))
+            //        {
+            //            if (System.IO.File.Exists(appPath + svm.StyleImage.Substring(svm.StyleImage.IndexOf(":") + 1, svm.StyleImage.Length - svm.StyleImage.IndexOf(":") - 1)) != true)
+            //            {
+            //                svm.StyleImage = "/StyleImages/notfound.png";
+            //            }
+            //            else
+            //            {
+            //                var data = svm.StyleImage.Substring(svm.StyleImage.IndexOf(":") + 1, svm.StyleImage.Length - svm.StyleImage.IndexOf(":") - 1);
+            //                svm.StyleImage = data.Replace("\\", "/");
+            //            }
+            //        }
+            //        else
+            //        {
+            //            if (System.IO.File.Exists(appPath + svm.StyleImage) != true)
+            //            {
+            //                svm.StyleImage = "/StyleImages/notfound.png";
+            //            }
+            //            else
+            //            {
+            //                svm.StyleImage = svm.StyleImage;
+            //            }
+            //        }
+            //        if (svm != null)
+            //        {
+            //            result.Add(svm);
+            //        }
+            //    }
+            //}
+            //catch (Exception e)
+            //{
 
-            }
-            return result;
+            //}
+            //return result;
         }
         #endregion
 
@@ -328,6 +334,36 @@ namespace Maximus.Models
         #endregion
 
         #region Employee Module
+
+        #region getEmpaddress
+
+        public int GetEmpAddress(string EmpId)
+        {
+            int result = 0;
+            string sSqry = "";
+            sSqry = sSqry + " SELECT addressId FROM `tblonline_emp_address` WHERE onlineuserid='" + EmpId + "' limit 1";
+            MySqlConnection conn = new MySqlConnection(ConnectionString);
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand(sSqry, conn);
+                var reader = cmd.ExecuteReader();
+                if(reader.Read())
+                {
+                    return  reader.GetInt32(0);
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+            return result;
+        }
+        #endregion
 
         #region GetOrderPermission
         public string GetOrderPermission()
@@ -1700,10 +1736,10 @@ namespace Maximus.Models
 
         #region getstyleviewmodel
 
-        public List<styleViewmodel> GetStyleViewModel(string Template,string busId)
+        public List<styleViewmodel> GetStyleViewModel(string Template, string busId)
         {
             List<styleViewmodel> svm = new List<styleViewmodel>();
-            foreach (var item in enty.tblsop_customerorder_template.Where(x => x.Template == Template && x.BusinessID.ToLower().Trim()==busId.ToLower().Trim()).Select(x => new { x.Style }).Distinct().ToList())
+            foreach (var item in enty.tblsop_customerorder_template.Where(x => x.Template == Template && x.BusinessID.ToLower().Trim() == busId.ToLower().Trim()).Select(x => new { x.Style }).Distinct().ToList())
             {
                 svm.Add(new styleViewmodel
                 {
@@ -1956,9 +1992,9 @@ namespace Maximus.Models
                 var S = Convert.ToSByte(true);
                 if (enty.tblasm_assemblyheader.Any(x => x.StyleID == ParentStyle && x.CustID == BusinessId && x.Live == 1 && x.Enabled == 1))
                 {
-                    assmId= enty.tblasm_assemblyheader.Where(x => x.StyleID == ParentStyle && x.CustID == BusinessId && x.Live == 1 && x.Enabled == 1).FirstOrDefault().AssemblyID;
+                    assmId = enty.tblasm_assemblyheader.Where(x => x.StyleID == ParentStyle && x.CustID == BusinessId && x.Live == 1 && x.Enabled == 1).FirstOrDefault().AssemblyID;
                 }
-                else if(enty.tblasm_assemblyheader.Any(x => x.StyleID == ParentStyle && x.CustID.ToLower() == "all" && x.Live == 1 && x.Enabled == 1))
+                else if (enty.tblasm_assemblyheader.Any(x => x.StyleID == ParentStyle && x.CustID.ToLower() == "all" && x.Live == 1 && x.Enabled == 1))
                 {
                     assmId = enty.tblasm_assemblyheader.Where(x => x.StyleID == ParentStyle && x.CustID.ToLower() == "all" && x.Live == 1 && x.Enabled == 1).FirstOrDefault().AssemblyID;
                 }
@@ -2642,20 +2678,20 @@ namespace Maximus.Models
 
         #region displayOrderListGrid
 
-        public void displayOrderListGrid(bool booShowManpack=false)
+        public void displayOrderListGrid(bool booShowManpack = false)
         {
             string sql = "";
             long i;
             string xmlOrderList = "";
             string Employee = "";
-          var data= ( (SalesOrderHeaderViewModel)HttpContext.Current.Session["objCurrentOrder"]).SalesOrderLine;
+            var data = ((SalesOrderHeaderViewModel)HttpContext.Current.Session["objCurrentOrder"]).SalesOrderLine;
             //    If IIf(Request.QueryString("Pinno") = "", Session.Item("EmpID"), Request.QueryString("Pinno")) <> vbNullString Then
             //        Employee = IIf(Request.QueryString("Pinno") = "", Session.Item("EmpID"), Request.QueryString("Pinno")) & " - " & getEmpName(strCompanyID, strCustID, IIf(Request.QueryString("Pinno") = "", Session.Item("EmpID"), Request.QueryString("Pinno")))
             //    Else
             //        Employee = "XXX"
             //    End If
             xmlOrderList = "<SalesOrders>";
-            for(i=1;i<=data.Count();i++)
+            for (i = 1; i <= data.Count(); i++)
             {
                 //xmlOrderList = xmlOrderList + "<OrderLine OrderLineNo=" + (char)(34) + i + (char)(34) + " lineno=" + (char)(34) + .Item(i).LineNo + (char)(34) + " basestyle=" + (char)(34) + Server.HtmlEncode(.Item(i).BaseStyleID) + (char)(34) + " style=" + (char)(34) + Server.HtmlEncode(.Item(i).StyleID) + " - " + Server.HtmlEncode(.Item(i).Description) + (char)(34) + " colour=" + (char)(34) + Server.HtmlEncode(.Item(i).ColourID) + (char)(34) + " size=" + (char)(34) + Server.HtmlEncode(.Item(i).SizeID) + (char)(34) + " issuom=" + (char)(34)
             }
@@ -2800,7 +2836,7 @@ namespace Maximus.Models
 
         #region SetSalesHeader
 
-        public bool SetSalesHeader(string txtCustRef = "", string txtDelAddDesc = "", bool optNewAddr = false, string cboSiteCode = "", string txtNomCode = "", string txtNomCode1 = "", string txtNomCode2 = "", string txtNomCode3 = "", string txtNomCode4 = "", string isBulk = "", bool booBulk = false,string txtCarrierCharge="",string txtOrdDate="",string txtCarrier="",string txtCommentsExternal="",string txtReasoncode="",string txtCustAddDesc="",string txtCustAdd1="",string txtCustAdd2="",string txtCustAdd3="",string txtCustTown="",string txtCustCity="",string txtCustPost="",string txtCustCountry="",string txtDelAdd1 = "",string txtDelAdd2="",string txtDelAdd3="",string txtDelTown="",string txtDelCity="",string txtDelPost="",string txtDelCountry="")
+        public bool SetSalesHeader(string txtCustRef = "", string txtDelAddDesc = "", bool optNewAddr = false, string cboSiteCode = "", string txtNomCode = "", string txtNomCode1 = "", string txtNomCode2 = "", string txtNomCode3 = "", string txtNomCode4 = "", string isBulk = "", bool booBulk = false, string txtCarrierCharge = "", string txtOrdDate = "", string txtCarrier = "", string txtCommentsExternal = "", string txtReasoncode = "", string txtCustAddDesc = "", string txtCustAdd1 = "", string txtCustAdd2 = "", string txtCustAdd3 = "", string txtCustTown = "", string txtCustCity = "", string txtCustPost = "", string txtCustCountry = "", string txtDelAdd1 = "", string txtDelAdd2 = "", string txtDelAdd3 = "", string txtDelTown = "", string txtDelCity = "", string txtDelPost = "", string txtDelCountry = "")
         {
             var busID = System.Web.HttpContext.Current.Session["BuisnessId"].ToString().Trim();
 
@@ -3032,20 +3068,20 @@ namespace Maximus.Models
                     //    Else
                     //        .Carrier = 0
                     //    End If
-                    dat.CarrierCharge =Convert.ToDecimal(txtCarrierCharge);
+                    dat.CarrierCharge = Convert.ToDecimal(txtCarrierCharge);
                     dat.CustRef = txtCustRef == "" ? BusinessParam("CustRefDef", strCustID) : txtCustRef;
                     dat.Currency_Exchange_Code = tmpbusiness.CurrencyName;
                     dat.VatFlag = tmpbusiness.VatFlag;
                     dat.VATPercent = GetVatCodes(SetVatCodes(), tmpbusiness.VatCode).VatPercent;
                     dat.RepID = tmpbusiness.RepID;
-                    dat.OrderDate =DateTime.Parse(txtOrdDate);
+                    dat.OrderDate = DateTime.Parse(txtOrdDate);
                     dat.UserID = HttpContext.Current.Session["UserName"] == null ? "" : HttpContext.Current.Session["UserName"].ToString();
                     dat.Currency_Exchange_Rate = Convert.ToInt32(tmpbusiness.ExchangeRate) == 0 ? 1 : tmpbusiness.ExchangeRate;
                     dat.Carrier = txtCarrier;
                     dat.VatCode = tmpbusiness.VatCode;
                     dat.KAMid = getKAM(SetKam(), Convert.ToInt32(dat.RepID)).KamID;
                     //    .EmployeeID = IIf(IIf(Request.QueryString("Pinno") = "", Session.Item("EmpID"), Request.QueryString("Pinno")) = vbNullString, "", IIf(Request.QueryString("Pinno") = "", Session.Item("EmpID"), Request.QueryString("Pinno")))
-                    if(dat.EmployeeID==strCustID)
+                    if (dat.EmployeeID == strCustID)
                     {
                         dat.EmployeeID = "";
                     }
@@ -3058,17 +3094,17 @@ namespace Maximus.Models
                     dat.NomCode3 = txtNomCode3;
                     dat.NomCode4 = txtNomCode4;
                     dat.OrderType = "SO";
-                    dat.InvDesc     = txtCustAddDesc;
-                    dat.InvAddress1 = txtCustAdd1   ;
-                    dat.InvAddress2 = txtCustAdd2   ;
-                    dat.InvAddress3 = txtCustAdd3   ;
-                    dat.DelAddress1 = txtDelAdd1    ;
-                    dat.DelAddress2 = txtDelAdd2    ;
-                    dat.DelAddress3 = txtDelAdd3    ;
-                    dat.DelTown     = txtDelTown    ;
-                    dat.DelCity     = txtDelCity    ;
-                    dat.DelPostCode = txtDelPost    ;
-                    dat.DelCountry  = txtDelCountry ;
+                    dat.InvDesc = txtCustAddDesc;
+                    dat.InvAddress1 = txtCustAdd1;
+                    dat.InvAddress2 = txtCustAdd2;
+                    dat.InvAddress3 = txtCustAdd3;
+                    dat.DelAddress1 = txtDelAdd1;
+                    dat.DelAddress2 = txtDelAdd2;
+                    dat.DelAddress3 = txtDelAdd3;
+                    dat.DelTown = txtDelTown;
+                    dat.DelCity = txtDelCity;
+                    dat.DelPostCode = txtDelPost;
+                    dat.DelCountry = txtDelCountry;
                     dat.DelDesc = txtDelAddDesc;
                     dat.InvPostCode = txtCustCountry;
                     dat.InvCountry = txtCustCountry;
@@ -3076,11 +3112,11 @@ namespace Maximus.Models
                     dat.InvPostCode = txtCustPost;
                 }
             }
-          if(HttpContext.Current.Session["objCurrentOrder"]=="")
+            if (HttpContext.Current.Session["objCurrentOrder"] == "")
             {
                 setSalesOrderHeader = false;
             }
-          else
+            else
             {
 
             }

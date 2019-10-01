@@ -47,247 +47,91 @@ warning 6002: The table/view 'def.e4kmaximusdb.copy_tblusers' does not have a pr
     <Property Name="AspUserID" Type="varchar" MaxLength="256" />
     <Property Name="BusinessName" Type="varchar" MaxLength="255" />
   </EntityType>
-  <EntityType Name="hr_emplo_ve">
-    <Key>
-      <PropertyRef Name="Username" />
-    </Key>
-    <Property Name="Username" Type="varchar" MaxLength="30" Nullable="false" />
-    <Property Name="Businessid" Type="varchar" MaxLength="15" />
-  </EntityType>
-  <EntityType Name="hr_tremot02">
-    <Key>
-      <PropertyRef Name="OrderNo" />
-      <PropertyRef Name="CompanyID" />
-      <PropertyRef Name="WarehouseID" />
-      <PropertyRef Name="BusinessID" />
-      <PropertyRef Name="Pinno" />
-    </Key>
-    <Property Name="OrderNo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-    <Property Name="CompanyID" Type="varchar" MaxLength="3" Nullable="false" />
-    <Property Name="WarehouseID" Type="varchar" MaxLength="10" Nullable="false" />
-    <Property Name="BusinessID" Type="varchar" MaxLength="30" Nullable="false" />
-    <Property Name="Pinno" Type="varchar" MaxLength="15" Nullable="false" />
-    <Property Name="Style1" Type="varchar" MaxLength="30" />
-    <Property Name="Colour1" Type="varchar" MaxLength="25" />
-    <Property Name="Size1" Type="varchar" MaxLength="15" />
-    <Property Name="Qty1" Type="varchar" MaxLength="10" />
-    <Property Name="Style2" Type="varchar" MaxLength="30" />
-    <Property Name="Colour2" Type="varchar" MaxLength="25" />
-    <Property Name="Size2" Type="varchar" MaxLength="15" />
-    <Property Name="Qty2" Type="varchar" MaxLength="10" />
-  </EntityType>
-  <EntityType Name="hr_tremot02_derbyf">
-    <Key>
-      <PropertyRef Name="CompanyID" />
-      <PropertyRef Name="WarehouseID" />
-      <PropertyRef Name="BusinessID" />
-      <PropertyRef Name="Pinno" />
-    </Key>
-    <Property Name="CompanyID" Type="varchar" MaxLength="3" Nullable="false" />
-    <Property Name="WarehouseID" Type="varchar" MaxLength="10" Nullable="false" />
-    <Property Name="BusinessID" Type="varchar" MaxLength="30" Nullable="false" />
-    <Property Name="Pinno" Type="varchar" MaxLength="15" Nullable="false" />
-    <Property Name="Style1" Type="varchar" MaxLength="30" />
-    <Property Name="Colour1" Type="varchar" MaxLength="25" />
-    <Property Name="Size1" Type="varchar" MaxLength="15" />
-    <Property Name="Qty1" Type="varchar" MaxLength="10" />
-    <Property Name="Style2" Type="varchar" MaxLength="30" />
-    <Property Name="Colour2" Type="varchar" MaxLength="25" />
-    <Property Name="Size2" Type="varchar" MaxLength="15" />
-    <Property Name="Qty2" Type="varchar" MaxLength="10" />
-  </EntityType>
-  <EntityType Name="hr_tremot02_derbym">
-    <Key>
-      <PropertyRef Name="CompanyID" />
-      <PropertyRef Name="WarehouseID" />
-      <PropertyRef Name="BusinessID" />
-      <PropertyRef Name="Pinno" />
-    </Key>
-    <Property Name="CompanyID" Type="varchar" MaxLength="3" Nullable="false" />
-    <Property Name="WarehouseID" Type="varchar" MaxLength="10" Nullable="false" />
-    <Property Name="BusinessID" Type="varchar" MaxLength="30" Nullable="false" />
-    <Property Name="Pinno" Type="varchar" MaxLength="15" Nullable="false" />
-    <Property Name="Style1" Type="varchar" MaxLength="30" />
-    <Property Name="Colour1" Type="varchar" MaxLength="25" />
-    <Property Name="Size1" Type="varchar" MaxLength="15" />
-    <Property Name="Qty1" Type="varchar" MaxLength="10" />
-    <Property Name="Style2" Type="varchar" MaxLength="30" />
-    <Property Name="Colour2" Type="varchar" MaxLength="25" />
-    <Property Name="Size2" Type="varchar" MaxLength="15" />
-    <Property Name="Qty2" Type="varchar" MaxLength="10" />
-  </EntityType>
-  <EntityType Name="hr_tremot02_langleyf">
-    <Key>
-      <PropertyRef Name="CompanyID" />
-      <PropertyRef Name="WarehouseID" />
-      <PropertyRef Name="BusinessID" />
-      <PropertyRef Name="Pinno" />
-    </Key>
-    <Property Name="CompanyID" Type="varchar" MaxLength="3" Nullable="false" />
-    <Property Name="WarehouseID" Type="varchar" MaxLength="10" Nullable="false" />
-    <Property Name="BusinessID" Type="varchar" MaxLength="30" Nullable="false" />
-    <Property Name="Pinno" Type="varchar" MaxLength="15" Nullable="false" />
-    <Property Name="Style1" Type="varchar" MaxLength="30" />
-    <Property Name="Colour1" Type="varchar" MaxLength="25" />
-    <Property Name="Size1" Type="varchar" MaxLength="15" />
-    <Property Name="Qty1" Type="varchar" MaxLength="10" />
-    <Property Name="Style2" Type="varchar" MaxLength="30" />
-    <Property Name="Colour2" Type="varchar" MaxLength="25" />
-    <Property Name="Size2" Type="varchar" MaxLength="15" />
-    <Property Name="Qty2" Type="varchar" MaxLength="10" />
-  </EntityType>
-  <EntityType Name="hr_tremot02_langleym">
-    <Key>
-      <PropertyRef Name="CompanyID" />
-      <PropertyRef Name="WarehouseID" />
-      <PropertyRef Name="BusinessID" />
-      <PropertyRef Name="Pinno" />
-    </Key>
-    <Property Name="CompanyID" Type="varchar" MaxLength="3" Nullable="false" />
-    <Property Name="WarehouseID" Type="varchar" MaxLength="10" Nullable="false" />
-    <Property Name="BusinessID" Type="varchar" MaxLength="30" Nullable="false" />
-    <Property Name="Pinno" Type="varchar" MaxLength="15" Nullable="false" />
-    <Property Name="Style1" Type="varchar" MaxLength="30" />
-    <Property Name="Colour1" Type="varchar" MaxLength="25" />
-    <Property Name="Size1" Type="varchar" MaxLength="15" />
-    <Property Name="Qty1" Type="varchar" MaxLength="10" />
-    <Property Name="Style2" Type="varchar" MaxLength="30" />
-    <Property Name="Colour2" Type="varchar" MaxLength="25" />
-    <Property Name="Size2" Type="varchar" MaxLength="15" />
-    <Property Name="Qty2" Type="varchar" MaxLength="10" />
-  </EntityType>
-  <EntityType Name="hr_tremot02_nottmf">
-    <Key>
-      <PropertyRef Name="CompanyID" />
-      <PropertyRef Name="WarehouseID" />
-      <PropertyRef Name="BusinessID" />
-      <PropertyRef Name="Pinno" />
-    </Key>
-    <Property Name="CompanyID" Type="varchar" MaxLength="3" Nullable="false" />
-    <Property Name="WarehouseID" Type="varchar" MaxLength="10" Nullable="false" />
-    <Property Name="BusinessID" Type="varchar" MaxLength="30" Nullable="false" />
-    <Property Name="Pinno" Type="varchar" MaxLength="15" Nullable="false" />
-    <Property Name="Style1" Type="varchar" MaxLength="30" />
-    <Property Name="Colour1" Type="varchar" MaxLength="25" />
-    <Property Name="Size1" Type="varchar" MaxLength="15" />
-    <Property Name="Qty1" Type="varchar" MaxLength="10" />
-    <Property Name="Style2" Type="varchar" MaxLength="30" />
-    <Property Name="Colour2" Type="varchar" MaxLength="25" />
-    <Property Name="Size2" Type="varchar" MaxLength="15" />
-    <Property Name="Qty2" Type="varchar" MaxLength="10" />
-  </EntityType>
-  <EntityType Name="hr_tremot02_nottmm">
-    <Key>
-      <PropertyRef Name="CompanyID" />
-      <PropertyRef Name="WarehouseID" />
-      <PropertyRef Name="BusinessID" />
-      <PropertyRef Name="Pinno" />
-    </Key>
-    <Property Name="CompanyID" Type="varchar" MaxLength="3" Nullable="false" />
-    <Property Name="WarehouseID" Type="varchar" MaxLength="10" Nullable="false" />
-    <Property Name="BusinessID" Type="varchar" MaxLength="30" Nullable="false" />
-    <Property Name="Pinno" Type="varchar" MaxLength="15" Nullable="false" />
-    <Property Name="Style1" Type="varchar" MaxLength="30" />
-    <Property Name="Colour1" Type="varchar" MaxLength="25" />
-    <Property Name="Size1" Type="varchar" MaxLength="15" />
-    <Property Name="Qty1" Type="varchar" MaxLength="10" />
-    <Property Name="Style2" Type="varchar" MaxLength="30" />
-    <Property Name="Colour2" Type="varchar" MaxLength="25" />
-    <Property Name="Size2" Type="varchar" MaxLength="15" />
-    <Property Name="Qty2" Type="varchar" MaxLength="10" />
-  </EntityType>
-  <EntityType Name="hr_tremot02_suttonf">
-    <Key>
-      <PropertyRef Name="CompanyID" />
-      <PropertyRef Name="WarehouseID" />
-      <PropertyRef Name="BusinessID" />
-      <PropertyRef Name="Pinno" />
-    </Key>
-    <Property Name="CompanyID" Type="varchar" MaxLength="3" Nullable="false" />
-    <Property Name="WarehouseID" Type="varchar" MaxLength="10" Nullable="false" />
-    <Property Name="BusinessID" Type="varchar" MaxLength="30" Nullable="false" />
-    <Property Name="Pinno" Type="varchar" MaxLength="15" Nullable="false" />
-    <Property Name="Style1" Type="varchar" MaxLength="30" />
-    <Property Name="Colour1" Type="varchar" MaxLength="25" />
-    <Property Name="Size1" Type="varchar" MaxLength="15" />
-    <Property Name="Qty1" Type="varchar" MaxLength="10" />
-    <Property Name="Style2" Type="varchar" MaxLength="30" />
-    <Property Name="Colour2" Type="varchar" MaxLength="25" />
-    <Property Name="Size2" Type="varchar" MaxLength="15" />
-    <Property Name="Qty2" Type="varchar" MaxLength="10" />
-  </EntityType>
-  <EntityType Name="hr_tremot02_suttonm">
-    <Key>
-      <PropertyRef Name="CompanyID" />
-      <PropertyRef Name="WarehouseID" />
-      <PropertyRef Name="BusinessID" />
-      <PropertyRef Name="Pinno" />
-    </Key>
-    <Property Name="CompanyID" Type="varchar" MaxLength="3" Nullable="false" />
-    <Property Name="WarehouseID" Type="varchar" MaxLength="10" Nullable="false" />
-    <Property Name="BusinessID" Type="varchar" MaxLength="30" Nullable="false" />
-    <Property Name="Pinno" Type="varchar" MaxLength="15" Nullable="false" />
-    <Property Name="Style1" Type="varchar" MaxLength="30" />
-    <Property Name="Colour1" Type="varchar" MaxLength="25" />
-    <Property Name="Size1" Type="varchar" MaxLength="15" />
-    <Property Name="Qty1" Type="varchar" MaxLength="10" />
-    <Property Name="Style2" Type="varchar" MaxLength="30" />
-    <Property Name="Colour2" Type="varchar" MaxLength="25" />
-    <Property Name="Size2" Type="varchar" MaxLength="15" />
-    <Property Name="Qty2" Type="varchar" MaxLength="10" />
-  </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'def.e4kmaximusdb.hr_tsb_min_orderdate' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-  <EntityType Name="hr_tsb_min_orderdate">
+warning 6002: The table/view 'def.e4kmaximusdb.hr_demo_address' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="hr_demo_address">
     <Key>
       <PropertyRef Name="CompanyID" />
-    </Key>
-    <Property Name="CompanyID" Type="varchar" MaxLength="3" Nullable="false" />
-    <Property Name="CustID" Type="varchar" MaxLength="10" />
-    <Property Name="Pinno" Type="varchar" MaxLength="50" />
-    <Property Name="Min(OrderDate)" Type="date" />
-  </EntityType>
-  <EntityType Name="hr_tsb_reldates">
-    <Key>
-      <PropertyRef Name="Release_date" />
-      <PropertyRef Name="date_orderconfirm" />
-    </Key>
-    <Property Name="Release_date" Type="date" Nullable="false" />
-    <Property Name="date_orderconfirm" Type="date" Nullable="false" />
-  </EntityType>
-  <EntityType Name="hr_tsb_release">
-    <Key>
-      <PropertyRef Name="OrderNo" />
-    </Key>
-    <Property Name="OrderNo" Type="bigint" Nullable="false" />
-    <Property Name="Release_date" Type="date" />
-  </EntityType>
-  <!--Errors Found During Generation:
-warning 6002: The table/view 'def.e4kmaximusdb.hr_tsb_tblaccemp_ucodesemployees' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-  <EntityType Name="hr_tsb_tblaccemp_ucodesemployees">
-    <Key>
-      <PropertyRef Name="CompanyID" />
-      <PropertyRef Name="EmployeeID" />
       <PropertyRef Name="BusinessID" />
-      <PropertyRef Name="UCodeID" />
+      <PropertyRef Name="OldAddressID" />
     </Key>
     <Property Name="CompanyID" Type="varchar" MaxLength="3" Nullable="false" />
-    <Property Name="EmployeeID" Type="varchar" MaxLength="10" Nullable="false" />
     <Property Name="BusinessID" Type="varchar" MaxLength="10" Nullable="false" />
-    <Property Name="UCodeID" Type="varchar" MaxLength="15" Nullable="false" />
+    <Property Name="OldAddressID" Type="int" Nullable="false" />
+    <Property Name="NewAddressID" Type="bigint" />
+    <Property Name="Description" Type="varchar" MaxLength="50" />
+    <Property Name="PostCode" Type="varchar" MaxLength="20" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6002: The table/view 'def.e4kmaximusdb.hr_visexp01_address_map_bak' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-  <EntityType Name="hr_visexp01_address_map_bak">
+warning 6002: The table/view 'def.e4kmaximusdb.hr_demo_employee' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="hr_demo_employee">
     <Key>
-      <PropertyRef Name="MapUser" />
+      <PropertyRef Name="BusinessID" />
+      <PropertyRef Name="EmployeeID" />
     </Key>
-    <Property Name="Companyid" Type="varchar" MaxLength="3" />
-    <Property Name="BusinessId" Type="varchar" MaxLength="10" />
-    <Property Name="OnlineUserId" Type="varchar" MaxLength="20" />
-    <Property Name="Employeeid" Type="varchar" MaxLength="10" />
-    <Property Name="AddressId" Type="int" />
-    <Property Name="MapUser" Type="varchar" MaxLength="20" Nullable="false" />
+    <Property Name="BusinessID" Type="varchar" MaxLength="10" Nullable="false" />
+    <Property Name="EmployeeID" Type="varchar" MaxLength="10" Nullable="false" />
+    <Property Name="NewEmployeeID" Type="varchar" MaxLength="10" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'def.e4kmaximusdb.hr_demo_invoices' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="hr_demo_invoices">
+    <Key>
+      <PropertyRef Name="InvoiceNo" />
+    </Key>
+    <Property Name="SalesOrder" Type="int" />
+    <Property Name="NewOrderNo" Type="bigint" />
+    <Property Name="PickingSlipNo" Type="int" />
+    <Property Name="NewPickSlipNo" Type="bigint" />
+    <Property Name="InvoiceNo" Type="int" Nullable="false" />
+    <Property Name="NewInvoiceNo" Type="bigint" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'def.e4kmaximusdb.hr_demo_orders' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="hr_demo_orders">
+    <Key>
+      <PropertyRef Name="OrderNo" />
+    </Key>
+    <Property Name="CustID" Type="varchar" MaxLength="10" />
+    <Property Name="PinNo" Type="varchar" MaxLength="50" />
+    <Property Name="OrderNo" Type="int" Nullable="false" />
+    <Property Name="NewOrderNo" Type="bigint" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'def.e4kmaximusdb.hr_demo_pickslips' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="hr_demo_pickslips">
+    <Key>
+      <PropertyRef Name="PickingSlipNo" />
+    </Key>
+    <Property Name="CustID" Type="varchar" MaxLength="10" />
+    <Property Name="PinNo" Type="varchar" MaxLength="50" />
+    <Property Name="OrderNo" Type="int" />
+    <Property Name="NewOrderNo" Type="bigint" />
+    <Property Name="PickingSlipNo" Type="int" Nullable="false" />
+    <Property Name="NewPickSlipNo" Type="bigint" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'def.e4kmaximusdb.hr_demo_style' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="hr_demo_style">
+    <Key>
+      <PropertyRef Name="StyleID" />
+      <PropertyRef Name="NewStyleID" />
+    </Key>
+    <Property Name="StyleID" Type="varchar" MaxLength="25" Nullable="false" />
+    <Property Name="NewStyleID" Type="varchar" MaxLength="33" Nullable="false" />
+    <Property Name="NewDescription" Type="varchar" MaxLength="66" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'def.e4kmaximusdb.hr_demo_ucode' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="hr_demo_ucode">
+    <Key>
+      <PropertyRef Name="BusinessID" />
+      <PropertyRef Name="UcodeID" />
+      <PropertyRef Name="NewUCodeID" />
+    </Key>
+    <Property Name="BusinessID" Type="varchar" MaxLength="10" Nullable="false" />
+    <Property Name="UcodeID" Type="varchar" MaxLength="15" Nullable="false" />
+    <Property Name="NewUCodeID" Type="varchar" MaxLength="20" Nullable="false" />
   </EntityType>
   <EntityType Name="my_aspnet_applications">
     <Key>
@@ -420,188 +264,6 @@ warning 6002: The table/view 'def.e4kmaximusdb.hr_visexp01_address_map_bak' does
     <Property Name="userId" Type="int" Nullable="false" />
     <Property Name="roleId" Type="int" Nullable="false" />
   </EntityType>
-  <!--Errors Found During Generation:
-warning 6002: The table/view 'def.e4kmaximusdb.rollout_order_detail_tsb' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-  <EntityType Name="rollout_order_detail_tsb">
-    <Key>
-      <PropertyRef Name="CompanyID" />
-      <PropertyRef Name="OrderNo" />
-      <PropertyRef Name="LineNo" />
-    </Key>
-    <Property Name="CompanyID" Type="varchar" MaxLength="3" Nullable="false" />
-    <Property Name="Warehouseid" Type="varchar" MaxLength="10" />
-    <Property Name="OrderNo" Type="bigint" Nullable="false" />
-    <Property Name="LineNo" Type="bigint" Nullable="false" />
-    <Property Name="LineType" Type="int" />
-    <Property Name="StyleID" Type="varchar" MaxLength="25" />
-    <Property Name="ColourID" Type="varchar" MaxLength="15" />
-    <Property Name="SizeID" Type="varchar" MaxLength="10" />
-    <Property Name="Description" Type="varchar" MaxLength="100" />
-    <Property Name="Price" Type="decimal" Precision="20" Scale="4" />
-    <Property Name="Cost" Type="decimal" Precision="20" Scale="4" />
-    <Property Name="OrdQty" Type="bigint" />
-    <Property Name="AllQty" Type="bigint" />
-    <Property Name="InvQty" Type="bigint" />
-    <Property Name="DespQty" Type="bigint" />
-    <Property Name="CommissionRate" Type="double" />
-    <Property Name="Discount" Type="double" />
-    <Property Name="Deliverydate" Type="date" />
-    <Property Name="VatCode" Type="int" />
-    <Property Name="NomCode" Type="int" />
-    <Property Name="PartShip" Type="tinyint" />
-    <Property Name="LineNoRef" Type="float" />
-    <Property Name="Currency_Exchange_Rate" Type="double" />
-    <Property Name="StyleIDref" Type="varchar" MaxLength="15" />
-    <Property Name="FreeText" Type="varchar" MaxLength="250" />
-    <Property Name="RepID" Type="bigint" />
-    <Property Name="RepRate" Type="double" />
-    <Property Name="KamID" Type="bigint" />
-    <Property Name="KAMRate" Type="double" />
-    <Property Name="IssueUOM" Type="bigint" />
-    <Property Name="IssueQty" Type="double" />
-    <Property Name="StockingUOM" Type="bigint" />
-    <Property Name="OriginalOrderNo" Type="bigint" />
-    <Property Name="OriginalLineNo" Type="bigint" />
-    <Property Name="SOPDETAIL1" Type="varchar" MaxLength="100" />
-    <Property Name="SOPDETAIL2" Type="varchar" MaxLength="100" />
-    <Property Name="SOPDETAIL3" Type="varchar" MaxLength="100" />
-    <Property Name="SOPDETAIL4" Type="varchar" MaxLength="100" />
-    <Property Name="SOPDETAIL5" Type="varchar" MaxLength="100" />
-    <Property Name="Jobsheetno" Type="int" />
-    <Property Name="JobsheetLineNo" Type="int" />
-    <Property Name="AssemblyID" Type="int" />
-    <Property Name="AsmLineNo" Type="int" />
-    <Property Name="ReasonCode" Type="int" />
-    <Property Name="ReturnOrderNo" Type="bigint" />
-    <Property Name="ReturnLineNo" Type="bigint" />
-  </EntityType>
-  <!--Errors Found During Generation:
-warning 6002: The table/view 'def.e4kmaximusdb.rollout_order_header_address_tsb' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-  <EntityType Name="rollout_order_header_address_tsb">
-    <Key>
-      <PropertyRef Name="EmployeeID" />
-      <PropertyRef Name="BusinessID" />
-    </Key>
-    <Property Name="EmployeeID" Type="varchar" MaxLength="10" Nullable="false" />
-    <Property Name="BusinessID" Type="varchar" MaxLength="10" Nullable="false" />
-    <Property Name="OnlineUserID" Type="text" />
-    <Property Name="AddressID" Type="text" />
-    <Property Name="Description" Type="varchar" MaxLength="50" />
-    <Property Name="Address1" Type="varchar" MaxLength="75" />
-    <Property Name="Address2" Type="varchar" MaxLength="75" />
-    <Property Name="Address3" Type="varchar" MaxLength="75" />
-    <Property Name="City" Type="varchar" MaxLength="75" />
-    <Property Name="Town" Type="varchar" MaxLength="75" />
-    <Property Name="Postcode" Type="varchar" MaxLength="20" />
-  </EntityType>
-  <!--Errors Found During Generation:
-warning 6002: The table/view 'def.e4kmaximusdb.rollout_order_header_tsb' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-  <EntityType Name="rollout_order_header_tsb">
-    <Key>
-      <PropertyRef Name="CompanyID" />
-      <PropertyRef Name="OrderNo" />
-    </Key>
-    <Property Name="CompanyID" Type="varchar" MaxLength="3" Nullable="false" />
-    <Property Name="WarehouseID" Type="varchar" MaxLength="50" />
-    <Property Name="OrderNo" Type="bigint" Nullable="false" />
-    <Property Name="CustID" Type="varchar" MaxLength="10" />
-    <Property Name="OrderDate" Type="date" />
-    <Property Name="InvDesc" Type="varchar" MaxLength="50" />
-    <Property Name="InvAddress1" Type="varchar" MaxLength="50" />
-    <Property Name="InvAddress2" Type="varchar" MaxLength="50" />
-    <Property Name="InvAddress3" Type="varchar" MaxLength="50" />
-    <Property Name="InvCity" Type="varchar" MaxLength="50" />
-    <Property Name="InvTown" Type="varchar" MaxLength="50" />
-    <Property Name="InvPostCode" Type="varchar" MaxLength="50" />
-    <Property Name="InvCountry" Type="varchar" MaxLength="50" />
-    <Property Name="DelDesc" Type="varchar" MaxLength="50" />
-    <Property Name="DelAddress1" Type="varchar" MaxLength="50" />
-    <Property Name="DelAddress2" Type="varchar" MaxLength="50" />
-    <Property Name="DelAddress3" Type="varchar" MaxLength="50" />
-    <Property Name="DelCity" Type="varchar" MaxLength="50" />
-    <Property Name="DelTown" Type="varchar" MaxLength="50" />
-    <Property Name="DelPostCode" Type="varchar" MaxLength="50" />
-    <Property Name="DelCountry" Type="varchar" MaxLength="50" />
-    <Property Name="CustRef" Type="varchar" MaxLength="50" />
-    <Property Name="ContractRef" Type="varchar" MaxLength="50" />
-    <Property Name="Comments" Type="varchar" MaxLength="250" />
-    <Property Name="InvoiceDate" Type="date" />
-    <Property Name="Carrier" Type="varchar" MaxLength="12" />
-    <Property Name="CarrierCharge" Type="decimal" Precision="20" Scale="4" />
-    <Property Name="CustDisc" Type="double" />
-    <Property Name="SettDisc" Type="double" />
-    <Property Name="VolDisc" Type="double" />
-    <Property Name="SettlementDays" Type="int" />
-    <Property Name="OrderConfirm" Type="utinyint" />
-    <Property Name="CommentsExternal" Type="varchar" MaxLength="250" />
-    <Property Name="Cancelled" Type="tinyint" />
-    <Property Name="ProForma" Type="tinyint" />
-    <Property Name="Completed" Type="tinyint" />
-    <Property Name="WorksOrderNo" Type="double" />
-    <Property Name="AllowPartShipment" Type="tinyint" />
-    <Property Name="TotalGoods" Type="double" />
-    <Property Name="OrderGoods" Type="double" />
-    <Property Name="UserID" Type="varchar" MaxLength="20" />
-    <Property Name="pRINTINVOICE" Type="tinyint" />
-    <Property Name="Currency_Exchange_Rate" Type="double" />
-    <Property Name="PinNo" Type="varchar" MaxLength="50" />
-    <Property Name="UCodeId" Type="varchar" MaxLength="50" />
-    <Property Name="ContractNo" Type="varchar" MaxLength="50" />
-    <Property Name="Currency_Exchange_Code" Type="varchar" MaxLength="50" />
-    <Property Name="TIMEOFENTRY" Type="time" Precision="0" />
-    <Property Name="RepID" Type="bigint" />
-    <Property Name="RepNo" Type="bigint" />
-    <Property Name="OnlineConfirm" Type="tinyint" />
-    <Property Name="OnlineConfirmDate" Type="datetime" Precision="0" />
-    <Property Name="OnlineConfirmedBy" Type="varchar" MaxLength="50" />
-    <Property Name="OnlineProcessed" Type="tinyint" />
-    <Property Name="OnlineProcessedDate" Type="datetime" Precision="0" />
-    <Property Name="OnlineProcessedBy" Type="varchar" MaxLength="50" />
-    <Property Name="ReasonCode" Type="int" />
-    <Property Name="OnlineUserID" Type="varchar" MaxLength="30" />
-    <Property Name="OrderAnalysisCode1" Type="varchar" MaxLength="30" />
-    <Property Name="OrderAnalysisCode2" Type="varchar" MaxLength="30" />
-    <Property Name="OrderAnalysisCode3" Type="varchar" MaxLength="30" />
-    <Property Name="OrderAnalysisCode4" Type="varchar" MaxLength="30" />
-    <Property Name="OrderAnalysisCode5" Type="varchar" MaxLength="30" />
-    <Property Name="PrintLabel" Type="tinyint" />
-    <Property Name="ProFormaPrint" Type="tinyint" />
-    <Property Name="ConfirmPrint" Type="tinyint" />
-    <Property Name="OrderType" Type="varchar" MaxLength="2" />
-  </EntityType>
-  <!--Errors Found During Generation:
-warning 6002: The table/view 'def.e4kmaximusdb.stockcard_tsb_rollout' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-  <EntityType Name="stockcard_tsb_rollout">
-    <Key>
-      <PropertyRef Name="CompanyID" />
-      <PropertyRef Name="BusinessID" />
-      <PropertyRef Name="EmployeeID" />
-      <PropertyRef Name="StyleID" />
-      <PropertyRef Name="ColourID" />
-      <PropertyRef Name="Year" />
-    </Key>
-    <Property Name="CompanyID" Type="varchar" MaxLength="3" Nullable="false" />
-    <Property Name="BusinessID" Type="varchar" MaxLength="10" Nullable="false" />
-    <Property Name="EmployeeID" Type="varchar" MaxLength="10" Nullable="false" />
-    <Property Name="StyleID" Type="varchar" MaxLength="25" Nullable="false" />
-    <Property Name="ColourID" Type="varchar" MaxLength="15" Nullable="false" />
-    <Property Name="Year" Type="smallint" Nullable="false" />
-    <Property Name="SOQty" Type="int" />
-    <Property Name="PickQty" Type="int" />
-    <Property Name="InvQty" Type="int" />
-    <Property Name="TotalIssues" Type="int" />
-    <Property Name="FirstIssueDate" Type="timestamp" Precision="6" />
-    <Property Name="StartIssueDate" Type="timestamp" Precision="6" />
-    <Property Name="LastIssueDate" Type="timestamp" Precision="6" />
-  </EntityType>
-  <EntityType Name="tbl_employee_s27_hr">
-    <Key>
-      <PropertyRef Name="EmployeeID" />
-      <PropertyRef Name="BusinessID" />
-    </Key>
-    <Property Name="EmployeeID" Type="varchar" MaxLength="10" Nullable="false" />
-    <Property Name="BusinessID" Type="varchar" MaxLength="10" Nullable="false" />
-  </EntityType>
   <EntityType Name="tblacc_vatcodes">
     <Key>
       <PropertyRef Name="CompanyID" />
@@ -674,7 +336,41 @@ warning 6002: The table/view 'def.e4kmaximusdb.stockcard_tsb_rollout' does not h
     <Property Name="roleid" Type="int" />
     <Property Name="IsDefault" Type="tinyint" Nullable="false" />
   </EntityType>
+  <EntityType Name="tblaccemp_employee_atlasfm">
+    <Key>
+      <PropertyRef Name="CompanyID" />
+      <PropertyRef Name="EmployeeID" />
+      <PropertyRef Name="BusinessID" />
+    </Key>
+    <Property Name="CompanyID" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="EmployeeID" Type="varchar" MaxLength="10" Nullable="false" />
+    <Property Name="BusinessID" Type="varchar" MaxLength="10" Nullable="false" />
+    <Property Name="DepartmentID" Type="int" />
+    <Property Name="GroupID" Type="int" />
+    <Property Name="Title" Type="varchar" MaxLength="5" />
+    <Property Name="Forename" Type="varchar" MaxLength="80" />
+    <Property Name="Surname" Type="varchar" MaxLength="80" />
+    <Property Name="StartDate" Type="timestamp" Precision="6" />
+    <Property Name="EndDate" Type="timestamp" Precision="6" />
+    <Property Name="EmployeeClosed" Type="tinyint" Nullable="false" />
+    <Property Name="roleid" Type="int" />
+    <Property Name="IsDefault" Type="tinyint" Nullable="false" />
+  </EntityType>
   <EntityType Name="tblaccemp_employee_rollout">
+    <Key>
+      <PropertyRef Name="CompanyID" />
+      <PropertyRef Name="BusinessID" />
+      <PropertyRef Name="EmployeeID" />
+      <PropertyRef Name="RolloutName" />
+    </Key>
+    <Property Name="CompanyID" Type="varchar" MaxLength="3" Nullable="false" />
+    <Property Name="BusinessID" Type="varchar" MaxLength="10" Nullable="false" />
+    <Property Name="EmployeeID" Type="varchar" MaxLength="10" Nullable="false" />
+    <Property Name="IsProcessed" Type="bool" Nullable="false" />
+    <Property Name="PrevOrder" Type="int" />
+    <Property Name="RolloutName" Type="varchar" MaxLength="150" Nullable="false" />
+  </EntityType>
+  <EntityType Name="tblaccemp_employee_rollout_atlasfm">
     <Key>
       <PropertyRef Name="CompanyID" />
       <PropertyRef Name="BusinessID" />
@@ -771,6 +467,29 @@ warning 6002: The table/view 'def.e4kmaximusdb.stockcard_tsb_rollout' does not h
     <Property Name="StartIssueDate" Type="timestamp" Precision="6" />
     <Property Name="LastIssueDate" Type="timestamp" Precision="6" />
   </EntityType>
+  <EntityType Name="tblaccemp_stockcard_atlasfm">
+    <Key>
+      <PropertyRef Name="CompanyID" />
+      <PropertyRef Name="BusinessID" />
+      <PropertyRef Name="EmployeeID" />
+      <PropertyRef Name="StyleID" />
+      <PropertyRef Name="ColourID" />
+      <PropertyRef Name="Year" />
+    </Key>
+    <Property Name="CompanyID" Type="varchar" MaxLength="3" Nullable="false" />
+    <Property Name="BusinessID" Type="varchar" MaxLength="10" Nullable="false" />
+    <Property Name="EmployeeID" Type="varchar" MaxLength="10" Nullable="false" />
+    <Property Name="StyleID" Type="varchar" MaxLength="25" Nullable="false" />
+    <Property Name="ColourID" Type="varchar" MaxLength="15" Nullable="false" />
+    <Property Name="Year" Type="smallint" Nullable="false" />
+    <Property Name="SOQty" Type="int" />
+    <Property Name="PickQty" Type="int" />
+    <Property Name="InvQty" Type="int" />
+    <Property Name="TotalIssues" Type="int" />
+    <Property Name="FirstIssueDate" Type="timestamp" Precision="6" />
+    <Property Name="StartIssueDate" Type="timestamp" Precision="6" />
+    <Property Name="LastIssueDate" Type="timestamp" Precision="6" />
+  </EntityType>
   <!--Errors Found During Generation:
 warning 6002: The table/view 'def.e4kmaximusdb.tblaccemp_style_staticqty' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="tblaccemp_style_staticqty">
@@ -790,6 +509,28 @@ warning 6002: The table/view 'def.e4kmaximusdb.tblaccemp_style_staticqty' does n
     <Property Name="RolloutName" Type="varchar" MaxLength="150" />
     <Property Name="ID" Type="int" />
   </EntityType>
+  <EntityType Name="tblaccemp_stylepoints">
+    <Key>
+      <PropertyRef Name="CompanyID" />
+      <PropertyRef Name="BusinessID" />
+      <PropertyRef Name="UcodeID" />
+      <PropertyRef Name="StyleID" />
+      <PropertyRef Name="ColourID" />
+      <PropertyRef Name="FromDate" />
+      <PropertyRef Name="ToDate" />
+    </Key>
+    <Property Name="CompanyID" Type="varchar" MaxLength="3" Nullable="false" />
+    <Property Name="BusinessID" Type="varchar" MaxLength="10" Nullable="false" />
+    <Property Name="UcodeID" Type="varchar" MaxLength="15" Nullable="false" />
+    <Property Name="StyleID" Type="varchar" MaxLength="25" Nullable="false" />
+    <Property Name="ColourID" Type="varchar" MaxLength="15" Nullable="false" />
+    <Property Name="FromDate" Type="timestamp" Precision="0" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ToDate" Type="timestamp" Precision="0" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="Points" Type="int" />
+    <Property Name="MandatoryQty" Type="int" />
+    <Property Name="MinPts" Type="int" />
+    <Property Name="MaxPts" Type="int" />
+  </EntityType>
   <EntityType Name="tblaccemp_ucode_reasons">
     <Key>
       <PropertyRef Name="CompanyID" />
@@ -800,6 +541,21 @@ warning 6002: The table/view 'def.e4kmaximusdb.tblaccemp_style_staticqty' does n
     <Property Name="BusinessID" Type="varchar" MaxLength="10" Nullable="false" />
     <Property Name="ReasonCodeID" Type="int" Nullable="false" />
     <Property Name="ReasonDesc" Type="varchar" MaxLength="100" />
+  </EntityType>
+  <EntityType Name="tblaccemp_ucodepoints">
+    <Key>
+      <PropertyRef Name="CompanyID" />
+      <PropertyRef Name="BusinessID" />
+      <PropertyRef Name="UcodeID" />
+      <PropertyRef Name="FromDate" />
+      <PropertyRef Name="ToDate" />
+    </Key>
+    <Property Name="CompanyID" Type="varchar" MaxLength="3" Nullable="false" />
+    <Property Name="BusinessID" Type="varchar" MaxLength="10" Nullable="false" />
+    <Property Name="UcodeID" Type="varchar" MaxLength="15" Nullable="false" />
+    <Property Name="FromDate" Type="timestamp" Precision="0" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="ToDate" Type="timestamp" Precision="0" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="TotalPoints" Type="int" />
   </EntityType>
   <EntityType Name="tblaccemp_ucodes">
     <Key>
@@ -859,6 +615,18 @@ warning 6002: The table/view 'def.e4kmaximusdb.tblaccemp_style_staticqty' does n
     <Property Name="UCodeID" Type="varchar" MaxLength="15" Nullable="false" />
   </EntityType>
   <EntityType Name="tblaccemp_ucodesemployees">
+    <Key>
+      <PropertyRef Name="CompanyID" />
+      <PropertyRef Name="EmployeeID" />
+      <PropertyRef Name="BusinessID" />
+      <PropertyRef Name="UCodeID" />
+    </Key>
+    <Property Name="CompanyID" Type="varchar" MaxLength="3" Nullable="false" />
+    <Property Name="EmployeeID" Type="varchar" MaxLength="10" Nullable="false" />
+    <Property Name="BusinessID" Type="varchar" MaxLength="10" Nullable="false" />
+    <Property Name="UCodeID" Type="varchar" MaxLength="15" Nullable="false" />
+  </EntityType>
+  <EntityType Name="tblaccemp_ucodesemployees_atlasfm">
     <Key>
       <PropertyRef Name="CompanyID" />
       <PropertyRef Name="EmployeeID" />
@@ -947,59 +715,19 @@ warning 6002: The table/view 'def.e4kmaximusdb.tblaccemp_style_staticqty' does n
     <Property Name="VATNo" Type="varchar" MaxLength="15" />
     <Property Name="Special_Instructions1" Type="varchar" MaxLength="255" />
     <Property Name="Special_Instructions2" Type="varchar" MaxLength="255" />
-    <Property Name="Date_Used" Type="timestamp" Precision="6" />
-    <Property Name="Date_Opened" Type="timestamp" Precision="6" />
-    <Property Name="Conditions" Type="bit" Nullable="false" />
+    <Property Name="Date_Used" Type="timestamp" Precision="0" />
+    <Property Name="Date_Opened" Type="timestamp" Precision="0" />
+    <Property Name="Conditions" Type="bool" Nullable="false" />
     <Property Name="Nominal_Code" Type="varchar" MaxLength="12" />
     <Property Name="Balance" Type="decimal" Precision="19" Scale="4" />
     <Property Name="Chase_Amount" Type="decimal" Precision="19" Scale="4" />
-    <Property Name="Chase_Date" Type="timestamp" Precision="6" />
+    <Property Name="Chase_Date" Type="timestamp" Precision="0" />
     <Property Name="RepID" Type="int" />
     <Property Name="Rep_Comission" Type="double" />
     <Property Name="KAM_Comission" Type="double" />
     <Property Name="PaymentTermsID" Type="smallint" />
   </EntityType>
   <EntityType Name="tblbus_address">
-    <Key>
-      <PropertyRef Name="CompanyID" />
-      <PropertyRef Name="BusinessID" />
-      <PropertyRef Name="AddressID" />
-    </Key>
-    <Property Name="CompanyID" Type="varchar" MaxLength="3" Nullable="false" />
-    <Property Name="BusinessID" Type="varchar" MaxLength="10" Nullable="false" />
-    <Property Name="AddressID" Type="int" Nullable="false" />
-    <Property Name="Description" Type="varchar" MaxLength="50" />
-    <Property Name="Address1" Type="varchar" MaxLength="75" />
-    <Property Name="Address2" Type="varchar" MaxLength="75" />
-    <Property Name="Address3" Type="varchar" MaxLength="75" />
-    <Property Name="Town" Type="varchar" MaxLength="75" />
-    <Property Name="City" Type="varchar" MaxLength="75" />
-    <Property Name="Postcode" Type="varchar" MaxLength="20" />
-    <Property Name="CountryCode" Type="int" />
-    <Property Name="AddressTypeID" Type="int" />
-    <Property Name="ContactID" Type="int" />
-  </EntityType>
-  <EntityType Name="tblbus_address_copy">
-    <Key>
-      <PropertyRef Name="Description" />
-      <PropertyRef Name="BusinessID" />
-      <PropertyRef Name="Address1" />
-    </Key>
-    <Property Name="Description" Type="varchar" MaxLength="50" Nullable="false" />
-    <Property Name="BusinessID" Type="varchar" MaxLength="10" Nullable="false" />
-    <Property Name="Address1" Type="varchar" MaxLength="75" Nullable="false" />
-    <Property Name="Address2" Type="varchar" MaxLength="75" />
-    <Property Name="Address3" Type="varchar" MaxLength="75" />
-    <Property Name="Town" Type="varchar" MaxLength="75" />
-    <Property Name="City" Type="varchar" MaxLength="75" />
-    <Property Name="Postcode" Type="varchar" MaxLength="20" />
-    <Property Name="CountryCode" Type="int" />
-    <Property Name="AddressTypeID" Type="int" />
-    <Property Name="ContactID" Type="int" />
-  </EntityType>
-  <!--Errors Found During Generation:
-warning 6002: The table/view 'def.e4kmaximusdb.tblbus_address_s27' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-  <EntityType Name="tblbus_address_s27">
     <Key>
       <PropertyRef Name="CompanyID" />
       <PropertyRef Name="BusinessID" />
@@ -1045,14 +773,14 @@ warning 6002: The table/view 'def.e4kmaximusdb.tblbus_address_s27' does not have
     <Property Name="BusType" Type="varchar" MaxLength="3" />
     <Property Name="Name" Type="varchar" MaxLength="100" />
     <Property Name="Country_Currency" Type="int" />
-    <Property Name="Live" Type="tinyint" Nullable="false" />
+    <Property Name="Live" Type="bool" Nullable="false" />
     <Property Name="AnalysisCodeID" Type="int" />
     <Property Name="Default_Nominal" Type="varchar" MaxLength="12" />
     <Property Name="Factoring_No" Type="varchar" MaxLength="15" />
     <Property Name="Comments" Type="text" />
     <Property Name="GroupID" Type="int" />
     <Property Name="CoupleID" Type="varchar" MaxLength="10" />
-    <Property Name="IsExtract" Type="tinyint" Nullable="false" />
+    <Property Name="IsExtract" Type="bool" Nullable="false" />
   </EntityType>
   <EntityType Name="tblbus_business_types">
     <Key>
@@ -1081,17 +809,6 @@ warning 6002: The table/view 'def.e4kmaximusdb.tblbus_address_s27' does not have
     </Key>
     <Property Name="ContactType_ID" Type="int" Nullable="false" />
     <Property Name="Name" Type="varchar" MaxLength="50" />
-  </EntityType>
-  <!--Errors Found During Generation:
-warning 6002: The table/view 'def.e4kmaximusdb.tblbus_contact_s27' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-  <EntityType Name="tblbus_contact_s27">
-    <Key>
-      <PropertyRef Name="ID" />
-    </Key>
-    <Property Name="ID" Type="int" Nullable="false" />
-    <Property Name="ContactID" Type="int" />
-    <Property Name="ContactType_ID" Type="int" />
-    <Property Name="Value" Type="varchar" MaxLength="50" />
   </EntityType>
   <EntityType Name="tblbus_countrycodes">
     <Key>
@@ -1125,22 +842,9 @@ warning 6002: The table/view 'def.e4kmaximusdb.tblbus_contact_s27' does not have
     <Property Name="OrderRef" Type="varchar" MaxLength="250" Nullable="false" />
     <Property Name="NominalCode" Type="varchar" MaxLength="250" Nullable="false" />
   </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'def.e4kmaximusdb.tblbus_settings' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="tblbus_settings">
-    <Key>
-      <PropertyRef Name="SettingID" />
-      <PropertyRef Name="BusType" />
-    </Key>
-    <Property Name="SettingID" Type="varchar" MaxLength="20" Nullable="false" />
-    <Property Name="BusType" Type="varchar" MaxLength="3" Nullable="false" />
-    <Property Name="SettingName1" Type="varchar" MaxLength="50" />
-    <Property Name="Type" Type="int" />
-    <Property Name="Category" Type="varchar" MaxLength="30" />
-    <Property Name="DefaultValue" Type="varchar" MaxLength="50" />
-    <Property Name="SeqNo" Type="int" />
-    <Property Name="Lookup_Table" Type="varchar" MaxLength="255" />
-    <Property Name="Lookup_Text" Type="varchar" MaxLength="255" />
-  </EntityType>
-  <EntityType Name="tblbus_settings_copy">
     <Key>
       <PropertyRef Name="SettingID" />
       <PropertyRef Name="BusType" />
@@ -1359,9 +1063,9 @@ warning 6002: The table/view 'def.e4kmaximusdb.tblbus_contact_s27' does not have
     <Property Name="Season" Type="int" />
     <Property Name="ClassID" Type="int" />
     <Property Name="Obsolete_Class" Type="int" />
-    <Property Name="Live" Type="tinyint" Nullable="false" />
+    <Property Name="Live" Type="bool" Nullable="false" />
     <Property Name="StyleImage" Type="varchar" MaxLength="255" />
-    <Property Name="BatchControl" Type="tinyint" Nullable="false" />
+    <Property Name="BatchControl" Type="bool" Nullable="false" />
     <Property Name="StockingUOM" Type="int" />
     <Property Name="IssueUOM" Type="int" />
     <Property Name="StockingType" Type="varchar" MaxLength="1" />
@@ -1455,7 +1159,7 @@ warning 6002: The table/view 'def.e4kmaximusdb.tblbus_contact_s27' does not have
     <Property Name="GroupID" Type="int" Nullable="false" />
     <Property Name="Description" Type="varchar" MaxLength="50" />
     <Property Name="CompanyID" Type="varchar" MaxLength="3" Nullable="false" />
-    <Property Name="ImagePath" Type="text" />
+    <Property Name="ImagePath" Type="varchar" MaxLength="500" />
   </EntityType>
   <EntityType Name="tblfsk_style_groups_sub">
     <Key>
@@ -1465,7 +1169,7 @@ warning 6002: The table/view 'def.e4kmaximusdb.tblbus_contact_s27' does not have
     <Property Name="SubGroupID" Type="int" Nullable="false" />
     <Property Name="Description" Type="varchar" MaxLength="50" />
     <Property Name="CompanyID" Type="varchar" MaxLength="3" Nullable="false" />
-    <Property Name="ImagePath" Type="text" />
+    <Property Name="ImagePath" Type="varchar" MaxLength="500" />
   </EntityType>
   <EntityType Name="tblfsk_style_locations">
     <Key>
@@ -1518,7 +1222,7 @@ warning 6002: The table/view 'def.e4kmaximusdb.tblbus_contact_s27' does not have
     <Property Name="VATCode" Type="smallint" />
     <Property Name="PriceOptionID" Type="int" Nullable="false" />
     <Property Name="StockingType" Type="varchar" MaxLength="1" />
-    <Property Name="IsStatic" Type="tinyint" Nullable="false" />
+    <Property Name="IsStatic" Type="bool" Nullable="false" />
   </EntityType>
   <EntityType Name="tblfsk_style_sizes_prices">
     <Key>
@@ -1606,6 +1310,32 @@ warning 6002: The table/view 'def.e4kmaximusdb.tblbus_contact_s27' does not have
     <Property Name="SmallerUnit" Type="int" />
     <Property Name="Ratio" Type="int" />
     <Property Name="BaseRatio" Type="int" />
+  </EntityType>
+  <EntityType Name="tblfskstyle_dimension">
+    <Key>
+      <PropertyRef Name="CompanyId" />
+      <PropertyRef Name="DimensionId" />
+      <PropertyRef Name="StyleId" />
+      <PropertyRef Name="Freetexttype" />
+    </Key>
+    <Property Name="CompanyId" Type="varchar" MaxLength="3" Nullable="false" />
+    <Property Name="DimensionId" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="StyleId" Type="varchar" MaxLength="25" Nullable="false" />
+    <Property Name="Freetexttype" Type="varchar" MaxLength="25" Nullable="false" />
+  </EntityType>
+  <EntityType Name="tblfskstyle_dimension1_">
+    <Key>
+      <PropertyRef Name="CompanyId" />
+      <PropertyRef Name="DimensionId" />
+      <PropertyRef Name="StyleId" />
+      <PropertyRef Name="FreeTextType" />
+    </Key>
+    <Property Name="CompanyId" Type="varchar" MaxLength="3" Nullable="false" />
+    <Property Name="DimensionId" Type="varchar" MaxLength="30" Nullable="false" />
+    <Property Name="StyleId" Type="varchar" MaxLength="25" Nullable="false" />
+    <Property Name="FreeTextType" Type="varchar" MaxLength="25" Nullable="false" />
+    <Property Name="StyleImage" Type="varchar" MaxLength="200" />
+    <Property Name="Description" Type="varchar" MaxLength="200" />
   </EntityType>
   <EntityType Name="tblfstk_feature">
     <Key>
@@ -1719,20 +1449,15 @@ warning 6002: The table/view 'def.e4kmaximusdb.tblbus_contact_s27' does not have
     <Property Name="LanguageName" Type="varchar" MaxLength="150" />
     <Property Name="ImageName" Type="varchar" MaxLength="50" />
   </EntityType>
-  <EntityType Name="tblonline_emp_address_copy">
-    <Key>
-      <PropertyRef Name="Companyid" />
-      <PropertyRef Name="BusinessId" />
-      <PropertyRef Name="OnlineUserId" />
-      <PropertyRef Name="Employeeid" />
-      <PropertyRef Name="AddressId" />
-    </Key>
-    <Property Name="Companyid" Type="varchar" MaxLength="3" Nullable="false" />
-    <Property Name="BusinessId" Type="varchar" MaxLength="10" Nullable="false" />
-    <Property Name="OnlineUserId" Type="varchar" MaxLength="20" Nullable="false" />
-    <Property Name="Employeeid" Type="varchar" MaxLength="10" Nullable="false" />
-    <Property Name="AddressId" Type="int" Nullable="false" />
-  </EntityType>
+  <!--Errors Found During Generation:
+warning 6013: The table/view 'def.e4kmaximusdb.tblonline_emp_address' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
+        <EntityType Name="tblonline_emp_address">
+          <Property Name="Companyid" Type="varchar" MaxLength="3" />
+          <Property Name="BusinessId" Type="varchar" MaxLength="10" />
+          <Property Name="OnlineUserId" Type="varchar" MaxLength="20" />
+          <Property Name="Employeeid" Type="varchar" MaxLength="10" />
+          <Property Name="AddressId" Type="int" />
+        </EntityType>-->
   <EntityType Name="tblonline_holidays">
     <Key>
       <PropertyRef Name="CompanyID" />
@@ -1773,6 +1498,15 @@ warning 6002: The table/view 'def.e4kmaximusdb.tblbus_contact_s27' does not have
     <Property Name="OrderNo" Type="int" Nullable="false" />
     <Property Name="IsReq" Type="int" />
   </EntityType>
+  <EntityType Name="tblonline_rolloutorders_reqstatus_atlasfm">
+    <Key>
+      <PropertyRef Name="CompanyID" />
+      <PropertyRef Name="OrderNo" />
+    </Key>
+    <Property Name="CompanyID" Type="varchar" MaxLength="5" Nullable="false" />
+    <Property Name="OrderNo" Type="int" Nullable="false" />
+    <Property Name="IsReq" Type="int" />
+  </EntityType>
   <EntityType Name="tblonline_userid_employee">
     <Key>
       <PropertyRef Name="CompanyID" />
@@ -1785,9 +1519,7 @@ warning 6002: The table/view 'def.e4kmaximusdb.tblbus_contact_s27' does not have
     <Property Name="OnlineUserID" Type="varchar" MaxLength="20" Nullable="false" />
     <Property Name="EmployeeID" Type="varchar" MaxLength="10" Nullable="false" />
   </EntityType>
-  <!--Errors Found During Generation:
-warning 6002: The table/view 'def.e4kmaximusdb.tblonline_userid_employee_s27' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-  <EntityType Name="tblonline_userid_employee_s27">
+  <EntityType Name="tblonline_userid_employee_atlasfm">
     <Key>
       <PropertyRef Name="CompanyID" />
       <PropertyRef Name="BusinessID" />
@@ -1819,33 +1551,35 @@ warning 6002: The table/view 'def.e4kmaximusdb.tblonline_userid_employee_s27' do
 warning 6002: The table/view 'def.e4kmaximusdb.tblonlinesop_backorders' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="tblonlinesop_backorders">
     <Key>
+      <PropertyRef Name="PickingSlipNo" />
+      <PropertyRef Name="LineNo" />
       <PropertyRef Name="PickSlipPrinted" />
       <PropertyRef Name="DelNotePrinted" />
       <PropertyRef Name="Cancelled" />
     </Key>
-    <Property Name="CustID" Type="varchar" MaxLength="10" />
+    <Property Name="CustID" Type="varchar" MaxLength="255" />
     <Property Name="OrderNo" Type="int" />
     <Property Name="OrderLine" Type="smallint" />
-    <Property Name="PickingSlipNo" Type="int" />
-    <Property Name="LineNo" Type="int" />
-    <Property Name="StyleID" Type="varchar" MaxLength="25" />
-    <Property Name="ColourID" Type="varchar" MaxLength="15" />
-    <Property Name="SizeID" Type="varchar" MaxLength="10" />
-    <Property Name="DatePicked" Type="timestamp" Precision="0" />
+    <Property Name="PickingSlipNo" Type="int" Nullable="false" />
+    <Property Name="LineNo" Type="int" Nullable="false" />
+    <Property Name="StyleID" Type="varchar" MaxLength="255" />
+    <Property Name="ColourID" Type="varchar" MaxLength="255" />
+    <Property Name="SizeID" Type="varchar" MaxLength="255" />
+    <Property Name="DatePicked" Type="datetime" Precision="0" />
     <Property Name="OrdQty" Type="int" />
     <Property Name="AllQty" Type="int" />
     <Property Name="PickSlipPrinted" Type="bool" Nullable="false" />
     <Property Name="DelNotePrinted" Type="bool" Nullable="false" />
     <Property Name="Cancelled" Type="bool" Nullable="false" />
-    <Property Name="CustomerName" Type="varchar" MaxLength="100" />
-    <Property Name="CompanyName" Type="varchar" MaxLength="40" />
+    <Property Name="CustomerName" Type="varchar" MaxLength="255" />
+    <Property Name="CompanyName" Type="varchar" MaxLength="255" />
     <Property Name="FullDate" Type="varchar" MaxLength="255" />
-    <Property Name="DelDesc" Type="varchar" MaxLength="50" />
-    <Property Name="DelAddress1" Type="varchar" MaxLength="50" />
-    <Property Name="CustRef" Type="varchar" MaxLength="50" />
-    <Property Name="Value1" Type="decimal" Precision="19" Scale="2" />
+    <Property Name="DelDesc" Type="varchar" MaxLength="255" />
+    <Property Name="DelAddress1" Type="varchar" MaxLength="255" />
+    <Property Name="CustRef" Type="varchar" MaxLength="255" />
+    <Property Name="Value1" Type="double" />
     <Property Name="DueDate" Type="datetime" Precision="0" />
-    <Property Name="CommentsExternal" Type="varchar" MaxLength="255" />
+    <Property Name="CommentsExternal" Type="longtext" />
   </EntityType>
   <EntityType Name="tblonlinesop_carriage">
     <Key>
@@ -2509,9 +2243,7 @@ warning 6002: The table/view 'def.e4kmaximusdb.tblonlinesop_backorders' does not
     <Property Name="ReturnOrderNo" Type="bigint" />
     <Property Name="ReturnLineNo" Type="bigint" />
   </EntityType>
-  <!--Errors Found During Generation:
-warning 6002: The table/view 'def.e4kmaximusdb.tblsop_salesorder_detail_bk' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-  <EntityType Name="tblsop_salesorder_detail_bk">
+  <EntityType Name="tblsop_salesorder_detail_atlasfm">
     <Key>
       <PropertyRef Name="CompanyID" />
       <PropertyRef Name="OrderNo" />
@@ -2800,9 +2532,7 @@ warning 6002: The table/view 'def.e4kmaximusdb.tblsop_salesorder_detail_console'
     <Property Name="EmailID" Type="varchar" MaxLength="200" />
     <Property Name="ContactName" Type="varchar" MaxLength="150" />
   </EntityType>
-  <!--Errors Found During Generation:
-warning 6002: The table/view 'def.e4kmaximusdb.tblsop_salesorder_header_bk' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
-  <EntityType Name="tblsop_salesorder_header_bk">
+  <EntityType Name="tblsop_salesorder_header_atlasfm">
     <Key>
       <PropertyRef Name="CompanyID" />
       <PropertyRef Name="OrderNo" />
@@ -2874,6 +2604,8 @@ warning 6002: The table/view 'def.e4kmaximusdb.tblsop_salesorder_header_bk' does
     <Property Name="ProFormaPrint" Type="tinyint" />
     <Property Name="ConfirmPrint" Type="tinyint" />
     <Property Name="OrderType" Type="varchar" MaxLength="2" />
+    <Property Name="EmailID" Type="varchar" MaxLength="200" />
+    <Property Name="ContactName" Type="varchar" MaxLength="150" />
   </EntityType>
   <!--Errors Found During Generation:
 warning 6002: The table/view 'def.e4kmaximusdb.tblsop_salesorder_header_console' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -3259,20 +2991,20 @@ warning 6002: The table/view 'def.e4kmaximusdb.tblupload_orderheader' does not h
     <Property Name="CompanyID" Type="varchar" MaxLength="3" Nullable="false" />
     <Property Name="WarehouseID" Type="varchar" MaxLength="10" Nullable="false" />
     <Property Name="WarehouseName" Type="varchar" MaxLength="50" />
-    <Property Name="LocationControled" Type="bit" Nullable="false" />
+    <Property Name="LocationControled" Type="bool" Nullable="false" />
     <Property Name="NoOfAisles" Type="int" />
     <Property Name="NoOfBays" Type="int" />
     <Property Name="NoOfShelfs" Type="int" />
-    <Property Name="DateCreated" Type="timestamp" Precision="6" />
+    <Property Name="DateCreated" Type="timestamp" Precision="0" />
     <Property Name="CreatedBy" Type="varchar" MaxLength="20" />
     <Property Name="UpdateBy" Type="varchar" MaxLength="20" />
-    <Property Name="DateUpdated" Type="timestamp" Precision="6" />
+    <Property Name="DateUpdated" Type="timestamp" Precision="0" />
     <Property Name="Address1" Type="varchar" MaxLength="50" />
     <Property Name="Address2" Type="varchar" MaxLength="50" />
     <Property Name="Address3" Type="varchar" MaxLength="50" />
     <Property Name="Address4" Type="varchar" MaxLength="50" />
     <Property Name="PostCode" Type="varchar" MaxLength="15" />
-    <Property Name="Live" Type="bit" Nullable="false" />
+    <Property Name="Live" Type="bool" Nullable="false" />
     <Property Name="Phone" Type="varchar" MaxLength="15" />
     <Property Name="Fax" Type="varchar" MaxLength="15" />
     <Property Name="Email" Type="varchar" MaxLength="50" />
@@ -3444,6 +3176,35 @@ warning 6002: The table/view 'def.e4kmaximusdb.ucode_employee_rollout_tsb' does 
     <Property Name="ordertype" Type="varchar" MaxLength="2" />
   </EntityType>
   <!--Errors Found During Generation:
+warning 6002: The table/view 'def.e4kmaximusdb.dim_fit_nongroup_styles' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="dim_fit_nongroup_styles">
+    <Key>
+      <PropertyRef Name="CompanyID" />
+      <PropertyRef Name="WareHouseID" />
+      <PropertyRef Name="FreeTextType" />
+      <PropertyRef Name="StyleId" />
+    </Key>
+    <Property Name="CompanyID" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="WareHouseID" Type="varchar" MaxLength="10" Nullable="false" />
+    <Property Name="FreeTextType" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="FreeText" Type="text" />
+    <Property Name="StyleId" Type="varchar" MaxLength="25" Nullable="false" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'def.e4kmaximusdb.dim_fit_styles' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="dim_fit_styles">
+    <Key>
+      <PropertyRef Name="CompanyID" />
+      <PropertyRef Name="WareHouseID" />
+      <PropertyRef Name="FreeTextType" />
+    </Key>
+    <Property Name="CompanyID" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="WareHouseID" Type="varchar" MaxLength="10" Nullable="false" />
+    <Property Name="FreeTextType" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="FreeText" Type="text" />
+    <Property Name="StyleIDs" Type="text" />
+  </EntityType>
+  <!--Errors Found During Generation:
 warning 6002: The table/view 'def.e4kmaximusdb.getallassemblies' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="getallassemblies">
     <Key>
@@ -3584,6 +3345,21 @@ warning 6002: The table/view 'def.e4kmaximusdb.product_obsolete' does not have a
     <Property Name="obsoletecode" Type="bigint" />
   </EntityType>
   <!--Errors Found During Generation:
+warning 6002: The table/view 'def.e4kmaximusdb.productlist' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="productlist">
+    <Key>
+      <PropertyRef Name="CompanyID" />
+      <PropertyRef Name="StyleID" />
+      <PropertyRef Name="ColourID" />
+      <PropertyRef Name="SizeID" />
+    </Key>
+    <Property Name="CompanyID" Type="varchar" MaxLength="3" Nullable="false" />
+    <Property Name="StyleID" Type="varchar" MaxLength="25" Nullable="false" />
+    <Property Name="ColourID" Type="varchar" MaxLength="15" Nullable="false" />
+    <Property Name="SizeID" Type="varchar" MaxLength="10" Nullable="false" />
+    <Property Name="SeqNo" Type="smallint" />
+  </EntityType>
+  <!--Errors Found During Generation:
 warning 6002: The table/view 'def.e4kmaximusdb.style_dimfitalloc_caption' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="style_dimfitalloc_caption">
     <Key>
@@ -3605,6 +3381,21 @@ warning 6002: The table/view 'def.e4kmaximusdb.styleby_freetextview' does not ha
     <Property Name="FreeText" Type="text" />
   </EntityType>
   <!--Errors Found During Generation:
+warning 6002: The table/view 'def.e4kmaximusdb.tblfskstyle_dimension1' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="tblfskstyle_dimension1">
+    <Key>
+      <PropertyRef Name="CompanyId" />
+      <PropertyRef Name="StyleId" />
+      <PropertyRef Name="freetexttype" />
+    </Key>
+    <Property Name="CompanyId" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="FreeText" Type="text" />
+    <Property Name="StyleId" Type="varchar" MaxLength="25" Nullable="false" />
+    <Property Name="freetexttype" Type="varchar" MaxLength="50" Nullable="false" />
+    <Property Name="StyleImage" Type="varchar" MaxLength="255" />
+    <Property Name="Description" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <!--Errors Found During Generation:
 warning 6002: The table/view 'def.e4kmaximusdb.ucodeby_freetextview' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="ucodeby_freetextview">
     <Key>
@@ -3620,6 +3411,363 @@ warning 6002: The table/view 'def.e4kmaximusdb.ucodeby_freetextview' does not ha
     <Property Name="UCodeID" Type="varchar" MaxLength="15" Nullable="false" />
     <Property Name="SeqNo" Type="int" />
   </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'def.e4kmaximusdb.unrelatedorders' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="unrelatedorders">
+    <Key>
+      <PropertyRef Name="OrderNo" />
+    </Key>
+    <Property Name="OrderNo" Type="bigint" Nullable="false" />
+    <Property Name="CustID" Type="varchar" MaxLength="10" />
+    <Property Name="OrderDate" Type="date" />
+    <Property Name="PinNo" Type="varchar" MaxLength="50" />
+    <Property Name="Forename" Type="varchar" MaxLength="80" />
+    <Property Name="Surname" Type="varchar" MaxLength="80" />
+    <Property Name="UCodeId" Type="varchar" MaxLength="50" />
+    <Property Name="StyleID" Type="varchar" MaxLength="25" />
+    <Property Name="OrdQty" Type="bigint" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'def.e4kmaximusdb.view_manpack' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="view_manpack">
+    <Key>
+      <PropertyRef Name="ManPackNo" />
+      <PropertyRef Name="CompanyID" />
+    </Key>
+    <Property Name="ManPackNo" Type="bigint" Nullable="false" />
+    <Property Name="ManpackDate" Type="date" />
+    <Property Name="TotalGoods" Type="double" />
+    <Property Name="OrderGoods" Type="double" />
+    <Property Name="CustID" Type="varchar" MaxLength="10" />
+    <Property Name="CompanyID" Type="varchar" MaxLength="3" Nullable="false" />
+    <Property Name="OnlineUserID" Type="varchar" MaxLength="30" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'def.e4kmaximusdb.view_noorderplacedforthisemployee' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="view_noorderplacedforthisemployee">
+    <Key>
+      <PropertyRef Name="BusinessID" />
+      <PropertyRef Name="UCodeID" />
+      <PropertyRef Name="EmployeeID" />
+      <PropertyRef Name="UserName" />
+    </Key>
+    <Property Name="BusinessID" Type="varchar" MaxLength="10" Nullable="false" />
+    <Property Name="UCodeID" Type="varchar" MaxLength="15" Nullable="false" />
+    <Property Name="EmployeeID" Type="varchar" MaxLength="10" Nullable="false" />
+    <Property Name="Forename" Type="varchar" MaxLength="80" />
+    <Property Name="Surname" Type="varchar" MaxLength="80" />
+    <Property Name="UserName" Type="varchar" MaxLength="150" Nullable="false" />
+    <Property Name="Password" Type="varchar" MaxLength="50" />
+    <Property Name="AccessID" Type="varchar" MaxLength="50" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'def.e4kmaximusdb.view_normatucodereissueorder' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="view_normatucodereissueorder">
+    <Key>
+      <PropertyRef Name="CompanyID" />
+      <PropertyRef Name="OrderNo" />
+    </Key>
+    <Property Name="CompanyID" Type="varchar" MaxLength="3" Nullable="false" />
+    <Property Name="WarehouseID" Type="varchar" MaxLength="50" />
+    <Property Name="OrderNo" Type="bigint" Nullable="false" />
+    <Property Name="CustID" Type="varchar" MaxLength="10" />
+    <Property Name="OrderDate" Type="date" />
+    <Property Name="InvDesc" Type="varchar" MaxLength="50" />
+    <Property Name="InvAddress1" Type="varchar" MaxLength="50" />
+    <Property Name="InvAddress2" Type="varchar" MaxLength="50" />
+    <Property Name="InvAddress3" Type="varchar" MaxLength="50" />
+    <Property Name="InvCity" Type="varchar" MaxLength="50" />
+    <Property Name="InvTown" Type="varchar" MaxLength="50" />
+    <Property Name="InvPostCode" Type="varchar" MaxLength="50" />
+    <Property Name="InvCountry" Type="varchar" MaxLength="50" />
+    <Property Name="DelDesc" Type="varchar" MaxLength="50" />
+    <Property Name="DelAddress1" Type="varchar" MaxLength="50" />
+    <Property Name="DelAddress2" Type="varchar" MaxLength="50" />
+    <Property Name="DelAddress3" Type="varchar" MaxLength="50" />
+    <Property Name="DelCity" Type="varchar" MaxLength="50" />
+    <Property Name="DelTown" Type="varchar" MaxLength="50" />
+    <Property Name="DelPostCode" Type="varchar" MaxLength="50" />
+    <Property Name="DelCountry" Type="varchar" MaxLength="50" />
+    <Property Name="CustRef" Type="varchar" MaxLength="50" />
+    <Property Name="ContractRef" Type="varchar" MaxLength="50" />
+    <Property Name="Comments" Type="varchar" MaxLength="250" />
+    <Property Name="InvoiceDate" Type="date" />
+    <Property Name="Carrier" Type="varchar" MaxLength="12" />
+    <Property Name="CarrierCharge" Type="decimal" Precision="20" Scale="4" />
+    <Property Name="CustDisc" Type="double" />
+    <Property Name="SettDisc" Type="double" />
+    <Property Name="VolDisc" Type="double" />
+    <Property Name="SettlementDays" Type="int" />
+    <Property Name="OrderConfirm" Type="utinyint" />
+    <Property Name="CommentsExternal" Type="varchar" MaxLength="250" />
+    <Property Name="Cancelled" Type="tinyint" />
+    <Property Name="ProForma" Type="tinyint" />
+    <Property Name="Completed" Type="tinyint" />
+    <Property Name="WorksOrderNo" Type="double" />
+    <Property Name="AllowPartShipment" Type="tinyint" />
+    <Property Name="TotalGoods" Type="double" />
+    <Property Name="OrderGoods" Type="double" />
+    <Property Name="UserID" Type="varchar" MaxLength="20" />
+    <Property Name="pRINTINVOICE" Type="tinyint" />
+    <Property Name="Currency_Exchange_Rate" Type="double" />
+    <Property Name="PinNo" Type="varchar" MaxLength="50" />
+    <Property Name="UCodeId" Type="varchar" MaxLength="50" />
+    <Property Name="ContractNo" Type="varchar" MaxLength="50" />
+    <Property Name="Currency_Exchange_Code" Type="varchar" MaxLength="50" />
+    <Property Name="TIMEOFENTRY" Type="time" Precision="0" />
+    <Property Name="RepID" Type="bigint" />
+    <Property Name="RepNo" Type="bigint" />
+    <Property Name="OnlineConfirm" Type="tinyint" />
+    <Property Name="OnlineConfirmDate" Type="datetime" Precision="0" />
+    <Property Name="OnlineConfirmedBy" Type="varchar" MaxLength="50" />
+    <Property Name="OnlineProcessed" Type="tinyint" />
+    <Property Name="OnlineProcessedDate" Type="datetime" Precision="0" />
+    <Property Name="OnlineProcessedBy" Type="varchar" MaxLength="50" />
+    <Property Name="ReasonCode" Type="int" />
+    <Property Name="OnlineUserID" Type="varchar" MaxLength="30" />
+    <Property Name="OrderAnalysisCode1" Type="varchar" MaxLength="30" />
+    <Property Name="OrderAnalysisCode2" Type="varchar" MaxLength="30" />
+    <Property Name="OrderAnalysisCode3" Type="varchar" MaxLength="30" />
+    <Property Name="OrderAnalysisCode4" Type="varchar" MaxLength="30" />
+    <Property Name="OrderAnalysisCode5" Type="varchar" MaxLength="30" />
+    <Property Name="PrintLabel" Type="tinyint" />
+    <Property Name="ProFormaPrint" Type="tinyint" />
+    <Property Name="ConfirmPrint" Type="tinyint" />
+    <Property Name="OrderType" Type="varchar" MaxLength="2" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'def.e4kmaximusdb.view_order_freetext_tsb_rollout' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="view_order_freetext_tsb_rollout">
+    <Key>
+      <PropertyRef Name="OrderNo" />
+    </Key>
+    <Property Name="OrderNo" Type="bigint" Nullable="false" />
+    <Property Name="PinNo" Type="varchar" MaxLength="50" />
+    <Property Name="UCodeId" Type="varchar" MaxLength="50" />
+    <Property Name="FreeText" Type="text" />
+    <Property Name="OrdQty" Type="decimal" Precision="41" Scale="0" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'def.e4kmaximusdb.view_privateorder_pendings' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="view_privateorder_pendings">
+    <Key>
+      <PropertyRef Name="CompanyID" />
+      <PropertyRef Name="OrderNo" />
+      <PropertyRef Name="SeqNo" />
+    </Key>
+    <Property Name="CompanyID" Type="varchar" MaxLength="3" Nullable="false" />
+    <Property Name="CustID" Type="varchar" MaxLength="10" />
+    <Property Name="OrderNo" Type="bigint" Nullable="false" />
+    <Property Name="OrderDate" Type="date" />
+    <Property Name="TotalGoods" Type="double" />
+    <Property Name="VAT" Type="double" />
+    <Property Name="OrderGoods" Type="double" />
+    <Property Name="txn_id" Type="varchar" MaxLength="50" />
+    <Property Name="txn_Ip" Type="varchar" MaxLength="45" />
+    <Property Name="rsp_date" Type="datetime" Precision="0" />
+    <Property Name="rsp_status" Type="varchar" MaxLength="20" />
+    <Property Name="GatewayImg" Type="text" />
+    <Property Name="GatewayName" Type="varchar" MaxLength="100" />
+    <Property Name="SeqNo" Type="int" Nullable="false" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'def.e4kmaximusdb.view_privateorders' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="view_privateorders">
+    <Key>
+      <PropertyRef Name="CompanyID" />
+      <PropertyRef Name="OrderNo" />
+    </Key>
+    <Property Name="CompanyID" Type="varchar" MaxLength="3" Nullable="false" />
+    <Property Name="WarehouseID" Type="varchar" MaxLength="50" />
+    <Property Name="OrderNo" Type="bigint" Nullable="false" />
+    <Property Name="CustID" Type="varchar" MaxLength="10" />
+    <Property Name="OrderDate" Type="date" />
+    <Property Name="InvDesc" Type="varchar" MaxLength="50" />
+    <Property Name="InvAddress1" Type="varchar" MaxLength="50" />
+    <Property Name="InvAddress2" Type="varchar" MaxLength="50" />
+    <Property Name="InvAddress3" Type="varchar" MaxLength="50" />
+    <Property Name="InvCity" Type="varchar" MaxLength="50" />
+    <Property Name="InvTown" Type="varchar" MaxLength="50" />
+    <Property Name="InvPostCode" Type="varchar" MaxLength="50" />
+    <Property Name="InvCountry" Type="varchar" MaxLength="50" />
+    <Property Name="DelDesc" Type="varchar" MaxLength="50" />
+    <Property Name="DelAddress1" Type="varchar" MaxLength="50" />
+    <Property Name="DelAddress2" Type="varchar" MaxLength="50" />
+    <Property Name="DelAddress3" Type="varchar" MaxLength="50" />
+    <Property Name="DelCity" Type="varchar" MaxLength="50" />
+    <Property Name="DelTown" Type="varchar" MaxLength="50" />
+    <Property Name="DelPostCode" Type="varchar" MaxLength="50" />
+    <Property Name="DelCountry" Type="varchar" MaxLength="50" />
+    <Property Name="CustRef" Type="varchar" MaxLength="50" />
+    <Property Name="ContractRef" Type="varchar" MaxLength="50" />
+    <Property Name="Comments" Type="varchar" MaxLength="250" />
+    <Property Name="InvoiceDate" Type="date" />
+    <Property Name="Carrier" Type="varchar" MaxLength="12" />
+    <Property Name="CarrierCharge" Type="decimal" Precision="20" Scale="4" />
+    <Property Name="CustDisc" Type="double" />
+    <Property Name="SettDisc" Type="double" />
+    <Property Name="VolDisc" Type="double" />
+    <Property Name="SettlementDays" Type="int" />
+    <Property Name="OrderConfirm" Type="utinyint" />
+    <Property Name="CommentsExternal" Type="varchar" MaxLength="250" />
+    <Property Name="Cancelled" Type="tinyint" />
+    <Property Name="ProForma" Type="tinyint" />
+    <Property Name="Completed" Type="tinyint" />
+    <Property Name="WorksOrderNo" Type="double" />
+    <Property Name="AllowPartShipment" Type="tinyint" />
+    <Property Name="TotalGoods" Type="double" />
+    <Property Name="OrderGoods" Type="double" />
+    <Property Name="UserID" Type="varchar" MaxLength="20" />
+    <Property Name="pRINTINVOICE" Type="tinyint" />
+    <Property Name="Currency_Exchange_Rate" Type="double" />
+    <Property Name="PinNo" Type="varchar" MaxLength="50" />
+    <Property Name="UCodeId" Type="varchar" MaxLength="50" />
+    <Property Name="ContractNo" Type="varchar" MaxLength="50" />
+    <Property Name="Currency_Exchange_Code" Type="varchar" MaxLength="50" />
+    <Property Name="TIMEOFENTRY" Type="time" Precision="0" />
+    <Property Name="RepID" Type="bigint" />
+    <Property Name="RepNo" Type="bigint" />
+    <Property Name="OnlineConfirm" Type="tinyint" />
+    <Property Name="OnlineConfirmDate" Type="datetime" Precision="0" />
+    <Property Name="OnlineConfirmedBy" Type="varchar" MaxLength="50" />
+    <Property Name="OnlineProcessed" Type="tinyint" />
+    <Property Name="OnlineProcessedDate" Type="datetime" Precision="0" />
+    <Property Name="OnlineProcessedBy" Type="varchar" MaxLength="50" />
+    <Property Name="ReasonCode" Type="int" />
+    <Property Name="OnlineUserID" Type="varchar" MaxLength="30" />
+    <Property Name="OrderAnalysisCode1" Type="varchar" MaxLength="30" />
+    <Property Name="OrderAnalysisCode2" Type="varchar" MaxLength="30" />
+    <Property Name="OrderAnalysisCode3" Type="varchar" MaxLength="30" />
+    <Property Name="OrderAnalysisCode4" Type="varchar" MaxLength="30" />
+    <Property Name="OrderAnalysisCode5" Type="varchar" MaxLength="30" />
+    <Property Name="PrintLabel" Type="tinyint" />
+    <Property Name="ProFormaPrint" Type="tinyint" />
+    <Property Name="ConfirmPrint" Type="tinyint" />
+    <Property Name="OrderType" Type="varchar" MaxLength="2" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'def.e4kmaximusdb.view_reissueorderwithnormalucode' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="view_reissueorderwithnormalucode">
+    <Key>
+      <PropertyRef Name="CompanyID" />
+      <PropertyRef Name="OrderNo" />
+    </Key>
+    <Property Name="CompanyID" Type="varchar" MaxLength="3" Nullable="false" />
+    <Property Name="WarehouseID" Type="varchar" MaxLength="50" />
+    <Property Name="OrderNo" Type="bigint" Nullable="false" />
+    <Property Name="CustID" Type="varchar" MaxLength="10" />
+    <Property Name="OrderDate" Type="date" />
+    <Property Name="InvDesc" Type="varchar" MaxLength="50" />
+    <Property Name="InvAddress1" Type="varchar" MaxLength="50" />
+    <Property Name="InvAddress2" Type="varchar" MaxLength="50" />
+    <Property Name="InvAddress3" Type="varchar" MaxLength="50" />
+    <Property Name="InvCity" Type="varchar" MaxLength="50" />
+    <Property Name="InvTown" Type="varchar" MaxLength="50" />
+    <Property Name="InvPostCode" Type="varchar" MaxLength="50" />
+    <Property Name="InvCountry" Type="varchar" MaxLength="50" />
+    <Property Name="DelDesc" Type="varchar" MaxLength="50" />
+    <Property Name="DelAddress1" Type="varchar" MaxLength="50" />
+    <Property Name="DelAddress2" Type="varchar" MaxLength="50" />
+    <Property Name="DelAddress3" Type="varchar" MaxLength="50" />
+    <Property Name="DelCity" Type="varchar" MaxLength="50" />
+    <Property Name="DelTown" Type="varchar" MaxLength="50" />
+    <Property Name="DelPostCode" Type="varchar" MaxLength="50" />
+    <Property Name="DelCountry" Type="varchar" MaxLength="50" />
+    <Property Name="CustRef" Type="varchar" MaxLength="50" />
+    <Property Name="ContractRef" Type="varchar" MaxLength="50" />
+    <Property Name="Comments" Type="varchar" MaxLength="250" />
+    <Property Name="InvoiceDate" Type="date" />
+    <Property Name="Carrier" Type="varchar" MaxLength="12" />
+    <Property Name="CarrierCharge" Type="decimal" Precision="20" Scale="4" />
+    <Property Name="CustDisc" Type="double" />
+    <Property Name="SettDisc" Type="double" />
+    <Property Name="VolDisc" Type="double" />
+    <Property Name="SettlementDays" Type="int" />
+    <Property Name="OrderConfirm" Type="utinyint" />
+    <Property Name="CommentsExternal" Type="varchar" MaxLength="250" />
+    <Property Name="Cancelled" Type="tinyint" />
+    <Property Name="ProForma" Type="tinyint" />
+    <Property Name="Completed" Type="tinyint" />
+    <Property Name="WorksOrderNo" Type="double" />
+    <Property Name="AllowPartShipment" Type="tinyint" />
+    <Property Name="TotalGoods" Type="double" />
+    <Property Name="OrderGoods" Type="double" />
+    <Property Name="UserID" Type="varchar" MaxLength="20" />
+    <Property Name="pRINTINVOICE" Type="tinyint" />
+    <Property Name="Currency_Exchange_Rate" Type="double" />
+    <Property Name="PinNo" Type="varchar" MaxLength="50" />
+    <Property Name="UCodeId" Type="varchar" MaxLength="50" />
+    <Property Name="ContractNo" Type="varchar" MaxLength="50" />
+    <Property Name="Currency_Exchange_Code" Type="varchar" MaxLength="50" />
+    <Property Name="TIMEOFENTRY" Type="time" Precision="0" />
+    <Property Name="RepID" Type="bigint" />
+    <Property Name="RepNo" Type="bigint" />
+    <Property Name="OnlineConfirm" Type="tinyint" />
+    <Property Name="OnlineConfirmDate" Type="datetime" Precision="0" />
+    <Property Name="OnlineConfirmedBy" Type="varchar" MaxLength="50" />
+    <Property Name="OnlineProcessed" Type="tinyint" />
+    <Property Name="OnlineProcessedDate" Type="datetime" Precision="0" />
+    <Property Name="OnlineProcessedBy" Type="varchar" MaxLength="50" />
+    <Property Name="ReasonCode" Type="int" />
+    <Property Name="OnlineUserID" Type="varchar" MaxLength="30" />
+    <Property Name="OrderAnalysisCode1" Type="varchar" MaxLength="30" />
+    <Property Name="OrderAnalysisCode2" Type="varchar" MaxLength="30" />
+    <Property Name="OrderAnalysisCode3" Type="varchar" MaxLength="30" />
+    <Property Name="OrderAnalysisCode4" Type="varchar" MaxLength="30" />
+    <Property Name="OrderAnalysisCode5" Type="varchar" MaxLength="30" />
+    <Property Name="PrintLabel" Type="tinyint" />
+    <Property Name="ProFormaPrint" Type="tinyint" />
+    <Property Name="ConfirmPrint" Type="tinyint" />
+    <Property Name="OrderType" Type="varchar" MaxLength="2" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'def.e4kmaximusdb.view_ucode_freetext_tsb_rollout' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="view_ucode_freetext_tsb_rollout">
+    <Key>
+      <PropertyRef Name="UCodeID" />
+    </Key>
+    <Property Name="UCodeID" Type="varchar" MaxLength="15" Nullable="false" />
+    <Property Name="FreeText" Type="text" />
+    <Property Name="AnnualIssue" Type="decimal" Precision="32" Scale="0" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'def.e4kmaximusdb.view_unmatchedcolourwithorgcolour' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="view_unmatchedcolourwithorgcolour">
+    <Key>
+      <PropertyRef Name="OrderNo" />
+      <PropertyRef Name="OrgColourID" />
+    </Key>
+    <Property Name="PinNo" Type="varchar" MaxLength="50" />
+    <Property Name="UCodeId" Type="varchar" MaxLength="50" />
+    <Property Name="CustID" Type="varchar" MaxLength="10" />
+    <Property Name="OrderNo" Type="bigint" Nullable="false" />
+    <Property Name="ReturnOrderNo" Type="bigint" />
+    <Property Name="OriginalOrderNo" Type="bigint" />
+    <Property Name="OrderDate" Type="date" />
+    <Property Name="StyleID" Type="varchar" MaxLength="25" />
+    <Property Name="ColourID" Type="varchar" MaxLength="15" />
+    <Property Name="SizeID" Type="varchar" MaxLength="10" />
+    <Property Name="OrdQty" Type="bigint" />
+    <Property Name="OrgColourID" Type="varchar" MaxLength="15" Nullable="false" />
+  </EntityType>
+  <!--Errors Found During Generation:
+warning 6002: The table/view 'def.e4kmaximusdb.view_unmatchedordercolourid' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+  <EntityType Name="view_unmatchedordercolourid">
+    <Key>
+      <PropertyRef Name="OrderNo" />
+    </Key>
+    <Property Name="UCodeId" Type="varchar" MaxLength="50" />
+    <Property Name="CustID" Type="varchar" MaxLength="10" />
+    <Property Name="OrderNo" Type="bigint" Nullable="false" />
+    <Property Name="ReturnOrderNo" Type="bigint" />
+    <Property Name="OriginalOrderNo" Type="bigint" />
+    <Property Name="OrderDate" Type="date" />
+    <Property Name="StyleID" Type="varchar" MaxLength="25" />
+    <Property Name="ColourID" Type="varchar" MaxLength="15" />
+    <Property Name="SizeID" Type="varchar" MaxLength="10" />
+    <Property Name="OrdQty" Type="bigint" />
+    <Property Name="PinNo" Type="varchar" MaxLength="50" />
+  </EntityType>
   <Function Name="bk_CreateCube_OrderDetail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="e4kmaximusdb" />
   <Function Name="CreateCube_EmployeeCard" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="e4kmaximusdb" />
   <Function Name="CreateCube_OrderDetail" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="e4kmaximusdb" />
@@ -3628,6 +3776,10 @@ warning 6002: The table/view 'def.e4kmaximusdb.ucodeby_freetextview' does not ha
   <Function Name="createCube_summary" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="e4kmaximusdb" />
   <Function Name="create_all_cubes1" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="e4kmaximusdb" />
   <Function Name="create_all_cubes2" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="e4kmaximusdb" />
+  <Function Name="GetBusAddressId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="e4kmaximusdb">
+    <Parameter Name="empId" Type="varchar" Mode="In" />
+    <Parameter Name="busId" Type="varchar" Mode="In" />
+  </Function>
   <Function Name="getColorProcedure" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="e4kmaximusdb">
     <Parameter Name="style" Type="varchar" Mode="In" />
   </Function>
@@ -3641,44 +3793,23 @@ warning 6002: The table/view 'def.e4kmaximusdb.ucodeby_freetextview' does not ha
     <Parameter Name="empId" Type="varchar" Mode="In" />
     <Parameter Name="busId" Type="varchar" Mode="In" />
   </Function>
+  <Function Name="GetEmployeebyId" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="e4kmaximusdb">
+    <Parameter Name="busId" Type="varchar" Mode="In" />
+    <Parameter Name="empId" Type="varchar" Mode="In" />
+  </Function>
   <Function Name="GetEmployeeByRole" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="e4kmaximusdb">
     <Parameter Name="pCompanyID" Type="varchar" Mode="In" />
     <Parameter Name="pCustID" Type="varchar" Mode="In" />
     <Parameter Name="pUserID" Type="varchar" Mode="In" />
     <Parameter Name="pRole" Type="varchar" Mode="In" />
   </Function>
-  <Function Name="GetEmployeeDetailnAddProcedure" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="e4kmaximusdb">
-    <Parameter Name="busId" Type="varchar" Mode="In" />
-  </Function>
-  <Function Name="GetEmployeeDetailsProcedure" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="e4kmaximusdb">
-    <Parameter Name="busId" Type="varchar" Mode="In" />
-  </Function>
-  <Function Name="getHighLevelUser" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="e4kmaximusdb">
-    <Parameter Name="p_Users" Type="text" Mode="In" />
-    <Parameter Name="p_CustID" Type="varchar" Mode="In" />
-  </Function>
-  <Function Name="getSizeColorchangeProcedure" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="e4kmaximusdb">
-    <Parameter Name="style" Type="varchar" Mode="In" />
-  </Function>
-  <Function Name="getSizeProcedure" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="e4kmaximusdb">
-    <Parameter Name="style" Type="varchar" Mode="In" />
-  </Function>
-  <Function Name="getSize_prod" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="e4kmaximusdb">
-    <Parameter Name="style" Type="varchar" Mode="In" />
+  <Function Name="GetEmployeeByRoles1" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="e4kmaximusdb">
+    <Parameter Name="pCompanyID" Type="varchar" Mode="In" />
+    <Parameter Name="pCustID" Type="varchar" Mode="In" />
+    <Parameter Name="pUserID" Type="varchar" Mode="In" />
+    <Parameter Name="pRole" Type="varchar" Mode="In" />
   </Function>
   <EntityContainer Name="e4kmaximusdbModelStoreContainer">
-    <EntitySet Name="hr_emplo_ve" EntityType="Self.hr_emplo_ve" Schema="e4kmaximusdb" store:Type="Tables" />
-    <EntitySet Name="hr_tremot02" EntityType="Self.hr_tremot02" Schema="e4kmaximusdb" store:Type="Tables" />
-    <EntitySet Name="hr_tremot02_derbyf" EntityType="Self.hr_tremot02_derbyf" Schema="e4kmaximusdb" store:Type="Tables" />
-    <EntitySet Name="hr_tremot02_derbym" EntityType="Self.hr_tremot02_derbym" Schema="e4kmaximusdb" store:Type="Tables" />
-    <EntitySet Name="hr_tremot02_langleyf" EntityType="Self.hr_tremot02_langleyf" Schema="e4kmaximusdb" store:Type="Tables" />
-    <EntitySet Name="hr_tremot02_langleym" EntityType="Self.hr_tremot02_langleym" Schema="e4kmaximusdb" store:Type="Tables" />
-    <EntitySet Name="hr_tremot02_nottmf" EntityType="Self.hr_tremot02_nottmf" Schema="e4kmaximusdb" store:Type="Tables" />
-    <EntitySet Name="hr_tremot02_nottmm" EntityType="Self.hr_tremot02_nottmm" Schema="e4kmaximusdb" store:Type="Tables" />
-    <EntitySet Name="hr_tremot02_suttonf" EntityType="Self.hr_tremot02_suttonf" Schema="e4kmaximusdb" store:Type="Tables" />
-    <EntitySet Name="hr_tremot02_suttonm" EntityType="Self.hr_tremot02_suttonm" Schema="e4kmaximusdb" store:Type="Tables" />
-    <EntitySet Name="hr_tsb_reldates" EntityType="Self.hr_tsb_reldates" Schema="e4kmaximusdb" store:Type="Tables" />
-    <EntitySet Name="hr_tsb_release" EntityType="Self.hr_tsb_release" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="my_aspnet_applications" EntityType="Self.my_aspnet_applications" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="my_aspnet_membership" EntityType="Self.my_aspnet_membership" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="my_aspnet_paths" EntityType="Self.my_aspnet_paths" Schema="e4kmaximusdb" store:Type="Tables" />
@@ -3691,31 +3822,35 @@ warning 6002: The table/view 'def.e4kmaximusdb.ucodeby_freetextview' does not ha
     <EntitySet Name="my_aspnet_sitemap" EntityType="Self.my_aspnet_sitemap" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="my_aspnet_users" EntityType="Self.my_aspnet_users" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="my_aspnet_usersinroles" EntityType="Self.my_aspnet_usersinroles" Schema="e4kmaximusdb" store:Type="Tables" />
-    <EntitySet Name="tbl_employee_s27_hr" EntityType="Self.tbl_employee_s27_hr" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tblacc_vatcodes" EntityType="Self.tblacc_vatcodes" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tblaccemp_budget" EntityType="Self.tblaccemp_budget" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tblaccemp_budgetcard" EntityType="Self.tblaccemp_budgetcard" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tblaccemp_departments" EntityType="Self.tblaccemp_departments" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tblaccemp_employee" EntityType="Self.tblaccemp_employee" Schema="e4kmaximusdb" store:Type="Tables" />
+    <EntitySet Name="tblaccemp_employee_atlasfm" EntityType="Self.tblaccemp_employee_atlasfm" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tblaccemp_employee_rollout" EntityType="Self.tblaccemp_employee_rollout" Schema="e4kmaximusdb" store:Type="Tables" />
+    <EntitySet Name="tblaccemp_employee_rollout_atlasfm" EntityType="Self.tblaccemp_employee_rollout_atlasfm" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tblaccemp_points" EntityType="Self.tblaccemp_points" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tblaccemp_pointscard" EntityType="Self.tblaccemp_pointscard" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tblaccemp_rollout_names" EntityType="Self.tblaccemp_rollout_names" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tblaccemp_rollout_ucode_ref" EntityType="Self.tblaccemp_rollout_ucode_ref" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tblaccemp_stockcard" EntityType="Self.tblaccemp_stockcard" Schema="e4kmaximusdb" store:Type="Tables" />
+    <EntitySet Name="tblaccemp_stockcard_atlasfm" EntityType="Self.tblaccemp_stockcard_atlasfm" Schema="e4kmaximusdb" store:Type="Tables" />
+    <EntitySet Name="tblaccemp_stylepoints" EntityType="Self.tblaccemp_stylepoints" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tblaccemp_ucode_reasons" EntityType="Self.tblaccemp_ucode_reasons" Schema="e4kmaximusdb" store:Type="Tables" />
+    <EntitySet Name="tblaccemp_ucodepoints" EntityType="Self.tblaccemp_ucodepoints" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tblaccemp_ucodes" EntityType="Self.tblaccemp_ucodes" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tblaccemp_ucodes_desc" EntityType="Self.tblaccemp_ucodes_desc" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tblaccemp_ucodes_dimension" EntityType="Self.tblaccemp_ucodes_dimension" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tblaccemp_ucodes_hours" EntityType="Self.tblaccemp_ucodes_hours" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tblaccemp_ucodesemployees" EntityType="Self.tblaccemp_ucodesemployees" Schema="e4kmaximusdb" store:Type="Tables" />
+    <EntitySet Name="tblaccemp_ucodesemployees_atlasfm" EntityType="Self.tblaccemp_ucodesemployees_atlasfm" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tblaccesslevels" EntityType="Self.tblaccesslevels" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tbladmin" EntityType="Self.tbladmin" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tblasm_assemblydetail" EntityType="Self.tblasm_assemblydetail" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tblasm_assemblyheader" EntityType="Self.tblasm_assemblyheader" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tblbus_account" EntityType="Self.tblbus_account" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tblbus_address" EntityType="Self.tblbus_address" Schema="e4kmaximusdb" store:Type="Tables" />
-    <EntitySet Name="tblbus_address_copy" EntityType="Self.tblbus_address_copy" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tblbus_addresstype_ref" EntityType="Self.tblbus_addresstype_ref" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tblbus_addresstypes" EntityType="Self.tblbus_addresstypes" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tblbus_business" EntityType="Self.tblbus_business" Schema="e4kmaximusdb" store:Type="Tables" />
@@ -3725,8 +3860,6 @@ warning 6002: The table/view 'def.e4kmaximusdb.ucodeby_freetextview' does not ha
     <EntitySet Name="tblbus_countrycodes" EntityType="Self.tblbus_countrycodes" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tblbus_groups_ref" EntityType="Self.tblbus_groups_ref" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tblbus_online_orderref_nominal" EntityType="Self.tblbus_online_orderref_nominal" Schema="e4kmaximusdb" store:Type="Tables" />
-    <EntitySet Name="tblbus_settings" EntityType="Self.tblbus_settings" Schema="e4kmaximusdb" store:Type="Tables" />
-    <EntitySet Name="tblbus_settings_copy" EntityType="Self.tblbus_settings_copy" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tblbus_setvalues" EntityType="Self.tblbus_setvalues" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tblbus_styles" EntityType="Self.tblbus_styles" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tblchildmenu" EntityType="Self.tblchildmenu" Schema="e4kmaximusdb" store:Type="Tables" />
@@ -3761,6 +3894,8 @@ warning 6002: The table/view 'def.e4kmaximusdb.ucodeby_freetextview' does not ha
     <EntitySet Name="tblfsk_unitofmeasure" EntityType="Self.tblfsk_unitofmeasure" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tblfsk_unitofmeasure_customer" EntityType="Self.tblfsk_unitofmeasure_customer" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tblfsk_unitofmeasureconversion" EntityType="Self.tblfsk_unitofmeasureconversion" Schema="e4kmaximusdb" store:Type="Tables" />
+    <EntitySet Name="tblfskstyle_dimension" EntityType="Self.tblfskstyle_dimension" Schema="e4kmaximusdb" store:Type="Tables" />
+    <EntitySet Name="tblfskstyle_dimension1_" EntityType="Self.tblfskstyle_dimension1_" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tblfstk_feature" EntityType="Self.tblfstk_feature" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tblfstk_featureoption_type" EntityType="Self.tblfstk_featureoption_type" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tblgen_autonumbers" EntityType="Self.tblgen_autonumbers" Schema="e4kmaximusdb" store:Type="Tables" />
@@ -3771,11 +3906,12 @@ warning 6002: The table/view 'def.e4kmaximusdb.ucodeby_freetextview' does not ha
     <EntitySet Name="tblgen_user_parameters" EntityType="Self.tblgen_user_parameters" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tblgen_users" EntityType="Self.tblgen_users" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tbllanguages" EntityType="Self.tbllanguages" Schema="e4kmaximusdb" store:Type="Tables" />
-    <EntitySet Name="tblonline_emp_address_copy" EntityType="Self.tblonline_emp_address_copy" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tblonline_holidays" EntityType="Self.tblonline_holidays" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tblonline_rolloutorders_config" EntityType="Self.tblonline_rolloutorders_config" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tblonline_rolloutorders_reqstatus" EntityType="Self.tblonline_rolloutorders_reqstatus" Schema="e4kmaximusdb" store:Type="Tables" />
+    <EntitySet Name="tblonline_rolloutorders_reqstatus_atlasfm" EntityType="Self.tblonline_rolloutorders_reqstatus_atlasfm" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tblonline_userid_employee" EntityType="Self.tblonline_userid_employee" Schema="e4kmaximusdb" store:Type="Tables" />
+    <EntitySet Name="tblonline_userid_employee_atlasfm" EntityType="Self.tblonline_userid_employee_atlasfm" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tblonline_userid_favourites" EntityType="Self.tblonline_userid_favourites" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tblonlinesop_carriage" EntityType="Self.tblonlinesop_carriage" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tblonlinesop_sitecode" EntityType="Self.tblonlinesop_sitecode" Schema="e4kmaximusdb" store:Type="Tables" />
@@ -3814,9 +3950,11 @@ warning 6002: The table/view 'def.e4kmaximusdb.ucodeby_freetextview' does not ha
     <EntitySet Name="tblsop_return_reasoncodes_customer" EntityType="Self.tblsop_return_reasoncodes_customer" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tblsop_salesorder_approved" EntityType="Self.tblsop_salesorder_approved" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tblsop_salesorder_detail" EntityType="Self.tblsop_salesorder_detail" Schema="e4kmaximusdb" store:Type="Tables" />
+    <EntitySet Name="tblsop_salesorder_detail_atlasfm" EntityType="Self.tblsop_salesorder_detail_atlasfm" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tblsop_salesorder_detail_offline" EntityType="Self.tblsop_salesorder_detail_offline" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tblsop_salesorder_detail_tremot02" EntityType="Self.tblsop_salesorder_detail_tremot02" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tblsop_salesorder_header" EntityType="Self.tblsop_salesorder_header" Schema="e4kmaximusdb" store:Type="Tables" />
+    <EntitySet Name="tblsop_salesorder_header_atlasfm" EntityType="Self.tblsop_salesorder_header_atlasfm" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tblsop_salesorder_header_offline" EntityType="Self.tblsop_salesorder_header_offline" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tblsop_salesorder_header_tremot02" EntityType="Self.tblsop_salesorder_header_tremot02" Schema="e4kmaximusdb" store:Type="Tables" />
     <EntitySet Name="tblsqlstrings" EntityType="Self.tblsqlstrings" Schema="e4kmaximusdb" store:Type="Tables" />
@@ -3862,184 +4000,64 @@ FROM `bak_tblaccemp_employee_tsb` AS `bak_tblaccemp_employee_tsb`</DefiningQuery
 `copy_tblusers`.`BusinessName`
 FROM `copy_tblusers` AS `copy_tblusers`</DefiningQuery>
     </EntitySet>
-    <EntitySet Name="hr_tsb_min_orderdate" EntityType="Self.hr_tsb_min_orderdate" store:Type="Tables" store:Schema="e4kmaximusdb">
+    <EntitySet Name="hr_demo_address" EntityType="Self.hr_demo_address" store:Type="Tables" store:Schema="e4kmaximusdb">
       <DefiningQuery>SELECT
-`hr_tsb_min_orderdate`.`CompanyID`, 
-`hr_tsb_min_orderdate`.`CustID`, 
-`hr_tsb_min_orderdate`.`Pinno`, 
-`hr_tsb_min_orderdate`.`Min(OrderDate)`
-FROM `hr_tsb_min_orderdate` AS `hr_tsb_min_orderdate`</DefiningQuery>
+`hr_demo_address`.`CompanyID`, 
+`hr_demo_address`.`BusinessID`, 
+`hr_demo_address`.`OldAddressID`, 
+`hr_demo_address`.`NewAddressID`, 
+`hr_demo_address`.`Description`, 
+`hr_demo_address`.`PostCode`
+FROM `hr_demo_address` AS `hr_demo_address`</DefiningQuery>
     </EntitySet>
-    <EntitySet Name="hr_tsb_tblaccemp_ucodesemployees" EntityType="Self.hr_tsb_tblaccemp_ucodesemployees" store:Type="Tables" store:Schema="e4kmaximusdb">
+    <EntitySet Name="hr_demo_employee" EntityType="Self.hr_demo_employee" store:Type="Tables" store:Schema="e4kmaximusdb">
       <DefiningQuery>SELECT
-`hr_tsb_tblaccemp_ucodesemployees`.`CompanyID`, 
-`hr_tsb_tblaccemp_ucodesemployees`.`EmployeeID`, 
-`hr_tsb_tblaccemp_ucodesemployees`.`BusinessID`, 
-`hr_tsb_tblaccemp_ucodesemployees`.`UCodeID`
-FROM `hr_tsb_tblaccemp_ucodesemployees` AS `hr_tsb_tblaccemp_ucodesemployees`</DefiningQuery>
+`hr_demo_employee`.`BusinessID`, 
+`hr_demo_employee`.`EmployeeID`, 
+`hr_demo_employee`.`NewEmployeeID`
+FROM `hr_demo_employee` AS `hr_demo_employee`</DefiningQuery>
     </EntitySet>
-    <EntitySet Name="hr_visexp01_address_map_bak" EntityType="Self.hr_visexp01_address_map_bak" store:Type="Tables" store:Schema="e4kmaximusdb">
+    <EntitySet Name="hr_demo_invoices" EntityType="Self.hr_demo_invoices" store:Type="Tables" store:Schema="e4kmaximusdb">
       <DefiningQuery>SELECT
-`hr_visexp01_address_map_bak`.`Companyid`, 
-`hr_visexp01_address_map_bak`.`BusinessId`, 
-`hr_visexp01_address_map_bak`.`OnlineUserId`, 
-`hr_visexp01_address_map_bak`.`Employeeid`, 
-`hr_visexp01_address_map_bak`.`AddressId`, 
-`hr_visexp01_address_map_bak`.`MapUser`
-FROM `hr_visexp01_address_map_bak` AS `hr_visexp01_address_map_bak`</DefiningQuery>
+`hr_demo_invoices`.`SalesOrder`, 
+`hr_demo_invoices`.`NewOrderNo`, 
+`hr_demo_invoices`.`PickingSlipNo`, 
+`hr_demo_invoices`.`NewPickSlipNo`, 
+`hr_demo_invoices`.`InvoiceNo`, 
+`hr_demo_invoices`.`NewInvoiceNo`
+FROM `hr_demo_invoices` AS `hr_demo_invoices`</DefiningQuery>
     </EntitySet>
-    <EntitySet Name="rollout_order_detail_tsb" EntityType="Self.rollout_order_detail_tsb" store:Type="Tables" store:Schema="e4kmaximusdb">
+    <EntitySet Name="hr_demo_orders" EntityType="Self.hr_demo_orders" store:Type="Tables" store:Schema="e4kmaximusdb">
       <DefiningQuery>SELECT
-`rollout_order_detail_tsb`.`CompanyID`, 
-`rollout_order_detail_tsb`.`Warehouseid`, 
-`rollout_order_detail_tsb`.`OrderNo`, 
-`rollout_order_detail_tsb`.`LineNo`, 
-`rollout_order_detail_tsb`.`LineType`, 
-`rollout_order_detail_tsb`.`StyleID`, 
-`rollout_order_detail_tsb`.`ColourID`, 
-`rollout_order_detail_tsb`.`SizeID`, 
-`rollout_order_detail_tsb`.`Description`, 
-`rollout_order_detail_tsb`.`Price`, 
-`rollout_order_detail_tsb`.`Cost`, 
-`rollout_order_detail_tsb`.`OrdQty`, 
-`rollout_order_detail_tsb`.`AllQty`, 
-`rollout_order_detail_tsb`.`InvQty`, 
-`rollout_order_detail_tsb`.`DespQty`, 
-`rollout_order_detail_tsb`.`CommissionRate`, 
-`rollout_order_detail_tsb`.`Discount`, 
-`rollout_order_detail_tsb`.`Deliverydate`, 
-`rollout_order_detail_tsb`.`VatCode`, 
-`rollout_order_detail_tsb`.`NomCode`, 
-`rollout_order_detail_tsb`.`PartShip`, 
-`rollout_order_detail_tsb`.`LineNoRef`, 
-`rollout_order_detail_tsb`.`Currency_Exchange_Rate`, 
-`rollout_order_detail_tsb`.`StyleIDref`, 
-`rollout_order_detail_tsb`.`FreeText`, 
-`rollout_order_detail_tsb`.`RepID`, 
-`rollout_order_detail_tsb`.`RepRate`, 
-`rollout_order_detail_tsb`.`KamID`, 
-`rollout_order_detail_tsb`.`KAMRate`, 
-`rollout_order_detail_tsb`.`IssueUOM`, 
-`rollout_order_detail_tsb`.`IssueQty`, 
-`rollout_order_detail_tsb`.`StockingUOM`, 
-`rollout_order_detail_tsb`.`OriginalOrderNo`, 
-`rollout_order_detail_tsb`.`OriginalLineNo`, 
-`rollout_order_detail_tsb`.`SOPDETAIL1`, 
-`rollout_order_detail_tsb`.`SOPDETAIL2`, 
-`rollout_order_detail_tsb`.`SOPDETAIL3`, 
-`rollout_order_detail_tsb`.`SOPDETAIL4`, 
-`rollout_order_detail_tsb`.`SOPDETAIL5`, 
-`rollout_order_detail_tsb`.`Jobsheetno`, 
-`rollout_order_detail_tsb`.`JobsheetLineNo`, 
-`rollout_order_detail_tsb`.`AssemblyID`, 
-`rollout_order_detail_tsb`.`AsmLineNo`, 
-`rollout_order_detail_tsb`.`ReasonCode`, 
-`rollout_order_detail_tsb`.`ReturnOrderNo`, 
-`rollout_order_detail_tsb`.`ReturnLineNo`
-FROM `rollout_order_detail_tsb` AS `rollout_order_detail_tsb`</DefiningQuery>
+`hr_demo_orders`.`CustID`, 
+`hr_demo_orders`.`PinNo`, 
+`hr_demo_orders`.`OrderNo`, 
+`hr_demo_orders`.`NewOrderNo`
+FROM `hr_demo_orders` AS `hr_demo_orders`</DefiningQuery>
     </EntitySet>
-    <EntitySet Name="rollout_order_header_address_tsb" EntityType="Self.rollout_order_header_address_tsb" store:Type="Tables" store:Schema="e4kmaximusdb">
+    <EntitySet Name="hr_demo_pickslips" EntityType="Self.hr_demo_pickslips" store:Type="Tables" store:Schema="e4kmaximusdb">
       <DefiningQuery>SELECT
-`rollout_order_header_address_tsb`.`EmployeeID`, 
-`rollout_order_header_address_tsb`.`BusinessID`, 
-`rollout_order_header_address_tsb`.`OnlineUserID`, 
-`rollout_order_header_address_tsb`.`AddressID`, 
-`rollout_order_header_address_tsb`.`Description`, 
-`rollout_order_header_address_tsb`.`Address1`, 
-`rollout_order_header_address_tsb`.`Address2`, 
-`rollout_order_header_address_tsb`.`Address3`, 
-`rollout_order_header_address_tsb`.`City`, 
-`rollout_order_header_address_tsb`.`Town`, 
-`rollout_order_header_address_tsb`.`Postcode`
-FROM `rollout_order_header_address_tsb` AS `rollout_order_header_address_tsb`</DefiningQuery>
+`hr_demo_pickslips`.`CustID`, 
+`hr_demo_pickslips`.`PinNo`, 
+`hr_demo_pickslips`.`OrderNo`, 
+`hr_demo_pickslips`.`NewOrderNo`, 
+`hr_demo_pickslips`.`PickingSlipNo`, 
+`hr_demo_pickslips`.`NewPickSlipNo`
+FROM `hr_demo_pickslips` AS `hr_demo_pickslips`</DefiningQuery>
     </EntitySet>
-    <EntitySet Name="rollout_order_header_tsb" EntityType="Self.rollout_order_header_tsb" store:Type="Tables" store:Schema="e4kmaximusdb">
+    <EntitySet Name="hr_demo_style" EntityType="Self.hr_demo_style" store:Type="Tables" store:Schema="e4kmaximusdb">
       <DefiningQuery>SELECT
-`rollout_order_header_tsb`.`CompanyID`, 
-`rollout_order_header_tsb`.`WarehouseID`, 
-`rollout_order_header_tsb`.`OrderNo`, 
-`rollout_order_header_tsb`.`CustID`, 
-`rollout_order_header_tsb`.`OrderDate`, 
-`rollout_order_header_tsb`.`InvDesc`, 
-`rollout_order_header_tsb`.`InvAddress1`, 
-`rollout_order_header_tsb`.`InvAddress2`, 
-`rollout_order_header_tsb`.`InvAddress3`, 
-`rollout_order_header_tsb`.`InvCity`, 
-`rollout_order_header_tsb`.`InvTown`, 
-`rollout_order_header_tsb`.`InvPostCode`, 
-`rollout_order_header_tsb`.`InvCountry`, 
-`rollout_order_header_tsb`.`DelDesc`, 
-`rollout_order_header_tsb`.`DelAddress1`, 
-`rollout_order_header_tsb`.`DelAddress2`, 
-`rollout_order_header_tsb`.`DelAddress3`, 
-`rollout_order_header_tsb`.`DelCity`, 
-`rollout_order_header_tsb`.`DelTown`, 
-`rollout_order_header_tsb`.`DelPostCode`, 
-`rollout_order_header_tsb`.`DelCountry`, 
-`rollout_order_header_tsb`.`CustRef`, 
-`rollout_order_header_tsb`.`ContractRef`, 
-`rollout_order_header_tsb`.`Comments`, 
-`rollout_order_header_tsb`.`InvoiceDate`, 
-`rollout_order_header_tsb`.`Carrier`, 
-`rollout_order_header_tsb`.`CarrierCharge`, 
-`rollout_order_header_tsb`.`CustDisc`, 
-`rollout_order_header_tsb`.`SettDisc`, 
-`rollout_order_header_tsb`.`VolDisc`, 
-`rollout_order_header_tsb`.`SettlementDays`, 
-`rollout_order_header_tsb`.`OrderConfirm`, 
-`rollout_order_header_tsb`.`CommentsExternal`, 
-`rollout_order_header_tsb`.`Cancelled`, 
-`rollout_order_header_tsb`.`ProForma`, 
-`rollout_order_header_tsb`.`Completed`, 
-`rollout_order_header_tsb`.`WorksOrderNo`, 
-`rollout_order_header_tsb`.`AllowPartShipment`, 
-`rollout_order_header_tsb`.`TotalGoods`, 
-`rollout_order_header_tsb`.`OrderGoods`, 
-`rollout_order_header_tsb`.`UserID`, 
-`rollout_order_header_tsb`.`pRINTINVOICE`, 
-`rollout_order_header_tsb`.`Currency_Exchange_Rate`, 
-`rollout_order_header_tsb`.`PinNo`, 
-`rollout_order_header_tsb`.`UCodeId`, 
-`rollout_order_header_tsb`.`ContractNo`, 
-`rollout_order_header_tsb`.`Currency_Exchange_Code`, 
-`rollout_order_header_tsb`.`TIMEOFENTRY`, 
-`rollout_order_header_tsb`.`RepID`, 
-`rollout_order_header_tsb`.`RepNo`, 
-`rollout_order_header_tsb`.`OnlineConfirm`, 
-`rollout_order_header_tsb`.`OnlineConfirmDate`, 
-`rollout_order_header_tsb`.`OnlineConfirmedBy`, 
-`rollout_order_header_tsb`.`OnlineProcessed`, 
-`rollout_order_header_tsb`.`OnlineProcessedDate`, 
-`rollout_order_header_tsb`.`OnlineProcessedBy`, 
-`rollout_order_header_tsb`.`ReasonCode`, 
-`rollout_order_header_tsb`.`OnlineUserID`, 
-`rollout_order_header_tsb`.`OrderAnalysisCode1`, 
-`rollout_order_header_tsb`.`OrderAnalysisCode2`, 
-`rollout_order_header_tsb`.`OrderAnalysisCode3`, 
-`rollout_order_header_tsb`.`OrderAnalysisCode4`, 
-`rollout_order_header_tsb`.`OrderAnalysisCode5`, 
-`rollout_order_header_tsb`.`PrintLabel`, 
-`rollout_order_header_tsb`.`ProFormaPrint`, 
-`rollout_order_header_tsb`.`ConfirmPrint`, 
-`rollout_order_header_tsb`.`OrderType`
-FROM `rollout_order_header_tsb` AS `rollout_order_header_tsb`</DefiningQuery>
+`hr_demo_style`.`StyleID`, 
+`hr_demo_style`.`NewStyleID`, 
+`hr_demo_style`.`NewDescription`
+FROM `hr_demo_style` AS `hr_demo_style`</DefiningQuery>
     </EntitySet>
-    <EntitySet Name="stockcard_tsb_rollout" EntityType="Self.stockcard_tsb_rollout" store:Type="Tables" store:Schema="e4kmaximusdb">
+    <EntitySet Name="hr_demo_ucode" EntityType="Self.hr_demo_ucode" store:Type="Tables" store:Schema="e4kmaximusdb">
       <DefiningQuery>SELECT
-`stockcard_tsb_rollout`.`CompanyID`, 
-`stockcard_tsb_rollout`.`BusinessID`, 
-`stockcard_tsb_rollout`.`EmployeeID`, 
-`stockcard_tsb_rollout`.`StyleID`, 
-`stockcard_tsb_rollout`.`ColourID`, 
-`stockcard_tsb_rollout`.`Year`, 
-`stockcard_tsb_rollout`.`SOQty`, 
-`stockcard_tsb_rollout`.`PickQty`, 
-`stockcard_tsb_rollout`.`InvQty`, 
-`stockcard_tsb_rollout`.`TotalIssues`, 
-`stockcard_tsb_rollout`.`FirstIssueDate`, 
-`stockcard_tsb_rollout`.`StartIssueDate`, 
-`stockcard_tsb_rollout`.`LastIssueDate`
-FROM `stockcard_tsb_rollout` AS `stockcard_tsb_rollout`</DefiningQuery>
+`hr_demo_ucode`.`BusinessID`, 
+`hr_demo_ucode`.`UcodeID`, 
+`hr_demo_ucode`.`NewUCodeID`
+FROM `hr_demo_ucode` AS `hr_demo_ucode`</DefiningQuery>
     </EntitySet>
     <EntitySet Name="tblaccemp_style_staticqty" EntityType="Self.tblaccemp_style_staticqty" store:Type="Tables" store:Schema="e4kmaximusdb">
       <DefiningQuery>SELECT
@@ -4054,38 +4072,18 @@ FROM `stockcard_tsb_rollout` AS `stockcard_tsb_rollout`</DefiningQuery>
 `tblaccemp_style_staticqty`.`ID`
 FROM `tblaccemp_style_staticqty` AS `tblaccemp_style_staticqty`</DefiningQuery>
     </EntitySet>
-    <EntitySet Name="tblbus_address_s27" EntityType="Self.tblbus_address_s27" store:Type="Tables" store:Schema="e4kmaximusdb">
+    <EntitySet Name="tblbus_settings" EntityType="Self.tblbus_settings" store:Type="Tables" store:Schema="e4kmaximusdb">
       <DefiningQuery>SELECT
-`tblbus_address_s27`.`CompanyID`, 
-`tblbus_address_s27`.`BusinessID`, 
-`tblbus_address_s27`.`AddressID`, 
-`tblbus_address_s27`.`Description`, 
-`tblbus_address_s27`.`Address1`, 
-`tblbus_address_s27`.`Address2`, 
-`tblbus_address_s27`.`Address3`, 
-`tblbus_address_s27`.`Town`, 
-`tblbus_address_s27`.`City`, 
-`tblbus_address_s27`.`Postcode`, 
-`tblbus_address_s27`.`CountryCode`, 
-`tblbus_address_s27`.`AddressTypeID`, 
-`tblbus_address_s27`.`ContactID`
-FROM `tblbus_address_s27` AS `tblbus_address_s27`</DefiningQuery>
-    </EntitySet>
-    <EntitySet Name="tblbus_contact_s27" EntityType="Self.tblbus_contact_s27" store:Type="Tables" store:Schema="e4kmaximusdb">
-      <DefiningQuery>SELECT
-`tblbus_contact_s27`.`ID`, 
-`tblbus_contact_s27`.`ContactID`, 
-`tblbus_contact_s27`.`ContactType_ID`, 
-`tblbus_contact_s27`.`Value`
-FROM `tblbus_contact_s27` AS `tblbus_contact_s27`</DefiningQuery>
-    </EntitySet>
-    <EntitySet Name="tblonline_userid_employee_s27" EntityType="Self.tblonline_userid_employee_s27" store:Type="Tables" store:Schema="e4kmaximusdb">
-      <DefiningQuery>SELECT
-`tblonline_userid_employee_s27`.`CompanyID`, 
-`tblonline_userid_employee_s27`.`BusinessID`, 
-`tblonline_userid_employee_s27`.`OnlineUserID`, 
-`tblonline_userid_employee_s27`.`EmployeeID`
-FROM `tblonline_userid_employee_s27` AS `tblonline_userid_employee_s27`</DefiningQuery>
+`tblbus_settings`.`SettingID`, 
+`tblbus_settings`.`BusType`, 
+`tblbus_settings`.`SettingName1`, 
+`tblbus_settings`.`Type`, 
+`tblbus_settings`.`Category`, 
+`tblbus_settings`.`DefaultValue`, 
+`tblbus_settings`.`SeqNo`, 
+`tblbus_settings`.`Lookup_Table`, 
+`tblbus_settings`.`Lookup_Text`
+FROM `tblbus_settings` AS `tblbus_settings`</DefiningQuery>
     </EntitySet>
     <EntitySet Name="tblonlinesop_backorders" EntityType="Self.tblonlinesop_backorders" store:Type="Tables" store:Schema="e4kmaximusdb">
       <DefiningQuery>SELECT
@@ -4113,56 +4111,6 @@ FROM `tblonline_userid_employee_s27` AS `tblonline_userid_employee_s27`</Definin
 `tblonlinesop_backorders`.`DueDate`, 
 `tblonlinesop_backorders`.`CommentsExternal`
 FROM `tblonlinesop_backorders` AS `tblonlinesop_backorders`</DefiningQuery>
-    </EntitySet>
-    <EntitySet Name="tblsop_salesorder_detail_bk" EntityType="Self.tblsop_salesorder_detail_bk" store:Type="Tables" store:Schema="e4kmaximusdb">
-      <DefiningQuery>SELECT
-`tblsop_salesorder_detail_bk`.`CompanyID`, 
-`tblsop_salesorder_detail_bk`.`Warehouseid`, 
-`tblsop_salesorder_detail_bk`.`OrderNo`, 
-`tblsop_salesorder_detail_bk`.`LineNo`, 
-`tblsop_salesorder_detail_bk`.`LineType`, 
-`tblsop_salesorder_detail_bk`.`StyleID`, 
-`tblsop_salesorder_detail_bk`.`ColourID`, 
-`tblsop_salesorder_detail_bk`.`SizeID`, 
-`tblsop_salesorder_detail_bk`.`Description`, 
-`tblsop_salesorder_detail_bk`.`Price`, 
-`tblsop_salesorder_detail_bk`.`Cost`, 
-`tblsop_salesorder_detail_bk`.`OrdQty`, 
-`tblsop_salesorder_detail_bk`.`AllQty`, 
-`tblsop_salesorder_detail_bk`.`InvQty`, 
-`tblsop_salesorder_detail_bk`.`DespQty`, 
-`tblsop_salesorder_detail_bk`.`CommissionRate`, 
-`tblsop_salesorder_detail_bk`.`Discount`, 
-`tblsop_salesorder_detail_bk`.`Deliverydate`, 
-`tblsop_salesorder_detail_bk`.`VatCode`, 
-`tblsop_salesorder_detail_bk`.`NomCode`, 
-`tblsop_salesorder_detail_bk`.`PartShip`, 
-`tblsop_salesorder_detail_bk`.`LineNoRef`, 
-`tblsop_salesorder_detail_bk`.`Currency_Exchange_Rate`, 
-`tblsop_salesorder_detail_bk`.`StyleIDref`, 
-`tblsop_salesorder_detail_bk`.`FreeText`, 
-`tblsop_salesorder_detail_bk`.`RepID`, 
-`tblsop_salesorder_detail_bk`.`RepRate`, 
-`tblsop_salesorder_detail_bk`.`KamID`, 
-`tblsop_salesorder_detail_bk`.`KAMRate`, 
-`tblsop_salesorder_detail_bk`.`IssueUOM`, 
-`tblsop_salesorder_detail_bk`.`IssueQty`, 
-`tblsop_salesorder_detail_bk`.`StockingUOM`, 
-`tblsop_salesorder_detail_bk`.`OriginalOrderNo`, 
-`tblsop_salesorder_detail_bk`.`OriginalLineNo`, 
-`tblsop_salesorder_detail_bk`.`SOPDETAIL1`, 
-`tblsop_salesorder_detail_bk`.`SOPDETAIL2`, 
-`tblsop_salesorder_detail_bk`.`SOPDETAIL3`, 
-`tblsop_salesorder_detail_bk`.`SOPDETAIL4`, 
-`tblsop_salesorder_detail_bk`.`SOPDETAIL5`, 
-`tblsop_salesorder_detail_bk`.`Jobsheetno`, 
-`tblsop_salesorder_detail_bk`.`JobsheetLineNo`, 
-`tblsop_salesorder_detail_bk`.`AssemblyID`, 
-`tblsop_salesorder_detail_bk`.`AsmLineNo`, 
-`tblsop_salesorder_detail_bk`.`ReasonCode`, 
-`tblsop_salesorder_detail_bk`.`ReturnOrderNo`, 
-`tblsop_salesorder_detail_bk`.`ReturnLineNo`
-FROM `tblsop_salesorder_detail_bk` AS `tblsop_salesorder_detail_bk`</DefiningQuery>
     </EntitySet>
     <EntitySet Name="tblsop_salesorder_detail_console" EntityType="Self.tblsop_salesorder_detail_console" store:Type="Tables" store:Schema="e4kmaximusdb">
       <DefiningQuery>SELECT
@@ -4213,77 +4161,6 @@ FROM `tblsop_salesorder_detail_bk` AS `tblsop_salesorder_detail_bk`</DefiningQue
 `tblsop_salesorder_detail_console`.`ReturnOrderNo`, 
 `tblsop_salesorder_detail_console`.`ReturnLineNo`
 FROM `tblsop_salesorder_detail_console` AS `tblsop_salesorder_detail_console`</DefiningQuery>
-    </EntitySet>
-    <EntitySet Name="tblsop_salesorder_header_bk" EntityType="Self.tblsop_salesorder_header_bk" store:Type="Tables" store:Schema="e4kmaximusdb">
-      <DefiningQuery>SELECT
-`tblsop_salesorder_header_bk`.`CompanyID`, 
-`tblsop_salesorder_header_bk`.`WarehouseID`, 
-`tblsop_salesorder_header_bk`.`OrderNo`, 
-`tblsop_salesorder_header_bk`.`CustID`, 
-`tblsop_salesorder_header_bk`.`OrderDate`, 
-`tblsop_salesorder_header_bk`.`InvDesc`, 
-`tblsop_salesorder_header_bk`.`InvAddress1`, 
-`tblsop_salesorder_header_bk`.`InvAddress2`, 
-`tblsop_salesorder_header_bk`.`InvAddress3`, 
-`tblsop_salesorder_header_bk`.`InvCity`, 
-`tblsop_salesorder_header_bk`.`InvTown`, 
-`tblsop_salesorder_header_bk`.`InvPostCode`, 
-`tblsop_salesorder_header_bk`.`InvCountry`, 
-`tblsop_salesorder_header_bk`.`DelDesc`, 
-`tblsop_salesorder_header_bk`.`DelAddress1`, 
-`tblsop_salesorder_header_bk`.`DelAddress2`, 
-`tblsop_salesorder_header_bk`.`DelAddress3`, 
-`tblsop_salesorder_header_bk`.`DelCity`, 
-`tblsop_salesorder_header_bk`.`DelTown`, 
-`tblsop_salesorder_header_bk`.`DelPostCode`, 
-`tblsop_salesorder_header_bk`.`DelCountry`, 
-`tblsop_salesorder_header_bk`.`CustRef`, 
-`tblsop_salesorder_header_bk`.`ContractRef`, 
-`tblsop_salesorder_header_bk`.`Comments`, 
-`tblsop_salesorder_header_bk`.`InvoiceDate`, 
-`tblsop_salesorder_header_bk`.`Carrier`, 
-`tblsop_salesorder_header_bk`.`CarrierCharge`, 
-`tblsop_salesorder_header_bk`.`CustDisc`, 
-`tblsop_salesorder_header_bk`.`SettDisc`, 
-`tblsop_salesorder_header_bk`.`VolDisc`, 
-`tblsop_salesorder_header_bk`.`SettlementDays`, 
-`tblsop_salesorder_header_bk`.`OrderConfirm`, 
-`tblsop_salesorder_header_bk`.`CommentsExternal`, 
-`tblsop_salesorder_header_bk`.`Cancelled`, 
-`tblsop_salesorder_header_bk`.`ProForma`, 
-`tblsop_salesorder_header_bk`.`Completed`, 
-`tblsop_salesorder_header_bk`.`WorksOrderNo`, 
-`tblsop_salesorder_header_bk`.`AllowPartShipment`, 
-`tblsop_salesorder_header_bk`.`TotalGoods`, 
-`tblsop_salesorder_header_bk`.`OrderGoods`, 
-`tblsop_salesorder_header_bk`.`UserID`, 
-`tblsop_salesorder_header_bk`.`pRINTINVOICE`, 
-`tblsop_salesorder_header_bk`.`Currency_Exchange_Rate`, 
-`tblsop_salesorder_header_bk`.`PinNo`, 
-`tblsop_salesorder_header_bk`.`UCodeId`, 
-`tblsop_salesorder_header_bk`.`ContractNo`, 
-`tblsop_salesorder_header_bk`.`Currency_Exchange_Code`, 
-`tblsop_salesorder_header_bk`.`TIMEOFENTRY`, 
-`tblsop_salesorder_header_bk`.`RepID`, 
-`tblsop_salesorder_header_bk`.`RepNo`, 
-`tblsop_salesorder_header_bk`.`OnlineConfirm`, 
-`tblsop_salesorder_header_bk`.`OnlineConfirmDate`, 
-`tblsop_salesorder_header_bk`.`OnlineConfirmedBy`, 
-`tblsop_salesorder_header_bk`.`OnlineProcessed`, 
-`tblsop_salesorder_header_bk`.`OnlineProcessedDate`, 
-`tblsop_salesorder_header_bk`.`OnlineProcessedBy`, 
-`tblsop_salesorder_header_bk`.`ReasonCode`, 
-`tblsop_salesorder_header_bk`.`OnlineUserID`, 
-`tblsop_salesorder_header_bk`.`OrderAnalysisCode1`, 
-`tblsop_salesorder_header_bk`.`OrderAnalysisCode2`, 
-`tblsop_salesorder_header_bk`.`OrderAnalysisCode3`, 
-`tblsop_salesorder_header_bk`.`OrderAnalysisCode4`, 
-`tblsop_salesorder_header_bk`.`OrderAnalysisCode5`, 
-`tblsop_salesorder_header_bk`.`PrintLabel`, 
-`tblsop_salesorder_header_bk`.`ProFormaPrint`, 
-`tblsop_salesorder_header_bk`.`ConfirmPrint`, 
-`tblsop_salesorder_header_bk`.`OrderType`
-FROM `tblsop_salesorder_header_bk` AS `tblsop_salesorder_header_bk`</DefiningQuery>
     </EntitySet>
     <EntitySet Name="tblsop_salesorder_header_console" EntityType="Self.tblsop_salesorder_header_console" store:Type="Tables" store:Schema="e4kmaximusdb">
       <DefiningQuery>SELECT
@@ -4466,6 +4343,24 @@ FROM `tblupload_orderheader` AS `tblupload_orderheader`</DefiningQuery>
 `ucode_employee_rollout_tsb`.`UCodeID`
 FROM `ucode_employee_rollout_tsb` AS `ucode_employee_rollout_tsb`</DefiningQuery>
     </EntitySet>
+    <EntitySet Name="dim_fit_nongroup_styles" EntityType="Self.dim_fit_nongroup_styles" store:Type="Views" store:Schema="e4kmaximusdb">
+      <DefiningQuery>SELECT
+`dim_fit_nongroup_styles`.`CompanyID`, 
+`dim_fit_nongroup_styles`.`WareHouseID`, 
+`dim_fit_nongroup_styles`.`FreeTextType`, 
+`dim_fit_nongroup_styles`.`FreeText`, 
+`dim_fit_nongroup_styles`.`StyleId`
+FROM `dim_fit_nongroup_styles` AS `dim_fit_nongroup_styles`</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="dim_fit_styles" EntityType="Self.dim_fit_styles" store:Type="Views" store:Schema="e4kmaximusdb">
+      <DefiningQuery>SELECT
+`dim_fit_styles`.`CompanyID`, 
+`dim_fit_styles`.`WareHouseID`, 
+`dim_fit_styles`.`FreeTextType`, 
+`dim_fit_styles`.`FreeText`, 
+`dim_fit_styles`.`StyleIDs`
+FROM `dim_fit_styles` AS `dim_fit_styles`</DefiningQuery>
+    </EntitySet>
     <EntitySet Name="getallassemblies" EntityType="Self.getallassemblies" store:Type="Views" store:Schema="e4kmaximusdb">
       <DefiningQuery>SELECT
 `getallassemblies`.`ParentStyleID`, 
@@ -4560,6 +4455,15 @@ FROM `getstylesview` AS `getstylesview`</DefiningQuery>
 `product_obsolete`.`obsoletecode`
 FROM `product_obsolete` AS `product_obsolete`</DefiningQuery>
     </EntitySet>
+    <EntitySet Name="productlist" EntityType="Self.productlist" store:Type="Views" store:Schema="e4kmaximusdb">
+      <DefiningQuery>SELECT
+`productlist`.`CompanyID`, 
+`productlist`.`StyleID`, 
+`productlist`.`ColourID`, 
+`productlist`.`SizeID`, 
+`productlist`.`SeqNo`
+FROM `productlist` AS `productlist`</DefiningQuery>
+    </EntitySet>
     <EntitySet Name="style_dimfitalloc_caption" EntityType="Self.style_dimfitalloc_caption" store:Type="Views" store:Schema="e4kmaximusdb">
       <DefiningQuery>SELECT
 `style_dimfitalloc_caption`.`StyleId`, 
@@ -4575,6 +4479,16 @@ FROM `style_dimfitalloc_caption` AS `style_dimfitalloc_caption`</DefiningQuery>
 `styleby_freetextview`.`FreeText`
 FROM `styleby_freetextview` AS `styleby_freetextview`</DefiningQuery>
     </EntitySet>
+    <EntitySet Name="tblfskstyle_dimension1" EntityType="Self.tblfskstyle_dimension1" store:Type="Views" store:Schema="e4kmaximusdb">
+      <DefiningQuery>SELECT
+`tblfskstyle_dimension1`.`CompanyId`, 
+`tblfskstyle_dimension1`.`FreeText`, 
+`tblfskstyle_dimension1`.`StyleId`, 
+`tblfskstyle_dimension1`.`freetexttype`, 
+`tblfskstyle_dimension1`.`StyleImage`, 
+`tblfskstyle_dimension1`.`Description`
+FROM `tblfskstyle_dimension1` AS `tblfskstyle_dimension1`</DefiningQuery>
+    </EntitySet>
     <EntitySet Name="ucodeby_freetextview" EntityType="Self.ucodeby_freetextview" store:Type="Views" store:Schema="e4kmaximusdb">
       <DefiningQuery>SELECT
 `ucodeby_freetextview`.`CompanyID`, 
@@ -4586,6 +4500,320 @@ FROM `styleby_freetextview` AS `styleby_freetextview`</DefiningQuery>
 `ucodeby_freetextview`.`UCodeID`, 
 `ucodeby_freetextview`.`SeqNo`
 FROM `ucodeby_freetextview` AS `ucodeby_freetextview`</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="unrelatedorders" EntityType="Self.unrelatedorders" store:Type="Views" store:Schema="e4kmaximusdb">
+      <DefiningQuery>SELECT
+`unrelatedorders`.`OrderNo`, 
+`unrelatedorders`.`CustID`, 
+`unrelatedorders`.`OrderDate`, 
+`unrelatedorders`.`PinNo`, 
+`unrelatedorders`.`Forename`, 
+`unrelatedorders`.`Surname`, 
+`unrelatedorders`.`UCodeId`, 
+`unrelatedorders`.`StyleID`, 
+`unrelatedorders`.`OrdQty`
+FROM `unrelatedorders` AS `unrelatedorders`</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="view_manpack" EntityType="Self.view_manpack" store:Type="Views" store:Schema="e4kmaximusdb">
+      <DefiningQuery>SELECT
+`view_manpack`.`ManPackNo`, 
+`view_manpack`.`ManpackDate`, 
+`view_manpack`.`TotalGoods`, 
+`view_manpack`.`OrderGoods`, 
+`view_manpack`.`CustID`, 
+`view_manpack`.`CompanyID`, 
+`view_manpack`.`OnlineUserID`
+FROM `view_manpack` AS `view_manpack`</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="view_noorderplacedforthisemployee" EntityType="Self.view_noorderplacedforthisemployee" store:Type="Views" store:Schema="e4kmaximusdb">
+      <DefiningQuery>SELECT
+`view_noorderplacedforthisemployee`.`BusinessID`, 
+`view_noorderplacedforthisemployee`.`UCodeID`, 
+`view_noorderplacedforthisemployee`.`EmployeeID`, 
+`view_noorderplacedforthisemployee`.`Forename`, 
+`view_noorderplacedforthisemployee`.`Surname`, 
+`view_noorderplacedforthisemployee`.`UserName`, 
+`view_noorderplacedforthisemployee`.`Password`, 
+`view_noorderplacedforthisemployee`.`AccessID`
+FROM `view_noorderplacedforthisemployee` AS `view_noorderplacedforthisemployee`</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="view_normatucodereissueorder" EntityType="Self.view_normatucodereissueorder" store:Type="Views" store:Schema="e4kmaximusdb">
+      <DefiningQuery>SELECT
+`view_normatucodereissueorder`.`CompanyID`, 
+`view_normatucodereissueorder`.`WarehouseID`, 
+`view_normatucodereissueorder`.`OrderNo`, 
+`view_normatucodereissueorder`.`CustID`, 
+`view_normatucodereissueorder`.`OrderDate`, 
+`view_normatucodereissueorder`.`InvDesc`, 
+`view_normatucodereissueorder`.`InvAddress1`, 
+`view_normatucodereissueorder`.`InvAddress2`, 
+`view_normatucodereissueorder`.`InvAddress3`, 
+`view_normatucodereissueorder`.`InvCity`, 
+`view_normatucodereissueorder`.`InvTown`, 
+`view_normatucodereissueorder`.`InvPostCode`, 
+`view_normatucodereissueorder`.`InvCountry`, 
+`view_normatucodereissueorder`.`DelDesc`, 
+`view_normatucodereissueorder`.`DelAddress1`, 
+`view_normatucodereissueorder`.`DelAddress2`, 
+`view_normatucodereissueorder`.`DelAddress3`, 
+`view_normatucodereissueorder`.`DelCity`, 
+`view_normatucodereissueorder`.`DelTown`, 
+`view_normatucodereissueorder`.`DelPostCode`, 
+`view_normatucodereissueorder`.`DelCountry`, 
+`view_normatucodereissueorder`.`CustRef`, 
+`view_normatucodereissueorder`.`ContractRef`, 
+`view_normatucodereissueorder`.`Comments`, 
+`view_normatucodereissueorder`.`InvoiceDate`, 
+`view_normatucodereissueorder`.`Carrier`, 
+`view_normatucodereissueorder`.`CarrierCharge`, 
+`view_normatucodereissueorder`.`CustDisc`, 
+`view_normatucodereissueorder`.`SettDisc`, 
+`view_normatucodereissueorder`.`VolDisc`, 
+`view_normatucodereissueorder`.`SettlementDays`, 
+`view_normatucodereissueorder`.`OrderConfirm`, 
+`view_normatucodereissueorder`.`CommentsExternal`, 
+`view_normatucodereissueorder`.`Cancelled`, 
+`view_normatucodereissueorder`.`ProForma`, 
+`view_normatucodereissueorder`.`Completed`, 
+`view_normatucodereissueorder`.`WorksOrderNo`, 
+`view_normatucodereissueorder`.`AllowPartShipment`, 
+`view_normatucodereissueorder`.`TotalGoods`, 
+`view_normatucodereissueorder`.`OrderGoods`, 
+`view_normatucodereissueorder`.`UserID`, 
+`view_normatucodereissueorder`.`pRINTINVOICE`, 
+`view_normatucodereissueorder`.`Currency_Exchange_Rate`, 
+`view_normatucodereissueorder`.`PinNo`, 
+`view_normatucodereissueorder`.`UCodeId`, 
+`view_normatucodereissueorder`.`ContractNo`, 
+`view_normatucodereissueorder`.`Currency_Exchange_Code`, 
+`view_normatucodereissueorder`.`TIMEOFENTRY`, 
+`view_normatucodereissueorder`.`RepID`, 
+`view_normatucodereissueorder`.`RepNo`, 
+`view_normatucodereissueorder`.`OnlineConfirm`, 
+`view_normatucodereissueorder`.`OnlineConfirmDate`, 
+`view_normatucodereissueorder`.`OnlineConfirmedBy`, 
+`view_normatucodereissueorder`.`OnlineProcessed`, 
+`view_normatucodereissueorder`.`OnlineProcessedDate`, 
+`view_normatucodereissueorder`.`OnlineProcessedBy`, 
+`view_normatucodereissueorder`.`ReasonCode`, 
+`view_normatucodereissueorder`.`OnlineUserID`, 
+`view_normatucodereissueorder`.`OrderAnalysisCode1`, 
+`view_normatucodereissueorder`.`OrderAnalysisCode2`, 
+`view_normatucodereissueorder`.`OrderAnalysisCode3`, 
+`view_normatucodereissueorder`.`OrderAnalysisCode4`, 
+`view_normatucodereissueorder`.`OrderAnalysisCode5`, 
+`view_normatucodereissueorder`.`PrintLabel`, 
+`view_normatucodereissueorder`.`ProFormaPrint`, 
+`view_normatucodereissueorder`.`ConfirmPrint`, 
+`view_normatucodereissueorder`.`OrderType`
+FROM `view_normatucodereissueorder` AS `view_normatucodereissueorder`</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="view_order_freetext_tsb_rollout" EntityType="Self.view_order_freetext_tsb_rollout" store:Type="Views" store:Schema="e4kmaximusdb">
+      <DefiningQuery>SELECT
+`view_order_freetext_tsb_rollout`.`OrderNo`, 
+`view_order_freetext_tsb_rollout`.`PinNo`, 
+`view_order_freetext_tsb_rollout`.`UCodeId`, 
+`view_order_freetext_tsb_rollout`.`FreeText`, 
+`view_order_freetext_tsb_rollout`.`OrdQty`
+FROM `view_order_freetext_tsb_rollout` AS `view_order_freetext_tsb_rollout`</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="view_privateorder_pendings" EntityType="Self.view_privateorder_pendings" store:Type="Views" store:Schema="e4kmaximusdb">
+      <DefiningQuery>SELECT
+`view_privateorder_pendings`.`CompanyID`, 
+`view_privateorder_pendings`.`CustID`, 
+`view_privateorder_pendings`.`OrderNo`, 
+`view_privateorder_pendings`.`OrderDate`, 
+`view_privateorder_pendings`.`TotalGoods`, 
+`view_privateorder_pendings`.`VAT`, 
+`view_privateorder_pendings`.`OrderGoods`, 
+`view_privateorder_pendings`.`txn_id`, 
+`view_privateorder_pendings`.`txn_Ip`, 
+`view_privateorder_pendings`.`rsp_date`, 
+`view_privateorder_pendings`.`rsp_status`, 
+`view_privateorder_pendings`.`GatewayImg`, 
+`view_privateorder_pendings`.`GatewayName`, 
+`view_privateorder_pendings`.`SeqNo`
+FROM `view_privateorder_pendings` AS `view_privateorder_pendings`</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="view_privateorders" EntityType="Self.view_privateorders" store:Type="Views" store:Schema="e4kmaximusdb">
+      <DefiningQuery>SELECT
+`view_privateorders`.`CompanyID`, 
+`view_privateorders`.`WarehouseID`, 
+`view_privateorders`.`OrderNo`, 
+`view_privateorders`.`CustID`, 
+`view_privateorders`.`OrderDate`, 
+`view_privateorders`.`InvDesc`, 
+`view_privateorders`.`InvAddress1`, 
+`view_privateorders`.`InvAddress2`, 
+`view_privateorders`.`InvAddress3`, 
+`view_privateorders`.`InvCity`, 
+`view_privateorders`.`InvTown`, 
+`view_privateorders`.`InvPostCode`, 
+`view_privateorders`.`InvCountry`, 
+`view_privateorders`.`DelDesc`, 
+`view_privateorders`.`DelAddress1`, 
+`view_privateorders`.`DelAddress2`, 
+`view_privateorders`.`DelAddress3`, 
+`view_privateorders`.`DelCity`, 
+`view_privateorders`.`DelTown`, 
+`view_privateorders`.`DelPostCode`, 
+`view_privateorders`.`DelCountry`, 
+`view_privateorders`.`CustRef`, 
+`view_privateorders`.`ContractRef`, 
+`view_privateorders`.`Comments`, 
+`view_privateorders`.`InvoiceDate`, 
+`view_privateorders`.`Carrier`, 
+`view_privateorders`.`CarrierCharge`, 
+`view_privateorders`.`CustDisc`, 
+`view_privateorders`.`SettDisc`, 
+`view_privateorders`.`VolDisc`, 
+`view_privateorders`.`SettlementDays`, 
+`view_privateorders`.`OrderConfirm`, 
+`view_privateorders`.`CommentsExternal`, 
+`view_privateorders`.`Cancelled`, 
+`view_privateorders`.`ProForma`, 
+`view_privateorders`.`Completed`, 
+`view_privateorders`.`WorksOrderNo`, 
+`view_privateorders`.`AllowPartShipment`, 
+`view_privateorders`.`TotalGoods`, 
+`view_privateorders`.`OrderGoods`, 
+`view_privateorders`.`UserID`, 
+`view_privateorders`.`pRINTINVOICE`, 
+`view_privateorders`.`Currency_Exchange_Rate`, 
+`view_privateorders`.`PinNo`, 
+`view_privateorders`.`UCodeId`, 
+`view_privateorders`.`ContractNo`, 
+`view_privateorders`.`Currency_Exchange_Code`, 
+`view_privateorders`.`TIMEOFENTRY`, 
+`view_privateorders`.`RepID`, 
+`view_privateorders`.`RepNo`, 
+`view_privateorders`.`OnlineConfirm`, 
+`view_privateorders`.`OnlineConfirmDate`, 
+`view_privateorders`.`OnlineConfirmedBy`, 
+`view_privateorders`.`OnlineProcessed`, 
+`view_privateorders`.`OnlineProcessedDate`, 
+`view_privateorders`.`OnlineProcessedBy`, 
+`view_privateorders`.`ReasonCode`, 
+`view_privateorders`.`OnlineUserID`, 
+`view_privateorders`.`OrderAnalysisCode1`, 
+`view_privateorders`.`OrderAnalysisCode2`, 
+`view_privateorders`.`OrderAnalysisCode3`, 
+`view_privateorders`.`OrderAnalysisCode4`, 
+`view_privateorders`.`OrderAnalysisCode5`, 
+`view_privateorders`.`PrintLabel`, 
+`view_privateorders`.`ProFormaPrint`, 
+`view_privateorders`.`ConfirmPrint`, 
+`view_privateorders`.`OrderType`
+FROM `view_privateorders` AS `view_privateorders`</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="view_reissueorderwithnormalucode" EntityType="Self.view_reissueorderwithnormalucode" store:Type="Views" store:Schema="e4kmaximusdb">
+      <DefiningQuery>SELECT
+`view_reissueorderwithnormalucode`.`CompanyID`, 
+`view_reissueorderwithnormalucode`.`WarehouseID`, 
+`view_reissueorderwithnormalucode`.`OrderNo`, 
+`view_reissueorderwithnormalucode`.`CustID`, 
+`view_reissueorderwithnormalucode`.`OrderDate`, 
+`view_reissueorderwithnormalucode`.`InvDesc`, 
+`view_reissueorderwithnormalucode`.`InvAddress1`, 
+`view_reissueorderwithnormalucode`.`InvAddress2`, 
+`view_reissueorderwithnormalucode`.`InvAddress3`, 
+`view_reissueorderwithnormalucode`.`InvCity`, 
+`view_reissueorderwithnormalucode`.`InvTown`, 
+`view_reissueorderwithnormalucode`.`InvPostCode`, 
+`view_reissueorderwithnormalucode`.`InvCountry`, 
+`view_reissueorderwithnormalucode`.`DelDesc`, 
+`view_reissueorderwithnormalucode`.`DelAddress1`, 
+`view_reissueorderwithnormalucode`.`DelAddress2`, 
+`view_reissueorderwithnormalucode`.`DelAddress3`, 
+`view_reissueorderwithnormalucode`.`DelCity`, 
+`view_reissueorderwithnormalucode`.`DelTown`, 
+`view_reissueorderwithnormalucode`.`DelPostCode`, 
+`view_reissueorderwithnormalucode`.`DelCountry`, 
+`view_reissueorderwithnormalucode`.`CustRef`, 
+`view_reissueorderwithnormalucode`.`ContractRef`, 
+`view_reissueorderwithnormalucode`.`Comments`, 
+`view_reissueorderwithnormalucode`.`InvoiceDate`, 
+`view_reissueorderwithnormalucode`.`Carrier`, 
+`view_reissueorderwithnormalucode`.`CarrierCharge`, 
+`view_reissueorderwithnormalucode`.`CustDisc`, 
+`view_reissueorderwithnormalucode`.`SettDisc`, 
+`view_reissueorderwithnormalucode`.`VolDisc`, 
+`view_reissueorderwithnormalucode`.`SettlementDays`, 
+`view_reissueorderwithnormalucode`.`OrderConfirm`, 
+`view_reissueorderwithnormalucode`.`CommentsExternal`, 
+`view_reissueorderwithnormalucode`.`Cancelled`, 
+`view_reissueorderwithnormalucode`.`ProForma`, 
+`view_reissueorderwithnormalucode`.`Completed`, 
+`view_reissueorderwithnormalucode`.`WorksOrderNo`, 
+`view_reissueorderwithnormalucode`.`AllowPartShipment`, 
+`view_reissueorderwithnormalucode`.`TotalGoods`, 
+`view_reissueorderwithnormalucode`.`OrderGoods`, 
+`view_reissueorderwithnormalucode`.`UserID`, 
+`view_reissueorderwithnormalucode`.`pRINTINVOICE`, 
+`view_reissueorderwithnormalucode`.`Currency_Exchange_Rate`, 
+`view_reissueorderwithnormalucode`.`PinNo`, 
+`view_reissueorderwithnormalucode`.`UCodeId`, 
+`view_reissueorderwithnormalucode`.`ContractNo`, 
+`view_reissueorderwithnormalucode`.`Currency_Exchange_Code`, 
+`view_reissueorderwithnormalucode`.`TIMEOFENTRY`, 
+`view_reissueorderwithnormalucode`.`RepID`, 
+`view_reissueorderwithnormalucode`.`RepNo`, 
+`view_reissueorderwithnormalucode`.`OnlineConfirm`, 
+`view_reissueorderwithnormalucode`.`OnlineConfirmDate`, 
+`view_reissueorderwithnormalucode`.`OnlineConfirmedBy`, 
+`view_reissueorderwithnormalucode`.`OnlineProcessed`, 
+`view_reissueorderwithnormalucode`.`OnlineProcessedDate`, 
+`view_reissueorderwithnormalucode`.`OnlineProcessedBy`, 
+`view_reissueorderwithnormalucode`.`ReasonCode`, 
+`view_reissueorderwithnormalucode`.`OnlineUserID`, 
+`view_reissueorderwithnormalucode`.`OrderAnalysisCode1`, 
+`view_reissueorderwithnormalucode`.`OrderAnalysisCode2`, 
+`view_reissueorderwithnormalucode`.`OrderAnalysisCode3`, 
+`view_reissueorderwithnormalucode`.`OrderAnalysisCode4`, 
+`view_reissueorderwithnormalucode`.`OrderAnalysisCode5`, 
+`view_reissueorderwithnormalucode`.`PrintLabel`, 
+`view_reissueorderwithnormalucode`.`ProFormaPrint`, 
+`view_reissueorderwithnormalucode`.`ConfirmPrint`, 
+`view_reissueorderwithnormalucode`.`OrderType`
+FROM `view_reissueorderwithnormalucode` AS `view_reissueorderwithnormalucode`</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="view_ucode_freetext_tsb_rollout" EntityType="Self.view_ucode_freetext_tsb_rollout" store:Type="Views" store:Schema="e4kmaximusdb">
+      <DefiningQuery>SELECT
+`view_ucode_freetext_tsb_rollout`.`UCodeID`, 
+`view_ucode_freetext_tsb_rollout`.`FreeText`, 
+`view_ucode_freetext_tsb_rollout`.`AnnualIssue`
+FROM `view_ucode_freetext_tsb_rollout` AS `view_ucode_freetext_tsb_rollout`</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="view_unmatchedcolourwithorgcolour" EntityType="Self.view_unmatchedcolourwithorgcolour" store:Type="Views" store:Schema="e4kmaximusdb">
+      <DefiningQuery>SELECT
+`view_unmatchedcolourwithorgcolour`.`PinNo`, 
+`view_unmatchedcolourwithorgcolour`.`UCodeId`, 
+`view_unmatchedcolourwithorgcolour`.`CustID`, 
+`view_unmatchedcolourwithorgcolour`.`OrderNo`, 
+`view_unmatchedcolourwithorgcolour`.`ReturnOrderNo`, 
+`view_unmatchedcolourwithorgcolour`.`OriginalOrderNo`, 
+`view_unmatchedcolourwithorgcolour`.`OrderDate`, 
+`view_unmatchedcolourwithorgcolour`.`StyleID`, 
+`view_unmatchedcolourwithorgcolour`.`ColourID`, 
+`view_unmatchedcolourwithorgcolour`.`SizeID`, 
+`view_unmatchedcolourwithorgcolour`.`OrdQty`, 
+`view_unmatchedcolourwithorgcolour`.`OrgColourID`
+FROM `view_unmatchedcolourwithorgcolour` AS `view_unmatchedcolourwithorgcolour`</DefiningQuery>
+    </EntitySet>
+    <EntitySet Name="view_unmatchedordercolourid" EntityType="Self.view_unmatchedordercolourid" store:Type="Views" store:Schema="e4kmaximusdb">
+      <DefiningQuery>SELECT
+`view_unmatchedordercolourid`.`UCodeId`, 
+`view_unmatchedordercolourid`.`CustID`, 
+`view_unmatchedordercolourid`.`OrderNo`, 
+`view_unmatchedordercolourid`.`ReturnOrderNo`, 
+`view_unmatchedordercolourid`.`OriginalOrderNo`, 
+`view_unmatchedordercolourid`.`OrderDate`, 
+`view_unmatchedordercolourid`.`StyleID`, 
+`view_unmatchedordercolourid`.`ColourID`, 
+`view_unmatchedordercolourid`.`SizeID`, 
+`view_unmatchedordercolourid`.`OrdQty`, 
+`view_unmatchedordercolourid`.`PinNo`
+FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQuery>
     </EntitySet>
   </EntityContainer>
 </Schema>

@@ -39,7 +39,29 @@
         });
     }
 }
+function  getEntitlementDIMENSION(style, orgStyle)
+{
+    if (style!="" && orgStyle!="") {
+        
+        $.ajax({
+            url: "/Home/GetEntitlement",
+            type: "POST",
+            data: { 'StyleId': style, 'orgStyl': orgStyle },
+            success: function (response) {
+                if (response != "") {
+                    var data = document.getElementById("Entitlement");
+                    data.innerHTML = response.Result;
+                    Entitlement.SetHeaderText("Entitlement for " + response.EmpId);
+                    Entitlement.Show();
+                }
+            },
+            error: function (response) {
 
+            }
+        });
+    }
+     
+}
 function getEntitlementonDemand(style) {
     var colordrop = "ColorDimview_" + "Drop_" + style;
     var colorValue = document.getElementsByName(colordrop);
@@ -197,11 +219,15 @@ function getSelectedSizeSwatch(style, size, orgStyle) {
             data: { 'StyleID': styleId_Val, 'SizeId': size },
             success: function (response) {
                 ;
-                if (response != "") {
+                if (!response.includes("Login")) { 
                     var priceId = "LbPrice" + style;
                     var price = document.getElementById(priceId);
                     price.innerHTML = "";
                     price.innerHTML = response;
+                }
+                else
+                {
+                    window.location = "/User/Login/";
                 }
             },
             error: function (erdata) {
@@ -226,11 +252,15 @@ function getSelectedSizeDimSwatch(style, size) {
             data: { 'StyleID': styleId_Val, 'SizeId': size },
             success: function (response) {
                 ;
-                if (response != "") {
+                if (!response.includes("Login")) {
                     var priceId = "LbPrice1" + style;
                     var price = document.getElementById(priceId);
                     price.innerHTML = "";
                     price.innerHTML = response;
+                }
+                else
+                {
+                    window.location = "/User/Login/";
                 }
             },
             error: function (erdata) {
@@ -256,11 +286,14 @@ function getSelectedSizeDemandSwatch(style, size, orgStyle) {
             data: { 'StyleID': styleId_Val, 'SizeId': size },
             success: function (response) {
                 ;
-                if (response != "") {
+                if (!response.includes("Login")) {
                     var priceId = "DimviewPrice" + style;
                     var price = document.getElementById(priceId);
                     price.innerHTML = "";
                     price.innerHTML = response;
+                }
+                else {
+                    window.location = "/User/Login/";
                 }
             },
             error: function (erdata) {
@@ -1427,11 +1460,15 @@ function getSelectedTemplateSize(s, e) {
             url: "/Home/GetPrice/",
             data: { 'StyleID': data1[2], 'SizeId': selectedSize },
             success: function (response) {
-                if (response != "") {
+                if (!response.includes("Login")) {
                     var priceId = "LbTemplatePrice" + data1[2];
                     var price = document.getElementById(priceId);
                     price.innerHTML = "";
                     price.innerHTML = response;
+                }
+                else
+                {
+                    window.location = "/User/Login/";
                 }
             },
             error: function (erdata) {
@@ -1454,11 +1491,15 @@ function getSelectedSizeTemplateSwatch(style, size) {
             url: "/Home/GetPrice/",
             data: { 'StyleID': style, 'SizeId': selectedSize },
             success: function (response) {
-                if (response != "") {
+                if (!response.includes("Login")) {
                     var priceId = "LbTemplatePrice" + style;
                     var price = document.getElementById(priceId);
                     price.innerHTML = "";
                     price.innerHTML = response;
+                }
+                else
+                {
+                    window.location = "/User/Login/";
                 }
             },
             error: function (erdata) {

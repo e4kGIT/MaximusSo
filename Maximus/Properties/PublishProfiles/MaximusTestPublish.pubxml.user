@@ -19,169 +19,169 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>08/11/2018 10:03:48</publishTime>
     </File>
     <File Include="bin/de/DevExpress.Data.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:24:06</publishTime>
+      <publishTime>09/24/2019 10:00:56</publishTime>
     </File>
     <File Include="bin/de/DevExpress.DataAccess.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:24:26</publishTime>
+      <publishTime>09/24/2019 10:01:18</publishTime>
     </File>
     <File Include="bin/de/DevExpress.Office.v16.1.Core.resources.dll">
-      <publishTime>06/08/2019 18:24:42</publishTime>
+      <publishTime>09/24/2019 10:01:43</publishTime>
     </File>
     <File Include="bin/de/DevExpress.Pdf.v16.1.Core.resources.dll">
-      <publishTime>06/08/2019 18:24:42</publishTime>
+      <publishTime>09/24/2019 10:01:43</publishTime>
     </File>
     <File Include="bin/de/DevExpress.PivotGrid.v16.1.Core.resources.dll">
-      <publishTime>06/08/2019 18:25:08</publishTime>
+      <publishTime>09/24/2019 10:02:05</publishTime>
     </File>
     <File Include="bin/de/DevExpress.Printing.v16.1.Core.resources.dll">
-      <publishTime>06/08/2019 18:24:44</publishTime>
+      <publishTime>09/24/2019 10:01:48</publishTime>
     </File>
     <File Include="bin/de/DevExpress.RichEdit.v16.1.Core.resources.dll">
-      <publishTime>06/08/2019 18:25:10</publishTime>
+      <publishTime>09/24/2019 10:02:08</publishTime>
     </File>
     <File Include="bin/de/DevExpress.Sparkline.v16.1.Core.resources.dll">
-      <publishTime>06/08/2019 18:24:48</publishTime>
+      <publishTime>09/24/2019 10:01:50</publishTime>
     </File>
     <File Include="bin/de/DevExpress.Spreadsheet.v16.1.Core.resources.dll">
-      <publishTime>06/08/2019 18:25:34</publishTime>
+      <publishTime>09/24/2019 10:02:22</publishTime>
     </File>
     <File Include="bin/de/DevExpress.Utils.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:24:48</publishTime>
+      <publishTime>09/24/2019 10:01:50</publishTime>
     </File>
     <File Include="bin/de/DevExpress.Web.ASPxHtmlEditor.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:23:50</publishTime>
+      <publishTime>09/24/2019 10:00:28</publishTime>
     </File>
     <File Include="bin/de/DevExpress.Web.ASPxRichEdit.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:23:52</publishTime>
+      <publishTime>09/24/2019 10:00:30</publishTime>
     </File>
     <File Include="bin/de/DevExpress.Web.ASPxScheduler.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:23:52</publishTime>
+      <publishTime>09/24/2019 10:00:30</publishTime>
     </File>
     <File Include="bin/de/DevExpress.Web.ASPxSpellChecker.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:23:52</publishTime>
+      <publishTime>09/24/2019 10:00:30</publishTime>
     </File>
     <File Include="bin/de/DevExpress.Web.ASPxSpreadsheet.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:24:48</publishTime>
+      <publishTime>09/24/2019 10:01:50</publishTime>
     </File>
     <File Include="bin/de/DevExpress.Web.ASPxTreeList.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:23:58</publishTime>
+      <publishTime>09/24/2019 10:00:38</publishTime>
     </File>
     <File Include="bin/de/DevExpress.Web.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:23:52</publishTime>
+      <publishTime>09/24/2019 10:00:30</publishTime>
     </File>
     <File Include="bin/de/DevExpress.Xpo.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:24:54</publishTime>
+      <publishTime>09/24/2019 10:01:57</publishTime>
     </File>
     <File Include="bin/de/DevExpress.XtraCharts.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:24:54</publishTime>
+      <publishTime>09/24/2019 10:02:02</publishTime>
     </File>
     <File Include="bin/de/DevExpress.XtraGauges.v16.1.Core.resources.dll">
-      <publishTime>06/08/2019 18:25:08</publishTime>
+      <publishTime>09/24/2019 10:02:05</publishTime>
     </File>
     <File Include="bin/de/DevExpress.XtraReports.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:25:10</publishTime>
+      <publishTime>09/24/2019 10:02:07</publishTime>
     </File>
     <File Include="bin/de/DevExpress.XtraReports.v16.1.Web.resources.dll">
-      <publishTime>06/08/2019 18:25:10</publishTime>
+      <publishTime>09/24/2019 10:02:07</publishTime>
     </File>
     <File Include="bin/de/DevExpress.XtraScheduler.v16.1.Core.resources.dll">
-      <publishTime>06/08/2019 18:25:28</publishTime>
+      <publishTime>09/24/2019 10:02:11</publishTime>
     </File>
     <File Include="bin/DevExpress.Charts.v16.1.Core.dll">
-      <publishTime>06/08/2019 18:24:54</publishTime>
+      <publishTime>09/24/2019 10:02:02</publishTime>
     </File>
     <File Include="bin/DevExpress.CodeParser.v16.1.dll">
-      <publishTime>06/08/2019 18:24:00</publishTime>
+      <publishTime>09/24/2019 10:00:55</publishTime>
     </File>
     <File Include="bin/DevExpress.Data.v16.1.dll">
-      <publishTime>06/08/2019 18:24:06</publishTime>
+      <publishTime>09/24/2019 10:00:56</publishTime>
     </File>
     <File Include="bin/DevExpress.DataAccess.v16.1.dll">
-      <publishTime>06/08/2019 18:24:26</publishTime>
+      <publishTime>09/24/2019 10:01:18</publishTime>
     </File>
     <File Include="bin/DevExpress.Office.v16.1.Core.dll">
-      <publishTime>06/08/2019 18:24:42</publishTime>
+      <publishTime>09/24/2019 10:01:43</publishTime>
     </File>
     <File Include="bin/DevExpress.Pdf.v16.1.Core.dll">
-      <publishTime>06/08/2019 18:24:42</publishTime>
+      <publishTime>09/24/2019 10:01:43</publishTime>
     </File>
     <File Include="bin/DevExpress.Pdf.v16.1.Drawing.dll">
-      <publishTime>06/08/2019 18:24:42</publishTime>
+      <publishTime>09/24/2019 10:01:43</publishTime>
     </File>
     <File Include="bin/DevExpress.PivotGrid.v16.1.Core.dll">
-      <publishTime>06/08/2019 18:25:08</publishTime>
+      <publishTime>09/24/2019 10:02:05</publishTime>
     </File>
     <File Include="bin/DevExpress.Printing.v16.1.Core.dll">
-      <publishTime>06/08/2019 18:24:44</publishTime>
+      <publishTime>09/24/2019 10:01:48</publishTime>
     </File>
     <File Include="bin/DevExpress.RichEdit.v16.1.Core.dll">
-      <publishTime>06/08/2019 18:25:28</publishTime>
+      <publishTime>09/24/2019 10:02:10</publishTime>
     </File>
     <File Include="bin/DevExpress.Sparkline.v16.1.Core.dll">
-      <publishTime>06/08/2019 18:24:48</publishTime>
+      <publishTime>09/24/2019 10:01:50</publishTime>
     </File>
     <File Include="bin/DevExpress.SpellChecker.v16.1.Core.dll">
-      <publishTime>06/08/2019 18:24:48</publishTime>
+      <publishTime>09/24/2019 10:01:50</publishTime>
     </File>
     <File Include="bin/DevExpress.Spreadsheet.v16.1.Core.dll">
-      <publishTime>06/08/2019 18:25:34</publishTime>
+      <publishTime>09/24/2019 10:02:22</publishTime>
     </File>
     <File Include="bin/DevExpress.Utils.v16.1.dll">
-      <publishTime>06/08/2019 18:24:48</publishTime>
+      <publishTime>09/24/2019 10:01:50</publishTime>
     </File>
     <File Include="bin/DevExpress.Web.ASPxHtmlEditor.v16.1.dll">
-      <publishTime>06/08/2019 18:23:50</publishTime>
+      <publishTime>09/24/2019 10:00:28</publishTime>
     </File>
     <File Include="bin/DevExpress.Web.ASPxPivotGrid.v16.1.dll">
-      <publishTime>06/08/2019 18:23:52</publishTime>
+      <publishTime>09/24/2019 10:00:30</publishTime>
     </File>
     <File Include="bin/DevExpress.Web.ASPxRichEdit.v16.1.dll">
-      <publishTime>06/08/2019 18:23:52</publishTime>
+      <publishTime>09/24/2019 10:00:30</publishTime>
     </File>
     <File Include="bin/DevExpress.Web.ASPxScheduler.v16.1.dll">
-      <publishTime>06/08/2019 18:23:52</publishTime>
+      <publishTime>09/24/2019 10:00:30</publishTime>
     </File>
     <File Include="bin/DevExpress.Web.ASPxSpellChecker.v16.1.dll">
-      <publishTime>06/08/2019 18:23:52</publishTime>
+      <publishTime>09/24/2019 10:00:30</publishTime>
     </File>
     <File Include="bin/DevExpress.Web.ASPxSpreadsheet.v16.1.dll">
-      <publishTime>06/08/2019 18:24:48</publishTime>
+      <publishTime>09/24/2019 10:01:50</publishTime>
     </File>
     <File Include="bin/DevExpress.Web.ASPxThemes.v16.1.dll">
-      <publishTime>06/08/2019 18:23:52</publishTime>
+      <publishTime>09/24/2019 10:00:30</publishTime>
     </File>
     <File Include="bin/DevExpress.Web.ASPxTreeList.v16.1.dll">
-      <publishTime>06/08/2019 18:23:58</publishTime>
+      <publishTime>09/24/2019 10:00:38</publishTime>
     </File>
     <File Include="bin/DevExpress.Web.Mvc5.v16.1.dll">
-      <publishTime>06/08/2019 18:24:42</publishTime>
+      <publishTime>09/24/2019 10:01:43</publishTime>
     </File>
     <File Include="bin/DevExpress.Web.Resources.v16.1.dll">
-      <publishTime>06/08/2019 18:24:52</publishTime>
+      <publishTime>09/24/2019 10:01:56</publishTime>
     </File>
     <File Include="bin/DevExpress.Web.v16.1.dll">
-      <publishTime>06/08/2019 18:23:52</publishTime>
+      <publishTime>09/24/2019 10:00:30</publishTime>
     </File>
     <File Include="bin/DevExpress.Xpo.v16.1.dll">
-      <publishTime>06/08/2019 18:24:54</publishTime>
+      <publishTime>09/24/2019 10:01:57</publishTime>
     </File>
     <File Include="bin/DevExpress.XtraCharts.v16.1.dll">
-      <publishTime>06/08/2019 18:24:56</publishTime>
+      <publishTime>09/24/2019 10:02:04</publishTime>
     </File>
     <File Include="bin/DevExpress.XtraCharts.v16.1.Web.dll">
-      <publishTime>06/08/2019 18:23:50</publishTime>
+      <publishTime>09/24/2019 10:00:28</publishTime>
     </File>
     <File Include="bin/DevExpress.XtraGauges.v16.1.Core.dll">
-      <publishTime>06/08/2019 18:25:08</publishTime>
+      <publishTime>09/24/2019 10:02:05</publishTime>
     </File>
     <File Include="bin/DevExpress.XtraReports.v16.1.dll">
-      <publishTime>06/08/2019 18:25:10</publishTime>
+      <publishTime>09/24/2019 10:02:07</publishTime>
     </File>
     <File Include="bin/DevExpress.XtraReports.v16.1.Web.dll">
-      <publishTime>06/08/2019 18:25:10</publishTime>
+      <publishTime>09/24/2019 10:02:07</publishTime>
     </File>
     <File Include="bin/DevExpress.XtraScheduler.v16.1.Core.dll">
-      <publishTime>06/08/2019 18:25:28</publishTime>
+      <publishTime>09/24/2019 10:02:11</publishTime>
     </File>
     <File Include="bin/EntityFramework.dll">
       <publishTime>10/23/2017 13:15:18</publishTime>
@@ -190,151 +190,151 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>10/23/2017 13:15:20</publishTime>
     </File>
     <File Include="bin/es/DevExpress.Data.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:24:06</publishTime>
+      <publishTime>09/24/2019 10:00:56</publishTime>
     </File>
     <File Include="bin/es/DevExpress.DataAccess.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:24:26</publishTime>
+      <publishTime>09/24/2019 10:01:18</publishTime>
     </File>
     <File Include="bin/es/DevExpress.Office.v16.1.Core.resources.dll">
-      <publishTime>06/08/2019 18:24:42</publishTime>
+      <publishTime>09/24/2019 10:01:43</publishTime>
     </File>
     <File Include="bin/es/DevExpress.Pdf.v16.1.Core.resources.dll">
-      <publishTime>06/08/2019 18:24:42</publishTime>
+      <publishTime>09/24/2019 10:01:43</publishTime>
     </File>
     <File Include="bin/es/DevExpress.PivotGrid.v16.1.Core.resources.dll">
-      <publishTime>06/08/2019 18:25:08</publishTime>
+      <publishTime>09/24/2019 10:02:05</publishTime>
     </File>
     <File Include="bin/es/DevExpress.Printing.v16.1.Core.resources.dll">
-      <publishTime>06/08/2019 18:24:44</publishTime>
+      <publishTime>09/24/2019 10:01:48</publishTime>
     </File>
     <File Include="bin/es/DevExpress.RichEdit.v16.1.Core.resources.dll">
-      <publishTime>06/08/2019 18:25:28</publishTime>
+      <publishTime>09/24/2019 10:02:10</publishTime>
     </File>
     <File Include="bin/es/DevExpress.Sparkline.v16.1.Core.resources.dll">
-      <publishTime>06/08/2019 18:24:48</publishTime>
+      <publishTime>09/24/2019 10:01:50</publishTime>
     </File>
     <File Include="bin/es/DevExpress.Spreadsheet.v16.1.Core.resources.dll">
-      <publishTime>06/08/2019 18:25:34</publishTime>
+      <publishTime>09/24/2019 10:02:22</publishTime>
     </File>
     <File Include="bin/es/DevExpress.Utils.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:24:48</publishTime>
+      <publishTime>09/24/2019 10:01:50</publishTime>
     </File>
     <File Include="bin/es/DevExpress.Web.ASPxHtmlEditor.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:23:50</publishTime>
+      <publishTime>09/24/2019 10:00:28</publishTime>
     </File>
     <File Include="bin/es/DevExpress.Web.ASPxRichEdit.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:23:52</publishTime>
+      <publishTime>09/24/2019 10:00:30</publishTime>
     </File>
     <File Include="bin/es/DevExpress.Web.ASPxScheduler.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:23:52</publishTime>
+      <publishTime>09/24/2019 10:00:30</publishTime>
     </File>
     <File Include="bin/es/DevExpress.Web.ASPxSpellChecker.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:23:52</publishTime>
+      <publishTime>09/24/2019 10:00:30</publishTime>
     </File>
     <File Include="bin/es/DevExpress.Web.ASPxSpreadsheet.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:24:48</publishTime>
+      <publishTime>09/24/2019 10:01:50</publishTime>
     </File>
     <File Include="bin/es/DevExpress.Web.ASPxTreeList.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:23:58</publishTime>
+      <publishTime>09/24/2019 10:00:38</publishTime>
     </File>
     <File Include="bin/es/DevExpress.Web.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:23:52</publishTime>
+      <publishTime>09/24/2019 10:00:30</publishTime>
     </File>
     <File Include="bin/es/DevExpress.Xpo.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:24:54</publishTime>
+      <publishTime>09/24/2019 10:01:57</publishTime>
     </File>
     <File Include="bin/es/DevExpress.XtraCharts.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:24:56</publishTime>
+      <publishTime>09/24/2019 10:02:04</publishTime>
     </File>
     <File Include="bin/es/DevExpress.XtraGauges.v16.1.Core.resources.dll">
-      <publishTime>06/08/2019 18:25:08</publishTime>
+      <publishTime>09/24/2019 10:02:05</publishTime>
     </File>
     <File Include="bin/es/DevExpress.XtraReports.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:25:10</publishTime>
+      <publishTime>09/24/2019 10:02:07</publishTime>
     </File>
     <File Include="bin/es/DevExpress.XtraReports.v16.1.Web.resources.dll">
-      <publishTime>06/08/2019 18:25:10</publishTime>
+      <publishTime>09/24/2019 10:02:07</publishTime>
     </File>
     <File Include="bin/es/DevExpress.XtraScheduler.v16.1.Core.resources.dll">
-      <publishTime>06/08/2019 18:25:28</publishTime>
+      <publishTime>09/24/2019 10:02:11</publishTime>
     </File>
     <File Include="bin/Google.Protobuf.dll">
       <publishTime>08/10/2018 18:51:54</publishTime>
     </File>
     <File Include="bin/ja/DevExpress.Data.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:24:06</publishTime>
+      <publishTime>09/24/2019 10:00:56</publishTime>
     </File>
     <File Include="bin/ja/DevExpress.DataAccess.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:24:26</publishTime>
+      <publishTime>09/24/2019 10:01:18</publishTime>
     </File>
     <File Include="bin/ja/DevExpress.Office.v16.1.Core.resources.dll">
-      <publishTime>06/08/2019 18:24:42</publishTime>
+      <publishTime>09/24/2019 10:01:43</publishTime>
     </File>
     <File Include="bin/ja/DevExpress.Pdf.v16.1.Core.resources.dll">
-      <publishTime>06/08/2019 18:24:42</publishTime>
+      <publishTime>09/24/2019 10:01:43</publishTime>
     </File>
     <File Include="bin/ja/DevExpress.PivotGrid.v16.1.Core.resources.dll">
-      <publishTime>06/08/2019 18:25:08</publishTime>
+      <publishTime>09/24/2019 10:02:05</publishTime>
     </File>
     <File Include="bin/ja/DevExpress.Printing.v16.1.Core.resources.dll">
-      <publishTime>06/08/2019 18:24:44</publishTime>
+      <publishTime>09/24/2019 10:01:48</publishTime>
     </File>
     <File Include="bin/ja/DevExpress.RichEdit.v16.1.Core.resources.dll">
-      <publishTime>06/08/2019 18:25:28</publishTime>
+      <publishTime>09/24/2019 10:02:10</publishTime>
     </File>
     <File Include="bin/ja/DevExpress.Sparkline.v16.1.Core.resources.dll">
-      <publishTime>06/08/2019 18:24:48</publishTime>
+      <publishTime>09/24/2019 10:01:50</publishTime>
     </File>
     <File Include="bin/ja/DevExpress.Spreadsheet.v16.1.Core.resources.dll">
-      <publishTime>06/08/2019 18:25:34</publishTime>
+      <publishTime>09/24/2019 10:02:22</publishTime>
     </File>
     <File Include="bin/ja/DevExpress.Utils.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:24:48</publishTime>
+      <publishTime>09/24/2019 10:01:50</publishTime>
     </File>
     <File Include="bin/ja/DevExpress.Web.ASPxHtmlEditor.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:23:50</publishTime>
+      <publishTime>09/24/2019 10:00:28</publishTime>
     </File>
     <File Include="bin/ja/DevExpress.Web.ASPxRichEdit.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:23:52</publishTime>
+      <publishTime>09/24/2019 10:00:30</publishTime>
     </File>
     <File Include="bin/ja/DevExpress.Web.ASPxScheduler.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:23:52</publishTime>
+      <publishTime>09/24/2019 10:00:30</publishTime>
     </File>
     <File Include="bin/ja/DevExpress.Web.ASPxSpellChecker.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:23:52</publishTime>
+      <publishTime>09/24/2019 10:00:30</publishTime>
     </File>
     <File Include="bin/ja/DevExpress.Web.ASPxSpreadsheet.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:24:48</publishTime>
+      <publishTime>09/24/2019 10:01:50</publishTime>
     </File>
     <File Include="bin/ja/DevExpress.Web.ASPxTreeList.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:23:58</publishTime>
+      <publishTime>09/24/2019 10:00:38</publishTime>
     </File>
     <File Include="bin/ja/DevExpress.Web.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:23:52</publishTime>
+      <publishTime>09/24/2019 10:00:30</publishTime>
     </File>
     <File Include="bin/ja/DevExpress.Xpo.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:24:54</publishTime>
+      <publishTime>09/24/2019 10:01:57</publishTime>
     </File>
     <File Include="bin/ja/DevExpress.XtraCharts.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:24:56</publishTime>
+      <publishTime>09/24/2019 10:02:04</publishTime>
     </File>
     <File Include="bin/ja/DevExpress.XtraGauges.v16.1.Core.resources.dll">
-      <publishTime>06/08/2019 18:25:08</publishTime>
+      <publishTime>09/24/2019 10:02:05</publishTime>
     </File>
     <File Include="bin/ja/DevExpress.XtraReports.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:25:10</publishTime>
+      <publishTime>09/24/2019 10:02:07</publishTime>
     </File>
     <File Include="bin/ja/DevExpress.XtraReports.v16.1.Web.resources.dll">
-      <publishTime>06/08/2019 18:25:10</publishTime>
+      <publishTime>09/24/2019 10:02:07</publishTime>
     </File>
     <File Include="bin/ja/DevExpress.XtraScheduler.v16.1.Core.resources.dll">
-      <publishTime>06/08/2019 18:25:28</publishTime>
+      <publishTime>09/24/2019 10:02:11</publishTime>
     </File>
     <File Include="bin/log4net.dll">
       <publishTime>03/08/2017 19:26:22</publishTime>
     </File>
     <File Include="bin/Maximus.dll">
-      <publishTime>09/17/2019 19:08:39</publishTime>
+      <publishTime>10/01/2019 13:22:07</publishTime>
     </File>
     <File Include="bin/Microsoft.AI.Agent.Intercept.dll">
       <publishTime>12/07/2015 19:04:38</publishTime>
@@ -406,73 +406,73 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>06/18/2015 20:19:46</publishTime>
     </File>
     <File Include="bin/ru/DevExpress.Data.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:24:06</publishTime>
+      <publishTime>09/24/2019 10:00:56</publishTime>
     </File>
     <File Include="bin/ru/DevExpress.DataAccess.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:24:26</publishTime>
+      <publishTime>09/24/2019 10:01:18</publishTime>
     </File>
     <File Include="bin/ru/DevExpress.Office.v16.1.Core.resources.dll">
-      <publishTime>06/08/2019 18:24:42</publishTime>
+      <publishTime>09/24/2019 10:01:43</publishTime>
     </File>
     <File Include="bin/ru/DevExpress.Pdf.v16.1.Core.resources.dll">
-      <publishTime>06/08/2019 18:24:42</publishTime>
+      <publishTime>09/24/2019 10:01:43</publishTime>
     </File>
     <File Include="bin/ru/DevExpress.PivotGrid.v16.1.Core.resources.dll">
-      <publishTime>06/08/2019 18:25:08</publishTime>
+      <publishTime>09/24/2019 10:02:05</publishTime>
     </File>
     <File Include="bin/ru/DevExpress.Printing.v16.1.Core.resources.dll">
-      <publishTime>06/08/2019 18:24:44</publishTime>
+      <publishTime>09/24/2019 10:01:48</publishTime>
     </File>
     <File Include="bin/ru/DevExpress.RichEdit.v16.1.Core.resources.dll">
-      <publishTime>06/08/2019 18:25:28</publishTime>
+      <publishTime>09/24/2019 10:02:10</publishTime>
     </File>
     <File Include="bin/ru/DevExpress.Sparkline.v16.1.Core.resources.dll">
-      <publishTime>06/08/2019 18:24:48</publishTime>
+      <publishTime>09/24/2019 10:01:50</publishTime>
     </File>
     <File Include="bin/ru/DevExpress.Spreadsheet.v16.1.Core.resources.dll">
-      <publishTime>06/08/2019 18:25:34</publishTime>
+      <publishTime>09/24/2019 10:02:22</publishTime>
     </File>
     <File Include="bin/ru/DevExpress.Utils.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:24:48</publishTime>
+      <publishTime>09/24/2019 10:01:50</publishTime>
     </File>
     <File Include="bin/ru/DevExpress.Web.ASPxHtmlEditor.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:23:50</publishTime>
+      <publishTime>09/24/2019 10:00:28</publishTime>
     </File>
     <File Include="bin/ru/DevExpress.Web.ASPxRichEdit.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:23:52</publishTime>
+      <publishTime>09/24/2019 10:00:30</publishTime>
     </File>
     <File Include="bin/ru/DevExpress.Web.ASPxScheduler.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:23:52</publishTime>
+      <publishTime>09/24/2019 10:00:30</publishTime>
     </File>
     <File Include="bin/ru/DevExpress.Web.ASPxSpellChecker.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:23:52</publishTime>
+      <publishTime>09/24/2019 10:00:30</publishTime>
     </File>
     <File Include="bin/ru/DevExpress.Web.ASPxSpreadsheet.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:24:48</publishTime>
+      <publishTime>09/24/2019 10:01:50</publishTime>
     </File>
     <File Include="bin/ru/DevExpress.Web.ASPxTreeList.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:23:58</publishTime>
+      <publishTime>09/24/2019 10:00:38</publishTime>
     </File>
     <File Include="bin/ru/DevExpress.Web.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:23:52</publishTime>
+      <publishTime>09/24/2019 10:00:30</publishTime>
     </File>
     <File Include="bin/ru/DevExpress.Xpo.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:24:54</publishTime>
+      <publishTime>09/24/2019 10:01:57</publishTime>
     </File>
     <File Include="bin/ru/DevExpress.XtraCharts.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:24:56</publishTime>
+      <publishTime>09/24/2019 10:02:04</publishTime>
     </File>
     <File Include="bin/ru/DevExpress.XtraGauges.v16.1.Core.resources.dll">
-      <publishTime>06/08/2019 18:25:08</publishTime>
+      <publishTime>09/24/2019 10:02:05</publishTime>
     </File>
     <File Include="bin/ru/DevExpress.XtraReports.v16.1.resources.dll">
-      <publishTime>06/08/2019 18:25:10</publishTime>
+      <publishTime>09/24/2019 10:02:07</publishTime>
     </File>
     <File Include="bin/ru/DevExpress.XtraReports.v16.1.Web.resources.dll">
-      <publishTime>06/08/2019 18:25:10</publishTime>
+      <publishTime>09/24/2019 10:02:07</publishTime>
     </File>
     <File Include="bin/ru/DevExpress.XtraScheduler.v16.1.Core.resources.dll">
-      <publishTime>06/08/2019 18:25:28</publishTime>
+      <publishTime>09/24/2019 10:02:11</publishTime>
     </File>
     <File Include="bin/System.Web.Helpers.dll">
       <publishTime>01/28/2015 04:04:30</publishTime>
@@ -562,7 +562,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/25/2019 12:16:14</publishTime>
     </File>
     <File Include="Content/snackbar.css">
-      <publishTime>09/17/2019 17:01:24</publishTime>
+      <publishTime>09/26/2019 18:20:33</publishTime>
     </File>
     <File Include="Content/themes/base/accordion.css">
       <publishTime>08/30/2019 12:25:35</publishTime>
@@ -706,7 +706,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>04/09/2019 14:31:16</publishTime>
     </File>
     <File Include="Models/maximusDataContext.edmx.diagram">
-      <publishTime>08/29/2019 10:27:38</publishTime>
+      <publishTime>09/30/2019 19:21:57</publishTime>
     </File>
     <File Include="packages.config">
       <publishTime>09/16/2019 18:31:58</publishTime>
@@ -775,7 +775,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>02/25/2019 12:16:16</publishTime>
     </File>
     <File Include="scripts/myScript.js">
-      <publishTime>09/17/2019 12:38:26</publishTime>
+      <publishTime>10/01/2019 13:21:36</publishTime>
     </File>
     <File Include="StyleImages/3MOB FLEECE2.jpg">
       <publishTime>05/01/2013 10:27:14</publishTime>
@@ -2599,7 +2599,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/16/2019 12:42:33</publishTime>
     </File>
     <File Include="Views/Basket/ShowBasket.cshtml">
-      <publishTime>09/17/2019 18:45:24</publishTime>
+      <publishTime>09/25/2019 18:13:07</publishTime>
     </File>
     <File Include="Views/Basket/_CardDetailAssembly.cshtml">
       <publishTime>05/14/2019 17:04:18</publishTime>
@@ -2614,7 +2614,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>06/01/2019 15:45:46</publishTime>
     </File>
     <File Include="Views/Basket/_Deliveryaddress.cshtml">
-      <publishTime>09/17/2019 12:14:30</publishTime>
+      <publishTime>09/25/2019 18:15:35</publishTime>
     </File>
     <File Include="Views/Employee/Employee.cshtml">
       <publishTime>09/14/2019 15:31:43</publishTime>
@@ -2623,16 +2623,16 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/13/2019 18:32:55</publishTime>
     </File>
     <File Include="Views/Employee/_EmployeeGridViewPartial.cshtml">
-      <publishTime>09/05/2019 17:07:13</publishTime>
+      <publishTime>09/27/2019 14:43:58</publishTime>
     </File>
     <File Include="Views/Employee/_multiselectCmb.cshtml">
       <publishTime>04/17/2019 17:43:18</publishTime>
     </File>
     <File Include="Views/Home/Index.cshtml">
-      <publishTime>09/16/2019 18:54:52</publishTime>
+      <publishTime>09/30/2019 12:32:34</publishTime>
     </File>
     <File Include="Views/Home/Model/_CardviewByStyle.cshtml">
-      <publishTime>08/30/2019 17:19:02</publishTime>
+      <publishTime>10/01/2019 12:42:37</publishTime>
     </File>
     <File Include="Views/Home/Model/_CardViewPartial132.cshtml">
       <publishTime>04/05/2019 11:01:44</publishTime>
@@ -2656,7 +2656,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>05/17/2019 16:18:46</publishTime>
     </File>
     <File Include="Views/Home/_CardViewPartial.cshtml">
-      <publishTime>09/17/2019 13:24:53</publishTime>
+      <publishTime>10/01/2019 12:41:22</publishTime>
     </File>
     <File Include="Views/Home/_CardViewPartialnew.cshtml">
       <publishTime>09/03/2019 10:19:48</publishTime>
@@ -2668,7 +2668,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/03/2019 10:20:27</publishTime>
     </File>
     <File Include="Views/Home/_DimAllocPartial.cshtml">
-      <publishTime>08/30/2019 17:19:02</publishTime>
+      <publishTime>10/01/2019 12:42:02</publishTime>
     </File>
     <File Include="Views/Home/_FilterModel.cshtml">
       <publishTime>08/30/2019 17:20:21</publishTime>
@@ -2683,25 +2683,25 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>05/16/2019 14:20:24</publishTime>
     </File>
     <File Include="Views/Home/_StyleByCardPop.cshtml">
-      <publishTime>09/10/2019 17:48:42</publishTime>
+      <publishTime>10/01/2019 12:42:12</publishTime>
     </File>
     <File Include="Views/Settings/Index.cshtml">
-      <publishTime>09/03/2019 12:08:25</publishTime>
+      <publishTime>09/30/2019 13:19:25</publishTime>
     </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>09/17/2019 11:23:21</publishTime>
+      <publishTime>10/01/2019 13:19:50</publishTime>
     </File>
     <File Include="Views/User/Login.cshtml">
       <publishTime>09/10/2019 10:46:33</publishTime>
     </File>
     <File Include="Views/web.config">
-      <publishTime>09/16/2019 12:17:33</publishTime>
+      <publishTime>09/25/2019 13:35:15</publishTime>
     </File>
     <File Include="Views/_ViewStart.cshtml">
       <publishTime>02/25/2019 12:16:12</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>09/17/2019 19:08:40</publishTime>
+      <publishTime>10/01/2019 13:22:08</publishTime>
     </File>
   </ItemGroup>
 </Project>

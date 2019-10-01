@@ -40,9 +40,9 @@ namespace Maximus.Models
         public Nullable<int> Season { get; set; }
         public Nullable<int> ClassID { get; set; }
         public Nullable<int> Obsolete_Class { get; set; }
-        public sbyte Live { get; set; }
+        public bool Live { get; set; }
         public string StyleImage { get; set; }
-        public sbyte BatchControl { get; set; }
+        public bool BatchControl { get; set; }
         public Nullable<int> StockingUOM { get; set; }
         public Nullable<int> IssueUOM { get; set; }
         public string StockingType { get; set; }

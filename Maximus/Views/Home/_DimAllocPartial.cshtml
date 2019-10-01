@@ -130,7 +130,7 @@
                 var Assembly = Convert.ToInt16(DataBinder.Eval(x.DataItem, "Assembly"));
                 var style = DataBinder.Eval(x.DataItem, "StyleID");
                 var styleimg = DataBinder.Eval(x.DataItem, "StyleImage");
-                ViewContext.Writer.Write(string.Format("<br/><br/><img src=\"{0}\"  height='250' width='200' onclick='Getimage(\"{0}\")' /> <br/><br/>", styleimg));
+                ViewContext.Writer.Write(string.Format("<br/><br/><img src=\"{0}\"  height='70%' width='70%' onclick='Getimage(\"{0}\")' /> <br/><br/>", styleimg));
                 string popname = string.Format("{0}_{1}", "pop", style);
                 ViewContext.Writer.Write("<div class='row'>");
                 if (Assembly != 0)

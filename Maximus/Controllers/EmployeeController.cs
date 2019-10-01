@@ -10,8 +10,8 @@ using System.Data;
 
 namespace Maximus.Controllers
 {
-
-    [CustomFilter]
+    [Authorize]
+   
     public class EmployeeController : Controller
     {  // GET: Employee
         #region declarations
@@ -21,7 +21,7 @@ namespace Maximus.Controllers
         #endregion
 
 
-
+        [AllowAnonymous]
         #region Index and EmpGrid
         public ActionResult Index(string BusinessID)
         {
@@ -97,7 +97,7 @@ namespace Maximus.Controllers
             return jsonResult;
         }
 
-
+        [AllowAnonymous]
         public ActionResult EmployeeGridViewPartial(string txtUcode = "", string ddlAddress = "", string txtUcodeDesc = "", string txtCDepartment = "", string txtRole = "", string txtEmpNo = "", string txtName = "", string txtStDate = "")
         {
             var templates = new List<string>();
@@ -484,6 +484,7 @@ namespace Maximus.Controllers
             result.chkMapEmp = dp.LimitEmpUsers(Session["Access"].ToString());
             result.chkMapAddr = Convert.ToBoolean(dp.BusinessParam("LimitUsrAddr", busId)) == true | !(dp.BusinessParam("DELADDRMAPTO", busId).ToUpper().Trim() == "EMPLOYEE" ? true : false);
             result.AddressLst = entity.tblbus_address.Where(x => x.BusinessID == busId).Select(x => new BusAddress { Address1 = x.Address1, Address2 = x.Address2, Address3 = x.Address3, City = x.City, CountryCode = x.CountryCode.Value, PostCode = x.Postcode, AddressDescription = x.Description, AddressId = x.AddressID }).ToList();
+            //var s = entity.tblbus_address.Where(x => x.BusinessID == busId && x.AddressID== 817371).ToList() ;
             Session["datestart"] = dp.ShowHourse(busId);
             Session["leavedate"] = dp.ShowHourse(busId);
             Session["roleid"] = dp.ShowHourse(busId);

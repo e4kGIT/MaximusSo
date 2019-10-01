@@ -81,14 +81,17 @@
         <div class="col-md-10">
             <br />
             <div class="col-md-5">
-                @Html.DevExpress().TextBox(sett =>
+                @Html.DevExpress().Memo( sett =>
            {
                sett.Name = "txtCommentsExternal";
                sett.Properties.Caption = "Comments";
                sett.ControlStyle.CssClass = "editor";
                sett.Height = System.Web.UI.WebControls.Unit.Pixel(100);
                sett.Width = System.Web.UI.WebControls.Unit.Pixel(200);
+
+
            }).GetHtml()
+            
             </div>
             @{
                 if (Convert.ToBoolean(Session["ONLNEREQNOM1"]))

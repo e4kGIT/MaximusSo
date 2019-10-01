@@ -12,7 +12,7 @@
     @*<link href="~/Content/jquery.jgrowl.css" rel="stylesheet" /*@>
     <script src="~/scripts/jquery-1.12.4.min.js"></script>
     <link href="~/Content/snackbar.css" rel="stylesheet" />
-  @*  <script src="~/scripts/jquery.jgrowl.js"></script>*@
+    @*  <script src="~/scripts/jquery.jgrowl.js"></script>*@
     <script src="~/scripts/jquery.growl.js"></script>
     <link href="~/Content/jquery.growl.css" rel="stylesheet" />
     <script src="~/scripts/jquery.unobtrusive-ajax.min.js"></script>
@@ -20,11 +20,11 @@
     <script src="~/Scripts/modernizr-2.6.2.js"></script>
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
-    
-  
+
+
     <script src="~/scripts/myScript.js"></script>
 
-    
+
 
 
 
@@ -58,9 +58,10 @@
         .changethisone span {
             background-color: #FFF;
         }
-        .colrer{
-            color:black;
-            background-color:gainsboro;
+
+        .colrer {
+            color: black;
+            background-color: gainsboro;
         }
 
         .changethisone input {
@@ -126,11 +127,11 @@
             background-color: DodgerBlue !important;
             color: #ffffff;
         }
-        
+
         .styler {
-            margin:-7px;
+            margin: -7px;
         }
-        
+
         .center {
             width: 150px;
             margin: 40px auto;
@@ -350,6 +351,10 @@
             background-color: #444;
             color: white;
         }
+        .dxpcDropDown_Material 
+        {
+            z-index:10000000;
+        }
 
         #main {
             transition: margin-left .5s;
@@ -551,11 +556,14 @@
                     url: "@Url.Content("~/Home/GetPrice/")",
                     data: { 'StyleID': styleId_Val, 'SizeId': selectedSize.size },
                     success: function (response) {
-                        if (response != "") {
+                        if (!response.includes("Login")) {
                             var priceId = "LbPrice" + data1[2];
                             var price = document.getElementById(priceId);
                             price.innerHTML = "";
                             price.innerHTML = response;
+                        }
+                        else {
+                            window.location = "/User/Login/";
                         }
                     },
                     error: function (erdata) {
@@ -591,11 +599,15 @@
                     data: { 'StyleID': styleId_Val, 'SizeId': selectedSize.size },
                     success: function (response) {
                         ;
-                        if (response != "") {
+                        if (!response.includes("Login")) {
                             var priceId = "LbPrice1" + data1[2];
                             var price = document.getElementById(priceId);
                             price.innerHTML = "";
                             price.innerHTML = response;
+                        }
+                        else
+                        {
+                            window.location = "/User/Login/";
                         }
                     },
                     error: function (erdata) {
@@ -631,11 +643,15 @@
                     data: { 'StyleID': styleId_Val, 'SizeId': selectedSize.size },
                     success: function (response) {
                         ;
-                        if (response != "") {
+                        if (!response.includes("Login")) {
                             var priceId = "DimviewPrice" + data1[2];
                             var price = document.getElementById(priceId);
                             price.innerHTML = "";
                             price.innerHTML = response;
+                        }
+                        else
+                        {
+                            window.location = "/User/Login/";
                         }
                     },
                     error: function (erdata) {
@@ -831,7 +847,7 @@
                                             $("#CartwidCount").html("");
                                             $("#CartwidCount").html(response);
                                             loadPopup.Hide();
-                                            myFunction("Added to cart..!");  ;
+                                            myFunction("Added to cart..!");;
                                         }
                                         else {
                                             loadPopup.Hide();
@@ -874,7 +890,7 @@
                                         if (response != "") {
                                             $("#CartwidCount").html("");
                                             $("#CartwidCount").html(response);
-                                            myFunction("Added to cart..!");  ;
+                                            myFunction("Added to cart..!");;
                                         }
                                         else {
                                             loadPopup.Hide();
@@ -959,7 +975,7 @@
                                             $("#CartwidCount").html("");
                                             $("#CartwidCount").html(response);
                                             loadPopup.Hide();
-                                            myFunction("Added to cart..!");  ;
+                                            myFunction("Added to cart..!");;
                                         }
                                         else {
                                             loadPopup.Hide();
@@ -994,7 +1010,7 @@
                                 $("#CartwidCount").html("");
                                 $("#CartwidCount").html(response);
                                 loadPopup.Hide();
-                                myFunction("Added to cart..!");  ;
+                                myFunction("Added to cart..!");;
                             }
                             else {
                                 loadPopup.Hide();
@@ -1068,7 +1084,7 @@
                                             $("#CartwidCount").html("");
                                             $("#CartwidCount").html(response);
                                             loadPopup.Hide();
-                                            myFunction("Added to cart..!");  ;
+                                            myFunction("Added to cart..!");;
                                         }
                                         else {
                                             loadPopup.Hide();
@@ -1105,7 +1121,7 @@
                                 $("#CartwidCount").html("");
                                 $("#CartwidCount").html(response);
                                 loadPopup.Hide();
-                                myFunction("Added to cart..!");  ;
+                                myFunction("Added to cart..!");;
                             }
                             else {
                                 loadPopup.Hide();
@@ -1133,7 +1149,7 @@
         function Getimage(img) {
             if (img != "") {
                 var popup = ASPxClientControl.GetControlCollection().GetByName("ImagePop");
-                var response = "<img src='" + img + "' height='500' width='600'/> "
+                var response = "<img src='" + img + "'/> "
                 $("#ImageDive").html("");
                 $("#ImageDive").html(response);
                 popup.Show();
@@ -1195,7 +1211,7 @@
                 $.ajax({
                     type: "POST",
                     url: url1,
-                    data: { 'StyleID': StyleID,'orgStyle':orgStyle },
+                    data: { 'StyleID': StyleID, 'orgStyle': orgStyle },
                     success: function (response) {
                         if (response != "" && !response.includes("Login")) {
                             var dim = document.getElementById("DimId");
@@ -1206,8 +1222,7 @@
                             popup.Show();
                             MVCxClientUtils.FinalizeCallback();
                         }
-                        else
-                        {
+                        else {
                             window.location = "/User/Login/";
                         }
                     },
@@ -1336,7 +1351,7 @@
                     url: "@Url.Content("~/Home/GetDimAlloc")",
                     data: { 'freeText': freeText },
                     success: function (response) {
-                        if (response != "") {
+                        if (response != "" && !response.includes("Login")) {
                             var dim = document.getElementById("DimId");
                             dim.innerHTML = "";
                             dim.innerHTML = response;
@@ -1346,6 +1361,9 @@
                             popup.Initialize();
                             popup.Show();
                             MVCxClientUtils.FinalizeCallback();
+                        }
+                        else {
+                            window.location = "/User/Login/";
                         }
                     },
                     error: function () {
@@ -1695,7 +1713,7 @@
    }).GetHtml()
     @Html.DevExpress().PopupControl(sett =>
 {
-    sett.Width = System.Web.UI.WebControls.Unit.Pixel(700);
+    sett.Width = System.Web.UI.WebControls.Unit.Percentage(100);
     sett.Height = System.Web.UI.WebControls.Unit.Percentage(100);
     sett.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
     sett.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
@@ -1742,14 +1760,20 @@
         <div class="col-lg-4">
             <a href="Home/Index"><img src="~/Content/Images/saleLogo.png" height="75" /></a>
         </div>
-        @if (Session["BuisnessId"] != null)
+        @*@if (Session["BuisnessId"] != null)
+            {*@
+        @if (User.Identity.IsAuthenticated)
         {
+
             <div class="col-lg-4"></div>
             <div class="col-lg-4">
                 <center>
                     <div class="navbar-collapse collapse pull-right">
                         <ul class="nav navbar-nav">
+                            @{
 
+                                var s = Session["UserName"].ToString().Trim();
+                            }
                             <li style="color:white" class="navbar-light">
                                 <a class="navbar-light"><b><span class="glyphicon glyphicon-user" title="User"></span></b> @Session["UserName"].ToString().Trim()</a>
                                 @*   @Html.ActionLink("Settings", "Index", "Settings", new { area = "" }, new { @class = "navbar-light" })*@
@@ -1758,7 +1782,7 @@
                                 <a class="navbar-light"><b>Role: </b>@Session["Access"].ToString().Trim()</a>
                                 @*   @Html.ActionLink("Settings", "Index", "Settings", new { area = "" }, new { @class = "navbar-light" })*@
                             </li>
-                           
+
                             <li style="color:white" class="navbar-light">
                                 <a class="navbar-light"><b>Customer: </b>@Session["Buisness"].ToString().Trim()</a>
                                 @*   @Html.ActionLink("Settings", "Index", "Settings", new { area = "" }, new { @class = "navbar-light" })*@
@@ -1782,20 +1806,20 @@
                     </div>
                 </center>
             </div>
-        }
-        @*  @Html.ActionLink("Sales order processing", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })*@
-    </div>
+                                }
+                                @*  @Html.ActionLink("Sales order processing", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })*@
+                            </div>
 
-    @*</div>
-        </div>*@
+                            @*</div>
+                                </div>*@
 
-    <div class="container-fluid body-content">
-        <br /><br />
-        <div class="col-md-1"></div>
-        <div class="col-md-10">
-            @RenderBody()
-        </div><div class="col-md-1"></div>
-    </div>
-    <div id="snackbar"> </div>
-</body>
-</html>
+                            <div class="container-fluid body-content">
+                                <br /><br />
+                                <div class="col-md-1"></div>
+                                <div class="col-md-10">
+                                    @RenderBody()
+                                </div><div class="col-md-1"></div>
+                            </div>
+                            <div id="snackbar"> </div>
+                        </body>
+                    </html>

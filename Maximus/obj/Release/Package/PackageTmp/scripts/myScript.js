@@ -197,11 +197,15 @@ function getSelectedSizeSwatch(style, size, orgStyle) {
             data: { 'StyleID': styleId_Val, 'SizeId': size },
             success: function (response) {
                 ;
-                if (response != "") {
+                if (!response.includes("Login")) { 
                     var priceId = "LbPrice" + style;
                     var price = document.getElementById(priceId);
                     price.innerHTML = "";
                     price.innerHTML = response;
+                }
+                else
+                {
+                    window.location = "/User/Login/";
                 }
             },
             error: function (erdata) {
@@ -226,11 +230,15 @@ function getSelectedSizeDimSwatch(style, size) {
             data: { 'StyleID': styleId_Val, 'SizeId': size },
             success: function (response) {
                 ;
-                if (response != "") {
+                if (!response.includes("Login")) {
                     var priceId = "LbPrice1" + style;
                     var price = document.getElementById(priceId);
                     price.innerHTML = "";
                     price.innerHTML = response;
+                }
+                else
+                {
+                    window.location = "/User/Login/";
                 }
             },
             error: function (erdata) {
@@ -256,11 +264,14 @@ function getSelectedSizeDemandSwatch(style, size, orgStyle) {
             data: { 'StyleID': styleId_Val, 'SizeId': size },
             success: function (response) {
                 ;
-                if (response != "") {
+                if (!response.includes("Login")) {
                     var priceId = "DimviewPrice" + style;
                     var price = document.getElementById(priceId);
                     price.innerHTML = "";
                     price.innerHTML = response;
+                }
+                else {
+                    window.location = "/User/Login/";
                 }
             },
             error: function (erdata) {
@@ -562,7 +573,7 @@ function addTocartSwatch(s, e) {
     description = document.getElementById("LbDescription" + desc).innerHTML;
     price = document.getElementById("LbPrice" + stylearr[1]).innerHTML;
     qty = Spin[0].value;
-    if (description != "" && price != "" && size != "" && color != "" && qty != "" && qty!="0") {
+    if (description != "" && price != "" && size != "" && color != "" && qty != "" && qty != "0") {
         if (stylearr[2] != "") {
             $.ajax({
                 url: "/Home/GetBtnStatus/",
@@ -583,7 +594,7 @@ function addTocartSwatch(s, e) {
                                     $("#CartwidCount").html(response);
                                     loadPopup.Hide();
                                     myFunction("Added to cart..!");
-                                    //alert("Successfully added to the cart!");
+                                    //myFunction("Added to cart..!");  ;
                                 }
                                 else {
                                     loadPopup.Hide();
@@ -607,7 +618,7 @@ function addTocartSwatch(s, e) {
                 },
                 error: function () {
                     loadPopup.Hide();
-                    alert("Try again!");
+                    myFunction("Added to cart..!"); ("Try again!");
                 }
             });
         }
@@ -628,7 +639,7 @@ function addTocartSwatch(s, e) {
                                 if (response != "") {
                                     $("#CartwidCount").html("");
                                     $("#CartwidCount").html(response);
-                                    alert("Successfully added to the cart!");
+                                    myFunction("Added to cart..!");  
                                 }
                                 else {
                                     loadPopup.Hide();
@@ -723,7 +734,7 @@ function addTocartDimSwatch(s, e) {
     description = document.getElementById("LbDescription1" + desc).innerHTML;
     price = document.getElementById("LbPrice1" + stylearr[1]).innerHTML;
     qty = Spin.lastValue;
-    if (description != "" && price != "" && size != "" && color != "" && qty != "" && qty!="0") {
+    if (description != "" && price != "" && size != "" && color != "" && qty != "" && qty != "0") {
         if (stylearr[2] != "") {
             $.ajax({
                 url: "/Home/GetBtnStatus/",
@@ -743,7 +754,7 @@ function addTocartDimSwatch(s, e) {
                                     $("#CartwidCount").html("");
                                     $("#CartwidCount").html(response);
                                     loadPopup.Hide();
-                                    alert("Successfully added to the cart!");
+                                    myFunction("Added to cart..!");
                                 }
                                 else {
                                     loadPopup.Hide();
@@ -786,7 +797,7 @@ function addTocartDimSwatch(s, e) {
                                 if (response != "") {
                                     $("#CartwidCount").html("");
                                     $("#CartwidCount").html(response);
-                                    alert("Successfully added to the cart!");
+                                    myFunction("Added to cart..!");
                                 }
                                 else {
                                     loadPopup.Hide();
@@ -889,7 +900,7 @@ function addTocartDemandSwatch(s, e) {
     description = document.getElementById("LbdemandDescription" + desc).innerHTML;
     price = document.getElementById("DimviewPrice" + stylearr[1]).innerHTML;
     qty = Spin[0].value;
-    if (description != "" && price != "" && size != undefined && price != undefined && color != undefined && size != "" && color != "" && qty != "" && qty!="0") {
+    if (description != "" && price != "" && size != undefined && price != undefined && color != undefined && size != "" && color != "" && qty != "" && qty != "0") {
         if (stylearr[2] != "") {
             $.ajax({
                 url: "/Home/GetBtnStatus/",
@@ -909,7 +920,7 @@ function addTocartDemandSwatch(s, e) {
                                     $("#CartwidCount").html("");
                                     $("#CartwidCount").html(response);
                                     loadPopup.Hide();
-                                    alert("Successfully added to the cart!");
+                                    myFunction("Added to cart..!");
                                 }
                                 else {
                                     loadPopup.Hide();
@@ -952,7 +963,7 @@ function addTocartDemandSwatch(s, e) {
                                 if (response != "") {
                                     $("#CartwidCount").html("");
                                     $("#CartwidCount").html(response);
-                                    alert("Successfully added to the cart!");
+                                    myFunction("Added to cart..!");
                                 }
                                 else {
                                     loadPopup.Hide();
@@ -1427,11 +1438,15 @@ function getSelectedTemplateSize(s, e) {
             url: "/Home/GetPrice/",
             data: { 'StyleID': data1[2], 'SizeId': selectedSize },
             success: function (response) {
-                if (response != "") {
+                if (!response.includes("Login")) {
                     var priceId = "LbTemplatePrice" + data1[2];
                     var price = document.getElementById(priceId);
                     price.innerHTML = "";
                     price.innerHTML = response;
+                }
+                else
+                {
+                    window.location = "/User/Login/";
                 }
             },
             error: function (erdata) {
@@ -1454,11 +1469,15 @@ function getSelectedSizeTemplateSwatch(style, size) {
             url: "/Home/GetPrice/",
             data: { 'StyleID': style, 'SizeId': selectedSize },
             success: function (response) {
-                if (response != "") {
+                if (!response.includes("Login")) {
                     var priceId = "LbTemplatePrice" + style;
                     var price = document.getElementById(priceId);
                     price.innerHTML = "";
                     price.innerHTML = response;
+                }
+                else
+                {
+                    window.location = "/User/Login/";
                 }
             },
             error: function (erdata) {
@@ -1516,11 +1535,12 @@ function addTocartTemplateSwatch(s, e) {
     color = colorValue != undefined & colorValue != "" ? colorValue : "";
     sStyle = stylearr[1];
     var desc = descStyle == undefined ? stylearr[1] : descStyle[0];
-    var Spin = ASPxClientControl.GetControlCollection().GetByName("spinEdit_" + stylearr[1]);
+    var Spin = "spinEdit_" + stylearr[1];
+    var qty1 = document.getElementsByName(Spin);
     description = document.getElementById("LbDescription" + desc).innerHTML;
     price = document.getElementById("LbTemplatePrice" + stylearr[1]).innerHTML;
-    qty = Spin.lastValue;
-    if (description != "" && price != "" && size != "" && color != "" && qty != "" && qty!="0") {
+    qty = qty1[0].value;
+    if (description != "" && price != "" && size != "" && color != "" && qty != "" && qty != "0") {
         loadPopup.Show();
         $.ajax({
             url: "/Home/AddToCart/",
@@ -1531,7 +1551,7 @@ function addTocartTemplateSwatch(s, e) {
                     $("#CartwidCount").html("");
                     $("#CartwidCount").html(response);
                     loadPopup.Hide();
-                    alert("Successfully added to the cart!");
+                    myFunction("Added to cart..!");  ;
                 }
                 else {
                     loadPopup.Hide();
@@ -1570,7 +1590,7 @@ function addTocartTemplate(s, e) {
     size = sizedrp[0].value == undefined ? sizedrp[0].defaultValue : sizedrp[0].value;
     color = colorDrp[0].value == undefined ? colorDrp[0].defaultValue : colorDrp[0].value;
     qty = Spin.lastValue;
-    if (description != "" && price != "" && size != "" && color != "" && qty != "" && qty!="0") {
+    if (description != "" && price != "" && size != "" && color != "" && qty != "" && qty != "0") {
         loadPopup.Show();
         $.ajax({
             url: "/Home/Addtocart/",
@@ -1581,7 +1601,7 @@ function addTocartTemplate(s, e) {
                     $("#CartwidCount").html("");
                     $("#CartwidCount").html(response);
                     loadPopup.Hide();
-                    alert("Successfully added to the cart!");
+                    myFunction("Added to cart..!");  ;
                 }
                 else {
                     loadPopup.Hide();
@@ -2158,7 +2178,7 @@ function myFunction(msg) {
 }
 
 function openNav() {
-    
+
     document.getElementById("mySidebar").style.width = "600px";
     //document.getElementById("main").style.marginLeft = "500px";
 }
@@ -2300,30 +2320,32 @@ function FillAlldeliveryfields(s, e) {
     var city = ASPxClientControl.GetControlCollection().GetByName("City");
     var postCode = ASPxClientControl.GetControlCollection().GetByName("PostCode");
     var country = ASPxClientControl.GetControlCollection().GetByName("Country");
+    var custRef = ASPxClientControl.GetControlCollection().GetByName("ddlCustRef");
+    var nomCode = ASPxClientControl.GetControlCollection().GetByName("txtNomCode");
     var descAddId = parseInt(addDescription.GetValue());
     $.ajax({
         url: "/Basket/FillAllAddress/",
         type: "POST",
         data: { 'descAddId': descAddId },
         success: function (resp) {
-            address1.SetValue(resp.Address1);
-            address2.SetValue(resp.Address2);
-            address3.SetValue(resp.Address3);
-            city.SetValue(resp.City); 
-            postCode.SetValue(resp.PostCode);
-            country.SetValue(resp.Country);
+            address1.SetValue(resp.BusAdd.Address1);
+            address2.SetValue(resp.BusAdd.Address2);
+            address3.SetValue(resp.BusAdd.Address3);
+            city.SetValue(resp.BusAdd.City);
+            postCode.SetValue(resp.BusAdd.PostCode);
+            country.SetValue(resp.BusAdd.Country);
+            custRef.SetValue(resp.custRef);
+            nomCode.SetValue(resp.nomCode);
         }
     });
 }
 
-function AcceptOrder()
-{
+function AcceptOrder() {
     $.ajax({
         url: "/Basket/AcceptOrder/",
         type: "POST",
-        data:{'addressId':102331},
-        success:function(resp)
-        {
+        data: { 'addressId': 102331 },
+        success: function (resp) {
 
         }
     });
@@ -2335,7 +2357,38 @@ function SettbxValue(s, e) {
     var data = cmbBox.GetValue().split("|");
     carrTextbox.SetValue(data[1]);
 
-}//$(document).ready(function () {
+}
+
+function FillCustRefandDeliveryFields(s, e) {
+    var addDescription = ASPxClientControl.GetControlCollection().GetByName(s.name);
+    var address1 = ASPxClientControl.GetControlCollection().GetByName("Address1");
+    var address2 = ASPxClientControl.GetControlCollection().GetByName("Address2");
+    var address3 = ASPxClientControl.GetControlCollection().GetByName("Address3");
+    var city = ASPxClientControl.GetControlCollection().GetByName("City");
+    var postCode = ASPxClientControl.GetControlCollection().GetByName("PostCode");
+    var country = ASPxClientControl.GetControlCollection().GetByName("Country");
+    var custRef = ASPxClientControl.GetControlCollection().GetByName("ddlCustRef");
+    var nomCode = ASPxClientControl.GetControlCollection().GetByName("txtNomCode");
+    var descAddId = parseInt(addDescription.GetValue());
+    $.ajax({
+        url: "/Basket/FillAllAddresswidCustRef/",
+        type: "POST",
+        data: { 'descAddId': descAddId },
+        success: function (resp) {
+            address1.SetValue(resp.BusAdd.Address1);
+            address2.SetValue(resp.BusAdd.Address2);
+            address3.SetValue(resp.BusAdd.Address3);
+            city.SetValue(resp.BusAdd.City);
+            postCode.SetValue(resp.BusAdd.PostCode);
+            country.SetValue(resp.BusAdd.Country);
+            custRef.SetValue(resp.custRef);
+            nomCode.SetValue(resp.nomCode);
+        }
+    });
+}
+
+
+//$(document).ready(function () {
 
 //    $("#FilterEmployeeId_I").autocomplete({
 //            source: function (request, response) {

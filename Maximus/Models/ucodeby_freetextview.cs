@@ -19,8 +19,8 @@ namespace Maximus.Models
         public string StyleImage { get; set; }
         public Nullable<int> Product_Group { get; set; }
         public string FreeText { get; set; }
+        public string DimFreeText { get; set; }
         public string UCodeID { get; set; }
         public Nullable<int> SeqNo { get; set; }
-        public string DimFreeText { get; set; }
     }
 }

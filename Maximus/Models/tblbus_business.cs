@@ -19,13 +19,13 @@ namespace Maximus.Models
         public string BusType { get; set; }
         public string Name { get; set; }
         public Nullable<int> Country_Currency { get; set; }
-        public sbyte Live { get; set; }
+        public bool Live { get; set; }
         public Nullable<int> AnalysisCodeID { get; set; }
         public string Default_Nominal { get; set; }
         public string Factoring_No { get; set; }
         public string Comments { get; set; }
         public Nullable<int> GroupID { get; set; }
         public string CoupleID { get; set; }
-        public sbyte IsExtract { get; set; }
+        public bool IsExtract { get; set; }
     }
 }
