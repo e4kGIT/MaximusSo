@@ -45,7 +45,7 @@
 
         settings.SettingsPager.Mode = GridViewPagerMode.ShowPager;
         settings.SettingsPager.Visible = true;
-        settings.Settings.ShowHeaderPanel = true;
+        settings.Settings.ShowHeaderPanel = false;
 
         settings.Settings.ShowHeaderFilterButton = true;
         settings.Settings.EnableFilterControlPopupMenuScrolling = false;
@@ -1146,6 +1146,7 @@
                     var content = string.Format("<div class='row'><div class='col-md-4'><b>Quantity</b><hr style='margin: 0;'/><div style='margin: 0;' class=\"center pull-left\"><p></p><div class=\"input-group\"><span class=\"input-group-btn\"><button type='button' class='qtyminus btn backg' field='{0}'><span class=\"glyphicon glyphicon-minus\"></span></button></span><input style='width:290px;text-align:center;' type='text' name='{0}'  class=\"form-control input-number\" value=\"1\" min=\"1\" max=\"10000000\"><span class=\"input-group-btn\"><button type='button' class='qtyplus  btn backg' field='{0}'><span class=\"glyphicon glyphicon-plus\"></span></button></span></div><p></p></div>", "spinEdit_" + style);
                     content = content + "</div>";
                     ViewContext.Writer.Write(content);
+                    
                     if (Session["OVERRIDE_ENT_WITH_REASON"].ToString().ToLower() == "show" && reason)
                     {
                         ViewContext.Writer.Write("<div class='col-md-4'><b>Reason</b><hr style='margin:0px'/><br><center  class='styler'>");
@@ -1267,6 +1268,7 @@
                     var content = string.Format("<div class='row'><div class='col-md-4'><b>Quantity</b><hr style='margin: 0;'/><div style='margin: 0;' class=\"center pull-left\"><p></p><div class=\"input-group\"><span class=\"input-group-btn\"><button type='button' class='qtyminus btn backg' field='{0}'><span class=\"glyphicon glyphicon-minus\"></span></button></span><input  type='text' name='{0}' style='width:290px;text-align:center;' class=\"form-control input-number\" value=\"1\" min=\"1\" max=\"10000000\"><span class=\"input-group-btn\"><button type='button' class='qtyplus  btn backg' field='{0}'><span class=\"glyphicon glyphicon-plus\"></span></button></span></div><p></p></div>", "spinEdit_" + style);
                     content = content + "</div>";
                     ViewContext.Writer.Write(content);
+                  
                     if (Session["OVERRIDE_ENT_WITH_REASON"].ToString().ToLower() == "show" && reason)
                     {
                         ViewContext.Writer.Write("<div class='col-md-4'><b>Reason</b><hr style='margin:0px'/><br>");

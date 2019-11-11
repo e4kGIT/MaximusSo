@@ -48,103 +48,6 @@ warning 6002: The table/view 'def.e4kmaximusdb.copy_tblusers' does not have a pr
     <Property Name="BusinessName" Type="varchar" MaxLength="255" />
   </EntityType>
   <!--Errors Found During Generation:
-warning 6013: The table/view 'def.e4kmaximusdb.csvaddress' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="csvaddress">
-          <Property Name="CostCentre" Type="varchar" MaxLength="100" />
-          <Property Name="StoreName" Type="varchar" MaxLength="150" />
-          <Property Name="Formats" Type="varchar" MaxLength="100" />
-          <Property Name="Partner" Type="varchar" MaxLength="100" />
-          <Property Name="Segmentation" Type="varchar" MaxLength="100" />
-          <Property Name="Dealercode" Type="varchar" MaxLength="100" />
-          <Property Name="DistanceCode" Type="varchar" MaxLength="100" />
-          <Property Name="StoreID" Type="bigint" />
-          <Property Name="Band" Type="int" />
-          <Property Name="Location" Type="varchar" MaxLength="100" />
-          <Property Name="RJLoc" Type="varchar" MaxLength="100" />
-          <Property Name="Area" Type="int" />
-          <Property Name="AreaManager" Type="varchar" MaxLength="100" />
-          <Property Name="RegionalManager" Type="varchar" MaxLength="100" />
-          <Property Name="Tel" Type="varchar" MaxLength="50" />
-          <Property Name="Address1" Type="varchar" MaxLength="100" />
-          <Property Name="Address2" Type="varchar" MaxLength="100" />
-          <Property Name="Town" Type="varchar" MaxLength="100" />
-          <Property Name="PostCode" Type="varchar" MaxLength="100" />
-          <Property Name="RJName" Type="varchar" MaxLength="100" />
-          <Property Name="OracleLocationname" Type="varchar" MaxLength="100" />
-          <Property Name="DailySalesName" Type="varchar" MaxLength="100" />
-          <Property Name="PayrollName" Type="varchar" MaxLength="100" />
-          <Property Name="OpeningDate" Type="date" />
-          <Property Name="Email" Type="varchar" MaxLength="250" />
-          <Property Name="OldStore" Type="bigint" />
-          <Property Name="RefitOpeningDate" Type="date" />
-          <Property Name="Processed" Type="bigint" />
-          <Property Name="ProcessedDate" Type="date" />
-        </EntityType>-->
-  <!--Errors Found During Generation:
-warning 6013: The table/view 'def.e4kmaximusdb.csvaddress_oldformat' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="csvaddress_oldformat">
-          <Property Name="StoreName" Type="varchar" MaxLength="150" />
-          <Property Name="Formats" Type="varchar" MaxLength="100" />
-          <Property Name="Opening" Type="varchar" MaxLength="100" />
-          <Property Name="Dealercode" Type="varchar" MaxLength="100" />
-          <Property Name="DistanceCode" Type="varchar" MaxLength="100" />
-          <Property Name="StoreID" Type="bigint" />
-          <Property Name="CostCentre" Type="varchar" MaxLength="100" />
-          <Property Name="Location" Type="varchar" MaxLength="100" />
-          <Property Name="RJLoc" Type="varchar" MaxLength="100" />
-          <Property Name="Area" Type="int" />
-          <Property Name="OldArea" Type="int" />
-          <Property Name="Stayedthesame" Type="varchar" MaxLength="100" />
-          <Property Name="AreaManager" Type="varchar" MaxLength="100" />
-          <Property Name="RegionalManager" Type="varchar" MaxLength="100" />
-          <Property Name="Tel" Type="varchar" MaxLength="50" />
-          <Property Name="Address1" Type="varchar" MaxLength="100" />
-          <Property Name="Address2" Type="varchar" MaxLength="100" />
-          <Property Name="Town" Type="varchar" MaxLength="100" />
-          <Property Name="PostCode" Type="varchar" MaxLength="100" />
-          <Property Name="RJName" Type="varchar" MaxLength="100" />
-          <Property Name="OracleLocationname" Type="varchar" MaxLength="100" />
-          <Property Name="DailySalesName" Type="varchar" MaxLength="100" />
-          <Property Name="PayrollName" Type="varchar" MaxLength="100" />
-          <Property Name="RTAName" Type="varchar" MaxLength="100" />
-          <Property Name="OpeningDate" Type="date" />
-          <Property Name="Email" Type="varchar" MaxLength="150" />
-          <Property Name="Processed" Type="bigint" />
-          <Property Name="ProcessedDate" Type="date" />
-        </EntityType>-->
-  <!--Errors Found During Generation:
-warning 6013: The table/view 'def.e4kmaximusdb.csvaddress_tsb' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="csvaddress_tsb">
-          <Property Name="StoreName" Type="varchar" MaxLength="150" />
-          <Property Name="Formats" Type="varchar" MaxLength="100" />
-          <Property Name="Opening" Type="varchar" MaxLength="100" />
-          <Property Name="Dealercode" Type="varchar" MaxLength="100" />
-          <Property Name="DistanceCode" Type="varchar" MaxLength="100" />
-          <Property Name="StoreID" Type="bigint" />
-          <Property Name="CostCentre" Type="varchar" MaxLength="100" />
-          <Property Name="Location" Type="varchar" MaxLength="100" />
-          <Property Name="RJLoc" Type="varchar" MaxLength="100" />
-          <Property Name="Area" Type="int" />
-          <Property Name="OldArea" Type="int" />
-          <Property Name="Stayedthesame" Type="varchar" MaxLength="100" />
-          <Property Name="AreaManager" Type="varchar" MaxLength="100" />
-          <Property Name="RegionalManager" Type="varchar" MaxLength="100" />
-          <Property Name="Tel" Type="varchar" MaxLength="50" />
-          <Property Name="Address1" Type="varchar" MaxLength="100" />
-          <Property Name="Address2" Type="varchar" MaxLength="100" />
-          <Property Name="Town" Type="varchar" MaxLength="100" />
-          <Property Name="PostCode" Type="varchar" MaxLength="100" />
-          <Property Name="RJName" Type="varchar" MaxLength="100" />
-          <Property Name="OracleLocationname" Type="varchar" MaxLength="100" />
-          <Property Name="DailySalesName" Type="varchar" MaxLength="100" />
-          <Property Name="PayrollName" Type="varchar" MaxLength="100" />
-          <Property Name="RTAName" Type="varchar" MaxLength="100" />
-          <Property Name="OpeningDate" Type="date" />
-          <Property Name="Email" Type="varchar" MaxLength="150" />
-          <Property Name="Processed" Type="bigint" />
-          <Property Name="ProcessedDate" Type="date" />
-        </EntityType>-->
-  <!--Errors Found During Generation:
 warning 6002: The table/view 'def.e4kmaximusdb.hr_demo_address' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="hr_demo_address">
     <Key>
@@ -308,11 +211,6 @@ warning 6002: The table/view 'def.e4kmaximusdb.hr_demo_ucode' does not have a pr
     <Property Name="applicationId" Type="int" Nullable="false" />
     <Property Name="name" Type="varchar" MaxLength="255" Nullable="false" />
   </EntityType>
-  <!--Errors Found During Generation:
-warning 6013: The table/view 'def.e4kmaximusdb.my_aspnet_schemaversion' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="my_aspnet_schemaversion">
-          <Property Name="version" Type="int" />
-        </EntityType>-->
   <EntityType Name="my_aspnet_sessioncleanup">
     <Key>
       <PropertyRef Name="ApplicationId" />
@@ -366,16 +264,6 @@ warning 6013: The table/view 'def.e4kmaximusdb.my_aspnet_schemaversion' does not
     <Property Name="userId" Type="int" Nullable="false" />
     <Property Name="roleId" Type="int" Nullable="false" />
   </EntityType>
-  <!--Errors Found During Generation:
-warning 6013: The table/view 'def.e4kmaximusdb.onlineorder_history' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="onlineorder_history">
-          <Property Name="Browser" Type="varchar" MaxLength="255" />
-          <Property Name="OrderNo" Type="bigint" />
-          <Property Name="Date" Type="datetime" Precision="0" />
-          <Property Name="IPAddress" Type="varchar" MaxLength="15" />
-          <Property Name="Flag" Type="varchar" MaxLength="20" />
-          <Property Name="Detail" Type="text" />
-        </EntityType>-->
   <EntityType Name="tblacc_vatcodes">
     <Key>
       <PropertyRef Name="CompanyID" />
@@ -936,13 +824,6 @@ warning 6002: The table/view 'def.e4kmaximusdb.tblaccemp_style_staticqty' does n
     <Property Name="Member" Type="varchar" MaxLength="10" />
     <Property Name="ISOCode" Type="varchar" MaxLength="3" />
   </EntityType>
-  <!--Errors Found During Generation:
-warning 6013: The table/view 'def.e4kmaximusdb.tblbus_defaults' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="tblbus_defaults">
-          <Property Name="ParamID" Type="varchar" MaxLength="12" />
-          <Property Name="Value" Type="varchar" MaxLength="50" />
-          <Property Name="CompanyID" Type="varchar" MaxLength="10" />
-        </EntityType>-->
   <EntityType Name="tblbus_groups_ref">
     <Key>
       <PropertyRef Name="GroupID" />
@@ -1081,28 +962,6 @@ warning 6002: The table/view 'def.e4kmaximusdb.tblbus_settings' does not have a 
     <Property Name="content" Type="text" />
     <Property Name="Enable" Type="tinyint" />
   </EntityType>
-  <!--Errors Found During Generation:
-warning 6013: The table/view 'def.e4kmaximusdb.tblemp_stockdetails' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="tblemp_stockdetails">
-          <Property Name="AllQty" Type="int" />
-          <Property Name="ColourID" Type="varchar" MaxLength="15" />
-          <Property Name="CourierRef" Type="varchar" MaxLength="10" />
-          <Property Name="CustID" Type="varchar" MaxLength="10" />
-          <Property Name="CustRef" Type="varchar" MaxLength="50" />
-          <Property Name="DeliveryDate" Type="datetime" Precision="0" />
-          <Property Name="DespatchDate" Type="datetime" Precision="0" />
-          <Property Name="DespQty" Type="int" />
-          <Property Name="InvQty" Type="int" />
-          <Property Name="OrderDate" Type="datetime" Precision="0" />
-          <Property Name="OrderNo" Type="int" />
-          <Property Name="OrdQty" Type="int" />
-          <Property Name="PickingSlipNo" Type="int" />
-          <Property Name="PinNo" Type="varchar" MaxLength="50" />
-          <Property Name="Price" Type="decimal" Precision="10" Scale="2" />
-          <Property Name="SizeID" Type="varchar" MaxLength="10" />
-          <Property Name="StyleID" Type="varchar" MaxLength="25" />
-          <Property Name="UCodeId" Type="varchar" MaxLength="50" />
-        </EntityType>-->
   <EntityType Name="tblfsk_class">
     <Key>
       <PropertyRef Name="ClassID" />
@@ -1130,14 +989,6 @@ warning 6013: The table/view 'def.e4kmaximusdb.tblemp_stockdetails' does not hav
     <Property Name="FeatureID" Type="varchar" MaxLength="25" Nullable="false" />
     <Property Name="Description" Type="varchar" MaxLength="50" />
   </EntityType>
-  <!--Errors Found During Generation:
-warning 6013: The table/view 'def.e4kmaximusdb.tblfsk_obsolete' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="tblfsk_obsolete">
-          <Property Name="ObsoleteID" Type="int" />
-          <Property Name="Obsolete_Class" Type="varchar" MaxLength="50" />
-          <Property Name="Allow_Sale" Type="bool" />
-          <Property Name="CompanyID" Type="varchar" MaxLength="3" />
-        </EntityType>-->
   <EntityType Name="tblfsk_price">
     <Key>
       <PropertyRef Name="CompanyID" />
@@ -1310,14 +1161,6 @@ warning 6013: The table/view 'def.e4kmaximusdb.tblfsk_obsolete' does not have a 
     <Property Name="CompanyID" Type="varchar" MaxLength="3" Nullable="false" />
     <Property Name="ImagePath" Type="varchar" MaxLength="500" />
   </EntityType>
-  <!--Errors Found During Generation:
-warning 6013: The table/view 'def.e4kmaximusdb.tblfsk_style_groups_customer' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="tblfsk_style_groups_customer">
-          <Property Name="CompanyID" Type="varchar" MaxLength="3" />
-          <Property Name="BusinessID" Type="varchar" MaxLength="15" />
-          <Property Name="StyleID" Type="varchar" MaxLength="50" />
-          <Property Name="Description" Type="varchar" MaxLength="25" />
-        </EntityType>-->
   <EntityType Name="tblfsk_style_groups_sub">
     <Key>
       <PropertyRef Name="SubGroupID" />
@@ -1424,12 +1267,6 @@ warning 6013: The table/view 'def.e4kmaximusdb.tblfsk_style_groups_customer' doe
     <Property Name="StockingType" Type="varchar" MaxLength="1" Nullable="false" />
     <Property Name="Description" Type="varchar" MaxLength="50" />
   </EntityType>
-  <!--Errors Found During Generation:
-warning 6013: The table/view 'def.e4kmaximusdb.tblfsk_style_trans_type' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="tblfsk_style_trans_type">
-          <Property Name="TransID" Type="int" />
-          <Property Name="TransDesc" Type="varchar" MaxLength="50" />
-        </EntityType>-->
   <EntityType Name="tblfsk_style_typeofissue">
     <Key>
       <PropertyRef Name="Issue_Type" />
@@ -1439,13 +1276,6 @@ warning 6013: The table/view 'def.e4kmaximusdb.tblfsk_style_trans_type' does not
     <Property Name="Description" Type="varchar" MaxLength="30" />
     <Property Name="CompanyID" Type="varchar" MaxLength="3" Nullable="false" />
   </EntityType>
-  <!--Errors Found During Generation:
-warning 6013: The table/view 'def.e4kmaximusdb.tblfsk_style_unitofissue' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="tblfsk_style_unitofissue">
-          <Property Name="Issue_Units" Type="int" />
-          <Property Name="Description" Type="varchar" MaxLength="30" />
-          <Property Name="CompanyID" Type="varchar" MaxLength="3" />
-        </EntityType>-->
   <EntityType Name="tblfsk_unitofmeasure">
     <Key>
       <PropertyRef Name="CompanyID" />
@@ -1628,15 +1458,6 @@ warning 6013: The table/view 'def.e4kmaximusdb.tblonline_emp_address' does not h
           <Property Name="Employeeid" Type="varchar" MaxLength="10" />
           <Property Name="AddressId" Type="int" />
         </EntityType>-->
-  <!--Errors Found During Generation:
-warning 6013: The table/view 'def.e4kmaximusdb.tblonline_emp_address_atlasfm' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="tblonline_emp_address_atlasfm">
-          <Property Name="Companyid" Type="varchar" MaxLength="3" />
-          <Property Name="BusinessId" Type="varchar" MaxLength="10" />
-          <Property Name="OnlineUserId" Type="varchar" MaxLength="20" />
-          <Property Name="Employeeid" Type="varchar" MaxLength="10" />
-          <Property Name="AddressId" Type="int" />
-        </EntityType>-->
   <EntityType Name="tblonline_holidays">
     <Key>
       <PropertyRef Name="CompanyID" />
@@ -1686,14 +1507,6 @@ warning 6013: The table/view 'def.e4kmaximusdb.tblonline_emp_address_atlasfm' do
     <Property Name="OrderNo" Type="int" Nullable="false" />
     <Property Name="IsReq" Type="int" />
   </EntityType>
-  <!--Errors Found During Generation:
-warning 6013: The table/view 'def.e4kmaximusdb.tblonline_soplinestatus' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="tblonline_soplinestatus">
-          <Property Name="CompanyID" Type="varchar" MaxLength="3" />
-          <Property Name="OrderNo" Type="int" />
-          <Property Name="LineNo" Type="int" />
-          <Property Name="LineStatus" Type="varchar" MaxLength="255" />
-        </EntityType>-->
   <EntityType Name="tblonline_userid_employee">
     <Key>
       <PropertyRef Name="CompanyID" />
@@ -1734,14 +1547,6 @@ warning 6013: The table/view 'def.e4kmaximusdb.tblonline_soplinestatus' does not
     <Property Name="SubGroupID" Type="int" Nullable="false" />
     <Property Name="StyleID" Type="varchar" MaxLength="25" Nullable="false" />
   </EntityType>
-  <!--Errors Found During Generation:
-warning 6013: The table/view 'def.e4kmaximusdb.tblonline_userid_xref' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="tblonline_userid_xref">
-          <Property Name="CompanyID" Type="varchar" MaxLength="3" />
-          <Property Name="OnlineUserID" Type="varchar" MaxLength="20" />
-          <Property Name="UserID" Type="varchar" MaxLength="20" />
-          <Property Name="BusinessID" Type="varchar" MaxLength="10" />
-        </EntityType>-->
   <!--Errors Found During Generation:
 warning 6002: The table/view 'def.e4kmaximusdb.tblonlinesop_backorders' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="tblonlinesop_backorders">
@@ -1951,33 +1756,6 @@ warning 6002: The table/view 'def.e4kmaximusdb.tblonlinesop_backorders' does not
     <Property Name="KAMID" Type="int" Nullable="false" />
     <Property Name="RepID" Type="int" Nullable="false" />
   </EntityType>
-  <!--Errors Found During Generation:
-warning 6013: The table/view 'def.e4kmaximusdb.tblroles' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="tblroles">
-          <Property Name="RoleID" Type="int" />
-          <Property Name="RoleName" Type="varchar" MaxLength="15" />
-          <Property Name="Priority" Type="int" />
-          <Property Name="Order" Type="int" />
-        </EntityType>-->
-  <!--Errors Found During Generation:
-warning 6013: The table/view 'def.e4kmaximusdb.tblsalesreport_repl' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="tblsalesreport_repl">
-          <Property Name="Colour" Type="varchar" MaxLength="15" />
-          <Property Name="CustID" Type="varchar" MaxLength="10" />
-          <Property Name="CustName" Type="varchar" MaxLength="100" />
-          <Property Name="GroupDesc" Type="varchar" MaxLength="50" />
-          <Property Name="GroupID" Type="int" />
-          <Property Name="InvoiceDate" Type="datetime" Precision="0" />
-          <Property Name="KAMKey" Type="int" />
-          <Property Name="RepKey" Type="varchar" MaxLength="10" />
-          <Property Name="SalesQty" Type="int" />
-          <Property Name="SalesValue" Type="double" />
-          <Property Name="Size" Type="varchar" MaxLength="10" />
-          <Property Name="Style" Type="varchar" MaxLength="25" />
-          <Property Name="StyleDesc" Type="varchar" MaxLength="50" />
-          <Property Name="SubGroupDesc" Type="varchar" MaxLength="50" />
-          <Property Name="SubGroupID" Type="int" />
-        </EntityType>-->
   <EntityType Name="tblsop_carrier">
     <Key>
       <PropertyRef Name="CarrierID" />
@@ -3061,22 +2839,6 @@ warning 6002: The table/view 'def.e4kmaximusdb.tblsop_salesorder_header_console'
     <Property Name="dtProcessedDate" Type="datetime" Precision="0" />
     <Property Name="dataset" Type="varchar" MaxLength="10" />
   </EntityType>
-  <!--Errors Found During Generation:
-warning 6013: The table/view 'def.e4kmaximusdb.tblsys_config' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="tblsys_config">
-          <Property Name="Description" Type="text" />
-          <Property Name="mDate" Type="varchar" MaxLength="50" />
-          <Property Name="mTime" Type="varchar" MaxLength="50" />
-          <Property Name="StopFlag" Type="char" MaxLength="1" />
-        </EntityType>-->
-  <!--Errors Found During Generation:
-warning 6013: The table/view 'def.e4kmaximusdb.tblsys_messages' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="tblsys_messages">
-          <Property Name="FromDate" Type="datetime" Precision="0" />
-          <Property Name="ToDate" Type="datetime" Precision="0" />
-          <Property Name="Message" Type="varchar" MaxLength="255" />
-          <Property Name="Active" Type="char" MaxLength="1" />
-        </EntityType>-->
   <EntityType Name="tblupdate_status_three">
     <Key>
       <PropertyRef Name="ProcessType" />
@@ -3221,16 +2983,6 @@ warning 6002: The table/view 'def.e4kmaximusdb.tblupload_orderheader' does not h
     <Property Name="AspUserID" Type="varchar" MaxLength="256" />
     <Property Name="BusinessName" Type="varchar" MaxLength="255" />
   </EntityType>
-  <!--Errors Found During Generation:
-warning 6013: The table/view 'def.e4kmaximusdb.tblvisitors' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="tblvisitors">
-          <Property Name="VisitorName" Type="varchar" MaxLength="200" />
-          <Property Name="Company" Type="varchar" MaxLength="200" />
-          <Property Name="ContactNo" Type="varchar" MaxLength="200" />
-          <Property Name="EmailID" Type="varchar" MaxLength="100" />
-          <Property Name="VisitDate" Type="date" />
-          <Property Name="VisitTime" Type="time" Precision="0" />
-        </EntityType>-->
   <EntityType Name="tblwho_warehouses">
     <Key>
       <PropertyRef Name="CompanyID" />
@@ -3300,21 +3052,6 @@ warning 6002: The table/view 'def.e4kmaximusdb.ucode_employee_rollout_tsb' does 
     <Property Name="BusinessID" Type="varchar" MaxLength="10" Nullable="false" />
     <Property Name="UCodeID" Type="varchar" MaxLength="15" Nullable="false" />
   </EntityType>
-  <!--Errors Found During Generation:
-warning 6013: The table/view 'def.e4kmaximusdb.worldpay_trans' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="worldpay_trans">
-          <Property Name="TransID" Type="varchar" MaxLength="20" />
-          <Property Name="CartID" Type="varchar" MaxLength="30" />
-          <Property Name="OrderNo" Type="varchar" MaxLength="10" />
-          <Property Name="Payer" Type="varchar" MaxLength="50" />
-          <Property Name="Amount" Type="decimal" Precision="5" Scale="2" />
-          <Property Name="Email" Type="varchar" MaxLength="100" />
-          <Property Name="Phone" Type="varchar" MaxLength="15" />
-          <Property Name="Address" Type="varchar" MaxLength="70" />
-          <Property Name="City" Type="varchar" MaxLength="30" />
-          <Property Name="Postcode" Type="varchar" MaxLength="15" />
-          <Property Name="Country" Type="varchar" MaxLength="25" />
-        </EntityType>-->
   <EntityType Name="xml_salesorder_detail">
     <Key>
       <PropertyRef Name="CompanyID" />
@@ -3592,12 +3329,6 @@ warning 6002: The table/view 'def.e4kmaximusdb.getstylesview' does not have a pr
     <Property Name="Product_Group" Type="int" />
     <Property Name="FreeText" Type="text" />
   </EntityType>
-  <!--Errors Found During Generation:
-warning 6013: The table/view 'def.e4kmaximusdb.obsolete_styles_view' does not have a primary key defined and no valid primary key could be inferred. This table/view has been excluded. To use the entity, you will need to review your schema, add the correct keys, and uncomment it.
-        <EntityType Name="obsolete_styles_view">
-          <Property Name="StyleID" Type="varchar" MaxLength="25" />
-          <Property Name="Allow_Sale" Type="bool" />
-        </EntityType>-->
   <!--Errors Found During Generation:
 warning 6002: The table/view 'def.e4kmaximusdb.product_obsolete' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
   <EntityType Name="product_obsolete">

@@ -10,6 +10,93 @@
 @Html.Action("CartView")
 <br />
 <br />
+<div class="row" style="background-color:white;">
+    <div class="row colrer" style="margin:0px">
+        <br /> <center>
+            <b>
+                Charges
+            </b>
+        </center>
+        <br />
+    </div>
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-6">
+            <br />
+            <div class="row">
+                <div class="col-md-5" style="color:black;">
+                    Total Goods
+                </div>
+                <div class="col-md-6">
+                    @Html.DevExpress().TextBox(sett =>
+               {
+                   sett.Name = "txtTotGoods";
+                   sett.Text = ViewBag.Total!=null?ViewBag.Total.ToString():"0.0";
+                   sett.ControlStyle.CssClass = "rightaligntext";
+                   sett.ReadOnly = true;
+               }).GetHtml();
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-5" style="color:black;">
+                    Carrier Charges
+                </div>
+                <div class="col-md-6">
+                    @Html.DevExpress().TextBox(sett =>
+               {
+                   sett.Name = "txtCarrierCharges";
+                   sett.Text = ViewBag.carriage != null ? ViewBag.carriage.ToString() : "0.0";
+                   sett.ControlStyle.CssClass = "rightaligntext";
+                   sett.ReadOnly = true;
+               }).GetHtml();
+                </div>
+
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-5" style="color:black;"> Order Total</div>
+                <div class="col-md-6">
+                    @Html.DevExpress().TextBox(sett =>
+               {
+                   sett.Name = "txtOrdTotal";
+                   sett.Text = ViewBag.ordeTotal != null ? ViewBag.ordeTotal.ToString() : "0.0";
+                   sett.ControlStyle.CssClass = "rightaligntext";
+                   sett.ReadOnly = true;
+               }).GetHtml();
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-5"  style="color:black;"> VAT <span>@if (ViewBag.VatPercent != null) { <p> @ViewBag.VatPercent % of total goods </p> }</span>  </div>
+                <div class="col-md-6">
+                    @Html.DevExpress().TextBox(sett =>
+               {
+                   sett.Name = "txtVAT";
+                   sett.Text=ViewBag.totalVat!=null?ViewBag.totalVat.ToString() : "0.0";
+                   sett.ControlStyle.CssClass = "rightaligntext";
+                   sett.ReadOnly = true;
+               }).GetHtml()
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-5"  style="color:black;">Grand Total</div>
+                <div class="col-md-6">
+                    @Html.DevExpress().TextBox(sett =>
+               {
+                   sett.Name = "txtGrndTot";
+                   sett.Text = ViewBag.GrossTotal != null ? ViewBag.GrossTotal.ToString() : "0.0";
+                   sett.ControlStyle.CssClass = "rightaligntext";
+                   sett.ReadOnly = true;
+               }).GetHtml()
+                </div>
+            </div>
+            <br />
+        </div>
+    </div>
+</div>
+<br />
 <br />
 <div class="row" style="background-color:white;">
     <div class="row colrer" style="margin:0px;">
@@ -32,7 +119,12 @@
                x.Properties.Caption = "Carrier";
                foreach (var dat in (List<string>)ViewData["carrierFill"])
                {
+
                    x.Properties.Items.Add(dat);
+               }
+               if (ViewData["selectedcar"] != null)
+               {
+                   x.SelectedIndex = ((List<string>)ViewData["carrierFill"]).IndexOf(ViewData["selectedcar"].ToString());
                }
                x.Properties.ClientSideEvents.SelectedIndexChanged = "SettbxValue";
            }).GetHtml();
@@ -42,6 +134,7 @@
            {
                x.Name = "CarriageTexbox";
                x.ReadOnly = true;
+               x.Text = ViewData["selectedcar"] != null ? ViewData["selectedcar"].ToString() : "";
            }).GetHtml();
             </div>
             <div class="col-md-4">
@@ -69,6 +162,79 @@
     <div class="row colrer" style="margin:0px;">
         <br /> <center>
             <b>
+                Date & Customer Ref
+            </b>
+        </center>
+        <br />
+    </div>
+    <div class="row">
+        <div class="col-md-1"></div>
+        <div class="col-md-10">
+            <div class="row">
+                <br />
+                <div class="col-md-3">
+                    @Html.DevExpress().DateEdit(settings =>
+               {
+                   settings.Properties.Caption = "Order date";
+                   settings.Name = "DateEdit";
+                   settings.Properties.NullText = DateTime.Now.Date.ToString("dd-MMM-yyyy");
+                   settings.ReadOnly = true;
+               }).GetHtml()
+                </div>
+                @if (Convert.ToBoolean(ViewData["ddlCustRef"]))
+                {
+                    <div class="col-md-3">
+                        @Html.DevExpress().ComboBox(sett =>
+               {
+                   sett.Name = "ddlCustRef";
+
+               }).GetHtml()
+                    </div>
+                }
+                <div class="col-md-3">
+                    @Html.DevExpress().TextBox(set =>
+               {
+                   set.Name = "txtCustRef";
+                   set.Properties.Caption = Session["ONLCUSREFLBL"].ToString();
+                   set.Text = Session["CustRef"].ToString() != "" ? Session["CustRef"].ToString() : "";
+                   set.Properties.ClientSideEvents.LostFocus = "saveCustRef";
+                   if ((bool)Session["CusRefMan"])
+                   {
+                       set.Properties.ValidationSettings.RequiredField.IsRequired = true;
+                       set.Properties.ValidationSettings.RequiredField.ErrorText = "*";
+                   }
+               }
+               ).GetHtml()
+                </div>
+                <div class="col-md-3" style="display:none;">
+                    @Html.DevExpress().TextBox(sett => { sett.Name = "txtCustID"; }).GetHtml()
+                </div>
+                <div class="col-md-3" style="display:none;">
+                    @Html.DevExpress().TextBox(sett => { sett.Name = "txtCustName"; }).GetHtml()
+                </div>
+            </div>
+            <div class="row">
+                <br />
+                <div class="col-md-3" style="display:none;">
+                    @Html.DevExpress().TextBox(sett => { sett.Name = "txtBudget"; }).GetHtml()
+                </div>
+                <div class="col-md-3" style="display:none;">
+                    @Html.DevExpress().TextBox(sett => { sett.Name = "txtCurrBudget"; }).GetHtml()
+                </div>
+            </div>
+            <br />
+            <br />
+            <br />
+        </div>
+        <div class="col-md-1"></div>
+    </div>
+</div>
+<br />
+<br />
+<div class="row" style="background-color:white;">
+    <div class="row colrer" style="margin:0px;">
+        <br /> <center>
+            <b>
                 Comments and Analysis code
             </b>
         </center>
@@ -81,7 +247,7 @@
         <div class="col-md-10">
             <br />
             <div class="col-md-5">
-                @Html.DevExpress().Memo( sett =>
+                @Html.DevExpress().Memo(sett =>
            {
                sett.Name = "txtCommentsExternal";
                sett.Properties.Caption = "Comments";
@@ -91,7 +257,7 @@
 
 
            }).GetHtml()
-            
+
             </div>
             @{
                 if (Convert.ToBoolean(Session["ONLNEREQNOM1"]))
@@ -110,11 +276,11 @@
                     {
                         <div class="col-md-4">
                             @Html.DevExpress().TextBox(txt =>
-                   {
-                       txt.Name = "txtNomCode";
-                       txt.Properties.Caption = Session["ONLNETXTNOM1"].ToString() == "" ? dp.CompanyParam("ONLNETXTNOM1", Session["CmpId"].ToString()) == "" ? "Site Code" : dp.CompanyParam("ONLNETXTNOM1", Session["CmpId"].ToString()) : Session["ONLNETXTNOM1"].ToString();
-                       txt.Text = dp.CompanyParam("ONLNEDEFNOM1", Session["CmpId"].ToString());
-                   }).GetHtml();
+                       {
+                           txt.Name = "txtNomCode";
+                           txt.Properties.Caption = Session["ONLNETXTNOM1"].ToString() == "" ? dp.CompanyParam("ONLNETXTNOM1", Session["CmpId"].ToString()) == "" ? "Site Code" : dp.CompanyParam("ONLNETXTNOM1", Session["CmpId"].ToString()) : Session["ONLNETXTNOM1"].ToString();
+                           txt.Text = Session["ONLINEDEFNOM"].ToString() == "" ? dp.CompanyParam("ONLNEDEFNOM1", Session["CmpId"].ToString()) : Session["ONLINEDEFNOM"].ToString();
+                       }).GetHtml();
                         </div>
                     }
                 }
@@ -126,9 +292,9 @@
                     <div class="col-md-4">
                         @Html.DevExpress().TextBox(txt =>
                    {
-                       txt.Name = "txtNomCode2";
+                       txt.Name = "txtNomCode1";
                        txt.Properties.Caption = Session["ONLNETXTNOM2"].ToString();
-                       txt.Text = dp.CompanyParam("ONLNEDEFNOM2", Session["CmpId"].ToString());
+                       txt.Text = Session["ONLINEDEFNOM"].ToString() == "" ? dp.CompanyParam("ONLNEDEFNOM2", Session["CmpId"].ToString()) : Session["ONLINEDEFNOM"].ToString();
                    }).GetHtml();
                     </div>
                 }
@@ -149,25 +315,28 @@
                 {
                     <div class="col-md-4">
                         @Html.DevExpress().TextBox(txt =>
-           {
-               txt.Name = "txtNomCode3";
-               txt.Properties.Caption = Session["ONLNETXTNOM3"].ToString();
-               txt.Text = dp.CompanyParam("ONLNEDEFNOM3", Session["CmpId"].ToString());
-           }).GetHtml();
+                   {
+                       txt.Name = "txtNomCode2";
+                       txt.Properties.Caption = Session["ONLNETXTNOM3"].ToString();
+                       txt.Text = Session["ONLINEDEFNOM"].ToString() == "" ? dp.CompanyParam("ONLNEDEFNOM3", Session["CmpId"].ToString()) : Session["ONLINEDEFNOM"].ToString();
+                   }).GetHtml();
                     </div>
                 }
             }
             @{
-                if (Convert.ToBoolean(Session["ONLNEREQNOM4"]))
+                if (Convert.ToBoolean(Session["pnlRolloutName"]))
                 {
-                    <div class="col-md-4">
-                        @Html.DevExpress().TextBox(txt =>
-           {
-               txt.Name = "txtNomCode4";
-               txt.Properties.Caption = Session["ONLNETXTNOM4"].ToString();
-               txt.Text = dp.CompanyParam("ONLNEDEFNOM4", Session["CmpId"].ToString());
-           }).GetHtml();
-                    </div>
+                    if (Convert.ToBoolean(Session["ONLNEREQNOM4"]))
+                    {
+                        <div class="col-md-4">
+                            @Html.DevExpress().TextBox(txt =>
+                   {
+                       txt.Name = "txtNomCode3";
+                       txt.Properties.Caption = Session["ONLNETXTNOM4"].ToString();
+                       txt.Text = Session["ONLINEDEFNOM"].ToString() == "" ? dp.CompanyParam("ONLNEDEFNOM4", Session["CmpId"].ToString()) : Session["ONLINEDEFNOM"].ToString();
+                   }).GetHtml();
+                        </div>
+                    }
                 }
             }
             @{
@@ -175,11 +344,11 @@
                 {
                     <div class="col-md-4">
                         @Html.DevExpress().TextBox(txt =>
-           {
-               txt.Name = "txtNomCode5";
-               txt.Properties.Caption = Session["ONLNETXTNOM5"].ToString();
-               txt.Text = dp.CompanyParam("ONLNEDEFNOM5", Session["CmpId"].ToString());
-           }).GetHtml();
+                   {
+                       txt.Name = "txtNomCode4";
+                       txt.Properties.Caption = Session["ONLNETXTNOM5"].ToString();
+                       txt.Text = Session["ONLINEDEFNOM"].ToString() == "" ? dp.CompanyParam("ONLNEDEFNOM5", Session["CmpId"].ToString()) : Session["ONLINEDEFNOM"].ToString();
+                   }).GetHtml();
                     </div>
                 }
             }
@@ -216,67 +385,8 @@
 </div>
 <br />
 <br />
-<div class="row" style="background-color:white;">
-    <div class="row colrer" style="margin:0px;">
-        <br /> <center>
-            <b>
-                Date & Customer Ref
-            </b>
-        </center>
-        <br />
-    </div>
-    <div class="row">
-        <div class="col-md-1"></div>
-        <div class="col-md-10">
-            <div class="row">
-                <br />
-                <div class="col-md-3">
-                    @Html.DevExpress().DateEdit(settings =>
-               {
-                   settings.Properties.Caption = "Order date";
-                   settings.Name = "DateEdit";
-                   settings.Properties.NullText = DateTime.Now.Date.ToString("dd-MMM-yyyy");
-                   settings.ReadOnly = true;
-               }).GetHtml()
-                </div>
-                <div class="col-md-3">
-                    @Html.DevExpress().TextBox(set =>
-               {
-                   set.Name = "ddlCustRef";
-                   set.Properties.Caption = "Your Po reference";
-                   if ((bool)Session["CusRefMan"])
-                   {
-                       set.Properties.ValidationSettings.RequiredField.IsRequired = true;
-                       set.Properties.ValidationSettings.RequiredField.ErrorText = "*";
-                   }
-               }
-               ).GetHtml()
-                </div>
-                <div class="col-md-3" style="display:none;">
-                    @Html.DevExpress().TextBox(sett => { sett.Name = "txtCustID"; }).GetHtml()
-                </div>
-                <div class="col-md-3" style="display:none;">
-                    @Html.DevExpress().TextBox(sett => { sett.Name = "txtCustName"; }).GetHtml()
-                </div>
-            </div>
-            <div class="row">
-                <br />
-                <div class="col-md-3" style="display:none;">
-                    @Html.DevExpress().TextBox(sett => { sett.Name = "txtBudget"; }).GetHtml()
-                </div>
-                <div class="col-md-3" style="display:none;">
-                    @Html.DevExpress().TextBox(sett => { sett.Name = "txtCurrBudget"; }).GetHtml()
-                </div>
-            </div>
-            <br />
-            <br />
-            <br />
-        </div>
-        <div class="col-md-1"></div>
-    </div>
-</div>
-<br />
-<br />
+
+
 @Html.DevExpress().Button(sett =>
 {
     sett.Name = "Acceptorders";
@@ -287,7 +397,7 @@
 <br />
 <br />
 <div class="row">
-    <div class="col-md-1 col-xs-1 col-sm-1 col-lg-1 col-xs-1 col-sm-1 col-lg-1" style="padding-right:0px"><a href="/Home/Index" title="Back"><span style="color:white;font-size:30px;" class="glyphicon glyphicon-chevron-left"></span></a></div>
-    <div class="col-md-2 col-xs-2 col-sm-2 col-lg-2" style="padding-left:0px"><a href="/Employee/Index?BusinessID=@Session["BuisnessId"].ToString()" title="Next employee"><span style="color:white;font-size:30px;" class="glyphicon glyphicon-chevron-right"></span></a></div>
+    <div class="col-md-1 col-xs-1 col-sm-1 col-lg-1 col-xs-1 col-sm-1 col-lg-1" style="padding-right:0px"><a onclick="GetNavigation('<')" title="Back"><span style="color:white;font-size:30px;" class="glyphicon glyphicon-chevron-left"></span></a></div>
+    <div class="col-md-2 col-xs-2 col-sm-2 col-lg-2" style="padding-left:0px"><a onclick="GetNavigation('>')" title="Next employee"><span style="color:white;font-size:30px;" class="glyphicon glyphicon-chevron-right"></span></a></div>
 </div>
 

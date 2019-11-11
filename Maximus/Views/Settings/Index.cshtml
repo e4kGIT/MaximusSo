@@ -1,119 +1,123 @@
 ﻿<h2>Settings</h2>
 <br /><br />
-<div class="row">
-    <div class="col-md-1 col-xs-1 col-sm-1 col-lg-1"></div>
-    <div class="col-md-10 col-xs-10 col-sm-10 col-lg-10">
-        <div class="row">
-            <div class="col-md-6 col-xs-6 col-sm-6 col-lg-6">
-                @Html.DevExpress().RadioButton(x =>
+<div style="background-color:white">
+    <hr />
+    <div class="row">
+        <div class="col-md-1 col-xs-1 col-sm-1 col-lg-1"></div>
+        <div class="col-md-10 col-xs-10 col-sm-10 col-lg-10">
+            <div class="row">
+                <div class="col-md-6 col-xs-6 col-sm-6 col-lg-6">
+                    @Html.DevExpress().RadioButton(x =>
            {
                x.GroupName = "SizenColor";
                x.Text = "Swatch layout";
                x.Name = "ModernSWATCHES";
                x.Properties.ClientSideEvents.CheckedChanged = "CheckedChanged";
-               x.ControlStyle.ForeColor = System.Drawing.Color.White;
+               x.ControlStyle.ForeColor = System.Drawing.Color.Black;
                x.Checked = Session["ColorSizestyle"] == null | Session["ColorSizestyle"].ToString() == "COMBOBOXES" ? false : true;
            }).GetHtml()
-            </div>
-            <div class="col-md-6 col-xs-6 col-sm-6 col-lg-6">
-                @Html.DevExpress().RadioButton(x =>
+                </div>
+                <div class="col-md-6 col-xs-6 col-sm-6 col-lg-6">
+                    @Html.DevExpress().RadioButton(x =>
            {
                x.GroupName = "SizenColor";
                x.Name = "TraditionalCOMBOBOXES";
                x.Text = "Dropdownbox layout";
                x.Properties.ClientSideEvents.CheckedChanged = "CheckedChanged";
-               x.ControlStyle.ForeColor = System.Drawing.Color.White;
+               x.ControlStyle.ForeColor = System.Drawing.Color.Black;
                x.Checked = Session["ColorSizestyle"] == null | Session["ColorSizestyle"].ToString() == "SWATCHES" ? false : true;
            }).GetHtml()
+                </div>
             </div>
         </div>
+        <div class="col-md-1 col-xs-1 col-sm-1 col-lg-1"></div>
     </div>
-    <div class="col-md-1 col-xs-1 col-sm-1 col-lg-1"></div>
-</div>
 
-<br />
-<div class="row">
-    <div class="col-md-1 col-xs-1 col-sm-1 col-lg-1"></div>
-    <div class="col-md-5 col-xs-5 col-sm-5 col-lg-5">
-        @Html.DevExpress().CheckBox(m =>
+    <br />
+    <div class="row">
+        <div class="col-md-1 col-xs-1 col-sm-1 col-lg-1"></div>
+        <div class="col-md-5 col-xs-5 col-sm-5 col-lg-5">
+            @Html.DevExpress().CheckBox(m =>
    {
        m.Name = "ImageIdFil";
        m.Text = "Show Products only with images";
        m.Properties.ClientSideEvents.CheckedChanged = "getSelectedImgFilter";
-       m.ControlStyle.ForeColor = System.Drawing.Color.White;
+       m.ControlStyle.ForeColor = System.Drawing.Color.Black;
        m.Checked = Session["ImageFilter"] == null ? false : (bool)Session["ImageFilter"];
    }).GetHtml()
-    </div>
+        </div>
 
-    @*<div class="col-md-5 col-xs-5 col-sm-5 col-lg-5">
-        @Html.DevExpress().CheckBox(m =>
-   {
-       m.Name = "DimIdFil";
-       m.Text = "Show products grouped by dimensions";
-       m.Properties.ClientSideEvents.CheckedChanged = "getSelectedDimensionsFilter";
-       m.Checked = Session["GroupdeFilter"] == null ? false : (bool)Session["GroupdeFilter"];
-   }).GetHtml()
-    </div>*@
-    <div class="col-md-1 col-xs-1 col-sm-1 col-lg-1"></div>
-</div>
-<br /> 
-<div class="row">
-    <div class="col-md-1 col-xs-1 col-sm-1 col-lg-1"></div>
-    <div class="col-md-5 col-xs-5 col-sm-5 col-lg-5">
-        @Html.DevExpress().CheckBox(check =>
+        @*<div class="col-md-5 col-xs-5 col-sm-5 col-lg-5">
+                 @Html.DevExpress().CheckBox(m =>
+            {
+                m.Name = "DimIdFil";
+                m.Text = "Show products grouped by dimensions";
+                m.Properties.ClientSideEvents.CheckedChanged = "getSelectedDimensionsFilter";
+                m.Checked = Session["GroupdeFilter"] == null ? false : (bool)Session["GroupdeFilter"];
+            }).GetHtml()
+             </div>*@
+        <div class="col-md-1 col-xs-1 col-sm-1 col-lg-1"></div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-1 col-xs-1 col-sm-1 col-lg-1"></div>
+        <div class="col-md-5 col-xs-5 col-sm-5 col-lg-5">
+            @Html.DevExpress().CheckBox(check =>
    {
        check.Name = "Dimensional_Check";
        check.Text = "Dimension products in treeview layout";
        check.Checked = Session["onDemand"] != null ? (bool)Session["onDemand"] : false;
        check.Properties.ClientSideEvents.CheckedChanged = "setDimensionalView";
-       check.ControlStyle.ForeColor = System.Drawing.Color.White;
+       check.ControlStyle.ForeColor = System.Drawing.Color.Black;
        check.Checked = Session["onDemand"] == null ? false : (bool)Session["onDemand"];
    }).GetHtml()
+        </div>
+        <div class="col-md-5 col-xs-5 col-sm-5 col-lg-5">
+        </div>
+        <div class="col-md-1 col-xs-1 col-sm-1 col-lg-1"></div>
     </div>
-    <div class="col-md-5 col-xs-5 col-sm-5 col-lg-5">
-    </div>
-    <div class="col-md-1 col-xs-1 col-sm-1 col-lg-1"></div>
-</div>
-<br />
-<div class="row">
-    <div class="col-md-1 col-xs-1 col-sm-1 col-lg-1"></div>
-    <div class="col-md-10 col-xs-10 col-sm-10 col-lg-10">
-        <div class="row">
-            <div class="col-md-5 col-xs-5 col-sm-5 col-lg-5" style="padding:0px">
-                <div class="col-md-2 col-xs-2 col-sm-2 col-lg-2">Rows:</div>
-                @if (Convert.ToInt32(Session["cardColumns"]) != 0)
-                {
-                    <div class="col-md-10 col-xs-10 col-sm-10 col-lg-10"><center><input id="cardRows" min="1" type="number" value="@Convert.ToInt32(Session["cardRows"])" placeholder="no of rows per page" class="form-control" /><br /><span hidden style="color:red" id="rowVal">Please enter Row value</span></center></div>
-                }
-                else
-                {
-                    <div class="col-md-10 col-xs-10 col-sm-10 col-lg-10"><center><input id="cardRows" min="1" type="number" value="10" placeholder="no of rows per page" class="form-control" /><br /><span hidden style="color:red" id="rowVal">Please enter Row value</span></center></div>
-                }
-            </div>
-            <div class="col-md-5 col-xs-5 col-sm-5 col-lg-5" style="padding:0px">
-                <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3">Columns:</div>
-                @if (Convert.ToInt32(Session["cardColumns"]) != 0)
-                {
-                    <div class="col-md-9"><center><input id="cardColumns" min="1" type="number" value="@Convert.ToInt32(Session["cardColumns"])" placeholder="no of columns per row" class="form-control" /> <br /> <span hidden style="color:red" id="colVal">Please enter column value</span> </center></div>
-                }
-                else
-                {
-                    <div class="col-md-9"><center><input id="cardColumns" min="1" type="number" value="1" placeholder="no of columns per row" class="form-control" /> <br /> <span hidden style="color:red" id="colVal">Please enter column value</span> </center></div>
-                }
-            </div>
-            <div class="col-md-1 col-xs-1 col-sm-1 col-lg-1" style="padding:0px">
+    <br />
+    <div class="row">
+        <div class="col-md-1 col-xs-1 col-sm-1 col-lg-1"></div>
+        <div class="col-md-10 col-xs-10 col-sm-10 col-lg-10">
+            <div class="row">
+                <div class="col-md-5 col-xs-5 col-sm-5 col-lg-5" style="padding:0px">
+                    <div class="col-md-2 col-xs-2 col-sm-2 col-lg-2" style="color:black">Rows:</div>
+                    @if (Convert.ToInt32(Session["cardColumns"]) != 0)
+                    {
+                        <div class="col-md-10 col-xs-10 col-sm-10 col-lg-10"><center><input id="cardRows" min="1" type="number" value="@Convert.ToInt32(Session["cardRows"])" placeholder="no of rows per page" class="form-control" /><br /><span hidden style="color:red" id="rowVal">Please enter Row value</span></center></div>
+                    }
+                    else
+                    {
+                        <div class="col-md-10 col-xs-10 col-sm-10 col-lg-10"><center><input id="cardRows" min="1" type="number" value="10" placeholder="no of rows per page" class="form-control" /><br /><span hidden style="color:red" id="rowVal">Please enter Row value</span></center></div>
+                    }
+                </div>
+                <div class="col-md-5 col-xs-5 col-sm-5 col-lg-5" style="padding:0px">
+                    <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3" style="color:black">Columns:</div>
+                    @if (Convert.ToInt32(Session["cardColumns"]) != 0)
+                    {
+                        <div class="col-md-9"><center><input id="cardColumns" min="1" type="number" value="@Convert.ToInt32(Session["cardColumns"])" placeholder="no of columns per row" class="form-control" /> <br /> <span hidden style="color:red" id="colVal">Please enter column value</span> </center></div>
+                    }
+                    else
+                    {
+                        <div class="col-md-9"><center><input id="cardColumns" min="1" type="number" value="1" placeholder="no of columns per row" class="form-control" /> <br /> <span hidden style="color:red" id="colVal">Please enter column value</span> </center></div>
+                    }
+                </div>
+                <div class="col-md-1 col-xs-1 col-sm-1 col-lg-1" style="padding:0px">
+                </div>
             </div>
         </div>
+        <div class="col-md-1 col-xs-1 col-sm-1 col-lg-1"></div>
     </div>
-    <div class="col-md-1 col-xs-1 col-sm-1 col-lg-1"></div>
-</div>
-<br /><br /><br />
-<center>
-    @Html.DevExpress().Button(x =>
+    <br /><br /><br />
+    <center>
+        @Html.DevExpress().Button(x =>
     {
         x.Name = "RefreshButton";
         x.Text = "Save";
         x.ClientSideEvents.Click = "setCardRows";
     }).GetHtml()
 
-</center>
+    </center>
+    <hr />
+</div>

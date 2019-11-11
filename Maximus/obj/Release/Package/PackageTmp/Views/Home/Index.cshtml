@@ -32,7 +32,14 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <span><b>Ucode:</b></span>  @{ViewContext.Writer.Write(string.Format("{0}", Session["UcodeDesc"].ToString()));
+                      @{if (((List<string>)Session["Templates"]).Count() > 0)
+                          {
+                            <span><b>Template:</b></span>ViewContext.Writer.Write(string.Format("{0}", Session["UcodeDesc"].ToString()));
+                          }
+                          else
+                          { <span><b>Ucode:</b></span>
+                              ViewContext.Writer.Write(string.Format("{0}", Session["UcodeDesc"].ToString()));
+                          }
                         }
                     </div>
                                 }

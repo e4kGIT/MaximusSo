@@ -351,14 +351,18 @@
             background-color: #444;
             color: white;
         }
-        .dxpcDropDown_Material 
-        {
-            z-index:10000000;
+
+        .dxpcDropDown_Material {
+            z-index: 10000000;
         }
 
         #main {
             transition: margin-left .5s;
             padding: 16px;
+        }
+
+        .rightaligntext input {
+            text-align: right !important;
         }
     </style>
 
@@ -531,8 +535,22 @@
             }
         }
         function GetCart() {
-            var url = "/Basket/ShowBasket";
-            window.location = url;
+            $.ajax({
+                type: "POST",
+                url: "/Home/GetBasketStatus",
+                success:function (response)
+                {
+                    if(response=="")
+                    {
+                        var url = "/Basket/ShowBasket";
+                        window.location = url;
+                    }
+                    else
+                    {
+                        myFunction("No items in the cart!");
+                    }
+                },
+            });
         }
 
         function getSelectedSize(s, e) {
@@ -605,8 +623,7 @@
                             price.innerHTML = "";
                             price.innerHTML = response;
                         }
-                        else
-                        {
+                        else {
                             window.location = "/User/Login/";
                         }
                     },
@@ -649,8 +666,7 @@
                             price.innerHTML = "";
                             price.innerHTML = response;
                         }
-                        else
-                        {
+                        else {
                             window.location = "/User/Login/";
                         }
                     },

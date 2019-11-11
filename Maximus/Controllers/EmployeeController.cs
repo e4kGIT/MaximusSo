@@ -10,8 +10,8 @@ using System.Data;
 
 namespace Maximus.Controllers
 {
+
     [Authorize]
-   
     public class EmployeeController : Controller
     {  // GET: Employee
         #region declarations
@@ -21,7 +21,7 @@ namespace Maximus.Controllers
         #endregion
 
 
-        [AllowAnonymous]
+
         #region Index and EmpGrid
         public ActionResult Index(string BusinessID)
         {
@@ -59,7 +59,7 @@ namespace Maximus.Controllers
                     ViewBag.HideSearch = false;
                     if (!((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes.Contains(','))
                     {
-                        return RedirectToAction("Action", new { EmployeeId = ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmployeeId, EmpName = ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpFirstName+ " "+ ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpLastName, Ucodes = ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes });
+                        return RedirectToAction("Action", new { EmployeeId = ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmployeeId, EmpName = ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpFirstName + " " + ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpLastName, Ucodes = ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes });
                         //((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().em.Contains(',')
                         //GotoCard(((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmployeeId, ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpFirstName + " " + ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpLastName, ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes);
                     }
@@ -115,7 +115,7 @@ namespace Maximus.Controllers
             if (templates.Count > 0)
             {
                 Session["Templates"] = templates;
-                result = dp.GetEmployeeTemplate(businessId, Session["UserName"].ToString(), Session["OrderPermit"].ToString(), txtUcode, ddlAddress, txtUcodeDesc, txtCDepartment, txtRole, txtEmpNo, txtName, txtStDate);
+                result = dp.GetEmployee(businessId, Session["UserName"].ToString(), Session["OrderPermit"].ToString(), txtUcode, ddlAddress, txtUcodeDesc, txtCDepartment, txtRole, txtEmpNo, txtName, txtStDate);
                 //result = dp.getEmployeeDetailsTemplates(Session["BuisnessId"].ToString());
             }
             else
@@ -204,21 +204,24 @@ namespace Maximus.Controllers
             var addArr = new string[] { };
             var addresArr = address1.Contains(',') ? address1.Split(',') : addArr;
             string businessId = Session["BuisnessId"].ToString();
-            salesOrderHeader.Add(new SalesOrderHeaderViewModel
+            if (!salesOrderHeader.Any(x => x.EmployeeID == emp))
             {
-                DelDesc = addresArr.Count() > 0 ? addresArr[0] : "",
-                DelAddress1 = addresArr.Count() > 0 ? addresArr[1] : "",
-                DelAddress2 = addresArr.Count() > 0 ? addresArr[2] : "",
-                DelAddress3 = addresArr.Count() > 0 ? addresArr[3] : "",
-                DelTown = addresArr.Count() > 0 ? addresArr[4] : "",
-                DelCity = addresArr.Count() > 0 ? addresArr[5] : "",
-                DelPostCode = addresArr.Count() > 0 ? addresArr[6] : "",
-                DelCountry = addresArr.Count() > 0 ? addresArr[7] : "",
-                EmployeeName = Session["EmpName"].ToString(),
-                EmployeeID = Session["SelectedEmp"].ToString(),
-                //CustRef = entity.tblsop_salesorder_header.Where(x => x.CustID == businessId).First().CustRef,
-                //Comments = entity.tblsop_salesorder_header.Where(x => x.CustID == businessId).First().Comments,
-            });
+                salesOrderHeader.Add(new SalesOrderHeaderViewModel
+                {
+                    DelDesc = addresArr.Count() > 0 ? addresArr[0] : "",
+                    DelAddress1 = addresArr.Count() > 0 ? addresArr[1] : "",
+                    DelAddress2 = addresArr.Count() > 0 ? addresArr[2] : "",
+                    DelAddress3 = addresArr.Count() > 0 ? addresArr[3] : "",
+                    DelTown = addresArr.Count() > 0 ? addresArr[4] : "",
+                    DelCity = addresArr.Count() > 0 ? addresArr[5] : "",
+                    DelPostCode = addresArr.Count() > 0 ? addresArr[6] : "",
+                    DelCountry = addresArr.Count() > 0 ? addresArr[7] : "",
+                    EmployeeName = Session["EmpName"].ToString(),
+                    EmployeeID = Session["SelectedEmp"].ToString(),
+                    //CustRef = entity.tblsop_salesorder_header.Where(x => x.CustID == businessId).First().CustRef,
+                    //Comments = entity.tblsop_salesorder_header.Where(x => x.CustID == businessId).First().Comments,
+                });
+            }
             List<string> ucodeLst = new List<string>();
             List<UcodeModel> ucodeLst1 = new List<UcodeModel>();
             if (Ucodes.Contains(';'))
@@ -285,11 +288,11 @@ namespace Maximus.Controllers
             string templateHtml = "<ol style=\"padding:0px;\">";
             if (((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Count() > 0)
             {
-                if(((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Any(x => x.SalesOrderLine != null))
+                if (((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Any(x => x.SalesOrderLine != null))
                 {
-                    if(((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Any(x => x.EmployeeID == Session["SelectedEmp"].ToString()))
+                    if (((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Any(x => x.EmployeeID == Session["SelectedEmp"].ToString()))
                     {
-                        var jvj= ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.EmployeeID == Session["SelectedEmp"].ToString()).First().SalesOrderLine.ToList() ;
+                        var jvj = ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.EmployeeID == Session["SelectedEmp"].ToString()).First().SalesOrderLine.ToList();
                         var jvj1 = jvj.Where(x => x.OriginalLineNo == null).ToList();
                         var jvj12 = jvj1.Sum(x => x.OrdQty);
                         Session["qty"] = jvj12;
@@ -375,6 +378,7 @@ namespace Maximus.Controllers
             var templates = (List<string>)Session["Templates"];
             var result = new EmployeeViewModel();
             string busId = Session["BuisnessId"].ToString();
+            ViewBag.empId = empId;
             if (templates.Count > 0)
             {
                 Session["Templates"] = templates;
@@ -382,10 +386,13 @@ namespace Maximus.Controllers
             }
             else
             {
-
                 result = dp.GetEmployeeById(Session["BuisnessId"].ToString(), empId);
             }
-
+            result.EmployeeId = result.EmployeeId == null ? entity.tblaccemp_employee.Where(x => x.EmployeeID == empId && x.BusinessID == busId).First().EmployeeID : empId;
+            result.EmpFirstName = result.EmpFirstName == null ? entity.tblaccemp_employee.Where(x => x.EmployeeID == empId && x.BusinessID == busId).First().Forename : result.EmpFirstName;
+            result.EmpLastName = result.EmpLastName == null ? entity.tblaccemp_employee.Where(x => x.EmployeeID == empId && x.BusinessID == busId).First().Surname : result.EmpLastName;
+            var dept = entity.tblaccemp_employee.Where(x => x.EmployeeID == empId && x.BusinessID == busId).First().DepartmentID;
+            result.Department = result.Department == null ? entity.tblaccemp_departments.Where(x => x.DepartmentID == dept).First().Department : result.Department;
             result.DepartmentLst = entity.tblaccemp_departments.Where(x => x.BusinessID == busId).Select(x => x.Department).ToList();
             result.ucodeLst = dp.GetUcodeList(empId, busId);/* entity.tblaccemp_ucodesemployees.Where(x => x.BusinessID == busId).Select(x => x.UCodeID).Distinct().ToList();*/
             int addId = dp.GetAddressId(busId, empId);
@@ -394,11 +401,11 @@ namespace Maximus.Controllers
             return PartialView("_EmployeeEdit", result);
         }
         [HttpPost]
-        public string EditEmployee(DateTime StartDate, DateTime EndDate, string EmpFirstName = "", string EmpLastName = "", string EmployeeId = "", string EmpUcodes = "", string Address = "", string Department = "", bool isActive = false)
+        public string EditEmployee1(DateTime? StartDate = null, DateTime? EndDate = null, string EmpFirstName = "", string EmpLastName = "", string EmployeeId = "", string EmpUcodes = "", string Address = "", string Department = "", string hrsCmb = "", string hoursNo = "", string hoursDept = "", bool isActive = false)
         {
             try
             {
-                if (EmpFirstName != "" & EmpLastName != "" & EmployeeId != "" & Department != "" & Address != "" & StartDate != null & EndDate != null)
+                if (EmpFirstName != "" & EmpLastName != "" & EmployeeId != "" & Department != "")
                 {
                     string busId = Session["BuisnessId"].ToString();
                     var templates = (List<string>)Session["Templates"];
@@ -444,13 +451,38 @@ namespace Maximus.Controllers
                             }
                         }
                     }
+                    if (hoursNo != "" && hoursDept != "")
+                    {
+                        if (Convert.ToBoolean(Session["ShowHourse"].ToString()) && Convert.ToBoolean(Session["REQ_REASONPAGE"].ToString()))
+                        {
+                            var hrsUcode = new tblaccemp_ucodesemployees();
+                            hrsUcode.BusinessID = busId;
+                            hrsUcode.CompanyID = cmpId;
+                            hrsUcode.EmployeeID = EmployeeId;
+                            hrsUcode.UCodeID = "SQ" + hoursDept + hoursNo;
+                            entity.Entry(hrsUcode).State = System.Data.Entity.EntityState.Added;
+                        }
+                    }
+                    if (hrsCmb != "")
+                    {
+                        var hrsUcode = new tblaccemp_ucodesemployees();
+                        hrsUcode.CompanyID = cmpId;
+                        hrsUcode.UCodeID = hrsCmb;
+                        hrsUcode.EmployeeID = EmployeeId;
+                        hrsUcode.BusinessID = busId;
+                        entity.Entry(hrsUcode).State = System.Data.Entity.EntityState.Added;
+                    }
                     if (entity.SaveChanges() > 0)
                     {
-                        int res = dp.UpdateEmployee(Convert.ToInt32(cmpId), Convert.ToInt32(busAddsId), EmployeeId, busId);
-                        if (res > -1)
+                        if (Address != "")
                         {
-                            return "success";
+                            int res = dp.UpdateEmployee(Convert.ToInt32(cmpId), Convert.ToInt32(busAddsId), EmployeeId, busId);
+                            if (res > -1)
+                            {
+                                return "success";
+                            }
                         }
+                        return "success";
                     }
                     else
                     {
@@ -461,12 +493,27 @@ namespace Maximus.Controllers
                 {
                     return "Validation";
                 }
+                return "success";
             }
             catch (Exception e)
             {
 
             }
             return "";
+        }
+        #endregion
+
+        #region FillAddress
+        public JsonResult FillAllAddress(int descAddId)
+        {
+
+            var FillAddressModel = new FillAddressModel();
+            var result = entity.tblbus_address.Where(x => x.AddressID == descAddId).Select(x => new BusAddress { Address1 = x.Address1, Address2 = x.Address2, Address3 = x.Address3, City = x.City, CountryCode = x.CountryCode.Value, PostCode = x.Postcode, AddressDescription = x.Description, AddressId = x.AddressID }).ToList();
+            foreach (var dtat in result)
+            {
+                dtat.Country = entity.tblbus_countrycodes.Where(x => x.CountryID == dtat.CountryCode).First().Country;
+            }
+            return Json(result, JsonRequestBehavior.AllowGet);
         }
         #endregion
 
@@ -484,6 +531,7 @@ namespace Maximus.Controllers
             result.chkMapEmp = dp.LimitEmpUsers(Session["Access"].ToString());
             result.chkMapAddr = Convert.ToBoolean(dp.BusinessParam("LimitUsrAddr", busId)) == true | !(dp.BusinessParam("DELADDRMAPTO", busId).ToUpper().Trim() == "EMPLOYEE" ? true : false);
             result.AddressLst = entity.tblbus_address.Where(x => x.BusinessID == busId).Select(x => new BusAddress { Address1 = x.Address1, Address2 = x.Address2, Address3 = x.Address3, City = x.City, CountryCode = x.CountryCode.Value, PostCode = x.Postcode, AddressDescription = x.Description, AddressId = x.AddressID }).ToList();
+            Session["Mapemptome"] = !(Session["Access"].ToString().ToUpper().Trim() == "ADMIN" | Session["Access"].ToString().ToUpper().Trim() == "MANAGER");
             //var s = entity.tblbus_address.Where(x => x.BusinessID == busId && x.AddressID== 817371).ToList() ;
             Session["datestart"] = dp.ShowHourse(busId);
             Session["leavedate"] = dp.ShowHourse(busId);
@@ -496,11 +544,11 @@ namespace Maximus.Controllers
             return PartialView("_EmployeeEdit", result);
         }
         [HttpPost]
-        public string CreateNewEmployee(DateTime StartDate, DateTime EndDate, string EmpFirstName = "", string EmpLastName = "", string EmployeeId = "", string EmpUcodes = "", string Address = "", string Department = "", bool isActive = false, bool isMapped = false)
+        public string CreateNewEmployee(DateTime? StartDate = null, DateTime? EndDate = null, string EmpFirstName = "", string EmpLastName = "", string EmployeeId = "", string EmpUcodes = "", string Address = "", string hrsCmb = "", string Department = "", bool isActive = false, bool isMapped = false, string hoursDept = "", string hoursNo = "")
         {
             try
             {
-                if (EmpFirstName != "" & EmpLastName != "" & EmployeeId != "" & Department != "" & Address != "" & StartDate != null & EndDate != null)
+                if (EmpFirstName != "" & EmpLastName != "" & EmployeeId != "" & Department != "")
                 {
                     var templates = (List<string>)Session["Templates"];
                     string busId = Session["BuisnessId"].ToString();
@@ -514,8 +562,8 @@ namespace Maximus.Controllers
                     emp.Surname = EmpLastName;
                     emp.DepartmentID = deptData;
                     emp.EmployeeClosed = isActive == false ? Convert.ToSByte(true) : Convert.ToSByte(false);
-                    emp.StartDate = StartDate;
-                    emp.EndDate = EndDate;
+                    emp.StartDate = StartDate == null ? DateTime.Now : StartDate;
+                    emp.EndDate = EndDate == null ? DateTime.Now : StartDate;
                     entity.Entry(emp).State = System.Data.Entity.EntityState.Added;
                     if (isMapped)
                     {
@@ -551,34 +599,60 @@ namespace Maximus.Controllers
                             tblEmpUcode.EmployeeID = EmployeeId;
                             entity.Entry(tblEmpUcode).State = System.Data.Entity.EntityState.Added;
                         }
+                        entity.SaveChanges();
                     }
-                    if (templates.Count == 0)
+                    if (hrsCmb != "")
                     {
-                        if (entity.SaveChanges() > 0)
+                        var hrsUcode = new tblaccemp_ucodesemployees();
+                        hrsUcode.BusinessID = busId;
+                        hrsUcode.CompanyID = cmpId;
+                        hrsUcode.UCodeID = hrsCmb;
+                        hrsUcode.EmployeeID = EmployeeId;
+                        entity.Entry(hrsUcode).State = System.Data.Entity.EntityState.Added;
+                        entity.SaveChanges();
+                    }
+                    if (hoursNo == "" && hoursDept == "")
+                    {
+                        if (Convert.ToBoolean(Session["ShowHourse"].ToString()) && Convert.ToBoolean(Session["REQ_REASONPAGE"].ToString()))
                         {
+                            var hrsUcode = new tblaccemp_ucodesemployees();
+                            hrsUcode.BusinessID = busId;
+                            hrsUcode.CompanyID = cmpId;
+                            hrsUcode.EmployeeID = EmployeeId;
+                            hrsUcode.UCodeID = "SQ" + hoursDept + hoursNo;
+                            entity.Entry(hrsUcode).State = System.Data.Entity.EntityState.Added;
+                        }
+                    }
+                    if (Address != "")
+                    {
+                        if (templates.Count == 0)
+                        {
+                            if (entity.SaveChanges() > 0)
+                            {
+                                int res = dp.UpdateEmployee(Convert.ToInt32(cmpId), Convert.ToInt32(busAddsId), EmployeeId, busId);
+                                if (res > -1)
+                                {
+                                    return "success";
+                                }
+                            }
+                            else
+                            {
+                                return "";
+                            }
+                        }
+                        else
+                        {
+
+
                             int res = dp.UpdateEmployee(Convert.ToInt32(cmpId), Convert.ToInt32(busAddsId), EmployeeId, busId);
                             if (res > -1)
                             {
                                 return "success";
                             }
-                        }
-                        else
-                        {
-                            return "";
-                        }
-                    }
-                    else
-                    {
-
-
-                        int res = dp.UpdateEmployee(Convert.ToInt32(cmpId), Convert.ToInt32(busAddsId), EmployeeId, busId);
-                        if (res > -1)
-                        {
-                            return "success";
-                        }
-                        else
-                        {
-                            return "";
+                            else
+                            {
+                                return "";
+                            }
                         }
                     }
                 }
@@ -586,7 +660,7 @@ namespace Maximus.Controllers
                 {
                     return "Validation";
                 }
-
+                return "success";
             }
             catch (Exception e)
             {

@@ -10,6 +10,7 @@ namespace Maximus.Models
         public string EmployeeID { get; set; }
         public string EmployeeName { get; set; }
         public string Address { get; set; }
+     
         public string Comments { get; set; }
         public string CompanyID { get; set; }
         public string WarehouseID { get; set; }
@@ -26,6 +27,7 @@ namespace Maximus.Models
         public string InvCountry { get; set; }
         public string DelDesc { get; set; }
         public string DelAddress1 { get; set; }
+        public int AddressId { get; set; }
         public string DelAddress2 { get; set; }
         public string DelAddress3 { get; set; }
         public string DelCity { get; set; }

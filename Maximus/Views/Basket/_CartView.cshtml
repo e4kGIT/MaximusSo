@@ -11,7 +11,8 @@
         settings.SettingsBehavior.ConfirmDelete = true;
         settings.CommandColumn.Visible = true;
         settings.SettingsDetail.ShowDetailRow = true;
-        settings.ClientSideEvents.RowDblClick = "function(s, e) {s.StartEditRow(e.visibleIndex);}";
+        settings.ClientSideEvents.RowClick = "FillAllCurrentHeaderData";
+        //settings.ClientSideEvents.RowDblClick = "function(s, e) {s.StartEditRow(e.visibleIndex);}";
         settings.SettingsDetail.AllowOnlyOneMasterRowExpanded = true;
         // settings.CommandColumn.ShowNewButton = true;
         settings.CommandColumn.ShowDeleteButton = true;

@@ -13,8 +13,7 @@ using Maximus.Filter;
 
 namespace Maximus.Controllers
 {
-
-    [Authorize] 
+    [Authorize]
 
     public class HomeController : Controller
     {
@@ -883,7 +882,7 @@ namespace Maximus.Controllers
         #endregion
 
         #region AddItemsToCart
-        public JsonResult AddToCart(string description = "", string price = "", string size = "", string color = "", string qty = "", string style = "", string orgStyl = "")
+        public JsonResult AddToCart(string description = "", string price = "", string size = "", string color = "", string qty = "", string style = "", string orgStyl = "",string entQty="")
         {
             var appPath = System.Web.HttpContext.Current.Request.MapPath(@"~\");
             string result = "";
@@ -892,7 +891,7 @@ namespace Maximus.Controllers
             long lineNo = 0;
             if (salesOrderHeader.Count != 0)
             {
-                var sss = Session["SelectedEmp"].ToString();
+              
                 salesOrderLines =salesOrderHeader.Any(x => x.EmployeeID == Session["SelectedEmp"].ToString())? salesOrderHeader.Where(x => x.EmployeeID == Session["SelectedEmp"].ToString()).FirstOrDefault().SalesOrderLine != null ?
                   salesOrderHeader.Where(x => x.EmployeeID == Session["SelectedEmp"].ToString()).FirstOrDefault().SalesOrderLine.ToList() : new List<SalesOrderLineViewModel>() : new List<SalesOrderLineViewModel>();
             }
@@ -932,7 +931,7 @@ namespace Maximus.Controllers
             {
                 try
                 {
-                    salesOrderLines.Add(new SalesOrderLineViewModel { ColourID = color, LineNo = lineNo, Description = description, OrdQty = Convert.ToInt64(qty), Price = Convert.ToDouble(price), SizeID = size, StyleID = style, EmployeeId = Session["SelectedEmp"].ToString(), EmployeeName = Session["EmpName"].ToString(), StyleImage = entity.ucodeby_freetextview.Any(x => x.StyleID.Contains(style))? entity.ucodeby_freetextview.Where(x => x.StyleID.Contains(style)).FirstOrDefault().StyleImage : Url.Content("~/StyleImages/notfound.png"), orgStyleId = orgStyl });
+                    salesOrderLines.Add(new SalesOrderLineViewModel { ColourID = color, LineNo = lineNo, Description = description, OrdQty = Convert.ToInt64(qty), Price = Convert.ToDouble(price), SizeID = size, StyleID = style, EmployeeId = Session["SelectedEmp"].ToString(), EmployeeName = Session["EmpName"].ToString(), StyleImage = entity.ucodeby_freetextview.Any(x => x.StyleID.Contains(style))? entity.ucodeby_freetextview.Where(x => x.StyleID.Contains(style)).FirstOrDefault().StyleImage : Url.Content("~/StyleImages/notfound.png"), orgStyleId = orgStyl,VatPercent=data.GetVatPercent(style,size),EntQty=entQty });
                 }
                 catch (Exception e)
                 {
@@ -1545,6 +1544,23 @@ namespace Maximus.Controllers
             }
             return result;
         }
+        #endregion
+
+        #region GetBasketStatus
+        [HttpPost]
+        public string GetBasketStatus()
+        {
+            string result = "";
+            string empId = (Session["SelectedEmp"].ToString());
+            
+            var salesHeader = ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]);
+            if (salesHeader.Any(x => x.SalesOrderLine == null && x.EmployeeID== empId  ) || salesHeader.Count==0)
+            {
+                result = "fail";
+            }
+            return result;
+        }
+
         #endregion
 
     }

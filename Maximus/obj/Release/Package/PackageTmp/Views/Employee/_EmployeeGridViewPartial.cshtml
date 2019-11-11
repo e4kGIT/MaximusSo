@@ -51,7 +51,11 @@
                 string addBtn = "<span style=\"cursor:pointer;\" class=\"glyphicon glyphicon-plus\" title=\"Add new employee\" onclick='CreateNewEmployee()'></span>";
                 // string editBtn = string.Format("<span style=\"cursor:pointer;\" class=\"glyphicon glyphicon-edit\" onclick=\"EditEmployee('{0}');\"></span>");
                 content = content + "{0}&nbsp;&nbsp; </center>";
-                ViewContext.Writer.Write(string.Format(content, addBtn));
+                if (!(bool)Session["DELADDR_USER_CREATE"])
+                {
+                    var s = (bool)Session["DELADDR_USER_CREATE"];
+                    ViewContext.Writer.Write(string.Format(content, addBtn));
+                }
             });
             c.SetDataItemTemplateContent(edit =>
             {

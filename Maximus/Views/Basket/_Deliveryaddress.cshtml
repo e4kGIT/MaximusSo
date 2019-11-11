@@ -1,5 +1,12 @@
 ﻿
 <div class="row">
+    @{
+
+        var addId = Session["cboDelAddress"]!=null?  Convert.ToInt32(Session["cboDelAddress"].ToString()):0;
+        var busAdd = ((List<Maximus.Models.BusAddress>
+            )Session["DeliveryAddress"]).Any(x => x.AddressId == addId) ? ((List<Maximus.Models.BusAddress>
+                )Session["DeliveryAddress"]).Where(x => x.AddressId == addId).First() : new Maximus.Models.BusAddress();
+    }
     @Html.DevExpress().ComboBox(comboBoxSettings =>
 {
     comboBoxSettings.Name = "CmbAddress";
@@ -21,6 +28,8 @@
     comboBoxSettings.Properties.ValueType = typeof(string);
     comboBoxSettings.Properties.TextFormatString = "{0}";
     comboBoxSettings.Properties.Columns.Add("AddressDescription", "Description", System.Web.UI.WebControls.Unit.Percentage(100));
+
+    comboBoxSettings.SelectedIndex = ((List<Maximus.Models.BusAddress>)Session["DeliveryAddress"]).IndexOf(busAdd);
     //comboBoxSettings.Properties.Columns.Add("AddressID", "AddressID", System.Web.UI.WebControls.Unit.Percentage(100));
     //comboBoxSettings.Properties.Columns.Add("Address1", "Address1", System.Web.UI.WebControls.Unit.Percentage(100));
     //comboBoxSettings.Properties.Columns.Add("Address2", "Address2", System.Web.UI.WebControls.Unit.Percentage(100));
@@ -35,45 +44,46 @@
     //}
 }).BindList(Model).GetHtml()
 </div>
+
 <br />
 <br />
 <div class="row">
     @*@{
-        if ((bool)ViewData["booAddrDef"])
-        {
-            if ((bool)ViewData["booAddrEdit"])
+            if ((bool)ViewData["booAddrDef"])
             {
-                <div class="col-md-3">
-                    @Html.DevExpress().CheckBox(sett =>
-           {
-               sett.Name = "optNewAddr";
-               sett.Text = "New";
-           }).GetHtml()
-                </div>
-                <div class="col-md-3"  style="display:none;">
-                    @Html.DevExpress().CheckBox(sett =>
-           {
-               sett.Name = "chkAddress";
-               sett.Text = "Map this address to employee";
-           }).GetHtml()
-                </div>
-                <div class="col-md-3">@Html.DevExpress().TextBox(settings => { settings.Name = "txtAddrChange"; settings.Properties.Caption = "txtAddrChange"; }).GetHtml()</div>
+                if ((bool)ViewData["booAddrEdit"])
+                {
+                    <div class="col-md-3">
+                        @Html.DevExpress().CheckBox(sett =>
+               {
+                   sett.Name = "optNewAddr";
+                   sett.Text = "New";
+               }).GetHtml()
+                    </div>
+                    <div class="col-md-3"  style="display:none;">
+                        @Html.DevExpress().CheckBox(sett =>
+               {
+                   sett.Name = "chkAddress";
+                   sett.Text = "Map this address to employee";
+               }).GetHtml()
+                    </div>
+                    <div class="col-md-3">@Html.DevExpress().TextBox(settings => { settings.Name = "txtAddrChange"; settings.Properties.Caption = "txtAddrChange"; }).GetHtml()</div>
+                }
             }
-        }
-    }*@
-    <div class="col-md-3">@Html.DevExpress().TextBox(settings => { settings.Name = "Address1"; settings.Properties.Caption = "Address1"; }).GetHtml()</div>
-    <div class="col-md-3">@Html.DevExpress().TextBox(settings => { settings.Name = "Address2"; settings.Properties.Caption = "Address2"; }).GetHtml()</div>
-    <div class="col-md-3">@Html.DevExpress().TextBox(settings => { settings.Name = "Address3"; settings.Properties.Caption = "Address3"; }).GetHtml()</div>
+        }*@
+    <div class="col-md-3">@Html.DevExpress().TextBox(settings => { settings.Name = "Address1"; settings.Properties.Caption = "Address1"; settings.Text = busAdd!=null?busAdd.Address1:""; }).GetHtml()</div>
+    <div class="col-md-3">@Html.DevExpress().TextBox(settings => { settings.Name = "Address2"; settings.Properties.Caption = "Address2"; settings.Text = busAdd != null ? busAdd.Address2 : ""; }).GetHtml()</div>
+    <div class="col-md-3">@Html.DevExpress().TextBox(settings => { settings.Name = "Address3"; settings.Properties.Caption = "Address3"; settings.Text = busAdd != null ? busAdd.Address3 : ""; }).GetHtml()</div>
 
 </div>
 <br />
-<
+
 <div class="row">
-    <div class="col-md-3">@Html.DevExpress().TextBox(settings => { settings.Name = "City"; settings.Properties.Caption = "City"; }).GetHtml()</div>
-    <div class="col-md-3">@Html.DevExpress().TextBox(settings => { settings.Name = "PostCode"; settings.Properties.Caption = "Postcode"; }).GetHtml()</div>
+    <div class="col-md-3">@Html.DevExpress().TextBox(settings => { settings.Name = "City"; settings.Properties.Caption = "City"; settings.Text = busAdd != null ? busAdd.City : ""; }).GetHtml()</div>
+    <div class="col-md-3">@Html.DevExpress().TextBox(settings => { settings.Name = "PostCode"; settings.Properties.Caption = "Postcode"; settings.Text = busAdd != null ? busAdd.PostCode : ""; }).GetHtml()</div>
 
     <div class="col-md-3">
-        @Html.DevExpress().TextBox(settings => { settings.Name = "Country"; settings.Properties.Caption = "Country"; }).GetHtml()
+        @Html.DevExpress().TextBox(settings => { settings.Name = "Country"; settings.Properties.Caption = "Country"; settings.Text = busAdd != null ? busAdd.Country : ""; }).GetHtml()
     </div>
 </div>
 

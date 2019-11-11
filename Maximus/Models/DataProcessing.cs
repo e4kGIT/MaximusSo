@@ -348,9 +348,9 @@ namespace Maximus.Models
                 conn.Open();
                 MySqlCommand cmd = new MySqlCommand(sSqry, conn);
                 var reader = cmd.ExecuteReader();
-                if(reader.Read())
+                if (reader.Read())
                 {
-                    return  reader.GetInt32(0);
+                    return reader.GetInt32(0);
                 }
                 else
                 {
@@ -482,6 +482,32 @@ namespace Maximus.Models
         public bool AddressUserCreate(string busId = "")
         {
             return Convert.ToBoolean(BusinessParam("DELADDR_USER_CREATE", busId.Trim()));
+        }
+        #endregion
+
+        #region IsSuperUser 
+        public bool IsSuperUser(string cmpId, string custId, string _user)
+        {
+            bool result = false;
+            string sSqry = "SELECT if(isnull(`Permission`),'HIDE',`Permission`) as `Permission` from `tblpermission_settings_users` WHERE `CompanyID`='" + cmpId + "' AND `UserID`='" + _user + "' AND `BusinessID`='" + custId + "' AND `ControlID`='SUPERUSER'";
+            MySqlConnection conn = new MySqlConnection(ConnectionString);
+            conn.Open();
+            try
+            {
+                MySqlCommand cmd = new MySqlCommand(sSqry, conn);
+                var data = cmd.ExecuteScalar();
+                result = data.ToString().ToUpper() == "SHOW";
+                return result;
+            }
+            catch (Exception e)
+            {
+
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return result;
         }
         #endregion
 
@@ -961,7 +987,7 @@ namespace Maximus.Models
                 usrs = (cmd.ExecuteScalar()).ToString() != "" | cmd.ExecuteScalar() != null ? (cmd.ExecuteScalar()).ToString() : "";
                 if (usrs == "0" | usrs == "")
                 {
-                    emplList = "'" + getZeroLevelUsers(Users) + ",";
+                    emplList = "" + getZeroLevelUsers(Users) + ",";
                     result1.Add(new Models.AllowUsers { users = emplList, count = emplList.Count() });
                 }
                 else
@@ -1004,7 +1030,7 @@ namespace Maximus.Models
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add(new MySqlParameter("Users", arr));
                     result = (command.ExecuteScalar()).ToString() != "" | command.ExecuteScalar() != null ? (command.ExecuteScalar()).ToString() : "";
-                    result = result.Substring(result.Length - 1) == "'" ? "'" + result : "'" + result + "'";
+                    result = result != "" ? result.Substring(result.Length - 1) == "'" ? "'" + result : "'" + result + "'" : "'" + result + "'";
                     userLst.Add(result);
                 }
                 var result2 = "";
@@ -1530,7 +1556,7 @@ namespace Maximus.Models
         {
             string cmpId = System.Configuration.ConfigurationManager.AppSettings["CompanyId"].ToString();
             var data = "";
-            data = enty.tblcmp_defaults.Where(x => x.CompanyID == companyId & x.ParamID == paramID).First().Value;
+            data = enty.tblcmp_defaults.Any(x => x.CompanyID == companyId & x.ParamID == paramID) ? enty.tblcmp_defaults.Where(x => x.CompanyID == companyId & x.ParamID == paramID).First().Value : "";
             if (data != "" && data != null)
             {
                 return data;
@@ -1566,6 +1592,36 @@ namespace Maximus.Models
 
         #endregion
 
+        #region IsSiteCode
+        public bool IsSiteCode(string custId)
+        {
+            bool result = false;
+            string strSQl = "";
+            string sortFld = "t1.SiteName,' | ',t1.SiteCode";
+            string sortString = BusinessParam("SITECODE_SORTING", custId);
+            if (sortString == "")
+            {
+                sortString = "SiteName";
+            }
+            if (sortString == "SiteCode")
+            {
+                sortFld = "t1.SiteCode,' | ',t1.SiteName";
+            }
+            strSQl = "SELECT DISTINCT t1.SiteCode, CAST(Concat(" + sortFld + ") AS CHAR) AS SiteCodeInfo  FROM tblonlinesop_sitecode t1  WHERE t1.Businessid='" + custId + "' ORDER BY t1." + sortString + " ASC";
+            return result = GetDataTable(strSQl).Rows.Count > 0 ? true : false;
+        }
+        #endregion
+
+
+        #region GetCustRefVisiblity
+
+        public bool GetCustRefVisiblity(string busId)
+        {
+            bool result = false;
+            string strSql = "SELECT DISTINCT OrderRef,CONCAT(OrderRef,' | ',NominalCode) AS OrderNomRef FROM tblbus_online_orderref_nominal WHERE businessID='" + busId + "' ORDER BY OrderRef";
+            return GetDataTable(strSql).Rows.Count > 3 ? true : false;
+        }
+        #endregion
 
         #region UpdateEmployee
         public int UpdateEmployee(int cmpId, int addressId, string employeeId, string busId)
@@ -1639,7 +1695,6 @@ namespace Maximus.Models
                             addId = Convert.ToInt32(dr.ItemArray[0].ToString());
                         }
                     }
-
                     return addId;
                 }
             }
@@ -1676,7 +1731,8 @@ namespace Maximus.Models
                             emp.StartDate = DateTime.Parse(data.ItemArray[6].ToString());
                             emp.EndDate = DateTime.Parse(data.ItemArray[7].ToString());
                             emp.EmpUcodes = data.ItemArray[8].ToString();
-                            emp.EmpIsActive = data.ItemArray[9].ToString() == "0" ? true : false;
+                            var s = data.ItemArray[9].ToString() == "0" ? true : false;
+                            emp.EmpIsActive = Convert.ToBoolean(data.ItemArray[9].ToString()) == false ? true : false;
                         }
                     }
                     return emp;
@@ -1688,7 +1744,7 @@ namespace Maximus.Models
             }
             return emp;
         }
-        #endregion
+        #endregion 
 
         #region GetEmployeeDetails
         public List<EmployeeViewModel> getEmployeeDetails(string BuisnessId)
@@ -2011,51 +2067,160 @@ namespace Maximus.Models
         #endregion
         #endregion
 
-        #region usermodule
-
-        public string PermissionSettings(string busId, string userId, string controlId, string accessId)
+        #region Employee
+        public int GetDeliveryAddressId(string employeeId, string busId)
         {
-            string permisson = "";
-            if (userId != "")
+
+            var result = 0;
+            var LstOnlineId = enty.tblonline_userid_employee.Any(x => x.BusinessID == busId && x.EmployeeID == employeeId) ? enty.tblonline_userid_employee.Where(x => x.BusinessID == busId && x.EmployeeID == employeeId).Select(x => x.OnlineUserID).ToList() : new List<string>();
+            string sQry = "";
+            MySqlConnection conn = new MySqlConnection(ConnectionString);
+            try
             {
-                //if (enty.tblpermission_settings_users.Any(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim() && x.UserID.ToLower().Trim() == userId.ToLower().Trim() && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()))
-                //{
-                //    permisson = enty.tblpermission_settings_users.Where(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim() && x.UserID.ToLower().Trim() == userId.ToLower().Trim() && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()).First().Permission;
-                //}
-                //else if (enty.tblpermission_settings.Any(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim() && x.AccessID.ToLower() == accessId.Trim().ToLower() && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()))
-                //{
-                //    permisson = enty.tblpermission_settings.Where(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim() && x.AccessID.ToLower() == accessId.Trim().ToLower() && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()).First().Permission;
-                //}
-                //else if (enty.tblpermission_settings.Any(x => x.BusinessID.ToLower().Trim() == "all" && x.AccessID.ToLower() == accessId.Trim().ToLower() && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()))
-                //{
-                //    permisson = enty.tblpermission_settings.Where(x => x.BusinessID.ToLower().Trim() == "all" && x.AccessID.ToLower() == accessId.Trim().ToLower() && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()).First().Permission;
-                //}
-                //else
-                //{
-                //    permisson = enty.tblpermission_controls.Any(x => x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()) ? enty.tblpermission_controls.Where(x => x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()).First().Defaults : "HIDE";
-                //}
-                if (enty.tblpermission_controls.Any(x => x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()))
+                conn.Open();
+                if (LstOnlineId.Count > 0)
                 {
-                    permisson = enty.tblpermission_controls.Any(x => x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()) ? enty.tblpermission_controls.Where(x => x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()).First().Defaults : "HIDE";
-                    if (enty.tblpermission_settings.Any(x => x.BusinessID.ToLower().Trim() == "all" && x.AccessID.ToLower() == accessId.Trim().ToLower() && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()))
+                    if (LstOnlineId.Contains(employeeId))
                     {
-                        permisson = enty.tblpermission_settings.Where(x => x.BusinessID.ToLower().Trim() == "all" && x.AccessID.ToLower() == accessId.Trim().ToLower() && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()).First().Permission;
-
+                        sQry = "CALL `GetEmpAddressId`('" + employeeId + "','" + busId + "')";
+                        MySqlCommand cmd = new MySqlCommand(sQry, conn);
+                        result = cmd.ExecuteScalar() != null ? Convert.ToInt32(cmd.ExecuteScalar()) : 0;
+                        if (result > 0)
+                        {
+                            return result;
+                        }
                     }
-                    else if (enty.tblpermission_settings.Any(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim() && x.AccessID.ToLower() == accessId.Trim().ToLower() && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()))
+                    foreach (var item in LstOnlineId)
                     {
-                        permisson = enty.tblpermission_settings.Where(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim() && x.AccessID.ToLower() == accessId.Trim().ToLower() && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()).First().Permission;
-
-                    }
-                    else if (enty.tblpermission_settings_users.Any(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim() && x.UserID.ToLower().Trim() == userId.ToLower().Trim() && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()))
-                    {
-                        permisson = enty.tblpermission_settings_users.Where(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim() && x.UserID.ToLower().Trim() == userId.ToLower().Trim() && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()).First().Permission;
-                    }
-                    else
-                    {
-                        permisson = "HIDE";
+                        sQry = "CALL `GetEmpAddressId`('" + item + "','" + busId + "')";
+                        MySqlCommand cmd = new MySqlCommand(sQry, conn);
+                        result = cmd.ExecuteScalar() != null ? Convert.ToInt32(cmd.ExecuteScalar()) : 0;
+                        if (result > 0)
+                        {
+                            return result;
+                        }
                     }
                 }
+            }
+            catch (Exception e)
+            {
+
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return result;
+        }
+        #endregion
+
+
+
+        #region usermodule
+
+        public List<PermissionList> PermissionSettings(string busId, string userId, string controlId, string accessId)
+        {
+
+            List<PermissionList> permisson = new List<PermissionList>(); ;
+            MySqlConnection conn = new MySqlConnection(ConnectionString);
+            string sSqry = "";
+            sSqry = "SELECT * FROM tblpermission_settings_users WHERE companyid='" + cmpId + "' AND BusinessID='" + busId + "' AND UserID='" + userId + "'";
+            if (userId != "")
+            {
+                conn.Open();
+                try
+                {
+                    MySqlCommand cmd = new MySqlCommand(sSqry, conn);
+                    MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+                    if (dt.Rows.Count > 0)
+                    {
+                        foreach (DataRow dr in dt.Rows)
+                        {
+                            permisson.Add(new PermissionList { ControlId = dr["ControlID"].ToString(), Permission = dr["Permission"].ToString() });
+                        }
+                    }
+
+                    sSqry = "SELECT * FROM tblpermission_settings WHERE companyid='" + cmpId + "' AND BusinessID='" + busId + "' AND AccessID='" + accessId + "'";
+                    MySqlCommand cmd1 = new MySqlCommand(sSqry, conn);
+                    MySqlDataAdapter da1 = new MySqlDataAdapter(cmd1);
+                    DataTable dt1 = new DataTable();
+                    da1.Fill(dt1);
+                    if (dt1.Rows.Count > 0)
+                    {
+                        foreach (DataRow dr in dt1.Rows)
+                        {
+                            if (!permisson.Any(x => x.ControlId == dr["ControlID"].ToString()))
+                            {
+                                permisson.Add(new PermissionList { ControlId = dr["ControlID"].ToString(), Permission = dr["Permission"].ToString() });
+                            }
+
+                        }
+                    }
+                    sSqry = "SELECT * FROM tblpermission_settings WHERE companyid='" + cmpId + "' AND BusinessID='ALL' AND AccessID='" + accessId + "'";
+                    MySqlCommand cmd3 = new MySqlCommand(sSqry, conn);
+                    MySqlDataAdapter da3 = new MySqlDataAdapter(cmd3);
+                    DataTable dt3 = new DataTable();
+                    da3.Fill(dt3);
+                    if (dt3.Rows.Count > 0)
+                    {
+                        foreach (DataRow dr in dt3.Rows)
+                        {
+                            if (!permisson.Any(x => x.ControlId == dr["ControlID"].ToString()))
+                            {
+                                permisson.Add(new PermissionList { ControlId = dr["ControlID"].ToString(), Permission = dr["Permission"].ToString() });
+                            }
+                        }
+                    }
+
+                }
+                catch (Exception e)
+                {
+
+                }
+                finally
+                {
+                    conn.Close();
+                }
+                ////if (enty.tblpermission_settings_users.Any(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim() && x.UserID.ToLower().Trim() == userId.ToLower().Trim() && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()))
+                ////{
+                ////    permisson = enty.tblpermission_settings_users.Where(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim() && x.UserID.ToLower().Trim() == userId.ToLower().Trim() && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()).First().Permission;
+                ////}
+                ////else if (enty.tblpermission_settings.Any(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim() && x.AccessID.ToLower() == accessId.Trim().ToLower() && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()))
+                ////{
+                ////    permisson = enty.tblpermission_settings.Where(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim() && x.AccessID.ToLower() == accessId.Trim().ToLower() && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()).First().Permission;
+                ////}
+                ////else if (enty.tblpermission_settings.Any(x => x.BusinessID.ToLower().Trim() == "all" && x.AccessID.ToLower() == accessId.Trim().ToLower() && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()))
+                ////{
+                ////    permisson = enty.tblpermission_settings.Where(x => x.BusinessID.ToLower().Trim() == "all" && x.AccessID.ToLower() == accessId.Trim().ToLower() && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()).First().Permission;
+                ////}
+                ////else
+                ////{
+                ////    permisson = enty.tblpermission_controls.Any(x => x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()) ? enty.tblpermission_controls.Where(x => x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()).First().Defaults : "HIDE";
+                ////}
+                //if (enty.tblpermission_controls.Any(x => x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()))
+                //{
+                //    permisson = enty.tblpermission_controls.Any(x => x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()) ? enty.tblpermission_controls.Where(x => x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()).First().Defaults : "HIDE";
+                //    if (enty.tblpermission_settings.Any(x => x.BusinessID.ToLower().Trim() == "all" && x.AccessID.ToLower() == accessId.Trim().ToLower() && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()))
+                //    {
+                //        permisson = enty.tblpermission_settings.Where(x => x.BusinessID.ToLower().Trim() == "all" && x.AccessID.ToLower() == accessId.Trim().ToLower() && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()).First().Permission;
+
+                //    }
+                //    else if (enty.tblpermission_settings.Any(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim() && x.AccessID.ToLower() == accessId.Trim().ToLower() && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()))
+                //    {
+                //        permisson = enty.tblpermission_settings.Where(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim() && x.AccessID.ToLower() == accessId.Trim().ToLower() && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()).First().Permission;
+
+                //    }
+                //    else if (enty.tblpermission_settings_users.Any(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim() && x.UserID.ToLower().Trim() == userId.ToLower().Trim() && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()))
+                //    {
+                //        permisson = enty.tblpermission_settings_users.Where(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim() && x.UserID.ToLower().Trim() == userId.ToLower().Trim() && x.ControlID.ToLower().Trim() == controlId.ToLower().Trim()).First().Permission;
+                //    }
+                //    else
+                //    {
+                //        permisson = "HIDE";
+                //    }
+                //}
             }
 
 
@@ -2128,6 +2293,32 @@ namespace Maximus.Models
         #endregion
 
         #region basket
+
+        #region GetVatPercent
+        public double GetVatPercent(string style, string size)
+        {
+            double vatPercent = 0.0;
+            string sSqry = " SELECT `vatpercent`  FROM    `tblacc_vatcodes`  WHERE vatcode = (SELECT  `price`  FROM  `tblfsk_style_sizes_prices`  WHERE  `styleid`= '" + style + "' AND sizeid = '" + size + "' AND `priceid`= (SELECT priceid FROM `tblfsk_price` WHERE description = 'VAT'))";
+            MySqlConnection conn = new MySqlConnection(ConnectionString);
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand(sSqry, conn);
+                vatPercent = cmd.ExecuteScalar() != null ? Convert.ToDouble(cmd.ExecuteScalar()) : 0.0;
+                return vatPercent;
+            }
+            catch (Exception e)
+            {
+
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+            return vatPercent;
+        }
+        #endregion
 
         #region GetBooValue
 
@@ -2280,6 +2471,31 @@ namespace Maximus.Models
 
         #endregion
 
+        #region CheckBudgetOrPoints
+        public bool CheckBudgetOrPoints(string businessId, bool booCheck = true)
+        {
+            bool booReturn = true;
+            bool isPersonalOrder = false;
+            bool busBudgetReq = Convert.ToBoolean(HttpContext.Current.Session["BUDGETREQ"]);
+            if (isPersonalOrder)
+            {
+                return true;
+            }
+            if (booCheck)
+            {
+                if (busBudgetReq)
+                {
+
+                }
+                else if (Convert.ToBoolean(BusinessParam("POINTSREQ", businessId)))
+                {
+
+                }
+            }
+            return booReturn;
+        }
+        #endregion
+
         #region GetAddressDetails
         public BusAddress GetAddressDetails(string qry)
         {
@@ -2367,6 +2583,70 @@ namespace Maximus.Models
 
             return result;
         }
+        #endregion
+
+        #region getDatatable
+        public DataTable GetDatatableByQry(int i, string busId)
+        {
+            string sql = "";
+            DataTable dt = new DataTable();
+            MySqlConnection con = new MySqlConnection(ConnectionString);
+            sql = i == 0 ? "SELECT DISTINCT ToHour FROM tblaccemp_ucodes_hours WHERE BusinessID='" + busId + "' AND CompanyID='" + cmpId + "' ORDER BY ToHour" : "SELECT DISTINCT UCodeID  FROM tblaccemp_ucodes_hours  WHERE BusinessID='" + busId + "' AND CompanyID='" + cmpId + "' ORDER BY UCodeID";
+            try
+            {
+                con.Open();
+                MySqlCommand cmd = new MySqlCommand(sql, con);
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                da.Fill(dt);
+                if (dt.Rows.Count > 0)
+                {
+                    return dt;
+                }
+            }
+            catch
+            {
+            }
+            finally
+            {
+                con.Close();
+            }
+            return dt;
+        }
+        #endregion
+
+        #region FillComboUcodesShowHours
+
+        public DataTable FillshowhoursCmb(string txtEmpID, string strCompanyID)
+        {
+            DataTable dt = new DataTable();
+            MySqlConnection conn = new MySqlConnection(ConnectionString);
+            string sSqry = "";
+            if (txtEmpID == "")
+            {
+                sSqry = "SELECT DISTINCT t1.`CompanyID`,t1.`UCodeID`,IF (Q1.`UCodeID` IS NULL,FALSE,FALSE) AS CheckIt  FROM `tblaccemp_ucodes` t1  LEFT JOIN (SELECT CompanyID,BusinessID,UCodeID FROM `tblaccemp_ucodesemployees` WHERE `EmployeeID`='" + txtEmpID + "') Q1 ON t1.`CompanyID`=Q1.CompanyID AND t1.UCODEID=Q1.UCODEID  LEFT JOIN tblaccemp_ucodesemployees t2 ON t1.`CompanyID` = t2.`CompanyID` AND t1.`UCodeID` = t2.`UCodeID`  WHERE t2.BusinessID='" + strCustID + "' AND t2.CompanyID='" + strCompanyID + "' ORDER BY t1.UCodeID";
+            }
+            else
+            {
+                sSqry = "SELECT DISTINCT t1.`CompanyID`,t1.`UCodeID`,IF (Q1.`UCodeID` IS NULL,FALSE,TRUE) AS CheckIt FROM `tblaccemp_ucodes` t1  LEFT JOIN (SELECT CompanyID,BusinessID,UCodeID FROM `tblaccemp_ucodesemployees`   WHERE `EmployeeID`='" + txtEmpID + "') Q1 ON t1.`CompanyID`=Q1.CompanyID AND t1.UCODEID=Q1.UCODEID  LEFT JOIN tblaccemp_ucodesemployees t2 ON t1.`CompanyID` = t2.`CompanyID` AND t1.`UCodeID` = t2.`UCodeID`  WHERE t2.BusinessID='" + strCustID + "' AND t2.CompanyID='" + strCompanyID + "' ORDER BY t1.UCodeID";
+            }
+            conn.Open();
+            try
+            {
+                MySqlCommand cmd = new MySqlCommand(sSqry, conn);
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                da.Fill(dt);
+                if (dt.Rows.Count > 0)
+                {
+                    return dt;
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+            return dt;
+        }
+
         #endregion
 
         #region IsGetAllDelAddress

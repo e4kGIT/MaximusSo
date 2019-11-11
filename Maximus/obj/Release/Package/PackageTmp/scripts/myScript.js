@@ -39,7 +39,29 @@
         });
     }
 }
+function  getEntitlementDIMENSION(style, orgStyle)
+{
+    if (style!="" && orgStyle!="") {
+        
+        $.ajax({
+            url: "/Home/GetEntitlement",
+            type: "POST",
+            data: { 'StyleId': style, 'orgStyl': orgStyle },
+            success: function (response) {
+                if (response != "") {
+                    var data = document.getElementById("Entitlement");
+                    data.innerHTML = response.Result;
+                    Entitlement.SetHeaderText("Entitlement for " + response.EmpId);
+                    Entitlement.Show();
+                }
+            },
+            error: function (response) {
 
+            }
+        });
+    }
+     
+}
 function getEntitlementonDemand(style) {
     var colordrop = "ColorDimview_" + "Drop_" + style;
     var colorValue = document.getElementsByName(colordrop);

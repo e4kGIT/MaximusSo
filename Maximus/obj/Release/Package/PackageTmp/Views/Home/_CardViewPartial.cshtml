@@ -471,7 +471,8 @@
                     {
                         var svmLst = entity.tblfskstyle_dimension1.Where(s => s.FreeText.ToLower() == freeText.ToLower()).Select(s => new Maximus.Models.styleViewmodel { StyleID = s.StyleId, Description = s.Description, StyleImage = s.StyleImage }).ToList();
                         //var svm=entity.styleby_freetextview.Where(s=>s.FreeText==f)
-                        var content = "<div class='row'>";
+                        var data1 = entity.tblfsk_setvalues.Any(sas => sas.SettingID.ToUpper().Trim() == "FITDIM_STYLE_DESC" && sas.StyleID.ToLower().Trim() == orgStyle.ToLower().Trim())? entity.tblfsk_setvalues.Where(sas => sas.SettingID.ToUpper().Trim() == "FITDIM_STYLE_DESC" && sas.StyleID.ToLower().Trim()==orgStyle.ToLower().Trim()).First().Value:"";
+                        var content = "<div class='row'><div class='col-md-11'><div class='row'><center>"+ data1 + "</center><hr/>";
                         foreach (var svm in svmLst)
                         {
                             if (svm.StyleImage != null)
@@ -506,7 +507,7 @@
                             }
                             content = content + string.Format("<div class='col-md-2'><div class='dimAllocdiv'><a style=\"cursor:pointer;\" onclick=\"getCard1('{1}','{3}')\"><center><img src='{0}'  style=\"margin:3px;\" height=\"150\" width=\"100\" /><br/>{2}</center></a></div></div>", svm.StyleImage, svm.StyleID, svm.Description, orgStyle);
                         }
-                        content = content + "</div>";
+                        content = content + "</div></div><div class='col-md-1'>"+string.Format("<div style='margin-top: 14px;'><center> <img src='/Content/Images/empHistory.png' title='Entitlement and previous history' height='40' width='40' onclick=\"getEntitlementDIMENSION('{0}','{1}');\"/></center></div>",style,orgStyle)+"</div></div>";
                         //Maximus.Models.DataProcessing data = new Maximus.Models.DataProcessing();
 
                         //var svmLst = entity.ucodeby_freetextview.Where(ss => ss.DimFreeText == freeText).Select(ss => new Maximus.Models.styleViewmodel { StyleID = ss.StyleID, OriginalStyleid = ss.StyleID, StyleImage = ss.StyleImage, Freetext = freeText, ProductGroup = ss.Product_Group.Value }).Distinct().ToList(); /*data.getFreeTextStyles(freeText, Session["SelectedEmp"].ToString(), Session["BuisnessId"].ToString());*/

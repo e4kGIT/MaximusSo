@@ -39,10 +39,9 @@
         });
     }
 }
-function  getEntitlementDIMENSION(style, orgStyle)
-{
-    if (style!="" && orgStyle!="") {
-        
+function getEntitlementDIMENSION(style, orgStyle) {
+    if (style != "" && orgStyle != "") {
+
         $.ajax({
             url: "/Home/GetEntitlement",
             type: "POST",
@@ -60,7 +59,7 @@ function  getEntitlementDIMENSION(style, orgStyle)
             }
         });
     }
-     
+
 }
 function getEntitlementonDemand(style) {
     var colordrop = "ColorDimview_" + "Drop_" + style;
@@ -219,14 +218,13 @@ function getSelectedSizeSwatch(style, size, orgStyle) {
             data: { 'StyleID': styleId_Val, 'SizeId': size },
             success: function (response) {
                 ;
-                if (!response.includes("Login")) { 
+                if (!response.includes("Login")) {
                     var priceId = "LbPrice" + style;
                     var price = document.getElementById(priceId);
                     price.innerHTML = "";
                     price.innerHTML = response;
                 }
-                else
-                {
+                else {
                     window.location = "/User/Login/";
                 }
             },
@@ -258,8 +256,7 @@ function getSelectedSizeDimSwatch(style, size) {
                     price.innerHTML = "";
                     price.innerHTML = response;
                 }
-                else
-                {
+                else {
                     window.location = "/User/Login/";
                 }
             },
@@ -592,7 +589,8 @@ function addTocartSwatch(s, e) {
     }
     var desc = descStyle == undefined ? stylearr[1] : descStyle[0];
     var Spin = document.getElementsByName("spinEdit_" + stylearr[1]);
-    description = document.getElementById("LbDescription" + desc).innerHTML;
+ var descriptionDiv = document.getElementById("LbDescription" + desc);
+ description = descriptionDiv.innerHTML;
     price = document.getElementById("LbPrice" + stylearr[1]).innerHTML;
     qty = Spin[0].value;
     if (description != "" && price != "" && size != "" && color != "" && qty != "" && qty != "0") {
@@ -609,7 +607,7 @@ function addTocartSwatch(s, e) {
                         $.ajax({
                             url: "/Home/Addtocart/",
                             type: "POST",
-                            data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3] },
+                            data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'entQty': stylearr[2] },
                             success: function (response) {
                                 if (response != "") {
                                     $("#CartwidCount").html("");
@@ -661,7 +659,7 @@ function addTocartSwatch(s, e) {
                                 if (response != "") {
                                     $("#CartwidCount").html("");
                                     $("#CartwidCount").html(response);
-                                    myFunction("Added to cart..!");  
+                                    myFunction("Added to cart..!");
                                 }
                                 else {
                                     loadPopup.Hide();
@@ -1466,8 +1464,7 @@ function getSelectedTemplateSize(s, e) {
                     price.innerHTML = "";
                     price.innerHTML = response;
                 }
-                else
-                {
+                else {
                     window.location = "/User/Login/";
                 }
             },
@@ -1497,8 +1494,7 @@ function getSelectedSizeTemplateSwatch(style, size) {
                     price.innerHTML = "";
                     price.innerHTML = response;
                 }
-                else
-                {
+                else {
                     window.location = "/User/Login/";
                 }
             },
@@ -1573,7 +1569,7 @@ function addTocartTemplateSwatch(s, e) {
                     $("#CartwidCount").html("");
                     $("#CartwidCount").html(response);
                     loadPopup.Hide();
-                    myFunction("Added to cart..!");  ;
+                    myFunction("Added to cart..!");;
                 }
                 else {
                     loadPopup.Hide();
@@ -1623,7 +1619,7 @@ function addTocartTemplate(s, e) {
                     $("#CartwidCount").html("");
                     $("#CartwidCount").html(response);
                     loadPopup.Hide();
-                    myFunction("Added to cart..!");  ;
+                    myFunction("Added to cart..!");;
                 }
                 else {
                     loadPopup.Hide();
@@ -1684,22 +1680,25 @@ function UpdateEmployee(s, e) {
     var lstName = ASPxClientControl.GetControlCollection().GetByName("editEmpLastName");
     var dept = ASPxClientControl.GetControlCollection().GetByName("editDepartment");
     var selUcode;
+    var hoursCmb = ASPxClientControl.GetControlCollection().GetByName("hoursCmb");
+    var hoursDept = ASPxClientControl.GetControlCollection().GetByName("hoursDEPT");
+    var hoursNo = ASPxClientControl.GetControlCollection().GetByName("hoursNo");
     if (s.name != "UpdateBtn_Template") {
         selUcode = ASPxClientControl.GetControlCollection().GetByName("checkComboEdit");
     }
+    var date = new Date().toISOString();
     var strtDate = ASPxClientControl.GetControlCollection().GetByName("editStartDate");
     var endDate = ASPxClientControl.GetControlCollection().GetByName("editStartDate");
     var isAct = ASPxClientControl.GetControlCollection().GetByName("editEmpIsActive");
     var address = ASPxClientControl.GetControlCollection().GetByName("CmbAddress");
     if (s.name != "UpdateBtn_Template") {
-        if (empID.lastChangedValue != null & frstName.lastChangedValue != null & lstName.lastChangedValue != null & dept.lastSuccessText != null & selUcode.lastChangedValue != null & strtDate.date != null & address.lastSuccessText != null & endDate.date != null) {
-            if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & dept.lastSuccessText.trim() != "" & selUcode.lastChangedValue.trim() != "" & strtDate.date != "" & address.lastSuccessText.trim() != "" & endDate.date != "") {
-                if (address.lastSuccessText.trim() != '') {
-
-                    var data1 = { 'StartDate': strtDate.date.toJSON(), 'EndDate': endDate.date.toJSON(), 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address.lastSuccessText.trim(), 'isActive': isAct.previousValue };
+        if ((hoursCmb == undefined || hoursCmb == null) && (hoursDept == undefined || hoursDept == null)) {
+            if (empID.lastChangedValue != null & frstName.lastChangedValue != null & lstName.lastChangedValue != null & dept.lastSuccessText != null & selUcode.lastChangedValue != null) {
+                if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & dept.lastSuccessText.trim() != "" & selUcode.lastChangedValue.trim() != "") {
+                    var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue };
                     $.ajax({
                         type: "POST",
-                        url: "/Employee/EditEmployee/",
+                        url: "/Employee/EditEmployee1/",
                         data: data1,
                         success: function (response) {
                             if (response == "success") {
@@ -1714,25 +1713,46 @@ function UpdateEmployee(s, e) {
                         }
                     });
                 }
+            }
+            else {
+                alert("Please fill all details");
+            }
+        }
+        else if ((hoursCmb == undefined || hoursCmb == null) || (hoursDept != undefined || hoursDept != null)) {
+            var hrsDept = hoursDept.GetValue();
+            var hrsNo = hoursNo.GetValue();
+            if (empID.lastChangedValue != null & frstName.lastChangedValue != null & lstName.lastChangedValue != null & dept.lastSuccessText != null & hrsDept != null) {
+                if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & dept.lastSuccessText.trim() != "" & hrsDept.trim() != "") {
+                    var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursDept': hrsDept.trim(), 'hoursNo': hrsNo.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue };
+                    $.ajax({
+                        type: "POST",
+                        url: "/Employee/EditEmployee1/",
+                        data: data1,
+                        success: function (response) {
+                            if (response == "success") {
+                                alert("Successfully updated!");
+                                EditPop.Hide();
+                                window.location.reload();
+                            }
+                            else if (response == "Validation") {
+                                alert("Please fill all data");
+                            }
 
-                else {
-                    alert("Please select a valid Address");
+                        }
+                    });
                 }
+            }
+            else {
+                alert("Please fill all details");
             }
         }
         else {
-            alert("Please fill all details");
-        }
-    }
-    else {
-        if (empID.lastChangedValue != null & frstName.lastChangedValue != null & lstName.lastChangedValue != null & dept.lastSuccessText != null & strtDate.date != null & address.lastSuccessText != null & endDate.date != null) {
-            if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & dept.lastSuccessText.trim() != "" & strtDate.date != "" & address.lastSuccessText.trim() != "" & endDate.date != "") {
-                if (address.lastSuccessText.trim() != '') {
-
-                    var data1 = { 'StartDate': strtDate.date.toJSON(), 'EndDate': endDate.date.toJSON(), 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address.lastSuccessText.trim(), 'isActive': isAct.previousValue };
+            if (empID.lastChangedValue != null & frstName.lastChangedValue != null & lstName.lastChangedValue != null & dept.lastSuccessText != null & hoursCmb.lastChangedValue != null) {
+                if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & dept.lastSuccessText.trim() != "" & hoursCmb.lastChangedValue.trim() != "") {
+                    var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hrsCmb': hoursCmb.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue };
                     $.ajax({
                         type: "POST",
-                        url: "/Employee/EditEmployee/",
+                        url: "/Employee/EditEmployee1/",
                         data: data1,
                         success: function (response) {
                             if (response == "success") {
@@ -1747,10 +1767,31 @@ function UpdateEmployee(s, e) {
                         }
                     });
                 }
-
-                else {
-                    alert("Please select a valid Address");
-                }
+            }
+            else {
+                alert("Please fill all details");
+            }
+        }
+    }
+    else {
+        if (empID.lastChangedValue != null & frstName.lastChangedValue != null & lstName.lastChangedValue != null & dept.lastSuccessText != null) {
+            if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & dept.lastSuccessText.trim() != "") {
+                var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue };
+                $.ajax({
+                    type: "POST",
+                    url: "/Employee/EditEmployee1/",
+                    data: data1,
+                    success: function (response) {
+                        if (response == "success") {
+                            alert("Successfully updated!");
+                            EditPop.Hide();
+                            window.location.reload();
+                        }
+                        else if (response == "Validation") {
+                            alert("Please fill all data");
+                        }
+                    }
+                });
             }
         }
         else {
@@ -1761,14 +1802,15 @@ function UpdateEmployee(s, e) {
 }
 
 function CreateEmployee(s, e) {
-
-
     var EditPop = ASPxClientControl.GetControlCollection().GetByName("CreateEditPop");
     var empID = ASPxClientControl.GetControlCollection().GetByName("editEmpId");
     var frstName = ASPxClientControl.GetControlCollection().GetByName("editEmpFirstName");
     var lstName = ASPxClientControl.GetControlCollection().GetByName("editEmpLastName");
     var dept = ASPxClientControl.GetControlCollection().GetByName("editDepartment");
     var selUcode;
+    var hoursCmb = ASPxClientControl.GetControlCollection().GetByName("hoursCmb");
+    var hoursDept = ASPxClientControl.GetControlCollection().GetByName("hoursDEPT");
+    var hoursNo = ASPxClientControl.GetControlCollection().GetByName("hoursNo");
     if (s.name != "CreateBtn_Template") {
         selUcode = ASPxClientControl.GetControlCollection().GetByName("checkComboEdit");
     }
@@ -1779,10 +1821,12 @@ function CreateEmployee(s, e) {
     var empMapper = ASPxClientControl.GetControlCollection().GetByName("empMapper");
     var isMapped = empMapper == null | empMapper == undefined ? false : empMapper.GetValue();
     if (s.name != "CreateBtn_Template") {
-        if (empID.lastChangedValue != null & frstName.lastChangedValue != null & lstName.lastChangedValue != null & dept.lastSuccessText != null & selUcode.lastChangedValue != null & strtDate.date != null & address.lastSuccessText != null & endDate.date != null) {
-            if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & dept.lastSuccessText.trim() != "" & selUcode.lastChangedValue.trim() != "" & strtDate.date != "" & address.lastSuccessText.trim() != "" & endDate.date != "") {
-                if (address.lastSuccessText.trim() != '') {
+        if ((hoursCmb == undefined || hoursCmb == null) && (hoursDept == undefined || hoursDept == null)) {
+            if (empID.lastChangedValue != null & frstName.lastChangedValue != null & lstName.lastChangedValue != null & dept.lastSuccessText != null & selUcode.lastChangedValue != null) {
+                if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & dept.lastSuccessText.trim() != "" & selUcode.lastChangedValue.trim() != "") {
+
                     var data1;
+                    var date = new Date().toISOString();
                     $.ajax({
                         type: "POST",
                         url: "/Employee/EmployeeIdValidation/",
@@ -1791,7 +1835,7 @@ function CreateEmployee(s, e) {
                             if (response == "Success") {
                                 if (isAct.previousValue == false) {
                                     if (confirm("Do you want to set the employee Active")) {
-                                        data1 = { 'StartDate': strtDate.date.toJSON(), 'EndDate': endDate.date.toJSON(), 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address.lastSuccessText.trim(), 'isActive': true, 'isMapped': isMapped };
+                                        data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': true, 'isMapped': isMapped };
                                         $.ajax({
                                             type: "POST",
                                             url: "/Employee/CreateNewEmployee/",
@@ -1811,7 +1855,7 @@ function CreateEmployee(s, e) {
                                         });
                                     }
                                     else {
-                                        data1 = { 'StartDate': strtDate.date.toJSON(), 'EndDate': endDate.date.toJSON(), 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address.lastSuccessText.trim(), 'isActive': isAct.previousValue };
+                                        data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
                                         $.ajax({
                                             type: "POST",
                                             url: "/Employee/CreateNewEmployee/",
@@ -1833,7 +1877,7 @@ function CreateEmployee(s, e) {
 
                                 }
                                 else {
-                                    data1 = { 'StartDate': strtDate.date.toJSON(), 'EndDate': endDate.date.toJSON(), 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address.lastSuccessText.trim(), 'isActive': isAct.previousValue };
+                                    data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
                                     $.ajax({
                                         type: "POST",
                                         url: "/Employee/CreateNewEmployee/",
@@ -1875,21 +1919,112 @@ function CreateEmployee(s, e) {
                     //        }
                     //    }
                     //});
+
+
                 }
-                else {
-                    alert("Please select a valid Address");
+            }
+            else {
+                alert("Please fill all details");
+            }
+        }
+        else if ((hoursCmb == undefined || hoursCmb == null) && (hoursDept != undefined || hoursDept != null)) {
+            var hrsDept = hoursDept.GetValue();
+            var hrsNo = hoursNo.GetValue();
+            if (empID.lastChangedValue != null & frstName.lastChangedValue != null & lstName.lastChangedValue != null & dept.lastSuccessText != null & hoursDept.lastChangedValue != null & hrsDept != null) {
+                if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & dept.lastSuccessText.trim() != "" & hrsDept != "") {
+
+                    var data1;
+                    var date = new Date().toISOString();
+                    $.ajax({
+                        type: "POST",
+                        url: "/Employee/EmployeeIdValidation/",
+                        data: { 'empId': empID.lastChangedValue.trim() },
+                        success: function (response) {
+                            if (response == "Success") {
+                                if (isAct.previousValue == false) {
+                                    if (confirm("Do you want to set the employee Active")) {
+                                        data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursDept': hrsDept.trim(), 'hoursNo': hrsNo.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': true, 'isMapped': isMapped };
+                                        $.ajax({
+                                            type: "POST",
+                                            url: "/Employee/CreateNewEmployee/",
+                                            data: data1,
+                                            success: function (response) {
+                                                if (response == "success") {
+                                                    alert("Successfully created employee!");
+                                                    EditPop.Hide();
+                                                    window.location.reload();
+                                                }
+                                                else {
+
+                                                }
+                                            },
+                                            error: function (response) {
+                                            }
+                                        });
+                                    }
+                                    else {
+                                        data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursDept': hrsDept.trim(), 'hoursNo': hrsNo.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
+                                        $.ajax({
+                                            type: "POST",
+                                            url: "/Employee/CreateNewEmployee/",
+                                            data: data1,
+                                            success: function (response) {
+                                                if (response == "success") {
+                                                    alert("Successfully created employee!");
+                                                    EditPop.Hide();
+                                                    window.location.reload();
+                                                }
+                                                else {
+
+                                                }
+                                            },
+                                            error: function (response) {
+                                            }
+                                        });
+                                    }
+
+                                }
+                                else {
+                                    data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursDept': hrsDept.trim(), 'hoursNo': hrsNo.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "/Employee/CreateNewEmployee/",
+                                        data: data1,
+                                        success: function (response) {
+                                            if (response == "success") {
+                                                alert("Successfully created employee!");
+                                                EditPop.Hide();
+                                                window.location.reload();
+                                            }
+                                            else {
+
+                                            }
+                                        },
+                                        error: function (response) {
+                                        }
+                                    });
+                                }
+                            }
+                            else if (response == "") {
+                                alert("The Employee id already registered please select different employee id");
+                            }
+                            else {
+                                alert(response);
+                            }
+                        }
+                    });
                 }
+            }
+            else {
+                alert("Please fill all details");
             }
         }
         else {
-            alert("Please fill all details");
-        }
-    }
-    else {
-        if (empID.lastChangedValue != null & frstName.lastChangedValue != null & lstName.lastChangedValue != null & dept.lastSuccessText != null & strtDate.date != null & address.lastSuccessText != null & endDate.date != null) {
-            if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & dept.lastSuccessText.trim() != "" & strtDate.date != "" & address.lastSuccessText.trim() != "" & endDate.date != "") {
-                if (address.lastSuccessText.trim() != '') {
+            if (empID.lastChangedValue != null & frstName.lastChangedValue != null & lstName.lastChangedValue != null & dept.lastSuccessText != null & hoursCmb.lastChangedValue != null) {
+                if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & dept.lastSuccessText.trim() != "" & hoursCmb.lastChangedValue.trim() != "") {
+
                     var data1;
+                    var date = new Date().toISOString();
                     $.ajax({
                         type: "POST",
                         url: "/Employee/EmployeeIdValidation/",
@@ -1898,7 +2033,7 @@ function CreateEmployee(s, e) {
                             if (response == "Success") {
                                 if (isAct.previousValue == false) {
                                     if (confirm("Do you want to set the employee Active")) {
-                                        data1 = { 'StartDate': strtDate.date.toJSON(), 'EndDate': endDate.date.toJSON(), 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address.lastSuccessText.trim(), 'isActive': true };
+                                        data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursCmb': hoursCmb.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': true, 'isMapped': isMapped };
                                         $.ajax({
                                             type: "POST",
                                             url: "/Employee/CreateNewEmployee/",
@@ -1918,7 +2053,7 @@ function CreateEmployee(s, e) {
                                         });
                                     }
                                     else {
-                                        data1 = { 'StartDate': strtDate.date.toJSON(), 'EndDate': endDate.date.toJSON(), 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address.lastSuccessText.trim(), 'isActive': isAct.previousValue };
+                                        data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursCmb': hoursCmb.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
                                         $.ajax({
                                             type: "POST",
                                             url: "/Employee/CreateNewEmployee/",
@@ -1940,7 +2075,7 @@ function CreateEmployee(s, e) {
 
                                 }
                                 else {
-                                    data1 = { 'StartDate': strtDate.date.toJSON(), 'EndDate': endDate.date.toJSON(), 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address.lastSuccessText.trim(), 'isActive': isAct.previousValue };
+                                    data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursCmb': hoursCmb.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
                                     $.ajax({
                                         type: "POST",
                                         url: "/Employee/CreateNewEmployee/",
@@ -1982,10 +2117,114 @@ function CreateEmployee(s, e) {
                     //        }
                     //    }
                     //});
+
+
                 }
-                else {
-                    alert("Please select a valid Address");
-                }
+            }
+            else {
+                alert("Please fill all details");
+            }
+        }
+    }
+    else {
+        if (empID.lastChangedValue != null & frstName.lastChangedValue != null & lstName.lastChangedValue != null & dept.lastSuccessText != null) {
+            if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & dept.lastSuccessText.trim() != "") {
+
+                var data1;
+                var date = new Date();
+                $.ajax({
+                    type: "POST",
+                    url: "/Employee/EmployeeIdValidation/",
+                    data: { 'empId': empID.lastChangedValue.trim() },
+                    success: function (response) {
+                        if (response == "Success") {
+                            if (isAct.previousValue == false) {
+                                if (confirm("Do you want to set the employee Active")) {
+                                    data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': true };
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "/Employee/CreateNewEmployee/",
+                                        data: data1,
+                                        success: function (response) {
+                                            if (response == "success") {
+                                                alert("Successfully created employee!");
+                                                EditPop.Hide();
+                                                window.location.reload();
+                                            }
+                                            else {
+
+                                            }
+                                        },
+                                        error: function (response) {
+                                        }
+                                    });
+                                }
+                                else {
+                                    data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "/Employee/CreateNewEmployee/",
+                                        data: data1,
+                                        success: function (response) {
+                                            if (response == "success") {
+                                                alert("Successfully created employee!");
+                                                EditPop.Hide();
+                                                window.location.reload();
+                                            }
+                                            else {
+
+                                            }
+                                        },
+                                        error: function (response) {
+                                        }
+                                    });
+                                }
+
+                            }
+                            else {
+                                data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
+                                $.ajax({
+                                    type: "POST",
+                                    url: "/Employee/CreateNewEmployee/",
+                                    data: data1,
+                                    success: function (response) {
+                                        if (response == "success") {
+                                            alert("Successfully created employee!");
+                                            EditPop.Hide();
+                                            window.location.reload();
+                                        }
+                                        else {
+
+                                        }
+                                    },
+                                    error: function (response) {
+                                    }
+                                });
+                            }
+                        }
+                        else if (response == "") {
+                            alert("The Employee id already registered please select different employee id");
+                        }
+                        else {
+                            alert(response);
+                        }
+                    }
+                });
+                //$.ajax({
+                //    type: "POST",
+                //    url: "/Employee/EditEmployee/",
+                //    data: data1,
+                //    success: function (response) {
+                //        if (response == "success") {
+                //            alert("Successfully updated!");
+                //            EditPop.Hide();
+                //        }
+                //        else if (response == "Validation") {
+                //            alert("Please fill all data");
+                //        }
+                //    }
+                //});
+
             }
         }
         else {
@@ -2342,7 +2581,7 @@ function FillAlldeliveryfields(s, e) {
     var city = ASPxClientControl.GetControlCollection().GetByName("City");
     var postCode = ASPxClientControl.GetControlCollection().GetByName("PostCode");
     var country = ASPxClientControl.GetControlCollection().GetByName("Country");
-    var custRef = ASPxClientControl.GetControlCollection().GetByName("ddlCustRef");
+    var custRef = ASPxClientControl.GetControlCollection().GetByName("txtCustRef");
     var nomCode = ASPxClientControl.GetControlCollection().GetByName("txtNomCode");
     var descAddId = parseInt(addDescription.GetValue());
     $.ajax({
@@ -2362,15 +2601,43 @@ function FillAlldeliveryfields(s, e) {
     });
 }
 
-function AcceptOrder() {
+function FillAllFields(s, e) {
+    var addDescription = ASPxClientControl.GetControlCollection().GetByName(s.name);
+    var address1 = ASPxClientControl.GetControlCollection().GetByName("EmpAddress1");
+    var address2 = ASPxClientControl.GetControlCollection().GetByName("EmpAddress2");
+    var address3 = ASPxClientControl.GetControlCollection().GetByName("EmpAddress3");
+    var city = ASPxClientControl.GetControlCollection().GetByName("EmpCity");
+    var postCode = ASPxClientControl.GetControlCollection().GetByName("EmpPostCode");
+    var country = ASPxClientControl.GetControlCollection().GetByName("EmpCountry");
+    var descAddId = parseInt(addDescription.GetValue());
     $.ajax({
-        url: "/Basket/AcceptOrder/",
+        url: "/Employee/FillAllAddress/",
         type: "POST",
-        data: { 'addressId': 102331 },
+        data: { 'descAddId': descAddId },
         success: function (resp) {
-
+            address1.SetValue(resp[0].Address1);
+            address2.SetValue(resp[0].Address2);
+            address3.SetValue(resp[0].Address3);
+            city.SetValue(resp[0].City);
+            postCode.SetValue(resp[0].PostCode);
+            country.SetValue(resp[0].Country);
         }
     });
+}
+
+function AcceptOrder(s, e) {
+    var address = ASPxClientControl.GetControlCollection().GetByName("CmbAddress");
+    var addressId = address.GetValue();
+    if (addressId != null && addressId != "") {
+        $.ajax({
+            url: "/Basket/AcceptOrder/",
+            type: "POST",
+            data: { 'addressId': addressId },
+            success: function (resp) {
+
+            }
+        });
+    }
 }
 
 function SettbxValue(s, e) {
@@ -2389,8 +2656,12 @@ function FillCustRefandDeliveryFields(s, e) {
     var city = ASPxClientControl.GetControlCollection().GetByName("City");
     var postCode = ASPxClientControl.GetControlCollection().GetByName("PostCode");
     var country = ASPxClientControl.GetControlCollection().GetByName("Country");
-    var custRef = ASPxClientControl.GetControlCollection().GetByName("ddlCustRef");
+    var custRef = ASPxClientControl.GetControlCollection().GetByName("txtCustRef");
     var nomCode = ASPxClientControl.GetControlCollection().GetByName("txtNomCode");
+    var nomCode1 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode1");
+    var nomCode2 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode2");
+    var nomCode3 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode3");
+    var nomCode4 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode4");
     var descAddId = parseInt(addDescription.GetValue());
     $.ajax({
         url: "/Basket/FillAllAddresswidCustRef/",
@@ -2405,34 +2676,98 @@ function FillCustRefandDeliveryFields(s, e) {
             country.SetValue(resp.BusAdd.Country);
             custRef.SetValue(resp.custRef);
             nomCode.SetValue(resp.nomCode);
+            nomCode1.SetValue(resp.nomCode);
+            nomCode2.SetValue(resp.nomCode);
+            nomCode3.SetValue(resp.nomCode);
+            nomCode4.SetValue(resp.nomCode);
         }
     });
 }
 
 
-//$(document).ready(function () {
+function GetNavigation(data) {
+    var address = ASPxClientControl.GetControlCollection().GetByName("CmbAddress");
+    var addressId = address.GetValue();
+    var custref = ASPxClientControl.GetControlCollection().GetByName("txtCustRef");
+    var custRefVal = custref.GetValue();
+    var carrVal = ASPxClientControl.GetControlCollection().GetByName("CarriageCmbbox");
+    var carr = carrVal.GetValue();
+    var custReflbl = "";
+    if (addressId != null && addressId != undefined && addressId != "" && custRefVal != null && custRefVal != undefined && custRefVal != "") {
+        if (data != null && data != undefined) {
+            $.ajax({
+                url: "/Basket/GetNavigationUrl/",
+                type: "POST",
+                data: { 'data': data, 'addId': addressId, 'cusrRef': custRefVal, 'carr': carr },
+                success: function (resp) {
+                    window.location = resp;
+                },
+                error:function(resp)
+                {
+                    alert("Please fill Address & Customer/PO reference");
+                }
+            });
 
-//    $("#FilterEmployeeId_I").autocomplete({
-//            source: function (request, response) {
-//                $.ajax({
-//                    url: "/Employee/GetAutocompleteVal",
-//                    type: "POST",
-//                    dataType: "json",
-//                    data: {
-//                        keyword: request.term
-//                    },
-//                    success: function (data) {
-//                        data
-//                    },
-//                    error: function () {
-//                        alert('something went wrong !');
-//                    }
-//                })
-//            },
-//            messages: {
-//                noResults: "",
-//                results: ""
-//            }
-//        });
+        }
 
-//});
+    }
+    else {
+        alert("Please fill Address & Customer/PO reference");
+    }
+
+}
+
+function FillAllCurrentHeaderData(s,e)
+{
+    var addDescription = ASPxClientControl.GetControlCollection().GetByName("CmbAddress");
+    var address1 = ASPxClientControl.GetControlCollection().GetByName("Address1");
+    var address2 = ASPxClientControl.GetControlCollection().GetByName("Address2");
+    var address3 = ASPxClientControl.GetControlCollection().GetByName("Address3");
+    var city = ASPxClientControl.GetControlCollection().GetByName("City");
+    var postCode = ASPxClientControl.GetControlCollection().GetByName("PostCode");
+    var country = ASPxClientControl.GetControlCollection().GetByName("Country");
+    var custRef = ASPxClientControl.GetControlCollection().GetByName("txtCustRef");
+    var nomCode = ASPxClientControl.GetControlCollection().GetByName("txtNomCode");
+    var nomCode1 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode1");
+    var nomCode2 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode2");
+    var nomCode3 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode3");
+    var nomCode4 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode4");
+    var grid = ASPxClientControl.GetControlCollection().GetByName(s.name);
+    var key = grid.GetRowKey(e.visibleIndex);
+    $.ajax({
+        url: "/Basket/FillHeaderDetails/",
+        type: "POST",
+        data: { 'key': key },
+        success:function(resp)
+        {
+            if(resp!=null)
+            {
+                addDescription.SetValue(resp.DelDesc);
+                address1.SetValue(resp.DelAddress1);
+                address2.SetValue(resp.DelAddress2);
+                address3.SetValue(resp.DelAddress3);
+                city.SetValue(resp.DelCity);
+                postCode.SetValue(resp.DelPostCode);
+                country.SetValue(resp.DelCountry);
+                custRef.SetValue(resp.CustRef);
+                nomCode.SetValue(resp.nomCode);
+                nomCode1.SetValue(resp.nomCode);
+                nomCode2.SetValue(resp.nomCode);
+                nomCode3.SetValue(resp.nomCode);
+                nomCode4.SetValue(resp.nomCode);
+            }
+        }
+    });
+}
+function CartDetailEdit(s,e)
+{
+    s.StartEditRow(e.visibleIndex);
+    $.ajax({
+        url: "/Basket/CartviewDetailGridViewGridViewPartial/",
+        type: "POST",
+        data: { 'key': e.visibleIndex },
+        success:function(resp) {
+
+        }
+    });
+}

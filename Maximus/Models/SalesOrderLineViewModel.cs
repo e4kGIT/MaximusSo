@@ -14,6 +14,7 @@ namespace Maximus.Models
         public double RepRate1 { get; set; }
         public double KAMRate1 { get; set; }
 
+        public string EntQty { get; set; }
         public string RequireData { get; set; }
         public double VatPercent { get; set; }
         public DateTime DeliveryDate { get; set; }
