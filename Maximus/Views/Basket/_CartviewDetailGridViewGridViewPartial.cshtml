@@ -12,8 +12,8 @@
         settings.SettingsBehavior.ConfirmDelete = true;
         // settings.StylesEditors.TextBox.CssClass = "textBoxStyle";
         settings.ClientSideEvents.RowDblClick = "function(s, e) {s.StartEditRow(e.visibleIndex);}";
-        //settings.CommandColumn.Visible = true;
-        //settings.CommandColumn.ShowNewButton = true;
+        settings.CommandColumn.Visible = true;
+        ////settings.CommandColumn.ShowNewButton = true;
         //settings.CommandColumn.ShowDeleteButton = true;
         //settings.CommandColumn.ShowEditButton = true;
 
@@ -111,7 +111,7 @@
 
 
         //});
- 
+
         settings.Columns.Add(x =>
         {
             x.FieldName = "StyleImage"; x.Caption = " "; x.ReadOnly = true; x.EditFormSettings.Visible = DefaultBoolean.False;
@@ -223,6 +223,30 @@
                 Html.DevExpress().Label(lblsettings =>
                 {
                     lblsettings.Name = "SizeID";
+                    //lblsettings.ControlStyle.CssClass = "align-middle";
+                    //lblsettings.ClientVisible = visible;
+                }).Bind(templateContainer.Text).Render();
+
+            });
+        });
+        settings.Columns.Add(x =>
+        {
+            x.FieldName = "VatPercent"; x.Caption = "VAT"; x.ReadOnly = true; x.Visible = true; x.EditFormSettings.Visible = DefaultBoolean.False;
+            x.SetDataItemTemplateContent(c =>
+            {
+                string data = Convert.ToString((DataBinder.Eval(c.DataItem, "VatPercent")));
+                data = data.ToString() + " %";
+
+                ViewContext.Writer.Write(data);
+
+            });
+            x.SetEditItemTemplateContent(c =>
+            {
+                GridViewEditItemTemplateContainer templateContainer = c as GridViewEditItemTemplateContainer;
+
+                Html.DevExpress().Label(lblsettings =>
+                {
+                    lblsettings.Name = "VatPercent";
                     //lblsettings.ControlStyle.CssClass = "align-middle";
                     //lblsettings.ClientVisible = visible;
                 }).Bind(templateContainer.Text).Render();

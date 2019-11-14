@@ -364,6 +364,18 @@
         .rightaligntext input {
             text-align: right !important;
         }
+
+        .vertical-menu {
+            width: 100%;
+        }
+
+            .vertical-menu div {
+                background-color: White;
+                color: black;
+                display: block;
+                padding: 12px;
+                text-decoration: none;
+            }
     </style>
 
 
@@ -1831,10 +1843,10 @@
 
                             <div class="container-fluid body-content">
                                 <br /><br />
-                                <div class="col-md-1"></div>
-                                <div class="col-md-10">
+                                <div class="col-md-1" style="padding:0px"></div>
+                                <div class="col-md-11" style="padding:0px">
                                     @RenderBody()
-                                </div><div class="col-md-1"></div>
+                                </div>
                             </div>
                             <div id="snackbar"> </div>
                         </body>

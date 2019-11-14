@@ -2078,6 +2078,25 @@ namespace Maximus.Models
             try
             {
                 conn.Open();
+                MySqlCommand cmd = new MySqlCommand("SELECT AddressId FROM `tblonline_emp_address` WHERE employeeid=" + employeeId,conn);
+                result = cmd.ExecuteScalar() != null ? Convert.ToInt32(cmd.ExecuteScalar()) : 0;
+                if (result > 0)
+                {
+                    return result;
+                }
+            }
+            catch(Exception e)
+            {
+
+            }
+            finally
+            {
+                conn.Close();
+            }
+         
+            try
+            {
+                conn.Open();
                 if (LstOnlineId.Count > 0)
                 {
                     if (LstOnlineId.Contains(employeeId))
@@ -2298,7 +2317,7 @@ namespace Maximus.Models
         public double GetVatPercent(string style, string size)
         {
             double vatPercent = 0.0;
-            string sSqry = " SELECT `vatpercent`  FROM    `tblacc_vatcodes`  WHERE vatcode = (SELECT  `price`  FROM  `tblfsk_style_sizes_prices`  WHERE  `styleid`= '" + style + "' AND sizeid = '" + size + "' AND `priceid`= (SELECT priceid FROM `tblfsk_price` WHERE description = 'VAT'))";
+            string sSqry = " SELECT `vatpercent`  FROM    `tblacc_vatcodes`  WHERE vatcode = (SELECT  `price`  FROM  `tblfsk_style_sizes_prices`  WHERE  `styleid`= '" + style + "' AND BusinessId='ALL' AND sizeid = '" + size + "' AND `priceid`= (SELECT priceid FROM `tblfsk_price` WHERE description = 'VAT'))";
             MySqlConnection conn = new MySqlConnection(ConnectionString);
             try
             {

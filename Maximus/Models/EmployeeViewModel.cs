@@ -24,6 +24,13 @@ namespace Maximus.Models
         public BusAddress BusAdd { get; set; }
         public string custRef { get; set; }
         public string nomCode { get; set; }
+        public string VatPercent { get; set; }
+        public double carriage { get; set; }
+        public double ordeTotal { get; set; }
+        public double totalVat { get; set; }
+        public double Total { get; set; }
+        public double GrossTotal { get; set; }
+        public string CommentExternal { get; set; }
     }
     public class EmployeeViewModel
     {

@@ -1601,6 +1601,7 @@
     <Content Include="Views\Basket\_CarriageandResons.cshtml" />
     <Content Include="Views\Basket\model\_CarriageView.cshtml" />
     <Content Include="scripts\jquery.jgrowl.map" />
+    <Content Include="Views\Basket\model\_EmployeeView.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

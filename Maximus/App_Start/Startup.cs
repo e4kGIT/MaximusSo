@@ -11,7 +11,9 @@ namespace Maximus
             app.UseCookieAuthentication(new CookieAuthenticationOptions
             {
                 AuthenticationType = "ApplicationCookie",
-                LoginPath = new PathString("/User/Login")
+                LoginPath = new PathString("/User/Login"),
+                ExpireTimeSpan = System.TimeSpan.FromMinutes(60),
+                SlidingExpiration = true
             });
         }
     }

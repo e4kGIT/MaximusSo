@@ -589,8 +589,8 @@ function addTocartSwatch(s, e) {
     }
     var desc = descStyle == undefined ? stylearr[1] : descStyle[0];
     var Spin = document.getElementsByName("spinEdit_" + stylearr[1]);
- var descriptionDiv = document.getElementById("LbDescription" + desc);
- description = descriptionDiv.innerHTML;
+    var descriptionDiv = document.getElementById("LbDescription" + desc);
+    description = descriptionDiv.innerHTML;
     price = document.getElementById("LbPrice" + stylearr[1]).innerHTML;
     qty = Spin[0].value;
     if (description != "" && price != "" && size != "" && color != "" && qty != "" && qty != "0") {
@@ -2584,10 +2584,12 @@ function FillAlldeliveryfields(s, e) {
     var custRef = ASPxClientControl.GetControlCollection().GetByName("txtCustRef");
     var nomCode = ASPxClientControl.GetControlCollection().GetByName("txtNomCode");
     var descAddId = parseInt(addDescription.GetValue());
+    var commentBox = ASPxClientControl.GetControlCollection().GetByName("txtCommentsExternal");
+    comment = commentBox.GetValue();
     $.ajax({
         url: "/Basket/FillAllAddress/",
         type: "POST",
-        data: { 'descAddId': descAddId },
+        data: { 'descAddId': descAddId, 'comment': comment },
         success: function (resp) {
             address1.SetValue(resp.BusAdd.Address1);
             address2.SetValue(resp.BusAdd.Address2);
@@ -2642,10 +2644,24 @@ function AcceptOrder(s, e) {
 
 function SettbxValue(s, e) {
     var cmbBox = ASPxClientControl.GetControlCollection().GetByName(s.name);
-    var carrTextbox = ASPxClientControl.GetControlCollection().GetByName("CarriageTexbox");
+    var carrTextbox = document.getElementById("CarriageValueBox");
     var data = cmbBox.GetValue().split("|");
-    carrTextbox.SetValue(data[1]);
+    carrTextbox.innerHTML = data[1];
 
+}
+
+function saveCustRef(s, e) {
+    var addDescription = ASPxClientControl.GetControlCollection().GetByName("CmbAddress");
+    var descAddId = parseInt(addDescription.GetValue());
+    var AddId = isNaN(descAddId) ? addDescription.GetValue() : descAddId;
+    var ref = ASPxClientControl.GetControlCollection().GetByName(s.name);
+    var custRef = ref.GetValue(); var commentBox = ASPxClientControl.GetControlCollection().GetByName("txtCommentsExternal");
+    comment = commentBox.GetValue();
+    $.ajax({
+        url: "/Basket/SaveRefnAddress/",
+        type: "POST",
+        data: { 'descAddId': AddId, 'custRef': custRef, 'adddesc': AddId, 'comment': comment }
+    });
 }
 
 function FillCustRefandDeliveryFields(s, e) {
@@ -2663,10 +2679,12 @@ function FillCustRefandDeliveryFields(s, e) {
     var nomCode3 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode3");
     var nomCode4 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode4");
     var descAddId = parseInt(addDescription.GetValue());
+    var commentBox = ASPxClientControl.GetControlCollection().GetByName("txtCommentsExternal");
+    comment = commentBox.GetValue();
     $.ajax({
         url: "/Basket/FillAllAddresswidCustRef/",
         type: "POST",
-        data: { 'descAddId': descAddId },
+        data: { 'descAddId': descAddId, 'comment': comment },
         success: function (resp) {
             address1.SetValue(resp.BusAdd.Address1);
             address2.SetValue(resp.BusAdd.Address2);
@@ -2674,6 +2692,7 @@ function FillCustRefandDeliveryFields(s, e) {
             city.SetValue(resp.BusAdd.City);
             postCode.SetValue(resp.BusAdd.PostCode);
             country.SetValue(resp.BusAdd.Country);
+            commentBox.SetValue(resp.CommentExternal);
             custRef.SetValue(resp.custRef);
             nomCode.SetValue(resp.nomCode);
             nomCode1.SetValue(resp.nomCode);
@@ -2692,18 +2711,19 @@ function GetNavigation(data) {
     var custRefVal = custref.GetValue();
     var carrVal = ASPxClientControl.GetControlCollection().GetByName("CarriageCmbbox");
     var carr = carrVal.GetValue();
+    var commentBox = ASPxClientControl.GetControlCollection().GetByName("txtCommentsExternal");
+    comment = commentBox.GetValue();
     var custReflbl = "";
     if (addressId != null && addressId != undefined && addressId != "" && custRefVal != null && custRefVal != undefined && custRefVal != "") {
         if (data != null && data != undefined) {
             $.ajax({
                 url: "/Basket/GetNavigationUrl/",
                 type: "POST",
-                data: { 'data': data, 'addId': addressId, 'cusrRef': custRefVal, 'carr': carr },
+                data: { 'data': data, 'addId': addressId, 'cusrRef': custRefVal, 'carr': carr, 'comment': comment },
                 success: function (resp) {
                     window.location = resp;
                 },
-                error:function(resp)
-                {
+                error: function (resp) {
                     alert("Please fill Address & Customer/PO reference");
                 }
             });
@@ -2717,8 +2737,7 @@ function GetNavigation(data) {
 
 }
 
-function FillAllCurrentHeaderData(s,e)
-{
+function FillAllCurrentHeaderData(s, e) {
     var addDescription = ASPxClientControl.GetControlCollection().GetByName("CmbAddress");
     var address1 = ASPxClientControl.GetControlCollection().GetByName("Address1");
     var address2 = ASPxClientControl.GetControlCollection().GetByName("Address2");
@@ -2738,10 +2757,8 @@ function FillAllCurrentHeaderData(s,e)
         url: "/Basket/FillHeaderDetails/",
         type: "POST",
         data: { 'key': key },
-        success:function(resp)
-        {
-            if(resp!=null)
-            {
+        success: function (resp) {
+            if (resp != null) {
                 addDescription.SetValue(resp.DelDesc);
                 address1.SetValue(resp.DelAddress1);
                 address2.SetValue(resp.DelAddress2);
@@ -2749,6 +2766,7 @@ function FillAllCurrentHeaderData(s,e)
                 city.SetValue(resp.DelCity);
                 postCode.SetValue(resp.DelPostCode);
                 country.SetValue(resp.DelCountry);
+                commentBox.SetValue(resp.CommentExternal);
                 custRef.SetValue(resp.CustRef);
                 nomCode.SetValue(resp.nomCode);
                 nomCode1.SetValue(resp.nomCode);
@@ -2759,15 +2777,192 @@ function FillAllCurrentHeaderData(s,e)
         }
     });
 }
-function CartDetailEdit(s,e)
-{
+function CartDetailEdit(s, e) {
     s.StartEditRow(e.visibleIndex);
     $.ajax({
         url: "/Basket/CartviewDetailGridViewGridViewPartial/",
         type: "POST",
         data: { 'key': e.visibleIndex },
-        success:function(resp) {
+        success: function (resp) {
 
         }
     });
+}
+
+function GetDetailsBasedonGrid(empId, busId) {
+    var selected = document.getElementById(empId);
+    var idaa = "col+" + empId;
+    var deldiv = "delete+" + empId;
+    var sel = document.getElementById(deldiv);
+    sel.innerHTML = "<span style='color:red;' title=\"Click to remove this employee\" onclick=\"RemoveSelecetedEmp('" + empId + "','" + busId + "')\" class=\"glyphicon glyphicon-remove\"></span>";
+    var selected1 = document.getElementById(idaa);
+    selected1.innerHTML = "<span class=\"glyphicon glyphicon-chevron-right\"></span>";
+    //selected1.style.backgroundColor = "#009885";
+    selected1.style.color = "#009885";
+    //selected.style.backgroundColor = "";
+    selected.style.color = "#009885";
+    var active = document.getElementsByClassName("ActiveRes");
+    if (active.length > 0) {
+        if (active[0].id != empId) {
+            var deldiv = "delete+" + active[0].id;
+            var sel = document.getElementById(deldiv);
+            sel.innerHTML = "";
+            var deselected = document.getElementById(active[0].id);
+            deselected.style.backgroundColor = "white";
+            deselected.style.color = "black";
+            var idaa1 = "col+" + active[0].id;
+            var deselected1 = document.getElementById(idaa1);
+            deselected1.innerHTML = "";
+            document.getElementById(active[0].id).classList.remove("ActiveRes");
+        }
+    }
+    document.getElementById(empId).classList.add("ActiveRes");
+    var addDescription = ASPxClientControl.GetControlCollection().GetByName("CmbAddress");
+    var address1 = ASPxClientControl.GetControlCollection().GetByName("Address1");
+    var address2 = ASPxClientControl.GetControlCollection().GetByName("Address2");
+    var address3 = ASPxClientControl.GetControlCollection().GetByName("Address3");
+    var city = ASPxClientControl.GetControlCollection().GetByName("City");
+    var postCode = ASPxClientControl.GetControlCollection().GetByName("PostCode");
+    var txtTotGoods = ASPxClientControl.GetControlCollection().GetByName("txtTotGoods");
+    var txtCarrierCharges = ASPxClientControl.GetControlCollection().GetByName("txtCarrierCharges");
+    var txtOrdTotal = ASPxClientControl.GetControlCollection().GetByName("txtOrdTotal");
+    var txtVAT = document.getElementById("vatspan");
+    var txtVAT1 = ASPxClientControl.GetControlCollection().GetByName("txtVAT");
+    var txtGrndTot = ASPxClientControl.GetControlCollection().GetByName("txtGrndTot");
+    var country = ASPxClientControl.GetControlCollection().GetByName("Country");
+    var custRef = ASPxClientControl.GetControlCollection().GetByName("txtCustRef");
+    var nomCode = ASPxClientControl.GetControlCollection().GetByName("txtNomCode");
+    var nomCode1 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode1");
+    var nomCode2 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode2");
+    var nomCode3 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode3");
+    var nomCode4 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode4");
+    var grid = ASPxClientControl.GetControlCollection().GetByName("CartView");
+    var commentBox = ASPxClientControl.GetControlCollection().GetByName("txtCommentsExternal");
+    comment = commentBox.GetValue();
+    grid.PerformCallback({ empid: empId });
+    $.ajax({
+        url: "/Basket/CartDetailEdit/",
+        type: "POST",
+        data: { 'empId': empId },
+        success: function (resp) {
+            addDescription.SetValue(resp.BusAdd.AddressDescription);
+            address1.SetValue(resp.BusAdd.Address1);
+            address2.SetValue(resp.BusAdd.Address2);
+            address3.SetValue(resp.BusAdd.Address3);
+            city.SetValue(resp.BusAdd.City);
+            postCode.SetValue(resp.BusAdd.PostCode);
+            txtTotGoods.SetValue(resp.ordeTotal);
+            txtCarrierCharges.SetValue(resp.carriage);
+            txtOrdTotal.SetValue(resp.Total);
+            txtVAT.innerHTML = resp.VatPercent;
+            txtVAT1.SetValue(resp.totalVat);
+            txtGrndTot.SetValue(resp.GrossTotal);
+            commentBox.SetValue(resp.CommentExternal);
+            country.SetValue(resp.BusAdd.Country);
+            custRef.SetValue(resp.custRef);
+            nomCode.SetValue(resp.nomCode);
+            nomCode1.SetValue(resp.nomCode);
+            nomCode2.SetValue(resp.nomCode);
+            nomCode3.SetValue(resp.nomCode);
+            nomCode4.SetValue(resp.nomCode);
+
+        }
+    });
+}
+
+function EditEmp(s, e) {
+    s.StartEditRow(e.visibleIndex);
+}
+
+function RemoveSelecetedEmp(empId, busId) {
+    if (confirm("Are you sure you want to delete " + empId + "?")) {
+        $.ajax({
+            url: "/Basket/CartViewDelete/",
+            type: "POST",
+            data: { 'empId': empId },
+            success: function (resp) {
+                if (resp != null) {
+                    alert("Successfully deleted")
+                    if (resp.includes("HEADERVALUENOTZERO")) {
+                        window.location.reload();
+                    }
+                    else {
+                        window.location = "/Employee/Index?BusinessId=" + busId;
+                    }
+
+                }
+            }
+        });
+
+    }
+}
+
+function NextEmployee() {
+    var address = ASPxClientControl.GetControlCollection().GetByName("CmbAddress");
+    var addressId = address.GetValue();
+    var custref = ASPxClientControl.GetControlCollection().GetByName("txtCustRef");
+    var custRefVal = custref.GetValue();
+    var carrVal = ASPxClientControl.GetControlCollection().GetByName("CarriageCmbbox");
+    var carr = carrVal.GetValue();
+    var custReflbl = "";
+    var commentBox = ASPxClientControl.GetControlCollection().GetByName("txtCommentsExternal");
+    comment = commentBox.GetValue();
+    if (addressId != null && addressId != undefined && addressId != "" && custRefVal != null && custRefVal != undefined && custRefVal != "") {
+
+        $.ajax({
+            url: "/Basket/GetNavigationUrl/",
+            type: "POST",
+            data: { 'data': '>', 'addId': addressId, 'cusrRef': custRefVal, 'carr': carr, 'comment': comment },
+            success: function (resp) {
+                if (resp != "") {
+                    window.location = resp;
+                }
+                else {
+                    alert("Please fill Address & Customer/PO reference");
+                }
+            },
+            error: function (resp) {
+                alert("Please fill Address & Customer/PO reference");
+            }
+        });
+    }
+    else {
+        alert("Please fill Address & Customer/PO reference");
+    }
+
+}
+
+function UpdateCurrentEmp() {
+    var address = ASPxClientControl.GetControlCollection().GetByName("CmbAddress");
+    var addressId = address.GetValue();
+    var custref = ASPxClientControl.GetControlCollection().GetByName("txtCustRef");
+    var custRefVal = custref.GetValue();
+    var carrVal = ASPxClientControl.GetControlCollection().GetByName("CarriageCmbbox");
+    var carr = carrVal.GetValue();
+    var custReflbl = "";
+    var commentBox = ASPxClientControl.GetControlCollection().GetByName("txtCommentsExternal");
+    comment = commentBox.GetValue();
+    if (addressId != null && addressId != undefined && addressId != "" && custRefVal != null && custRefVal != undefined && custRefVal != "") {
+
+        $.ajax({
+            url: "/Basket/GetNavigationUrl/",
+            type: "POST",
+            data: { 'data': '>', 'addId': addressId, 'cusrRef': custRefVal, 'carr': carr, 'comment': comment },
+            success: function (resp) {
+                if (resp != "") {
+                    alert("Successfully updated");
+                    MVCxClientUtils.FinalizeCallback();
+                }
+            },
+            error: function (resp) {
+                alert("Please fill Address & Customer/PO reference");
+            }
+        });
+
+
+    }
+    else {
+        alert("Please fill Address & Customer/PO reference");
+    }
+
 }

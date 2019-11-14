@@ -74,12 +74,12 @@
     <div class="col-md-3">@Html.DevExpress().TextBox(settings => { settings.Name = "Address1"; settings.Properties.Caption = "Address1"; settings.Text = busAdd!=null?busAdd.Address1:""; }).GetHtml()</div>
     <div class="col-md-3">@Html.DevExpress().TextBox(settings => { settings.Name = "Address2"; settings.Properties.Caption = "Address2"; settings.Text = busAdd != null ? busAdd.Address2 : ""; }).GetHtml()</div>
     <div class="col-md-3">@Html.DevExpress().TextBox(settings => { settings.Name = "Address3"; settings.Properties.Caption = "Address3"; settings.Text = busAdd != null ? busAdd.Address3 : ""; }).GetHtml()</div>
-
+    <div class="col-md-3">@Html.DevExpress().TextBox(settings => { settings.Name = "City"; settings.Properties.Caption = "City"; settings.Text = busAdd != null ? busAdd.City : ""; }).GetHtml()</div>
 </div>
 <br />
 
 <div class="row">
-    <div class="col-md-3">@Html.DevExpress().TextBox(settings => { settings.Name = "City"; settings.Properties.Caption = "City"; settings.Text = busAdd != null ? busAdd.City : ""; }).GetHtml()</div>
+    
     <div class="col-md-3">@Html.DevExpress().TextBox(settings => { settings.Name = "PostCode"; settings.Properties.Caption = "Postcode"; settings.Text = busAdd != null ? busAdd.PostCode : ""; }).GetHtml()</div>
 
     <div class="col-md-3">

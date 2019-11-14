@@ -543,6 +543,8 @@ namespace Maximus.Controllers
             ViewBag.create = true;
             return PartialView("_EmployeeEdit", result);
         }
+
+  
         [HttpPost]
         public string CreateNewEmployee(DateTime? StartDate = null, DateTime? EndDate = null, string EmpFirstName = "", string EmpLastName = "", string EmployeeId = "", string EmpUcodes = "", string Address = "", string hrsCmb = "", string Department = "", bool isActive = false, bool isMapped = false, string hoursDept = "", string hoursNo = "")
         {
@@ -668,6 +670,7 @@ namespace Maximus.Controllers
             }
             return "";
         }
+        #endregion
 
         #region EmployeeIdValidation
         public string EmployeeIdValidation(string empId)
@@ -689,70 +692,7 @@ namespace Maximus.Controllers
             return result;
         }
         #endregion
-        #endregion
+ 
 
-
-        [ValidateInput(false)]
-        public ActionResult CardViewPartialxccccc()
-        {
-            var model = new object[0];
-            return PartialView("~/Views/Shared/_CardViewPartialxccccc.cshtml", model);
-        }
-
-        [HttpPost, ValidateInput(false)]
-        public ActionResult CardViewPartialxcccccAddNew(Maximus.Models.my_aspnet_users item)
-        {
-            var model = new object[0];
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    // Insert here a code to insert the new item in your model
-                }
-                catch (Exception e)
-                {
-                    ViewData["EditError"] = e.Message;
-                }
-            }
-            else
-                ViewData["EditError"] = "Please, correct all errors.";
-            return PartialView("~/Views/Shared/_CardViewPartialxccccc.cshtml", model);
-        }
-        [HttpPost, ValidateInput(false)]
-        public ActionResult CardViewPartialxcccccUpdate(Maximus.Models.my_aspnet_users item)
-        {
-            var model = new object[0];
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    // Insert here a code to update the item in your model
-                }
-                catch (Exception e)
-                {
-                    ViewData["EditError"] = e.Message;
-                }
-            }
-            else
-                ViewData["EditError"] = "Please, correct all errors.";
-            return PartialView("~/Views/Shared/_CardViewPartialxccccc.cshtml", model);
-        }
-        [HttpPost, ValidateInput(false)]
-        public ActionResult CardViewPartialxcccccDelete(System.Int32 applicationId)
-        {
-            var model = new object[0];
-            if (applicationId >= 0)
-            {
-                try
-                {
-                    // Insert here a code to delete the item from your model
-                }
-                catch (Exception e)
-                {
-                    ViewData["EditError"] = e.Message;
-                }
-            }
-            return PartialView("~/Views/Shared/_CardViewPartialxccccc.cshtml", model);
-        }
     }
 }

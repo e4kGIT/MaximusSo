@@ -557,6 +557,7 @@ namespace Maximus.Controllers
         //}
         public ActionResult Logoff()
         {
+            Session.Clear();
             var ctx = Request.GetOwinContext();
             var authManager = ctx.Authentication;
 
