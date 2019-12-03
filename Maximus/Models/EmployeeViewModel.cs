@@ -16,6 +16,7 @@ namespace Maximus.Models
         public string PostCode { get; set; }
         public int CountryCode { get; set; }
         public string Country { get; set; }
+        public string Town { get; set; }
         public string contactId { get; set; }
         public string AddressDescription { get; set; }
     }
@@ -24,6 +25,10 @@ namespace Maximus.Models
         public BusAddress BusAdd { get; set; }
         public string custRef { get; set; }
         public string nomCode { get; set; }
+        public string nomCode1 { get; set; }
+        public string nomCode2 { get; set; }
+        public string nomCode3 { get; set; }
+        public string nomCode4 { get; set; }
         public string VatPercent { get; set; }
         public double carriage { get; set; }
         public double ordeTotal { get; set; }

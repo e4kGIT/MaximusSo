@@ -85,7 +85,9 @@
             padding: 10px;
             font-size: 16px;
         }*/
-
+        .deliveryTbx{
+            width:250px;
+        }
 
         input[type=text] {
             background-color: #f1f1f1;
@@ -376,6 +378,36 @@
                 padding: 12px;
                 text-decoration: none;
             }
+
+        .acceptBtn {
+            margin-top: 20px;
+            height: 43px;
+            width: 300px;
+            font-size: 20px;
+            background-color: white;
+            color: black;
+        }
+
+        #overlayer:hover .overlay {
+            opacity: 1;
+        }
+
+        .overlay {
+            position: fixed;
+            display: none;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 2;
+            cursor: pointer;
+        }
+        .dxlbd{
+               z-index: 100000;
+        }
     </style>
 
 
@@ -550,15 +582,12 @@
             $.ajax({
                 type: "POST",
                 url: "/Home/GetBasketStatus",
-                success:function (response)
-                {
-                    if(response=="")
-                    {
+                success: function (response) {
+                    if (response == "") {
                         var url = "/Basket/ShowBasket";
                         window.location = url;
                     }
-                    else
-                    {
+                    else {
                         myFunction("No items in the cart!");
                     }
                 },
@@ -1798,10 +1827,7 @@
                 <center>
                     <div class="navbar-collapse collapse pull-right">
                         <ul class="nav navbar-nav">
-                            @{
-
-                                var s = Session["UserName"].ToString().Trim();
-                            }
+                            
                             <li style="color:white" class="navbar-light">
                                 <a class="navbar-light"><b><span class="glyphicon glyphicon-user" title="User"></span></b> @Session["UserName"].ToString().Trim()</a>
                                 @*   @Html.ActionLink("Settings", "Index", "Settings", new { area = "" }, new { @class = "navbar-light" })*@
@@ -1824,7 +1850,15 @@
                                 @* @Html.ActionLink("Logout", "Logoff", "User", new { area = "" }, new { @class = "navbar-light" })*@
                             </li>
                         </ul>
-                    </div>
+                        <br />
+                        <div class="col-md-2 col-sm-12 col-lg-2 col-xs-12"></div><div class="col-md-2 col-sm-12 col-lg-2 col-xs-12"></div><div class="col-md-2 col-sm-12 col-lg-2 col-xs-12"></div>
+                            <div class="col-md-2 col-sm-12 col-lg-2 col-xs-12">
+                                <div id="CartwidCount">
+                                    <button class="btn" style="background-color:#009885;color:white" onclick="GetCart()"><b>View Basket &nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-shopping-cart" style="color:white;font-size:25px"></span><sup class="badge" id="lblCartCount">@Convert.ToInt32(Session["qty"])</sup></b></button>
+                                </div>
+
+                            </div>
+                        </div>
                     <br />
                     <br />
                     <div class="row">
@@ -1845,6 +1879,7 @@
                                 <br /><br />
                                 <div class="col-md-1" style="padding:0px"></div>
                                 <div class="col-md-11" style="padding:0px">
+                                    <br /> <br /> 
                                     @RenderBody()
                                 </div>
                             </div>

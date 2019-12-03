@@ -16,7 +16,7 @@ namespace Maximus.Models
         public string WarehouseID { get; set; }
         public long OrderNo { get; set; }
         public string CustID { get; set; }
-        public Nullable<System.DateTime> OrderDate { get; set; }
+        public string OrderDate { get; set; }
         public string InvDesc { get; set; }
         public string InvAddress1 { get; set; }
         public string InvAddress2 { get; set; }
@@ -38,7 +38,7 @@ namespace Maximus.Models
         public string ContractRef { get; set; }
         public Nullable<System.DateTime> InvoiceDate { get; set; }
         public string Carrier { get; set; }
-        public Nullable<decimal> CarrierCharge { get; set; }
+        public Nullable<double> CarrierCharge { get; set; }
         public Nullable<double> CustDisc { get; set; }
         public Nullable<double> SettDisc { get; set; }
         public Nullable<double> VolDisc { get; set; }
@@ -56,6 +56,8 @@ namespace Maximus.Models
         public Nullable<double> WorksOrderNo { get; set; }
         public Nullable<sbyte> AllowPartShipment { get; set; }
         public Nullable<double> TotalGoods { get; set; }
+        public Nullable<double> Net { get; set; }
+         
         public Nullable<double> OrderGoods { get; set; }
         public string UserID { get; set; }
         public Nullable<sbyte> pRINTINVOICE { get; set; }
@@ -88,6 +90,7 @@ namespace Maximus.Models
         public string OrderType { get; set; }
         public string EmailID { get; set; }
         public string ContactName { get; set; }
+        public string Mobile { get; set; }
         public int VatCode { get; set; }
         public int KAMid { get; set; }
         public List<SalesOrderLineViewModel> SalesOrderLine { get; set; }

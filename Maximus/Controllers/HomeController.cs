@@ -494,23 +494,7 @@ namespace Maximus.Controllers
         #region GetPrice based on styleid and colorid
         public decimal GetPrice(string StyleID = "", string SizeId = "")
         {
-            try
-            {
-                string businessId = Session["BuisnessId"].ToString();
-                decimal result = entity.tblfsk_style_sizes_prices.Any(x => x.StyleID == StyleID.Trim() & x.SizeID == SizeId.Trim() & x.BusinessId == businessId) ? (decimal)entity.tblfsk_style_sizes_prices.Where(x => x.StyleID == StyleID.Trim() & x.SizeID == SizeId.Trim() & x.BusinessId == businessId).FirstOrDefault().Price.Value : 0;
-                result = result == 0 ? entity.tblfsk_style_sizes_prices.Any(x => x.StyleID == StyleID.Trim() & x.SizeID == SizeId.Trim() & x.BusinessId == "ALL") ? (decimal)entity.tblfsk_style_sizes_prices.Where(x => x.StyleID == StyleID.Trim() & x.SizeID == SizeId.Trim() & x.BusinessId == "ALL" && x.PriceID == 2).FirstOrDefault().Price.Value : result : result;
-                if (result != 0)
-                {
-                    return System.Math.Round(result, 2);
-                }
-                else
-                {
-                    return 0;
-                }
-            }
-            catch (Exception e)
-            { }
-            return 0;
+            return data.GetPrice(StyleID, SizeId, Session["BuisnessId"].ToString());
         }
         #endregion
 
@@ -882,7 +866,7 @@ namespace Maximus.Controllers
         #endregion
 
         #region AddItemsToCart
-        public JsonResult AddToCart(string description = "", string price = "", string size = "", string color = "", string qty = "", string style = "", string orgStyl = "",string entQty="")
+        public JsonResult AddToCart(string description = "", string price = "", string size = "", string color = "", string qty = "", string style = "", string orgStyl = "",string entQty="",string reqData1="")
         {
             var appPath = System.Web.HttpContext.Current.Request.MapPath(@"~\");
             string result = "";
@@ -900,21 +884,29 @@ namespace Maximus.Controllers
                 var address1 = data.getEmployeeAddress(Session["SelectedEmp"].ToString(), Session["BuisnessId"].ToString());
                 var addArr = new string[] { };
                 var addresArr = address1.Contains(',') ? address1.Split(',') : addArr;
-                salesOrderHeader.Add(new SalesOrderHeaderViewModel
+                var s=addresArr.Count();
+                try
                 {
-                    DelDesc = addresArr.Count() > 0 ? addresArr[0] : "",
-                    DelAddress1 = addresArr.Count() > 0 ? addresArr[1] : "",
-                    DelAddress2 = addresArr.Count() > 0 ? addresArr[2] : "",
-                    DelAddress3 = addresArr.Count() > 0 ? addresArr[3] : "",
-                    DelTown = addresArr.Count() > 0 ? addresArr[4] : "",
-                    DelCity = addresArr.Count() > 0 ? addresArr[5] : "",
-                    DelPostCode = addresArr.Count() > 0 ? addresArr[6] : "",
-                    DelCountry = addresArr.Count() > 0 ? addresArr[7] : "",
-                    EmployeeName = Session["EmpName"].ToString(),
-                    EmployeeID = Session["SelectedEmp"].ToString(),
-                    CustRef = entity.tblsop_salesorder_header.AsEnumerable().Where(x => x.CustID == Session["BuisnessId"].ToString()).First().CustRef,
-                    Comments = entity.tblsop_salesorder_header.AsEnumerable().Where(x => x.CustID == Session["BuisnessId"].ToString()).First().Comments,
-                });
+                    salesOrderHeader.Add(new SalesOrderHeaderViewModel
+                    {
+                        DelDesc = addresArr.Count() > 0 ? addresArr[0] : "",
+                        DelAddress1 = addresArr.Count() > 0 ? addresArr[1] : "",
+                        DelAddress2 = addresArr.Count() > 0 ? addresArr[2] : "",
+                        DelAddress3 = addresArr.Count() > 0 ? addresArr[3] : "",
+                        DelTown = addresArr.Count() > 0 ? addresArr[4] : "",
+                        DelCity = addresArr.Count() > 0 ? addresArr[5] : "",
+                        DelPostCode = addresArr.Count() > 0 ? addresArr[6] : "",
+                        DelCountry = addresArr.Count() > 0 ? addresArr[7] : "",
+                        EmployeeName = Session["EmpName"].ToString(),
+                        EmployeeID = Session["SelectedEmp"].ToString(),
+                        CustRef = entity.tblsop_salesorder_header.AsEnumerable().Where(x => x.CustID == Session["BuisnessId"].ToString()).First().CustRef,
+                        Comments = entity.tblsop_salesorder_header.AsEnumerable().Where(x => x.CustID == Session["BuisnessId"].ToString()).First().Comments,
+                    });
+                }
+                catch(Exception e)
+                {
+
+                }
             }
             if (salesOrderLines.Count > 0)
             {
@@ -927,11 +919,12 @@ namespace Maximus.Controllers
 
             var chargableAssembs = new List<SalesOrderLineViewModel>();
             var OptionalAssembs = new List<SalesOrderLineViewModel>();
+             
             if (description != "" && price != "" && size != "" && color != "" && qty != "")
             {
                 try
                 {
-                    salesOrderLines.Add(new SalesOrderLineViewModel { ColourID = color, LineNo = lineNo, Description = description, OrdQty = Convert.ToInt64(qty), Price = Convert.ToDouble(price), SizeID = size, StyleID = style, EmployeeId = Session["SelectedEmp"].ToString(), EmployeeName = Session["EmpName"].ToString(), StyleImage = entity.ucodeby_freetextview.Any(x => x.StyleID.Contains(style))? entity.ucodeby_freetextview.Where(x => x.StyleID.Contains(style)).FirstOrDefault().StyleImage : Url.Content("~/StyleImages/notfound.png"), orgStyleId = orgStyl,VatPercent=data.GetVatPercent(style,size),EntQty=entQty });
+                    salesOrderLines.Add(new SalesOrderLineViewModel { ColourID = color, LineNo = lineNo, Description = description, OrdQty = Convert.ToInt64(qty), Price = Convert.ToDouble(price)==0? Convert.ToDouble(GetPrice(style,size)): Convert.ToDouble(price), SizeID = size, StyleID = style, EmployeeId = Session["SelectedEmp"].ToString(), EmployeeName = Session["EmpName"].ToString(), StyleImage = entity.tblfsk_style.Any(x => x.StyleID.Contains(orgStyl))? entity.tblfsk_style.Where(x => x.StyleID.Contains(orgStyl)).FirstOrDefault().StyleImage : Url.Content("~/StyleImages/notfound.png"), orgStyleId = orgStyl,VatPercent=data.GetVatPercent(style,size),EntQty=entQty,FreeText1=reqData1,DeliveryDate=data.GetDeliveryDate(Convert.ToInt32(Session["intNoOfday"])-1,Convert.ToBoolean(Session["IncWendsDel"])) ,VatCode1= data.GetVatCode(),RepId=Convert.ToInt32(Session["Rep_Id"].ToString()),Currency_Exchange_Rate=Convert.ToDouble(Session["CurrencyExchangeRate"]),Cost1=data.GetCostPrice(style,size,color,Session["Currency_Name"].ToString(),1,0),IssueUOM1=1,IssueQty1= Convert.ToInt32(qty), StockingUOM1 =1});
                 }
                 catch (Exception e)
                 {
@@ -957,18 +950,38 @@ namespace Maximus.Controllers
                 {
                     salesOrderLines.AddRange(OptionalAssembs);
                 }
-                foreach (var data in salesOrderLines)
+                foreach (var data1 in salesOrderLines)
                 {
-
-                    if (System.IO.File.Exists(appPath + data.StyleImage) != true)
+                    if (data1.StyleImage != null)
                     {
-                        data.StyleImage = Url.Content("~/StyleImages/notfound.png");
+                        if (data1.StyleImage.Contains(":"))
+                        {
 
-                    }
-                    else
+                            var data = data1.StyleImage.Substring(data1.StyleImage.IndexOf(":") + 1, data1.StyleImage.Length - data1.StyleImage.IndexOf(":") - 1);
+                            if (System.IO.File.Exists(appPath + data1.StyleImage.Substring(data1.StyleImage.IndexOf(":") + 1, data1.StyleImage.Length - data1.StyleImage.IndexOf(":") - 1)) != true)
+                            {
+                                data1.StyleImage = Url.Content("~/StyleImages/notfound.png");
+                            }
+                            else
+                            {
+                                data1.StyleImage = Url.Content("~/" + data1.StyleImage.Substring(data1.StyleImage.IndexOf(":") + 1, data1.StyleImage.Length - data1.StyleImage.IndexOf(":") - 1));
+                            }
+                        }
+                        else
+                        {
+                            if (System.IO.File.Exists(appPath + data1.StyleImage) != true)
+                            {
+                                data1.StyleImage = Url.Content("~/StyleImages/notfound.png");
+                            }
+                            else
+                            {
+                                data1.StyleImage = Url.Content("~/" + data1.StyleImage);
+                            }
+                        }
+
+                    }else
                     {
-                        data.StyleImage = Url.Content("~/" + data.StyleImage);
-
+                        data1.StyleImage = Url.Content("~/StyleImages/notfound.png");
                     }
                 }
                 salesOrderHeader.Where(x => x.EmployeeID == Session["SelectedEmp"].ToString()).FirstOrDefault().SalesOrderLine = salesOrderLines;
@@ -1032,16 +1045,26 @@ namespace Maximus.Controllers
             EntitlementModel em = new EntitlementModel();
             //if(orgStyl.Contains(','))
             //{
-
+            var emp = Session["SelectedEmp"].ToString();
             string Ucodes = Session["SelectedUcode"] == null ? "" : Session["SelectedUcode"].ToString();
+            var saleHead=(List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"];
+            var salesLine = saleHead.Any(x => x.EmployeeID == emp && x.UCodeId == Ucodes) ? saleHead.Where(x => x.EmployeeID == emp && x.UCodeId == Ucodes).First().SalesOrderLine:new List<SalesOrderLineViewModel>();
+            long basketCount = 0;
+            if (salesLine != null)
+            {
+                if (salesLine.Count > 0)
+                {
+                    basketCount = salesLine.Any(x => x.orgStyleId == orgStyl | x.StyleID == StyleId) ? salesLine.Where(x => x.orgStyleId == orgStyl | x.StyleID == StyleId).Sum(x => x.OrdQty)  : 0;
+                }
+            }
             em.EmpId = "<b>" + Session["SelectedEmp"].ToString() + "</b> to style: <b>" + StyleId + "</b>";
             if (ColorId != "" && orgStyl != "")
             {
                 string result = "";
                 var entitlement = entity.tblaccemp_ucodes.Any(x => x.StyleID == orgStyl && x.ColourID == ColorId && x.UCodeID == Ucodes) ? entity.tblaccemp_ucodes.Where(x => x.StyleID == orgStyl && x.ColourID == ColorId && x.UCodeID == Ucodes).FirstOrDefault().AnnualIssue : 0;
                 entitlement = entitlement == 0 ? entity.tblaccemp_ucodes.Where(x => x.StyleID == orgStyl && x.UCodeID == Ucodes).FirstOrDefault().AnnualIssue : entitlement;
-                string PreviousOrder = data.GetAllPreviousData(Session["SelectedEmp"].ToString(), Session["BuisnessId"].ToString(), orgStyl);
-                PreviousOrder = PreviousOrder == "" ? "<tr><td>Issued: 0</td></tr><tr><td>Previous History: N/A</td></tr></table>" : PreviousOrder;
+                string PreviousOrder = data.GetAllPreviousData(Session["SelectedEmp"].ToString(), Session["BuisnessId"].ToString(), orgStyl, basketCount);
+                PreviousOrder = PreviousOrder == "" ? "<tr><td>Issued: 0</td></tr><tr><td>In Basket: " + basketCount + "</td></tr><tr><td>Previous History: N/A</td></tr></table>" : PreviousOrder;
                 result = "<table class=\"table\"><tr><td>Entitlement: " + entitlement + "</td></tr>" + PreviousOrder;
 
                 em.Result = result;
@@ -1053,12 +1076,10 @@ namespace Maximus.Controllers
                 string result = "";
                 var entitlement = entity.tblaccemp_ucodes.Any(x => x.StyleID == orgStyl   && x.UCodeID == Ucodes) ? entity.tblaccemp_ucodes.Where(x => x.StyleID == orgStyl  && x.UCodeID == Ucodes).FirstOrDefault().AnnualIssue : 0;
                 entitlement = entitlement == 0 ? entity.tblaccemp_ucodes.Where(x => x.StyleID == orgStyl && x.UCodeID == Ucodes).FirstOrDefault().AnnualIssue : entitlement;
-                string PreviousOrder = data.GetAllPreviousData(Session["SelectedEmp"].ToString(), Session["BuisnessId"].ToString(), orgStyl);
-                PreviousOrder = PreviousOrder == "" ? "<tr><td>Issued: 0</td></tr><tr><td>Previous History: N/A</td></tr></table>" : PreviousOrder;
+                string PreviousOrder = data.GetAllPreviousData(Session["SelectedEmp"].ToString(), Session["BuisnessId"].ToString(), orgStyl, basketCount);
+                PreviousOrder = PreviousOrder == "" ? "<tr><td>Issued: 0</td></tr><tr><td>In Basket: " + basketCount + "</td></tr><tr><td>Previous History: N/A</td></tr></table>" : PreviousOrder;
                 result = "<table class=\"table\"><tr><td>Entitlement: " + entitlement + "</td></tr>" + PreviousOrder;
-
                 em.Result = result;
-
                 return Json(em);
             }
             em.Result = "<table class=\"table\"><tr><td>Entitlement:  0</td></tr><tr><td>Issued: 0</td></tr><tr><td>Previous History: N/A</td></tr></table>";
@@ -1146,7 +1167,7 @@ namespace Maximus.Controllers
 
                 if (prevHistory.Size != "")
                 {
-                    prevHistory.price = entity.tblfsk_style_sizes_prices.Any(x => x.StyleID == style && x.SizeID == prevHistory.Size && x.PriceID == 2) ? entity.tblfsk_style_sizes_prices.Where(x => x.StyleID == style && x.SizeID == prevHistory.Size && x.PriceID == 2 && x.BusinessId == businessId).First().Price.ToString() : "";
+                    prevHistory.price = entity.tblfsk_style_sizes_prices.Any(x => x.StyleID == style && x.SizeID == prevHistory.Size && x.PriceID == 2) ?Math.Round(entity.tblfsk_style_sizes_prices.Where(x => x.StyleID == style && x.SizeID == prevHistory.Size && x.PriceID == 2 && x.BusinessId == businessId).First().Price.Value, 2).ToString() : "";
                 }
                 result = prevHistory;
                 return Json(result);
@@ -1554,13 +1575,33 @@ namespace Maximus.Controllers
             string empId = (Session["SelectedEmp"].ToString());
             
             var salesHeader = ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]);
-            if (salesHeader.Any(x => x.SalesOrderLine == null && x.EmployeeID== empId  ) || salesHeader.Count==0)
+            if (!salesHeader.Any(x => x.SalesOrderLine != null))
             {
                 result = "fail";
             }
             return result;
         }
 
+        #endregion
+
+        #region GetReqData
+        [HttpPost]
+        public string GetReqData(string StyleID)
+        {
+            string lblValue = "";
+            lblValue= entity.tblfsk_setvalues.Any(x => x.StyleID == StyleID && x.SettingID == "REQDATA1") ? entity.tblfsk_setvalues.Where(x => x.StyleID == StyleID && x.SettingID == "REQDATA1").First().Value : "";
+            if(lblValue=="")
+            {
+                try
+                {
+                    lblValue = entity.tblfsk_settings.Any(x => x.SettingID == "REQDATA1") ? entity.tblbus_settings.Where(x => x.SettingID == "REQDATA1").First().DefaultValue : "";
+                }catch(Exception e)
+                {
+
+                }
+            }
+            return lblValue;
+        }
         #endregion
 
     }

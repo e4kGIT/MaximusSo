@@ -208,3 +208,12 @@ G:\Sasidharan\Maximus\Maximus\bin\EntityFramework.SqlServer.xml
 G:\Sasidharan\Maximus\Maximus\bin\log4net.xml
 G:\Sasidharan\Maximus\Maximus\bin\MySql.Data.EntityFramework.xml
 G:\Sasidharan\Maximus\Maximus\bin\BouncyCastle.Crypto.dll
+G:\Sasidharan\Maximus\Maximus\bin\Microsoft.Owin.dll
+G:\Sasidharan\Maximus\Maximus\bin\Microsoft.Owin.Host.SystemWeb.dll
+G:\Sasidharan\Maximus\Maximus\bin\Microsoft.Owin.Security.Cookies.dll
+G:\Sasidharan\Maximus\Maximus\bin\Microsoft.Owin.Security.dll
+G:\Sasidharan\Maximus\Maximus\bin\Owin.dll
+G:\Sasidharan\Maximus\Maximus\bin\Microsoft.Owin.xml
+G:\Sasidharan\Maximus\Maximus\bin\Microsoft.Owin.Host.SystemWeb.xml
+G:\Sasidharan\Maximus\Maximus\bin\Microsoft.Owin.Security.xml
+G:\Sasidharan\Maximus\Maximus\bin\Microsoft.Owin.Security.Cookies.xml

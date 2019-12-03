@@ -11,7 +11,10 @@
         settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
         settings.SettingsBehavior.ConfirmDelete = true;
         // settings.StylesEditors.TextBox.CssClass = "textBoxStyle";
+        //settings.ClientSideEvents.RowDblClick = "function(s, e) {s.StartEditRow(e.visibleIndex);}";
         settings.ClientSideEvents.RowDblClick = "function(s, e) {s.StartEditRow(e.visibleIndex);}";
+        settings.ClientSideEvents.EndCallback = "OnEndCallback";
+        settings.ClientSideEvents.BeginCallback = "OnBeginCallback";
         settings.CommandColumn.Visible = true;
         ////settings.CommandColumn.ShowNewButton = true;
         //settings.CommandColumn.ShowDeleteButton = true;
@@ -231,43 +234,86 @@
         });
         settings.Columns.Add(x =>
         {
-            x.FieldName = "VatPercent"; x.Caption = "VAT"; x.ReadOnly = true; x.Visible = true; x.EditFormSettings.Visible = DefaultBoolean.False;
             x.SetDataItemTemplateContent(c =>
             {
-                string data = Convert.ToString((DataBinder.Eval(c.DataItem, "VatPercent")));
-                data = data.ToString() + " %";
-
+                string data = Convert.ToString((DataBinder.Eval(c.DataItem, "RequireData")));
                 ViewContext.Writer.Write(data);
-
             });
-            x.SetEditItemTemplateContent(c =>
+            x.FieldName = "RequireData"; x.Caption = "Require Data"; x.ReadOnly = true; x.Visible = true; x.EditFormSettings.Visible = DefaultBoolean.False; x.SetEditItemTemplateContent(c =>
             {
                 GridViewEditItemTemplateContainer templateContainer = c as GridViewEditItemTemplateContainer;
-
+                string data = Convert.ToString((DataBinder.Eval(c.DataItem, "RequireData")));
                 Html.DevExpress().Label(lblsettings =>
                 {
-                    lblsettings.Name = "VatPercent";
+                    lblsettings.Name = "RequireData";
                     //lblsettings.ControlStyle.CssClass = "align-middle";
                     //lblsettings.ClientVisible = visible;
-                }).Bind(templateContainer.Text).Render();
+                }).Bind(data).Render();
 
             });
         });
+
+        //settings.Columns.Add(x =>
+        //{
+        //    x.FieldName = "VatPercent"; x.Caption = "VAT"; x.ReadOnly = true; x.Visible = true; x.EditFormSettings.Visible = DefaultBoolean.False;
+        //    x.SetDataItemTemplateContent(c =>
+        //    {
+        //        string data = Convert.ToString((DataBinder.Eval(c.DataItem, "VatPercent")));
+        //        data = data.ToString() + " %";
+
+        //        ViewContext.Writer.Write(data);
+
+        //    });
+        //    x.SetEditItemTemplateContent(c =>
+        //    {
+        //        GridViewEditItemTemplateContainer templateContainer = c as GridViewEditItemTemplateContainer;
+        //        string data1  = Convert.ToString((DataBinder.Eval(c.DataItem, "VatPercent")));
+        //        data1 = data1.ToString() + " %";
+        //        Html.DevExpress().Label(lblsettings =>
+        //        {
+        //            lblsettings.Name = "VatPercent";
+        //            //lblsettings.ControlStyle.CssClass = "align-middle";
+        //            //lblsettings.ClientVisible = visible;
+        //        }).Bind(data1).Render();
+
+        //    });
+        //});
         settings.Columns.Add(x =>
         {
-            x.FieldName = "Price"; x.Caption = "Price"; x.ReadOnly = true; x.Visible = true; x.EditFormSettings.Visible = DefaultBoolean.False; x.SetEditItemTemplateContent(c =>
+            x.FieldName = "Price"; x.Caption = "Price"; x.Visible = true; x.EditFormSettings.Visible = DefaultBoolean.False; x.SetDataItemTemplateContent(c =>
             {
-                GridViewEditItemTemplateContainer templateContainer = c as GridViewEditItemTemplateContainer;
-
-                Html.DevExpress().Label(lblsettings =>
+                if (Session["Price"].ToString().ToLower() != "hide")
                 {
-                    lblsettings.Name = "Price";
-                    //lblsettings.ControlStyle.CssClass = "align-middle";
-                    //lblsettings.ClientVisible = visible;
-                }).Bind(templateContainer.Text).Render();
+                    string data = Convert.ToString((DataBinder.Eval(c.DataItem, "Price")));
+                    data = data.ToString();
+
+                    ViewContext.Writer.Write(data);
+                }
+                else
+                {
+                    ViewContext.Writer.Write("N/A");
+                }
 
             });
+
+            if (Session["Price"].ToString().ToLower() != "hide" && Session["Price"].ToString().ToLower() != "readwrite")
+            {
+                var s = Session["Price"].ToString();
+                x.SetEditItemTemplateContent(c =>
+                {
+                    GridViewEditItemTemplateContainer templateContainer = c as GridViewEditItemTemplateContainer;
+                    Html.DevExpress().Label(lblsettings =>
+                    {
+                        lblsettings.Name = "Price";
+                        //lblsettings.ControlStyle.CssClass = "align-middle";
+                        //lblsettings.ClientVisible = visible;
+                    }).Bind(templateContainer.Text).Render();
+                });
+                x.ReadOnly = true;
+            }
+
         });
+
         settings.Columns.Add(x =>
         {
             x.FieldName = "OrdQty"; x.Caption = "OrdQty"; x.Visible = true;
@@ -297,6 +343,93 @@
                 }
             });
         });
+        settings.Columns.Add(x =>
+        {
+            x.FieldName = "VAT";
+            x.Caption = "VAT"; x.Visible = true;
+            x.EditFormSettings.Visible = DefaultBoolean.True;
+            x.FieldName = "VAT"; x.Caption = "VAT"; x.ReadOnly = true; x.Visible = true; x.EditFormSettings.Visible = DefaultBoolean.False; x.SetEditItemTemplateContent(c =>
+            {
+                GridViewEditItemTemplateContainer templateContainer = c as GridViewEditItemTemplateContainer;
+
+                Html.DevExpress().Label(lblsettings =>
+                {
+                    lblsettings.Name = "VAT";
+                    //lblsettings.ControlStyle.CssClass = "align-middle";
+                    //lblsettings.ClientVisible = visible;
+                }).Bind(templateContainer.Text).Render();
+
+            });
+            //x.SetDataItemTemplateContent(c =>
+            //{
+            //    double pric = Convert.ToDouble((DataBinder.Eval(c.DataItem, "Price")));
+            //    double vatPer = Convert.ToDouble((DataBinder.Eval(c.DataItem, "VatPercent")));
+            //    double tot = Convert.ToDouble((pric * vatPer) / 100);
+            //    int totQty = Convert.ToInt32(DataBinder.Eval(c.DataItem, "OrdQty"));
+            //    tot = totQty * tot;
+            //    ViewContext.Writer.Write(tot);
+            //});
+            //x.SetEditItemTemplateContent(c =>
+            //{
+            //    GridViewEditItemTemplateContainer templateContainer = c as GridViewEditItemTemplateContainer;
+            //    double pric = Convert.ToDouble((DataBinder.Eval(c.DataItem, "Price")));
+            //    double vatPer = Convert.ToDouble((DataBinder.Eval(c.DataItem, "VatPercent")));
+            //    double tot = Convert.ToDouble((pric * vatPer) / 100);
+            //    int totQty = Convert.ToInt32(DataBinder.Eval(c.DataItem, "OrdQty"));
+            //    tot = totQty * tot;
+            //    Html.DevExpress().Label(lblsettings =>
+            //    {
+            //        lblsettings.Name = "VAT";
+            //    }).Bind(tot).Render();
+
+            //});
+        });
+
+
+        settings.Columns.Add(x =>
+        {
+            x.FieldName = "Total";
+            x.Caption = "Total"; x.Visible = true;
+            x.EditFormSettings.Visible = DefaultBoolean.True;
+            x.FieldName = "Total"; x.Caption = "Total"; x.ReadOnly = true; x.Visible = true; x.EditFormSettings.Visible = DefaultBoolean.False; x.SetEditItemTemplateContent(c =>
+            {
+                GridViewEditItemTemplateContainer templateContainer = c as GridViewEditItemTemplateContainer;
+
+                Html.DevExpress().Label(lblsettings =>
+                {
+                    lblsettings.Name = "Total";
+                    //lblsettings.ControlStyle.CssClass = "align-middle";
+                    //lblsettings.ClientVisible = visible;
+                }).Bind(templateContainer.Text).Render();
+
+            });
+            //x.SetDataItemTemplateContent(c =>
+            //{
+            //    double pric = Convert.ToDouble((DataBinder.Eval(c.DataItem, "Price")));
+            //    double vatPer = Convert.ToDouble((DataBinder.Eval(c.DataItem, "VatPercent")));
+            //    double totWitVat = Convert.ToDouble((pric * vatPer) / 100);
+            //    int totQty = Convert.ToInt32(DataBinder.Eval(c.DataItem, "OrdQty"));
+            //    double tot =( pric* totQty) + (totWitVat* totQty);
+            //    ViewContext.Writer.Write(tot);
+            //});
+            //x.SetEditItemTemplateContent(c =>
+            //{
+            //    GridViewEditItemTemplateContainer templateContainer = c as GridViewEditItemTemplateContainer;
+            //    double pric = Convert.ToDouble((DataBinder.Eval(c.DataItem, "Price")));
+            //    double vatPer = Convert.ToDouble((DataBinder.Eval(c.DataItem, "VatPercent")));
+            //    double totWitVat = Convert.ToDouble((pric * vatPer) / 100);
+            //    int totQty = Convert.ToInt32(DataBinder.Eval(c.DataItem, "OrdQty"));
+            //    double tot = (pric * totQty) + (totWitVat * totQty);
+            //    Html.DevExpress().Label(lblsettings =>
+            //    {
+            //        lblsettings.Name = "Total";
+            //        //lblsettings.ControlStyle.CssClass = "align-middle";
+            //        //lblsettings.ClientVisible = visible;
+            //    }).Bind(tot).Render();
+            //});
+        });
+
+
 
     });
     if (ViewData["EditError"] != null)

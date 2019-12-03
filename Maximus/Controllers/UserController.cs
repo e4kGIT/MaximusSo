@@ -21,7 +21,14 @@ namespace Maximus.Controllers
         // GET: User
         public ActionResult Login()
         {
-
+            Session.Clear();
+            var ctx = Request.GetOwinContext();
+            var authManager = ctx.Authentication;
+            FormsAuthentication.SignOut();
+            Response.Cookies[FormsAuthentication.FormsCookieName].Expires = DateTime.Now.AddYears(-1);
+            authManager.User = new GenericPrincipal(new GenericIdentity(string.Empty), null);
+            authManager.SignOut("ApplicationCookie");
+            //var s = User.Identity.IsAuthenticated;
             //       FormsAuthentication.SignOut();
             //       System.Web.HttpContext.Current.User =
             //new GenericPrincipal(new GenericIdentity(string.Empty), null);
@@ -44,6 +51,8 @@ namespace Maximus.Controllers
                             var identity = new ClaimsIdentity(
                   new[] {
                     new Claim(ClaimTypes.Name, logDetails.UserName),
+
+    new Claim(ClaimTypes.NameIdentifier,data.First().BusinessID )
                           },
                   "ApplicationCookie");
 
@@ -82,6 +91,7 @@ namespace Maximus.Controllers
                             Session["BuisnessId"] = data.First().BusinessID;
                             Session["Buisness"] = entity.tblbus_business.Where(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim()).First().Name;
                             Session["WareHouseID"] = dp.SetDefaultWarehouse(logDetails.UserName, data.First().BusinessID);
+
                             if (!dp.IsSuperUser(cmpId, busId, data.First().UserName))
                             {
                                 AllowSite = Convert.ToBoolean(dp.BusinessParam("ONL_NEWSYSTEM", busId.ToUpper()));
@@ -114,7 +124,8 @@ namespace Maximus.Controllers
                             Session["DELADDR_SAVE"] = dp.BusinessParam("DELADDR_SAVE", data.First().BusinessID.ToUpper().Trim());
                             Session["ONL_REORDER_REQ"] = dp.BusinessParam("ONL_REORDER_REQ", data.First().BusinessID.ToUpper().Trim());
                             Session["IsSiteCode"] = dp.IsSiteCode(busId);
-                            Session["RolloutName"] = dp.BusinessParam("ROLLOUT_NAME", busId);
+                            //Session["RolloutName"] = dp.BusinessParam("ROLLOUT_NAME", busId);
+                            Session["RolloutName"] = "";
                             if (Session["RolloutName"].ToString() != "")
                             {
                                 Session["FITALLOC"] = "FITALLOC_RO";
@@ -151,6 +162,13 @@ namespace Maximus.Controllers
                             Session["POINTSREQD"] = booPointsReq == "" ? false : booDefDelAddr.ToLower() == "true" ? true : false;
                             booCusRefMan = dp.BusinessParam("CusRefMan", data.First().BusinessID.Trim().ToUpper());
                             Session["CusRefMan"] = booCusRefMan == "" ? false : booCusRefMan.ToLower() == "true" ? true : false;
+                            Session["DIFF_MANPACK_INFO"] = dp.BusinessParam("DIFF_MANPACK_INFO", busId);
+                            var DIFF = dp.BusinessParam("DIFF_MANPACK_INFO", busId);
+                            if (Session["RolloutName"].ToString() != "")
+                            {
+                                Session["FITALLOC"] = "FITALLOC_RO";
+                                Session["DIMALLOC"] = "DIMALLOC_RO";
+                            }
                             booRea = dp.BusinessParam("SOPREAREQ", data.First().BusinessID.Trim().ToUpper());
                             if (booRea != "")
                             {
@@ -176,6 +194,14 @@ namespace Maximus.Controllers
                             {
                                 Session["CusProdCode"] = false;
                             }
+                            BusinessInfo busInfo = new BusinessInfo();
+                            busInfo = dp.GetbusInfo(busId);
+                            Session["Currency_Name"] = busInfo.Currency_Name;
+                            Session["CurrencyExchangeRate"] = busInfo.CurrencyExchangeRate;
+                            Session["intNoOfday"] = dp.BusinessParam("NoDaysToDel", busId);
+                            Session["IncWendsDel"] = dp.BusinessParam("IncWendsDel", busId);
+                            Session["Rep_Id"] = busInfo.Rep_Id;
+                            Session["OrderType"] = "SO";
                             // Session["colLines"]=colline
                             Session["REQ_REASONPAGE"] = dp.IsReasonUcodes(busId);
                             Session["IsVisitPrivate"] = false;
@@ -185,7 +211,9 @@ namespace Maximus.Controllers
                             Session["pandeliverypanelid"] = (bool)Session["IsAddressToEmployee"] | (bool)Session["IsAddressToAll"];
                             var permissionLst = dp.PermissionSettings(Session["BuisnessId"].ToString(), Session["UserName"].ToString(), "chkMapEmp", Session["Access"].ToString());
                             Session["chkMapEmp"] = permissionLst.Any(x => x.ControlId.Trim() == "chkMapEmp") ? permissionLst.Where(x => x.ControlId.Trim() == "chkMapEmp").First().Permission.ToLower() : "hide";
-                            var da = permissionLst.Any(x => x.ControlId.Trim() == "chkMapAddr") ? permissionLst.Where(x => x.ControlId.Trim() == "chkMapAddr").First().Permission.ToLower() : "";
+                            Session["Price"] = permissionLst.Any(x => x.ControlId.Trim() == "Price") ? permissionLst.Where(x => x.ControlId.Trim() == "Price").First().Permission.ToLower() : "hide";
+                            Session["pnlCommentsNominal"] = permissionLst.Any(x => x.ControlId.Trim() == "pnlCommentsNominal") ? permissionLst.Where(x => x.ControlId.Trim() == "pnlCommentsNominal").First().Permission.ToLower() : "hide";
+                            Session["pnlCarriageReason"] = permissionLst.Any(x => x.ControlId.Trim() == "pnlCarriageReason") ? permissionLst.Where(x => x.ControlId.Trim() == "pnlCarriageReason").First().Permission.ToLower() : "hide";
                             Session["chkMapAddr"] = permissionLst.Any(x => x.ControlId.Trim() == "chkMapAddr") ? permissionLst.Where(x => x.ControlId.Trim() == "chkMapAddr").First().Permission.ToLower() : "";
                             var da1 = !(Session["chkMapAddr"].ToString().ToLower().Trim() == "hide");
                             Session["chkMapAddrVisiblity"] = da1;
@@ -204,12 +232,13 @@ namespace Maximus.Controllers
                             Session["ONLNEDEFNOM3"] = dp.CompanyParam("ONLNEDEFNOM3", cmpId);
                             Session["ONLNEDEFNOM4"] = dp.CompanyParam("ONLNEDEFNOM4", cmpId);
                             Session["ONLNEDEFNOM5"] = dp.CompanyParam("ONLNEDEFNOM5", cmpId);
+                            Session["ROLLOUT_NAME"] = dp.BusinessParam("ROLLOUT_NAME", busId);
                             Session["ONLNETXTNOM1"] = dp.CompanyParam("ONLNETXTNOM1", busId);
                             Session["ONLNETXTNOM2"] = dp.CompanyParam("ONLNETXTNOM2", busId);
                             Session["ONLNETXTNOM3"] = dp.CompanyParam("ONLNETXTNOM3", busId);
                             Session["ONLNETXTNOM4"] = dp.CompanyParam("ONLNETXTNOM4", busId);
                             Session["ONLNETXTNOM5"] = dp.CompanyParam("ONLNETXTNOM5", busId);
-                            Session["txtcarriercharge"]=permissionLst.Any(x=> x.ControlId.Trim()== "txtcarriercharge") ? permissionLst.Where(x => x.ControlId.Trim() == "txtcarriercharge").First().Permission.ToLower() : "hide";
+                            Session["txtcarriercharge"] = permissionLst.Any(x => x.ControlId.Trim() == "txtcarriercharge") ? permissionLst.Where(x => x.ControlId.Trim() == "txtcarriercharge").First().Permission.ToLower() : "hide";
                             Session["IsManPack"] = true;
                             SalesOrderHeaderViewModel saleHeads = new SalesOrderHeaderViewModel();
                             Session["objCurrentOrder"] = saleHeads;
@@ -217,11 +246,11 @@ namespace Maximus.Controllers
                             Session["pnlRolloutName"] = permissionLst.Any(x => x.ControlId == "pnlRolloutName") ? permissionLst.Where(x => x.ControlId == "pnlRolloutName").First().Permission.ToLower() == "show" ? true : false : false;
                             Session["ProductBy"] = "Style";
                             Session["PricePermit"] = dp.getPermission(controls.Price, data.First().AccessID, Session["BuisnessId"].ToString().ToUpper(), "", Session["UserName"].ToString());
-                            Session["OrderPermit"] = dp.getPermission(controls.Orders, data.First().AccessID, Session["BuisnessId"].ToString().ToUpper());
-                            Session["AccessPermit"] = dp.getPermission(controls.Access, data.First().AccessID, Session["BuisnessId"].ToString().ToUpper());
-                            Session["OrderDelete"] = dp.getPermission(controls.OrderDelete, data.First().AccessID, Session["BuisnessId"].ToString().ToUpper());
-                            Session["NomCode"] = dp.getPermission(controls.NomCode, data.First().AccessID, Session["BuisnessId"].ToString().ToUpper());
-                            Session["OverrideEnt"] = dp.getPermission(controls.AllowOverrideEntitlement, data.First().AccessID, Session["BuisnessId"].ToString().ToUpper());
+                            Session["OrderPermit"] = dp.getPermission(controls.Orders, data.First().AccessID, Session["BuisnessId"].ToString().ToUpper(), Session["UserName"].ToString());
+                            Session["AccessPermit"] = dp.getPermission(controls.Access, data.First().AccessID, Session["BuisnessId"].ToString().ToUpper(), Session["UserName"].ToString());
+                            Session["OrderDelete"] = dp.getPermission(controls.OrderDelete, data.First().AccessID, Session["BuisnessId"].ToString().ToUpper(), Session["UserName"].ToString());
+                            Session["NomCode"] = dp.getPermission(controls.NomCode, data.First().AccessID, Session["BuisnessId"].ToString().ToUpper(), Session["UserName"].ToString());
+                            Session["OverrideEnt"] = dp.getPermission(controls.AllowOverrideEntitlement, data.First().AccessID, Session["BuisnessId"].ToString().ToUpper(), Session["UserName"].ToString());
                             Session["OverrideEntWithReason"] = dp.getPermission(controls.OverrideEntitlementWithReason, data.First().AccessID, Session["BuisnessId"].ToString().ToUpper());
                             Session["SAPPermit"] = dp.getPermission(controls.SAP, data.First().AccessID, Session["BuisnessId"].ToString().ToUpper());
                             Session["OrderConfirm"] = dp.getPermission(controls.OrderConfirm, data.First().AccessID, Session["BuisnessId"].ToString().ToUpper());
@@ -231,6 +260,7 @@ namespace Maximus.Controllers
                             Session["FITALLOC"] = "FITALLOC";
                             Session["DIMALLOC"] = "DIMALLOC";
                             Session["goto"] = null;
+                            Session["CarrierPrompt"] = dp.BusinessParam("CarrierPrompt", busId);
                             VInfo = dp.BusinessParam("VISITINFOREQ", Session["BuisnessId"].ToString().ToUpper());
                             if (VInfo == "")
                             {
@@ -244,35 +274,6 @@ namespace Maximus.Controllers
                             {
 
                             }
-                            //Dim startPage As String = ""
-                            //If booVinfo = False Then
-                            //    If getWelcomePage(UCase(Trim(BusinessID))) And Not CBoolstr(BusinessParam("IGNOREWELCOME", UCase(Trim(BusinessID)))) Then
-                            //        startPage = "Welcome.aspx"
-                            //        'startPage = "Dashboard.aspx"
-                            //    ElseIf CBoolstr(BusinessParam("REQ_REASONPAGE", UCase(Trim(BusinessID)))) Then
-                            //        startPage = "CustomerReason.aspx"
-                            //    Else
-                            //        Dim defMenu As String = modMain.GetDefaultMenu(UCase(Trim(BusinessID)), AccessID)
-                            //        If defMenu = "" Then
-                            //            If CBoolstr(Session.Item("MANPACK")) Then
-                            //                startPage = "newemp1.aspx?multi=true"
-                            //            Else
-                            //                startPage = "newemp1.aspx"
-                            //            End If
-                            //        Else
-                            //            startPage = defMenu
-                            //        End If
-                            //    End If
-                            //Else
-                            //    startPage = "VisitorInfo.aspx"
-                            //End If
-                            //Session.Add("StartPage", startPage)
-
-                            //Response.Redirect(startPage)
-                            //rs.Close()
-                            //If Conn.State = 1 Then
-                            //    Conn.Close()
-                            //End If
                             return RedirectToAction("Index", "Employee", new { BusinessID = data.First().BusinessID });
                             skip:;
                             return RedirectToAction("Login", "User", new { BusinessID = data.First().BusinessID });

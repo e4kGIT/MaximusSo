@@ -915,6 +915,7 @@
     <Compile Include="Models\bak_tblaccemp_employee_tsb.cs">
       <DependentUpon>maximusDataContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\BusinessInfo.cs" />
     <Compile Include="Models\Colors.cs" />
     <Compile Include="Models\Colorsizes.cs" />
     <Compile Include="Models\copy_tblusers.cs">
@@ -1055,6 +1056,7 @@
     <Compile Include="Models\SalesOrderHeaderViewModel.cs" />
     <Compile Include="Models\SalesOrderLineViewModel.cs" />
     <Compile Include="Models\SalesOrderViewModel.cs" />
+    <Compile Include="Models\SaveOrderResultSet.cs" />
     <Compile Include="Models\SiteCodeModel.cs" />
     <Compile Include="Models\Size.cs" />
     <Compile Include="Models\Structrues.cs" />
@@ -1509,6 +1511,7 @@
     <Compile Include="Models\tblwho_warehousesx.cs">
       <DependentUpon>maximusDataContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\TotalModel.cs" />
     <Compile Include="Models\ucodeby_freetextview.cs">
       <DependentUpon>maximusDataContext.tt</DependentUpon>
     </Compile>

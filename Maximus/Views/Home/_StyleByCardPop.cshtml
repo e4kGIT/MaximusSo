@@ -881,7 +881,6 @@
                     var style = (DataBinder.Eval(col.DataItem, "StyleID")).ToString();
                     if (style.Contains(','))
                     {
-
                         var styleArr = style.Split(',');
                         string style1 = styleArr[0].ToString();
                         var color = entity.tblfsk_style_colour.Any(s => s.StyleID == style1) == true ? entity.tblfsk_style_colour.Where(s => s.StyleID == style1).OrderBy(s => s.ColourID).FirstOrDefault().ColourID : "";
@@ -895,7 +894,10 @@
                                 price = entity.tblfsk_style_sizes_prices.Any(s => s.StyleID == style1 && s.SizeID == size && s.BusinessId == "ALL") == false ? "" : System.Math.Round(entity.tblfsk_style_sizes_prices.Where(s => s.StyleID == style1 && s.SizeID == prevHistory.Size && s.PriceID == 2 && s.BusinessId == "ALL").FirstOrDefault().Price.Value, 2).ToString();
                             }
                         }
-                        ViewContext.Writer.Write(string.Format("<b>Price</b><hr style='margin: 0;'/><br/><div id='DimviewPrice" + style + "'>{0}</div>", price));
+                        if (Session["Price"].ToString().ToLower() != "hide")
+                        {
+                            ViewContext.Writer.Write(string.Format("<b>Price</b><hr style='margin: 0;'/><br/><div id='DimviewPrice" + style + "'>{0}</div>", price));
+                        }
                     }
                     else
                     {
@@ -911,7 +913,10 @@
                                 price = entity.tblfsk_style_sizes_prices.Any(s => s.StyleID == style && s.SizeID == prevHistory.Size && s.BusinessId == "ALL") == false ? "" : System.Math.Round(entity.tblfsk_style_sizes_prices.Where(s => s.StyleID == style && s.PriceID == 2 && s.SizeID == prevHistory.Size && s.BusinessId == "ALL").FirstOrDefault().Price.Value, 2).ToString();
                             }
                         }
-                        ViewContext.Writer.Write(string.Format("<b>Price</b><hr style='margin: 0;'/><br/><div id='DimviewPrice" + style + "'>{0}</div>", price));
+                        if (Session["Price"].ToString().ToLower() != "hide")
+                        {
+                            ViewContext.Writer.Write(string.Format("<b>Price</b><hr style='margin: 0;'/><br/><div id='DimviewPrice" + style + "'>{0}</div>", price));
+                        }
                     }
                 }
             });
@@ -931,14 +936,14 @@
                 {
                     var style = (DataBinder.Eval(cont.DataItem, "StyleID")).ToString();
 
-                    var content = string.Format("<div class='row'><div class='col-md-4 col-xs-4 col-sm-4 col-lg-4'><b>Quantity</b><hr style='margin: 0;'/><div style='margin: 0;' class=\"center pull-left\"><p></p><div class=\"input-group\"><span class=\"input-group-btn\"><button type='button' class='qtyminusdemand btn backg' field='{0}'><span class=\"glyphicon glyphicon-minus\"></span></button></span><input style='width:290px;text-align:center;' type='text' name='{0}'   class=\"form-control input-number\" value=\"1\" min=\"1\" max=\"10000000\"><span class=\"input-group-btn\"><button type='button' class='qtyplusdemand  btn backg' field='{0}'><span class=\"glyphicon glyphicon-plus\"></span></button></span></div><p></p></div>", "spinDemandEdit_" + style);
+                    var content = string.Format("<div class='row reqDatadim" + style + "' style=\"display:none;\"><div class='col-md-4 col-xs-4 col-sm-4 col-lg-4'><b><span class='reqDataHeadingdim" + style + "'></span></b><hr style='margin: 0;'/><div><input class='form-control reqdatatxtdim" + style + "'  id='reqdatatxtdim" + style + "' style='margin-top:10px' type=\"text\"/><br/></div></div></div><div class='row'><div class='col-md-4 col-xs-4 col-sm-4 col-lg-4'><b>Quantity</b><hr style='margin: 0;'/><div style='margin: 0;' class=\"center pull-left\"><p></p><div class=\"input-group\"><span class=\"input-group-btn\"><button type='button' class='qtyminusdemand btn backg' field='{0}'><span class=\"glyphicon glyphicon-minus\"></span></button></span><input style='width:290px;text-align:center;' type='text' name='{0}'   class=\"form-control input-number\" value=\"1\" min=\"1\" max=\"10000000\"><span class=\"input-group-btn\"><button type='button' class='qtyplusdemand  btn backg' field='{0}'><span class=\"glyphicon glyphicon-plus\"></span></button></span></div><p></p></div><br/>", "spinDemandEdit_" + style);
                     content = content + "</div>";
                     ViewContext.Writer.Write(content);
                 }
                 else
                 {
                     var style = (DataBinder.Eval(cont.DataItem, "StyleID")).ToString();
-                    var content = string.Format("<div class='row'><div class='col-md-4 col-xs-4 col-sm-4 col-lg-4'><b>Quantity</b><hr style='margin: 0;'/><div style='margin: 0;' class=\"center pull-left\"><p></p><div class=\"input-group\"><span class=\"input-group-btn\"><button type='button' onclick=\"minus('{0}')\" class='btn backg' field='{0}'><span class=\"glyphicon glyphicon-minus\"></span></button></span><input style='width:290px;text-align:center;' type='text' name='{0}' style=\"text-align:center\" class=\"form-control input-number\" value=\"1\" min=\"1\" max=\"10000000\"><span class=\"input-group-btn\"><button type='button' onclick=\"plus('{0}')\" class='btn backg' field='{0}'><span class=\"glyphicon glyphicon-plus\"></span></button></span></div><p></p></div>", "spinDemandEdit_" + style);
+                    var content = string.Format("<div class='row reqDatadim" + style + "' style=\"display:none;\"><div class='col-md-4 col-xs-4 col-sm-4 col-lg-4'><b><span class='reqDataHeadingdim" + style + "'></span></b><hr style='margin: 0;'/><div><input class='form-control reqdatatxtdim" + style + "'  id='reqdatatxtdim" + style + "' style='margin-top:10px' type=\"text\"/><br/></div></div></div><div class='row'><div class='col-md-4 col-xs-4 col-sm-4 col-lg-4'><b>Quantity</b><hr style='margin: 0;'/><div style='margin: 0;' class=\"center pull-left\"><p></p><div class=\"input-group\"><span class=\"input-group-btn\"><button type='button' onclick=\"minus('{0}')\" class='btn backg' field='{0}'><span class=\"glyphicon glyphicon-minus\"></span></button></span><input style='width:290px;text-align:center;' type='text' name='{0}' style=\"text-align:center\" class=\"form-control input-number\" value=\"1\" min=\"1\" max=\"10000000\"><span class=\"input-group-btn\"><button type='button' onclick=\"plus('{0}')\" class='btn backg' field='{0}'><span class=\"glyphicon glyphicon-plus\"></span></button></span></div><p></p></div><br/>", "spinDemandEdit_" + style);
                     content = content + "</div>";
                     ViewContext.Writer.Write(content);
                     if (Session["OVERRIDE_ENT_WITH_REASON"].ToString().ToLower() == "show" && reason)

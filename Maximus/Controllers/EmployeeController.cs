@@ -59,7 +59,20 @@ namespace Maximus.Controllers
                     ViewBag.HideSearch = false;
                     if (!((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes.Contains(','))
                     {
-                        return RedirectToAction("Action", new { EmployeeId = ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmployeeId, EmpName = ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpFirstName + " " + ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpLastName, Ucodes = ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes });
+                       
+                        var sss = GotoCard( ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmployeeId,  ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpFirstName + " " + ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpLastName, ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes );
+                      var  templates = entity.tblsop_customerorder_template.Any(x => x.BusinessID == BusinessID) ? entity.tblsop_customerorder_template.Where(x => x.BusinessID == BusinessID).OrderBy(x => x.SeqNo).Select(x => x.Template).Distinct().ToList() : new List<string>();
+                        if (templates.Count > 0)
+                        {
+                            Session["Templates"] = templates;
+                        }
+                        else
+                        {
+                            Session["Templates"] = new List<string>();
+
+                        }
+                            return RedirectToAction("Index","Home");
+                        //return RedirectToAction("GotoCard", new { EmployeeId = ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmployeeId, EmpName = ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpFirstName + " " + ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpLastName, Ucodes = ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes });
                         //((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().em.Contains(',')
                         //GotoCard(((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmployeeId, ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpFirstName + " " + ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpLastName, ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes);
                     }
@@ -76,6 +89,18 @@ namespace Maximus.Controllers
                     ViewBag.HideSearch = false;
                     if (!((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes.Contains(','))
                     {
+                        var sss = GotoCard(((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmployeeId, ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpFirstName + " " + ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpLastName, ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes);
+                        var templates = entity.tblsop_customerorder_template.Any(x => x.BusinessID == BusinessID) ? entity.tblsop_customerorder_template.Where(x => x.BusinessID == BusinessID).OrderBy(x => x.SeqNo).Select(x => x.Template).Distinct().ToList() : new List<string>();
+                        if (templates.Count > 0)
+                        {
+                            Session["Templates"] = templates;
+                        }
+                        else
+                        {
+                            Session["Templates"] = new List<string>();
+
+                        }
+                        return RedirectToAction("Index", "Home");
                         return RedirectToAction("Action", new { EmployeeId = ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmployeeId, EmpName = ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpFirstName + " " + ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpLastName, Ucodes = ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes });
                         //((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().em.Contains(',')
                         //GotoCard(((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmployeeId, ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpFirstName + " " + ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpLastName, ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes);
@@ -115,7 +140,7 @@ namespace Maximus.Controllers
             if (templates.Count > 0)
             {
                 Session["Templates"] = templates;
-                result = dp.GetEmployee(businessId, Session["UserName"].ToString(), Session["OrderPermit"].ToString(), txtUcode, ddlAddress, txtUcodeDesc, txtCDepartment, txtRole, txtEmpNo, txtName, txtStDate);
+                result = dp.GetEmployeeTemplate(businessId, Session["UserName"].ToString(), Session["OrderPermit"].ToString(), txtUcode, ddlAddress, txtUcodeDesc, txtCDepartment, txtRole, txtEmpNo, txtName, txtStDate);
                 //result = dp.getEmployeeDetailsTemplates(Session["BuisnessId"].ToString());
             }
             else
@@ -218,6 +243,13 @@ namespace Maximus.Controllers
                     DelCountry = addresArr.Count() > 0 ? addresArr[7] : "",
                     EmployeeName = Session["EmpName"].ToString(),
                     EmployeeID = Session["SelectedEmp"].ToString(),
+                    UCodeId = Ucodes,
+                    WarehouseID = Session["WareHouseID"].ToString(),
+                    Currency_Exchange_Rate = Convert.ToDouble(Session["CurrencyExchangeRate"]),
+                    Currency_Exchange_Code = Session["Currency_Name"].ToString(),
+                    RepID = Convert.ToInt32(Session["Rep_Id"]),
+                    OrderType = Session["OrderType"].ToString(),
+                    OrderDate=DateTime.Now.ToString("yyyy-MM-dd")
                     //CustRef = entity.tblsop_salesorder_header.Where(x => x.CustID == businessId).First().CustRef,
                     //Comments = entity.tblsop_salesorder_header.Where(x => x.CustID == businessId).First().Comments,
                 });
@@ -330,6 +362,12 @@ namespace Maximus.Controllers
                 DelCountry = addresArr.Count() > 0 ? addresArr[7] : "",
                 EmployeeName = Session["EmpName"].ToString(),
                 EmployeeID = Session["SelectedEmp"].ToString(),
+                WarehouseID = Session["WareHouseID"].ToString(),
+                Currency_Exchange_Rate = Convert.ToDouble(Session["CurrencyExchangeRate"]),
+                Currency_Exchange_Code = Session["Currency_Name"].ToString(),
+                RepID = Convert.ToInt32(Session["Rep_Id"]),
+                OrderType = Session["OrderType"].ToString(),
+                OrderDate = DateTime.Now.ToString("yyyy-MM-dd")
                 //CustRef = entity.tblsop_salesorder_header.Where(x => x.CustID == businessId).First().CustRef,
                 //Comments = entity.tblsop_salesorder_header.Where(x => x.CustID == businessId).First().Comments,
             });

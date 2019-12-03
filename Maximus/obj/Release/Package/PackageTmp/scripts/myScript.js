@@ -1,4 +1,6 @@
-﻿function getEntitlement1(style) {
+﻿var updateEdit = "";
+
+function getEntitlement1(style) {
     var colordrop = "ColorPop_" + "Drop_" + style;
     var colorValue = document.getElementsByName(colordrop);
     var selectedcolor = colorValue[0].defaultValue == "" & colorValue[0].value == "" ? "" : colorValue[0].defaultValue != "" ? colorValue[0].defaultValue : colorValue[0].value;
@@ -39,10 +41,8 @@
         });
     }
 }
-function  getEntitlementDIMENSION(style, orgStyle)
-{
-    if (style!="" && orgStyle!="") {
-        
+function getEntitlementDIMENSION(style, orgStyle) {
+    if (style != "" && orgStyle != "") {
         $.ajax({
             url: "/Home/GetEntitlement",
             type: "POST",
@@ -60,7 +60,6 @@ function  getEntitlementDIMENSION(style, orgStyle)
             }
         });
     }
-     
 }
 function getEntitlementonDemand(style) {
     var colordrop = "ColorDimview_" + "Drop_" + style;
@@ -212,21 +211,19 @@ function getSelectedSizeSwatch(style, size, orgStyle) {
     var styleId_Val = style.includes(",") ? GetStyleIdSwatch(style, orgStyle) : style;
 
     if (size != "" && styleId_Val != "") {
-
         $.ajax({
             type: "POST",
             url: '/Home/GetPrice/',
             data: { 'StyleID': styleId_Val, 'SizeId': size },
             success: function (response) {
-                ;
-                if (!response.includes("Login")) { 
+                if (!response.includes("Login")) {
                     var priceId = "LbPrice" + style;
                     var price = document.getElementById(priceId);
                     price.innerHTML = "";
                     price.innerHTML = response;
+
                 }
-                else
-                {
+                else {
                     window.location = "/User/Login/";
                 }
             },
@@ -258,8 +255,7 @@ function getSelectedSizeDimSwatch(style, size) {
                     price.innerHTML = "";
                     price.innerHTML = response;
                 }
-                else
-                {
+                else {
                     window.location = "/User/Login/";
                 }
             },
@@ -291,6 +287,7 @@ function getSelectedSizeDemandSwatch(style, size, orgStyle) {
                     var price = document.getElementById(priceId);
                     price.innerHTML = "";
                     price.innerHTML = response;
+
                 }
                 else {
                     window.location = "/User/Login/";
@@ -572,8 +569,8 @@ function addTocartSwatch(s, e) {
             colorValue = colorSwatch[0].offsetParent.innerText;
         }
     }
-    size = sizeValue != undefined | sizeValue != "" ? sizeValue : "";
-    color = colorValue != undefined | colorValue != "" ? colorValue : "";
+    size = sizeValue != undefined && sizeValue != "" ? sizeValue : "";
+    color = colorValue != undefined && colorValue != "" ? colorValue : "";
 
     if (stylearr[1].includes(',')) {
         var name = 'Swatch_Style_FieldSet_' + stylearr[1];
@@ -592,105 +589,240 @@ function addTocartSwatch(s, e) {
     }
     var desc = descStyle == undefined ? stylearr[1] : descStyle[0];
     var Spin = document.getElementsByName("spinEdit_" + stylearr[1]);
-    description = document.getElementById("LbDescription" + desc).innerHTML;
-    price = document.getElementById("LbPrice" + stylearr[1]).innerHTML;
+    var descriptionDiv = document.getElementById("LbDescription" + desc);
+    description = descriptionDiv.innerHTML;
+    var priceId = document.getElementById("LbPrice" + stylearr[1]);
+    price = priceId != undefined && priceId != null ? priceId.innerHTML : "0";
     qty = Spin[0].value;
-    if (description != "" && price != "" && size != "" && color != "" && qty != "" && qty != "0") {
-        if (stylearr[2] != "") {
-            $.ajax({
-                url: "/Home/GetBtnStatus/",
-                type: "POST",
-                data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty, 'orgStyl': stylearr[3] },
-                success: function (response) {
-                    debugger;
-                    if (response == "enabled" | (reason != "" && reason != undefined)) {
-                        loadPopup.Show();
+    var clsName = "reqData" + stylearr[1];
+    var reqdatatxt = "reqdatatxt" + stylearr[1];
+    var reqData = document.getElementsByClassName(clsName);
+    if (reqData[0].style.display != "none") {
+        var reqtxt = document.getElementsByClassName(reqdatatxt);
+        if (description != "" && price != "" && size != "" && color != "" && qty != "" && qty != "0" && reqtxt[0].value != "") {
+            if (stylearr[2] != "") {
+                $.ajax({
+                    url: "/Home/GetBtnStatus/",
+                    type: "POST",
+                    data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty, 'orgStyl': stylearr[3] },
+                    success: function (response) {
+                        debugger;
+                        if (response == "enabled" | (reason != "" && reason != undefined)) {
+                            loadPopup.Show();
 
-                        $.ajax({
-                            url: "/Home/Addtocart/",
-                            type: "POST",
-                            data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3] },
-                            success: function (response) {
-                                if (response != "") {
-                                    $("#CartwidCount").html("");
-                                    $("#CartwidCount").html(response);
-                                    loadPopup.Hide();
-                                    myFunction("Added to cart..!");
-                                    //myFunction("Added to cart..!");  ;
-                                }
-                                else {
+                            $.ajax({
+                                url: "/Home/Addtocart/",
+                                type: "POST",
+                                data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'entQty': stylearr[2], 'reqData1': reqtxt[0].value },
+                                success: function (response) {
+                                    if (response != "") {
+                                        $("#CartwidCount").html("");
+                                        $("#CartwidCount").html(response);
+                                        loadPopup.Hide();
+                                        myFunction("Added to cart..!");
+                                        //myFunction("Added to cart..!");  ;
+                                    }
+                                    else {
+                                        loadPopup.Hide();
+                                        myFunction("Try again..!");
+                                        //alert("Try again!");
+                                    }
+                                },
+                                error: function () {
                                     loadPopup.Hide();
                                     myFunction("Try again..!");
                                     //alert("Try again!");
                                 }
-                            },
-                            error: function () {
-                                loadPopup.Hide();
-                                myFunction("Try again..!");
-                                //alert("Try again!");
-                            }
-                        })
-                    }
-                    else {
-                        // document.getElementById("ErrorMessage").style.display = 'block';
-                        loadPopup.Hide();
-                        getEntitlementSwatch(stylearr[1], stylearr[3], 1);
+                            })
+                        }
+                        else {
+                            // document.getElementById("ErrorMessage").style.display = 'block';
+                            loadPopup.Hide();
+                            getEntitlementSwatch(stylearr[1], stylearr[3], 1);
 
+                        }
+                    },
+                    error: function () {
+                        loadPopup.Hide();
+                        myFunction("Added to cart..!"); ("Try again!");
                     }
-                },
-                error: function () {
-                    loadPopup.Hide();
-                    myFunction("Added to cart..!"); ("Try again!");
-                }
-            });
-        }
-        else {
-            loadPopup.Show();
-            $.ajax({
-                url: "/Home/GetBtnStatus/",
-                type: "POST",
-                data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty, 'orgStyl': stylearr[3] },
-                success: function (response) {
-                    debugger;
-                    if (response == "enabled" | (reason != "" && reason != undefined)) {
-                        $.ajax({
-                            url: "/Home/Addtocart/",
-                            type: "POST",
-                            data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3] },
-                            success: function (response) {
-                                if (response != "") {
-                                    $("#CartwidCount").html("");
-                                    $("#CartwidCount").html(response);
-                                    myFunction("Added to cart..!");  
-                                }
-                                else {
+                });
+            }
+            else {
+                loadPopup.Show();
+                $.ajax({
+                    url: "/Home/GetBtnStatus/",
+                    type: "POST",
+                    data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty, 'orgStyl': stylearr[3] },
+                    success: function (response) {
+                        debugger;
+                        if (response == "enabled" | (reason != "" && reason != undefined)) {
+                            $.ajax({
+                                url: "/Home/Addtocart/",
+                                type: "POST",
+                                data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3] },
+                                success: function (response) {
+                                    if (response != "") {
+                                        $("#CartwidCount").html("");
+                                        $("#CartwidCount").html(response);
+                                        myFunction("Added to cart..!");
+                                    }
+                                    else {
+                                        loadPopup.Hide();
+                                        alert("Try again!");
+                                    }
+                                },
+                                error: function () {
                                     loadPopup.Hide();
                                     alert("Try again!");
                                 }
-                            },
-                            error: function () {
-                                loadPopup.Hide();
-                                alert("Try again!");
-                            }
-                        })
-                    }
-                    else {
-                        // document.getElementById("ErrorMessage").style.display = 'block';
+                            })
+                        }
+                        else {
+                            // document.getElementById("ErrorMessage").style.display = 'block';
+                            loadPopup.Hide();
+                            getEntitlementSwatch(stylearr[1], stylearr[3], 1);
+
+                        }
+                    },
+                    error: function () {
                         loadPopup.Hide();
-                        getEntitlementSwatch(stylearr[1], stylearr[3], 1);
-
+                        alert("Try again!");
                     }
-                },
-                error: function () {
-                    loadPopup.Hide();
-                    alert("Try again!");
-                }
-            });
-        }
+                });
+            }
 
+        }
+        else {
+            if (price == "" || price == null || price == undefined) {
+                alert("Please choose a size");
+            }
+            else if (size == "" || size == null || size == undefined) {
+                alert("Please choose a Size");
+            }
+            else if (color == "" || color == null || color == undefined) {
+                alert("Please choose a Colour");
+            }
+            else if (qty == "" || qty == "0" || qty == null || qty == undefined) {
+                alert("Quantity should be greater than 0");
+            }
+            else if (reqtxt[0].value == "") {
+                alert("Please select Required leg length");
+            }
+        }
     }
     else {
-        alert("Please select all the fields in the cards!");
+        if (description != "" && price != "" && size != "" && color != "" && qty != "" && qty != "0") {
+            if (stylearr[2] != "") {
+                $.ajax({
+                    url: "/Home/GetBtnStatus/",
+                    type: "POST",
+                    data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty, 'orgStyl': stylearr[3] },
+                    success: function (response) {
+                        debugger;
+                        if (response == "enabled" | (reason != "" && reason != undefined)) {
+                            loadPopup.Show();
+
+                            $.ajax({
+                                url: "/Home/Addtocart/",
+                                type: "POST",
+                                data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'entQty': stylearr[2] },
+                                success: function (response) {
+                                    if (response != "") {
+                                        $("#CartwidCount").html("");
+                                        $("#CartwidCount").html(response);
+                                        loadPopup.Hide();
+                                        myFunction("Added to cart..!");
+                                        //myFunction("Added to cart..!");  ;
+                                    }
+                                    else {
+                                        loadPopup.Hide();
+                                        myFunction("Try again..!");
+                                        //alert("Try again!");
+                                    }
+                                },
+                                error: function () {
+                                    loadPopup.Hide();
+                                    myFunction("Try again..!");
+                                    //alert("Try again!");
+                                }
+                            })
+                        }
+                        else {
+                            // document.getElementById("ErrorMessage").style.display = 'block';
+                            loadPopup.Hide();
+                            getEntitlementSwatch(stylearr[1], stylearr[3], 1);
+
+                        }
+                    },
+                    error: function () {
+                        loadPopup.Hide();
+                        myFunction("Added to cart..!"); ("Try again!");
+                    }
+                });
+            }
+            else {
+                loadPopup.Show();
+                $.ajax({
+                    url: "/Home/GetBtnStatus/",
+                    type: "POST",
+                    data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty, 'orgStyl': stylearr[3] },
+                    success: function (response) {
+                        debugger;
+                        if (response == "enabled" | (reason != "" && reason != undefined)) {
+                            $.ajax({
+                                url: "/Home/Addtocart/",
+                                type: "POST",
+                                data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3] },
+                                success: function (response) {
+                                    if (response != "") {
+                                        $("#CartwidCount").html("");
+                                        $("#CartwidCount").html(response);
+                                        myFunction("Added to cart..!");
+                                    }
+                                    else {
+                                        loadPopup.Hide();
+                                        alert("Try again!");
+                                    }
+                                },
+                                error: function () {
+                                    loadPopup.Hide();
+                                    alert("Try again!");
+                                }
+                            })
+                        }
+                        else {
+                            // document.getElementById("ErrorMessage").style.display = 'block';
+                            loadPopup.Hide();
+                            getEntitlementSwatch(stylearr[1], stylearr[3], 1);
+
+                        }
+                    },
+                    error: function () {
+                        loadPopup.Hide();
+                        alert("Try again!");
+                    }
+                });
+            }
+
+        }
+        else {
+            if (price == "" || price == null || undefined) {
+                alert("Please choose a size");
+            }
+            else if (size == "" || size == null || size == undefined) {
+                alert("Please choose a Size");
+            }
+            else if (color == "" || color == null || color == undefined) {
+                alert("Please choose a Colour");
+            }
+            else if (qty == "" || qty == "0" || qty == null || qty == undefined) {
+                alert("Quantity should be greater than 0");
+            }
+            else if (reqtxt[0].value == "") {
+                alert("Please select Required leg length");
+            }
+        }
     }
 }
 
@@ -848,7 +980,21 @@ function addTocartDimSwatch(s, e) {
 
     }
     else {
-        alert("Please select all the fields in the cards!");
+        if (price == "" || price == null || undefined) {
+            alert("Please choose a size");
+        }
+        else if (size == "" || size == null || size == undefined) {
+            alert("Please choose a Size");
+        }
+        else if (color == "" || color == null || color == undefined) {
+            alert("Please choose a Colour");
+        }
+        else if (qty == "" || qty == "0" || qty == null || qty == undefined) {
+            alert("Quantity should be greater than 0");
+        }
+        else if (reqtxt[0].value == "") {
+            alert("Please select Required leg length");
+        }
     }
 }
 
@@ -919,102 +1065,233 @@ function addTocartDemandSwatch(s, e) {
     }
     var desc = descStyle == undefined ? stylearr[1] : descStyle[0];
     var Spin = document.getElementsByName("spinDemandEdit_" + stylearr[1]);
+    var priceId = document.getElementById("DimviewPrice" + stylearr[1]);
     description = document.getElementById("LbdemandDescription" + desc).innerHTML;
-    price = document.getElementById("DimviewPrice" + stylearr[1]).innerHTML;
+    price = priceId != undefined && priceId != null ? priceId.innerHTML : "0";
     qty = Spin[0].value;
-    if (description != "" && price != "" && size != undefined && price != undefined && color != undefined && size != "" && color != "" && qty != "" && qty != "0") {
-        if (stylearr[2] != "") {
-            $.ajax({
-                url: "/Home/GetBtnStatus/",
-                type: "POST",
-                data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty, 'orgStyl': stylearr[3] },
-                success: function (response) {
-                    debugger;
-                    if (response == "enabled" | (reason != "" && reason != undefined)) {
-                        loadPopup.Show();
+    var clsName = "reqDatadim" + stylearr[1];
+    var reqdatatxt = "reqdatatxtdim" + stylearr[1];
+    var reqData = document.getElementsByClassName(clsName);
+    if (reqData[0].style.display != "none") {
+        var reqtxt = document.getElementsByClassName(reqdatatxt);
+        if (description != "" && price != "" && size != undefined && price != undefined && color != undefined && size != "" && color != "" && qty != "" && qty != "0" && reqtxt[0].value != "") {
+            if (stylearr[2] != "") {
+                $.ajax({
+                    url: "/Home/GetBtnStatus/",
+                    type: "POST",
+                    data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty, 'orgStyl': stylearr[3] },
+                    success: function (response) {
+                        debugger;
+                        if (response == "enabled" | (reason != "" && reason != undefined)) {
+                            loadPopup.Show();
 
-                        $.ajax({
-                            url: "/Home/Addtocart/",
-                            type: "POST",
-                            data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3] },
-                            success: function (response) {
-                                if (response != "") {
-                                    $("#CartwidCount").html("");
-                                    $("#CartwidCount").html(response);
-                                    loadPopup.Hide();
-                                    myFunction("Added to cart..!");
-                                }
-                                else {
+                            $.ajax({
+                                url: "/Home/Addtocart/",
+                                type: "POST",
+                                data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reqData1': reqtxt[0].value },
+                                success: function (response) {
+                                    if (response != "") {
+                                        $("#CartwidCount").html("");
+                                        $("#CartwidCount").html(response);
+                                        loadPopup.Hide();
+                                        myFunction("Added to cart..!");
+                                    }
+                                    else {
+                                        loadPopup.Hide();
+                                        alert("Try again!");
+                                    }
+                                },
+                                error: function () {
                                     loadPopup.Hide();
                                     alert("Try again!");
                                 }
-                            },
-                            error: function () {
-                                loadPopup.Hide();
-                                alert("Try again!");
-                            }
-                        })
-                    }
-                    else {
-                        // document.getElementById("ErrorMessage").style.display = 'block';
-                        loadPopup.Hide();
-                        getEntitlementDemandSwatch(stylearr[1], stylearr[3], 1);
+                            })
+                        }
+                        else {
+                            // document.getElementById("ErrorMessage").style.display = 'block';
+                            loadPopup.Hide();
+                            getEntitlementDemandSwatch(stylearr[1], stylearr[3], 1);
 
+                        }
+                    },
+                    error: function () {
+                        loadPopup.Hide();
+                        alert("Try again!");
                     }
-                },
-                error: function () {
-                    loadPopup.Hide();
-                    alert("Try again!");
-                }
-            });
+                });
+            }
+            else {
+                loadPopup.Show();
+                $.ajax({
+                    url: "/Home/GetBtnStatus/",
+                    type: "POST",
+                    data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty, 'orgStyl': stylearr[3] },
+                    success: function (response) {
+                        debugger;
+                        if (response == "enabled" | (reason != "" && reason != undefined)) {
+                            $.ajax({
+                                url: "/Home/Addtocart/",
+                                type: "POST",
+                                data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3] },
+                                success: function (response) {
+                                    if (response != "") {
+                                        $("#CartwidCount").html("");
+                                        $("#CartwidCount").html(response);
+                                        myFunction("Added to cart..!");
+                                    }
+                                    else {
+                                        loadPopup.Hide();
+                                        alert("Try again!");
+                                    }
+                                },
+                                error: function () {
+                                    loadPopup.Hide();
+                                    alert("Try again!");
+                                }
+                            })
+                        }
+                        else {
+                            // document.getElementById("ErrorMessage").style.display = 'block';
+                            loadPopup.Hide();
+                            getEntitlementDemandSwatch(stylearr[1], stylearr[3], 1);
+
+                        }
+                    },
+                    error: function () {
+                        loadPopup.Hide();
+                        alert("Try again!");
+                    }
+                });
+            }
+
         }
         else {
-            loadPopup.Show();
-            $.ajax({
-                url: "/Home/GetBtnStatus/",
-                type: "POST",
-                data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty, 'orgStyl': stylearr[3] },
-                success: function (response) {
-                    debugger;
-                    if (response == "enabled" | (reason != "" && reason != undefined)) {
-                        $.ajax({
-                            url: "/Home/Addtocart/",
-                            type: "POST",
-                            data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3] },
-                            success: function (response) {
-                                if (response != "") {
-                                    $("#CartwidCount").html("");
-                                    $("#CartwidCount").html(response);
-                                    myFunction("Added to cart..!");
-                                }
-                                else {
+            if (price == "" || price == null || undefined) {
+                alert("Please choose a size");
+            }
+            else if (size == "" || size == null || size == undefined) {
+                alert("Please choose a Size");
+            }
+            else if (color == "" || color == null || color == undefined) {
+                alert("Please choose a Colour");
+            }
+            else if (qty == "" || qty == "0" || qty == null || qty == undefined) {
+                alert("Quantity should be greater than 0");
+            }
+            else if (reqtxt[0].value == "") {
+                alert("Please select Required leg length");
+            }
+        }
+    }
+    else {
+        if (description != "" && price != "" && size != undefined && price != undefined && color != undefined && size != "" && color != "" && qty != "" && qty != "0") {
+            if (stylearr[2] != "") {
+                $.ajax({
+                    url: "/Home/GetBtnStatus/",
+                    type: "POST",
+                    data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty, 'orgStyl': stylearr[3] },
+                    success: function (response) {
+                        debugger;
+                        if (response == "enabled" | (reason != "" && reason != undefined)) {
+                            loadPopup.Show();
+
+                            $.ajax({
+                                url: "/Home/Addtocart/",
+                                type: "POST",
+                                data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3] },
+                                success: function (response) {
+                                    if (response != "") {
+                                        $("#CartwidCount").html("");
+                                        $("#CartwidCount").html(response);
+                                        loadPopup.Hide();
+                                        myFunction("Added to cart..!");
+                                    }
+                                    else {
+                                        loadPopup.Hide();
+                                        alert("Try again!");
+                                    }
+                                },
+                                error: function () {
                                     loadPopup.Hide();
                                     alert("Try again!");
                                 }
-                            },
-                            error: function () {
-                                loadPopup.Hide();
-                                alert("Try again!");
-                            }
-                        })
-                    }
-                    else {
-                        // document.getElementById("ErrorMessage").style.display = 'block';
+                            })
+                        }
+                        else {
+                            // document.getElementById("ErrorMessage").style.display = 'block';
+                            loadPopup.Hide();
+                            getEntitlementDemandSwatch(stylearr[1], stylearr[3], 1);
+
+                        }
+                    },
+                    error: function () {
                         loadPopup.Hide();
-                        getEntitlementDemandSwatch(stylearr[1], stylearr[3], 1);
-
+                        alert("Try again!");
                     }
-                },
-                error: function () {
-                    loadPopup.Hide();
-                    alert("Try again!");
-                }
-            });
-        }
+                });
+            }
+            else {
+                loadPopup.Show();
+                $.ajax({
+                    url: "/Home/GetBtnStatus/",
+                    type: "POST",
+                    data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty, 'orgStyl': stylearr[3] },
+                    success: function (response) {
+                        debugger;
+                        if (response == "enabled" | (reason != "" && reason != undefined)) {
+                            $.ajax({
+                                url: "/Home/Addtocart/",
+                                type: "POST",
+                                data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3] },
+                                success: function (response) {
+                                    if (response != "") {
+                                        $("#CartwidCount").html("");
+                                        $("#CartwidCount").html(response);
+                                        myFunction("Added to cart..!");
+                                    }
+                                    else {
+                                        loadPopup.Hide();
+                                        alert("Try again!");
+                                    }
+                                },
+                                error: function () {
+                                    loadPopup.Hide();
+                                    alert("Try again!");
+                                }
+                            })
+                        }
+                        else {
+                            // document.getElementById("ErrorMessage").style.display = 'block';
+                            loadPopup.Hide();
+                            getEntitlementDemandSwatch(stylearr[1], stylearr[3], 1);
 
-    }
-    else {
-        alert("Please select all the fields in the cards!");
+                        }
+                    },
+                    error: function () {
+                        loadPopup.Hide();
+                        alert("Try again!");
+                    }
+                });
+            }
+
+        }
+        else {
+            if (price == "" || price == null || undefined) {
+                alert("Please choose a size");
+            }
+            else if (size == "" || size == null || size == undefined) {
+                alert("Please choose a Size");
+            }
+            else if (color == "" || color == null || color == undefined) {
+                alert("Please choose a Colour");
+            }
+            else if (qty == "" || qty == "0" || qty == null || qty == undefined) {
+                alert("Quantity should be greater than 0");
+            }
+            else if (reqtxt[0].value == "") {
+                alert("Please select Required leg length");
+            }
+        }
     }
 }
 
@@ -1077,7 +1354,29 @@ function GetDrpResultModelSwatch(stle, selStyle, orgStyle) {
                             var price = document.getElementById(priceId);
                             price.innerHTML = "";
                             price.innerHTML = response.Price == 0 ? resp.price == "" ? "" : resp.price : response.Price;
-
+                            $.ajax({
+                                type: "POST",
+                                url: "/Home/GetReqData/",
+                                data: { 'StyleID': selStyle },
+                                success: function (response) {
+                                    if (response != "") {
+                                        var clsName = "reqData" + stle;
+                                        var headClsName = "reqDataHeading" + stle;
+                                        var stylVal = document.getElementsByClassName(clsName);
+                                        var headVal = document.getElementsByClassName(headClsName);
+                                        headVal[0].innerHTML = response;
+                                        stylVal[0].style.display = 'block';
+                                    }
+                                    else {
+                                        var clsName = "reqData" + stle;
+                                        var headClsName = "reqDataHeading" + stle;
+                                        var stylVal = document.getElementsByClassName(clsName);
+                                        var headVal = document.getElementsByClassName(headClsName);
+                                        headVal[0].innerHTML = response;
+                                        stylVal[0].style.display = 'none';
+                                    }
+                                }
+                            });
                         } else {
                             description.innerHTML = response.Description;
                             colorFieldset[0].innerHTML = "";
@@ -1104,6 +1403,29 @@ function GetDrpResultModelSwatch(stle, selStyle, orgStyle) {
                             var price = document.getElementById(priceId);
                             price.innerHTML = "";
                             price.innerHTML = response.Price == 0 ? "" : response.Price;
+                            $.ajax({
+                                type: "POST",
+                                url: "/Home/GetReqData/",
+                                data: { 'StyleID': styleId_Val },
+                                success: function (response) {
+                                    if (response != "") {
+                                        var clsName = "reqData" + style;
+                                        var headClsName = "reqDataHeading" + style;
+                                        var stylVal = document.getElementsByClassName(clsName);
+                                        var headVal = document.getElementsByClassName(headClsName);
+                                        headVal[0].innerHTML = response;
+                                        stylVal[0].style.display = 'block';
+                                    }
+                                    else {
+                                        var clsName = "reqData" + style;
+                                        var headClsName = "reqDataHeading" + style;
+                                        var stylVal = document.getElementsByClassName(clsName);
+                                        var headVal = document.getElementsByClassName(headClsName);
+                                        headVal[0].innerHTML = response;
+                                        stylVal[0].style.display = 'none';
+                                    }
+                                }
+                            });
                         }
                     }
                 })
@@ -1175,6 +1497,29 @@ function GetDrpResultModelDemandSwatch(stle, selStyle, orgStyle) {
                             var price = document.getElementById(priceId);
                             price.innerHTML = "";
                             price.innerHTML = response.Price == 0 ? resp.price == "" ? "" : resp.price : response.Price;
+                            $.ajax({
+                                type: "POST",
+                                url: "/Home/GetReqData/",
+                                data: { 'StyleID': selStyle },
+                                success: function (response) {
+                                    if (response != "") {
+                                        var clsName = "reqDatadim" + stle;
+                                        var headClsName = "reqDataHeadingdim" + stle;
+                                        var stylVal = document.getElementsByClassName(clsName);
+                                        var headVal = document.getElementsByClassName(headClsName);
+                                        headVal[0].innerHTML = response;
+                                        stylVal[0].style.display = 'block';
+                                    }
+                                    else {
+                                        var clsName = "reqDatadim" + stle;
+                                        var headClsName = "reqDataHeadingdim" + stle;
+                                        var stylVal = document.getElementsByClassName(clsName);
+                                        var headVal = document.getElementsByClassName(headClsName);
+                                        headVal[0].innerHTML = response;
+                                        stylVal[0].style.display = 'none';
+                                    }
+                                }
+                            });
 
                         } else {
                             description.innerHTML = response.Description;
@@ -1202,6 +1547,29 @@ function GetDrpResultModelDemandSwatch(stle, selStyle, orgStyle) {
                             var price = document.getElementById(priceId);
                             price.innerHTML = "";
                             price.innerHTML = response.Price == 0 ? "" : response.Price;
+                            $.ajax({
+                                type: "POST",
+                                url: "/Home/GetReqData/",
+                                data: { 'StyleID': selStyle },
+                                success: function (response) {
+                                    if (response != "") {
+                                        var clsName = "reqDatadim" + stle;
+                                        var headClsName = "reqDataHeadingdim" + stle;
+                                        var stylVal = document.getElementsByClassName(clsName);
+                                        var headVal = document.getElementsByClassName(headClsName);
+                                        headVal[0].innerHTML = response;
+                                        stylVal[0].style.display = 'block';
+                                    }
+                                    else {
+                                        var clsName = "reqDatadim" + stle;
+                                        var headClsName = "reqDataHeadingdim" + stle;
+                                        var stylVal = document.getElementsByClassName(clsName);
+                                        var headVal = document.getElementsByClassName(headClsName);
+                                        headVal[0].innerHTML = response;
+                                        stylVal[0].style.display = 'none';
+                                    }
+                                }
+                            });
                         }
                     }
                 })
@@ -1466,8 +1834,7 @@ function getSelectedTemplateSize(s, e) {
                     price.innerHTML = "";
                     price.innerHTML = response;
                 }
-                else
-                {
+                else {
                     window.location = "/User/Login/";
                 }
             },
@@ -1497,8 +1864,7 @@ function getSelectedSizeTemplateSwatch(style, size) {
                     price.innerHTML = "";
                     price.innerHTML = response;
                 }
-                else
-                {
+                else {
                     window.location = "/User/Login/";
                 }
             },
@@ -1573,7 +1939,7 @@ function addTocartTemplateSwatch(s, e) {
                     $("#CartwidCount").html("");
                     $("#CartwidCount").html(response);
                     loadPopup.Hide();
-                    myFunction("Added to cart..!");  ;
+                    myFunction("Added to cart..!");;
                 }
                 else {
                     loadPopup.Hide();
@@ -1623,7 +1989,7 @@ function addTocartTemplate(s, e) {
                     $("#CartwidCount").html("");
                     $("#CartwidCount").html(response);
                     loadPopup.Hide();
-                    myFunction("Added to cart..!");  ;
+                    myFunction("Added to cart..!");;
                 }
                 else {
                     loadPopup.Hide();
@@ -1684,22 +2050,25 @@ function UpdateEmployee(s, e) {
     var lstName = ASPxClientControl.GetControlCollection().GetByName("editEmpLastName");
     var dept = ASPxClientControl.GetControlCollection().GetByName("editDepartment");
     var selUcode;
+    var hoursCmb = ASPxClientControl.GetControlCollection().GetByName("hoursCmb");
+    var hoursDept = ASPxClientControl.GetControlCollection().GetByName("hoursDEPT");
+    var hoursNo = ASPxClientControl.GetControlCollection().GetByName("hoursNo");
     if (s.name != "UpdateBtn_Template") {
         selUcode = ASPxClientControl.GetControlCollection().GetByName("checkComboEdit");
     }
+    var date = new Date().toISOString();
     var strtDate = ASPxClientControl.GetControlCollection().GetByName("editStartDate");
     var endDate = ASPxClientControl.GetControlCollection().GetByName("editStartDate");
     var isAct = ASPxClientControl.GetControlCollection().GetByName("editEmpIsActive");
     var address = ASPxClientControl.GetControlCollection().GetByName("CmbAddress");
     if (s.name != "UpdateBtn_Template") {
-        if (empID.lastChangedValue != null & frstName.lastChangedValue != null & lstName.lastChangedValue != null & dept.lastSuccessText != null & selUcode.lastChangedValue != null & strtDate.date != null & address.lastSuccessText != null & endDate.date != null) {
-            if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & dept.lastSuccessText.trim() != "" & selUcode.lastChangedValue.trim() != "" & strtDate.date != "" & address.lastSuccessText.trim() != "" & endDate.date != "") {
-                if (address.lastSuccessText.trim() != '') {
-
-                    var data1 = { 'StartDate': strtDate.date.toJSON(), 'EndDate': endDate.date.toJSON(), 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address.lastSuccessText.trim(), 'isActive': isAct.previousValue };
+        if ((hoursCmb == undefined || hoursCmb == null) && (hoursDept == undefined || hoursDept == null)) {
+            if (empID.lastChangedValue != null & frstName.lastChangedValue != null & lstName.lastChangedValue != null & dept.lastSuccessText != null & selUcode.lastChangedValue != null) {
+                if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & dept.lastSuccessText.trim() != "" & selUcode.lastChangedValue.trim() != "") {
+                    var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue };
                     $.ajax({
                         type: "POST",
-                        url: "/Employee/EditEmployee/",
+                        url: "/Employee/EditEmployee1/",
                         data: data1,
                         success: function (response) {
                             if (response == "success") {
@@ -1714,25 +2083,46 @@ function UpdateEmployee(s, e) {
                         }
                     });
                 }
+            }
+            else {
+                alert("Please fill all details");
+            }
+        }
+        else if ((hoursCmb == undefined || hoursCmb == null) || (hoursDept != undefined || hoursDept != null)) {
+            var hrsDept = hoursDept.GetValue();
+            var hrsNo = hoursNo.GetValue();
+            if (empID.lastChangedValue != null & frstName.lastChangedValue != null & lstName.lastChangedValue != null & dept.lastSuccessText != null & hrsDept != null) {
+                if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & dept.lastSuccessText.trim() != "" & hrsDept.trim() != "") {
+                    var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursDept': hrsDept.trim(), 'hoursNo': hrsNo.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue };
+                    $.ajax({
+                        type: "POST",
+                        url: "/Employee/EditEmployee1/",
+                        data: data1,
+                        success: function (response) {
+                            if (response == "success") {
+                                alert("Successfully updated!");
+                                EditPop.Hide();
+                                window.location.reload();
+                            }
+                            else if (response == "Validation") {
+                                alert("Please fill all data");
+                            }
 
-                else {
-                    alert("Please select a valid Address");
+                        }
+                    });
                 }
+            }
+            else {
+                alert("Please fill all details");
             }
         }
         else {
-            alert("Please fill all details");
-        }
-    }
-    else {
-        if (empID.lastChangedValue != null & frstName.lastChangedValue != null & lstName.lastChangedValue != null & dept.lastSuccessText != null & strtDate.date != null & address.lastSuccessText != null & endDate.date != null) {
-            if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & dept.lastSuccessText.trim() != "" & strtDate.date != "" & address.lastSuccessText.trim() != "" & endDate.date != "") {
-                if (address.lastSuccessText.trim() != '') {
-
-                    var data1 = { 'StartDate': strtDate.date.toJSON(), 'EndDate': endDate.date.toJSON(), 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address.lastSuccessText.trim(), 'isActive': isAct.previousValue };
+            if (empID.lastChangedValue != null & frstName.lastChangedValue != null & lstName.lastChangedValue != null & dept.lastSuccessText != null & hoursCmb.lastChangedValue != null) {
+                if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & dept.lastSuccessText.trim() != "" & hoursCmb.lastChangedValue.trim() != "") {
+                    var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hrsCmb': hoursCmb.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue };
                     $.ajax({
                         type: "POST",
-                        url: "/Employee/EditEmployee/",
+                        url: "/Employee/EditEmployee1/",
                         data: data1,
                         success: function (response) {
                             if (response == "success") {
@@ -1747,10 +2137,31 @@ function UpdateEmployee(s, e) {
                         }
                     });
                 }
-
-                else {
-                    alert("Please select a valid Address");
-                }
+            }
+            else {
+                alert("Please fill all details");
+            }
+        }
+    }
+    else {
+        if (empID.lastChangedValue != null & frstName.lastChangedValue != null & lstName.lastChangedValue != null & dept.lastSuccessText != null) {
+            if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & dept.lastSuccessText.trim() != "") {
+                var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue };
+                $.ajax({
+                    type: "POST",
+                    url: "/Employee/EditEmployee1/",
+                    data: data1,
+                    success: function (response) {
+                        if (response == "success") {
+                            alert("Successfully updated!");
+                            EditPop.Hide();
+                            window.location.reload();
+                        }
+                        else if (response == "Validation") {
+                            alert("Please fill all data");
+                        }
+                    }
+                });
             }
         }
         else {
@@ -1761,14 +2172,15 @@ function UpdateEmployee(s, e) {
 }
 
 function CreateEmployee(s, e) {
-
-
     var EditPop = ASPxClientControl.GetControlCollection().GetByName("CreateEditPop");
     var empID = ASPxClientControl.GetControlCollection().GetByName("editEmpId");
     var frstName = ASPxClientControl.GetControlCollection().GetByName("editEmpFirstName");
     var lstName = ASPxClientControl.GetControlCollection().GetByName("editEmpLastName");
     var dept = ASPxClientControl.GetControlCollection().GetByName("editDepartment");
     var selUcode;
+    var hoursCmb = ASPxClientControl.GetControlCollection().GetByName("hoursCmb");
+    var hoursDept = ASPxClientControl.GetControlCollection().GetByName("hoursDEPT");
+    var hoursNo = ASPxClientControl.GetControlCollection().GetByName("hoursNo");
     if (s.name != "CreateBtn_Template") {
         selUcode = ASPxClientControl.GetControlCollection().GetByName("checkComboEdit");
     }
@@ -1779,10 +2191,12 @@ function CreateEmployee(s, e) {
     var empMapper = ASPxClientControl.GetControlCollection().GetByName("empMapper");
     var isMapped = empMapper == null | empMapper == undefined ? false : empMapper.GetValue();
     if (s.name != "CreateBtn_Template") {
-        if (empID.lastChangedValue != null & frstName.lastChangedValue != null & lstName.lastChangedValue != null & dept.lastSuccessText != null & selUcode.lastChangedValue != null & strtDate.date != null & address.lastSuccessText != null & endDate.date != null) {
-            if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & dept.lastSuccessText.trim() != "" & selUcode.lastChangedValue.trim() != "" & strtDate.date != "" & address.lastSuccessText.trim() != "" & endDate.date != "") {
-                if (address.lastSuccessText.trim() != '') {
+        if ((hoursCmb == undefined || hoursCmb == null) && (hoursDept == undefined || hoursDept == null)) {
+            if (empID.lastChangedValue != null & frstName.lastChangedValue != null & lstName.lastChangedValue != null & dept.lastSuccessText != null & selUcode.lastChangedValue != null) {
+                if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & dept.lastSuccessText.trim() != "" & selUcode.lastChangedValue.trim() != "") {
+
                     var data1;
+                    var date = new Date().toISOString();
                     $.ajax({
                         type: "POST",
                         url: "/Employee/EmployeeIdValidation/",
@@ -1791,7 +2205,7 @@ function CreateEmployee(s, e) {
                             if (response == "Success") {
                                 if (isAct.previousValue == false) {
                                     if (confirm("Do you want to set the employee Active")) {
-                                        data1 = { 'StartDate': strtDate.date.toJSON(), 'EndDate': endDate.date.toJSON(), 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address.lastSuccessText.trim(), 'isActive': true, 'isMapped': isMapped };
+                                        data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': true, 'isMapped': isMapped };
                                         $.ajax({
                                             type: "POST",
                                             url: "/Employee/CreateNewEmployee/",
@@ -1811,7 +2225,7 @@ function CreateEmployee(s, e) {
                                         });
                                     }
                                     else {
-                                        data1 = { 'StartDate': strtDate.date.toJSON(), 'EndDate': endDate.date.toJSON(), 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address.lastSuccessText.trim(), 'isActive': isAct.previousValue };
+                                        data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
                                         $.ajax({
                                             type: "POST",
                                             url: "/Employee/CreateNewEmployee/",
@@ -1833,7 +2247,7 @@ function CreateEmployee(s, e) {
 
                                 }
                                 else {
-                                    data1 = { 'StartDate': strtDate.date.toJSON(), 'EndDate': endDate.date.toJSON(), 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address.lastSuccessText.trim(), 'isActive': isAct.previousValue };
+                                    data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
                                     $.ajax({
                                         type: "POST",
                                         url: "/Employee/CreateNewEmployee/",
@@ -1875,21 +2289,112 @@ function CreateEmployee(s, e) {
                     //        }
                     //    }
                     //});
+
+
                 }
-                else {
-                    alert("Please select a valid Address");
+            }
+            else {
+                alert("Please fill all details");
+            }
+        }
+        else if ((hoursCmb == undefined || hoursCmb == null) && (hoursDept != undefined || hoursDept != null)) {
+            var hrsDept = hoursDept.GetValue();
+            var hrsNo = hoursNo.GetValue();
+            if (empID.lastChangedValue != null & frstName.lastChangedValue != null & lstName.lastChangedValue != null & dept.lastSuccessText != null & hoursDept.lastChangedValue != null & hrsDept != null) {
+                if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & dept.lastSuccessText.trim() != "" & hrsDept != "") {
+
+                    var data1;
+                    var date = new Date().toISOString();
+                    $.ajax({
+                        type: "POST",
+                        url: "/Employee/EmployeeIdValidation/",
+                        data: { 'empId': empID.lastChangedValue.trim() },
+                        success: function (response) {
+                            if (response == "Success") {
+                                if (isAct.previousValue == false) {
+                                    if (confirm("Do you want to set the employee Active")) {
+                                        data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursDept': hrsDept.trim(), 'hoursNo': hrsNo.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': true, 'isMapped': isMapped };
+                                        $.ajax({
+                                            type: "POST",
+                                            url: "/Employee/CreateNewEmployee/",
+                                            data: data1,
+                                            success: function (response) {
+                                                if (response == "success") {
+                                                    alert("Successfully created employee!");
+                                                    EditPop.Hide();
+                                                    window.location.reload();
+                                                }
+                                                else {
+
+                                                }
+                                            },
+                                            error: function (response) {
+                                            }
+                                        });
+                                    }
+                                    else {
+                                        data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursDept': hrsDept.trim(), 'hoursNo': hrsNo.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
+                                        $.ajax({
+                                            type: "POST",
+                                            url: "/Employee/CreateNewEmployee/",
+                                            data: data1,
+                                            success: function (response) {
+                                                if (response == "success") {
+                                                    alert("Successfully created employee!");
+                                                    EditPop.Hide();
+                                                    window.location.reload();
+                                                }
+                                                else {
+
+                                                }
+                                            },
+                                            error: function (response) {
+                                            }
+                                        });
+                                    }
+
+                                }
+                                else {
+                                    data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursDept': hrsDept.trim(), 'hoursNo': hrsNo.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "/Employee/CreateNewEmployee/",
+                                        data: data1,
+                                        success: function (response) {
+                                            if (response == "success") {
+                                                alert("Successfully created employee!");
+                                                EditPop.Hide();
+                                                window.location.reload();
+                                            }
+                                            else {
+
+                                            }
+                                        },
+                                        error: function (response) {
+                                        }
+                                    });
+                                }
+                            }
+                            else if (response == "") {
+                                alert("The Employee id already registered please select different employee id");
+                            }
+                            else {
+                                alert(response);
+                            }
+                        }
+                    });
                 }
+            }
+            else {
+                alert("Please fill all details");
             }
         }
         else {
-            alert("Please fill all details");
-        }
-    }
-    else {
-        if (empID.lastChangedValue != null & frstName.lastChangedValue != null & lstName.lastChangedValue != null & dept.lastSuccessText != null & strtDate.date != null & address.lastSuccessText != null & endDate.date != null) {
-            if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & dept.lastSuccessText.trim() != "" & strtDate.date != "" & address.lastSuccessText.trim() != "" & endDate.date != "") {
-                if (address.lastSuccessText.trim() != '') {
+            if (empID.lastChangedValue != null & frstName.lastChangedValue != null & lstName.lastChangedValue != null & dept.lastSuccessText != null & hoursCmb.lastChangedValue != null) {
+                if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & dept.lastSuccessText.trim() != "" & hoursCmb.lastChangedValue.trim() != "") {
+
                     var data1;
+                    var date = new Date().toISOString();
                     $.ajax({
                         type: "POST",
                         url: "/Employee/EmployeeIdValidation/",
@@ -1898,7 +2403,7 @@ function CreateEmployee(s, e) {
                             if (response == "Success") {
                                 if (isAct.previousValue == false) {
                                     if (confirm("Do you want to set the employee Active")) {
-                                        data1 = { 'StartDate': strtDate.date.toJSON(), 'EndDate': endDate.date.toJSON(), 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address.lastSuccessText.trim(), 'isActive': true };
+                                        data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursCmb': hoursCmb.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': true, 'isMapped': isMapped };
                                         $.ajax({
                                             type: "POST",
                                             url: "/Employee/CreateNewEmployee/",
@@ -1918,7 +2423,7 @@ function CreateEmployee(s, e) {
                                         });
                                     }
                                     else {
-                                        data1 = { 'StartDate': strtDate.date.toJSON(), 'EndDate': endDate.date.toJSON(), 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address.lastSuccessText.trim(), 'isActive': isAct.previousValue };
+                                        data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursCmb': hoursCmb.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
                                         $.ajax({
                                             type: "POST",
                                             url: "/Employee/CreateNewEmployee/",
@@ -1940,7 +2445,7 @@ function CreateEmployee(s, e) {
 
                                 }
                                 else {
-                                    data1 = { 'StartDate': strtDate.date.toJSON(), 'EndDate': endDate.date.toJSON(), 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address.lastSuccessText.trim(), 'isActive': isAct.previousValue };
+                                    data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursCmb': hoursCmb.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
                                     $.ajax({
                                         type: "POST",
                                         url: "/Employee/CreateNewEmployee/",
@@ -1982,10 +2487,114 @@ function CreateEmployee(s, e) {
                     //        }
                     //    }
                     //});
+
+
                 }
-                else {
-                    alert("Please select a valid Address");
-                }
+            }
+            else {
+                alert("Please fill all details");
+            }
+        }
+    }
+    else {
+        if (empID.lastChangedValue != null & frstName.lastChangedValue != null & lstName.lastChangedValue != null & dept.lastSuccessText != null) {
+            if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & dept.lastSuccessText.trim() != "") {
+
+                var data1;
+                var date = new Date();
+                $.ajax({
+                    type: "POST",
+                    url: "/Employee/EmployeeIdValidation/",
+                    data: { 'empId': empID.lastChangedValue.trim() },
+                    success: function (response) {
+                        if (response == "Success") {
+                            if (isAct.previousValue == false) {
+                                if (confirm("Do you want to set the employee Active")) {
+                                    data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': true };
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "/Employee/CreateNewEmployee/",
+                                        data: data1,
+                                        success: function (response) {
+                                            if (response == "success") {
+                                                alert("Successfully created employee!");
+                                                EditPop.Hide();
+                                                window.location.reload();
+                                            }
+                                            else {
+
+                                            }
+                                        },
+                                        error: function (response) {
+                                        }
+                                    });
+                                }
+                                else {
+                                    data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "/Employee/CreateNewEmployee/",
+                                        data: data1,
+                                        success: function (response) {
+                                            if (response == "success") {
+                                                alert("Successfully created employee!");
+                                                EditPop.Hide();
+                                                window.location.reload();
+                                            }
+                                            else {
+
+                                            }
+                                        },
+                                        error: function (response) {
+                                        }
+                                    });
+                                }
+
+                            }
+                            else {
+                                data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
+                                $.ajax({
+                                    type: "POST",
+                                    url: "/Employee/CreateNewEmployee/",
+                                    data: data1,
+                                    success: function (response) {
+                                        if (response == "success") {
+                                            alert("Successfully created employee!");
+                                            EditPop.Hide();
+                                            window.location.reload();
+                                        }
+                                        else {
+
+                                        }
+                                    },
+                                    error: function (response) {
+                                    }
+                                });
+                            }
+                        }
+                        else if (response == "") {
+                            alert("The Employee id already registered please select different employee id");
+                        }
+                        else {
+                            alert(response);
+                        }
+                    }
+                });
+                //$.ajax({
+                //    type: "POST",
+                //    url: "/Employee/EditEmployee/",
+                //    data: data1,
+                //    success: function (response) {
+                //        if (response == "success") {
+                //            alert("Successfully updated!");
+                //            EditPop.Hide();
+                //        }
+                //        else if (response == "Validation") {
+                //            alert("Please fill all data");
+                //        }
+                //    }
+                //});
+
             }
         }
         else {
@@ -2098,12 +2707,14 @@ function minus(name) {
     // Get its current value
     var currentVal = curVale == null | curVale == undefined ? parseInt($('input[name=' + name + ']').val()) : curVale;
     // If it isn't undefined or its greater than 0
-    if (!isNaN(currentVal) && currentVal > 0) {
+    if (!isNaN(currentVal) && currentVal > 1) {
         // Decrement one
         document.getElementsByName(name)[0].value = currentVal - 1;
     } else {
         // Otherwise put a 0 there
-        document.getElementsByName(name)[0].value = 0;
+        if (currentVal != 1) {
+            document.getElementsByName(name)[0].value = 0;
+        }
     }
 }
 
@@ -2139,12 +2750,14 @@ jQuery(document).ready(function () {
         // Get its current value
         var currentVal = curVale == null | curVale == undefined ? parseInt($('input[name=' + fieldName + ']').val()) : curVale;
         // If it isn't undefined or its greater than 0
-        if (!isNaN(currentVal) && currentVal > 0) {
+        if (!isNaN(currentVal) && currentVal > 1) {
             // Decrement one
             document.getElementsByName(fieldName)[0].value = currentVal - 1;
         } else {
             // Otherwise put a 0 there
-            document.getElementsByName(fieldName)[0].value = 0;
+            if (currentVal != 1) {
+                document.getElementsByName(fieldName)[0].value = 0;
+            }
         }
     });
 
@@ -2341,98 +2954,504 @@ function FillAlldeliveryfields(s, e) {
     var address3 = ASPxClientControl.GetControlCollection().GetByName("Address3");
     var city = ASPxClientControl.GetControlCollection().GetByName("City");
     var postCode = ASPxClientControl.GetControlCollection().GetByName("PostCode");
-    var country = ASPxClientControl.GetControlCollection().GetByName("Country");
-    var custRef = ASPxClientControl.GetControlCollection().GetByName("ddlCustRef");
+
+    var custRef = ASPxClientControl.GetControlCollection().GetByName("txtCustRef");
     var nomCode = ASPxClientControl.GetControlCollection().GetByName("txtNomCode");
     var descAddId = parseInt(addDescription.GetValue());
+    var commentBox = ASPxClientControl.GetControlCollection().GetByName("txtCommentsExternal");
+    comment = commentBox == null ? "" : commentBox.GetValue();
     $.ajax({
         url: "/Basket/FillAllAddress/",
         type: "POST",
-        data: { 'descAddId': descAddId },
+        data: { 'descAddId': descAddId, 'comment': comment },
         success: function (resp) {
             address1.SetValue(resp.BusAdd.Address1);
             address2.SetValue(resp.BusAdd.Address2);
             address3.SetValue(resp.BusAdd.Address3);
             city.SetValue(resp.BusAdd.City);
             postCode.SetValue(resp.BusAdd.PostCode);
-            country.SetValue(resp.BusAdd.Country);
+
             custRef.SetValue(resp.custRef);
             nomCode.SetValue(resp.nomCode);
         }
     });
 }
 
-function AcceptOrder() {
+function FillAllFields(s, e) {
+    var addDescription = ASPxClientControl.GetControlCollection().GetByName(s.name);
+    var address1 = ASPxClientControl.GetControlCollection().GetByName("EmpAddress1");
+    var address2 = ASPxClientControl.GetControlCollection().GetByName("EmpAddress2");
+    var address3 = ASPxClientControl.GetControlCollection().GetByName("EmpAddress3");
+    var city = ASPxClientControl.GetControlCollection().GetByName("EmpCity");
+    var postCode = ASPxClientControl.GetControlCollection().GetByName("EmpPostCode");
+
+    var descAddId = parseInt(addDescription.GetValue());
     $.ajax({
-        url: "/Basket/AcceptOrder/",
+        url: "/Employee/FillAllAddress/",
         type: "POST",
-        data: { 'addressId': 102331 },
+        data: { 'descAddId': descAddId },
         success: function (resp) {
+            address1.SetValue(resp[0].Address1);
+            address2.SetValue(resp[0].Address2);
+            address3.SetValue(resp[0].Address3);
+            city.SetValue(resp[0].City);
+            postCode.SetValue(resp[0].PostCode);
 
         }
     });
 }
 
-function SettbxValue(s, e) {
-    var cmbBox = ASPxClientControl.GetControlCollection().GetByName(s.name);
-    var carrTextbox = ASPxClientControl.GetControlCollection().GetByName("CarriageTexbox");
-    var data = cmbBox.GetValue().split("|");
-    carrTextbox.SetValue(data[1]);
-
-}
-
 function FillCustRefandDeliveryFields(s, e) {
-    var addDescription = ASPxClientControl.GetControlCollection().GetByName(s.name);
+    var addDescription = ASPxClientControl.GetControlCollection().GetByName("CmbAddress");
     var address1 = ASPxClientControl.GetControlCollection().GetByName("Address1");
     var address2 = ASPxClientControl.GetControlCollection().GetByName("Address2");
     var address3 = ASPxClientControl.GetControlCollection().GetByName("Address3");
     var city = ASPxClientControl.GetControlCollection().GetByName("City");
     var postCode = ASPxClientControl.GetControlCollection().GetByName("PostCode");
-    var country = ASPxClientControl.GetControlCollection().GetByName("Country");
-    var custRef = ASPxClientControl.GetControlCollection().GetByName("ddlCustRef");
     var nomCode = ASPxClientControl.GetControlCollection().GetByName("txtNomCode");
+    var nomCode1 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode1");
+    var nomCode2 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode2");
+    var nomCode3 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode3");
+    var nomCode4 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode4");
     var descAddId = parseInt(addDescription.GetValue());
+    var AddId = isNaN(descAddId) ? addDescription.GetValue() : descAddId;
+    var ref = ASPxClientControl.GetControlCollection().GetByName("txtCustRef");
+    var custRef = ref.GetValue(); var commentBox = ASPxClientControl.GetControlCollection().GetByName("txtCommentsExternal");
+    comment = commentBox != null ? commentBox.GetValue() : "";
+
     $.ajax({
         url: "/Basket/FillAllAddresswidCustRef/",
         type: "POST",
-        data: { 'descAddId': descAddId },
+        data: { 'descAddId': AddId, 'custRef': custRef, 'adddesc': AddId, 'comment': comment },
         success: function (resp) {
             address1.SetValue(resp.BusAdd.Address1);
             address2.SetValue(resp.BusAdd.Address2);
             address3.SetValue(resp.BusAdd.Address3);
             city.SetValue(resp.BusAdd.City);
             postCode.SetValue(resp.BusAdd.PostCode);
-            country.SetValue(resp.BusAdd.Country);
-            custRef.SetValue(resp.custRef);
+            commentBox.SetValue(resp.CommentExternal);
+            ref.SetValue(resp.custRef);
             nomCode.SetValue(resp.nomCode);
+            nomCode1.SetValue(resp.nomCode);
+            nomCode2.SetValue(resp.nomCode);
+            nomCode3.SetValue(resp.nomCode);
+            nomCode4.SetValue(resp.nomCode);
         }
     });
 }
 
+function AcceptOrder(s, e) {
+    var addDescription = ASPxClientControl.GetControlCollection().GetByName("CmbAddress");
+    var addDesc = addDescription != null ? addDescription.GetValue() : "";
+    var ref = ASPxClientControl.GetControlCollection().GetByName("txtCustRef");
+    var custRef = ref.GetValue(); var commentBox = ASPxClientControl.GetControlCollection().GetByName("txtCommentsExternal");
+    comment = commentBox != null ? commentBox.GetValue() : "";
+    if (addDesc != null && addDesc != "") {
+        $.ajax({
+            url: "/Basket/AcceptOrder/",
+            type: "POST",
+            data: { 'addDesc': addDesc },
+            success: function (resp) {
+                if (resp.type != "" && resp.type!=null) {
+                    alert("Please fill  customer reference")
+                }
+                else
+                {
+                    var message = "";
+                    for (var k = 0; k < resp.results.length; k++) {
+                        message = message + "Your uniform order has been successfully placed,order reference:" + resp.results[k].OrderNo + " (" + resp.results[k].EmployeeId + ")." + resp.results[k].OrderConfirmation + ". \n";
+                    }
+                    alert(message);
+                    window.location = "/Employee/Index/";
+                }
+            }
+        });
+    }
+    else {
+        alert("Please fill address and customer reference")
+    }
+}
 
-//$(document).ready(function () {
+function SettbxValue(s, e) {
+    var cmbBox = ASPxClientControl.GetControlCollection().GetByName(s.name);
+    var carrTextbox = document.getElementById("CarriageValueBox");
+    var data = cmbBox.GetValue().split("|");
+    carrTextbox.innerHTML = data[1];
 
-//    $("#FilterEmployeeId_I").autocomplete({
-//            source: function (request, response) {
-//                $.ajax({
-//                    url: "/Employee/GetAutocompleteVal",
-//                    type: "POST",
-//                    dataType: "json",
-//                    data: {
-//                        keyword: request.term
-//                    },
-//                    success: function (data) {
-//                        data
-//                    },
-//                    error: function () {
-//                        alert('something went wrong !');
-//                    }
-//                })
-//            },
-//            messages: {
-//                noResults: "",
-//                results: ""
-//            }
-//        });
+}
 
-//});
+//function saveCustRef(s, e) {
+//    var addDescription = ASPxClientControl.GetControlCollection().GetByName("CmbAddress");
+//    var descAddId = parseInt(addDescription.GetValue());
+//    var AddId = isNaN(descAddId) ? addDescription.GetValue() : descAddId;
+//    var ref = ASPxClientControl.GetControlCollection().GetByName(s.name);
+//    var custRef = ref.GetValue(); var commentBox = ASPxClientControl.GetControlCollection().GetByName("txtCommentsExternal");
+//    comment = commentBox.GetValue();
+//    $.ajax({
+//        url: "/Basket/SaveRefnAddress/",
+//        type: "POST",
+//        data: { 'descAddId': AddId, 'custRef': custRef, 'adddesc': AddId, 'comment': comment }
+//    });
+//}
+
+function saveCmt(s, e) {
+    var addDescription = ASPxClientControl.GetControlCollection().GetByName("CmbAddress");
+    var descAddId = parseInt(addDescription.GetValue());
+    var AddId = isNaN(descAddId) ? addDescription.GetValue() : descAddId;
+    var ref = ASPxClientControl.GetControlCollection().GetByName(s.name);
+    var custRef = ref.GetValue(); var commentBox = ASPxClientControl.GetControlCollection().GetByName("txtCommentsExternal");
+    comment = commentBox.GetValue();
+    $.ajax({
+        url: "/Basket/SaveRefnAddress/",
+        type: "POST",
+        data: { 'descAddId': AddId, 'custRef': custRef, 'adddesc': AddId, 'comment': comment }
+    });
+}
+
+function GetNavigation(data) {
+    var address = ASPxClientControl.GetControlCollection().GetByName("CmbAddress");
+    var addressId = address.GetValue();
+    var custref = ASPxClientControl.GetControlCollection().GetByName("txtCustRef");
+    var custRefVal = custref.GetValue();
+    var carrVal = ASPxClientControl.GetControlCollection().GetByName("CarriageCmbbox");
+    var carr = carrVal == null ? "" : carrVal.GetValue();
+    var commentBox = ASPxClientControl.GetControlCollection().GetByName("txtCommentsExternal");
+    comment = commentBox.GetValue();
+    var custReflbl = "";
+    if (addressId != null && addressId != undefined && addressId != "") {
+        if (data != null && data != undefined) {
+            $.ajax({
+                url: "/Basket/GetNavigationUrl/",
+                type: "POST",
+                data: { 'data': data, 'addId': addressId, 'cusrRef': custRefVal, 'carr': carr, 'comment': comment },
+                success: function (resp) {
+                    if (resp != "") {
+                        window.location = resp;
+                    }
+                    else
+                    {
+                        alert("Please fill Address & Customer/PO reference");
+                    }
+                },
+                error: function (resp) {
+                    alert("Please fill Address & Customer/PO reference");
+                }
+            });
+
+        }
+
+    }
+    else {
+        alert("Please fill Address & Customer/PO reference");
+    }
+
+}
+
+function FillAllCurrentHeaderData(s, e) {
+    var addDescription = ASPxClientControl.GetControlCollection().GetByName("CmbAddress");
+    var address1 = ASPxClientControl.GetControlCollection().GetByName("Address1");
+    var address2 = ASPxClientControl.GetControlCollection().GetByName("Address2");
+    var address3 = ASPxClientControl.GetControlCollection().GetByName("Address3");
+    var city = ASPxClientControl.GetControlCollection().GetByName("City");
+    var postCode = ASPxClientControl.GetControlCollection().GetByName("PostCode");
+
+    var custRef = ASPxClientControl.GetControlCollection().GetByName("txtCustRef");
+    var nomCode = ASPxClientControl.GetControlCollection().GetByName("txtNomCode");
+    var nomCode1 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode1");
+    var nomCode2 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode2");
+    var nomCode3 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode3");
+    var nomCode4 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode4");
+    var grid = ASPxClientControl.GetControlCollection().GetByName(s.name);
+    var key = grid.GetRowKey(e.visibleIndex);
+    $.ajax({
+        url: "/Basket/FillHeaderDetails/",
+        type: "POST",
+        data: { 'key': key },
+        success: function (resp) {
+            if (resp != null) {
+                addDescription.SetValue(resp.DelDesc);
+                address1.SetValue(resp.DelAddress1);
+                address2.SetValue(resp.DelAddress2);
+                address3.SetValue(resp.DelAddress3);
+                city.SetValue(resp.DelCity);
+                postCode.SetValue(resp.DelPostCode);
+
+                commentBox.SetValue(resp.CommentExternal);
+                custRef.SetValue(resp.CustRef);
+                nomCode.SetValue(resp.nomCode);
+                nomCode1.SetValue(resp.nomCode);
+                nomCode2.SetValue(resp.nomCode);
+                nomCode3.SetValue(resp.nomCode);
+                nomCode4.SetValue(resp.nomCode);
+            }
+        }
+    });
+}
+
+function CartDetailEdit(s, e) {
+    s.StartEditRow(e.visibleIndex);
+    $.ajax({
+        url: "/Basket/CartviewDetailGridViewGridViewPartial/",
+        type: "POST",
+        data: { 'key': e.visibleIndex },
+        success: function (resp) {
+
+        }
+    });
+}
+
+function GetDetailsBasedonGrid(empId, busId) {
+    var selected = document.getElementById(empId);
+    var idaa = "col+" + empId;
+    var deldiv = "delete+" + empId;
+    var sel = document.getElementById(deldiv);
+    sel.innerHTML = "<span style='color:red;' title=\"Click to remove this employee\" onclick=\"RemoveSelecetedEmp('" + empId + "','" + busId + "')\" class=\"glyphicon glyphicon-remove\"></span>";
+    var selected1 = document.getElementById(idaa);
+    selected1.innerHTML = "<span class=\"glyphicon glyphicon-chevron-right\"></span>";
+    //selected1.style.backgroundColor = "#009885";
+    selected1.style.color = "#009885";
+    //selected.style.backgroundColor = "";
+    selected.style.color = "#009885";
+    var active = document.getElementsByClassName("ActiveRes");
+    if (active.length > 0) {
+        if (active[0].id != empId) {
+            var deldiv = "delete+" + active[0].id;
+            var sel = document.getElementById(deldiv);
+            sel.innerHTML = "";
+            var deselected = document.getElementById(active[0].id);
+            deselected.style.backgroundColor = "white";
+            deselected.style.color = "black";
+            var idaa1 = "col+" + active[0].id;
+            var deselected1 = document.getElementById(idaa1);
+            deselected1.innerHTML = "";
+            document.getElementById(active[0].id).classList.remove("ActiveRes");
+        }
+    }
+    document.getElementById(empId).classList.add("ActiveRes");
+    var addDescription = ASPxClientControl.GetControlCollection().GetByName("CmbAddress");
+    var address1 = ASPxClientControl.GetControlCollection().GetByName("Address1");
+    var address2 = ASPxClientControl.GetControlCollection().GetByName("Address2");
+    var address3 = ASPxClientControl.GetControlCollection().GetByName("Address3");
+    var city = ASPxClientControl.GetControlCollection().GetByName("City");
+    var postCode = ASPxClientControl.GetControlCollection().GetByName("PostCode");
+    var txtTotGoods = ASPxClientControl.GetControlCollection().GetByName("txtTotGoods");
+    var txtCarrierCharges = ASPxClientControl.GetControlCollection().GetByName("txtCarrierCharges");
+    var txtOrdTotal = ASPxClientControl.GetControlCollection().GetByName("txtOrdTotal");
+    var txtVAT = document.getElementById("vatspan");
+    var txtVAT1 = ASPxClientControl.GetControlCollection().GetByName("txtVAT");
+    var txtGrndTot = ASPxClientControl.GetControlCollection().GetByName("txtGrndTot");
+
+    var custRef = ASPxClientControl.GetControlCollection().GetByName("txtCustRef");
+    var nomCode = ASPxClientControl.GetControlCollection().GetByName("txtNomCode");
+    var nomCode1 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode1");
+    var nomCode2 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode2");
+    var nomCode3 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode3");
+    var nomCode4 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode4");
+    var grid = ASPxClientControl.GetControlCollection().GetByName("CartView");
+    var commentBox = ASPxClientControl.GetControlCollection().GetByName("txtCommentsExternal");
+    comment = commentBox.GetValue();
+    grid.PerformCallback({ empid: empId });
+    $.ajax({
+        url: "/Basket/CartDetailEdit/",
+        type: "POST",
+        data: { 'empId': empId },
+        success: function (resp) {
+            addDescription.SetValue(resp.BusAdd.AddressDescription);
+            address1.SetValue(resp.BusAdd.Address1);
+            address2.SetValue(resp.BusAdd.Address2);
+            address3.SetValue(resp.BusAdd.Address3);
+            city.SetValue(resp.BusAdd.City);
+            postCode.SetValue(resp.BusAdd.PostCode);
+            txtTotGoods.SetValue(resp.ordeTotal);
+            txtCarrierCharges.SetValue(resp.carriage);
+            txtOrdTotal.SetValue(resp.Total);
+            txtVAT.innerHTML = resp.VatPercent;
+            txtVAT1.SetValue(resp.totalVat);
+            txtGrndTot.SetValue(resp.GrossTotal);
+            commentBox.SetValue(resp.CommentExternal);
+            custRef.SetValue(resp.custRef);
+
+            nomCode.SetValue(resp.nomCode);
+            nomCode1.SetValue(resp.nomCode);
+            nomCode2.SetValue(resp.nomCode);
+            nomCode3.SetValue(resp.nomCode);
+            nomCode4.SetValue(resp.nomCode);
+
+        }
+    });
+}
+
+function RemoveSelecetedEmp(empId, busId) {
+    if (confirm("Are you sure you want to delete " + empId + "?")) {
+        $.ajax({
+            url: "/Basket/CartViewDelete/",
+            type: "POST",
+            data: { 'empId': empId },
+            success: function (resp) {
+                if (resp != null) {
+                    alert("Successfully deleted")
+                    if (resp.includes("HEADERVALUENOTZERO")) {
+                        window.location.reload();
+                    }
+                    else {
+                        window.location = "/Employee/Index?BusinessId=" + busId;
+                    }
+
+                }
+            }
+        });
+
+    }
+}
+
+function NextEmployee() {
+    var address = ASPxClientControl.GetControlCollection().GetByName("CmbAddress");
+    var addressId = address.GetValue();
+    var custref = ASPxClientControl.GetControlCollection().GetByName("txtCustRef");
+    var custRefVal = custref.GetValue();
+    var carrVal = ASPxClientControl.GetControlCollection().GetByName("CarriageCmbbox");
+    var carr = carrVal == null ? "" : carrVal.GetValue();
+    var custReflbl = "";
+    var commentBox = ASPxClientControl.GetControlCollection().GetByName("txtCommentsExternal");
+    comment = commentBox.GetValue();
+    if (addressId != null && addressId != undefined && addressId != "") {
+
+        $.ajax({
+            url: "/Basket/GetNavigationUrl/",
+            type: "POST",
+            data: { 'data': '>', 'addId': addressId, 'cusrRef': custRefVal, 'carr': carr, 'comment': comment },
+            success: function (resp) {
+                if (resp != "") {
+                    window.location = resp;
+                }
+                else {
+                    alert("Please fill Address & Customer/PO reference");
+                }
+            },
+            error: function (resp) {
+                alert("Please fill Address & Customer/PO reference");
+            }
+        });
+    }
+    else {
+        alert("Please fill Address & Customer/PO reference");
+    }
+
+}
+
+function ContinueShop() {
+    var address = ASPxClientControl.GetControlCollection().GetByName("CmbAddress");
+    var addressId = address.GetValue();
+    var custref = ASPxClientControl.GetControlCollection().GetByName("txtCustRef");
+    var custRefVal = custref.GetValue();
+    var carrVal = ASPxClientControl.GetControlCollection().GetByName("CarriageCmbbox");
+    var carr = carrVal == null ? "" : carrVal.GetValue();
+    var custReflbl = "";
+    var commentBox = ASPxClientControl.GetControlCollection().GetByName("txtCommentsExternal");
+    comment = commentBox.GetValue();
+    if (addressId != null && addressId != undefined && addressId != "") {
+
+        $.ajax({
+            url: "/Basket/GetNavigationUrl/",
+            type: "POST",
+            data: { 'data': '<', 'addId': addressId, 'cusrRef': custRefVal, 'carr': carr, 'comment': comment },
+            success: function (resp) {
+                if (resp != "") {
+                    window.location = resp;
+                }
+                else {
+                    alert("Please fill Address & Customer/PO reference");
+                }
+            },
+            error: function (resp) {
+                alert("Please fill Address & Customer/PO reference");
+            }
+        });
+    }
+    else {
+        alert("Please fill Address & Customer/PO reference");
+    }
+
+}
+
+function UpdateCurrentEmp() {
+    var address = ASPxClientControl.GetControlCollection().GetByName("CmbAddress");
+    var addressId = address.GetValue();
+    var custref = ASPxClientControl.GetControlCollection().GetByName("txtCustRef");
+    var custRefVal = custref.GetValue();
+    var carrVal = ASPxClientControl.GetControlCollection().GetByName("CarriageCmbbox");
+    var carr = carrVal == null ? "" : carrVal.GetValue();
+    var custReflbl = "";
+    var commentBox = ASPxClientControl.GetControlCollection().GetByName("txtCommentsExternal");
+    comment = commentBox.GetValue();
+    if (addressId != null && addressId != undefined && addressId != "" ) {
+
+        $.ajax({
+            url: "/Basket/GetNavigationUrl/",
+            type: "POST",
+            data: { 'data': '>', 'addId': addressId, 'cusrRef': custRefVal, 'carr': carr, 'comment': comment },
+            success: function (resp) {
+                if (resp != "") {
+                    alert("Successfully updated");
+                    MVCxClientUtils.FinalizeCallback();
+                }
+                else
+                {
+                    alert("Please fill Address & Customer/PO reference");
+                }
+            },
+            error: function (resp) {
+                alert("Please fill Address & Customer/PO reference");
+            }
+        });
+
+
+    }
+    else {
+        alert("Please fill Address & Customer/PO reference");
+    }
+
+}
+
+function OnEndCallback(s, e) {
+    var txtTotGoods = ASPxClientControl.GetControlCollection().GetByName("txtTotGoods");
+    var txtCarrierCharges = ASPxClientControl.GetControlCollection().GetByName("txtCarrierCharges");
+    var txtOrdTotal = ASPxClientControl.GetControlCollection().GetByName("txtOrdTotal");
+    var txtVAT = document.getElementById("vatspan");
+    var txtVAT1 = ASPxClientControl.GetControlCollection().GetByName("txtVAT");
+    var txtGrndTot = ASPxClientControl.GetControlCollection().GetByName("txtGrndTot");
+    if (updateEdit != "" && updateEdit != undefined && updateEdit != null) {
+        $.ajax({
+            url: "/Basket/GetPrice/",
+            type: "GET",
+            success: function (resp) {
+                txtTotGoods.SetValue(resp.ordeTotal);
+                txtCarrierCharges.SetValue(resp.carriage);
+                txtOrdTotal.SetValue(resp.Total);
+                txtVAT.innerHTML = resp.VatPercent;
+                txtVAT1.SetValue(resp.totalVat);
+                txtGrndTot.SetValue(resp.GrossTotal);
+            },
+            error: function () {
+
+            }
+        });
+        updateEdit = "";
+    }
+
+}
+
+function OnBeginCallback(s, e) {
+    if (e.command == "UPDATEEDIT") {
+        updateEdit = "UPDATEEDIT";
+    }
+}
+//function edit(s,e) {
+//    var grid = ASPxClientControl.GetControlCollection().GetByName(s.name);
+//    var ss = grid.GetFocusedRowIndex();
+//    var s = grid.GetSelectedFieldValues('VAT', OnGetRowValues);
+//}
+
+//function OnGetRowValues(Value) {
+//    alert(Value);
+//}

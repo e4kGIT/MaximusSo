@@ -9,6 +9,7 @@ using System.Data.SqlClient;
 using Maximus.Utilities;
 using System.Text.RegularExpressions;
 using static Maximus.Models.Structrues;
+using System.Text;
 
 namespace Maximus.Models
 {
@@ -547,7 +548,9 @@ namespace Maximus.Models
             else if (controlId == controls.AllowOverrideEntitlement)
             { ControlName = "ALLOW_OVERRIDE_ENT"; }
             else if (controlId == controls.OverrideEntitlementWithReason)
-            { ControlName = "OVERRIDE_ENT_WITH_REASON"; }
+            {
+                ControlName = "OVERRIDE_ENT_WITH_REASON";
+            }
             else if (controlId == controls.AllAddress)
             { ControlName = "AllAddress"; }
             else if (controlId == controls.UserAddressMapping)
@@ -621,6 +624,31 @@ namespace Maximus.Models
             }
             return varPermission;
         }
+        #endregion
+
+        #region GetPrice
+
+        public decimal GetPrice(string StyleID = "", string SizeId = "",string busId="")
+        {
+            try
+            {
+                string businessId = busId;
+                decimal result = enty.tblfsk_style_sizes_prices.Any(x => x.StyleID == StyleID.Trim() & x.SizeID == SizeId.Trim() & x.BusinessId == businessId) ? (decimal)enty.tblfsk_style_sizes_prices.Where(x => x.StyleID == StyleID.Trim() & x.SizeID == SizeId.Trim() & x.BusinessId == businessId).FirstOrDefault().Price.Value : 0;
+                result = result == 0 ? enty.tblfsk_style_sizes_prices.Any(x => x.StyleID == StyleID.Trim() & x.SizeID == SizeId.Trim() & x.BusinessId == "ALL") ? (decimal)enty.tblfsk_style_sizes_prices.Where(x => x.StyleID == StyleID.Trim() & x.SizeID == SizeId.Trim() & x.BusinessId == "ALL" && x.PriceID == 2).FirstOrDefault().Price.Value : result : result;
+                if (result != 0)
+                {
+                    return System.Math.Round(result, 2);
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+            catch (Exception e)
+            { }
+            return 0;
+        }
+
         #endregion
 
         #region getCount
@@ -1543,7 +1571,7 @@ namespace Maximus.Models
             }
             else
             {
-                data = enty.tblbus_settings.Any(x => x.SettingID == paramId) ? enty.tblbus_settings.Where(x => x.SettingID == paramId).First().DefaultValue : "";
+                data = enty.tblbus_settings.Any(x => x.SettingID == paramId && x.BusType.ToUpper() == "CUS") ? enty.tblbus_settings.Where(x => x.SettingID == paramId && x.BusType.ToUpper() == "CUS").First().DefaultValue : "";
                 if (data != "" && data != null)
                 {
                     return data;
@@ -1936,7 +1964,7 @@ namespace Maximus.Models
         #endregion
 
         #region GetAllPreviousData
-        public string GetAllPreviousData(string EmpId, string BuisnessId, string styleId)
+        public string GetAllPreviousData(string EmpId, string BuisnessId, string styleId, long inBasket = 0)
         {
             string result = "";
             MySqlConnection con = new MySqlConnection(ConnectionString);
@@ -1954,7 +1982,7 @@ namespace Maximus.Models
                     foreach (DataRow dr in dt.Rows)
                     {
 
-                        result = "<tr><td>Issued: " + dr.ItemArray[4].ToString() + "</td></tr><tr><td>Orderno: " + dr.ItemArray[1].ToString() + " Orderdate:" + DateTime.Parse(dr.ItemArray[3].ToString()).ToString("dd-MM-yyyy") + "</td></tr></table>";
+                        result = "<tr><td>Issued: " + dr.ItemArray[4].ToString() + "</td></tr><tr><td>In Basket: " + inBasket + "</td></tr><tr><td>Orderno: " + dr.ItemArray[1].ToString() + " Orderdate:" + DateTime.Parse(dr.ItemArray[3].ToString()).ToString("dd-MM-yyyy") + "</td></tr></table>";
                     }
                 }
             }
@@ -2078,14 +2106,14 @@ namespace Maximus.Models
             try
             {
                 conn.Open();
-                MySqlCommand cmd = new MySqlCommand("SELECT AddressId FROM `tblonline_emp_address` WHERE employeeid=" + employeeId,conn);
+                MySqlCommand cmd = new MySqlCommand("SELECT AddressId FROM `tblonline_emp_address` WHERE employeeid=" + employeeId, conn);
                 result = cmd.ExecuteScalar() != null ? Convert.ToInt32(cmd.ExecuteScalar()) : 0;
                 if (result > 0)
                 {
                     return result;
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
 
             }
@@ -2093,7 +2121,7 @@ namespace Maximus.Models
             {
                 conn.Close();
             }
-         
+
             try
             {
                 conn.Open();
@@ -2132,8 +2160,6 @@ namespace Maximus.Models
             return result;
         }
         #endregion
-
-
 
         #region usermodule
 
@@ -2312,6 +2338,144 @@ namespace Maximus.Models
         #endregion
 
         #region basket
+
+        #region GetAllTotals
+        public TotalModel GetAlltotals(List<SalesOrderHeaderViewModel> mod, double carriage)
+        {
+            TotalModel tot = new TotalModel();
+            double orgTotal = 0;
+            double lineTotal = 0;
+            double vatTotal = 0;
+            double assemTotal = 0;
+            double Total = 0;
+            List<double> varpercents = new List<double>();
+            double totalVat = 0;
+            foreach (var header in mod)
+            {
+                foreach (var dat in header.SalesOrderLine)
+                {
+                    orgTotal = orgTotal + (dat.OrdQty * dat.Price);
+                    totalVat = totalVat + GetlineVat(dat.OrdQty, dat.Price, dat.VatPercent);
+                }
+                lineTotal = lineTotal + orgTotal;
+                vatTotal = vatTotal + totalVat;
+                orgTotal = 0;
+                totalVat = 0;
+                //orgTotal = header.SalesOrderLine != null && header.SalesOrderLine.Count > 0 ? header.SalesOrderLine.Where(x => x.OriginalLineNo == null).Any(x => x.Price != 0 && x.Price != null) ? header.SalesOrderLine.Where(x => x.OriginalLineNo == null).Sum(x => x.Price).Value : 0.0 : 0.0;
+                //long orgTotalQty = header.SalesOrderLine != null && header.SalesOrderLine.Count > 0 ? header.SalesOrderLine.Where(x => x.OriginalLineNo == null).First().OrdQty.Value : 0;
+                //assemTotal = header.SalesOrderLine != null && header.SalesOrderLine.Count > 0 && header.SalesOrderLine.Where(x => x.OriginalLineNo != null).Any(x => x.Price != 0 && x.Price != null) ? header.SalesOrderLine.Where(x => x.OriginalLineNo != null).Any(x => x.Price != 0 && x.Price != null) ? header.SalesOrderLine.Where(x => x.OriginalLineNo != null).Sum(x => x.Price).Value : 0.0 : 0.0;
+                //Total = Total + (orgTotal * orgTotalQty) + (assemTotal * orgTotalQty);
+                foreach (var line in header.SalesOrderLine)
+                {
+                    double VatPercent = line.VatPercent;
+                    varpercents.Add(VatPercent);
+                    double lineVat = line.OrdQty != 0 ? ((line.OrdQty * line.Price) * VatPercent) / 100 : 0.0;
+                    totalVat = totalVat + lineVat;
+                }
+            }
+            string vatSpan = "";
+            foreach (var vats in varpercents.Distinct())
+            {
+                vatSpan = vatSpan + vats + "% \n";
+            }
+            tot.vatSpan = vatSpan;
+            tot.carriage = RoundVATDecimals(carriage);
+            tot.ordeTotal = RoundVATDecimals(lineTotal + carriage);
+            tot.totalVat = RoundVATDecimals(vatTotal);
+            tot.Total = RoundVATDecimals(lineTotal);
+            tot.gross = RoundVATDecimals(vatTotal + lineTotal);
+            return tot;
+        }
+        #endregion
+
+        #region GetlineTotals
+        public double GetlineTotals(double qty, double price, double vat)
+        {
+            double tot = 0;
+            tot = ((qty * vat * price) / 100) + price * qty;
+            return RoundVATDecimals(tot);
+        }
+        #endregion
+
+        #region GetlineVat
+        public double GetlineVat(double qty, double price, double vat)
+        {
+            double vater = 0;
+            vater = ((qty * vat * price) / 100);
+            return RoundVATDecimals(vater);
+        }
+        #endregion
+
+        #region RoundVATDecimals
+
+        public double RoundVATDecimals(Double value)
+        {
+            double result = 0;
+            if (value > 0)
+            {
+                result = Convert.ToDouble(decimal.Divide(Convert.ToInt32(Convert.ToDouble((value * 100).ToString("0.0000")) + 0.4), 100));
+            }
+            return result;
+        }
+        #endregion
+
+        #region GetCostPrice
+        public double GetCostPrice(string style, string size, string color, string currency, int mprice, int seqNo)
+        {
+            double cost = 0.0;
+            string sSqry = " SELECT Price FROM tblfsk_style_sizes_prices  WHERE CompanyID='" + cmpId + "' AND StyleID='" + style + "' AND SizeID='" + size + "' AND  PriceID=" + mprice + " AND Businessid='ALL' AND Country_Currency=0";
+            MySqlConnection con = new MySqlConnection(ConnectionString);
+            try
+            {
+                con.Open();
+                MySqlCommand cmd = new MySqlCommand(sSqry, con);
+                cost = cmd.ExecuteScalar() == null ? 0.0 : Convert.ToDouble(cmd.ExecuteScalar());
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+                con.Close();
+            }
+            return cost;
+        }
+        #endregion
+
+        #region GetVatcode
+        public int GetVatCode()
+        {
+            int result = 0;
+            result = enty.tblacc_vatcodes.Any(x => x.Description == "VAT Code 1") ? enty.tblacc_vatcodes.Where(x => x.Description == "VAT Code 1").First().VATCode : 0;
+            return result;
+        }
+        #endregion
+
+        #region GetDeliveryDate
+        public string GetDeliveryDate(int noOfDays, bool isWeekends)
+        {
+            var date = DateTime.Now;
+
+            for (int i = 0; i < noOfDays; i++)
+            {
+                date = date.AddDays(i);
+                DayOfWeek day = date.DayOfWeek;
+
+                if (isWeekends == false)
+                {
+                    while (date.DayOfWeek == DayOfWeek.Saturday | date.DayOfWeek == DayOfWeek.Sunday)
+                    {
+                        date = date.AddDays(1);
+                    }
+                }
+
+            }
+
+            return date.ToString("yyyy-MM-dd");
+        }
+        #endregion
+
 
         #region GetVatPercent
         public double GetVatPercent(string style, string size)
@@ -2532,7 +2696,7 @@ namespace Maximus.Models
                         BusAddress.Address1 = reader.GetString("Address1") != "" ? reader.GetString("Address1") : "";
                         BusAddress.Address2 = reader.GetString("Address2") != "" ? reader.GetString("Address2") : "";
                         BusAddress.Address3 = reader.GetString("Address3") != "" ? reader.GetString("Address3") : "";
-                        BusAddress.AddressDescription = reader.GetString("Town") != "" ? reader.GetString("Town") : "";
+                        BusAddress.Town = reader.GetString("Town") != "" ? reader.GetString("Town") : "";
                         BusAddress.City = reader.GetString("City") != "" ? reader.GetString("City") : "";
                         BusAddress.PostCode = reader.GetString("Postcode") != "" ? reader.GetString("Postcode") : "";
                         BusAddress.Country = reader.GetString("Country") != "" ? reader.GetString("Country") : "";
@@ -2553,7 +2717,7 @@ namespace Maximus.Models
         #endregion
 
         #region FillCombo_CustomerDelivery
-        public List<BusAddress> FillCombo_CustomerDelivery(bool IsManpack = false)
+        public List<BusAddress> FillCombo_CustomerDelivery(bool IsManpack = false, string selEmp = "")
         {
             var result = new List<BusAddress>();
             string extraQry = "";
@@ -2561,6 +2725,7 @@ namespace Maximus.Models
             string busId = System.Web.HttpContext.Current.Session["BuisnessId"].ToString();
             if (IsManpack)
             {
+                extraQry = extraQry + " (onusraddr.`OnlineUserId`IN (" + getPermissionUsers(GetOrderPermission(), System.Web.HttpContext.Current.Session["UserName"].ToString(), busId) + ") OR onusraddr.`Employeeid` = '" + selEmp + "') ";
                 //extraQry = extraQry + " (onusraddr.`OnlineUserId`IN (" + getPermissionUsers(GetOrderPermission(), System.Web.HttpContext.Current.Session["UserName"].ToString(), busId) + ") OR onusraddr.`Employeeid` = '" & Emplist1.CurrentEmployee & "') ";
             }
             else
@@ -2588,6 +2753,21 @@ namespace Maximus.Models
                     foreach (DataRow dr in dt.Rows)
                     {
                         result.Add(new BusAddress { AddressDescription = dr.ItemArray[0].ToString(), Address1 = dr.ItemArray[1].ToString(), Address2 = dr.ItemArray[2].ToString(), Address3 = dr.ItemArray[3].ToString(), City = dr.ItemArray[5].ToString(), PostCode = dr.ItemArray[6].ToString(), AddressId = Convert.ToInt32(dr.ItemArray[9].ToString()), Country = dr.ItemArray[7].ToString(), contactId = dr.ItemArray[10].ToString() });
+                    }
+                }
+                else
+                {
+                    sQry = "SELECT DISTINCT tblbus_address.Description, tblbus_address.Address1, tblbus_address.Address2, tblbus_address.Address3, tblbus_address.Town, tblbus_address.City, tblbus_address.Postcode, tblbus_countrycodes.Country, tblbus_address.CountryCode, tblbus_address.AddressID,tblbus_address.ContactID   FROM tblbus_countrycodes INNER JOIN (tblbus_addresstype_ref INNER JOIN (tblbus_business INNER JOIN (tblbus_addresstypes INNER JOIN tblbus_address ON tblbus_addresstypes.AddressTypeID = tblbus_address.AddressTypeID) ON tblbus_business.BusinessID = tblbus_address.BusinessID) ON tblbus_addresstype_ref.Actual_TypeID = tblbus_addresstypes.Actual_TypeID) ON tblbus_countrycodes.CountryID = tblbus_address.CountryCode   WHERE tblbus_addresstype_ref.Actual_TypeID=2 AND tblbus_business.BusinessID='" + busId + "' and tblbus_countrycodes.CompanyID ='" + cmpId + "' order by tblbus_address.Description";
+                    MySqlCommand cmd1 = new MySqlCommand(sQry, conn);
+                    MySqlDataAdapter da1 = new MySqlDataAdapter(cmd1);
+                    DataTable dt1 = new DataTable();
+                    da1.Fill(dt1);
+                    if (dt1.Rows.Count > 0)
+                    {
+                        foreach (DataRow dr in dt1.Rows)
+                        {
+                            result.Add(new BusAddress { AddressDescription = dr.ItemArray[0].ToString(), Address1 = dr.ItemArray[1].ToString(), Address2 = dr.ItemArray[2].ToString(), Address3 = dr.ItemArray[3].ToString(), City = dr.ItemArray[5].ToString(), PostCode = dr.ItemArray[6].ToString(), AddressId = Convert.ToInt32(dr.ItemArray[9].ToString()), Country = dr.ItemArray[7].ToString(), contactId = dr.ItemArray[10].ToString() });
+                        }
                     }
                 }
             }
@@ -2896,84 +3076,84 @@ namespace Maximus.Models
         }
         #endregion
 
-        #region InsertManpackCarriage
-        public void InsertManpackCarriage(SalesOrderHeaderViewModel header, string carrPrice1 = "", bool CarrZero = false, string busId = "", string txtTotalGoods = "")
-        {
-            SalesOrderLineViewModel objOrderLine = new SalesOrderLineViewModel();
-            long lastLine = 0;
-            Structrues.TStyle tmpStyle;
-            Structrues.TBusinessAccount tmpBusiness;
-            Structrues.TStyleReps tmpStyleRep;
-            double dblCostPrice;
-            double carrPrice;
-            string reqData1 = "";
-            lastLine = header.SalesOrderLine.Count();
-            if (lastLine <= 0)
-            {
-                return;
-            }
-            if (carrPrice1 == "")
-            {
-                return;
-            }
-            objOrderLine.LineNo = lastLine + 1;
-            objOrderLine.StyleID = carrPrice1;
-            objOrderLine.ColourID = GetCarrClr(carrPrice1);
-            objOrderLine.SizeID = GetCarrSize(carrPrice1);
-            tmpBusiness = GetBusinessAccount(tBusinessAccount, busId);
-            if (Convert.ToInt32(HttpContext.Current.Session["CARRPERCENT"]) > 0)
-            {
-                if (Convert.ToDouble(txtTotalGoods) < Convert.ToDouble(HttpContext.Current.Session["CARRREQAMT"]))
-                {
-                    carrPrice = ItemPrice(objOrderLine.StyleID, objOrderLine.ColourID, objOrderLine.SizeID, tmpBusiness.Country_CurrencyID, Convert.ToInt32(BusinessParam("PriceList", busId)), 0);
-                    objOrderLine.Price = Math.Round(Convert.ToDouble(carrPrice), 2);
-                }
-                else
-                {
-                    carrPrice = Convert.ToDouble(txtTotalGoods) * Convert.ToDouble(HttpContext.Current.Session["CARRPERCENT"]) / 100;
-                    objOrderLine.Price = Math.Round(Convert.ToDouble(carrPrice), 2);
-                }
-            }
-            else
-            {
-                carrPrice = ItemPrice(objOrderLine.StyleID, objOrderLine.ColourID, objOrderLine.SizeID, tmpBusiness.Country_CurrencyID, Convert.ToInt32(BusinessParam("PriceList", busId)), 0);
-                objOrderLine.Price = Math.Round(Convert.ToDouble(carrPrice), 2);
-            }
-            objOrderLine.OrdQty = 1;
-            objOrderLine.DeliveryDate = DateTime.Now.AddDays(1);
-            tmpStyle = GetStyle(SetStyle(objOrderLine.StyleID), objOrderLine.StyleID, objOrderLine.SizeID);
-            objOrderLine.Description = tmpStyle.Description;
-            objOrderLine.NomCode1 = tmpStyle.NominalCode == "" ? 0 : Convert.ToInt32(tmpStyle.NominalCode);
-            dblCostPrice = ItemPrice(objOrderLine.StyleID, objOrderLine.ColourID, objOrderLine.SizeID, tmpBusiness.Country_CurrencyID, Convert.ToInt32(BusinessParam("PriceList", busId)), 0);
-            objOrderLine.Cost1 = Convert.ToDecimal(dblCostPrice);
-            objOrderLine.VatCode1 = UseVatCode(tmpBusiness.VatFlag, Convert.ToInt32(tmpStyle.VatCode), tmpBusiness.VatCode);
-            tmpStyleRep = GetStyleReps(SetStyleReps(objOrderLine.StyleID), objOrderLine.StyleID);
-            if (tmpStyleRep.RepID != 0)
-            {
-                objOrderLine.RepId = tmpStyleRep.RepID;
-            }
-            else
-            {
-                objOrderLine.RepId = tmpBusiness.RepID;
-            }
-            objOrderLine.KAMID = getKAM(SetKam(), objOrderLine.RepId).KamID;
-            objOrderLine.RepRate1 = tmpBusiness.Rep_Comission;
-            objOrderLine.KAMRate1 = tmpBusiness.KAM_Comission;
-            //objOrderLine.Currency_Exchange_Rate
-            objOrderLine.VatPercent = GetVatCodes(SetVatCodes(), header.VatCode).VatPercent;
-            reqData1 = StyleParam("REQDATA1", objOrderLine.StyleID);
-            if (reqData1 != "")
-            {
-                objOrderLine.FreeText1 = "(" + reqData1 + ")";
-                objOrderLine.RequireData = reqData1;
-            }
-            objOrderLine.IssueUOM1 = 1;
-            objOrderLine.IssueQty1 = 1;
-            objOrderLine.StockingUOM1 = 1;
-            objOrderLine.Ratio1 = 1;
+        //#region InsertManpackCarriage
+        //public void InsertManpackCarriage(SalesOrderHeaderViewModel header, string carrPrice1 = "", bool CarrZero = false, string busId = "", string txtTotalGoods = "")
+        //{
+        //    SalesOrderLineViewModel objOrderLine = new SalesOrderLineViewModel();
+        //    long lastLine = 0;
+        //    Structrues.TStyle tmpStyle;
+        //    Structrues.TBusinessAccount tmpBusiness;
+        //    Structrues.TStyleReps tmpStyleRep;
+        //    double dblCostPrice;
+        //    double carrPrice;
+        //    string reqData1 = "";
+        //    lastLine = header.SalesOrderLine.Count();
+        //    if (lastLine <= 0)
+        //    {
+        //        return;
+        //    }
+        //    if (carrPrice1 == "")
+        //    {
+        //        return;
+        //    }
+        //    objOrderLine.LineNo = lastLine + 1;
+        //    objOrderLine.StyleID = carrPrice1;
+        //    objOrderLine.ColourID = GetCarrClr(carrPrice1);
+        //    objOrderLine.SizeID = GetCarrSize(carrPrice1);
+        //    tmpBusiness = GetBusinessAccount(tBusinessAccount, busId);
+        //    if (Convert.ToInt32(HttpContext.Current.Session["CARRPERCENT"]) > 0)
+        //    {
+        //        if (Convert.ToDouble(txtTotalGoods) < Convert.ToDouble(HttpContext.Current.Session["CARRREQAMT"]))
+        //        {
+        //            carrPrice = ItemPrice(objOrderLine.StyleID, objOrderLine.ColourID, objOrderLine.SizeID, tmpBusiness.Country_CurrencyID, Convert.ToInt32(BusinessParam("PriceList", busId)), 0);
+        //            objOrderLine.Price = Math.Round(Convert.ToDouble(carrPrice), 2);
+        //        }
+        //        else
+        //        {
+        //            carrPrice = Convert.ToDouble(txtTotalGoods) * Convert.ToDouble(HttpContext.Current.Session["CARRPERCENT"]) / 100;
+        //            objOrderLine.Price = Math.Round(Convert.ToDouble(carrPrice), 2);
+        //        }
+        //    }
+        //    else
+        //    {
+        //        carrPrice = ItemPrice(objOrderLine.StyleID, objOrderLine.ColourID, objOrderLine.SizeID, tmpBusiness.Country_CurrencyID, Convert.ToInt32(BusinessParam("PriceList", busId)), 0);
+        //        objOrderLine.Price = Math.Round(Convert.ToDouble(carrPrice), 2);
+        //    }
+        //    objOrderLine.OrdQty = 1;
+        //    objOrderLine.DeliveryDate = DateTime.Now.AddDays(1);
+        //    tmpStyle = GetStyle(SetStyle(objOrderLine.StyleID), objOrderLine.StyleID, objOrderLine.SizeID);
+        //    objOrderLine.Description = tmpStyle.Description;
+        //    objOrderLine.NomCode1 = tmpStyle.NominalCode == "" ? 0 : Convert.ToInt32(tmpStyle.NominalCode);
+        //    dblCostPrice = ItemPrice(objOrderLine.StyleID, objOrderLine.ColourID, objOrderLine.SizeID, tmpBusiness.Country_CurrencyID, Convert.ToInt32(BusinessParam("PriceList", busId)), 0);
+        //    objOrderLine.Cost1 = Convert.ToDecimal(dblCostPrice);
+        //    objOrderLine.VatCode1 = UseVatCode(tmpBusiness.VatFlag, Convert.ToInt32(tmpStyle.VatCode), tmpBusiness.VatCode);
+        //    tmpStyleRep = GetStyleReps(SetStyleReps(objOrderLine.StyleID), objOrderLine.StyleID);
+        //    if (tmpStyleRep.RepID != 0)
+        //    {
+        //        objOrderLine.RepId = tmpStyleRep.RepID;
+        //    }
+        //    else
+        //    {
+        //        objOrderLine.RepId = tmpBusiness.RepID;
+        //    }
+        //    objOrderLine.KAMID = getKAM(SetKam(), objOrderLine.RepId).KamID;
+        //    objOrderLine.RepRate1 = tmpBusiness.Rep_Comission;
+        //    objOrderLine.KAMRate1 = tmpBusiness.KAM_Comission;
+        //    //objOrderLine.Currency_Exchange_Rate
+        //    objOrderLine.VatPercent = GetVatCodes(SetVatCodes(), header.VatCode).VatPercent;
+        //    reqData1 = StyleParam("REQDATA1", objOrderLine.StyleID);
+        //    if (reqData1 != "")
+        //    {
+        //        objOrderLine.FreeText1 = "(" + reqData1 + ")";
+        //        objOrderLine.RequireData = reqData1;
+        //    }
+        //    objOrderLine.IssueUOM1 = 1;
+        //    objOrderLine.IssueQty1 = 1;
+        //    objOrderLine.StockingUOM1 = 1;
+        //    objOrderLine.Ratio1 = 1;
 
-        }
-        #endregion
+        //}
+        //#endregion
 
         #region displayOrderListGrid
 
@@ -3135,306 +3315,306 @@ namespace Maximus.Models
 
         #region SetSalesHeader
 
-        public bool SetSalesHeader(string txtCustRef = "", string txtDelAddDesc = "", bool optNewAddr = false, string cboSiteCode = "", string txtNomCode = "", string txtNomCode1 = "", string txtNomCode2 = "", string txtNomCode3 = "", string txtNomCode4 = "", string isBulk = "", bool booBulk = false, string txtCarrierCharge = "", string txtOrdDate = "", string txtCarrier = "", string txtCommentsExternal = "", string txtReasoncode = "", string txtCustAddDesc = "", string txtCustAdd1 = "", string txtCustAdd2 = "", string txtCustAdd3 = "", string txtCustTown = "", string txtCustCity = "", string txtCustPost = "", string txtCustCountry = "", string txtDelAdd1 = "", string txtDelAdd2 = "", string txtDelAdd3 = "", string txtDelTown = "", string txtDelCity = "", string txtDelPost = "", string txtDelCountry = "")
-        {
-            var busID = System.Web.HttpContext.Current.Session["BuisnessId"].ToString().Trim();
+        //public bool SetSalesHeader(string txtCustRef = "", string txtDelAddDesc = "", bool optNewAddr = false, string cboSiteCode = "", string txtNomCode = "", string txtNomCode1 = "", string txtNomCode2 = "", string txtNomCode3 = "", string txtNomCode4 = "", string isBulk = "", bool booBulk = false, string txtCarrierCharge = "", string txtOrdDate = "", string txtCarrier = "", string txtCommentsExternal = "", string txtReasoncode = "", string txtCustAddDesc = "", string txtCustAdd1 = "", string txtCustAdd2 = "", string txtCustAdd3 = "", string txtCustTown = "", string txtCustCity = "", string txtCustPost = "", string txtCustCountry = "", string txtDelAdd1 = "", string txtDelAdd2 = "", string txtDelAdd3 = "", string txtDelTown = "", string txtDelCity = "", string txtDelPost = "", string txtDelCountry = "")
+        //{
+        //    var busID = System.Web.HttpContext.Current.Session["BuisnessId"].ToString().Trim();
 
-            TBusinessAccount tmpbusiness;
-            List<object> carrArr = new List<object>();
-            bool setSalesOrderHeader = false;
-            string strWarehouse = "";
-            if (BusinessParam("CusRefMan", busID) != "")
-            {
-                if (Convert.ToBoolean(BusinessParam("CusRefMan", busID)))
-                {
-                    if (txtCustRef == "")
-                    {
-                        // lblCustRefStat.Visible = True
-                        return setSalesOrderHeader = false;
-                        //divData1.Style("display") = "block"
-                    }
-                    else
-                    {
-                        //            lblCustRefStat.Visible = False
-                        //            pnlDateCustRef_Collaps.AutoExpand = False
-                        //            pnlDateCustRef_Collaps.ClientState = "true"
-                        //            divData1.Style("display") = "block"
-                    }
-                }
-                else
-                {
-                    //        lblCustRefStat.Visible = False
-                    //        pnlDateCustRef_Collaps.AutoExpand = False
-                    //        pnlDateCustRef_Collaps.ClientState = "true"
-                    //        divData1.Style("display") = "block"
-                }
-            }
-            else
-            {
-                //        lblCustRefStat.Visible = False
-                //        pnlDateCustRef_Collaps.AutoExpand = False
-                //        pnlDateCustRef_Collaps.ClientState = "true"
-                //        divData1.Style("display") = "block"
-            }
-            if (optNewAddr)
-            {
-                if (txtDelAddDesc == "")
-                {
-                    //        lblDelDescStat.Visible = True
-                    return setSalesOrderHeader = false;
-                }
-                else
-                {
-                    // lblDelDescStat.Visible = False
-                }
-            }
-            else
-            {
-                //    lblDelDescStat.Visible = False
-            }
+        //    TBusinessAccount tmpbusiness;
+        //    List<object> carrArr = new List<object>();
+        //    bool setSalesOrderHeader = false;
+        //    string strWarehouse = "";
+        //    if (BusinessParam("CusRefMan", busID) != "")
+        //    {
+        //        if (Convert.ToBoolean(BusinessParam("CusRefMan", busID)))
+        //        {
+        //            if (txtCustRef == "")
+        //            {
+        //                // lblCustRefStat.Visible = True
+        //                return setSalesOrderHeader = false;
+        //                //divData1.Style("display") = "block"
+        //            }
+        //            else
+        //            {
+        //                //            lblCustRefStat.Visible = False
+        //                //            pnlDateCustRef_Collaps.AutoExpand = False
+        //                //            pnlDateCustRef_Collaps.ClientState = "true"
+        //                //            divData1.Style("display") = "block"
+        //            }
+        //        }
+        //        else
+        //        {
+        //            //        lblCustRefStat.Visible = False
+        //            //        pnlDateCustRef_Collaps.AutoExpand = False
+        //            //        pnlDateCustRef_Collaps.ClientState = "true"
+        //            //        divData1.Style("display") = "block"
+        //        }
+        //    }
+        //    else
+        //    {
+        //        //        lblCustRefStat.Visible = False
+        //        //        pnlDateCustRef_Collaps.AutoExpand = False
+        //        //        pnlDateCustRef_Collaps.ClientState = "true"
+        //        //        divData1.Style("display") = "block"
+        //    }
+        //    if (optNewAddr)
+        //    {
+        //        if (txtDelAddDesc == "")
+        //        {
+        //            //        lblDelDescStat.Visible = True
+        //            return setSalesOrderHeader = false;
+        //        }
+        //        else
+        //        {
+        //            // lblDelDescStat.Visible = False
+        //        }
+        //    }
+        //    else
+        //    {
+        //        //    lblDelDescStat.Visible = False
+        //    }
 
-            if (BusinessParam("NOMCODEMAN", busID) != "")
-            {
-                if (Convert.ToBoolean(BusinessParam("NOMCODEMAN", busID)))
-                {
-                    if (Convert.ToBoolean(HttpContext.Current.Session["ONLNEREQNOM1"]))
-                    {
-                        if (GetSiteCodes())
-                        {
-                            if (cboSiteCode == "")
-                            {
-                                return setSalesOrderHeader = false;
-                            }
-                            else
-                            {
-                                //     validateSiteCode.Visible = False
-                                //lblNomCode1.Visible = False
-                            }
-                        }
-                        else
-                        {
-                            if (txtNomCode == "")
-                            {
-                                //lblNomCode1.Visible = True
-                                //validateSiteCode.Visible = False
-                                //SetSalesHeader = False
-                                return setSalesOrderHeader = false;
-                            }
-                            else
-                            {
+        //    if (BusinessParam("NOMCODEMAN", busID) != "")
+        //    {
+        //        if (Convert.ToBoolean(BusinessParam("NOMCODEMAN", busID)))
+        //        {
+        //            if (Convert.ToBoolean(HttpContext.Current.Session["ONLNEREQNOM1"]))
+        //            {
+        //                if (GetSiteCodes())
+        //                {
+        //                    if (cboSiteCode == "")
+        //                    {
+        //                        return setSalesOrderHeader = false;
+        //                    }
+        //                    else
+        //                    {
+        //                        //     validateSiteCode.Visible = False
+        //                        //lblNomCode1.Visible = False
+        //                    }
+        //                }
+        //                else
+        //                {
+        //                    if (txtNomCode == "")
+        //                    {
+        //                        //lblNomCode1.Visible = True
+        //                        //validateSiteCode.Visible = False
+        //                        //SetSalesHeader = False
+        //                        return setSalesOrderHeader = false;
+        //                    }
+        //                    else
+        //                    {
 
-                            }
-                        }
-                    }
-                    else
-                    {
-                        //lblNomCode1.Visible = False
-                        //validateSiteCode.Visible = False
-                    }
+        //                    }
+        //                }
+        //            }
+        //            else
+        //            {
+        //                //lblNomCode1.Visible = False
+        //                //validateSiteCode.Visible = False
+        //            }
 
-                    if (Convert.ToBoolean(HttpContext.Current.Session["ONLNEREQNOM2"]))
-                    {
-                        if (txtNomCode1 == "")
-                        {
-                            return setSalesOrderHeader = false;
-                        }
-                        else
-                        {
-                            //lblNomCode2.Visible = False
-                        }
-                    }
-                    else
-                    {
-                        //lblNomCode2.Visible = False
-                    }
-                    if (Convert.ToBoolean(HttpContext.Current.Session["ONLNEREQNOM3"]))
-                    {
-                        if (txtNomCode2 == "")
-                        {
-                            setSalesOrderHeader = false;
-                        }
-                        else
-                        {
-                            //lblNomCode3.Visible = False
-                        }
-                    }
-                    else
-                    {
-                        //lblNomCode3.Visible = False
-                    }
-                    if (Convert.ToBoolean(HttpContext.Current.Session["ONLNEREQNOM4"]))
-                    {
-                        if (txtNomCode3.Trim() == "")
-                        {
-                            //lblNomCode4.Visible = True
-                            setSalesOrderHeader = false;
-                            return setSalesOrderHeader;
-                        }
-                        else
-                        {
-                            //lblNomCode3.Visible = False
-                        }
-                    }
-                    else
-                    {
-                        // lblNomCode4.Visible = False
-                    }
-                    if (Convert.ToBoolean(HttpContext.Current.Session["ONLNEREQNOM5"]))
-                    {
-                        if (txtNomCode4.Trim() != "")
-                        {
-                            setSalesOrderHeader = false;
-                            return setSalesOrderHeader;
-                        }
-                        else
-                        {
-                            //                lblNomCode5.Visible = False
-                        }
-                    }
-                    else
-                    {
-                        //            lblNomCode5.Visible = False
-                    }
-                    if (!CheckFreetext())
-                    {
-                        setSalesOrderHeader = false;
-                        return setSalesOrderHeader;
-                    }
-                    else
-                    {
+        //            if (Convert.ToBoolean(HttpContext.Current.Session["ONLNEREQNOM2"]))
+        //            {
+        //                if (txtNomCode1 == "")
+        //                {
+        //                    return setSalesOrderHeader = false;
+        //                }
+        //                else
+        //                {
+        //                    //lblNomCode2.Visible = False
+        //                }
+        //            }
+        //            else
+        //            {
+        //                //lblNomCode2.Visible = False
+        //            }
+        //            if (Convert.ToBoolean(HttpContext.Current.Session["ONLNEREQNOM3"]))
+        //            {
+        //                if (txtNomCode2 == "")
+        //                {
+        //                    setSalesOrderHeader = false;
+        //                }
+        //                else
+        //                {
+        //                    //lblNomCode3.Visible = False
+        //                }
+        //            }
+        //            else
+        //            {
+        //                //lblNomCode3.Visible = False
+        //            }
+        //            if (Convert.ToBoolean(HttpContext.Current.Session["ONLNEREQNOM4"]))
+        //            {
+        //                if (txtNomCode3.Trim() == "")
+        //                {
+        //                    //lblNomCode4.Visible = True
+        //                    setSalesOrderHeader = false;
+        //                    return setSalesOrderHeader;
+        //                }
+        //                else
+        //                {
+        //                    //lblNomCode3.Visible = False
+        //                }
+        //            }
+        //            else
+        //            {
+        //                // lblNomCode4.Visible = False
+        //            }
+        //            if (Convert.ToBoolean(HttpContext.Current.Session["ONLNEREQNOM5"]))
+        //            {
+        //                if (txtNomCode4.Trim() != "")
+        //                {
+        //                    setSalesOrderHeader = false;
+        //                    return setSalesOrderHeader;
+        //                }
+        //                else
+        //                {
+        //                    //                lblNomCode5.Visible = False
+        //                }
+        //            }
+        //            else
+        //            {
+        //                //            lblNomCode5.Visible = False
+        //            }
+        //            if (!CheckFreetext())
+        //            {
+        //                setSalesOrderHeader = false;
+        //                return setSalesOrderHeader;
+        //            }
+        //            else
+        //            {
 
-                    }
-                    string booCheckLine = "";
-                    int AnnualIssue = 0;
-                    if (isBulk != "")
-                    {
-                        if (!Convert.ToBoolean(booBulk))
-                        {
-                            if (Convert.ToBoolean(HttpContext.Current.Session["POINTSREQD"]) & IsRolloutOrder)
-                            {
-                                booCheckLine = "";
-                            }
-                            else
-                            {
-                                //booCheckLine= EmpEntilementGridCheck(, AnnualIssue)
-                            }
-                        }
-                    }
-                    else
-                    {
-                        if (Convert.ToBoolean(HttpContext.Current.Session["POINTSREQD"]) & IsRolloutOrder)
-                        {
-                            booCheckLine = "";
-                        }
-                        else
-                        {
-                            //booCheckLine= EmpEntilementGridCheck(, AnnualIssue)
-                        }
-                    }
-                    if (booCheckLine != "")
-                    {
-                        setSalesOrderHeader = false;
-                        return setSalesOrderHeader;
-                    }
-                    else
-                    {
+        //            }
+        //            string booCheckLine = "";
+        //            int AnnualIssue = 0;
+        //            if (isBulk != "")
+        //            {
+        //                if (!Convert.ToBoolean(booBulk))
+        //                {
+        //                    if (Convert.ToBoolean(HttpContext.Current.Session["POINTSREQD"]) & IsRolloutOrder)
+        //                    {
+        //                        booCheckLine = "";
+        //                    }
+        //                    else
+        //                    {
+        //                        //booCheckLine= EmpEntilementGridCheck(, AnnualIssue)
+        //                    }
+        //                }
+        //            }
+        //            else
+        //            {
+        //                if (Convert.ToBoolean(HttpContext.Current.Session["POINTSREQD"]) & IsRolloutOrder)
+        //                {
+        //                    booCheckLine = "";
+        //                }
+        //                else
+        //                {
+        //                    //booCheckLine= EmpEntilementGridCheck(, AnnualIssue)
+        //                }
+        //            }
+        //            if (booCheckLine != "")
+        //            {
+        //                setSalesOrderHeader = false;
+        //                return setSalesOrderHeader;
+        //            }
+        //            else
+        //            {
 
-                    }
-                    string InvalidEmpId = "";
-                    InvalidEmpId = CheckValidEmployee();
-                    if (InvalidEmpId != "")
-                    {
-                        //    If Not modMain.ControlHidden("CreateEmployee") Then
-                        //        If CBoolstr(BusinessParam("CUSTCREATEEMP", strCustID)) Then
-                        //            WriteScript("<script language='javascript'> var win1; if(win1==null || win1.closed) win1=window.open('CreateEmployee.aspx?pagefrom=1&empid=" & InvalidEmpID & "','','resizable=yes,scrollbars=yes,width=700,height=500,top=200,left=100'); </script>")
-                        //        End If
-                        //    End If
-                        //    SetSalesHeader = False
-                        //    Exit Function
-                    }
-                    tmpbusiness = GetBusinessAccount(tBusinessAccount, strCustID);
-                    var dat = (SalesOrderHeaderViewModel)HttpContext.Current.Session["objCurrentOrder"];
-                    dat.CompanyID = cmpId;
-                    dat.WarehouseID = strWarehouse;
-                    dat.CustID = strCustID;
-                    if (strCustID == "")
-                    {
-                        //        WriteScript("<script language='javascript'> alert('" & Convert.ToString(GetLocalResourceObject("Alert1.Text")) & "'); document.location.href='Online_Login.aspx'; </script>")
-                    }
-                    //    If cboCarrier.Items.Count > 0 Then
-                    //        carrArr = Split(cboCarrier.Items(cboCarrier.SelectedIndex).Value, "|")
-                    //        .Carrier = carrArr(0)
-                    //    Else
-                    //        .Carrier = 0
-                    //    End If
-                    dat.CarrierCharge = Convert.ToDecimal(txtCarrierCharge);
-                    dat.CustRef = txtCustRef == "" ? BusinessParam("CustRefDef", strCustID) : txtCustRef;
-                    dat.Currency_Exchange_Code = tmpbusiness.CurrencyName;
-                    dat.VatFlag = tmpbusiness.VatFlag;
-                    dat.VATPercent = GetVatCodes(SetVatCodes(), tmpbusiness.VatCode).VatPercent;
-                    dat.RepID = tmpbusiness.RepID;
-                    dat.OrderDate = DateTime.Parse(txtOrdDate);
-                    dat.UserID = HttpContext.Current.Session["UserName"] == null ? "" : HttpContext.Current.Session["UserName"].ToString();
-                    dat.Currency_Exchange_Rate = Convert.ToInt32(tmpbusiness.ExchangeRate) == 0 ? 1 : tmpbusiness.ExchangeRate;
-                    dat.Carrier = txtCarrier;
-                    dat.VatCode = tmpbusiness.VatCode;
-                    dat.KAMid = getKAM(SetKam(), Convert.ToInt32(dat.RepID)).KamID;
-                    //    .EmployeeID = IIf(IIf(Request.QueryString("Pinno") = "", Session.Item("EmpID"), Request.QueryString("Pinno")) = vbNullString, "", IIf(Request.QueryString("Pinno") = "", Session.Item("EmpID"), Request.QueryString("Pinno")))
-                    if (dat.EmployeeID == strCustID)
-                    {
-                        dat.EmployeeID = "";
-                    }
-                    dat.UCodeId = HttpContext.Current.Session["Ucode"] == null ? "" : HttpContext.Current.Session["Ucode"].ToString();
-                    dat.CommentsExternal = txtCommentsExternal;
-                    //dat.ReasonCode = txtReasoncode!=""?Convert.ToInt32(txtReasoncode):0;
-                    dat.NomCode = txtNomCode;
-                    dat.NomCode1 = txtNomCode1;
-                    dat.NomCode2 = txtNomCode2;
-                    dat.NomCode3 = txtNomCode3;
-                    dat.NomCode4 = txtNomCode4;
-                    dat.OrderType = "SO";
-                    dat.InvDesc = txtCustAddDesc;
-                    dat.InvAddress1 = txtCustAdd1;
-                    dat.InvAddress2 = txtCustAdd2;
-                    dat.InvAddress3 = txtCustAdd3;
-                    dat.DelAddress1 = txtDelAdd1;
-                    dat.DelAddress2 = txtDelAdd2;
-                    dat.DelAddress3 = txtDelAdd3;
-                    dat.DelTown = txtDelTown;
-                    dat.DelCity = txtDelCity;
-                    dat.DelPostCode = txtDelPost;
-                    dat.DelCountry = txtDelCountry;
-                    dat.DelDesc = txtDelAddDesc;
-                    dat.InvPostCode = txtCustCountry;
-                    dat.InvCountry = txtCustCountry;
-                    dat.InvCity = txtCustCity;
-                    dat.InvPostCode = txtCustPost;
-                }
-            }
-            if (HttpContext.Current.Session["objCurrentOrder"] == "")
-            {
-                setSalesOrderHeader = false;
-            }
-            else
-            {
+        //            }
+        //            string InvalidEmpId = "";
+        //            InvalidEmpId = CheckValidEmployee();
+        //            if (InvalidEmpId != "")
+        //            {
+        //                //    If Not modMain.ControlHidden("CreateEmployee") Then
+        //                //        If CBoolstr(BusinessParam("CUSTCREATEEMP", strCustID)) Then
+        //                //            WriteScript("<script language='javascript'> var win1; if(win1==null || win1.closed) win1=window.open('CreateEmployee.aspx?pagefrom=1&empid=" & InvalidEmpID & "','','resizable=yes,scrollbars=yes,width=700,height=500,top=200,left=100'); </script>")
+        //                //        End If
+        //                //    End If
+        //                //    SetSalesHeader = False
+        //                //    Exit Function
+        //            }
+        //            tmpbusiness = GetBusinessAccount(tBusinessAccount, strCustID);
+        //            var dat = (SalesOrderHeaderViewModel)HttpContext.Current.Session["objCurrentOrder"];
+        //            dat.CompanyID = cmpId;
+        //            dat.WarehouseID = strWarehouse;
+        //            dat.CustID = strCustID;
+        //            if (strCustID == "")
+        //            {
+        //                //        WriteScript("<script language='javascript'> alert('" & Convert.ToString(GetLocalResourceObject("Alert1.Text")) & "'); document.location.href='Online_Login.aspx'; </script>")
+        //            }
+        //            //    If cboCarrier.Items.Count > 0 Then
+        //            //        carrArr = Split(cboCarrier.Items(cboCarrier.SelectedIndex).Value, "|")
+        //            //        .Carrier = carrArr(0)
+        //            //    Else
+        //            //        .Carrier = 0
+        //            //    End If
+        //            dat.CarrierCharge = Convert.ToDecimal(txtCarrierCharge);
+        //            dat.CustRef = txtCustRef == "" ? BusinessParam("CustRefDef", strCustID) : txtCustRef;
+        //            dat.Currency_Exchange_Code = tmpbusiness.CurrencyName;
+        //            dat.VatFlag = tmpbusiness.VatFlag;
+        //            dat.VATPercent = GetVatCodes(SetVatCodes(), tmpbusiness.VatCode).VatPercent;
+        //            dat.RepID = tmpbusiness.RepID;
+        //            dat.OrderDate = DateTime.Parse(txtOrdDate);
+        //            dat.UserID = HttpContext.Current.Session["UserName"] == null ? "" : HttpContext.Current.Session["UserName"].ToString();
+        //            dat.Currency_Exchange_Rate = Convert.ToInt32(tmpbusiness.ExchangeRate) == 0 ? 1 : tmpbusiness.ExchangeRate;
+        //            dat.Carrier = txtCarrier;
+        //            dat.VatCode = tmpbusiness.VatCode;
+        //            dat.KAMid = getKAM(SetKam(), Convert.ToInt32(dat.RepID)).KamID;
+        //            //    .EmployeeID = IIf(IIf(Request.QueryString("Pinno") = "", Session.Item("EmpID"), Request.QueryString("Pinno")) = vbNullString, "", IIf(Request.QueryString("Pinno") = "", Session.Item("EmpID"), Request.QueryString("Pinno")))
+        //            if (dat.EmployeeID == strCustID)
+        //            {
+        //                dat.EmployeeID = "";
+        //            }
+        //            dat.UCodeId = HttpContext.Current.Session["Ucode"] == null ? "" : HttpContext.Current.Session["Ucode"].ToString();
+        //            dat.CommentsExternal = txtCommentsExternal;
+        //            //dat.ReasonCode = txtReasoncode!=""?Convert.ToInt32(txtReasoncode):0;
+        //            dat.NomCode = txtNomCode;
+        //            dat.NomCode1 = txtNomCode1;
+        //            dat.NomCode2 = txtNomCode2;
+        //            dat.NomCode3 = txtNomCode3;
+        //            dat.NomCode4 = txtNomCode4;
+        //            dat.OrderType = "SO";
+        //            dat.InvDesc = txtCustAddDesc;
+        //            dat.InvAddress1 = txtCustAdd1;
+        //            dat.InvAddress2 = txtCustAdd2;
+        //            dat.InvAddress3 = txtCustAdd3;
+        //            dat.DelAddress1 = txtDelAdd1;
+        //            dat.DelAddress2 = txtDelAdd2;
+        //            dat.DelAddress3 = txtDelAdd3;
+        //            dat.DelTown = txtDelTown;
+        //            dat.DelCity = txtDelCity;
+        //            dat.DelPostCode = txtDelPost;
+        //            dat.DelCountry = txtDelCountry;
+        //            dat.DelDesc = txtDelAddDesc;
+        //            dat.InvPostCode = txtCustCountry;
+        //            dat.InvCountry = txtCustCountry;
+        //            dat.InvCity = txtCustCity;
+        //            dat.InvPostCode = txtCustPost;
+        //        }
+        //    }
+        //    if (HttpContext.Current.Session["objCurrentOrder"] == "")
+        //    {
+        //        setSalesOrderHeader = false;
+        //    }
+        //    else
+        //    {
 
-            }
-            //If cboDelAddress.Items.Count > 1 And Session.Item("objCurrentOrder").DelDesc = "" Then
-            //    SetSalesHeader = Falsec
-            //    divData4.Style("display") = "block"
-            //    lbl_ValidAddress.Visible = True
-            //    Collaps_delAdrs.Collapsed = False
-            //    Collaps_delAdrs.ClientState = "false"
-            //    ClientScript.RegisterStartupScript(Me.GetType(), "hash", "location.hash = '#daddress';", True)
-            //    Exit Function
-            //Else
-            //    lbl_ValidAddress.Visible = False
-            //    Collaps_delAdrs.Collapsed = True
-            //    Collaps_delAdrs.ClientState = "true"
-            //    '  divData4.Style("display") = "none"
-            //End If
-            return false;
-        }
+        //    }
+        //    //If cboDelAddress.Items.Count > 1 And Session.Item("objCurrentOrder").DelDesc = "" Then
+        //    //    SetSalesHeader = Falsec
+        //    //    divData4.Style("display") = "block"
+        //    //    lbl_ValidAddress.Visible = True
+        //    //    Collaps_delAdrs.Collapsed = False
+        //    //    Collaps_delAdrs.ClientState = "false"
+        //    //    ClientScript.RegisterStartupScript(Me.GetType(), "hash", "location.hash = '#daddress';", True)
+        //    //    Exit Function
+        //    //Else
+        //    //    lbl_ValidAddress.Visible = False
+        //    //    Collaps_delAdrs.Collapsed = True
+        //    //    Collaps_delAdrs.ClientState = "true"
+        //    //    '  divData4.Style("display") = "none"
+        //    //End If
+        //    return false;
+        //}
 
         #endregion
 
@@ -4122,8 +4302,768 @@ namespace Maximus.Models
 
         #endregion
 
+        #region OrderLog
+        public void OrderLog()
+        {
+
+        }
         #endregion
 
+        #region SaveSalesOrder
+        public bool SaveSalesOrder(SalesOrderHeaderViewModel salesHead, long salesNo = 0, string busId = "", string usrId = "", bool editFlag = false)
+        {
+            bool result = false;
+            int execVal = 0;
+            string sSqry = "";
+            MySqlConnection conn = new MySqlConnection(ConnectionString);
+            MySqlTransaction trans;
+            var salLst = new List<SalesOrderHeaderViewModel>();
+
+            salLst.Add(salesHead);
+            try
+            {
+                conn.Open();
+                trans = conn.BeginTransaction();
+
+                if (salesHead.SalesOrderLine.Count > 0 && salesNo > 0)
+                {
+                    string DefUserID = BusinessParam("DEFUSRID", busId);
+                    string sqlUserXref = "";
+                    string UserIDXref = "";
+                    sqlUserXref = "SELECT UserID FROM tblOnline_UserID_Xref  WHERE OnlineUserID='" + usrId + "' AND CompanyID='" + cmpId + "' AND BusinessID='" + busId + "'";
+                    MySqlCommand cmd = new MySqlCommand(sqlUserXref, conn);
+                    var reader = cmd.ExecuteReader();
+                    if (reader.Read())
+                    {
+                        UserIDXref = reader.GetString(0);
+                    }
+                    else if (DefUserID != "")
+                    {
+                        UserIDXref = DefUserID;
+                    }
+                    else
+                    {
+                        UserIDXref = usrId;
+                    }
+                    reader.Close();
+                    StringBuilder oString;
+                    string budgetString = "";
+                    var partShipment = Convert.ToBoolean(BusinessParam("Partshipment", busId)) == true ? -1 : 0;
+                    var cntName = salesHead.ContactName == "" | salesHead.ContactName == null ? "" : salesHead.ContactName + " mobile:" + salesHead.Mobile;
+                    sSqry = "INSERT INTO tblsop_salesorder_header(CompanyID,WarehouseId,OrderNo,CustID,OrderDate,InvDesc,InvAddress1,InvAddress2,InvAddress3,InvCity,InvTown,InvPostCode,InvCountry, DelDesc,DelAddress1,DelAddress2,DelAddress3,DelCity,DelTown,DelPostCode,DelCountry, CustRef,Carrier,CarrierCharge,Comments,CommentsExternal,Totalgoods,ordergoods,Currency_Exchange_Rate,UserId,PinNo,UCodeId,Currency_Exchange_Code,TimeOfEntry,RepID,ReasonCode,OnlineUserID, OrderAnalysisCode1, OrderAnalysisCode2, OrderAnalysisCode3, OrderAnalysisCode4, OrderAnalysisCode5, AllowPartShipment, OrderType,`ContractRef`,`EmailID`,`ContactName`)  VALUES('" + cmpId + "','" + salesHead.WarehouseID + "'," + salesNo + ",'" + busId + "','" + salesHead.OrderDate + "','" + salesHead.InvDesc + "','" + salesHead.InvAddress1 + "','" + salesHead.InvAddress2 + "','" + salesHead.InvAddress3 + "','" + salesHead.InvCity + "','" + salesHead.InvTown + "','" + salesHead.InvPostCode + "','" + salesHead.InvCountry + "','" + salesHead.DelDesc + "','" + salesHead.DelAddress1 + "','" + salesHead.DelAddress2 + "','" + salesHead.DelAddress3 + "','" + salesHead.DelCity + "','" + salesHead.DelTown + "','" + salesHead.DelPostCode + "','" + salesHead.DelCountry + "','" + salesHead.CustRef + "','" + salesHead.Carrier + "'," + salesHead.CarrierCharge + ",'" + salesHead.Comments + "','" + salesHead.CommentsExternal + "'," + GetAlltotals(salLst, salesHead.CarrierCharge.Value).Total + "," + GetAlltotals(salLst, salesHead.CarrierCharge.Value).gross + "," + salesHead.Currency_Exchange_Rate + ",'" + UserIDXref + "','" + salesHead.EmployeeID + "','" + salesHead.UCodeId + "','" + salesHead.Currency_Exchange_Code + "','" + DateTime.Now.ToString("hh:mm:ss") + "'," + salesHead.RepID + "," + salesHead.ReasonCode + ",'" + usrId + "','" + salesHead.NomCode + "','" + salesHead.NomCode1 +
+                   "','" + salesHead.NomCode2 + "','" + salesHead.NomCode3 + "','" + salesHead.NomCode4 + "'," + partShipment + ",'" + salesHead.OrderType + "', '" + salesHead.ContractRef + "', '" + salesHead.EmailID + "','" + cntName + "')";
+                    execVal = ExecuteQuery(sSqry);
+                    if (execVal > 0)
+                    {
+                        string orderFlg = editFlag ? "Edit Order" : "New Order";
+                        OrderLog(salesNo, salesHead.OrderType.ToUpper() + "-Start", salesHead.OrderType.ToUpper() + "- Header Saved Mode : " + orderFlg);
+                        if (HttpContext.Current.Session["os"] == null)
+                        {
+                            oString = new StringBuilder();
+                        }
+                        else
+                        {
+                            oString = (StringBuilder)HttpContext.Current.Session["os"];
+                        }
+                        budgetString = salesHead.OrderDate + "," + salesNo + "," + salesHead.EmployeeID + "," + usrId;
+                        oString.AppendLine(budgetString);
+                        HttpContext.Current.Session["os"] = oString;
+                        if (salesHead.CustRef != "")
+                        {
+                            if (editFlag == false)
+                            {
+                                string sSQL = "SELECT * FROM tblsop_customer_ref WHERE CompanyID='" + cmpId + "' AND Custid='" + salesHead.CustID + "' AND Custref='" + salesHead.CustRef + "'";
+                                try
+                                {
+                                    MySqlCommand cmd2 = new MySqlCommand(sSQL, conn);
+                                    MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                                    DataTable dt = new DataTable();
+                                    da.Fill(dt);
+                                    if (dt.Rows.Count == 0)
+                                    {
+                                        sSQL = "INSERT INTO tblsop_customer_ref (CompanyID,Custid,custref ) VALUES('" + cmpId + "','" + busId + "','" + salesHead.CustRef + "')";
+                                        if (ExecuteQuery(sSQL) == 0)
+                                        {
+
+                                        }
+                                    }
+                                }
+                                catch (Exception e)
+                                {
+
+                                }
+                                finally
+                                {
+
+                                }
+                            }
+                            else
+                            {
+                                //update
+                            }
+                        }
+                        // saving salesorder lines
+                        result = SaveSalesorderlines(conn, salesHead, salesNo, busId);
+                        if (result == false)
+                        {
+                            trans.Rollback();
+                        }
+                        else
+                        {
+                            trans.Commit();
+                        }
+                    }
+                    else
+                    {
+                        trans.Rollback();
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return result;
+        }
+        #endregion
+
+        #region GetBusInfo
+
+        public BusinessInfo GetbusInfo(string businessId)
+        {
+            BusinessInfo busInfo = new BusinessInfo();
+            MySqlConnection conn = new MySqlConnection(ConnectionString);
+            var country = enty.tblbus_business.Where(x => x.BusinessID.Trim() == businessId.Trim()).First();
+            conn.Open();
+            try
+            {
+                busInfo.CurrencyExchangeRate = enty.tblbus_countrycodes.Any(x => x.CountryID == country.Country_Currency) ? enty.tblbus_countrycodes.Where(x => x.CountryID == country.Country_Currency).First().Currency_Exchange_Rate.Value : 0;
+                busInfo.Currency_Name = enty.tblbus_countrycodes.Any(x => x.CountryID == country.Country_Currency) ? enty.tblbus_countrycodes.Where(x => x.CountryID == country.Country_Currency).First().Currency_Name : "";
+                busInfo.Rep_Id = enty.tblbus_account.Any(x => x.BusinessID == businessId) ? enty.tblbus_account.Where(x => x.BusinessID == businessId).First().RepID.Value : 0;
+            }
+            catch
+            {
+            }
+            finally
+            {
+            }
+            return busInfo;
+        }
+        #endregion
+
+        #region OrderLog
+        public void OrderLog(long salesNo, string flag = "", string detail = "")
+        {
+            string sSqry = "INSERT INTO `onlineorder_history`(`Browser`,`OrderNo`,`Date`,`IPAddress`,`Flag`,`Detail`)  VALUES ('" + HttpContext.Current.Request.Browser.Browser + "', '" + salesNo + "', NOW(),'" + getLanIpAddress() + "', '" + flag + "','" + detail + "')";
+            MySqlConnection conn = new MySqlConnection(ConnectionString);
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand(sSqry, conn);
+                if (cmd.ExecuteNonQuery() > 0)
+                {
+                }
+                else
+                {
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+            finally
+            {
+                conn.Close();
+            }
+
+        }
+
+        #endregion
+
+        #region getLanIpAddress
+        public string getLanIpAddress()
+        {
+            string IP = HttpContext.Current.Request.ServerVariables["HTTP_X_FORWARDED_FOR"];
+            if (IP != null)
+            {
+                if (IP != "")
+                {
+                    IP = HttpContext.Current.Request.ServerVariables["REMOTE_ADDR"];
+                }
+            }
+            return IP;
+        }
+        #endregion
+
+        #region SaveSalesorderlines
+
+        public bool SaveSalesorderlines(MySqlConnection conn, SalesOrderHeaderViewModel saleHead, long saleno, string busId)
+        {
+            bool result = false;
+            string sSQL = "";
+            int sYear = 0;
+            bool booStock = true;
+            bool isPersonalOrder = false;
+            long returnOrderNo = 0;
+            long returnOrderLine = 0;
+            sYear = IsRolloutOrder ? 99 : 0;
+
+            if (Convert.ToBoolean(BusinessParam("REQ_REASONPAGE", busId)) && saleHead.ReasonCode == 0)
+            {
+                booStock = false;
+            }
+            foreach (var line in saleHead.SalesOrderLine)
+            {
+                if (line.OrdQty > 0)
+                {
+                    if (line.OriginalLineNo > 0 && saleHead.OrderType == "SO")
+                    {
+                        sSQL = "SELECT t2.OrderNo,t2.LineNo FROM tblsop_salesorder_detail t2 JOIN tblsop_salesorder_header t1 ON (t1.CompanyID=t2.CompanyID) AND (t1.OrderNo=t2.OrderNo)  WHERE t1.CompanyID='" + cmpId + "' AND t1.OrderType='RT'  AND t2.OriginalOrderNo=" + line.OriginalOrderNo + " AND t2.OriginalLineNo=" + line.OriginalLineNo + " ORDER BY t2.OrderNo DESC";
+                        try
+                        {
+                            MySqlCommand cmd = new MySqlCommand(sSQL, conn);
+                            MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                            DataTable dt = new DataTable();
+                            da.Fill(dt);
+                            if (dt.Rows.Count > 0)
+                            {
+                                foreach (DataRow dr in dt.Rows)
+                                {
+                                    returnOrderLine = Convert.ToInt32(dr["OrderNo"].ToString());
+                                    returnOrderNo = Convert.ToInt32(dr["OrderNo"].ToString());
+                                    line.OriginalLineNo = 0;
+                                    line.OriginalOrderNo = 0;
+                                }
+                            }
+                            else
+                            {
+                                returnOrderLine = 0;
+                                returnOrderNo = 0;
+                                line.OriginalLineNo = 0;
+                                line.OriginalOrderNo = 0;
+                            }
+                        }
+                        catch (Exception e)
+                        {
+
+                        }
+                    }
+                    var orgLineno = line.OriginalLineNo == null ? 0 : line.OriginalLineNo;
+                    sSQL = "INSERT INTO tblsop_salesorder_detail (CompanyID, Warehouseid, OrderNo, LineNo,   LineType , StyleID, ColourID, SizeID,  Description, Price, OrdQty, AllQty, InvQty, DespQty,  CommissionRate, Deliverydate, VatCode, RepId, KamId, KAMrate, REPRate, Currency_Exchange_Rate,styleIDref,FreeText,Cost, IssueUOM, IssueQty,StockingUOM, NomCode, OriginalOrderNo, OriginalLineNo, AssemblyID, AsmLineNo, ReasonCode, ReturnOrderNo, ReturnLineNo, SOPDETAIL5, SOPDETAIL4)  VALUES('" + cmpId + "','" + saleHead.WarehouseID + "'," + saleno + "," + line.LineNo + ",1,'" + line.StyleID + "','" + line.ColourID + "','" + line.SizeID + "','" + line.Description + "'," + line.Price + "," + line.OrdQty + "," + line.AllQty + "," + line.InvQty + "," + line.InvQty + ",0,'" + line.DeliveryDate + "'," + line.VatCode1 + "," + line.RepId + "," + line.KAMID + "," + line.KAMRate1 + "," + line.RepRate1 + "," + line.Currency_Exchange_Rate + ",'" + line.StyleIDref + "','" + line.FreeText1 + "'," + line.Cost1 + "," + line.IssueUOM1 + "," + line.IssueQty1 + "," + line.StockingUOM1 + ",'" + line.NomCode + "'," + line.OriginalOrderNo + "," + orgLineno + "," + line.AssemblyID + "," + line.AsmLineNo + "," + line.ReasonCodeLine + "," + returnOrderNo + "," + returnOrderLine + ",'" + line.ProjectCode + "','" + line.SOPDetail4 + "')";
+                    if (ExecuteQuery(sSQL) == 0)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        result = true;
+                    }
+                    if (saleHead.OrderType != "RT")
+                    {
+                        if (isPersonalOrder)
+                        {
+
+                        }
+                        if (Convert.ToBoolean(BusinessParam("EmployeeDetails", busId)))
+                        {
+                            if (line.EmployeeId.Length > 0)
+                            {
+                                if (booStock)
+                                {
+                                    sSQL = "SELECT * FROM tblAccEmp_StockCard WHERE CompanyID='" + cmpId + "' AND BusinessID='" + busId + "' AND EmployeeID='" + line.EmployeeId + "' AND StyleID='" + line.StyleID + "' AND ColourID='" + line.ColourID + "' AND Year=" + sYear;
+                                    MySqlCommand cmd1 = new MySqlCommand(sSQL, conn);
+                                    MySqlDataAdapter da = new MySqlDataAdapter(cmd1);
+                                    DataTable dt1 = new DataTable();
+                                    da.Fill(dt1);
+                                    if (dt1.Rows.Count == 0)
+                                    {
+                                        sSQL = "INSERT INTO tblaccemp_stockcard (CompanyID,BusinessID,EmployeeID,StyleID,ColourID,SOQty,StartIssuedate,LastIssueDate,FirstIssueDate,Year)  VALUES('" + cmpId + "','" + saleHead.CustID + "','" + line.EmployeeId + "','" + line.StyleID + "','" + line.ColourID + "'," + line.OrdQty + ",'" + saleHead.OrderDate + "','" + saleHead.OrderDate + "','" + saleHead.OrderDate + "'," + sYear + ")";
+                                    }
+                                    else
+                                    {
+                                        sSQL = "UPDATE tblaccemp_stockcard SET SOQty=SOQty+" + line.OrdQty + " WHERE CompanyID='" + cmpId + "' AND BusinessID='" + saleHead.CustID + "' AND EmployeeID='" + saleHead.EmployeeID + "' AND StyleID='" + line.StyleID + "' AND ColourID='" + line.ColourID + "' AND Year=" + sYear;
+                                    }
+                                    if (ExecuteQuery(sSQL) > 0)
+                                    {
+                                        result = true;
+                                        //AddtologStockCard(SQL)
+                                    }
+                                }
+                                //If CBoolstr(BusinessParam("BUDGETREQ", mvarCustID)) Then
+                                //{ }
+                                //If CBoolstr(BusinessParam("POINTSREQ", mvarCustID)) And IsRolloutOrder Then
+                                //    { }
+                            }
+                        }
+                    }
+                }
+            }
+            return result;
+
+        }
+
+        #endregion
+
+        #region override entitlement
+
+        public bool overrideEntitlement()
+        {
+            if (HttpContext.Current.Session["OverrideEnt"].ToString().ToUpper().Trim() == "SHOW")
+            {
+                return true;
+            }
+            else
+            { return false; }
+        }
+
+        #endregion
+
+
+        #region IsCarriageStyle
+
+        public bool IsCarriageStyle(string styleId)
+        {
+            MySqlConnection conn = new MySqlConnection(ConnectionString);
+            string sqlC = "SELECT DISTINCT tblfsk_style.StyleID, tblfsk_style.Description   FROM tblfsk_style INNER JOIN tblonlinesop_carriage ON (tblfsk_style.StyleID = tblonlinesop_carriage.StyleID) AND (tblfsk_style.CompanyID = tblonlinesop_carriage.CompanyID)  WHERE tblfsk_style.StyleID='" + styleId + "' ORDER BY tblfsk_style.StyleID";
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand(sqlC, conn);
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                if (dt.Rows.Count > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return false;
+        }
+
+        #endregion
+
+        #region FindOpenManPackOrders
+
+        public long FindOpenManPackOrders(string mDelDesc, string delAddr1, string mDelPost)
+        {
+            string sqlTmp = "";
+            int intOpenManpack = 0;
+            MySqlConnection conn = new MySqlConnection(ConnectionString);
+            string sql = "SELECT DISTINCT m.ManpackNo as MyManpack FROM tblsop_manpackorders m  JOIN tblsop_salesorder_header h ON (m.CompanyID=h.CompanyID) AND (m.OrderNo=h.OrderNo)  WHERE m.CustID='" + strCustID + "' AND m.OnlineConfirm=0 ";
+            if (!Convert.ToBoolean(BusinessParam("OpenStack_Postcode", strCustID)))
+            {
+                sqlTmp += "AND h.DelDesc='" + mDelDesc + "' AND h.DelAddress1='" + delAddr1 + "' ";
+            }
+            sqlTmp += " AND h.DelPostCode='" + mDelPost + "' ORDER BY m.ManpackNo DESC ";
+            conn.Open();
+
+            try
+            {
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                var reader = cmd.ExecuteReader();
+                if (reader.Read())
+                {
+                    intOpenManpack = reader.GetString("MyManpack") != null && reader.GetString("MyManpack") != "" ? Convert.ToInt32(reader.GetString("MyManpack")) : 0;
+                }
+                else
+                {
+                    intOpenManpack = 0;
+                }
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+
+            }
+            return intOpenManpack;
+        }
+        #endregion
+
+
+        #region  EmpEntilementCheck
+
+        public bool EmpEntilementCheck(SalesOrderHeaderViewModel salesHead, string busId = "", int annualIssue = 0, bool isManPack = false, bool isPersonalOrder = false)
+        {
+            bool result = false;
+            string mAllocText = "";
+            bool booDimAlloc = false;
+            double AnnualIssue;
+            double mAnnual;
+            double mCurrStock = 0;
+            bool boocheck = false;
+            if (isPersonalOrder)
+            {
+                result = true;
+            }
+            else if (overrideEntitlement())
+            {
+                result = true;
+            }
+            string FITALLOCvalue = HttpContext.Current.Session["FITALLOC"].ToString();
+            string DIMALLOCvalue = HttpContext.Current.Session["DIMALLOC"].ToString();
+            foreach (var line in salesHead.SalesOrderLine)
+            {
+                if (!IsCarriageStyle(line.StyleID))
+                {
+                    if (line.OriginalLineNo == 0 || line.OriginalLineNo == null)
+                    {
+                        if (Convert.ToBoolean(BusinessParam("DIMALLOC_LAYOUT", busId)))
+                        {
+                            string mysql = "SELECT DISTINCT if(isnull(FreeText),'',FreeText) as FreeText  FROM tblfsk_style_freetext WHERE StyleID='" + line.StyleID + "' AND FreeTextType IN ('" + FITALLOCvalue + "','" + DIMALLOCvalue + "')";
+                            MySqlConnection conn = new MySqlConnection(ConnectionString);
+                            try
+                            {
+                                conn.Open();
+                                MySqlCommand cmd = new MySqlCommand(mysql, conn);
+                                var dr = cmd.ExecuteReader();
+                                if (dr.Read())
+                                {
+                                    mAllocText = dr.GetString("FreeText");
+                                }
+                                dr.Close();
+                                booDimAlloc = mAllocText == "" ? false : true;
+                                mAnnual = EmpAnnualIssue(line.StyleID, line.ColourID, salesHead.UCodeId, booDimAlloc);
+                                AnnualIssue = mAnnual;
+                                if (AnnualIssue > 0)
+                                {
+                                    mCurrStock = EmpStock(line.StyleID, line.ColourID, cmpId, busId, salesHead.EmployeeID, booDimAlloc);
+                                    if (true == false)
+                                    {
+
+                                    }
+                                    if ((mCurrStock + line.OrdQty) > mAnnual)
+                                    {
+                                        boocheck = false;
+                                    }
+                                    else
+                                    {
+                                        boocheck = true;
+                                    }
+                                }
+                                else
+                                {
+                                    boocheck = false;
+                                }
+                            }
+                            catch
+                            {
+                            }
+                            finally
+                            {
+                                conn.Close();
+                            }
+                        }
+
+                    }
+
+                }
+
+            }
+            //if(Convert.ToBoolean(BusinessParam("REQ_REASONPAGE",busId)) && Convert.ToInt32(str)==0)
+            //{
+            //    boocheck = true;
+            //}
+            return boocheck;
+        }
+        public double EmpAnnualIssue(string styleId, string colourId, string Ucode, bool booDimAlloc = false)
+        {
+            double EmpAnnualIssue = 0;
+            string FITALLOCvalue = HttpContext.Current.Session["FITALLOC"].ToString();
+            string DIMALLOCvalue = HttpContext.Current.Session["DIMALLOC"].ToString();
+            string sql = "";
+            int reasoncode = 0;
+            string mAllocText = "";
+            string strReasonCode = "";
+            string mPointDate = DateTime.Now.ToString("yyyy-MM-dd");
+            MySqlConnection conn = new MySqlConnection(ConnectionString);
+            try
+            {
+                conn.Open();
+                if (booDimAlloc == false)
+                {
+                    sql = "select Annualissue from tblaccemp_ucodes where companyId='" + cmpId + "' and UcodeId='" + Ucode + "' and StyleId='" + styleId + "' And ColourId='" + colourId + "'";
+                }
+                else
+                {
+                    sql = "SELECT DISTINCT FreeText   FROM tblfsk_style_freetext WHERE StyleID='" + styleId + "' AND FreeTextType IN ('" + FITALLOCvalue + "','" + DIMALLOCvalue + "')";
+                    MySqlCommand cmd = new MySqlCommand(sql, conn);
+                    var dr = cmd.ExecuteReader();
+                    if (dr.Read())
+                    {
+                        mAllocText = dr.GetString("FreeText");
+                    }
+                    dr.Close();
+                    if (mAllocText != "")
+                    {
+                        sql = "SELECT DISTINCT PeriodQty as AnnualIssue FROM tblaccemp_ucodes_dimension uds  LEFT JOIN tblfsk_style_freetext f on uds.Dimension=f.styleid and FreeTextType IN ('" + FITALLOCvalue + "','" + DIMALLOCvalue + "')  WHERE uds.Companyid='" + cmpId + "' AND f.freetext='" + mAllocText + "' AND uds.Colourid='" + colourId + "'  AND ReasonCode=" + (strReasonCode) + " AND '" + mPointDate + "' BETWEEN StartDate AND EndDate ";
+                    }
+                    else
+                    {
+                        sql = "select Annualissue from tblaccemp_ucodes where companyId='" + cmpId + "' and UcodeId='" + Ucode + "' and StyleId='" + styleId + "' And ColourId='" + colourId + "'";
+                    }
+
+                    MySqlCommand cmd1 = new MySqlCommand(sql, conn);
+                    var dr1 = cmd1.ExecuteReader();
+                    if (dr1.Read())
+                    {
+                        EmpAnnualIssue = dr.GetString("Annualissue") == "" ? 0 : Convert.ToDouble(dr.GetString("Annualissue"));
+                    }
+                    else
+                    {
+                        dr1.Close();
+
+                        sql = "SELECT DISTINCT FreeText  FROM tblfsk_style_freetext WHERE StyleID='" + styleId + "' AND FreeTextType IN ('" + FITALLOCvalue + "','" + DIMALLOCvalue + "')";
+
+                        MySqlCommand cmd2 = new MySqlCommand(sql, conn);
+                        var dr2 = cmd2.ExecuteReader();
+                        if (dr2.Read())
+                        {
+                            mAllocText = dr2.GetString("FreeText");
+                        }
+                        dr2.Close();
+                        if (mAllocText != "")
+                        {
+                            sql = "SELECT SUM(AnnualIssue) AS AnnualIssue FROM tblaccemp_ucodes uds  LEFT JOIN tblfsk_style_freetext f ON uds.StyleId=f.styleid AND FreeTextType IN ('" + FITALLOCvalue + "','" + DIMALLOCvalue + "')  WHERE uds.Companyid='" + cmpId + "' AND f.freetext='" + mAllocText + "' AND uds.`UCodeID` = '" + Ucode + "' ";
+                            MySqlCommand cmd3 = new MySqlCommand(sql, conn);
+                            var dr3 = cmd3.ExecuteReader();
+                            if (dr3.Read())
+                            {
+                                EmpAnnualIssue = dr3.GetString("AnnualIssue") != "" ? Convert.ToDouble(dr3.GetString("AnnualIssue")) : 0;
+                            }
+                            else
+                            {
+                                EmpAnnualIssue = 0;
+                            }
+                            dr3.Close();
+                            if (EmpAnnualIssue == 0)
+                            {
+                                sql = "SELECT SUM(AnnualIssue) AS AnnualIssue FROM tblaccemp_ucodes uds  LEFT JOIN tblfsk_style_freetext f ON uds.StyleId=f.styleid AND FreeTextType IN ('" + FITALLOCvalue + "','" + DIMALLOCvalue + "')  WHERE uds.Companyid='" + cmpId + "' AND f.freetext IN(SELECT DISTINCT `FreeText` FROM `tblfsk_style_freetext` df JOIN (SELECT DISTINCT `StyleId` FROM `tblfsk_style_freetext` sf JOIN (SELECT `FreeText` FROM `tblfsk_style_freetext` WHERE `StyleId` = '" + styleId + "' AND FreeTextType IN('" + FITALLOCvalue + "', '" + DIMALLOCvalue + "')) da ON sf.FreeText=da.FreeText) ds ON df.StyleID=ds.StyleID AND df.`FreeTextType`='" + DIMALLOCvalue + "') AND uds.`UCodeID` = '" + Ucode + "' ";
+                                MySqlCommand cmd4 = new MySqlCommand(sql, conn);
+                                var dr4 = cmd4.ExecuteReader();
+                                if (dr4.Read())
+                                {
+                                    EmpAnnualIssue = dr4.GetString("AnnualIssue") != "" ? Convert.ToDouble(dr4.GetString("AnnualIssue")) : 0;
+                                }
+                                else
+                                {
+                                    EmpAnnualIssue = 0;
+                                }
+                            }
+                        }
+                    }
+
+                }
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return EmpAnnualIssue;
+        }
+
+        public int EmployeeRenewDays(string businessId)
+        {
+            int intVal = Convert.ToInt32(BusinessParam("EmployeeRenew", businessId)) / 12;
+            return (intVal * 365);
+        }
+
+        public double EmpStock(string styleid, string colourid, string companyid, string custid, string empid, bool booDimalloc = false, string OrdNo = "")
+        {
+            double empStock = 0;
+            string FITALLOCvalue = HttpContext.Current.Session["FITALLOC"].ToString();
+            string DIMALLOCvalue = HttpContext.Current.Session["DIMALLOC"].ToString();
+            string sql = "";
+            string mAllocText = "";
+            int syear = HttpContext.Current.Session["RolloutName"].ToString().Trim() != "" ? 99 : 0;
+            isRolloutOrder = HttpContext.Current.Session["RolloutName"].ToString() != "" ? true : false;
+            string attachString = isRolloutOrder ? " WHERE dss.FreeText='" + mAllocText + "'" : "";
+            MySqlConnection conn = new MySqlConnection(ConnectionString);
+            try
+            {
+                if (booDimalloc == false)
+                {
+                    sql = "select * from tblaccemp_stockcard Where Companyid='" + companyid + "' and BusinessId='" + custid + "' and EmployeeId='" + empid + "' And Styleid='" + styleid + "' and Colourid='" + colourid + "' AND ADDDATE(`FirstIssueDate`, " + EmployeeRenewDays(HttpContext.Current.Session["BuisnessId"].ToString()) + ") > CURDATE()  and year=" + syear;
+                }
+                else
+                {
+                    sql = "SELECT DISTINCT FreeText  FROM tblfsk_style_freetext WHERE StyleID='" + styleid + "' AND FreeTextType IN ('" + FITALLOCvalue + "','" + DIMALLOCvalue + "')";
+                    MySqlCommand cmd = new MySqlCommand(sql, conn);
+                    var reader = cmd.ExecuteReader();
+                    if (reader.Read())
+                    {
+                        mAllocText = reader.GetString("FreeText");
+                    }
+                    reader.Close();
+                    if (mAllocText != "")
+                    {
+                        sql = "select sum(soqty) as soqty, sum(pickqty) as pickqty, sum(invqty) as invqty from tblaccemp_stockcard stc  Where stc.Companyid='" + companyid + "' and stc.BusinessId='" + custid + "' and stc.EmployeeId='" + empid + "' AND ADDDATE(stc.`FirstIssueDate`, " + EmployeeRenewDays(HttpContext.Current.Session["BuisnessId"].ToString()) + ") > CURDATE()  AND stc.`Year`=" + syear + " AND stc.StyleID IN (SELECT DISTINCT `StyleId` FROM `tblfsk_style_freetext` dff JOIN  (SELECT `FreeText` FROM `tblfsk_style_freetext` df JOIN  (SELECT DISTINCT `StyleId` FROM `tblfsk_style_freetext` sf JOIN (SELECT `FreeText` FROM `tblfsk_style_freetext` WHERE `StyleId` IN  (SELECT `StyleId` FROM `tblfsk_style_freetext` WHERE FreeText IN (SELECT FreeText FROM tblfsk_style_freetext WHERE StyleID='" + styleid + "'))) da  ON sf.FreeText=da.FreeText) ds ON df.StyleID=ds.StyleID) dss ON dff.`FreeText`=dss.FreeText " + attachString + " ORDER BY StyleID)  group by stc.companyid, stc.businessid, stc.employeeid";
+                    }
+                    else
+                    {
+                        sql = "select * from tblaccemp_stockcard Where Companyid='" + cmpId + "' and BusinessId='" + custid + "' and EmployeeId='" + empid + "' And Styleid='" + styleid + "' and Colourid='" + colourid + "' AND ADDDATE(`FirstIssueDate`, " + EmployeeRenewDays(HttpContext.Current.Session["BuisnessId"].ToString()) + ") > CURDATE()  and year= " + syear;
+                    }
+                    MySqlCommand cmd1 = new MySqlCommand(sql, conn);
+                    var reader1 = cmd1.ExecuteReader();
+                    if (reader1.Read())
+                    {
+                        string soQty = reader1.GetString("SoQty");
+                        double PickQty = reader1.GetString("PickQty") == null || reader1.GetString("PickQty") == "" ? 0 : Convert.ToDouble(reader1.GetString("PickQty"));
+                        double invQty = reader1.GetString("InvQty") == null || reader1.GetString("InvQty") == "" ? 0 : Convert.ToDouble(reader1.GetString("InvQty"));
+                        empStock = soQty == null || reader1.GetString("PickQty") == "" ? 0 : Convert.ToDouble(soQty) + PickQty + invQty;
+                    }
+                    else
+                    {
+                        empStock = 0;
+                    }
+                }
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return empStock;
+        }
+
+        #endregion
+
+        #region  hasBudget
+
+        public bool HasBudget(string pinNo, string busId)
+        {
+            bool result = false;
+            string sSql = "";
+            string bgtTyp = "";
+            bool booBgtType = false;
+            bgtTyp = BusinessParam("REQDIVBUDGET", busId);
+            booBgtType = bgtTyp == "" ? false : Convert.ToBoolean(bgtTyp);
+            MySqlConnection conn = new MySqlConnection(ConnectionString);
+            try
+            {
+                conn.Open();
+                if (booBgtType)
+                {
+                }
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+
+            }
+            return result;
+        }
+        //    Public Function hasBudget(ByVal PinNo As String, ByVal BusID As String) As Boolean
+        //    Dim rsBudget As New ADODB.Recordset
+        //    Dim SQL As String
+        //    If Conn Is Nothing Then
+        //        Conn = OpenDatabase()
+        //    End If
+        //    If Conn.State = 0 Then
+        //        Conn.Open()
+        //    End If
+
+        //    'Check for Default Employee dt 19/08/09
+        //    Dim BgtType As String
+        //    Dim booBgtType As Boolean
+        //    BgtType = BusinessParam("REQDIVBUDGET", BusID)
+        //    booBgtType = IIf(BgtType = "", False, CBoolstr(BgtType))
+        //    If booBgtType Then
+        //        PinNo = GetDefEmp_DivBudget(BusID, PinNo)
+        //    End If
+
+        //    SQL = "SELECT tblaccemp_budget.Budget " & _
+        //          "FROM tblaccemp_employee INNER JOIN tblaccemp_budget ON (tblaccemp_employee.BusinessID = tblaccemp_budget.BusinessID) AND (tblaccemp_employee.CompanyID = tblaccemp_budget.CompanyID) AND (tblaccemp_employee.RoleID = tblaccemp_budget.RoleID) " & _
+        //          "WHERE tblaccemp_employee.EmployeeID='" & PinNo & "' AND tblaccemp_budget.BusinessID='" & BusID & "'"
+        //    rsBudget.Open(LCase(SQL), Conn)
+        //    hasBudget = Not rsBudget.EOF
+        //    rsBudget.Close()
+        //    rsBudget = Nothing
+        //End Function
+        #endregion
+        #endregion
+
+        #region commonmethods
+        #region ExecuteQuery
+        public int ExecuteQuery(string sSqry = "")
+        {
+            int result = 0;
+            MySqlConnection conn = new MySqlConnection(ConnectionString);
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand(sSqry, conn);
+                result = cmd.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return result;
+        }
+
+        public int ExecuteQuerywidTrans(string sSqry = "")
+        {
+            int result = 0;
+            MySqlConnection conn = new MySqlConnection(ConnectionString);
+            MySqlTransaction trans;
+            conn.Open();
+            trans = conn.BeginTransaction();
+            try
+            {
+
+                MySqlCommand cmd = new MySqlCommand(sSqry, conn);
+                result = cmd.ExecuteNonQuery();
+                trans.Commit();
+            }
+            catch (Exception e)
+            {
+                trans.Rollback();
+            }
+            finally
+            {
+
+                conn.Close();
+            }
+            return result;
+        }
+        #endregion
+
+
+
+
+        #endregion
 
     }
     public class ColorsOb

@@ -1,4 +1,6 @@
-﻿function getEntitlement1(style) {
+﻿var updateEdit = "";
+
+function getEntitlement1(style) {
     var colordrop = "ColorPop_" + "Drop_" + style;
     var colorValue = document.getElementsByName(colordrop);
     var selectedcolor = colorValue[0].defaultValue == "" & colorValue[0].value == "" ? "" : colorValue[0].defaultValue != "" ? colorValue[0].defaultValue : colorValue[0].value;
@@ -41,7 +43,6 @@
 }
 function getEntitlementDIMENSION(style, orgStyle) {
     if (style != "" && orgStyle != "") {
-
         $.ajax({
             url: "/Home/GetEntitlement",
             type: "POST",
@@ -59,7 +60,6 @@ function getEntitlementDIMENSION(style, orgStyle) {
             }
         });
     }
-
 }
 function getEntitlementonDemand(style) {
     var colordrop = "ColorDimview_" + "Drop_" + style;
@@ -211,18 +211,17 @@ function getSelectedSizeSwatch(style, size, orgStyle) {
     var styleId_Val = style.includes(",") ? GetStyleIdSwatch(style, orgStyle) : style;
 
     if (size != "" && styleId_Val != "") {
-
         $.ajax({
             type: "POST",
             url: '/Home/GetPrice/',
             data: { 'StyleID': styleId_Val, 'SizeId': size },
             success: function (response) {
-                ;
                 if (!response.includes("Login")) {
                     var priceId = "LbPrice" + style;
                     var price = document.getElementById(priceId);
                     price.innerHTML = "";
                     price.innerHTML = response;
+
                 }
                 else {
                     window.location = "/User/Login/";
@@ -288,6 +287,7 @@ function getSelectedSizeDemandSwatch(style, size, orgStyle) {
                     var price = document.getElementById(priceId);
                     price.innerHTML = "";
                     price.innerHTML = response;
+
                 }
                 else {
                     window.location = "/User/Login/";
@@ -569,8 +569,8 @@ function addTocartSwatch(s, e) {
             colorValue = colorSwatch[0].offsetParent.innerText;
         }
     }
-    size = sizeValue != undefined | sizeValue != "" ? sizeValue : "";
-    color = colorValue != undefined | colorValue != "" ? colorValue : "";
+    size = sizeValue != undefined && sizeValue != "" ? sizeValue : "";
+    color = colorValue != undefined && colorValue != "" ? colorValue : "";
 
     if (stylearr[1].includes(',')) {
         var name = 'Swatch_Style_FieldSet_' + stylearr[1];
@@ -591,104 +591,238 @@ function addTocartSwatch(s, e) {
     var Spin = document.getElementsByName("spinEdit_" + stylearr[1]);
     var descriptionDiv = document.getElementById("LbDescription" + desc);
     description = descriptionDiv.innerHTML;
-    price = document.getElementById("LbPrice" + stylearr[1]).innerHTML;
+    var priceId = document.getElementById("LbPrice" + stylearr[1]);
+    price = priceId != undefined && priceId != null ? priceId.innerHTML : "0";
     qty = Spin[0].value;
-    if (description != "" && price != "" && size != "" && color != "" && qty != "" && qty != "0") {
-        if (stylearr[2] != "") {
-            $.ajax({
-                url: "/Home/GetBtnStatus/",
-                type: "POST",
-                data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty, 'orgStyl': stylearr[3] },
-                success: function (response) {
-                    debugger;
-                    if (response == "enabled" | (reason != "" && reason != undefined)) {
-                        loadPopup.Show();
+    var clsName = "reqData" + stylearr[1];
+    var reqdatatxt = "reqdatatxt" + stylearr[1];
+    var reqData = document.getElementsByClassName(clsName);
+    if (reqData[0].style.display != "none") {
+        var reqtxt = document.getElementsByClassName(reqdatatxt);
+        if (description != "" && price != "" && size != "" && color != "" && qty != "" && qty != "0" && reqtxt[0].value != "") {
+            if (stylearr[2] != "") {
+                $.ajax({
+                    url: "/Home/GetBtnStatus/",
+                    type: "POST",
+                    data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty, 'orgStyl': stylearr[3] },
+                    success: function (response) {
+                        debugger;
+                        if (response == "enabled" | (reason != "" && reason != undefined)) {
+                            loadPopup.Show();
 
-                        $.ajax({
-                            url: "/Home/Addtocart/",
-                            type: "POST",
-                            data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'entQty': stylearr[2] },
-                            success: function (response) {
-                                if (response != "") {
-                                    $("#CartwidCount").html("");
-                                    $("#CartwidCount").html(response);
-                                    loadPopup.Hide();
-                                    myFunction("Added to cart..!");
-                                    //myFunction("Added to cart..!");  ;
-                                }
-                                else {
+                            $.ajax({
+                                url: "/Home/Addtocart/",
+                                type: "POST",
+                                data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'entQty': stylearr[2], 'reqData1': reqtxt[0].value },
+                                success: function (response) {
+                                    if (response != "") {
+                                        $("#CartwidCount").html("");
+                                        $("#CartwidCount").html(response);
+                                        loadPopup.Hide();
+                                        myFunction("Added to cart..!");
+                                        //myFunction("Added to cart..!");  ;
+                                    }
+                                    else {
+                                        loadPopup.Hide();
+                                        myFunction("Try again..!");
+                                        //alert("Try again!");
+                                    }
+                                },
+                                error: function () {
                                     loadPopup.Hide();
                                     myFunction("Try again..!");
                                     //alert("Try again!");
                                 }
-                            },
-                            error: function () {
-                                loadPopup.Hide();
-                                myFunction("Try again..!");
-                                //alert("Try again!");
-                            }
-                        })
-                    }
-                    else {
-                        // document.getElementById("ErrorMessage").style.display = 'block';
-                        loadPopup.Hide();
-                        getEntitlementSwatch(stylearr[1], stylearr[3], 1);
+                            })
+                        }
+                        else {
+                            // document.getElementById("ErrorMessage").style.display = 'block';
+                            loadPopup.Hide();
+                            getEntitlementSwatch(stylearr[1], stylearr[3], 1);
 
+                        }
+                    },
+                    error: function () {
+                        loadPopup.Hide();
+                        myFunction("Added to cart..!"); ("Try again!");
                     }
-                },
-                error: function () {
-                    loadPopup.Hide();
-                    myFunction("Added to cart..!"); ("Try again!");
-                }
-            });
-        }
-        else {
-            loadPopup.Show();
-            $.ajax({
-                url: "/Home/GetBtnStatus/",
-                type: "POST",
-                data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty, 'orgStyl': stylearr[3] },
-                success: function (response) {
-                    debugger;
-                    if (response == "enabled" | (reason != "" && reason != undefined)) {
-                        $.ajax({
-                            url: "/Home/Addtocart/",
-                            type: "POST",
-                            data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3] },
-                            success: function (response) {
-                                if (response != "") {
-                                    $("#CartwidCount").html("");
-                                    $("#CartwidCount").html(response);
-                                    myFunction("Added to cart..!");
-                                }
-                                else {
+                });
+            }
+            else {
+                loadPopup.Show();
+                $.ajax({
+                    url: "/Home/GetBtnStatus/",
+                    type: "POST",
+                    data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty, 'orgStyl': stylearr[3] },
+                    success: function (response) {
+                        debugger;
+                        if (response == "enabled" | (reason != "" && reason != undefined)) {
+                            $.ajax({
+                                url: "/Home/Addtocart/",
+                                type: "POST",
+                                data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3] },
+                                success: function (response) {
+                                    if (response != "") {
+                                        $("#CartwidCount").html("");
+                                        $("#CartwidCount").html(response);
+                                        myFunction("Added to cart..!");
+                                    }
+                                    else {
+                                        loadPopup.Hide();
+                                        alert("Try again!");
+                                    }
+                                },
+                                error: function () {
                                     loadPopup.Hide();
                                     alert("Try again!");
                                 }
-                            },
-                            error: function () {
-                                loadPopup.Hide();
-                                alert("Try again!");
-                            }
-                        })
-                    }
-                    else {
-                        // document.getElementById("ErrorMessage").style.display = 'block';
+                            })
+                        }
+                        else {
+                            // document.getElementById("ErrorMessage").style.display = 'block';
+                            loadPopup.Hide();
+                            getEntitlementSwatch(stylearr[1], stylearr[3], 1);
+
+                        }
+                    },
+                    error: function () {
                         loadPopup.Hide();
-                        getEntitlementSwatch(stylearr[1], stylearr[3], 1);
-
+                        alert("Try again!");
                     }
-                },
-                error: function () {
-                    loadPopup.Hide();
-                    alert("Try again!");
-                }
-            });
-        }
+                });
+            }
 
+        }
+        else {
+            if (price == "" || price == null || price == undefined) {
+                alert("Please choose a size");
+            }
+            else if (size == "" || size == null || size == undefined) {
+                alert("Please choose a Size");
+            }
+            else if (color == "" || color == null || color == undefined) {
+                alert("Please choose a Colour");
+            }
+            else if (qty == "" || qty == "0" || qty == null || qty == undefined) {
+                alert("Quantity should be greater than 0");
+            }
+            else if (reqtxt[0].value == "") {
+                alert("Please select Required leg length");
+            }
+        }
     }
     else {
-        alert("Please select all the fields in the cards!");
+        if (description != "" && price != "" && size != "" && color != "" && qty != "" && qty != "0") {
+            if (stylearr[2] != "") {
+                $.ajax({
+                    url: "/Home/GetBtnStatus/",
+                    type: "POST",
+                    data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty, 'orgStyl': stylearr[3] },
+                    success: function (response) {
+                        debugger;
+                        if (response == "enabled" | (reason != "" && reason != undefined)) {
+                            loadPopup.Show();
+
+                            $.ajax({
+                                url: "/Home/Addtocart/",
+                                type: "POST",
+                                data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'entQty': stylearr[2] },
+                                success: function (response) {
+                                    if (response != "") {
+                                        $("#CartwidCount").html("");
+                                        $("#CartwidCount").html(response);
+                                        loadPopup.Hide();
+                                        myFunction("Added to cart..!");
+                                        //myFunction("Added to cart..!");  ;
+                                    }
+                                    else {
+                                        loadPopup.Hide();
+                                        myFunction("Try again..!");
+                                        //alert("Try again!");
+                                    }
+                                },
+                                error: function () {
+                                    loadPopup.Hide();
+                                    myFunction("Try again..!");
+                                    //alert("Try again!");
+                                }
+                            })
+                        }
+                        else {
+                            // document.getElementById("ErrorMessage").style.display = 'block';
+                            loadPopup.Hide();
+                            getEntitlementSwatch(stylearr[1], stylearr[3], 1);
+
+                        }
+                    },
+                    error: function () {
+                        loadPopup.Hide();
+                        myFunction("Added to cart..!"); ("Try again!");
+                    }
+                });
+            }
+            else {
+                loadPopup.Show();
+                $.ajax({
+                    url: "/Home/GetBtnStatus/",
+                    type: "POST",
+                    data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty, 'orgStyl': stylearr[3] },
+                    success: function (response) {
+                        debugger;
+                        if (response == "enabled" | (reason != "" && reason != undefined)) {
+                            $.ajax({
+                                url: "/Home/Addtocart/",
+                                type: "POST",
+                                data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3] },
+                                success: function (response) {
+                                    if (response != "") {
+                                        $("#CartwidCount").html("");
+                                        $("#CartwidCount").html(response);
+                                        myFunction("Added to cart..!");
+                                    }
+                                    else {
+                                        loadPopup.Hide();
+                                        alert("Try again!");
+                                    }
+                                },
+                                error: function () {
+                                    loadPopup.Hide();
+                                    alert("Try again!");
+                                }
+                            })
+                        }
+                        else {
+                            // document.getElementById("ErrorMessage").style.display = 'block';
+                            loadPopup.Hide();
+                            getEntitlementSwatch(stylearr[1], stylearr[3], 1);
+
+                        }
+                    },
+                    error: function () {
+                        loadPopup.Hide();
+                        alert("Try again!");
+                    }
+                });
+            }
+
+        }
+        else {
+            if (price == "" || price == null || undefined) {
+                alert("Please choose a size");
+            }
+            else if (size == "" || size == null || size == undefined) {
+                alert("Please choose a Size");
+            }
+            else if (color == "" || color == null || color == undefined) {
+                alert("Please choose a Colour");
+            }
+            else if (qty == "" || qty == "0" || qty == null || qty == undefined) {
+                alert("Quantity should be greater than 0");
+            }
+            else if (reqtxt[0].value == "") {
+                alert("Please select Required leg length");
+            }
+        }
     }
 }
 
@@ -846,7 +980,21 @@ function addTocartDimSwatch(s, e) {
 
     }
     else {
-        alert("Please select all the fields in the cards!");
+        if (price == "" || price == null || undefined) {
+            alert("Please choose a size");
+        }
+        else if (size == "" || size == null || size == undefined) {
+            alert("Please choose a Size");
+        }
+        else if (color == "" || color == null || color == undefined) {
+            alert("Please choose a Colour");
+        }
+        else if (qty == "" || qty == "0" || qty == null || qty == undefined) {
+            alert("Quantity should be greater than 0");
+        }
+        else if (reqtxt[0].value == "") {
+            alert("Please select Required leg length");
+        }
     }
 }
 
@@ -917,102 +1065,233 @@ function addTocartDemandSwatch(s, e) {
     }
     var desc = descStyle == undefined ? stylearr[1] : descStyle[0];
     var Spin = document.getElementsByName("spinDemandEdit_" + stylearr[1]);
+    var priceId = document.getElementById("DimviewPrice" + stylearr[1]);
     description = document.getElementById("LbdemandDescription" + desc).innerHTML;
-    price = document.getElementById("DimviewPrice" + stylearr[1]).innerHTML;
+    price = priceId != undefined && priceId != null ? priceId.innerHTML : "0";
     qty = Spin[0].value;
-    if (description != "" && price != "" && size != undefined && price != undefined && color != undefined && size != "" && color != "" && qty != "" && qty != "0") {
-        if (stylearr[2] != "") {
-            $.ajax({
-                url: "/Home/GetBtnStatus/",
-                type: "POST",
-                data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty, 'orgStyl': stylearr[3] },
-                success: function (response) {
-                    debugger;
-                    if (response == "enabled" | (reason != "" && reason != undefined)) {
-                        loadPopup.Show();
+    var clsName = "reqDatadim" + stylearr[1];
+    var reqdatatxt = "reqdatatxtdim" + stylearr[1];
+    var reqData = document.getElementsByClassName(clsName);
+    if (reqData[0].style.display != "none") {
+        var reqtxt = document.getElementsByClassName(reqdatatxt);
+        if (description != "" && price != "" && size != undefined && price != undefined && color != undefined && size != "" && color != "" && qty != "" && qty != "0" && reqtxt[0].value != "") {
+            if (stylearr[2] != "") {
+                $.ajax({
+                    url: "/Home/GetBtnStatus/",
+                    type: "POST",
+                    data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty, 'orgStyl': stylearr[3] },
+                    success: function (response) {
+                        debugger;
+                        if (response == "enabled" | (reason != "" && reason != undefined)) {
+                            loadPopup.Show();
 
-                        $.ajax({
-                            url: "/Home/Addtocart/",
-                            type: "POST",
-                            data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3] },
-                            success: function (response) {
-                                if (response != "") {
-                                    $("#CartwidCount").html("");
-                                    $("#CartwidCount").html(response);
-                                    loadPopup.Hide();
-                                    myFunction("Added to cart..!");
-                                }
-                                else {
+                            $.ajax({
+                                url: "/Home/Addtocart/",
+                                type: "POST",
+                                data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reqData1': reqtxt[0].value },
+                                success: function (response) {
+                                    if (response != "") {
+                                        $("#CartwidCount").html("");
+                                        $("#CartwidCount").html(response);
+                                        loadPopup.Hide();
+                                        myFunction("Added to cart..!");
+                                    }
+                                    else {
+                                        loadPopup.Hide();
+                                        alert("Try again!");
+                                    }
+                                },
+                                error: function () {
                                     loadPopup.Hide();
                                     alert("Try again!");
                                 }
-                            },
-                            error: function () {
-                                loadPopup.Hide();
-                                alert("Try again!");
-                            }
-                        })
-                    }
-                    else {
-                        // document.getElementById("ErrorMessage").style.display = 'block';
-                        loadPopup.Hide();
-                        getEntitlementDemandSwatch(stylearr[1], stylearr[3], 1);
+                            })
+                        }
+                        else {
+                            // document.getElementById("ErrorMessage").style.display = 'block';
+                            loadPopup.Hide();
+                            getEntitlementDemandSwatch(stylearr[1], stylearr[3], 1);
 
+                        }
+                    },
+                    error: function () {
+                        loadPopup.Hide();
+                        alert("Try again!");
                     }
-                },
-                error: function () {
-                    loadPopup.Hide();
-                    alert("Try again!");
-                }
-            });
+                });
+            }
+            else {
+                loadPopup.Show();
+                $.ajax({
+                    url: "/Home/GetBtnStatus/",
+                    type: "POST",
+                    data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty, 'orgStyl': stylearr[3] },
+                    success: function (response) {
+                        debugger;
+                        if (response == "enabled" | (reason != "" && reason != undefined)) {
+                            $.ajax({
+                                url: "/Home/Addtocart/",
+                                type: "POST",
+                                data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3] },
+                                success: function (response) {
+                                    if (response != "") {
+                                        $("#CartwidCount").html("");
+                                        $("#CartwidCount").html(response);
+                                        myFunction("Added to cart..!");
+                                    }
+                                    else {
+                                        loadPopup.Hide();
+                                        alert("Try again!");
+                                    }
+                                },
+                                error: function () {
+                                    loadPopup.Hide();
+                                    alert("Try again!");
+                                }
+                            })
+                        }
+                        else {
+                            // document.getElementById("ErrorMessage").style.display = 'block';
+                            loadPopup.Hide();
+                            getEntitlementDemandSwatch(stylearr[1], stylearr[3], 1);
+
+                        }
+                    },
+                    error: function () {
+                        loadPopup.Hide();
+                        alert("Try again!");
+                    }
+                });
+            }
+
         }
         else {
-            loadPopup.Show();
-            $.ajax({
-                url: "/Home/GetBtnStatus/",
-                type: "POST",
-                data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty, 'orgStyl': stylearr[3] },
-                success: function (response) {
-                    debugger;
-                    if (response == "enabled" | (reason != "" && reason != undefined)) {
-                        $.ajax({
-                            url: "/Home/Addtocart/",
-                            type: "POST",
-                            data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3] },
-                            success: function (response) {
-                                if (response != "") {
-                                    $("#CartwidCount").html("");
-                                    $("#CartwidCount").html(response);
-                                    myFunction("Added to cart..!");
-                                }
-                                else {
+            if (price == "" || price == null || undefined) {
+                alert("Please choose a size");
+            }
+            else if (size == "" || size == null || size == undefined) {
+                alert("Please choose a Size");
+            }
+            else if (color == "" || color == null || color == undefined) {
+                alert("Please choose a Colour");
+            }
+            else if (qty == "" || qty == "0" || qty == null || qty == undefined) {
+                alert("Quantity should be greater than 0");
+            }
+            else if (reqtxt[0].value == "") {
+                alert("Please select Required leg length");
+            }
+        }
+    }
+    else {
+        if (description != "" && price != "" && size != undefined && price != undefined && color != undefined && size != "" && color != "" && qty != "" && qty != "0") {
+            if (stylearr[2] != "") {
+                $.ajax({
+                    url: "/Home/GetBtnStatus/",
+                    type: "POST",
+                    data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty, 'orgStyl': stylearr[3] },
+                    success: function (response) {
+                        debugger;
+                        if (response == "enabled" | (reason != "" && reason != undefined)) {
+                            loadPopup.Show();
+
+                            $.ajax({
+                                url: "/Home/Addtocart/",
+                                type: "POST",
+                                data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3] },
+                                success: function (response) {
+                                    if (response != "") {
+                                        $("#CartwidCount").html("");
+                                        $("#CartwidCount").html(response);
+                                        loadPopup.Hide();
+                                        myFunction("Added to cart..!");
+                                    }
+                                    else {
+                                        loadPopup.Hide();
+                                        alert("Try again!");
+                                    }
+                                },
+                                error: function () {
                                     loadPopup.Hide();
                                     alert("Try again!");
                                 }
-                            },
-                            error: function () {
-                                loadPopup.Hide();
-                                alert("Try again!");
-                            }
-                        })
-                    }
-                    else {
-                        // document.getElementById("ErrorMessage").style.display = 'block';
+                            })
+                        }
+                        else {
+                            // document.getElementById("ErrorMessage").style.display = 'block';
+                            loadPopup.Hide();
+                            getEntitlementDemandSwatch(stylearr[1], stylearr[3], 1);
+
+                        }
+                    },
+                    error: function () {
                         loadPopup.Hide();
-                        getEntitlementDemandSwatch(stylearr[1], stylearr[3], 1);
-
+                        alert("Try again!");
                     }
-                },
-                error: function () {
-                    loadPopup.Hide();
-                    alert("Try again!");
-                }
-            });
-        }
+                });
+            }
+            else {
+                loadPopup.Show();
+                $.ajax({
+                    url: "/Home/GetBtnStatus/",
+                    type: "POST",
+                    data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty, 'orgStyl': stylearr[3] },
+                    success: function (response) {
+                        debugger;
+                        if (response == "enabled" | (reason != "" && reason != undefined)) {
+                            $.ajax({
+                                url: "/Home/Addtocart/",
+                                type: "POST",
+                                data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3] },
+                                success: function (response) {
+                                    if (response != "") {
+                                        $("#CartwidCount").html("");
+                                        $("#CartwidCount").html(response);
+                                        myFunction("Added to cart..!");
+                                    }
+                                    else {
+                                        loadPopup.Hide();
+                                        alert("Try again!");
+                                    }
+                                },
+                                error: function () {
+                                    loadPopup.Hide();
+                                    alert("Try again!");
+                                }
+                            })
+                        }
+                        else {
+                            // document.getElementById("ErrorMessage").style.display = 'block';
+                            loadPopup.Hide();
+                            getEntitlementDemandSwatch(stylearr[1], stylearr[3], 1);
 
-    }
-    else {
-        alert("Please select all the fields in the cards!");
+                        }
+                    },
+                    error: function () {
+                        loadPopup.Hide();
+                        alert("Try again!");
+                    }
+                });
+            }
+
+        }
+        else {
+            if (price == "" || price == null || undefined) {
+                alert("Please choose a size");
+            }
+            else if (size == "" || size == null || size == undefined) {
+                alert("Please choose a Size");
+            }
+            else if (color == "" || color == null || color == undefined) {
+                alert("Please choose a Colour");
+            }
+            else if (qty == "" || qty == "0" || qty == null || qty == undefined) {
+                alert("Quantity should be greater than 0");
+            }
+            else if (reqtxt[0].value == "") {
+                alert("Please select Required leg length");
+            }
+        }
     }
 }
 
@@ -1075,7 +1354,29 @@ function GetDrpResultModelSwatch(stle, selStyle, orgStyle) {
                             var price = document.getElementById(priceId);
                             price.innerHTML = "";
                             price.innerHTML = response.Price == 0 ? resp.price == "" ? "" : resp.price : response.Price;
-
+                            $.ajax({
+                                type: "POST",
+                                url: "/Home/GetReqData/",
+                                data: { 'StyleID': selStyle },
+                                success: function (response) {
+                                    if (response != "") {
+                                        var clsName = "reqData" + stle;
+                                        var headClsName = "reqDataHeading" + stle;
+                                        var stylVal = document.getElementsByClassName(clsName);
+                                        var headVal = document.getElementsByClassName(headClsName);
+                                        headVal[0].innerHTML = response;
+                                        stylVal[0].style.display = 'block';
+                                    }
+                                    else {
+                                        var clsName = "reqData" + stle;
+                                        var headClsName = "reqDataHeading" + stle;
+                                        var stylVal = document.getElementsByClassName(clsName);
+                                        var headVal = document.getElementsByClassName(headClsName);
+                                        headVal[0].innerHTML = response;
+                                        stylVal[0].style.display = 'none';
+                                    }
+                                }
+                            });
                         } else {
                             description.innerHTML = response.Description;
                             colorFieldset[0].innerHTML = "";
@@ -1102,6 +1403,29 @@ function GetDrpResultModelSwatch(stle, selStyle, orgStyle) {
                             var price = document.getElementById(priceId);
                             price.innerHTML = "";
                             price.innerHTML = response.Price == 0 ? "" : response.Price;
+                            $.ajax({
+                                type: "POST",
+                                url: "/Home/GetReqData/",
+                                data: { 'StyleID': styleId_Val },
+                                success: function (response) {
+                                    if (response != "") {
+                                        var clsName = "reqData" + style;
+                                        var headClsName = "reqDataHeading" + style;
+                                        var stylVal = document.getElementsByClassName(clsName);
+                                        var headVal = document.getElementsByClassName(headClsName);
+                                        headVal[0].innerHTML = response;
+                                        stylVal[0].style.display = 'block';
+                                    }
+                                    else {
+                                        var clsName = "reqData" + style;
+                                        var headClsName = "reqDataHeading" + style;
+                                        var stylVal = document.getElementsByClassName(clsName);
+                                        var headVal = document.getElementsByClassName(headClsName);
+                                        headVal[0].innerHTML = response;
+                                        stylVal[0].style.display = 'none';
+                                    }
+                                }
+                            });
                         }
                     }
                 })
@@ -1173,6 +1497,29 @@ function GetDrpResultModelDemandSwatch(stle, selStyle, orgStyle) {
                             var price = document.getElementById(priceId);
                             price.innerHTML = "";
                             price.innerHTML = response.Price == 0 ? resp.price == "" ? "" : resp.price : response.Price;
+                            $.ajax({
+                                type: "POST",
+                                url: "/Home/GetReqData/",
+                                data: { 'StyleID': selStyle },
+                                success: function (response) {
+                                    if (response != "") {
+                                        var clsName = "reqDatadim" + stle;
+                                        var headClsName = "reqDataHeadingdim" + stle;
+                                        var stylVal = document.getElementsByClassName(clsName);
+                                        var headVal = document.getElementsByClassName(headClsName);
+                                        headVal[0].innerHTML = response;
+                                        stylVal[0].style.display = 'block';
+                                    }
+                                    else {
+                                        var clsName = "reqDatadim" + stle;
+                                        var headClsName = "reqDataHeadingdim" + stle;
+                                        var stylVal = document.getElementsByClassName(clsName);
+                                        var headVal = document.getElementsByClassName(headClsName);
+                                        headVal[0].innerHTML = response;
+                                        stylVal[0].style.display = 'none';
+                                    }
+                                }
+                            });
 
                         } else {
                             description.innerHTML = response.Description;
@@ -1200,6 +1547,29 @@ function GetDrpResultModelDemandSwatch(stle, selStyle, orgStyle) {
                             var price = document.getElementById(priceId);
                             price.innerHTML = "";
                             price.innerHTML = response.Price == 0 ? "" : response.Price;
+                            $.ajax({
+                                type: "POST",
+                                url: "/Home/GetReqData/",
+                                data: { 'StyleID': selStyle },
+                                success: function (response) {
+                                    if (response != "") {
+                                        var clsName = "reqDatadim" + stle;
+                                        var headClsName = "reqDataHeadingdim" + stle;
+                                        var stylVal = document.getElementsByClassName(clsName);
+                                        var headVal = document.getElementsByClassName(headClsName);
+                                        headVal[0].innerHTML = response;
+                                        stylVal[0].style.display = 'block';
+                                    }
+                                    else {
+                                        var clsName = "reqDatadim" + stle;
+                                        var headClsName = "reqDataHeadingdim" + stle;
+                                        var stylVal = document.getElementsByClassName(clsName);
+                                        var headVal = document.getElementsByClassName(headClsName);
+                                        headVal[0].innerHTML = response;
+                                        stylVal[0].style.display = 'none';
+                                    }
+                                }
+                            });
                         }
                     }
                 })
@@ -2337,12 +2707,14 @@ function minus(name) {
     // Get its current value
     var currentVal = curVale == null | curVale == undefined ? parseInt($('input[name=' + name + ']').val()) : curVale;
     // If it isn't undefined or its greater than 0
-    if (!isNaN(currentVal) && currentVal > 0) {
+    if (!isNaN(currentVal) && currentVal > 1) {
         // Decrement one
         document.getElementsByName(name)[0].value = currentVal - 1;
     } else {
         // Otherwise put a 0 there
-        document.getElementsByName(name)[0].value = 0;
+        if (currentVal != 1) {
+            document.getElementsByName(name)[0].value = 0;
+        }
     }
 }
 
@@ -2378,12 +2750,14 @@ jQuery(document).ready(function () {
         // Get its current value
         var currentVal = curVale == null | curVale == undefined ? parseInt($('input[name=' + fieldName + ']').val()) : curVale;
         // If it isn't undefined or its greater than 0
-        if (!isNaN(currentVal) && currentVal > 0) {
+        if (!isNaN(currentVal) && currentVal > 1) {
             // Decrement one
             document.getElementsByName(fieldName)[0].value = currentVal - 1;
         } else {
             // Otherwise put a 0 there
-            document.getElementsByName(fieldName)[0].value = 0;
+            if (currentVal != 1) {
+                document.getElementsByName(fieldName)[0].value = 0;
+            }
         }
     });
 
@@ -2580,12 +2954,12 @@ function FillAlldeliveryfields(s, e) {
     var address3 = ASPxClientControl.GetControlCollection().GetByName("Address3");
     var city = ASPxClientControl.GetControlCollection().GetByName("City");
     var postCode = ASPxClientControl.GetControlCollection().GetByName("PostCode");
-    var country = ASPxClientControl.GetControlCollection().GetByName("Country");
+
     var custRef = ASPxClientControl.GetControlCollection().GetByName("txtCustRef");
     var nomCode = ASPxClientControl.GetControlCollection().GetByName("txtNomCode");
     var descAddId = parseInt(addDescription.GetValue());
     var commentBox = ASPxClientControl.GetControlCollection().GetByName("txtCommentsExternal");
-    comment = commentBox.GetValue();
+    comment = commentBox == null ? "" : commentBox.GetValue();
     $.ajax({
         url: "/Basket/FillAllAddress/",
         type: "POST",
@@ -2596,7 +2970,7 @@ function FillAlldeliveryfields(s, e) {
             address3.SetValue(resp.BusAdd.Address3);
             city.SetValue(resp.BusAdd.City);
             postCode.SetValue(resp.BusAdd.PostCode);
-            country.SetValue(resp.BusAdd.Country);
+
             custRef.SetValue(resp.custRef);
             nomCode.SetValue(resp.nomCode);
         }
@@ -2610,7 +2984,7 @@ function FillAllFields(s, e) {
     var address3 = ASPxClientControl.GetControlCollection().GetByName("EmpAddress3");
     var city = ASPxClientControl.GetControlCollection().GetByName("EmpCity");
     var postCode = ASPxClientControl.GetControlCollection().GetByName("EmpPostCode");
-    var country = ASPxClientControl.GetControlCollection().GetByName("EmpCountry");
+
     var descAddId = parseInt(addDescription.GetValue());
     $.ajax({
         url: "/Employee/FillAllAddress/",
@@ -2622,24 +2996,96 @@ function FillAllFields(s, e) {
             address3.SetValue(resp[0].Address3);
             city.SetValue(resp[0].City);
             postCode.SetValue(resp[0].PostCode);
-            country.SetValue(resp[0].Country);
+
+        }
+    });
+}
+
+function FillCustRefandDeliveryFields(s, e) {
+    var addDescription = ASPxClientControl.GetControlCollection().GetByName("CmbAddress");
+    var address1 = ASPxClientControl.GetControlCollection().GetByName("Address1");
+    var address2 = ASPxClientControl.GetControlCollection().GetByName("Address2");
+    var address3 = ASPxClientControl.GetControlCollection().GetByName("Address3");
+    var city = ASPxClientControl.GetControlCollection().GetByName("City");
+    var postCode = ASPxClientControl.GetControlCollection().GetByName("PostCode");
+    var nomCode = ASPxClientControl.GetControlCollection().GetByName("txtNomCode");
+    var nomCode1 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode1");
+    var nomCode2 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode2");
+    var nomCode3 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode3");
+    var nomCode4 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode4");
+    var descAddId = parseInt(addDescription.GetValue());
+    var AddId = isNaN(descAddId) ? addDescription.GetValue() : descAddId;
+    var ref = ASPxClientControl.GetControlCollection().GetByName("txtCustRef");
+    var custRef = ref.GetValue(); var commentBox = ASPxClientControl.GetControlCollection().GetByName("txtCommentsExternal");
+    comment = commentBox != null ? commentBox.GetValue() : "";
+    nomCode = nomCode != null ? nomCode.GetValue() : "";
+    nomCode1 = nomCode1 != null ? nomCode1.GetValue() : "";
+    nomCode2 = nomCode2 != null ? nomCode2.GetValue() : "";
+    nomCode4 = nomCode4 != null ? nomCode4.GetValue() : "";
+    nomCode3 = nomCode3 != null ? nomCode3.GetValue() : "";
+
+    $.ajax({
+        url: "/Basket/FillAllAddresswidCustRef/",
+        type: "POST",
+        data: { 'descAddId': AddId, 'custRef': custRef, 'adddesc': AddId, 'comment': comment, 'nomCode': nomCode, 'nomCode1': nomCode1, 'nomCode2': nomCode2, 'nomCode3': nomCode3, 'nomCode4': nomCode4 },
+        success: function (resp) {
+            address1.SetValue(resp.BusAdd.Address1);
+            address2.SetValue(resp.BusAdd.Address2);
+            address3.SetValue(resp.BusAdd.Address3);
+            city.SetValue(resp.BusAdd.City);
+            postCode.SetValue(resp.BusAdd.PostCode);
+            commentBox.SetValue(resp.CommentExternal);
+            ref.SetValue(resp.custRef);
+            nomCode.SetValue(resp.nomCode);
+            nomCode1.SetValue(resp.nomCode);
+            nomCode2.SetValue(resp.nomCode);
+            nomCode3.SetValue(resp.nomCode);
+            nomCode4.SetValue(resp.nomCode);
         }
     });
 }
 
 function AcceptOrder(s, e) {
-    var address = ASPxClientControl.GetControlCollection().GetByName("CmbAddress");
-    var addressId = address.GetValue();
-    if (addressId != null && addressId != "") {
+    var addDescription = ASPxClientControl.GetControlCollection().GetByName("CmbAddress");
+    var addDesc = addDescription != null ? addDescription.GetValue() : "";
+    var ref = ASPxClientControl.GetControlCollection().GetByName("txtCustRef");
+    var custRef = ref.GetValue(); var commentBox = ASPxClientControl.GetControlCollection().GetByName("txtCommentsExternal");
+    comment = commentBox != null ? commentBox.GetValue() : "";
+
+    //$.ajax({
+    //    url: "Basket/GetCarriageStatus",
+    //    type: "POST",
+    //    success: function (result) {
+    //        if (result) {
+    if (addDesc != null && addDesc != "") {
         $.ajax({
             url: "/Basket/AcceptOrder/",
             type: "POST",
-            data: { 'addressId': addressId },
+            data: { 'addDesc': addDesc },
             success: function (resp) {
-
+                if (resp.type != "" && resp.type != null) {
+                    alert("Please fill  customer reference")
+                }
+                else {
+                    var message = "";
+                    for (var k = 0; k < resp.results.length; k++) {
+                        message = message + "Your uniform order has been successfully placed,order reference:" + resp.results[k].OrderNo + " (" + resp.results[k].EmployeeId + ")." + resp.results[k].OrderConfirmation + ". \n";
+                    }
+                    alert(message);
+                    window.location = "/Employee/Index/";
+                }
             }
         });
     }
+    else {
+        alert("Please fill address and customer reference");
+    }
+    //        }
+    //        else {
+    //            alert("Please select a carriage");
+    //        }
+    //    }
+    //});
 }
 
 function SettbxValue(s, e) {
@@ -2650,13 +3096,27 @@ function SettbxValue(s, e) {
 
 }
 
-function saveCustRef(s, e) {
+//function saveCustRef(s, e) {
+//    var addDescription = ASPxClientControl.GetControlCollection().GetByName("CmbAddress");
+//    var descAddId = parseInt(addDescription.GetValue());
+//    var AddId = isNaN(descAddId) ? addDescription.GetValue() : descAddId;
+//    var ref = ASPxClientControl.GetControlCollection().GetByName(s.name);
+//    var custRef = ref.GetValue(); var commentBox = ASPxClientControl.GetControlCollection().GetByName("txtCommentsExternal");
+//    comment = commentBox.GetValue();
+//    $.ajax({
+//        url: "/Basket/SaveRefnAddress/",
+//        type: "POST",
+//        data: { 'descAddId': AddId, 'custRef': custRef, 'adddesc': AddId, 'comment': comment }
+//    });
+//}
+
+function saveCmt(s, e) {
     var addDescription = ASPxClientControl.GetControlCollection().GetByName("CmbAddress");
     var descAddId = parseInt(addDescription.GetValue());
     var AddId = isNaN(descAddId) ? addDescription.GetValue() : descAddId;
     var ref = ASPxClientControl.GetControlCollection().GetByName(s.name);
     var custRef = ref.GetValue(); var commentBox = ASPxClientControl.GetControlCollection().GetByName("txtCommentsExternal");
-    comment = commentBox.GetValue();
+    comment = commentBox != null ? commentBox.GetValue() : "";
     $.ajax({
         url: "/Basket/SaveRefnAddress/",
         type: "POST",
@@ -2664,64 +3124,39 @@ function saveCustRef(s, e) {
     });
 }
 
-function FillCustRefandDeliveryFields(s, e) {
-    var addDescription = ASPxClientControl.GetControlCollection().GetByName(s.name);
-    var address1 = ASPxClientControl.GetControlCollection().GetByName("Address1");
-    var address2 = ASPxClientControl.GetControlCollection().GetByName("Address2");
-    var address3 = ASPxClientControl.GetControlCollection().GetByName("Address3");
-    var city = ASPxClientControl.GetControlCollection().GetByName("City");
-    var postCode = ASPxClientControl.GetControlCollection().GetByName("PostCode");
-    var country = ASPxClientControl.GetControlCollection().GetByName("Country");
-    var custRef = ASPxClientControl.GetControlCollection().GetByName("txtCustRef");
-    var nomCode = ASPxClientControl.GetControlCollection().GetByName("txtNomCode");
-    var nomCode1 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode1");
-    var nomCode2 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode2");
-    var nomCode3 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode3");
-    var nomCode4 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode4");
-    var descAddId = parseInt(addDescription.GetValue());
-    var commentBox = ASPxClientControl.GetControlCollection().GetByName("txtCommentsExternal");
-    comment = commentBox.GetValue();
-    $.ajax({
-        url: "/Basket/FillAllAddresswidCustRef/",
-        type: "POST",
-        data: { 'descAddId': descAddId, 'comment': comment },
-        success: function (resp) {
-            address1.SetValue(resp.BusAdd.Address1);
-            address2.SetValue(resp.BusAdd.Address2);
-            address3.SetValue(resp.BusAdd.Address3);
-            city.SetValue(resp.BusAdd.City);
-            postCode.SetValue(resp.BusAdd.PostCode);
-            country.SetValue(resp.BusAdd.Country);
-            commentBox.SetValue(resp.CommentExternal);
-            custRef.SetValue(resp.custRef);
-            nomCode.SetValue(resp.nomCode);
-            nomCode1.SetValue(resp.nomCode);
-            nomCode2.SetValue(resp.nomCode);
-            nomCode3.SetValue(resp.nomCode);
-            nomCode4.SetValue(resp.nomCode);
-        }
-    });
-}
-
-
 function GetNavigation(data) {
     var address = ASPxClientControl.GetControlCollection().GetByName("CmbAddress");
     var addressId = address.GetValue();
     var custref = ASPxClientControl.GetControlCollection().GetByName("txtCustRef");
     var custRefVal = custref.GetValue();
     var carrVal = ASPxClientControl.GetControlCollection().GetByName("CarriageCmbbox");
-    var carr = carrVal.GetValue();
+    var carr = carrVal == null ? "" : carrVal.GetValue();
     var commentBox = ASPxClientControl.GetControlCollection().GetByName("txtCommentsExternal");
-    comment = commentBox.GetValue();
+    var nomCode = ASPxClientControl.GetControlCollection().GetByName("txtNomCode");
+    var nomCode1 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode1");
+    var nomCode2 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode2");
+    var nomCode3 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode3");
+    var nomCode4 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode4");
+    comment = commentBox != null ? commentBox.GetValue() : "";
+    nomCode = nomCode != null ? nomCode.GetValue() : "";
+    nomCode1 = nomCode1 != null ? nomCode1.GetValue() : "";
+    nomCode2 = nomCode2 != null ? nomCode2.GetValue() : "";
+    nomCode4 = nomCode4 != null ? nomCode4.GetValue() : "";
+    nomCode3 = nomCode3 != null ? nomCode3.GetValue() : "";
     var custReflbl = "";
-    if (addressId != null && addressId != undefined && addressId != "" && custRefVal != null && custRefVal != undefined && custRefVal != "") {
+    if (addressId != null && addressId != undefined && addressId != "") {
         if (data != null && data != undefined) {
             $.ajax({
                 url: "/Basket/GetNavigationUrl/",
                 type: "POST",
-                data: { 'data': data, 'addId': addressId, 'cusrRef': custRefVal, 'carr': carr, 'comment': comment },
+                data: { 'data': data, 'addId': addressId, 'cusrRef': custRefVal, 'carr': carr, 'comment': comment, 'nomCode': nomCode, 'nomCode1': nomCode1, 'nomCode2': nomCode2, 'nomCode3': nomCode3, 'nomCode4': nomCode4 },
                 success: function (resp) {
-                    window.location = resp;
+                    if (resp != "") {
+                        window.location = resp;
+                    }
+                    else {
+                        alert("Please fill Address & Customer/PO reference");
+                    }
                 },
                 error: function (resp) {
                     alert("Please fill Address & Customer/PO reference");
@@ -2744,7 +3179,7 @@ function FillAllCurrentHeaderData(s, e) {
     var address3 = ASPxClientControl.GetControlCollection().GetByName("Address3");
     var city = ASPxClientControl.GetControlCollection().GetByName("City");
     var postCode = ASPxClientControl.GetControlCollection().GetByName("PostCode");
-    var country = ASPxClientControl.GetControlCollection().GetByName("Country");
+
     var custRef = ASPxClientControl.GetControlCollection().GetByName("txtCustRef");
     var nomCode = ASPxClientControl.GetControlCollection().GetByName("txtNomCode");
     var nomCode1 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode1");
@@ -2765,7 +3200,7 @@ function FillAllCurrentHeaderData(s, e) {
                 address3.SetValue(resp.DelAddress3);
                 city.SetValue(resp.DelCity);
                 postCode.SetValue(resp.DelPostCode);
-                country.SetValue(resp.DelCountry);
+
                 commentBox.SetValue(resp.CommentExternal);
                 custRef.SetValue(resp.CustRef);
                 nomCode.SetValue(resp.nomCode);
@@ -2777,6 +3212,7 @@ function FillAllCurrentHeaderData(s, e) {
         }
     });
 }
+
 function CartDetailEdit(s, e) {
     s.StartEditRow(e.visibleIndex);
     $.ajax({
@@ -2829,7 +3265,7 @@ function GetDetailsBasedonGrid(empId, busId) {
     var txtVAT = document.getElementById("vatspan");
     var txtVAT1 = ASPxClientControl.GetControlCollection().GetByName("txtVAT");
     var txtGrndTot = ASPxClientControl.GetControlCollection().GetByName("txtGrndTot");
-    var country = ASPxClientControl.GetControlCollection().GetByName("Country");
+
     var custRef = ASPxClientControl.GetControlCollection().GetByName("txtCustRef");
     var nomCode = ASPxClientControl.GetControlCollection().GetByName("txtNomCode");
     var nomCode1 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode1");
@@ -2838,7 +3274,7 @@ function GetDetailsBasedonGrid(empId, busId) {
     var nomCode4 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode4");
     var grid = ASPxClientControl.GetControlCollection().GetByName("CartView");
     var commentBox = ASPxClientControl.GetControlCollection().GetByName("txtCommentsExternal");
-    comment = commentBox.GetValue();
+    comment = commentBox != null ? commentBox.GetValue() : "";
     grid.PerformCallback({ empid: empId });
     $.ajax({
         url: "/Basket/CartDetailEdit/",
@@ -2858,20 +3294,15 @@ function GetDetailsBasedonGrid(empId, busId) {
             txtVAT1.SetValue(resp.totalVat);
             txtGrndTot.SetValue(resp.GrossTotal);
             commentBox.SetValue(resp.CommentExternal);
-            country.SetValue(resp.BusAdd.Country);
             custRef.SetValue(resp.custRef);
             nomCode.SetValue(resp.nomCode);
-            nomCode1.SetValue(resp.nomCode);
-            nomCode2.SetValue(resp.nomCode);
-            nomCode3.SetValue(resp.nomCode);
-            nomCode4.SetValue(resp.nomCode);
+            nomCode1.SetValue(resp.nomCode1);
+            nomCode2.SetValue(resp.nomCode2);
+            nomCode3.SetValue(resp.nomCode3);
+            nomCode4.SetValue(resp.nomCode4);
 
         }
     });
-}
-
-function EditEmp(s, e) {
-    s.StartEditRow(e.visibleIndex);
 }
 
 function RemoveSelecetedEmp(empId, busId) {
@@ -2903,16 +3334,71 @@ function NextEmployee() {
     var custref = ASPxClientControl.GetControlCollection().GetByName("txtCustRef");
     var custRefVal = custref.GetValue();
     var carrVal = ASPxClientControl.GetControlCollection().GetByName("CarriageCmbbox");
-    var carr = carrVal.GetValue();
+    var carr = carrVal == null ? "" : carrVal.GetValue();
     var custReflbl = "";
     var commentBox = ASPxClientControl.GetControlCollection().GetByName("txtCommentsExternal");
-    comment = commentBox.GetValue();
-    if (addressId != null && addressId != undefined && addressId != "" && custRefVal != null && custRefVal != undefined && custRefVal != "") {
+    comment = commentBox != null ? commentBox.GetValue() : "";
+    var nomCode = ASPxClientControl.GetControlCollection().GetByName("txtNomCode");
+    var nomCode1 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode1");
+    var nomCode2 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode2");
+    var nomCode3 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode3");
+    var nomCode4 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode4");
+    nomCode = nomCode != null ? nomCode.GetValue() : "";
+    nomCode1 = nomCode1 != null ? nomCode1.GetValue() : "";
+    nomCode2 = nomCode2 != null ? nomCode2.GetValue() : "";
+    nomCode4 = nomCode4 != null ? nomCode4.GetValue() : "";
+    nomCode3 = nomCode3 != null ? nomCode3.GetValue() : "";
+    if (addressId != null && addressId != undefined && addressId != "") {
 
         $.ajax({
             url: "/Basket/GetNavigationUrl/",
             type: "POST",
-            data: { 'data': '>', 'addId': addressId, 'cusrRef': custRefVal, 'carr': carr, 'comment': comment },
+            data: { 'data': '>', 'addId': addressId, 'cusrRef': custRefVal, 'carr': carr, 'comment': comment, 'nomCode': nomCode, 'nomCode1': nomCode1, 'nomCode2': nomCode2, 'nomCode3': nomCode3, 'nomCode4': nomCode4 },
+            success: function (resp) {
+                if (resp != "") {
+                    window.location = resp;
+                }
+                else {
+                    alert("Please fill Address & Customer/PO reference");
+                }
+            },
+            error: function (resp) {
+                alert("Please fill Address & Customer/PO reference");
+            }
+        });
+    }
+    else {
+        alert("Please fill Address & Customer/PO reference");
+    }
+
+}
+
+function ContinueShop() {
+    var address = ASPxClientControl.GetControlCollection().GetByName("CmbAddress");
+    var addressId = address.GetValue();
+    var custref = ASPxClientControl.GetControlCollection().GetByName("txtCustRef");
+    var custRefVal = custref.GetValue();
+    var carrVal = ASPxClientControl.GetControlCollection().GetByName("CarriageCmbbox");
+    var carr = carrVal == null ? "" : carrVal.GetValue();
+    var custReflbl = "";
+    var commentBox = ASPxClientControl.GetControlCollection().GetByName("txtCommentsExternal");
+    var nomCode = ASPxClientControl.GetControlCollection().GetByName("txtNomCode");
+    var nomCode1 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode1");
+    var nomCode2 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode2");
+    var nomCode3 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode3");
+    var nomCode4 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode4");
+    nomCode = nomCode != null ? nomCode.GetValue() : "";
+    nomCode1 = nomCode1 != null ? nomCode1.GetValue() : "";
+    nomCode2 = nomCode2 != null ? nomCode2.GetValue() : "";
+    nomCode4 = nomCode4 != null ? nomCode4.GetValue() : "";
+    nomCode3 = nomCode3 != null ? nomCode3.GetValue() : "";
+    comment = commentBox != null ? commentBox.GetValue() : "";
+    if (addressId != null && addressId != undefined && addressId != "") {
+
+        $.ajax({
+            url: "/Basket/GetNavigationUrl/",
+            type: "POST",
+            data: { 'data': '<', 'addId': addressId, 'cusrRef': custRefVal, 'carr': carr, 'comment': comment, 'nomCode': nomCode, 'nomCode1': nomCode1, 'nomCode2': nomCode2, 'nomCode3': nomCode3, 'nomCode4': nomCode4 },
             success: function (resp) {
                 if (resp != "") {
                     window.location = resp;
@@ -2938,20 +3424,34 @@ function UpdateCurrentEmp() {
     var custref = ASPxClientControl.GetControlCollection().GetByName("txtCustRef");
     var custRefVal = custref.GetValue();
     var carrVal = ASPxClientControl.GetControlCollection().GetByName("CarriageCmbbox");
-    var carr = carrVal.GetValue();
+    var carr = carrVal == null ? "" : carrVal.GetValue();
     var custReflbl = "";
     var commentBox = ASPxClientControl.GetControlCollection().GetByName("txtCommentsExternal");
-    comment = commentBox.GetValue();
-    if (addressId != null && addressId != undefined && addressId != "" && custRefVal != null && custRefVal != undefined && custRefVal != "") {
+    comment = commentBox != null ? commentBox.GetValue() : "";
+    var nomCode = ASPxClientControl.GetControlCollection().GetByName("txtNomCode");
+    var nomCode1 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode1");
+    var nomCode2 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode2");
+    var nomCode3 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode3");
+    var nomCode4 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode4");
+    nomCode = nomCode != null ? nomCode.GetValue() : "";
+    nomCode1 = nomCode1 != null ? nomCode1.GetValue() : "";
+    nomCode2 = nomCode2 != null ? nomCode2.GetValue() : "";
+    nomCode4 = nomCode4 != null ? nomCode4.GetValue() : "";
+    nomCode3 = nomCode3 != null ? nomCode3.GetValue() : "";
+    comment = commentBox != null ? commentBox.GetValue() : "";
+    if (addressId != null && addressId != undefined && addressId != "") {
 
         $.ajax({
             url: "/Basket/GetNavigationUrl/",
             type: "POST",
-            data: { 'data': '>', 'addId': addressId, 'cusrRef': custRefVal, 'carr': carr, 'comment': comment },
+            data: { 'data': '>', 'addId': addressId, 'cusrRef': custRefVal, 'carr': carr, 'comment': comment, 'nomCode': nomCode, 'nomCode1': nomCode1, 'nomCode2': nomCode2, 'nomCode3': nomCode3, 'nomCode4': nomCode4 },
             success: function (resp) {
                 if (resp != "") {
                     alert("Successfully updated");
                     MVCxClientUtils.FinalizeCallback();
+                }
+                else {
+                    alert("Please fill Address & Customer/PO reference");
                 }
             },
             error: function (resp) {
@@ -2966,3 +3466,45 @@ function UpdateCurrentEmp() {
     }
 
 }
+
+function OnEndCallback(s, e) {
+    var txtTotGoods = ASPxClientControl.GetControlCollection().GetByName("txtTotGoods");
+    var txtCarrierCharges = ASPxClientControl.GetControlCollection().GetByName("txtCarrierCharges");
+    var txtOrdTotal = ASPxClientControl.GetControlCollection().GetByName("txtOrdTotal");
+    var txtVAT = document.getElementById("vatspan");
+    var txtVAT1 = ASPxClientControl.GetControlCollection().GetByName("txtVAT");
+    var txtGrndTot = ASPxClientControl.GetControlCollection().GetByName("txtGrndTot");
+    if (updateEdit != "" && updateEdit != undefined && updateEdit != null) {
+        $.ajax({
+            url: "/Basket/GetPrice/",
+            type: "GET",
+            success: function (resp) {
+                txtTotGoods.SetValue(resp.ordeTotal);
+                txtCarrierCharges.SetValue(resp.carriage);
+                txtOrdTotal.SetValue(resp.Total);
+                txtVAT.innerHTML = resp.VatPercent;
+                txtVAT1.SetValue(resp.totalVat);
+                txtGrndTot.SetValue(resp.GrossTotal);
+            },
+            error: function () {
+
+            }
+        });
+        updateEdit = "";
+    }
+}
+
+function OnBeginCallback(s, e) {
+    if (e.command == "UPDATEEDIT") {
+        updateEdit = "UPDATEEDIT";
+    }
+}
+//function edit(s,e) {
+//    var grid = ASPxClientControl.GetControlCollection().GetByName(s.name);
+//    var ss = grid.GetFocusedRowIndex();
+//    var s = grid.GetSelectedFieldValues('VAT', OnGetRowValues);
+//}
+
+//function OnGetRowValues(Value) {
+//    alert(Value);
+//}
