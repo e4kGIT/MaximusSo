@@ -1,0 +1,45 @@
+﻿@model IEnumerable<Maximus.Data.models.UcodenDescModal>
+<br />
+<br /><br />
+@{<div class="row">
+        @foreach (var item in Model)
+        {
+            <div class="col-md-2">
+                <br />
+                @if (((List<string>)Session["Templates"]).Count > 0)
+                {
+                    <div class="MyThumbnail ucodeCard" id="@item.UcodeId" onclick="SetValue111('@item.UcodeId','Template')">
+                        <center>
+                            <br />
+                            <h4>@item.UcodeId</h4>
+                            <hr />
+                            <div>
+                                <img src="~/StyleImages/notfound.png" height="200" />
+                            </div><br />
+                            <span>@item.UcodeDescription</span>
+                        </center>
+                    </div>
+                    <br />
+                }
+                else
+                {
+                    <div class="MyThumbnail ucodeCard" id="@item.UcodeId" onclick="SetValue111('@item.UcodeId','Ucode')">
+
+                        <center>
+                            <br />
+                            <h4>@item.UcodeId</h4>
+                            <hr /><div>
+                                <img src="~/StyleImages/notfound.png" height="200" />
+                            </div><br />
+                            <span>@item.UcodeDescription</span>
+                        </center>
+                    </div>
+                    <br />
+                }
+            </div>
+
+        }
+    </div>
+}
+
+

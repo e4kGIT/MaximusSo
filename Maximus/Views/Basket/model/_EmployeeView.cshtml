@@ -1,21 +1,21 @@
-﻿@model IEnumerable<Maximus.Models.SalesOrderHeaderViewModel>
+﻿@model IEnumerable<Maximus.Data.Models.SalesOrderHeaderViewModel>
 
 
 <div class="vertical-menu" style="background:white">
- @foreach (var item in Model)
- {   <div class="row">
+    @foreach (var item in Model)
+    {   <div class="row">
         @if (item.EmployeeID.Trim() != Session["SelectedEmp"].ToString())
         {
-            <div class="col-lg-8" id="@item.EmployeeID" style="cursor:pointer"><span onclick="GetDetailsBasedonGrid('@item.EmployeeID','@Session["BuisnessId"].ToString()')">@item.EmployeeName (@item.EmployeeID) </span>&nbsp;&nbsp;</div>
+            <div class="col-md-8 col-lg-8 col-sm-12 col-xs-12" id="@item.EmployeeID" style="cursor:pointer"><span onclick="GetDetailsBasedonGrid('@item.EmployeeID','@Session["BuisnessId"].ToString()')">@item.EmployeeName (@item.EmployeeID) </span>&nbsp;&nbsp;</div>
             <div class="col-lg-2"><span id="delete+@item.EmployeeID"></span></div>
             <div class="col-lg-2" id="col+@item.EmployeeID"></div>
         }
         else
         {
-            <div class="col-lg-8 ActiveRes" id="@item.EmployeeID" style="cursor:pointer;color:#009885"><span onclick="GetDetailsBasedonGrid('@item.EmployeeID','@Session["BuisnessId"].ToString()')">@item.EmployeeName (@item.EmployeeID) </span>&nbsp;&nbsp;</div>
+            <div class="col-md-8 col-lg-8 col-sm-12 col-xs-12 ActiveRes" id="@item.EmployeeID" style="cursor:pointer;color:#009885"><span onclick="GetDetailsBasedonGrid('@item.EmployeeID','@Session["BuisnessId"].ToString()')">@item.EmployeeName (@item.EmployeeID) </span>&nbsp;&nbsp;</div>
             <div class="col-lg-2"><span id="delete+@item.EmployeeID"><span style="color:red;" title="Click to remove this employee" onclick="RemoveSelecetedEmp('@item.EmployeeID','@Session["BuisnessId"].ToString()')" class="glyphicon glyphicon-remove"></span></span></div>
             <div class="col-lg-2" id="col+@item.EmployeeID"><span class="glyphicon glyphicon-chevron-right" style="color:#009885"></span></div>
         }
-    </div>   
-  }
+    </div>
+    }
 </div>

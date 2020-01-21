@@ -1,5 +1,6 @@
 @{
-    var grid = Html.DevExpress().GridView(settings => {
+    var grid = Html.DevExpress().GridView(settings =>
+    {
         settings.Name = "GridView";
         settings.CallbackRouteValues = new { Controller = "Basket", Action = "GridViewPartial" };
 
@@ -10,7 +11,7 @@
         settings.SettingsBehavior.ConfirmDelete = true;
 
         settings.CommandColumn.Visible = false;
-       
+
 
         settings.KeyFieldName = "LineNo";
 
@@ -71,7 +72,8 @@
         settings.Columns.Add("SizeID");
         settings.Columns.Add("OrdQty");
     });
-    if (ViewData["EditError"] != null){
+    if (ViewData["EditError"] != null)
+    {
         grid.SetEditErrorText((string)ViewData["EditError"]);
     }
 }

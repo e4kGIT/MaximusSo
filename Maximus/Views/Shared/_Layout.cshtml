@@ -6,7 +6,7 @@
     <title>@ViewBag.Title - My ASP.NET Application</title>
     <link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
     <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
-
+    <link href="~/Content/css/CustomCss.css" rel="stylesheet" />
     <link href="~/Content/css/Media.css" rel="stylesheet" />
     <link href="~/Content/bootstrap.css" rel="stylesheet" />
     @*<link href="~/Content/jquery.jgrowl.css" rel="stylesheet" /*@>
@@ -51,10 +51,10 @@
             font: 16px Arial;
         }
 
-        /*.dxeCaption_Material
-        {
-            color:white;
-        }*/
+        .hideElement {
+            visibility: hidden;
+        }
+
         .changethisone span {
             background-color: #FFF;
         }
@@ -73,20 +73,46 @@
             padding-right: 17px;
         }
 
-        /*the container must be positioned relative:*/
         .autocomplete {
             position: relative;
             display: inline-block;
         }
-
         /*input {
             border: 1px solid transparent;
             background-color: #f1f1f1;
             padding: 10px;
             font-size: 16px;
         }*/
-        .deliveryTbx{
-            width:250px;
+        .deliveryTbx {
+            width: 250px;
+        }
+
+        .MyThumbnail {
+            height: 370px;
+            background-color: white;
+            color: black;
+            border: 2px solid #009885;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+            .MyThumbnail:hover {
+                background-color: #009885;
+                color: white;
+                border-color: black;
+                cursor:pointer;
+            }
+             .MyThumbnail1 {
+                  height: 370px;
+                  border: 2px solid black;
+                color: white;
+                padding: 10px;
+                border-radius: 5px;
+                background-color: #009885;
+                cursor:pointer;
+            }
+        .container {
+            padding: 2px 16px;
         }
 
         input[type=text] {
@@ -130,9 +156,6 @@
             color: #ffffff;
         }
 
-        .styler {
-            margin: -7px;
-        }
 
         .center {
             width: 150px;
@@ -405,8 +428,9 @@
             z-index: 2;
             cursor: pointer;
         }
-        .dxlbd{
-               z-index: 100000;
+
+        .dxlbd {
+            z-index: 100000;
         }
     </style>
 
@@ -1822,12 +1846,12 @@
         @if (User.Identity.IsAuthenticated)
         {
 
-            <div class="col-lg-4"></div>
-            <div class="col-lg-4">
+            // <div class="col-lg-"></div>
+            <div class="col-lg-8">
                 <center>
                     <div class="navbar-collapse collapse pull-right">
                         <ul class="nav navbar-nav">
-                            
+
                             <li style="color:white" class="navbar-light">
                                 <a class="navbar-light"><b><span class="glyphicon glyphicon-user" title="User"></span></b> @Session["UserName"].ToString().Trim()</a>
                                 @*   @Html.ActionLink("Settings", "Index", "Settings", new { area = "" }, new { @class = "navbar-light" })*@
@@ -1852,13 +1876,13 @@
                         </ul>
                         <br />
                         <div class="col-md-2 col-sm-12 col-lg-2 col-xs-12"></div><div class="col-md-2 col-sm-12 col-lg-2 col-xs-12"></div><div class="col-md-2 col-sm-12 col-lg-2 col-xs-12"></div>
-                            <div class="col-md-2 col-sm-12 col-lg-2 col-xs-12">
-                                <div id="CartwidCount">
-                                    <button class="btn" style="background-color:#009885;color:white" onclick="GetCart()"><b>View Basket &nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-shopping-cart" style="color:white;font-size:25px"></span><sup class="badge" id="lblCartCount">@Convert.ToInt32(Session["qty"])</sup></b></button>
-                                </div>
-
+                        <div class="col-md-2 col-sm-12 col-lg-2 col-xs-12">
+                            <div id="CartwidCount">
+                                <button class="btn" style="background-color:#009885;color:white" onclick="GetCart()"><b>View Basket &nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-shopping-cart" style="color:white;font-size:25px"></span><sup class="badge" id="lblCartCount">@Convert.ToInt32(Session["qty"])</sup></b></button>
                             </div>
+
                         </div>
+                    </div>
                     <br />
                     <br />
                     <div class="row">
@@ -1868,21 +1892,21 @@
                     </div>
                 </center>
             </div>
-                                }
-                                @*  @Html.ActionLink("Sales order processing", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })*@
-                            </div>
+        }
+        @*  @Html.ActionLink("Sales order processing", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })*@
+    </div>
 
-                            @*</div>
-                                </div>*@
+    @*</div>
+        </div>*@
 
-                            <div class="container-fluid body-content">
-                                <br /><br />
-                                <div class="col-md-1" style="padding:0px"></div>
-                                <div class="col-md-11" style="padding:0px">
-                                    <br /> <br /> 
-                                    @RenderBody()
-                                </div>
-                            </div>
-                            <div id="snackbar"> </div>
-                        </body>
-                    </html>
+    <div class="container-fluid body-content">
+        <br /><br />
+        <div class="col-md-1" style="padding:0px"></div>
+        <div class="col-md-11" style="padding:0px">
+            <br /> <br />
+            @RenderBody()
+        </div>
+    </div>
+    <div id="snackbar"> </div>
+</body>
+</html>

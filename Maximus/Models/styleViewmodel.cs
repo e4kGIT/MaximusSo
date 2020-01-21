@@ -25,6 +25,8 @@ namespace Maximus.Models
         public string OriginalStyleid { get; set; }
         public string Freetext { get; set; }
         public string Entitlement { get; set; }
+        public string Reqdata { get; set; }
     }
     #endregion
 }
+    

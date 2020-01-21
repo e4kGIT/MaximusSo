@@ -1,4 +1,4 @@
-@model IEnumerable<Maximus.Models.SalesOrderLineViewModel>
+@model IEnumerable<Maximus.Data.Models.SalesOrderLineViewModel>
 @{
     var grid = Html.DevExpress().GridView(settings =>
     {
@@ -236,22 +236,61 @@
         {
             x.SetDataItemTemplateContent(c =>
             {
-                string data = Convert.ToString((DataBinder.Eval(c.DataItem, "RequireData")));
+                string data = Convert.ToString((DataBinder.Eval(c.DataItem, "FreeText1")));
                 ViewContext.Writer.Write(data);
             });
-            x.FieldName = "RequireData"; x.Caption = "Require Data"; x.ReadOnly = true; x.Visible = true; x.EditFormSettings.Visible = DefaultBoolean.False; x.SetEditItemTemplateContent(c =>
+            x.FieldName = "FreeText1"; x.Caption = "Require Data"; x.ReadOnly = false; x.Visible = true; x.EditFormSettings.Visible = DefaultBoolean.True;
+            x.SetEditItemTemplateContent(c =>
             {
                 GridViewEditItemTemplateContainer templateContainer = c as GridViewEditItemTemplateContainer;
-                string data = Convert.ToString((DataBinder.Eval(c.DataItem, "RequireData")));
-                Html.DevExpress().Label(lblsettings =>
+                string value = (DataBinder.Eval(c.DataItem, "FreeText1")).ToString();
+                if (value == "")
                 {
-                    lblsettings.Name = "RequireData";
-                    //lblsettings.ControlStyle.CssClass = "align-middle";
-                    //lblsettings.ClientVisible = visible;
-                }).Bind(data).Render();
-
+                     
+                    Html.DevExpress().Label(lblsettings =>
+                    {
+                        lblsettings.Name = "FreeText1";
+                        lblsettings.Text = "-";
+                        //lblsettings.ControlStyle.CssClass = "align-middle";
+                        //lblsettings.ClientVisible = visible;
+                    }).Bind("").Render();
+                }
+                else
+                {
+                    Html.DevExpress().TextBox(lblsettings =>
+                    {
+                        lblsettings.Name = "FreeText1";
+                        //lblsettings.ControlStyle.CssClass = "align-middle";
+                        //lblsettings.ClientVisible = visible;
+                    }).Bind(templateContainer.Text).Render();
+                }
             });
         });
+
+        if (Session["OVERRIDE_ENT_WITH_REASON"].ToString().ToLower() == "show")
+        {
+
+            settings.Columns.Add(x =>
+            {
+                x.SetDataItemTemplateContent(c =>
+                {
+                    string data = Convert.ToString((DataBinder.Eval(c.DataItem, "SOPDetail4")));
+                    ViewContext.Writer.Write(data);
+                });
+                x.FieldName = "SOPDetail4"; x.Caption = "Exceed reason"; x.ReadOnly = true; x.Visible = true; x.EditFormSettings.Visible = DefaultBoolean.False; x.SetEditItemTemplateContent(c =>
+                {
+                    GridViewEditItemTemplateContainer templateContainer = c as GridViewEditItemTemplateContainer;
+                    string data = Convert.ToString((DataBinder.Eval(c.DataItem, "SOPDetail4")));
+                    Html.DevExpress().Label(lblsettings =>
+                    {
+                        lblsettings.Name = "SOPDetail4";
+                        //lblsettings.ControlStyle.CssClass = "align-middle";
+                        //lblsettings.ClientVisible = visible;
+                    }).Bind(data).Render();
+
+                });
+            });
+        }
 
         //settings.Columns.Add(x =>
         //{
@@ -286,7 +325,6 @@
                 {
                     string data = Convert.ToString((DataBinder.Eval(c.DataItem, "Price")));
                     data = data.ToString();
-
                     ViewContext.Writer.Write(data);
                 }
                 else
@@ -305,9 +343,20 @@
                     Html.DevExpress().Label(lblsettings =>
                     {
                         lblsettings.Name = "Price";
-                        //lblsettings.ControlStyle.CssClass = "align-middle";
-                        //lblsettings.ClientVisible = visible;
                     }).Bind(templateContainer.Text).Render();
+                });
+                x.ReadOnly = true;
+            }
+            else if(Session["Price"].ToString().ToLower() == "hide")
+            {
+                x.SetEditItemTemplateContent(c =>
+                {
+                    GridViewEditItemTemplateContainer templateContainer = c as GridViewEditItemTemplateContainer;
+                    Html.DevExpress().Label(lblsettings =>
+                    {
+                        lblsettings.Name = "Price";
+                        lblsettings.Text = "N/A";
+                    }).Bind("N/A").Render();
                 });
                 x.ReadOnly = true;
             }
@@ -328,8 +377,6 @@
                     Html.DevExpress().Label(lblsettings =>
                     {
                         lblsettings.Name = "OrdQty";
-                        //lblsettings.ControlStyle.CssClass = "align-middle";
-                        //lblsettings.ClientVisible = visible;
                     }).Bind(templateContainer.Text).Render();
                 }
                 else
@@ -337,8 +384,6 @@
                     Html.DevExpress().TextBox(lblsettings =>
                     {
                         lblsettings.Name = "OrdQty";
-                        //lblsettings.ControlStyle.CssClass = "align-middle";
-                        //lblsettings.ClientVisible = visible;
                     }).Bind(templateContainer.Text).Render();
                 }
             });
@@ -355,34 +400,9 @@
                 Html.DevExpress().Label(lblsettings =>
                 {
                     lblsettings.Name = "VAT";
-                    //lblsettings.ControlStyle.CssClass = "align-middle";
-                    //lblsettings.ClientVisible = visible;
                 }).Bind(templateContainer.Text).Render();
 
             });
-            //x.SetDataItemTemplateContent(c =>
-            //{
-            //    double pric = Convert.ToDouble((DataBinder.Eval(c.DataItem, "Price")));
-            //    double vatPer = Convert.ToDouble((DataBinder.Eval(c.DataItem, "VatPercent")));
-            //    double tot = Convert.ToDouble((pric * vatPer) / 100);
-            //    int totQty = Convert.ToInt32(DataBinder.Eval(c.DataItem, "OrdQty"));
-            //    tot = totQty * tot;
-            //    ViewContext.Writer.Write(tot);
-            //});
-            //x.SetEditItemTemplateContent(c =>
-            //{
-            //    GridViewEditItemTemplateContainer templateContainer = c as GridViewEditItemTemplateContainer;
-            //    double pric = Convert.ToDouble((DataBinder.Eval(c.DataItem, "Price")));
-            //    double vatPer = Convert.ToDouble((DataBinder.Eval(c.DataItem, "VatPercent")));
-            //    double tot = Convert.ToDouble((pric * vatPer) / 100);
-            //    int totQty = Convert.ToInt32(DataBinder.Eval(c.DataItem, "OrdQty"));
-            //    tot = totQty * tot;
-            //    Html.DevExpress().Label(lblsettings =>
-            //    {
-            //        lblsettings.Name = "VAT";
-            //    }).Bind(tot).Render();
-
-            //});
         });
 
 

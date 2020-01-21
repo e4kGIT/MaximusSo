@@ -1,4 +1,10 @@
 ﻿@{
+    Maximus.Data.Interface.Concrete.IUnitOfWork _unitOfWork = new Maximus.Data.InterFace.UnitOfWork();
+    Maximus.Controllers.HomeController home = new Maximus.Controllers.HomeController(_unitOfWork);
+    Maximus.Data.Models.DataProcessing hc = new Maximus.Data.Models.DataProcessing(_unitOfWork);
+    Maximus.Services.Interface.IDataConnection _dataConnection = new Maximus.Services.DataConnectionService(_unitOfWork);
+}
+@{
     var cardView = Html.DevExpress().CardView(settings =>
     {
         settings.Name = "CardViewByStyle";
@@ -25,7 +31,7 @@
         settings.Columns.Add("Quantity");
         settings.Columns.Add("BasketButton");
         var selUcode = Session["SelectedUcode"].ToString();
-        Maximus.Models.e4kmaximusdbEntities entity = new Maximus.Models.e4kmaximusdbEntities();
+        //Maximus.Data.Modelse4kmaximusdbEntities entity = new Maximus.Data.Modelse4kmaximusdbEntities();
         settings.CardLayoutCreated = (sender, e) =>
         {
             MVCxCardView cv = sender as MVCxCardView;
@@ -33,7 +39,7 @@
             if (e.VisibleIndex >= 0)
             {
                 string BusinessId = Session["BuisnessId"].ToString();
-                var reasons = entity.tblsop_reasoncodes.Where(xs => xs.BusinessId == BusinessId).Select(c => new { c.Description }).ToList();
+                var reasons = home._reason.GetAll(xs => xs.BusinessId == BusinessId).Select(c => new { c.Description }).ToList();
                 if (reasons.Count == 0)
                 {
                     e.Properties.Items[7].ParentContainerStyle.CssClass = "itemToHide";
@@ -125,11 +131,11 @@
                 {
                     var styleArr = style.Split(',');
                     var style1 = styleArr[0];
-                    ViewContext.Writer.Write(string.Format("<div id='DimviewDescription" + style1 + "'>{0}</div>", entity.tblfsk_style.Where(s => s.StyleID == style1).FirstOrDefault().Description));
+                    ViewContext.Writer.Write(string.Format("<div id='DimviewDescription" + style1 + "'>{0}</div>", home._tblFskStyle.GetAll(s => s.StyleID == style1).FirstOrDefault().Description));
                 }
                 else
                 {
-                    ViewContext.Writer.Write(string.Format("<div id='DimviewDescription" + style + "'>{0}</div>", entity.tblfsk_style.Where(s => s.StyleID == style).FirstOrDefault().Description != null ? entity.tblfsk_style.Where(s => s.StyleID == style).FirstOrDefault().Description.ToString() : ""));
+                    ViewContext.Writer.Write(string.Format("<div id='DimviewDescription" + style + "'>{0}</div>", home._tblFskStyle.GetAll(s => s.StyleID == style).FirstOrDefault().Description != null ? home._tblFskStyle.GetAll(s => s.StyleID == style).FirstOrDefault().Description.ToString() : ""));
                 }
             });
         });
@@ -150,7 +156,7 @@
                                 var styleArr = style.Split(',');
                                 string style1 = styleArr[0].ToString();
                                 c.Name = "ColorDimview_" + "Drop_" + style;
-                                List<string> colorIdLst = (List<string>)entity.tblfsk_style_colour_size.Where(s => s.StyleID == style1).Select(s => s.ColourID).Distinct().ToList();
+                                List<string> colorIdLst = (List<string>)home._styleColorSize.GetAll(s => s.StyleID == style1).Select(s => s.ColourID).Distinct().ToList();
                                 foreach (string data in colorIdLst)
                                 {
                                     c.Properties.Items.Add(data);
@@ -167,7 +173,7 @@
                             c =>
                             {
                                 c.Name = "ColorDimview_" + "Drop_" + style;
-                                List<string> colorIdLst = (List<string>)entity.tblfsk_style_colour_size.Where(s => s.StyleID == style).OrderBy(s => s.ColourID).Select(s => s.ColourID).Distinct().ToList();
+                                List<string> colorIdLst = (List<string>)home._styleColorSize.GetAll(s => s.StyleID == style).OrderBy(s => s.ColourID).Select(s => s.ColourID).Distinct().ToList();
                                 foreach (string data in colorIdLst)
                                 {
                                     c.Properties.Items.Add(data);
@@ -182,16 +188,16 @@
                 }
                 else
                 {
-                    var content = "<fieldset class='swatch-picker' name=\"Swatch_DemColor_FieldSet_"+style+"\">";
+                    var content = "<fieldset class='swatch-picker' name=\"Swatch_DemColor_FieldSet_" + style + "\">";
                     if (style.Contains(','))
                     {
                         var styleArr = style.Split(',');
                         string style1 = styleArr[0].ToString();
-                        List<string> colorIdLst = (List<string>)entity.tblfsk_style_colour_size.Where(s => s.StyleID == style1).Select(s => s.ColourID).Distinct().ToList();
+                        List<string> colorIdLst = (List<string>)home._styleColorSize.GetAll(s => s.StyleID == style1).Select(s => s.ColourID).Distinct().ToList();
                         foreach (string data in colorIdLst)
                         {
-                            var hexcode = entity.tblfsk_colour.Any(da => da.Description.Contains(data)) ? entity.tblfsk_colour.Where(da => da.Description.Contains(data)).First().Colour_hexcode : "";
-                            if (colorIdLst.Count>1)
+                            var hexcode = home._fskColor.Exists(da => da.Description.Contains(data)) ? home._fskColor.GetAll(da => da.Description.Contains(data)).First().Colour_hexcode : "";
+                            if (colorIdLst.Count > 1)
                             {
                                 content = content + string.Format("<label><input type='radio'  id='radio' name=\"swatch_DemandColor_" + style + "\" class='' value='blue'/><span style='display: block;border-radius:5px;  height:100%;width:100%;background:" + hexcode + "' onclick=\"getSelectedSizeDemandSwatch('{0}','{1}')\" ><center><bold>{1}</bold></center></span></label>", style, data);
                             }
@@ -204,11 +210,11 @@
                     }
                     else
                     {
-                        List<string> colorIdLst = (List<string>)entity.tblfsk_style_colour_size.Where(s => s.StyleID == style).OrderBy(s => s.ColourID).Select(s => s.ColourID).Distinct().ToList();
+                        List<string> colorIdLst = (List<string>)home._styleColorSize.GetAll(s => s.StyleID == style).OrderBy(s => s.ColourID).Select(s => s.ColourID).Distinct().ToList();
                         foreach (string data in colorIdLst)
                         {
-                            var hexcode = entity.tblfsk_colour.Any(da => da.Description.Contains(data)) ? entity.tblfsk_colour.Where(da => da.Description.Contains(data)).First().Colour_hexcode : "";
-                            if (colorIdLst.Count>1)
+                            var hexcode = home._fskColor.Exists(da => da.Description.Contains(data)) ? home._fskColor.GetAll(da => da.Description.Contains(data)).First().Colour_hexcode : "";
+                            if (colorIdLst.Count > 1)
                             {
                                 content = content + string.Format("<label><input type='radio'  id='radio' name=\"swatch_DemandColor_" + style + "\" class='' value='blue'/><span style='display: block;border-radius:5px;  height:100%;width:100%;background:" + hexcode + "' onclick=\"getSelectedSizeDemandSwatch('{0}','{1}')\"><center><bold>{1}</bold></center></span></label>", style, data);
                             }
@@ -234,7 +240,7 @@
             x.SetTemplateContent(col =>
             {
                 var style = (DataBinder.Eval(col.DataItem, "StyleID")).ToString();
-                Maximus.Models.PreviousQty prevHistory = (Maximus.Models.PreviousQty)(DataBinder.Eval(col.DataItem, "HasPreviousSize"));
+                Maximus.Data.Models.PreviousQty prevHistory = (Maximus.Data.Models.PreviousQty)(DataBinder.Eval(col.DataItem, "HasPreviousSize"));
                 if (Session["ColorSizestyle"].ToString() != "SWATCHES")
                 {
                     if (style.Contains(','))
@@ -245,7 +251,7 @@
                                 var styleArr = style.Split(',');
                                 string style1 = styleArr[0].ToString();
                                 c.Name = "SizeDimview_" + "Drop_" + style;
-                                List<string> sizeIdLst = (List<string>)entity.tblfsk_style_sizes.Where(s => s.StyleID == style1).Distinct().OrderBy(s => s.SeqNo).Select(s => s.SizeID).ToList();
+                                List<string> sizeIdLst = (List<string>)home._style_Sizes.GetAll(s => s.StyleID == style1).Distinct().OrderBy(s => s.SeqNo).Select(s => s.SizeID).ToList();
                                 foreach (string data in sizeIdLst)
                                 {
                                     c.Properties.Items.Add(data);
@@ -275,7 +281,7 @@
                             c =>
                             {
                                 c.Name = "SizeDimview_" + "Drop_" + style;
-                                List<string> sizeIdLst = (List<string>)entity.tblfsk_style_sizes.Where(s => s.StyleID == style).Distinct().OrderBy(s => s.SeqNo).Select(s => s.SizeID).ToList();
+                                List<string> sizeIdLst = (List<string>)home._style_Sizes.GetAll(s => s.StyleID == style).Distinct().OrderBy(s => s.SeqNo).Select(s => s.SizeID).ToList();
                                 foreach (string data in sizeIdLst)
                                 {
                                     c.Properties.Items.Add(data);
@@ -307,13 +313,13 @@
                     {
                         var styleArr = style.Split(',');
                         string style1 = styleArr[0].ToString();
-                        List<string> sizeIdLst = (List<string>)entity.tblfsk_style_sizes.Where(s => s.StyleID == style1).Distinct().OrderBy(s => s.SeqNo).Select(s => s.SizeID).ToList();
+                        List<string> sizeIdLst = (List<string>)home._style_Sizes.GetAll(s => s.StyleID == style1).Distinct().OrderBy(s => s.SeqNo).Select(s => s.SizeID).ToList();
                         foreach (string data in sizeIdLst)
                         {
 
-                            if(sizeIdLst.Count>1)
+                            if (sizeIdLst.Count > 1)
                             {
-                                if(prevHistory.Size==data)
+                                if (prevHistory.Size == data)
                                 {
                                     content = content + string.Format("<label><input type='radio'  id='radio' name=\"swatch_DemandSize_" + style + "\" class='' value='blue' checked=\"checked\"/><span style='display: block;border-radius:5px;  height:100%;width:100%;' onclick=\"getSelectedSizeDemandSwatch('{0}','{1}')\"><center><bold>{1}</bold></center></span></label>", style, data);
                                 }
@@ -332,7 +338,7 @@
                     }
                     else
                     {
-                        List<string> sizeIdLst = (List<string>)entity.tblfsk_style_sizes.Where(s => s.StyleID == style).Distinct().OrderBy(s => s.SeqNo).Select(s => s.SizeID).ToList();
+                        List<string> sizeIdLst = (List<string>)home._style_Sizes.GetAll(s => s.StyleID == style).Distinct().OrderBy(s => s.SeqNo).Select(s => s.SizeID).ToList();
                         foreach (string data in sizeIdLst)
                         {
                             if (sizeIdLst.Count > 1)
@@ -366,38 +372,44 @@
             x.Caption = "Price";
             x.SetTemplateContent(col =>
             {
-                Maximus.Models.PreviousQty prevHistory = (Maximus.Models.PreviousQty)(DataBinder.Eval(col.DataItem, "HasPreviousSize"));
+                Maximus.Data.Models.PreviousQty prevHistory = (Maximus.Data.Models.PreviousQty)(DataBinder.Eval(col.DataItem, "HasPreviousSize"));
                 var style = (DataBinder.Eval(col.DataItem, "StyleID")).ToString();
                 string businessId = Session["BuisnessId"].ToString();
                 if (style.Contains(','))
                 {
                     var styleArr = style.Split(',');
                     string style1 = styleArr[0].ToString();
-                    var color = entity.tblfsk_style_colour.Any(s => s.StyleID == style1) == true ? entity.tblfsk_style_colour.Where(s => s.StyleID == style1).OrderBy(s => s.ColourID).FirstOrDefault().ColourID : "";
-                    var size = entity.tblfsk_style_sizes.Any(s => s.StyleID == style1) == true ? entity.tblfsk_style_sizes.Where(s => s.StyleID == style1).OrderBy(s => s.SeqNo).Count() == 1 ? entity.tblfsk_style_sizes.Where(s => s.StyleID == style1).OrderBy(s => s.SeqNo).FirstOrDefault().SizeID : "" : "";
-                    var price = size == "" ? "" : entity.tblfsk_style_sizes_prices.Any(s => s.StyleID == style1 && s.SizeID == size && s.BusinessId == businessId) == false ? "" : System.Math.Round(entity.tblfsk_style_sizes_prices.Where(s => s.StyleID == style1 && s.SizeID == size && s.BusinessId == businessId).FirstOrDefault().Price.Value, 2).ToString();
+                    var color = home._style_Colour.Exists(s => s.StyleID == style1) == true ? home._style_Colour.GetAll(s => s.StyleID == style1).OrderBy(s => s.ColourID).FirstOrDefault().ColourID : "";
+                    var size = home._style_Sizes.Exists(s => s.StyleID == style1) == true ? home._style_Sizes.GetAll(s => s.StyleID == style1).OrderBy(s => s.SeqNo).Count() == 1 ? home._style_Sizes.GetAll(s => s.StyleID == style1).OrderBy(s => s.SeqNo).FirstOrDefault().SizeID : "" : "";
+                    var price = size == "" ? "" : home._styleSizePrice.Exists(s => s.StyleID == style1 && s.SizeID == size && s.BusinessId == businessId) == false ? "" : System.Math.Round(home._styleSizePrice.GetAll(s => s.StyleID == style1 && s.SizeID == size && s.BusinessId == businessId).FirstOrDefault().Price.Value, 2).ToString();
                     if (prevHistory.Size != "")
                     {
-                        price = entity.tblfsk_style_sizes_prices.Any(s => s.StyleID == style1 && s.SizeID == size && s.BusinessId == businessId) == false ? "" : System.Math.Round(entity.tblfsk_style_sizes_prices.Where(s => s.StyleID == style1 && s.SizeID == prevHistory.Size && s.BusinessId == businessId).FirstOrDefault().Price.Value, 2).ToString();
+                        price = home._styleSizePrice.Exists(s => s.StyleID == style1 && s.SizeID == size && s.BusinessId == businessId) == false ? "" : System.Math.Round(home._styleSizePrice.GetAll(s => s.StyleID == style1 && s.SizeID == prevHistory.Size && s.BusinessId == businessId).FirstOrDefault().Price.Value, 2).ToString();
                     }
                     if (Session["ColorSizestyle"].ToString() != "SWATCHES")
                     {
-                        ViewContext.Writer.Write(string.Format("<div Id='DimviewPrice" + style + "'>{0}</div>", price));
+                        ViewContext.Writer.Write(string.Format("<div Id='DimviewPrice" + style + "'><input class='form-control' readonly  type=\"number\" min=\"1\" max=\"10000\" value='{0}'/></div>", price));
                     }
                     else
                     {
-                        ViewContext.Writer.Write(string.Format("<div name='DimviewPrice" + style + "'>{0}</div>", price));
+                        if (Session["Price"].ToString().ToLower() != "hide" && Session["Price"].ToString().ToLower() != "readonly")
+                        {
+                            ViewContext.Writer.Write(string.Format("<div Id='DimviewPrice" + style + "'><input class='form-control' type=\"number\" min=\"1\" max=\"10000\" value='{0}'/></div>", price));
+                        }
+                        else if (Session["Price"].ToString().ToLower() != "hide" && Session["Price"].ToString().ToLower() == "readonly")
+                        {
+                            ViewContext.Writer.Write(string.Format("<div Id='DimviewPrice" + style + "'><input class='form-control' readonly  type=\"number\" min=\"1\" max=\"10000\" value='{0}'/></div>", price));
+                        }
                     }
-
                 }
                 else
                 {
-                    var color = entity.tblfsk_style_colour.Any(s => s.StyleID == style) == true ? entity.tblfsk_style_colour.Where(s => s.StyleID == style).OrderBy(s => s.ColourID).FirstOrDefault().ColourID : "";
-                    var size = entity.tblfsk_style_sizes.Any(s => s.StyleID == style) == true ? entity.tblfsk_style_sizes.Where(s => s.StyleID == style).OrderBy(s => s.SeqNo).Count() == 1 ? entity.tblfsk_style_sizes.Where(s => s.StyleID == style).OrderBy(s => s.SeqNo).FirstOrDefault().SizeID : "" : "";
-                    var price = size == "" ? "" : entity.tblfsk_style_sizes_prices.Any(s => s.StyleID == style && s.SizeID == size && s.BusinessId == businessId) == false ? "" : System.Math.Round(entity.tblfsk_style_sizes_prices.Where(s => s.StyleID == style && s.SizeID == size && s.BusinessId == businessId).FirstOrDefault().Price.Value, 2).ToString();
+                    var color = home._style_Colour.Exists(s => s.StyleID == style) == true ? home._style_Colour.GetAll(s => s.StyleID == style).OrderBy(s => s.ColourID).FirstOrDefault().ColourID : "";
+                    var size = home._style_Sizes.Exists(s => s.StyleID == style) == true ? home._style_Sizes.GetAll(s => s.StyleID == style).OrderBy(s => s.SeqNo).Count() == 1 ? home._style_Sizes.GetAll(s => s.StyleID == style).OrderBy(s => s.SeqNo).FirstOrDefault().SizeID : "" : "";
+                    var price = size == "" ? "" : home._styleSizePrice.Exists(s => s.StyleID == style && s.SizeID == size && s.BusinessId == businessId) == false ? "" : System.Math.Round(home._styleSizePrice.GetAll(s => s.StyleID == style && s.SizeID == size && s.BusinessId == businessId).FirstOrDefault().Price.Value, 2).ToString();
                     if (prevHistory.Size != "")
                     {
-                        price = entity.tblfsk_style_sizes_prices.Any(s => s.StyleID == style && s.SizeID == prevHistory.Size && s.BusinessId == businessId) == false ? "" : System.Math.Round(entity.tblfsk_style_sizes_prices.Where(s => s.StyleID == style && s.SizeID == prevHistory.Size && s.BusinessId == businessId).FirstOrDefault().Price.Value, 2).ToString();
+                        price = home._styleSizePrice.Exists(s => s.StyleID == style && s.SizeID == prevHistory.Size && s.BusinessId == businessId) == false ? "" : System.Math.Round(home._styleSizePrice.GetAll(s => s.StyleID == style && s.SizeID == prevHistory.Size && s.BusinessId == businessId).FirstOrDefault().Price.Value, 2).ToString();
                     }
                     if (Session["ColorSizestyle"].ToString() != "SWATCHES")
                     {
@@ -405,7 +417,14 @@
                     }
                     else
                     {
-                        ViewContext.Writer.Write(string.Format("<div name='DimviewPrice" + style + "'>{0}</div>", price));
+                        if (Session["Price"].ToString().ToLower() != "hide" && Session["Price"].ToString().ToLower() != "readonly")
+                        {
+                            ViewContext.Writer.Write(string.Format("<div Id='DimviewPrice" + style + "'><input class='form-control' type=\"number\" min=\"1\" max=\"10000\" value='{0}'/></div>", price));
+                        }
+                        else if (Session["Price"].ToString().ToLower() != "hide" && Session["Price"].ToString().ToLower() == "readonly")
+                        {
+                            ViewContext.Writer.Write(string.Format("<div Id='DimviewPrice" + style + "'><input class='form-control' readonly  type=\"number\" min=\"1\" max=\"10000\" value='{0}'/></div>", price));
+                        }
                     }
                 }
             });
@@ -442,7 +461,7 @@
                 {
                     edit.Name = "CmbReasonDemand_" + style;
                     string BusinessId = Session["BuisnessId"].ToString();
-                    var reasons = entity.tblsop_reasoncodes.Where(xs => xs.BusinessId == BusinessId).Select(c => new { c.Description }).ToList();
+                    var reasons = home._reason.GetAll(xs => xs.BusinessId == BusinessId).Select(c => new { c.Description }).ToList();
                     if (reasons.Count > 0)
                     {
                         foreach (var dta in reasons)
@@ -467,7 +486,7 @@
             {
                 //  var style = (DataBinder.Eval(cont.DataItem, "StyleID")).ToString();
                 var style = (DataBinder.Eval(cont.DataItem, "StyleID")).ToString();
-                Maximus.Models.PreviousQty prevHistory = (Maximus.Models.PreviousQty)(DataBinder.Eval(cont.DataItem, "HasPreviousSize"));
+                Maximus.Data.Models.PreviousQty prevHistory = (Maximus.Data.Models.PreviousQty)(DataBinder.Eval(cont.DataItem, "HasPreviousSize"));
 
                 Html.DevExpress().Button(btn =>
                 {

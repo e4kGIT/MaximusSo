@@ -1,5 +1,5 @@
 ﻿<div class="row">
-    <div class="col-md-4">
+    <div class="col-md-4 col-lg-4 col-sm-12 col-xs-12">
         @Html.DevExpress().ComboBox(x =>
    {
        x.Name = "CarriageCmbbox";
@@ -11,13 +11,16 @@
        x.Properties.ClientSideEvents.SelectedIndexChanged = "SettbxValue";
    }).GetHtml();
     </div>
-    <div class="col-md-4">@Html.DevExpress().TextBox(x =>
-   {
-       x.Name = "CarriageTexbox";
-       x.Properties.Caption = "Carrier";
-       x.ReadOnly=true;
-   }).GetHtml();</div>
-    <div class="col-md-4">@Html.DevExpress().ComboBox(x =>
+    <div class="col-md-4 col-lg-4 col-sm-12 col-xs-12">
+        @Html.DevExpress().TextBox(x =>
+                                                  {
+                                                      x.Name = "CarriageTexbox";
+                                                      x.Properties.Caption = "Carrier";
+                                                      x.ReadOnly = true;
+                                                  }).GetHtml();
+</div>
+<div class="col-md-4 col-lg-4 col-sm-12 col-xs-12">
+    @Html.DevExpress().ComboBox(x =>
    {
        x.Name = "CarriageStyleCmbbox";
        x.Properties.Caption = "Carrier";
@@ -26,6 +29,7 @@
            x.Properties.Items.Add(dat);
        }
        x.Properties.ClientSideEvents.SelectedIndexChanged = "SettbxValue";
-   }).GetHtml();</div>
+   }).GetHtml();
+</div>
 
 </div>

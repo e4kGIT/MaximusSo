@@ -25,18 +25,19 @@
         settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
         settings.SettingsPager.PageSize = 550;
 
-        settings.Columns.Add(x=> { x.FieldName = "StyleID"; x.Caption = "Style"; });
+        settings.Columns.Add(x => { x.FieldName = "StyleID"; x.Caption = "Style"; });
         settings.Columns.Add(x => { x.FieldName = "Instruction"; x.Caption = "Instruction"; });
-        settings.Columns.Add(x => {
-            x.FieldName = "IsChargeable";x.ReadOnly = false; x.Caption = " "; x.SetDataItemTemplateContent(d =>
+        settings.Columns.Add(x =>
+        {
+            x.FieldName = "IsChargeable"; x.ReadOnly = false; x.Caption = " "; x.SetDataItemTemplateContent(d =>
             {
 
-                int IsChargeable =(int) DataBinder.Eval(d.DataItem, "IsChargeable") ;
+                int IsChargeable = (int)DataBinder.Eval(d.DataItem, "IsChargeable");
                 string style = DataBinder.Eval(d.DataItem, "StyleID").ToString();
                 string Instruction = DataBinder.Eval(d.DataItem, "StyleID").ToString();
                 if (IsChargeable == 1)
                 {
-                    ViewContext.Writer.Write(string.Format("<center><input type='checkbox' disabled='disabled' id=\"CHKID"+ System.Text.RegularExpressions.Regex.Replace(style, @"[^0-9a-zA-Z]+", "") + "\" onclick=\"assemblyChanged('{0}')\" checked='checked'/></center>", style));
+                    ViewContext.Writer.Write(string.Format("<center><input type='checkbox' disabled='disabled' id=\"CHKID" + System.Text.RegularExpressions.Regex.Replace(style, @"[^0-9a-zA-Z]+", "") + "\" onclick=\"assemblyChanged('{0}')\" checked='checked'/></center>", style));
                 }
                 else
                 {
@@ -46,14 +47,17 @@
             });
         });
 
-        settings.Columns.Add(x => { x.FieldName = "StyleImage"; x.Caption = "Image";x.SetDataItemTemplateContent(d =>
+        settings.Columns.Add(x =>
         {
-            string Styleimage = DataBinder.Eval(d.DataItem, "StyleImage").ToString();
-            if (Styleimage!="")
+            x.FieldName = "StyleImage"; x.Caption = "Image"; x.SetDataItemTemplateContent(d =>
             {
-                ViewContext.Writer.Write(string.Format("<img src=\"{0}\" height='50' width='60'/>",Styleimage));
-            }
-        });});
+                string Styleimage = DataBinder.Eval(d.DataItem, "StyleImage").ToString();
+                if (Styleimage != "")
+                {
+                    ViewContext.Writer.Write(string.Format("<img src=\"{0}\" height='50' width='60'/>", Styleimage));
+                }
+            });
+        });
     });
     if (ViewData["EditError"] != null)
     {
@@ -62,5 +66,5 @@
 }
 @grid.Bind(Model).GetHtml()
 
- 
+
 

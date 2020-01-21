@@ -12,7 +12,7 @@ namespace Maximus
             {
                 AuthenticationType = "ApplicationCookie",
                 LoginPath = new PathString("/User/Login"),
-                ExpireTimeSpan = System.TimeSpan.FromMinutes(60),
+                ExpireTimeSpan = System.TimeSpan.FromMinutes(560),
                 SlidingExpiration = true
             });
         }

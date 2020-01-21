@@ -46,7 +46,7 @@
         settings.Settings.ShowHeaderFilterButton = true;
         settings.Settings.EnableFilterControlPopupMenuScrolling = false;
         settings.SettingsBehavior.AllowSelectByCardClick = true;
-        Maximus.Models.e4kmaximusdbEntities entity = new Maximus.Models.e4kmaximusdbEntities();
+        Maximus.Data.Modelse4kmaximusdbEntities entity = new Maximus.Data.Modelse4kmaximusdbEntities();
         //settings.ClientSideEvents.BeginCallback = "BeginCallback";
         settings.CardLayoutCreated = (sender, e) =>
         {
@@ -376,7 +376,7 @@
             x.SetTemplateContent(col =>
             {
                 var style = (DataBinder.Eval(col.DataItem, "StyleID")).ToString();
-                Maximus.Models.PreviousQty prevHistory = (Maximus.Models.PreviousQty)(DataBinder.Eval(col.DataItem, "HasPreviousSize"));
+                Maximus.Data.Models.PreviousQty prevHistory = (Maximus.Data.Models.PreviousQty)(DataBinder.Eval(col.DataItem, "HasPreviousSize"));
                 if (Session["ColorSizestyle"].ToString() != "SWATCHES")
                 {
                     if (style.Contains(','))
@@ -504,7 +504,7 @@
             x.SetTemplateContent(col =>
             {
                 string businessId = Session["BuisnessId"].ToString();
-                Maximus.Models.PreviousQty prevHistory = (Maximus.Models.PreviousQty)(DataBinder.Eval(col.DataItem, "HasPreviousSize"));
+                Maximus.Data.Models.PreviousQty prevHistory = (Maximus.Data.Models.PreviousQty)(DataBinder.Eval(col.DataItem, "HasPreviousSize"));
                 var style = (DataBinder.Eval(col.DataItem, "StyleID")).ToString();
                 if (style.Contains(','))
                 {
@@ -587,7 +587,7 @@
             x.Caption = " ";
             x.SetTemplateContent(cont =>
             {
-                Maximus.Models.PreviousQty prevHistory = (Maximus.Models.PreviousQty)(DataBinder.Eval(cont.DataItem, "HasPreviousSize"));
+                Maximus.Data.Models.PreviousQty prevHistory = (Maximus.Data.Models.PreviousQty)(DataBinder.Eval(cont.DataItem, "HasPreviousSize"));
                 var style = (DataBinder.Eval(cont.DataItem, "StyleID")).ToString();
                 Html.DevExpress().Button(btn =>
                 {

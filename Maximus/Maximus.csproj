@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\EntityFramework.6.4.0\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.4.0\build\EntityFramework.props')" />
   <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
   <Import Project="..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -55,11 +56,11 @@
     <Reference Include="DevExpress.Web.Mvc5.v16.1, Version=16.1.15.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="DevExpress.Web.v16.1, Version=16.1.15.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.4.0\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>..\packages\EntityFramework.6.4.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Google.Protobuf, Version=3.6.1.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
@@ -119,14 +120,15 @@
       <HintPath>..\packages\Microsoft.Owin.Security.Cookies.4.0.1\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MySql.Data, Version=8.0.16.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
-      <HintPath>..\packages\MySql.Data.8.0.16\lib\net452\MySql.Data.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="MySql.Data, Version=8.0.18.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\MySQL\MySQL Connector Net 8.0.18\Assemblies\v4.5.2\MySql.Data.dll</HintPath>
     </Reference>
-    <Reference Include="MySql.Data.EntityFramework, Version=8.0.16.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
-      <HintPath>..\packages\MySql.Data.EntityFramework.8.0.16\lib\net452\MySql.Data.EntityFramework.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="MySql.Data.EntityFramework, Version=8.0.18.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\MySQL\MySQL Connector Net 8.0.18\Assemblies\v4.5.2\MySql.Data.EntityFramework.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL" />
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
       <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
       <Private>True</Private>
@@ -135,6 +137,10 @@
     <Reference Include="System.Configuration.Install" />
     <Reference Include="System.Drawing.Design" />
     <Reference Include="System.Management" />
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.5.2\lib\netstandard1.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
     <Reference Include="System.Transactions" />
@@ -147,6 +153,30 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.Helpers.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.7.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.7\lib\net45\System.Web.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.7\lib\net45\System.Web.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
@@ -154,33 +184,28 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Unity.Abstractions, Version=5.11.1.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.5.11.1\lib\net45\Unity.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Unity.Container, Version=5.11.1.0, Culture=neutral, PublicKeyToken=489b6accfaf20ef0, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.5.11.1\lib\net45\Unity.Container.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Unity.Mvc5, Version=1.4.0.0, Culture=neutral, PublicKeyToken=43da31bc42a85347, processorArchitecture=MSIL">
+      <HintPath>..\packages\Unity.Mvc5.1.4.0\lib\net45\Unity.Mvc5.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="System.Web.Razor">
-      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Webpages">
-      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Webpages.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Webpages.Deployment">
-      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Webpages.Deployment.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Webpages.Razor">
-      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Webpages.Razor.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Helpers">
-      <HintPath>..\packages\Microsoft.AspNet.Webpages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Web.Infrastructure">
       <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Web.Mvc">
-      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\css\CustomCss.css" />
     <Content Include="Content\css\Media.css" />
     <Content Include="Content\Images\dimensions.jpg" />
     <Content Include="Content\Images\doc.png" />
@@ -246,31 +271,10 @@
     <Content Include="Content\themes\base\tooltip.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="Models\maximusContext.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>maximusContext1.cs</LastGenOutput>
-    </Content>
-    <Content Include="Models\maximusDataContext.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>maximusDataContext.edmx</DependentUpon>
-      <LastGenOutput>maximusDataContext.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="Models\maximusDataContext.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>maximusDataContext.edmx</DependentUpon>
-      <LastGenOutput>maximusDataContext.cs</LastGenOutput>
-    </Content>
     <Content Include="scripts\ai.0.22.9-build00167.js" />
     <Content Include="scripts\ai.0.22.9-build00167.min.js" />
     <Content Include="scripts\bootstrap.js" />
     <Content Include="scripts\bootstrap.min.js" />
-    <EntityDeploy Include="Models\maximusDataContext.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>maximusDataContext.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\maximusDataContext.edmx.diagram">
-      <DependentUpon>maximusDataContext.edmx</DependentUpon>
-    </Content>
     <None Include="Properties\PublishProfiles\MaximusTestPublish.pubxml" />
     <None Include="scripts\jquery-1.12.4.intellisense.js" />
     <Content Include="scripts\jquery-1.12.4.js" />
@@ -899,6 +903,7 @@
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.cs" />
+    <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="Controllers\BasketController.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -909,663 +914,17 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\ControllerHelperMethods.cs" />
-    <Compile Include="Models\AllEnums.cs" />
-    <Compile Include="Models\AllowUsers.cs" />
-    <Compile Include="Models\AssemblyModel.cs" />
-    <Compile Include="Models\bak_tblaccemp_employee_tsb.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\BusinessInfo.cs" />
-    <Compile Include="Models\Colors.cs" />
-    <Compile Include="Models\Colorsizes.cs" />
-    <Compile Include="Models\copy_tblusers.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\DataProcessing.cs" />
-    <Compile Include="Models\dim_fit_nongroup_styles.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\dim_fit_styles.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\DrpResultModel.cs" />
-    <Compile Include="Models\EmployeeLoginModel.cs" />
-    <Compile Include="Models\EmployeeViewModel.cs" />
-    <Compile Include="Models\EntitlementModel.cs" />
-    <Compile Include="Models\FilterModel.cs" />
-    <Compile Include="Models\FreetxtStyle.cs" />
-    <Compile Include="Models\getallassembly.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\getColorProcedure_Result.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\getColors_prod_Result.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\getColors_Result.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\getcolour.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\getcustassembly.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\GetEmployeebyId_Result.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\getproductslist.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\getsize.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\getstylesview.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\hr_demo_address.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\hr_demo_employee.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\hr_demo_invoices.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\hr_demo_orders.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\hr_demo_pickslips.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\hr_demo_style.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\hr_demo_ucode.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\IssuedQtyModel.cs" />
-    <Compile Include="Models\LoginModel.cs" />
-    <Compile Include="Models\maximusContext1.cs">
-      <DependentUpon>maximusContext.tt</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Include="Models\maximusDataContext.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>maximusDataContext.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\maximusDataContext.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\maximusDataContext.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>maximusDataContext.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Model1.cs" />
-    <Compile Include="Models\my_aspnet_applications.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\my_aspnet_membership.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\my_aspnet_paths.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\my_aspnet_personalizationallusers.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\my_aspnet_personalizationperuser.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\my_aspnet_profiles.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\my_aspnet_roles.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\my_aspnet_sessioncleanup.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\my_aspnet_sessions.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\my_aspnet_sitemap.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\my_aspnet_users.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\my_aspnet_usersinroles.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\ObsoleteColor.cs" />
-    <Compile Include="Models\PermissionList.cs" />
-    <Compile Include="Models\PreviousQty.cs" />
-    <Compile Include="Models\productlist.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\product_obsolete.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\SalesOrderHeaderViewModel.cs" />
-    <Compile Include="Models\SalesOrderLineViewModel.cs" />
-    <Compile Include="Models\SalesOrderViewModel.cs" />
-    <Compile Include="Models\SaveOrderResultSet.cs" />
-    <Compile Include="Models\SiteCodeModel.cs" />
-    <Compile Include="Models\Size.cs" />
-    <Compile Include="Models\Structrues.cs" />
-    <Compile Include="Models\styleby_freetextview.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\styleViewmodel.cs" />
-    <Compile Include="Models\style_dimfitalloc_caption.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblaccemp_budget.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblaccemp_budgetcard.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblaccemp_departments.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblaccemp_employee.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblaccemp_employee_atlasfm.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblaccemp_employee_rollout.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblaccemp_employee_rollout_atlasfm.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblaccemp_points.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblaccemp_pointscard.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblaccemp_rollout_names.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblaccemp_rollout_ucode_ref.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblaccemp_stockcard.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblaccemp_stockcard_atlasfm.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblaccemp_stylepoints.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblaccemp_style_staticqty.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblaccemp_ucodepoints.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblaccemp_ucodes.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblaccemp_ucodesemployees.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblaccemp_ucodesemployees_atlasfm.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblaccemp_ucodes_desc.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblaccemp_ucodes_dimension.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblaccemp_ucodes_hours.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblaccemp_ucode_reasons.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblaccesslevel.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblacc_vatcodes.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tbladmin.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblasm_assemblydetail.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblasm_assemblyheader.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblbus_account.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblbus_address.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblbus_addresstypes.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblbus_addresstype_ref.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblbus_business.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblbus_business_types.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblbus_contact.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblbus_contact_ref.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblbus_countrycodes.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblbus_groups_ref.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblbus_online_orderref_nominal.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblbus_settings.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblbus_setvalues.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblbus_styles.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblchildmenu.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblchildmenu_new.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblchildmenu_newlayout.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblcmp_defaults.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblcompany.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblcontent_lang.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblfskstyle_dimension.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblfskstyle_dimension1.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblfskstyle_dimension1_.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblfsk_class.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblfsk_colour.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblfsk_features.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblfsk_price.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblfsk_seasons.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblfsk_settings.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblfsk_setvalues.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblfsk_style.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblfsk_style_colour.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblfsk_style_colour_size.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblfsk_style_colour_size_obsolete.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblfsk_style_commoditycode.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblfsk_style_customers.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblfsk_style_freetext.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblfsk_style_groups.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblfsk_style_groups_sub.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblfsk_style_locations.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblfsk_style_reps.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblfsk_style_sizes.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblfsk_style_sizes_prices.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblfsk_style_stockingtypes.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblfsk_style_stock_levels.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblfsk_style_typeofissue.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblfsk_unitofmeasure.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblfsk_unitofmeasureconversion.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblfsk_unitofmeasure_customer.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblfstk_feature.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblfstk_featureoption_type.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblgen_autonumbers.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblgen_log.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblgen_nextno.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblgen_parameters.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblgen_users.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblgen_user_defaults.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblgen_user_parameters.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tbllanguage.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblonlinesop_backorders.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblonlinesop_carriage.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblonlinesop_sitecode.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblonline_holidays.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblonline_rolloutorders_config.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblonline_rolloutorders_reqstatus.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblonline_rolloutorders_reqstatus_atlasfm.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblonline_userid_employee.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblonline_userid_employee_atlasfm.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblonline_userid_favourites.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblparentmenu.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblparentmenu_new.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblparentmenu_newlayout.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblpayment_gateways.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblpayment_trans.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblpermission_controls.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblpermission_controls_category.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblpermission_settings.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblpermission_settings_users.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblpermission_users_allow.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblpermission_users_deny.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblquestionanswer.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblrep_kams.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblsop_carrier.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblsop_courier_information.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblsop_customerorder_template.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblsop_customerorder_template_costcentre.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblsop_customerorder_template_img.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblsop_customerorder_template_ucodes.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblsop_customer_ref.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblsop_despatch_confirm.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblsop_despatch_status.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblsop_download_fields.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblsop_invoice_detail.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblsop_invoice_header.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblsop_manpackorders.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblsop_manpackreturns.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblsop_pickingslip_detail.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblsop_pickingslip_header.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblsop_reasoncodes.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblsop_reasons.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblsop_return_reasoncodes.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblsop_return_reasoncodes_customer.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblsop_salesorder_approved.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblsop_salesorder_detail.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblsop_salesorder_detail_atlasfm.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblsop_salesorder_detail_console.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblsop_salesorder_detail_offline.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblsop_salesorder_detail_tremot02.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblsop_salesorder_header.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblsop_salesorder_header_atlasfm.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblsop_salesorder_header_console.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblsop_salesorder_header_offline.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblsop_salesorder_header_tremot02.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblsqlstring.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblupdate_status_three.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblupload_orderdetail.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblupload_orderheader.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tbluser.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblwho_warehouses.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tblwho_warehousesx.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\TotalModel.cs" />
-    <Compile Include="Models\ucodeby_freetextview.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\UcodeModel.cs" />
-    <Compile Include="Models\ucode_employee_rollout_tsb.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\unrelatedorder.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\UserViewModel.cs" />
-    <Compile Include="Models\view_manpack.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\view_noorderplacedforthisemployee.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\view_normatucodereissueorder.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\view_order_freetext_tsb_rollout.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\view_privateorders.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\view_privateorder_pendings.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\view_reissueorderwithnormalucode.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\view_ucode_freetext_tsb_rollout.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\view_unmatchedcolourwithorgcolour.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\view_unmatchedordercolourid.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\xml_salesorder_detail.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\xml_salesorder_header.cs">
-      <DependentUpon>maximusDataContext.tt</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
     <Compile Include="Utilities\Log.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Views\web.config" />
-    <Content Include="packages.config" />
+    <Content Include="Views\web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="packages.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -1605,6 +964,7 @@
     <Content Include="Views\Basket\model\_CarriageView.cshtml" />
     <Content Include="scripts\jquery.jgrowl.map" />
     <Content Include="Views\Basket\model\_EmployeeView.cshtml" />
+    <Content Include="Views\Employee\_bulkOrderPartial.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1614,12 +974,23 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Maximus.Data\Maximus.Data.csproj">
+      <Project>{1cdb605a-8e79-4562-9c7b-afe6e2b93312}</Project>
+      <Name>Maximus.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Maximus.Services\Maximus.Services.csproj">
+      <Project>{6c9a5454-8cb0-48df-834c-82e5a61a6328}</Project>
+      <Name>Maximus.Services</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -1652,7 +1023,10 @@
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props'))" />
     <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.0\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.0\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('..\packages\EntityFramework.6.4.0\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.4.0\build\EntityFramework.targets'))" />
   </Target>
+  <Import Project="..\packages\EntityFramework.6.4.0\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.0\build\EntityFramework.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

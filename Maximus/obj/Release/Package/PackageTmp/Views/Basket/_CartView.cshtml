@@ -20,7 +20,7 @@
         //settings.CommandColumn.ShowEditButton = true;
         settings.SetDetailRowTemplateContent(x =>
         {
-            @Html.RenderAction("CartviewDetailGridViewGridViewPartial",new { empId = x.KeyValue });
+            @Html.RenderAction("CartviewDetailGridViewGridViewPartial", new { empId = x.KeyValue });
         });
 
         settings.SettingsCommandButton.EditButton.Image.IconID = IconID.EditEdit16x16;
@@ -34,7 +34,8 @@
 
         settings.SettingsCommandButton.UpdateButton.Image.IconID = IconID.OtherUpdatetable16x16gray;
         settings.SettingsCommandButton.UpdateButton.RenderMode = GridCommandButtonRenderMode.Image;
-
+        settings.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Right;
+        settings.SettingsAdaptivity.AdaptiveDetailColumnCount = 5;
 
         settings.KeyFieldName = "EmployeeID";
 
@@ -51,17 +52,17 @@
         //    Address = dp.getEmployeeAddress(Session["SelectedEmp"].ToString(), Session["BuisnessId"].ToString()), EmployeeName = Session["EmpName"].ToString(), EmployeeID = Session["SelectedEmp"].ToString(), CustRef = entity.tblsop_salesorder_header.AsEnumerable().Where(x => x.CustID == Session["BuisnessId"].ToString()).First().CustRef, Comments = entity.tblsop_salesorder_header.AsEnumerable().Where(x => x.CustID == Session["BuisnessId"].ToString()).First().Comments });
         //var modelq = (List<SalesOrderLineViewModel>)Session["SalesOrderLines"];
         //settings.Columns.Add(x => { x.FieldName = "LineNo"; x.Caption = "Line no"; x.ReadOnly = true; });
-        settings.Columns.Add(x => { x.FieldName = "EmployeeID"; x.Caption = "Employee Id"; x.ReadOnly = true; x.EditFormSettings.Visible =DefaultBoolean.False; });
+        settings.Columns.Add(x => { x.FieldName = "EmployeeID"; x.Caption = "Employee Id"; x.ReadOnly = true; x.EditFormSettings.Visible = DefaultBoolean.False; });
         settings.Columns.Add(x => { x.FieldName = "EmployeeName"; x.Caption = "Employee Name"; x.ReadOnly = true; x.EditFormSettings.Visible = DefaultBoolean.False; });
         settings.Columns.Add(x => { x.FieldName = "CustRef"; x.Caption = "CustRef"; x.ReadOnly = false; x.Visible = true; x.EditFormSettings.Visible = DefaultBoolean.True; });
-        settings.Columns.Add(x => { x.FieldName = "DelDesc"; x.Caption = "Description"; x.Visible = true; x.EditFormSettings.Visible =DefaultBoolean.True;});
-        settings.Columns.Add(x => { x.FieldName = "DelAddress1"; x.Caption = "Address1";x.Visible = true;x.EditFormSettings.Visible =DefaultBoolean.True; });
-        settings.Columns.Add(x => { x.FieldName = "DelAddress2"; x.Caption = "Address2";x.Visible = true;x.EditFormSettings.Visible =DefaultBoolean.True; });
-        settings.Columns.Add(x => { x.FieldName = "DelAddress3"; x.Caption = "Address3";x.Visible = true;x.EditFormSettings.Visible =DefaultBoolean.True; });
-        settings.Columns.Add(x => { x.FieldName = "DelTown"; x.Caption = "Town"; x.Visible = true;x.EditFormSettings.Visible =DefaultBoolean.True; });
-        settings.Columns.Add(x => { x.FieldName = "DelCity"; x.Caption = "City"; x.Visible = true;x.EditFormSettings.Visible =DefaultBoolean.True; });
-        settings.Columns.Add(x => { x.FieldName = "DelPostCode"; x.Caption = "Post code";  x.Visible = true; x.EditFormSettings.Visible = DefaultBoolean.True; });
-        settings.Columns.Add(x => { x.FieldName = "DelCountry"; x.Caption = "Country code";   x.Visible = true; x.EditFormSettings.Visible = DefaultBoolean.True; });
+        settings.Columns.Add(x => { x.FieldName = "DelDesc"; x.Caption = "Description"; x.Visible = true; x.EditFormSettings.Visible = DefaultBoolean.True; });
+        settings.Columns.Add(x => { x.FieldName = "DelAddress1"; x.Caption = "Address1"; x.Visible = true; x.EditFormSettings.Visible = DefaultBoolean.True; });
+        settings.Columns.Add(x => { x.FieldName = "DelAddress2"; x.Caption = "Address2"; x.Visible = true; x.EditFormSettings.Visible = DefaultBoolean.True; });
+        settings.Columns.Add(x => { x.FieldName = "DelAddress3"; x.Caption = "Address3"; x.Visible = true; x.EditFormSettings.Visible = DefaultBoolean.True; });
+        settings.Columns.Add(x => { x.FieldName = "DelTown"; x.Caption = "Town"; x.Visible = true; x.EditFormSettings.Visible = DefaultBoolean.True; });
+        settings.Columns.Add(x => { x.FieldName = "DelCity"; x.Caption = "City"; x.Visible = true; x.EditFormSettings.Visible = DefaultBoolean.True; });
+        settings.Columns.Add(x => { x.FieldName = "DelPostCode"; x.Caption = "Post code"; x.Visible = true; x.EditFormSettings.Visible = DefaultBoolean.True; });
+        settings.Columns.Add(x => { x.FieldName = "DelCountry"; x.Caption = "Country code"; x.Visible = true; x.EditFormSettings.Visible = DefaultBoolean.True; });
         settings.Columns.Add(x => { x.FieldName = "Comments"; x.Caption = "Comments"; x.ReadOnly = true; x.Visible = true; });
         //settings.Columns.Add(x=>{ x.FieldName = "SizeID"; x.Caption = "Size"; x.ReadOnly = true; x.Visible = false; });
         //settings.Columns.Add(x=>{ x.FieldName = "Price"; x.Caption = "Price"; x.ReadOnly = true; x.Visible = false; });
@@ -77,12 +78,11 @@
 
 
 
-@if(ViewData["headerCount"]!=null)
+@if (ViewData["headerCount"] != null)
 {
-    if(Convert.ToInt32(ViewData["headerCount"])>0)
+    if (Convert.ToInt32(ViewData["headerCount"]) > 0)
     {
         <input type="hidden" id="HEADERVALUENOTZERO" value="HEADERVALUENOTZERO" />
     }
 }
 
- 

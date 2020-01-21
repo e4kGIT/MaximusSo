@@ -2,10 +2,10 @@
 <div class="row">
     @{
 
-        var addId = Session["cboDelAddress"] != null ? Convert.ToInt32(Session["cboDelAddress"].ToString()) : 0;
-        var busAdd = ((List<Maximus.Models.BusAddress>
-            )Session["DeliveryAddress"]).Any(x => x.AddressId == addId) ? ((List<Maximus.Models.BusAddress>
-                )Session["DeliveryAddress"]).Where(x => x.AddressId == addId).First() : new Maximus.Models.BusAddress();
+        var addId = Session["cboDelAddress"] != null && Session["cboDelAddress"].ToString() !=""? Convert.ToInt32(Session["cboDelAddress"].ToString()) : 0;
+        var busAdd = ((List<Maximus.Data.Models.BusAddress1>
+            )Session["DeliveryAddress"]).Any(x => x.AddressId == addId) ? ((List<Maximus.Data.Models.BusAddress1>
+                )Session["DeliveryAddress"]).Where(x => x.AddressId == addId).First() : new Maximus.Data.Models.BusAddress1();
     }
     @Html.DevExpress().ComboBox(comboBoxSettings =>
 {
@@ -29,7 +29,7 @@
     comboBoxSettings.Properties.TextFormatString = "{0}";
     comboBoxSettings.Properties.Columns.Add("AddressDescription", "Description", System.Web.UI.WebControls.Unit.Percentage(100));
 
-    comboBoxSettings.SelectedIndex = ((List<Maximus.Models.BusAddress>)Session["DeliveryAddress"]).IndexOf(busAdd);
+    comboBoxSettings.SelectedIndex = ((List<Maximus.Data.Models.BusAddress1>)Session["DeliveryAddress"]).IndexOf(busAdd);
     //comboBoxSettings.Properties.Columns.Add("AddressID", "AddressID", System.Web.UI.WebControls.Unit.Percentage(100));
     //comboBoxSettings.Properties.Columns.Add("Address1", "Address1", System.Web.UI.WebControls.Unit.Percentage(100));
     //comboBoxSettings.Properties.Columns.Add("Address2", "Address2", System.Web.UI.WebControls.Unit.Percentage(100));
@@ -39,7 +39,7 @@
     //// comboBoxSettings.Properties.DataSource = ViewBag.MultiComboBoxSites;
     //if (Model.Address != null)
     //{
-    //    var busAdd = Model.AddressLst.Any(x => x.AddressId == Model.Address.AddressId) ? Model.AddressLst.Where(x => x.AddressId == Model.Address.AddressId).First() : new Maximus.Models.BusAddress();
+    //    var busAdd = Model.AddressLst.Any(x => x.AddressId == Model.Address.AddressId) ? Model.AddressLst.Where(x => x.AddressId == Model.Address.AddressId).First() : new Maximus.Data.ModelsBusAddress();
     //    comboBoxSettings.SelectedIndex = Model.AddressLst.IndexOf(busAdd);
     //}
 }).BindList(Model).GetHtml()
@@ -71,65 +71,65 @@
                 }
             }
         }*@
-    <div class="col-md-4">
+    <div class="col-md-4 col-lg-4 col-sm-12 col-xs-12">
         @Html.DevExpress().TextBox(settings =>
    {
        settings.Name = "Address1";
        settings.Properties.Caption = "Address1";
        settings.ControlStyle.CssClass = "deliveryTbx";
-        
-           settings.Text = busAdd != null ? busAdd.Address1 : "";
-       
+
+       settings.Text = busAdd != null ? busAdd.Address1 : "";
+
    }).GetHtml()
     </div>
-    <div class="col-md-4">
+    <div class="col-md-4 col-lg-4 col-sm-12 col-xs-12">
         @Html.DevExpress().TextBox(settings =>
    {
        settings.Name = "Address2"; settings.Properties.Caption = "Address2";
        settings.ControlStyle.CssClass = "deliveryTbx";
-       
-           settings.Text = busAdd != null ? busAdd.Address2 : "";
-       
+
+       settings.Text = busAdd != null ? busAdd.Address2 : "";
+
    }).GetHtml()
     </div>
-    <div class="col-md-4">
+    <div class="col-md-4 col-lg-4 col-sm-12 col-xs-12">
         @Html.DevExpress().TextBox(settings =>
    {
        settings.Name = "Address3";
        settings.Properties.Caption = "Address3";
        settings.ControlStyle.CssClass = "deliveryTbx";
-       
-           settings.Text = busAdd != null ? busAdd.Address3 : "";
-      
+
+       settings.Text = busAdd != null ? busAdd.Address3 : "";
+
    }).GetHtml()
     </div>
 </div>
 <br />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-4 col-lg-4 col-sm-12 col-xs-12">
         @Html.DevExpress().TextBox(settings =>
    {
        settings.Name = "City";
        settings.Properties.Caption = "City";
        settings.ControlStyle.CssClass = "deliveryTbx";
-      
-           settings.Text = busAdd != null ? busAdd.City : "";
-        
+
+       settings.Text = busAdd != null ? busAdd.City : "";
+
    }).GetHtml()
     </div>
-    <div class="col-md-4">
+    <div class="col-md-4 col-lg-4 col-sm-12 col-xs-12">
         @Html.DevExpress().TextBox(settings =>
    {
        settings.Name = "PostCode";
        settings.Properties.Caption = "Postcode";
        settings.ControlStyle.CssClass = "deliveryTbx";
-      
-           settings.Text = busAdd != null ? busAdd.PostCode : "";
-       
-   }).GetHtml()
-</div>
 
-@*<div class="col-md-3">
-        @Html.DevExpress().TextBox(settings => { settings.Name = "Country"; settings.Properties.Caption = "Country"; settings.Text = busAdd != null ? busAdd.Country : ""; }).GetHtml()
-    </div>*@
+       settings.Text = busAdd != null ? busAdd.PostCode : "";
+
+   }).GetHtml()
+    </div>
+
+    @*<div class="col-md-3">
+            @Html.DevExpress().TextBox(settings => { settings.Name = "Country"; settings.Properties.Caption = "Country"; settings.Text = busAdd != null ? busAdd.Country : ""; }).GetHtml()
+        </div>*@
 </div>

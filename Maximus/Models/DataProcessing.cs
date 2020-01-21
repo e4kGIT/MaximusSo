@@ -628,20 +628,39 @@ namespace Maximus.Models
 
         #region GetPrice
 
-        public decimal GetPrice(string StyleID = "", string SizeId = "",string busId="")
+        public decimal GetPrice(string StyleID = "", string SizeId = "", string busId = "")
         {
+            decimal result = 0;
             try
             {
                 string businessId = busId;
-                decimal result = enty.tblfsk_style_sizes_prices.Any(x => x.StyleID == StyleID.Trim() & x.SizeID == SizeId.Trim() & x.BusinessId == businessId) ? (decimal)enty.tblfsk_style_sizes_prices.Where(x => x.StyleID == StyleID.Trim() & x.SizeID == SizeId.Trim() & x.BusinessId == businessId).FirstOrDefault().Price.Value : 0;
-                result = result == 0 ? enty.tblfsk_style_sizes_prices.Any(x => x.StyleID == StyleID.Trim() & x.SizeID == SizeId.Trim() & x.BusinessId == "ALL") ? (decimal)enty.tblfsk_style_sizes_prices.Where(x => x.StyleID == StyleID.Trim() & x.SizeID == SizeId.Trim() & x.BusinessId == "ALL" && x.PriceID == 2).FirstOrDefault().Price.Value : result : result;
-                if (result != 0)
+                if(StyleID.Contains(",")==false)
                 {
-                    return System.Math.Round(result, 2);
+                    result = enty.tblfsk_style_sizes_prices.Any(x => x.StyleID == StyleID.Trim() & x.SizeID == SizeId.Trim() & x.BusinessId == businessId && x.PriceID == 2) ? (decimal)enty.tblfsk_style_sizes_prices.Where(x => x.StyleID == StyleID.Trim() & x.SizeID == SizeId.Trim() & x.BusinessId == businessId && x.PriceID == 2).FirstOrDefault().Price.Value : 0;
+                    result = result == 0 ? enty.tblfsk_style_sizes_prices.Any(x => x.StyleID == StyleID.Trim() & x.SizeID == SizeId.Trim() & x.BusinessId == "ALL" && x.PriceID == 2) ? (decimal)enty.tblfsk_style_sizes_prices.Where(x => x.StyleID == StyleID.Trim() & x.SizeID == SizeId.Trim() & x.BusinessId == "ALL" && x.PriceID == 2).FirstOrDefault().Price.Value : result : result;
+                    if (result != 0)
+                    {
+                        return System.Math.Round(result, 2);
+                    }
+                    else
+                    {
+                        return 0;
+                    }
                 }
                 else
                 {
-                    return 0;
+                   string[] styleArr= StyleID.Split(',');
+                    string firstStyl = styleArr[0].ToString();
+                    result = enty.tblfsk_style_sizes_prices.Any(x => x.StyleID == firstStyl.Trim() & x.SizeID == SizeId.Trim() & x.BusinessId == businessId && x.PriceID == 2) ? (decimal)enty.tblfsk_style_sizes_prices.Where(x => x.StyleID == firstStyl.Trim() & x.SizeID == SizeId.Trim() & x.BusinessId == businessId && x.PriceID == 2).FirstOrDefault().Price.Value : 0;
+                    result = result == 0 ? enty.tblfsk_style_sizes_prices.Any(x => x.StyleID == firstStyl.Trim() & x.SizeID == SizeId.Trim() & x.BusinessId == "ALL" && x.PriceID == 2) ? (decimal)enty.tblfsk_style_sizes_prices.Where(x => x.StyleID == firstStyl.Trim() & x.SizeID == SizeId.Trim() & x.BusinessId == "ALL" && x.PriceID == 2).FirstOrDefault().Price.Value : result : result;
+                    if (result != 0)
+                    {
+                        return System.Math.Round(result, 2);
+                    }
+                    else
+                    {
+                        return 0;
+                    }
                 }
             }
             catch (Exception e)
@@ -649,6 +668,86 @@ namespace Maximus.Models
             return 0;
         }
 
+        #endregion
+       
+
+        #region GetBulkPrice
+        public decimal GetBulkPrice(int qty, string StyleID = "", string SizeId = "", string busId = "")
+        {
+            decimal resPric = 0;
+            List<BulkOrderModel> qtyMode = new List<BulkOrderModel>();
+            qtyMode = (List<BulkOrderModel>)HttpContext.Current.Session["BulkQtyModel"];
+
+            if (qtyMode.Count > 0)
+            {
+                if (qtyMode.Any(x => x.style.ToString().ToLower() == StyleID.ToLower() && x.size.ToLower() == SizeId.ToLower()))
+                {
+                    qtyMode.Remove(qtyMode.Where(x => x.style.ToString().ToLower() == StyleID.ToLower() && x.size.ToLower() == SizeId.ToLower()).First());
+                }
+            }
+            try
+            {
+                if (qty > 0)
+                {
+                    qtyMode.Add(new BulkOrderModel { size = SizeId, style = StyleID, qty = qty });
+
+                    string businessId = busId;
+                    decimal result = enty.tblfsk_style_sizes_prices.Any(x => x.StyleID == StyleID.Trim() & x.SizeID == SizeId.Trim() & x.BusinessId == businessId && x.PriceID == 2) ? (decimal)enty.tblfsk_style_sizes_prices.Where(x => x.StyleID == StyleID.Trim() & x.SizeID == SizeId.Trim() & x.BusinessId == businessId && x.PriceID == 2).FirstOrDefault().Price.Value : 0;
+                    result = result == 0 ? enty.tblfsk_style_sizes_prices.Any(x => x.StyleID == StyleID.Trim() & x.SizeID == SizeId.Trim() & x.BusinessId == "ALL" && x.PriceID == 2) ? (decimal)enty.tblfsk_style_sizes_prices.Where(x => x.StyleID == StyleID.Trim() & x.SizeID == SizeId.Trim() & x.BusinessId == "ALL" && x.PriceID == 2).FirstOrDefault().Price.Value : result : result;
+                    if (result != 0)
+                    {
+                        resPric = System.Math.Round(result, 2);
+                        qtyMode.Where(x => x.style.ToString().ToLower() == StyleID.ToLower() && x.size.ToLower() == SizeId.ToLower()).First().price = resPric * qty;
+                    }
+                    else
+                    {
+                        qtyMode.Where(x => x.style.ToString().ToLower() == StyleID.ToLower() && SizeId.ToLower() == SizeId.ToLower()).First().price = 0 * qty;
+                    }
+                    HttpContext.Current.Session["BulkQtyModel"] = qtyMode;
+                }
+                return qtyMode.Where(x => x.style.ToLower() == StyleID.ToLower()).Sum(x => x.price);
+            }
+            catch (Exception e)
+            {
+            }
+            return 0;
+        }
+        #endregion
+
+        #region GetBulkPrice1
+        public decimal GetBulkPrice1(int qty, string StyleID = "", string SizeId = "", string busId = "")
+        {
+            decimal resPric = 0;
+            //List<BulkOrderModel> qtyMode = new List<BulkOrderModel>();
+            //qtyMode = (List<BulkOrderModel>)HttpContext.Current.Session["BulkQtyModel"];
+
+            try
+            {
+                if (qty > 0)
+                {
+
+                    string businessId = busId;
+                    decimal result = enty.tblfsk_style_sizes_prices.Any(x => x.StyleID == StyleID.Trim() & x.SizeID == SizeId.Trim() & x.BusinessId == businessId && x.PriceID == 2) ? (decimal)enty.tblfsk_style_sizes_prices.Where(x => x.StyleID == StyleID.Trim() & x.SizeID == SizeId.Trim() & x.BusinessId == businessId && x.PriceID == 2).FirstOrDefault().Price.Value : 0;
+                    result = result == 0 ? enty.tblfsk_style_sizes_prices.Any(x => x.StyleID == StyleID.Trim() & x.SizeID == SizeId.Trim() & x.BusinessId == "ALL" && x.PriceID == 2) ? (decimal)enty.tblfsk_style_sizes_prices.Where(x => x.StyleID == StyleID.Trim() & x.SizeID == SizeId.Trim() & x.BusinessId == "ALL" && x.PriceID == 2).FirstOrDefault().Price.Value : result : result;
+                    if (result != 0)
+                    {
+                        resPric = System.Math.Round(result, 2);
+                        resPric = resPric * qty;
+                    }
+                    else
+                    {
+                        resPric = 0 * qty;
+                    }
+                    return resPric;
+                }
+
+            }
+            catch (Exception e)
+            {
+            }
+            return 0;
+
+        }
         #endregion
 
         #region getCount
@@ -1458,7 +1557,7 @@ namespace Maximus.Models
             var role = enty.tblusers.Where(x => x.UserName == userId && x.BusinessID == busId && x.Active == "Y").First().AccessID;
             string strCompanyID = ConfigurationManager.AppSettings["CompanyId"].ToString();
             string sSqry = "";
-            sSqry = "CALL `GetEmployeeByRoles1`('" + strCompanyID + "','" + busId + "','" + userId + "','" + role + "')";
+            sSqry = "CALL `GetEmployeeByRolesLast`('" + strCompanyID + "','" + busId + "','" + userId + "','" + role + "')";
             MySqlConnection conn = new MySqlConnection(ConnectionString);
             try
             {
@@ -1472,7 +1571,7 @@ namespace Maximus.Models
                     foreach (DataRow dr in dt.Rows)
                     {
                         var empId = dr.ItemArray[0].ToString();
-                        result.Add(new EmployeeViewModel { EmployeeId = dr.ItemArray[1].ToString(), EmpFirstName = dr.ItemArray[4].ToString(), Department = dr.ItemArray[3].ToString(), EmpLastName = dr.ItemArray[5].ToString(), EmpUcodes = dr.ItemArray[8].ToString(), StartDate = DateTime.Parse(dr.ItemArray[6].ToString()), EndDate = DateTime.Parse(dr.ItemArray[7].ToString()), role = dr.ItemArray[9].ToString() });
+                        result.Add(new EmployeeViewModel { EmployeeId = dr.ItemArray[1].ToString(), EmpFirstName = dr.ItemArray[4].ToString(), Department = dr.ItemArray[3].ToString(), EmpLastName = dr.ItemArray[5].ToString(), EmpUcodes = dr.ItemArray[8].ToString(), StartDate = DateTime.Parse(dr.ItemArray[6].ToString()), EndDate = DateTime.Parse(dr.ItemArray[7].ToString()), role = dr.ItemArray[9].ToString(), LastOrderDate = dr["OrderDate"].ToString(), LastOrderNo = dr["OrderNo"].ToString() != "" ? Convert.ToInt64(dr["OrderNo"].ToString()) : 0, OrderType = dr["OrderType"].ToString() });
                     }
                 }
             }
@@ -1982,7 +2081,7 @@ namespace Maximus.Models
                     foreach (DataRow dr in dt.Rows)
                     {
 
-                        result = "<tr><td>Issued: " + dr.ItemArray[4].ToString() + "</td></tr><tr><td>In Basket: " + inBasket + "</td></tr><tr><td>Orderno: " + dr.ItemArray[1].ToString() + " Orderdate:" + DateTime.Parse(dr.ItemArray[3].ToString()).ToString("dd-MM-yyyy") + "</td></tr></table>";
+                        result = "<tr><td>Issued: " + dr.ItemArray[4].ToString() + "</td></tr><tr><td>In Basket: " + inBasket + "</td></tr><tr><td>Order No: " + dr.ItemArray[1].ToString() + " Order Date:" + DateTime.Parse(dr.ItemArray[3].ToString()).ToString("dd-MM-yyyy") + "</td></tr></table>";
                     }
                 }
             }
@@ -1998,6 +2097,27 @@ namespace Maximus.Models
         }
         #endregion
 
+        #region getReqData
+        public string GetReqData(string StyleID)
+        {
+            string lblValue = "";
+            StyleID = StyleID.Contains(",") ? StyleID.Split(',')[0] : StyleID;
+            lblValue = enty.tblfsk_setvalues.Any(x => x.StyleID == StyleID && x.SettingID == "REQDATA1") ? enty.tblfsk_setvalues.Where(x => x.StyleID == StyleID && x.SettingID == "REQDATA1").First().Value : "";
+            if (lblValue == "")
+            {
+                try
+                {
+                    lblValue = enty.tblfsk_settings.Any(x => x.SettingID == "REQDATA1") ? enty.tblbus_settings.Where(x => x.SettingID == "REQDATA1").First().DefaultValue : "";
+                }
+                catch (Exception e)
+                {
+
+                }
+            }
+            return lblValue;
+        }
+        #endregion 
+
         #region GetAllPreviousData
         public PreviousQty GetPreviousHistory(string EmpId, string BuisnessId, string styleId)
         {
@@ -2008,7 +2128,7 @@ namespace Maximus.Models
             try
             {
                 DataTable dt = new DataTable();
-                string sQry = "CALL `GetPreviousHistory`('" + styleId + "','" + BuisnessId + "','" + EmpId + "')";
+                string sQry = "SELECT t2.`SizeID`,t2.`OrdQty`  FROM `tblsop_salesorder_header` t1 JOIN `tblsop_salesorder_detail` t2 ON (t1.`OrderNo`= t2.`OrderNo` ) WHERE t1.`PinNo`= '" + EmpId + "' AND t1.`CustID`= '" + BuisnessId + "' AND t2.`StyleID`= '" + styleId + "' AND t1.`OrderType`= 'SO' ORDER BY t1.`OrderNo` DESC LIMIT 1";
                 con.Open();
                 MySqlCommand cmd = new MySqlCommand(sQry, con);
                 using (var reader = cmd.ExecuteReader())

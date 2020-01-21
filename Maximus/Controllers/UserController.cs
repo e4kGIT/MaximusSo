@@ -1,6 +1,10 @@
-﻿using Maximus.Filter;
+﻿using Maximus.Data.Interface.Concrete;
+using Maximus.Data.models.RepositoryModels;
+using Maximus.Data.Models;
+using Maximus.Filter;
 using Maximus.Helpers;
-using Maximus.Models;
+using Maximus.Services;
+using Maximus.Services.Interface;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -10,15 +14,30 @@ using System.Security.Principal;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Security;
+using Unity;
 
 namespace Maximus.Controllers
 {
     public class UserController : Controller
     {
-        e4kmaximusdbEntities entity = new e4kmaximusdbEntities();
-        DataProcessing dp = new DataProcessing();
-        ControllerHelperMethods helper = new ControllerHelperMethods();
-        // GET: User
+        public string cmpId = System.Configuration.ConfigurationManager.AppSettings["CompanyId"].ToString();
+        [Dependency]
+        private readonly IDataConnection _dataConnection;
+        [Dependency]
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly User _user1;
+        private readonly IUser _user;
+        public UserController(IUnitOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
+            UserService user = new UserService(_unitOfWork);
+            DataConnectionService dataConnection = new DataConnectionService(_unitOfWork);
+            User user1 = new User(_unitOfWork);
+            _user = user;
+            _user1 = user1;
+            _dataConnection = dataConnection;
+        }
+
         public ActionResult Login()
         {
             Session.Clear();
@@ -28,22 +47,18 @@ namespace Maximus.Controllers
             Response.Cookies[FormsAuthentication.FormsCookieName].Expires = DateTime.Now.AddYears(-1);
             authManager.User = new GenericPrincipal(new GenericIdentity(string.Empty), null);
             authManager.SignOut("ApplicationCookie");
-            //var s = User.Identity.IsAuthenticated;
-            //       FormsAuthentication.SignOut();
-            //       System.Web.HttpContext.Current.User =
-            //new GenericPrincipal(new GenericIdentity(string.Empty), null);
-            //       var sss1 = User.Identity.IsAuthenticated;
-
             return View();
         }
         [HttpPost]
         public ActionResult Login(LoginModel logDetails)
         {
+          
             if (ModelState.IsValid)
             {
                 if (logDetails.UserName != "" & logDetails.Password != "")
                 {
-                    List<EmployeeLoginModel> data = dp.GetLoginDetails(logDetails.UserName, logDetails.Password);
+                    var ss = _user1.GetAll(x => x.BusinessID == "S27").Select(x => new { name = x.UserName, Pass = x.Password }).ToList();
+                    List<EmployeeLoginModel> data = _user.GetLoginDetails(logDetails.UserName, logDetails.Password);
                     if (data.Count > 0)
                     {
                         if (data.Any(x => x.UserName.ToLower() == logDetails.UserName.ToLower() && x.Password == logDetails.Password && x.Active.ToLower() == "y"))
@@ -89,179 +104,188 @@ namespace Maximus.Controllers
                             Session["Email"] = data.First().Email_ID;
                             busId = data.First().BusinessID;
                             Session["BuisnessId"] = data.First().BusinessID;
-                            Session["Buisness"] = entity.tblbus_business.Where(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim()).First().Name;
-                            Session["WareHouseID"] = dp.SetDefaultWarehouse(logDetails.UserName, data.First().BusinessID);
-
-                            if (!dp.IsSuperUser(cmpId, busId, data.First().UserName))
+                            Session["Buisness"] = _dataConnection.GetAllBusBusinness().Where(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim()).First().Name;
+                            var s = _dataConnection.GetAllBusBusinness().Where(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim()).First().Name; ;
+                            Session["WareHouseID"] = _dataConnection.SetDefaultWarehouse(logDetails.UserName, data.First().BusinessID);
+                            if (!_dataConnection.IsSuperUser(cmpId, busId, data.First().UserName))
                             {
-                                AllowSite = Convert.ToBoolean(dp.BusinessParam("ONL_NEWSYSTEM", busId.ToUpper()));
+                                AllowSite = Convert.ToBoolean(_dataConnection.BusinessParam("ONL_NEWSYSTEM", busId.ToUpper()));
                                 if (AllowSite == false)
                                 {
                                     goto skip;
                                 }
                                 else
                                 {
-                                    AllowSite = Convert.ToBoolean(dp.BusinessParam("ONL_ENHSYSTEM", busId.ToUpper()));
+                                    AllowSite = Convert.ToBoolean(_dataConnection.BusinessParam("ONL_ENHSYSTEM", busId.ToUpper()));
                                     if (!AllowSite)
                                     {
                                         goto skip;
                                     }
                                 }
                             }
-                            //Session["AddressUserCreate"] = dp.BusinessParam("DELADDR_USER_CREATE",busId);
-                            Session["UseMatrix"] = dp.CompanyParam("UseMatrix", cmpId);
-                            Session["CC_PREFIXLETTERS"] = dp.BusinessParam("CC_PREFIXLETTERS", busId);
-                            Session["BudgetReq"] = dp.CompanyParam("BUDGETREQ", cmpId);
-                            Session["MANPACK"] = dp.BusinessParam("MANPACK", data.First().BusinessID.ToUpper().Trim());
-                            Session["CARRREQAMT"] = dp.BusinessParam("CARRREQAMT", data.First().BusinessID.ToUpper().Trim());
-                            Session["CARRPRICE"] = dp.BusinessParam("CARRPRICE", data.First().BusinessID.ToUpper().Trim());
-                            Session["CARRPERCENT"] = dp.BusinessParam("CARRPERCENT", data.First().BusinessID.ToUpper().Trim());
-                            Session["CARRPRICE_RTN"] = dp.BusinessParam("CARRPRICE_RTN", data.First().BusinessID.ToUpper().Trim());
-                            Session["CARRPRICE_XCHG"] = dp.BusinessParam("CARRPRICE_XCHG", data.First().BusinessID.ToUpper().Trim());
-                            Session["BusBudgetReq"] = dp.BusinessParam("BUDGETREQ", data.First().BusinessID.ToUpper().Trim());
-                            Session["DEFEMPDELADDR"] = dp.BusinessParam("DEFEMPDELADDR", data.First().BusinessID.ToUpper().Trim());
-                            Session["ABANDON_EMP"] = dp.BusinessParam("ABANDON_EMP", data.First().BusinessID.ToUpper().Trim());
-                            Session["DELADDR_SAVE"] = dp.BusinessParam("DELADDR_SAVE", data.First().BusinessID.ToUpper().Trim());
-                            Session["ONL_REORDER_REQ"] = dp.BusinessParam("ONL_REORDER_REQ", data.First().BusinessID.ToUpper().Trim());
-                            Session["IsSiteCode"] = dp.IsSiteCode(busId);
-                            //Session["RolloutName"] = dp.BusinessParam("ROLLOUT_NAME", busId);
+                            //Session["AddressUserCreate"] = _dataConnection.BusinessParam("DELADDR_USER_CREATE",busId);
+                            Session["UseMatrix"] = _dataConnection.CompanyParam("UseMatrix", cmpId);
+                            Session["CC_PREFIXLETTERS"] = _dataConnection.BusinessParam("CC_PREFIXLETTERS", busId);
+                            Session["BudgetReq"] = _dataConnection.CompanyParam("BUDGETREQ", cmpId);
+                            Session["MANPACK"] = _dataConnection.BusinessParam("MANPACK", data.First().BusinessID.ToUpper().Trim());
+                            Session["CARRREQAMT"] = _dataConnection.BusinessParam("CARRREQAMT", data.First().BusinessID.ToUpper().Trim());
+                            Session["CARRPRICE"] = _dataConnection.BusinessParam("CARRPRICE", data.First().BusinessID.ToUpper().Trim());
+                            Session["CARRPERCENT"] = _dataConnection.BusinessParam("CARRPERCENT", data.First().BusinessID.ToUpper().Trim());
+                            Session["CARRPRICE_RTN"] = _dataConnection.BusinessParam("CARRPRICE_RTN", data.First().BusinessID.ToUpper().Trim());
+                            Session["CARRPRICE_XCHG"] = _dataConnection.BusinessParam("CARRPRICE_XCHG", data.First().BusinessID.ToUpper().Trim());
+                            Session["BusBudgetReq"] = _dataConnection.BusinessParam("BUDGETREQ", data.First().BusinessID.ToUpper().Trim());
+                            Session["DEFEMPDELADDR"] = _dataConnection.BusinessParam("DEFEMPDELADDR", data.First().BusinessID.ToUpper().Trim());
+                            Session["ABANDON_EMP"] = _dataConnection.BusinessParam("ABANDON_EMP", data.First().BusinessID.ToUpper().Trim());
+                            Session["DELADDR_SAVE"] = _dataConnection.BusinessParam("DELADDR_SAVE", data.First().BusinessID.ToUpper().Trim());
+                            Session["ONL_REORDER_REQ"] = _dataConnection.BusinessParam("ONL_REORDER_REQ", data.First().BusinessID.ToUpper().Trim());
+                            Session["IsSiteCode"] = _dataConnection.IsSiteCode(busId);
                             Session["RolloutName"] = "";
                             if (Session["RolloutName"].ToString() != "")
                             {
                                 Session["FITALLOC"] = "FITALLOC_RO";
                                 Session["DIMALLOC"] = "DIMALLOC_RO";
                             }
-                            Session["BUDGETREQ"] = Convert.ToBoolean(dp.BusinessParam("BUDGETREQ", busId));
+                            Session["BUDGETREQ"] = Convert.ToBoolean(_dataConnection.BusinessParam("BUDGETREQ", busId));
                             Session["RolloutOrder"] = Session["RolloutName"] == null | Session["RolloutName"].ToString() == "" ? false : true;
-                            booNom = dp.CompanyParam("ONLNEREQNOM1", cmpId);
+                            booNom = _dataConnection.CompanyParam("ONLNEREQNOM1", cmpId);
                             Session["ONLNEREQNOM1"] = booNom == "" ? false : booNom.ToLower() == "true" ? true : false;
-                            booNom = dp.CompanyParam("ONLNEREQNOM2", cmpId);
+                            booNom = _dataConnection.CompanyParam("ONLNEREQNOM2", cmpId);
                             Session["ONLNEREQNOM2"] = booNom == "" ? false : booNom.ToLower() == "true" ? true : false;
-                            booNom = dp.CompanyParam("ONLNEREQNOM3", cmpId);
+                            booNom = _dataConnection.CompanyParam("ONLNEREQNOM3", cmpId);
                             Session["ONLNEREQNOM3"] = booNom == "" ? false : booNom.ToLower() == "true" ? true : false;
-                            booNom = dp.CompanyParam("ONLNEREQNOM4", cmpId);
+                            booNom = _dataConnection.CompanyParam("ONLNEREQNOM4", cmpId);
                             Session["ONLNEREQNOM4"] = booNom == "" ? false : booNom.ToLower() == "true" ? true : false;
-                            booNom = dp.CompanyParam("ONLNEREQNOM5", cmpId);
+                            booNom = _dataConnection.CompanyParam("ONLNEREQNOM5", cmpId);
                             Session["ONLNEREQNOM5"] = booNom == "" ? false : booNom.ToLower() == "true" ? true : false;
-                            booDefDelAddr = dp.BusinessParam("DEFINVADDR", data.First().BusinessID.Trim().ToUpper());
+                            booDefDelAddr = _dataConnection.BusinessParam("DEFINVADDR", data.First().BusinessID.Trim().ToUpper());
                             Session["DEFINVADDR"] = booDefDelAddr == "" ? false : booDefDelAddr.ToLower() == "true" ? true : false;
-                            booDefDelRef = dp.BusinessParam("DELREFREQ", data.First().BusinessID.Trim().ToUpper());
+                            booDefDelRef = _dataConnection.BusinessParam("DELREFREQ", data.First().BusinessID.Trim().ToUpper());
                             Session["DELREFREQ"] = booDefDelRef == "" ? false : booDefDelRef.ToLower() == "true" ? true : false;
-                            onlineDefNom = dp.BusinessParam("ONLINEDEFNOM", data.First().BusinessID.Trim().ToUpper());
-                            Session["CUSTREFDEF"] = dp.BusinessParam("CUSTREFDEF", data.First().BusinessID.Trim().ToUpper());
+                            onlineDefNom = _dataConnection.BusinessParam("ONLINEDEFNOM", data.First().BusinessID.Trim().ToUpper());
+                            Session["CUSTREFDEF"] = _dataConnection.BusinessParam("CUSTREFDEF", data.First().BusinessID.Trim().ToUpper());
                             Session["ONLINEDEFNOM"] = onlineDefNom;
-                            booDefNomCode = dp.BusinessParam("DEFDELREFNOM", data.First().BusinessID.Trim().ToUpper());
+                            booDefNomCode = _dataConnection.BusinessParam("DEFDELREFNOM", data.First().BusinessID.Trim().ToUpper());
                             Session["DEFDELREFNOM"] = booDefNomCode == "" ? false : booDefDelAddr.ToLower() == "true" ? true : false;
-                            booDivBudget = dp.BusinessParam("REQDIVBUDGET", data.First().BusinessID.Trim().ToUpper());
+                            booDivBudget = _dataConnection.BusinessParam("REQDIVBUDGET", data.First().BusinessID.Trim().ToUpper());
                             Session["REQDIVBUDGET"] = booDivBudget == "" ? false : booDefDelAddr.ToLower() == "true" ? true : false;
-                            strDefNomCode = dp.BusinessParam("ONLINEDEFNOM", data.First().BusinessID.Trim().ToUpper());
+                            strDefNomCode = _dataConnection.BusinessParam("ONLINEDEFNOM", data.First().BusinessID.Trim().ToUpper());
                             Session["ONLINEDEFNOMQ"] = strDefNomCode == "" ? false : booDefDelAddr.ToLower() == "true" ? true : false;
-                            booBudgetEmail = dp.BusinessParam("REQBUDGETEMAIL", data.First().BusinessID.Trim().ToUpper());
+                            booBudgetEmail = _dataConnection.BusinessParam("REQBUDGETEMAIL", data.First().BusinessID.Trim().ToUpper());
                             Session["REQBUDGETEMAIL"] = booBudgetEmail == "" ? false : booDefDelAddr.ToLower() == "true" ? true : false;
-                            booPointsReq = dp.BusinessParam("POINTSREQ", data.First().BusinessID.Trim().ToUpper());
+                            booPointsReq = _dataConnection.BusinessParam("POINTSREQ", data.First().BusinessID.Trim().ToUpper());
                             Session["POINTSREQD"] = booPointsReq == "" ? false : booDefDelAddr.ToLower() == "true" ? true : false;
-                            booCusRefMan = dp.BusinessParam("CusRefMan", data.First().BusinessID.Trim().ToUpper());
+                            booCusRefMan = _dataConnection.BusinessParam("CusRefMan", data.First().BusinessID.Trim().ToUpper());
                             Session["CusRefMan"] = booCusRefMan == "" ? false : booCusRefMan.ToLower() == "true" ? true : false;
-                            Session["DIFF_MANPACK_INFO"] = dp.BusinessParam("DIFF_MANPACK_INFO", busId);
-                            var DIFF = dp.BusinessParam("DIFF_MANPACK_INFO", busId);
+                            Session["DIFF_MANPACK_INFO"] = _dataConnection.BusinessParam("DIFF_MANPACK_INFO", busId);
+                            var DIFF = _dataConnection.BusinessParam("DIFF_MANPACK_INFO", busId);
                             if (Session["RolloutName"].ToString() != "")
                             {
                                 Session["FITALLOC"] = "FITALLOC_RO";
                                 Session["DIMALLOC"] = "DIMALLOC_RO";
                             }
-                            booRea = dp.BusinessParam("SOPREAREQ", data.First().BusinessID.Trim().ToUpper());
+                            booRea = _dataConnection.BusinessParam("SOPREAREQ", data.First().BusinessID.Trim().ToUpper());
                             if (booRea != "")
                             {
                                 Session["SOPREAREQ"] = booRea == "" ? false : booDefDelAddr.ToLower() == "true" ? true : false;
                             }
                             else
                             {
-                                booCmpRea = dp.CompanyParam("SOPREAREQ", cmpId);
+                                booCmpRea = _dataConnection.CompanyParam("SOPREAREQ", cmpId);
                                 Session["SOPREAREQ"] = booCmpRea == "" ? false : booDefDelAddr.ToLower() == "true" ? true : false;
                             }
-                            //booStkLevel = dp.BusinessParam("REQSTKLEVEL", Session["BuisnessId"].ToString());
+                            //booStkLevel = _dataConnection.BusinessParam("REQSTKLEVEL", Session["BuisnessId"].ToString());
                             //Session["REQSTKLEVEL"] = booStkLevel == "" ? false : Convert.ToBoolean(booStkLevel);
-                            Session["DEFEMPLOYEE"] = dp.DefaultEmployee(ConfigurationSettings.AppSettings["CompanyId"].ToString(), Session["UserName"].ToString().Trim().ToUpper(), Session["BuisnessId"].ToString().ToUpper());
-                            booDespConfirm = dp.BusinessParam("CHKDISPCONFIRM", Session["BuisnessId"].ToString().ToUpper());
+                            Session["DEFEMPLOYEE"] = _dataConnection.DefaultEmployee(ConfigurationSettings.AppSettings["CompanyId"].ToString(), Session["UserName"].ToString().Trim().ToUpper(), Session["BuisnessId"].ToString().ToUpper());
+                            booDespConfirm = _dataConnection.BusinessParam("CHKDISPCONFIRM", Session["BuisnessId"].ToString().ToUpper());
                             Session["CHKDISPCONFIRM"] = booDespConfirm == "" ? false : Convert.ToBoolean(Session["CHKDISPCONFIRM"]);
-                            mMonthsAgo = dp.BusinessParam("MONTHAGO_RT", Session["BuisnessId"].ToString().ToUpper());
+                            mMonthsAgo = _dataConnection.BusinessParam("MONTHAGO_RT", Session["BuisnessId"].ToString().ToUpper());
                             Session["MONTHAGO_RT"] = mMonthsAgo == "" ? 1 : Convert.ToInt32(mMonthsAgo);
-                            if (dp.CompanyParam("CUSPRODCODE", ConfigurationSettings.AppSettings["CompanyId"].ToString()) != "")
+                            if (_dataConnection.CompanyParam("CUSPRODCODE", ConfigurationSettings.AppSettings["CompanyId"].ToString()) != "")
                             {
-                                Session["CusProdCode"] = Convert.ToBoolean(dp.CompanyParam("CUSPRODCODE", ConfigurationSettings.AppSettings["CompanyId"].ToString()));
+                                Session["CusProdCode"] = Convert.ToBoolean(_dataConnection.CompanyParam("CUSPRODCODE", ConfigurationSettings.AppSettings["CompanyId"].ToString()));
                             }
                             else
                             {
                                 Session["CusProdCode"] = false;
                             }
                             BusinessInfo busInfo = new BusinessInfo();
-                            busInfo = dp.GetbusInfo(busId);
+                            busInfo = _dataConnection.GetbusInfo(busId);
                             Session["Currency_Name"] = busInfo.Currency_Name;
                             Session["CurrencyExchangeRate"] = busInfo.CurrencyExchangeRate;
-                            Session["intNoOfday"] = dp.BusinessParam("NoDaysToDel", busId);
-                            Session["IncWendsDel"] = dp.BusinessParam("IncWendsDel", busId);
+                            Session["intNoOfday"] = _dataConnection.BusinessParam("NoDaysToDel", busId);
+                            Session["IncWendsDel"] = _dataConnection.BusinessParam("IncWendsDel", busId);
                             Session["Rep_Id"] = busInfo.Rep_Id;
                             Session["OrderType"] = "SO";
                             // Session["colLines"]=colline
-                            Session["REQ_REASONPAGE"] = dp.IsReasonUcodes(busId);
+                            Session["REQ_REASONPAGE"] = _dataConnection.IsReasonUcodes(busId);
                             Session["IsVisitPrivate"] = false;
-                            Session["DELADDR_USER_CREATE"] = Convert.ToBoolean(dp.BusinessParam("DELADDR_USER_CREATE", busId).ToUpper().Trim());
-                            Session["IsAddressToEmployee"] = dp.BusinessParam("DELADDRMAPTO", busId).ToUpper().Trim() == "EMPLOYEE" ? true : false;
-                            Session["IsAddressToAll"] = dp.BusinessParam("DELADDRMAPTO", busId).ToUpper().Trim() == "ALL" ? true : false;
+                            Session["DELADDR_USER_CREATE"] = Convert.ToBoolean(_dataConnection.BusinessParam("DELADDR_USER_CREATE", busId).ToUpper().Trim());
+                            Session["IsAddressToEmployee"] = _dataConnection.BusinessParam("DELADDRMAPTO", busId).ToUpper().Trim() == "EMPLOYEE" ? true : false;
+                            Session["IsAddressToAll"] = _dataConnection.BusinessParam("DELADDRMAPTO", busId).ToUpper().Trim() == "ALL" ? true : false;
                             Session["pandeliverypanelid"] = (bool)Session["IsAddressToEmployee"] | (bool)Session["IsAddressToAll"];
-                            var permissionLst = dp.PermissionSettings(Session["BuisnessId"].ToString(), Session["UserName"].ToString(), "chkMapEmp", Session["Access"].ToString());
+                            var permissionLst = _dataConnection.PermissionSettings(Session["BuisnessId"].ToString(), Session["UserName"].ToString(), "chkMapEmp", Session["Access"].ToString());
+                            Session["permissionLst"] = permissionLst;
                             Session["chkMapEmp"] = permissionLst.Any(x => x.ControlId.Trim() == "chkMapEmp") ? permissionLst.Where(x => x.ControlId.Trim() == "chkMapEmp").First().Permission.ToLower() : "hide";
+                            Session[""] =
                             Session["Price"] = permissionLst.Any(x => x.ControlId.Trim() == "Price") ? permissionLst.Where(x => x.ControlId.Trim() == "Price").First().Permission.ToLower() : "hide";
                             Session["pnlCommentsNominal"] = permissionLst.Any(x => x.ControlId.Trim() == "pnlCommentsNominal") ? permissionLst.Where(x => x.ControlId.Trim() == "pnlCommentsNominal").First().Permission.ToLower() : "hide";
                             Session["pnlCarriageReason"] = permissionLst.Any(x => x.ControlId.Trim() == "pnlCarriageReason") ? permissionLst.Where(x => x.ControlId.Trim() == "pnlCarriageReason").First().Permission.ToLower() : "hide";
                             Session["chkMapAddr"] = permissionLst.Any(x => x.ControlId.Trim() == "chkMapAddr") ? permissionLst.Where(x => x.ControlId.Trim() == "chkMapAddr").First().Permission.ToLower() : "";
+                            Session["ALLOW_OVERRIDE_ENT"] = permissionLst.Any(x => x.ControlId.Trim() == "ALLOW_OVERRIDE_ENT") ? permissionLst.Where(x => x.ControlId.Trim() == "ALLOW_OVERRIDE_ENT").First().Permission.ToLower() : "";
+                            var ass1 = Session["ALLOW_OVERRIDE_ENT"].ToString();
                             var da1 = !(Session["chkMapAddr"].ToString().ToLower().Trim() == "hide");
                             Session["chkMapAddrVisiblity"] = da1;
                             Session["OVERRIDE_ENT_WITH_REASON"] = permissionLst.Any(x => x.ControlId.Trim() == "OVERRIDE_ENT_WITH_REASON") ? permissionLst.Where(x => x.ControlId.Trim() == "OVERRIDE_ENT_WITH_REASON").First().Permission.ToLower() : "hide";
-                            Session["ShowHourse"] = dp.ShowHourse(busId);
-                            Session["ONLCUSREFLBL"] = dp.BusinessParam("ONLCUSREFLBL", busId);
-                            Session["OnStop"] = dp.BusinessParam("OnStop", busId);
-                            Session["Carrier"] = dp.BusinessParam("Carrier", busId);
-                            Session["ONLNEREQNOM1"] = dp.CompanyParam("ONLNEREQNOM1", cmpId);
-                            Session["ONLNEREQNOM2"] = dp.CompanyParam("ONLNEREQNOM2", cmpId);
-                            Session["ONLNEREQNOM3"] = dp.CompanyParam("ONLNEREQNOM3", cmpId);
-                            Session["ONLNEREQNOM4"] = dp.CompanyParam("ONLNEREQNOM4", cmpId);
-                            Session["ONLNEREQNOM5"] = dp.CompanyParam("ONLNEREQNOM5", cmpId);
-                            Session["ONLNEDEFNOM1"] = dp.CompanyParam("ONLNEDEFNOM1", cmpId);
-                            Session["ONLNEDEFNOM2"] = dp.CompanyParam("ONLNEDEFNOM2", cmpId);
-                            Session["ONLNEDEFNOM3"] = dp.CompanyParam("ONLNEDEFNOM3", cmpId);
-                            Session["ONLNEDEFNOM4"] = dp.CompanyParam("ONLNEDEFNOM4", cmpId);
-                            Session["ONLNEDEFNOM5"] = dp.CompanyParam("ONLNEDEFNOM5", cmpId);
-                            Session["ROLLOUT_NAME"] = dp.BusinessParam("ROLLOUT_NAME", busId);
-                            Session["ONLNETXTNOM1"] = dp.CompanyParam("ONLNETXTNOM1", busId);
-                            Session["ONLNETXTNOM2"] = dp.CompanyParam("ONLNETXTNOM2", busId);
-                            Session["ONLNETXTNOM3"] = dp.CompanyParam("ONLNETXTNOM3", busId);
-                            Session["ONLNETXTNOM4"] = dp.CompanyParam("ONLNETXTNOM4", busId);
-                            Session["ONLNETXTNOM5"] = dp.CompanyParam("ONLNETXTNOM5", busId);
+                            Session["ShowHourse"] = _dataConnection.ShowHourse(busId);
+                            Session["ONLCUSREFLBL"] = _dataConnection.BusinessParam("ONLCUSREFLBL", busId);
+                            Session["OnStop"] = _dataConnection.BusinessParam("OnStop", busId);
+                            Session["Carrier"] = _dataConnection.BusinessParam("Carrier", busId);
+                            Session["ONLNEREQNOM1"] = _dataConnection.CompanyParam("ONLNEREQNOM1", cmpId);
+                            Session["ONLNEREQNOM2"] = _dataConnection.CompanyParam("ONLNEREQNOM2", cmpId);
+                            Session["ONLNEREQNOM3"] = _dataConnection.CompanyParam("ONLNEREQNOM3", cmpId);
+                            Session["ONLNEREQNOM4"] = _dataConnection.CompanyParam("ONLNEREQNOM4", cmpId);
+                            Session["ONLNEREQNOM5"] = _dataConnection.CompanyParam("ONLNEREQNOM5", cmpId);
+                            Session["ONLNEDEFNOM1"] = _dataConnection.CompanyParam("ONLNEDEFNOM1", cmpId);
+                            Session["ONLNEDEFNOM2"] = _dataConnection.CompanyParam("ONLNEDEFNOM2", cmpId);
+                            Session["ONLNEDEFNOM3"] = _dataConnection.CompanyParam("ONLNEDEFNOM3", cmpId);
+                            Session["ONLNEDEFNOM4"] = _dataConnection.CompanyParam("ONLNEDEFNOM4", cmpId);
+                            Session["ONLNEDEFNOM5"] = _dataConnection.CompanyParam("ONLNEDEFNOM5", cmpId);
+                            Session["ROLLOUT_NAME"] = _dataConnection.BusinessParam("ROLLOUT_NAME", busId);
+                            Session["ONLNETXTNOM1"] = _dataConnection.CompanyParam("ONLNETXTNOM1", busId);
+                            Session["ONLNETXTNOM2"] = _dataConnection.CompanyParam("ONLNETXTNOM2", busId);
+                            Session["ONLNETXTNOM3"] = _dataConnection.CompanyParam("ONLNETXTNOM3", busId);
+                            Session["ONLNETXTNOM4"] = _dataConnection.CompanyParam("ONLNETXTNOM4", busId);
+                            Session["ONLNETXTNOM5"] = _dataConnection.CompanyParam("ONLNETXTNOM5", busId);
                             Session["txtcarriercharge"] = permissionLst.Any(x => x.ControlId.Trim() == "txtcarriercharge") ? permissionLst.Where(x => x.ControlId.Trim() == "txtcarriercharge").First().Permission.ToLower() : "hide";
-                            Session["IsManPack"] = true;
+                            Session["IsManPack"] = false;
+                            Session["IsBulkOrder"] = false;
+                            Session["IsBulkOrder1"] = false;
+                            //Session["IsBulkOrder"] = true;
                             SalesOrderHeaderViewModel saleHeads = new SalesOrderHeaderViewModel();
                             Session["objCurrentOrder"] = saleHeads;
-                            var s = permissionLst.Any(x => x.ControlId == "pnlRolloutName");
+                            var sddd = permissionLst.Any(x => x.ControlId == "pnlRolloutName");
                             Session["pnlRolloutName"] = permissionLst.Any(x => x.ControlId == "pnlRolloutName") ? permissionLst.Where(x => x.ControlId == "pnlRolloutName").First().Permission.ToLower() == "show" ? true : false : false;
                             Session["ProductBy"] = "Style";
-                            Session["PricePermit"] = dp.getPermission(controls.Price, data.First().AccessID, Session["BuisnessId"].ToString().ToUpper(), "", Session["UserName"].ToString());
-                            Session["OrderPermit"] = dp.getPermission(controls.Orders, data.First().AccessID, Session["BuisnessId"].ToString().ToUpper(), Session["UserName"].ToString());
-                            Session["AccessPermit"] = dp.getPermission(controls.Access, data.First().AccessID, Session["BuisnessId"].ToString().ToUpper(), Session["UserName"].ToString());
-                            Session["OrderDelete"] = dp.getPermission(controls.OrderDelete, data.First().AccessID, Session["BuisnessId"].ToString().ToUpper(), Session["UserName"].ToString());
-                            Session["NomCode"] = dp.getPermission(controls.NomCode, data.First().AccessID, Session["BuisnessId"].ToString().ToUpper(), Session["UserName"].ToString());
-                            Session["OverrideEnt"] = dp.getPermission(controls.AllowOverrideEntitlement, data.First().AccessID, Session["BuisnessId"].ToString().ToUpper(), Session["UserName"].ToString());
-                            Session["OverrideEntWithReason"] = dp.getPermission(controls.OverrideEntitlementWithReason, data.First().AccessID, Session["BuisnessId"].ToString().ToUpper());
-                            Session["SAPPermit"] = dp.getPermission(controls.SAP, data.First().AccessID, Session["BuisnessId"].ToString().ToUpper());
-                            Session["OrderConfirm"] = dp.getPermission(controls.OrderConfirm, data.First().AccessID, Session["BuisnessId"].ToString().ToUpper());
-                            Session["ShowStockcard"] = dp.getPermission(controls.OrderConfirm, data.First().AccessID, Session["BuisnessId"].ToString().ToUpper());
-                            Session["ROLLOUTEMPDELADDR_CHG"] = dp.getPermission(controls.ROLLOUTEMPDELADDR_CHG, data.First().AccessID, Session["BuisnessId"].ToString().ToUpper());
+                            Session["PricePermit"] = _dataConnection.getPermission(controls.Price, data.First().AccessID, Session["BuisnessId"].ToString().ToUpper(), "", Session["UserName"].ToString());
+                            Session["OrderPermit"] = _dataConnection.getPermission(controls.Orders, data.First().AccessID, Session["BuisnessId"].ToString().ToUpper(), Session["UserName"].ToString());
+                            Session["AccessPermit"] = _dataConnection.getPermission(controls.Access, data.First().AccessID, Session["BuisnessId"].ToString().ToUpper(), Session["UserName"].ToString());
+                            Session["OrderDelete"] = _dataConnection.getPermission(controls.OrderDelete, data.First().AccessID, Session["BuisnessId"].ToString().ToUpper(), Session["UserName"].ToString());
+                            Session["NomCode"] = _dataConnection.getPermission(controls.NomCode, data.First().AccessID, Session["BuisnessId"].ToString().ToUpper(), Session["UserName"].ToString());
+                            Session["OverrideEnt"] = _dataConnection.getPermission(controls.AllowOverrideEntitlement, data.First().AccessID, Session["BuisnessId"].ToString().ToUpper(), Session["UserName"].ToString());
+                            Session["OverrideEntWithReason"] = _dataConnection.getPermission(controls.OverrideEntitlementWithReason, data.First().AccessID, Session["BuisnessId"].ToString().ToUpper());
+                            Session["SAPPermit"] = _dataConnection.getPermission(controls.SAP, data.First().AccessID, Session["BuisnessId"].ToString().ToUpper());
+                            Session["OrderConfirm"] = _dataConnection.getPermission(controls.OrderConfirm, data.First().AccessID, Session["BuisnessId"].ToString().ToUpper());
+                            Session["ShowStockcard"] = _dataConnection.getPermission(controls.OrderConfirm, data.First().AccessID, Session["BuisnessId"].ToString().ToUpper());
+                            Session["ROLLOUTEMPDELADDR_CHG"] = _dataConnection.getPermission(controls.ROLLOUTEMPDELADDR_CHG, data.First().AccessID, Session["BuisnessId"].ToString().ToUpper());
                             Session["OrderMode"] = "";
                             Session["FITALLOC"] = "FITALLOC";
                             Session["DIMALLOC"] = "DIMALLOC";
+                            var businessData = _dataConnection.GetAllBusBusinness().Where(x => x.BusinessID == busId).First().Country_Currency;
+                            Session["CountryCurrency"] = _dataConnection.GetAllCountryCodes().Where(x => x.CountryID == businessData).First().Currency_Name;
+                            Session["CurrencySymbol"] = _dataConnection.GetAllCountryCodes().Where(x => x.CountryID == businessData).First().Currency_Symbol;
                             Session["goto"] = null;
-                            Session["CarrierPrompt"] = dp.BusinessParam("CarrierPrompt", busId);
-                            VInfo = dp.BusinessParam("VISITINFOREQ", Session["BuisnessId"].ToString().ToUpper());
+                            Session["CarrierPrompt"] = _dataConnection.BusinessParam("CarrierPrompt", busId);
+                            VInfo = _dataConnection.BusinessParam("VISITINFOREQ", Session["BuisnessId"].ToString().ToUpper());
                             if (VInfo == "")
                             {
                                 booVinfo = false;
@@ -287,275 +311,6 @@ namespace Maximus.Controllers
             return View();
         }
 
-
-        //[HttpPost]
-        //public ActionResult Login(LoginModel logDetails)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        if (logDetails.UserName != "" & logDetails.Password != "")
-        //        {
-        //            List<EmployeeLoginModel> data = dp.GetLoginDetails(logDetails.UserName, logDetails.Password);
-        //            if (data.Count > 0)
-        //            {
-        //                if (data.Any(x => x.UserName.ToLower() == logDetails.UserName.ToLower() && x.Password == logDetails.Password && x.Active.ToLower() == "y"))
-        //                {
-        //                    FormsAuthentication.SetAuthCookie(logDetails.UserName, false);
-        //                    string custrefdef = "";
-        //                    string onlineDefNom = "";
-        //                    string booNom = "";
-        //                    string booDefDelAddr = "";
-        //                    string booDefDelRef = "";
-        //                    string booDivBudget = "";
-        //                    string booDefNomCode = "";
-        //                    string booBudgetEmail = "";
-        //                    string booCusRefMan = "";
-        //                    string booPointsReq = "";
-        //                    string booDespConfirm = "";
-        //                    string booRea = "";
-        //                    string booCmpRea = "";
-        //                    string strDefNomCode = "";
-        //                    string mMonthsAgo = "";
-        //                    string booStkLevel = "";
-        //                    string VInfo = "";
-        //                    bool booVinfo = false;
-        //                    string busId = "";
-        //                    string startPage = "";
-        //                    string cmpId = System.Configuration.ConfigurationManager.AppSettings["CompanyId"].ToString();
-        //                    bool AllowSite;
-        //                    Session["CmpId"] = cmpId;
-        //                    Session["UserName"] = data.First().UserName;
-        //                    Session["Password"] = data.First().Password;
-        //                    Session["Name"] = data.First().ForeName + " " + data.First().SurName;
-        //                    Session["Access"] = data.First().AccessID;
-        //                    Session["Email"] = data.First().Email_ID;
-        //                    busId = data.First().BusinessID;
-        //                    Session["BuisnessId"] = data.First().BusinessID;
-        //                    Session["Buisness"] = entity.tblbus_business.Where(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim()).First().Name;
-        //                    Session["WareHouseID"] = dp.SetDefaultWarehouse(logDetails.UserName, data.First().BusinessID);
-        //                    if (!dp.IsSuperUser(cmpId, busId, data.First().UserName))
-        //                    {
-        //                        AllowSite = Convert.ToBoolean(dp.BusinessParam("ONL_NEWSYSTEM", busId.ToUpper()));
-        //                        if (AllowSite == false)
-        //                        {
-        //                            goto skip;
-        //                        }
-        //                        else
-        //                        {
-        //                            AllowSite = Convert.ToBoolean(dp.BusinessParam("ONL_ENHSYSTEM", busId.ToUpper()));
-        //                            if (!AllowSite)
-        //                            {
-        //                                goto skip;
-        //                            }
-        //                        }
-        //                    }
-        //                    //Session["AddressUserCreate"] = dp.BusinessParam("DELADDR_USER_CREATE",busId);
-        //                    Session["UseMatrix"] = dp.CompanyParam("UseMatrix", cmpId);
-        //                    Session["CC_PREFIXLETTERS"] = dp.BusinessParam("CC_PREFIXLETTERS",busId);
-        //                    Session["BudgetReq"] = dp.CompanyParam("BUDGETREQ", cmpId);
-        //                    Session["MANPACK"] = dp.BusinessParam("MANPACK", data.First().BusinessID.ToUpper().Trim());
-        //                    Session["CARRREQAMT"] = dp.BusinessParam("CARRREQAMT", data.First().BusinessID.ToUpper().Trim());
-        //                    Session["CARRPRICE"] = dp.BusinessParam("CARRPRICE", data.First().BusinessID.ToUpper().Trim());
-        //                    Session["CARRPERCENT"] = dp.BusinessParam("CARRPERCENT", data.First().BusinessID.ToUpper().Trim());
-        //                    Session["CARRPRICE_RTN"] = dp.BusinessParam("CARRPRICE_RTN", data.First().BusinessID.ToUpper().Trim());
-        //                    Session["CARRPRICE_XCHG"] = dp.BusinessParam("CARRPRICE_XCHG", data.First().BusinessID.ToUpper().Trim());
-        //                    Session["BusBudgetReq"] = dp.BusinessParam("BUDGETREQ", data.First().BusinessID.ToUpper().Trim());
-        //                    Session["DEFEMPDELADDR"] = dp.BusinessParam("DEFEMPDELADDR", data.First().BusinessID.ToUpper().Trim());
-        //                    Session["ABANDON_EMP"] = dp.BusinessParam("ABANDON_EMP", data.First().BusinessID.ToUpper().Trim());
-        //                    Session["DELADDR_SAVE"] = dp.BusinessParam("DELADDR_SAVE", data.First().BusinessID.ToUpper().Trim());
-        //                    Session["ONL_REORDER_REQ"] = dp.BusinessParam("ONL_REORDER_REQ", data.First().BusinessID.ToUpper().Trim());
-        //                    Session["IsSiteCode"] = dp.IsSiteCode(busId);
-        //                    booNom = dp.CompanyParam("ONLNEREQNOM1", cmpId);
-        //                    Session["ONLNEREQNOM1"] = booNom == "" ? false : booNom.ToLower() == "true" ? true : false;
-        //                    booNom = dp.CompanyParam("ONLNEREQNOM2", cmpId);
-        //                    Session["ONLNEREQNOM2"] = booNom == "" ? false : booNom.ToLower() == "true" ? true : false;
-        //                    booNom = dp.CompanyParam("ONLNEREQNOM3", cmpId);
-        //                    Session["ONLNEREQNOM3"] = booNom == "" ? false : booNom.ToLower() == "true" ? true : false;
-        //                    booNom = dp.CompanyParam("ONLNEREQNOM4", cmpId);
-        //                    Session["ONLNEREQNOM4"] = booNom == "" ? false : booNom.ToLower() == "true" ? true : false;
-        //                    booNom = dp.CompanyParam("ONLNEREQNOM5", cmpId);
-        //                    Session["ONLNEREQNOM5"] = booNom == "" ? false : booNom.ToLower() == "true" ? true : false;
-        //                    booDefDelAddr = dp.BusinessParam("DEFINVADDR", data.First().BusinessID.Trim().ToUpper());
-        //                    Session["DEFINVADDR"] = booDefDelAddr == "" ? false : booDefDelAddr.ToLower() == "true" ? true : false;
-        //                    booDefDelRef = dp.BusinessParam("DELREFREQ", data.First().BusinessID.Trim().ToUpper());
-        //                    Session["DELREFREQ"] = booDefDelRef == "" ? false : booDefDelRef.ToLower() == "true" ? true : false;
-        //                    onlineDefNom = dp.BusinessParam("ONLINEDEFNOM", data.First().BusinessID.Trim().ToUpper());
-        //                    Session["CUSTREFDEF"] = dp.BusinessParam("CUSTREFDEF", data.First().BusinessID.Trim().ToUpper());
-        //                    Session["ONLINEDEFNOM"] = onlineDefNom;
-        //                    booDefNomCode = dp.BusinessParam("DEFDELREFNOM", data.First().BusinessID.Trim().ToUpper());
-        //                    Session["DEFDELREFNOM"] = booDefNomCode == "" ? false : booDefDelAddr.ToLower() == "true" ? true : false;
-        //                    booDivBudget = dp.BusinessParam("REQDIVBUDGET", data.First().BusinessID.Trim().ToUpper());
-        //                    Session["REQDIVBUDGET"] = booDivBudget == "" ? false : booDefDelAddr.ToLower() == "true" ? true : false;
-        //                    strDefNomCode = dp.BusinessParam("ONLINEDEFNOM", data.First().BusinessID.Trim().ToUpper());
-        //                    Session["ONLINEDEFNOMQ"] = strDefNomCode == "" ? false : booDefDelAddr.ToLower() == "true" ? true : false;
-        //                    booBudgetEmail = dp.BusinessParam("REQBUDGETEMAIL", data.First().BusinessID.Trim().ToUpper());
-        //                    Session["REQBUDGETEMAIL"] = booBudgetEmail == "" ? false : booDefDelAddr.ToLower() == "true" ? true : false;
-        //                    booPointsReq = dp.BusinessParam("POINTSREQ", data.First().BusinessID.Trim().ToUpper());
-        //                    Session["POINTSREQD"] = booPointsReq == "" ? false : booDefDelAddr.ToLower() == "true" ? true : false;
-        //                    booCusRefMan = dp.BusinessParam("CusRefMan", data.First().BusinessID.Trim().ToUpper());
-        //                    Session["CusRefMan"] = booCusRefMan == "" ? false : booCusRefMan.ToLower() == "true" ? true : false;
-        //                    booRea = dp.BusinessParam("SOPREAREQ", data.First().BusinessID.Trim().ToUpper());
-        //                    if (booRea != "")
-        //                    {
-        //                        Session["SOPREAREQ"] = booRea == "" ? false : booDefDelAddr.ToLower() == "true" ? true : false;
-        //                    }
-        //                    else
-        //                    {
-        //                        booCmpRea = dp.CompanyParam("SOPREAREQ", cmpId);
-        //                        Session["SOPREAREQ"] = booCmpRea == "" ? false : booDefDelAddr.ToLower() == "true" ? true : false;
-        //                    }
-        //                    //booStkLevel = dp.BusinessParam("REQSTKLEVEL", Session["BuisnessId"].ToString());
-        //                    //Session["REQSTKLEVEL"] = booStkLevel == "" ? false : Convert.ToBoolean(booStkLevel);
-        //                    Session["DEFEMPLOYEE"] = dp.DefaultEmployee(ConfigurationSettings.AppSettings["CompanyId"].ToString(), Session["UserName"].ToString().Trim().ToUpper(), Session["BuisnessId"].ToString().ToUpper());
-        //                    booDespConfirm = dp.BusinessParam("CHKDISPCONFIRM", Session["BuisnessId"].ToString().ToUpper());
-        //                    Session["CHKDISPCONFIRM"] = booDespConfirm == "" ? false : Convert.ToBoolean(Session["CHKDISPCONFIRM"]);
-        //                    mMonthsAgo = dp.BusinessParam("MONTHAGO_RT", Session["BuisnessId"].ToString().ToUpper());
-        //                    Session["MONTHAGO_RT"] = mMonthsAgo == "" ? 1 : Convert.ToInt32(mMonthsAgo);
-        //                    if (dp.CompanyParam("CUSPRODCODE", ConfigurationSettings.AppSettings["CompanyId"].ToString()) != "")
-        //                    {
-        //                        Session["CusProdCode"] = Convert.ToBoolean(dp.CompanyParam("CUSPRODCODE", ConfigurationSettings.AppSettings["CompanyId"].ToString()));
-        //                    }
-        //                    else
-        //                    {
-        //                        Session["CusProdCode"] = false;
-        //                    }
-        //                    // Session["colLines"]=colline
-        //                    Session["REQ_REASONPAGE"] = dp.IsReasonUcodes(busId);
-        //                    Session["IsVisitPrivate"] = false;
-        //                    Session["DELADDR_USER_CREATE"] = Convert.ToBoolean(dp.BusinessParam("DELADDR_USER_CREATE", busId).ToUpper().Trim());
-        //                    Session["IsAddressToEmployee"] = dp.BusinessParam("DELADDRMAPTO", busId).ToUpper().Trim() == "EMPLOYEE" ? true : false;
-        //                    Session["IsAddressToAll"] = dp.BusinessParam("DELADDRMAPTO", busId).ToUpper().Trim() == "ALL" ? true : false;
-        //                    Session["pandeliverypanelid"] = (bool)Session["IsAddressToEmployee"] | (bool)Session["IsAddressToAll"];
-        //                    var permissionLst = dp.PermissionSettings(Session["BuisnessId"].ToString(), Session["UserName"].ToString(), "chkMapEmp", Session["Access"].ToString());
-        //                    Session["chkMapEmp"] = permissionLst.Any(x => x.ControlId.Trim() == "chkMapEmp") ? permissionLst.Where(x => x.ControlId.Trim() == "chkMapEmp").First().Permission.ToLower() : "hide";
-        //                    var da = permissionLst.Any(x => x.ControlId.Trim() == "chkMapAddr") ? permissionLst.Where(x => x.ControlId.Trim() == "chkMapAddr").First().Permission.ToLower() : "";
-        //                    Session["chkMapAddr"] = permissionLst.Any(x => x.ControlId.Trim() == "chkMapAddr") ? permissionLst.Where(x => x.ControlId.Trim() == "chkMapAddr").First().Permission.ToLower() : "";
-        //                    var da1 = !(Session["chkMapAddr"].ToString().ToLower().Trim() == "hide");
-        //                    Session["chkMapAddrVisiblity"] = da1;
-        //                    Session["OVERRIDE_ENT_WITH_REASON"] =  permissionLst.Any(x=>x.ControlId.Trim()== "OVERRIDE_ENT_WITH_REASON")? permissionLst.Where(x => x.ControlId.Trim() == "OVERRIDE_ENT_WITH_REASON").First().Permission.ToLower() : "hide";
-        //                    Session["ShowHourse"] = dp.ShowHourse(busId);
-        //                    Session["ONLCUSREFLBL"] = dp.BusinessParam("ONLCUSREFLBL", busId);
-        //                    Session["OnStop"] = dp.BusinessParam("OnStop", busId);
-        //                    Session["Carrier"] = dp.BusinessParam("Carrier", busId);
-        //                    Session["ONLNEREQNOM1"] = dp.CompanyParam("ONLNEREQNOM1", cmpId);
-        //                    Session["ONLNEREQNOM2"] = dp.CompanyParam("ONLNEREQNOM2", cmpId);
-        //                    Session["ONLNEREQNOM3"] = dp.CompanyParam("ONLNEREQNOM3", cmpId);
-        //                    Session["ONLNEREQNOM4"] = dp.CompanyParam("ONLNEREQNOM4", cmpId);
-        //                    Session["ONLNEREQNOM5"] = dp.CompanyParam("ONLNEREQNOM5", cmpId);
-        //                    Session["ONLNEDEFNOM1"] = dp.CompanyParam("ONLNEDEFNOM1", cmpId);
-        //                    Session["ONLNEDEFNOM2"] = dp.CompanyParam("ONLNEDEFNOM2", cmpId);
-        //                    Session["ONLNEDEFNOM3"] = dp.CompanyParam("ONLNEDEFNOM3", cmpId);
-        //                    Session["ONLNEDEFNOM4"] = dp.CompanyParam("ONLNEDEFNOM4", cmpId);
-        //                    Session["ONLNEDEFNOM5"] = dp.CompanyParam("ONLNEDEFNOM5", cmpId);
-        //                    Session["ONLNETXTNOM1"] = dp.CompanyParam("ONLNETXTNOM1", busId);
-        //                    Session["ONLNETXTNOM2"] = dp.CompanyParam("ONLNETXTNOM2", busId);
-        //                    Session["ONLNETXTNOM3"] = dp.CompanyParam("ONLNETXTNOM3", busId);
-        //                    Session["ONLNETXTNOM4"] = dp.CompanyParam("ONLNETXTNOM4", busId);
-        //                    Session["ONLNETXTNOM5"] = dp.CompanyParam("ONLNETXTNOM5", busId);
-        //                    Session["IsManPack"] = true;
-        //                    SalesOrderHeaderViewModel saleHeads = new SalesOrderHeaderViewModel();
-        //                    Session["objCurrentOrder"] = saleHeads;
-        //                    var s = permissionLst.Any(x => x.ControlId == "pnlRolloutName");
-        //                    Session["pnlRolloutName"] = permissionLst.Any(x => x.ControlId == "pnlRolloutName") ? permissionLst.Where(x => x.ControlId == "pnlRolloutName").First().Permission.ToLower() == "show" ? true : false : false;
-        //                    Session["ProductBy"] = "Style";
-        //                    Session["PricePermit"] = dp.getPermission(controls.Price, data.First().AccessID, Session["BuisnessId"].ToString().ToUpper(), "", Session["UserName"].ToString());
-        //                    Session["OrderPermit"] = dp.getPermission(controls.Orders, data.First().AccessID, Session["BuisnessId"].ToString().ToUpper());
-        //                    Session["AccessPermit"] = dp.getPermission(controls.Access, data.First().AccessID, Session["BuisnessId"].ToString().ToUpper());
-        //                    Session["OrderDelete"] = dp.getPermission(controls.OrderDelete, data.First().AccessID, Session["BuisnessId"].ToString().ToUpper());
-        //                    Session["NomCode"] = dp.getPermission(controls.NomCode, data.First().AccessID, Session["BuisnessId"].ToString().ToUpper());
-        //                    Session["OverrideEnt"] = dp.getPermission(controls.AllowOverrideEntitlement, data.First().AccessID, Session["BuisnessId"].ToString().ToUpper());
-        //                    Session["OverrideEntWithReason"] = dp.getPermission(controls.OverrideEntitlementWithReason, data.First().AccessID, Session["BuisnessId"].ToString().ToUpper());
-        //                    Session["SAPPermit"] = dp.getPermission(controls.SAP, data.First().AccessID, Session["BuisnessId"].ToString().ToUpper());
-        //                    Session["OrderConfirm"] = dp.getPermission(controls.OrderConfirm, data.First().AccessID, Session["BuisnessId"].ToString().ToUpper());
-        //                    Session["ShowStockcard"] = dp.getPermission(controls.OrderConfirm, data.First().AccessID, Session["BuisnessId"].ToString().ToUpper());
-        //                    Session["ROLLOUTEMPDELADDR_CHG"] = dp.getPermission(controls.ROLLOUTEMPDELADDR_CHG, data.First().AccessID, Session["BuisnessId"].ToString().ToUpper());
-        //                    Session["OrderMode"] = "";
-        //                    Session["FITALLOC"] = "FITALLOC";
-        //                    Session["DIMALLOC"] = "DIMALLOC";
-        //                    Session["goto"] = null;
-        //                    VInfo = dp.BusinessParam("VISITINFOREQ", Session["BuisnessId"].ToString().ToUpper());
-        //                    if (VInfo == "")
-        //                    {
-        //                        booVinfo = false;
-        //                    }
-        //                    else
-        //                    {
-        //                        booVinfo = Convert.ToBoolean(VInfo);
-        //                    }
-        //                    if (!booVinfo)
-        //                    {
-
-        //                    }
-        //                    //Dim startPage As String = ""
-        //                    //If booVinfo = False Then
-        //                    //    If getWelcomePage(UCase(Trim(BusinessID))) And Not CBoolstr(BusinessParam("IGNOREWELCOME", UCase(Trim(BusinessID)))) Then
-        //                    //        startPage = "Welcome.aspx"
-        //                    //        'startPage = "Dashboard.aspx"
-        //                    //    ElseIf CBoolstr(BusinessParam("REQ_REASONPAGE", UCase(Trim(BusinessID)))) Then
-        //                    //        startPage = "CustomerReason.aspx"
-        //                    //    Else
-        //                    //        Dim defMenu As String = modMain.GetDefaultMenu(UCase(Trim(BusinessID)), AccessID)
-        //                    //        If defMenu = "" Then
-        //                    //            If CBoolstr(Session.Item("MANPACK")) Then
-        //                    //                startPage = "newemp1.aspx?multi=true"
-        //                    //            Else
-        //                    //                startPage = "newemp1.aspx"
-        //                    //            End If
-        //                    //        Else
-        //                    //            startPage = defMenu
-        //                    //        End If
-        //                    //    End If
-        //                    //Else
-        //                    //    startPage = "VisitorInfo.aspx"
-        //                    //End If
-        //                    //Session.Add("StartPage", startPage)
-
-        //                    //Response.Redirect(startPage)
-        //                    //rs.Close()
-        //                    //If Conn.State = 1 Then
-        //                    //    Conn.Close()
-        //                    //End If
-
-        //                    HttpCookie cookie1 = new HttpCookie("Username", logDetails.UserName);
-        //                    HttpCookie cookie2 = new HttpCookie("Password", logDetails.Password);
-        //                    cookie1.Expires = DateTime.Now.AddMinutes(30);
-        //                    cookie2.Expires = DateTime.Now.AddMinutes(30);
-        //                    HttpContext.Response.Cookies.Add(cookie1);
-        //                    HttpContext.Response.Cookies.Add(cookie2);
-        //                    return RedirectToAction("Index", "Employee", new { BusinessID = data.First().BusinessID });
-        //                    skip:;
-        //                    return RedirectToAction("Login", "User", new { BusinessID = data.First().BusinessID });
-        //                }
-        //                else
-        //                {
-        //                    ViewBag.error = "Username or Password is incorrect please try again";
-        //                }
-        //            }
-        //        }
-
-        //    }
-        //    return View(logDetails);
-        //}
-
-        //public ActionResult Logoff()
-        //{
-        //    Session.Clear();
-        //    FormsAuthentication.SignOut();
-        //    //if (HttpContext.Request.Cookies.AllKeys.Contains("Username"))
-        //    //{
-        //    //    if (HttpContext.Request.Cookies["Username"].Value != "" && HttpContext.Request.Cookies["Username"].Value != null)
-        //    //    {
-        //    //        Session.Clear();
-        //    //        //HttpCookie cookie1 = new HttpCookie("Username", "");
-        //    //        //HttpCookie cookie2 = new HttpCookie("Password", "");
-        //    //        //cookie1.Expires = DateTime.Now.AddDays(-1);
-        //    //        //cookie2.Expires = DateTime.Now.AddDays(-1);
-        //    //        //HttpContext.Response.Cookies.Add(cookie1);
-        //    //        //HttpContext.Response.Cookies.Add(cookie2);
-        //    //    }
-        //    //}
-        //    return RedirectToAction("Login", "User");
-        //}
         public ActionResult Logoff()
         {
             Session.Clear();

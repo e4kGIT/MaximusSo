@@ -1,4 +1,4 @@
-@model IEnumerable<Maximus.Models.EmployeeViewModel>
+@model IEnumerable<Maximus.Data.Models.EmployeeViewModel>
 @{
     var grid = Html.DevExpress().GridView(settings =>
     {
@@ -62,15 +62,15 @@
                 string EmployeeId = (DataBinder.Eval(edit.DataItem, "EmployeeId")).ToString();
                 var content = "<center>";
                 //string addBtn = "<span style=\"cursor:pointer;\" class=\"glyphicon glyphicon-plus\" onclick='CreateNewEmployee()'></span>";
-                string editBtn =string.Format("<span style=\"cursor:pointer;\" title=\"Edit employee\" class=\"glyphicon glyphicon-edit\" onclick=\"EditEmployee('{0}');\"></span>", EmployeeId);
+                string editBtn = string.Format("<span style=\"cursor:pointer;\" title=\"Edit employee\" class=\"glyphicon glyphicon-edit\" onclick=\"EditEmployee('{0}');\"></span>", EmployeeId);
                 content = content + "{0}&nbsp;&nbsp;</center>";
-                ViewContext.Writer.Write(string.Format(content,editBtn));
+                ViewContext.Writer.Write(string.Format(content, editBtn));
             });
         });
         settings.Columns.Add("EmployeeId");
         settings.Columns.Add("Department");
         //settings.Columns.Add("EmpFirstName").Caption = "First name";
-        settings.Columns.Add("EmpFirstName").Caption="Firstname";
+        settings.Columns.Add("EmpFirstName").Caption = "Firstname";
         settings.Columns.Add("EmpLastName").Caption = "Lastname";
 
         //settings.Columns.Add("StartDate").PropertiesEdit.DisplayFormatString = "dd.MM.yyyy"; ;
@@ -140,7 +140,7 @@
                 col.SetDataItemTemplateContent(x =>
                 {
                     string EmployeeId = (DataBinder.Eval(x.DataItem, "EmployeeId")).ToString();
-                    string  Ucodes = ( string )(DataBinder.Eval(x.DataItem, "EmpUcodes"));
+                    string Ucodes = (string)(DataBinder.Eval(x.DataItem, "EmpUcodes"));
 
                     if (Ucodes.Contains(','))
                     {
@@ -214,25 +214,33 @@
 
         settings.Columns.Add(col =>
         {
-            Maximus.Models.e4kmaximusdbEntities enty = new Maximus.Models.e4kmaximusdbEntities();
+            //Maximus.Data.Models.e4kmaximusdbEntities enty = new Maximus.Data.Models.e4kmaximusdbEntities();
             col.FieldName = "Entitlement";
             col.Caption = "Last order";
             col.SetDataItemTemplateContent(x =>
             {
-                string EmployeeId = (DataBinder.Eval(x.DataItem, "EmployeeId")).ToString();
-                var custId = Session["BuisnessId"].ToString();
-                try
-                {
-                    var data = enty.tblsop_salesorder_header.Where(s => s.CustID == custId && s.PinNo == EmployeeId && s.OrderType == "SO").OrderByDescending(s => s.OrderDate).Select(s => new { OrderDate = s.OrderDate, OrderNo = s.OrderNo }).FirstOrDefault();
-                }
-                catch (Exception e)
-                {
+                var s = DataBinder.Eval(x.DataItem, "LastOrderDate") != null ? (DataBinder.Eval(x.DataItem, "LastOrderDate")).ToString():"";
+                DateTime LastDate = DataBinder.Eval(x.DataItem, "LastOrderDate") !=null  ? (DataBinder.Eval(x.DataItem, "LastOrderDate")).ToString()!=""? DateTime.Parse((DataBinder.Eval(x.DataItem, "LastOrderDate")).ToString()) : DateTime.Now : DateTime.Now;
+                long ordNo = Convert.ToInt64((DataBinder.Eval(x.DataItem, "LastOrderNo")).ToString());
+                //{
+                //    string EmployeeId = (DataBinder.Eval(x.DataItem, "EmployeeId")).ToString();
+                //    var custId = Session["BuisnessId"].ToString();
+                //    try
+                //    {
+                //        var data = enty.tblsop_salesorder_header.Where(s => s.CustID == custId && s.PinNo == EmployeeId && s.OrderType == "SO").OrderByDescending(s => s.OrderDate).Select(s => new { OrderDate = s.OrderDate, OrderNo = s.OrderNo }).FirstOrDefault();
+                //    }
+                //    catch (Exception e)
+                //    {
 
-                }
+                //    }
                 //if (data != null)
                 //{
                 //    ViewContext.Writer.Write(string.Format("Order no: {0} on {1}", data.OrderNo, data.OrderDate.Value.ToString("dd-MM-yyyy")));
                 //}
+                if (ordNo > 0)
+                {
+                    ViewContext.Writer.Write(string.Format("Order no: {0} on {1} ", ordNo, LastDate.ToString("dd-MM-yyyy") ));
+                }
             });
         });
         settings.Columns.Add(col =>
@@ -242,10 +250,10 @@
             {
                 col.SetDataItemTemplateContent(x =>
                 {
-                    string EmployeeName = (DataBinder.Eval(x.DataItem, "EmpFirstName")).ToString() ;
+                    string EmployeeName = (DataBinder.Eval(x.DataItem, "EmpFirstName")).ToString();
 
                     string EmployeeId = (DataBinder.Eval(x.DataItem, "EmployeeId")).ToString();
-                    string Content = Convert.ToBoolean(Session["OnStop"].ToString()) ? string.Format("<button style='background-color:#009885;' disabled onclick=\"CreateTemplateOrder('{0}','{1}','{2}')\" class=\"btn btn-primary\">Create Order</button>", EmployeeId, "CmbUcode_" + EmployeeId, EmployeeName): string.Format("<button style='background-color:#009885;' onclick=\"CreateTemplateOrder('{0}','{1}','{2}')\" class=\"btn btn-primary\">Create Order</button>", EmployeeId, "CmbUcode_" + EmployeeId, EmployeeName);
+                    string Content = Convert.ToBoolean(Session["OnStop"].ToString()) ? string.Format("<button style='background-color:#009885;' disabled onclick=\"CreateTemplateOrder('{0}','{1}','{2}')\" class=\"btn btn-primary\">Create Order</button>", EmployeeId, "CmbUcode_" + EmployeeId, EmployeeName) : string.Format("<button style='background-color:#009885;' onclick=\"CreateTemplateOrder('{0}','{1}','{2}')\" class=\"btn btn-primary\">Create Order</button>", EmployeeId, "CmbUcode_" + EmployeeId, EmployeeName);
                     ViewContext.Writer.Write(Content);
                 });
             }
@@ -269,6 +277,4 @@
 }
 @grid.Bind(Model).GetHtml()
 
-
-
-
+ 

@@ -40,10 +40,14 @@ namespace Maximus.Models
     public class EmployeeViewModel
     {
         public string role { get; set; }
+
+        public string OrderType { get; set; }
         public string BuisnessId { get; set; }
         public string CompanyId { get; set; }
+        public Int64 LastOrderNo { get; set; }
         [Required]
         public string EmployeeId { get; set; }
+        public string LastOrderDate { get; set; }
         [Required]
         public string Department { get; set; }
         [Required]

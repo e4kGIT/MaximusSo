@@ -1,12 +1,13 @@
-﻿using DevExpress.Web.Mvc;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using Maximus.Models;
-using Maximus.Filter;
 using System.Data;
+using Maximus.Data.Interface.Concrete;
+using Maximus.Services.Interface;
+using Maximus.Services;
+using Maximus.Data.Models;
+using Maximus.Data.models.RepositoryModels;
 
 namespace Maximus.Controllers
 {
@@ -15,16 +16,131 @@ namespace Maximus.Controllers
     public class EmployeeController : Controller
     {  // GET: Employee
         #region declarations
-        DataProcessing dp = new DataProcessing();
-        e4kmaximusdbEntities entity = new e4kmaximusdbEntities();
-
+        //DataProcessing dp = new DataProcessing();
+        //e4kmaximusdbEntities entity = new e4kmaximusdbEntities();
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IDataConnection _dataConnection;
+        public readonly AllAssemblies _allAssemblies;
+        public readonly AssemblyDetail _assemblyDetail;
+        public readonly AssemblyHeader _assemblyHeader;
+        public readonly BusContact _busContact;
+        public readonly CountryCodes _countryCodes;
+        public readonly CustomAssembly _customAssembly;
+        public readonly Departments _departments;
+        public readonly Employee _employee1;
+        public readonly FskStyleFreetext _fskStyleFreetext;
+        public readonly Nextno _nextno;
+        public readonly StockCard _stockCard;
+        public readonly Style_Colour _style_Colour;
+        public readonly Style_Sizes _style_Sizes;
+        public readonly StyleByFreetext _styleByFreetext;
+        public readonly StyleColorSizeObsolete _styleColorSizeObsolete;
+        public readonly StyleGroups _styleGroups;
+        public readonly StylesView _stylesView;
+        public readonly TblFskStyle _tblFskStyle;
+        public readonly Ucode_Description _ucode_Description;
+        public readonly UcodeByFreeTextView _ucodeByFreeText;
+        public readonly UcodeEmployees _ucodeEmployees;
+        public readonly Ucodes _ucodes;
+        public readonly BusAddress _busAddress;
+        public readonly DataProcessing _dp;
+        public readonly StyleSizePrice _styleSizePrice;
+        public readonly CustomerOrderTemplate _customerOrderTemplate;
+        public readonly tblSalesOrderHeader _salesOrderHeader;
+        public readonly BusBusiness _busBusiness;
+        public readonly FskSetValues _fskSetValues;
+        public readonly Dimension1 _dimension1;
+        public readonly DimFitCaption _dimFitCap;
+        public readonly Reasoncodes _reason;
+        public readonly FskColour _fskColor;
+        public readonly EmployeeService _employee;
+        public readonly BusSetValues _busSetValues;
         #endregion
 
-
+        #region EmployeeController constructor
+        public EmployeeController(IUnitOfWork unitOfWork)
+        {
+            _unitOfWork = unitOfWork;
+            HomeService home = new HomeService(_unitOfWork);
+            DataConnectionService dataConnection = new DataConnectionService(_unitOfWork);
+            _dataConnection = dataConnection;
+            DimFitCaption dimFitCap = new DimFitCaption(_unitOfWork);
+            FskColour fskColor = new FskColour(_unitOfWork);
+            Reasoncodes reason = new Reasoncodes(_unitOfWork);
+            AllAssemblies allAssemblies = new AllAssemblies(_unitOfWork);
+            BusBusiness busBusiness = new BusBusiness(_unitOfWork);
+            AssemblyDetail assemblyDetail = new AssemblyDetail(_unitOfWork);
+            AssemblyHeader assemblyHeader = new AssemblyHeader(_unitOfWork);
+            BusAddress busAddress = new BusAddress(_unitOfWork);
+            BusContact busContact = new BusContact(_unitOfWork);
+            CountryCodes countryCodes = new CountryCodes(_unitOfWork);
+            CustomAssembly customAssembly = new CustomAssembly(_unitOfWork);
+            Departments departments = new Departments(_unitOfWork);
+            Employee employee1 = new Employee(_unitOfWork);
+            FskStyleFreetext fskStyleFreetext = new FskStyleFreetext(_unitOfWork);
+            Nextno nextno = new Nextno(_unitOfWork);
+            StockCard stockCard = new StockCard(_unitOfWork);
+            Style_Colour style_Colour = new Style_Colour(_unitOfWork);
+            Style_Sizes style_Sizes = new Style_Sizes(_unitOfWork);
+            StyleByFreetext styleByFreetext = new StyleByFreetext(_unitOfWork);
+            StyleColorSizeObsolete styleColorSizeObsolete = new StyleColorSizeObsolete(_unitOfWork);
+            StyleGroups styleGroups = new StyleGroups(_unitOfWork);
+            StylesView stylesView = new StylesView(_unitOfWork);
+            TblFskStyle tblFskStyle = new TblFskStyle(_unitOfWork);
+            Ucode_Description ucode_Description = new Ucode_Description(_unitOfWork);
+            UcodeByFreeTextView ucodeByFreeText = new UcodeByFreeTextView(_unitOfWork);
+            UcodeEmployees ucodeEmployees = new UcodeEmployees(_unitOfWork);
+            Ucodes ucodes = new Ucodes(_unitOfWork);
+            DataProcessing dp = new DataProcessing(_unitOfWork);
+            StyleSizePrice styleSizePrice = new StyleSizePrice(_unitOfWork);
+            CustomerOrderTemplate customerOrderTemplate = new CustomerOrderTemplate(_unitOfWork);
+            tblSalesOrderHeader salesOrderHeader = new tblSalesOrderHeader(_unitOfWork);
+            Dimension1 dimension = new Dimension1(_unitOfWork);
+            FskSetValues fskSetValues = new FskSetValues(_unitOfWork);
+            EmployeeService employee = new EmployeeService(_unitOfWork);
+            BusSetValues busSetValues = new BusSetValues(_unitOfWork);
+            _busSetValues = busSetValues;
+            _employee = employee;
+            _fskSetValues = fskSetValues;
+            _dimFitCap = dimFitCap;
+            _dimension1 = dimension;
+            _salesOrderHeader = salesOrderHeader;
+            _customerOrderTemplate = customerOrderTemplate;
+            _allAssemblies = allAssemblies;
+            _assemblyDetail = assemblyDetail;
+            _assemblyHeader = assemblyHeader;
+            _busContact = busContact;
+            _countryCodes = countryCodes;
+            _customAssembly = customAssembly;
+            _departments = departments;
+            _employee1 = employee1;
+            _fskStyleFreetext = fskStyleFreetext;
+            _nextno = nextno;
+            _stockCard = stockCard;
+            _style_Colour = style_Colour;
+            _style_Sizes = style_Sizes;
+            _styleByFreetext = styleByFreetext;
+            _styleColorSizeObsolete = styleColorSizeObsolete;
+            _styleGroups = styleGroups;
+            _stylesView = stylesView;
+            _tblFskStyle = tblFskStyle;
+            _ucode_Description = ucode_Description;
+            _ucodeByFreeText = ucodeByFreeText;
+            _ucodeEmployees = ucodeEmployees;
+            _ucodes = ucodes;
+            _busAddress = busAddress;
+            _styleSizePrice = styleSizePrice;
+            _dp = dp;
+            _busBusiness = busBusiness;
+            _reason = reason;
+            _fskColor = fskColor;
+        }
+        #endregion
 
         #region Index and EmpGrid
         public ActionResult Index(string BusinessID)
         {
+
             ViewBag.HideSearch = true;
             Session["cardRows"] = 10;
             Session["cardColumns"] = 1;
@@ -53,15 +169,15 @@ namespace Maximus.Controllers
             }
             if (Session["EmployeeViewModel"] == null)
             {
-                Session["EmployeeViewModel"] = (List<EmployeeViewModel>)dp.GetEmployeeByProcedure(Session["BuisnessId"].ToString(), Session["UserName"].ToString());
+                Session["EmployeeViewModel"] = (List<EmployeeViewModel>)_employee.GetEmployeeByProcedure(Session["BuisnessId"].ToString(), Session["UserName"].ToString());
                 if (((List<EmployeeViewModel>)Session["EmployeeViewModel"]).Count == 1)
                 {
                     ViewBag.HideSearch = false;
                     if (!((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes.Contains(','))
                     {
-                       
-                        var sss = GotoCard( ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmployeeId,  ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpFirstName + " " + ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpLastName, ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes );
-                      var  templates = entity.tblsop_customerorder_template.Any(x => x.BusinessID == BusinessID) ? entity.tblsop_customerorder_template.Where(x => x.BusinessID == BusinessID).OrderBy(x => x.SeqNo).Select(x => x.Template).Distinct().ToList() : new List<string>();
+
+                        var sss = GotoCard(((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmployeeId, ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpFirstName + " " + ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpLastName, ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes);
+                        var templates = _customerOrderTemplate.Exists(x => x.BusinessID == BusinessID) ? _customerOrderTemplate.GetAll(x => x.BusinessID == BusinessID).OrderBy(x => x.SeqNo).Select(x => x.Template).Distinct().ToList() : new List<string>();
                         if (templates.Count > 0)
                         {
                             Session["Templates"] = templates;
@@ -71,10 +187,7 @@ namespace Maximus.Controllers
                             Session["Templates"] = new List<string>();
 
                         }
-                            return RedirectToAction("Index","Home");
-                        //return RedirectToAction("GotoCard", new { EmployeeId = ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmployeeId, EmpName = ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpFirstName + " " + ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpLastName, Ucodes = ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes });
-                        //((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().em.Contains(',')
-                        //GotoCard(((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmployeeId, ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpFirstName + " " + ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpLastName, ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes);
+                        return RedirectToAction("Index", "Home");
                     }
                 }
                 else
@@ -90,7 +203,7 @@ namespace Maximus.Controllers
                     if (!((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes.Contains(','))
                     {
                         var sss = GotoCard(((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmployeeId, ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpFirstName + " " + ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpLastName, ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes);
-                        var templates = entity.tblsop_customerorder_template.Any(x => x.BusinessID == BusinessID) ? entity.tblsop_customerorder_template.Where(x => x.BusinessID == BusinessID).OrderBy(x => x.SeqNo).Select(x => x.Template).Distinct().ToList() : new List<string>();
+                        var templates = _customerOrderTemplate.Exists(x => x.BusinessID == BusinessID) ? _customerOrderTemplate.GetAll(x => x.BusinessID == BusinessID).OrderBy(x => x.SeqNo).Select(x => x.Template).Distinct().ToList() : new List<string>();
                         if (templates.Count > 0)
                         {
                             Session["Templates"] = templates;
@@ -101,14 +214,23 @@ namespace Maximus.Controllers
 
                         }
                         return RedirectToAction("Index", "Home");
-                        return RedirectToAction("Action", new { EmployeeId = ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmployeeId, EmpName = ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpFirstName + " " + ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpLastName, Ucodes = ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes });
-                        //((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().em.Contains(',')
-                        //GotoCard(((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmployeeId, ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpFirstName + " " + ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpLastName, ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes);
                     }
                 }
                 else
                 {
                     ViewBag.HideSearch = true;
+                    var templates = _customerOrderTemplate.Exists(x => x.BusinessID == BusinessID) ? _customerOrderTemplate.GetAll(x => x.BusinessID == BusinessID).OrderBy(x => x.SeqNo).Select(x => x.Template).Distinct().ToList() : new List<string>();
+                    if (templates.Count > 0)
+                    {
+                        Session["Templates"] = templates;
+                    }
+                    else
+                    {
+                        Session["Templates"] = new List<string>();
+
+                    }
+
+
                 }
             }
             return View("Employee");
@@ -122,12 +244,32 @@ namespace Maximus.Controllers
             return jsonResult;
         }
 
+        public ActionResult BulkOrderPartial()
+        {
+            var templates = (List<string>)Session["Templates"];
+            if (templates.Count > 0)
+            {
+                var businessId = Session["BuisnessId"].ToString();
+                var ucodeLst = _dataConnection.GetAllTemplates(businessId);
+                return PartialView("_bulkOrderPartial", ucodeLst);
+            }
+            else
+            {
+                var businessId = Session["BuisnessId"].ToString();
+                var ucodeLst = _dataConnection.GetAllUcodesAndDesc(businessId);
+                return PartialView("_bulkOrderPartial", ucodeLst);
+            }
+        }
+
+
+
         [AllowAnonymous]
         public ActionResult EmployeeGridViewPartial(string txtUcode = "", string ddlAddress = "", string txtUcodeDesc = "", string txtCDepartment = "", string txtRole = "", string txtEmpNo = "", string txtName = "", string txtStDate = "")
         {
+
             var templates = new List<string>();
             var businessId = Session["BuisnessId"].ToString();
-            templates = entity.tblsop_customerorder_template.Any(x => x.BusinessID == businessId) ? entity.tblsop_customerorder_template.Where(x => x.BusinessID == businessId).OrderBy(x => x.SeqNo).Select(x => x.Template).Distinct().ToList() : new List<string>();
+            templates = _customerOrderTemplate.Exists(x => x.BusinessID == businessId) ? _customerOrderTemplate.GetAll(x => x.BusinessID == businessId).OrderBy(x => x.SeqNo).Select(x => x.Template).Distinct().ToList() : new List<string>();
 
             Session["SalesOrderLines"] = new List<SalesOrderLineViewModel>();
             if (((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Count > 0)
@@ -140,13 +282,13 @@ namespace Maximus.Controllers
             if (templates.Count > 0)
             {
                 Session["Templates"] = templates;
-                result = dp.GetEmployeeTemplate(businessId, Session["UserName"].ToString(), Session["OrderPermit"].ToString(), txtUcode, ddlAddress, txtUcodeDesc, txtCDepartment, txtRole, txtEmpNo, txtName, txtStDate);
-                //result = dp.getEmployeeDetailsTemplates(Session["BuisnessId"].ToString());
+                result = _employee.GetEmployeeTemplate(businessId, Session["UserName"].ToString(), Session["OrderPermit"].ToString(), txtUcode, ddlAddress, txtUcodeDesc, txtCDepartment, txtRole, txtEmpNo, txtName, txtStDate);
+                //result = _dataConnection.getEmployeeDetailsTemplates(Session["BuisnessId"].ToString());
             }
             else
             {
                 Session["Templates"] = new List<string>();
-                result = dp.GetEmployee(businessId, Session["UserName"].ToString(), Session["OrderPermit"].ToString(), txtUcode, ddlAddress, txtUcodeDesc, txtCDepartment, txtRole, txtEmpNo, txtName, txtStDate);
+                result = _employee.GetEmployee(businessId, Session["UserName"].ToString(), Session["OrderPermit"].ToString(), txtUcode, ddlAddress, txtUcodeDesc, txtCDepartment, txtRole, txtEmpNo, txtName, txtStDate);
                 Session["EmployeeModel"] = result;
             }
             if (txtUcode != "" && txtEmpNo != "" && txtCDepartment != "" && txtRole != "" && txtName != "")
@@ -196,41 +338,283 @@ namespace Maximus.Controllers
         {
             Session["EmpName"] = EmpName;
             Session["SelectedEmp"] = EmployeeId;
-            string ucodeHtml = "<p style=\"padding:0px;\">";
-            if (((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Count() > 0)
+            Session["selectedUcodes"] = Ucodes;
+            if ((bool)Session["IsBulkOrder1"] == false && (bool)Session["IsManPack"] == true)
             {
-                var s = ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]);
-                var EMP = Session["SelectedEmp"].ToString();
-                if (((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Any(x => x.SalesOrderLine != null))
+                Session["EmpName"] = EmpName;
+                Session["SelectedEmp"] = EmployeeId;
+                string ucodeHtml = "<p style=\"padding:0px;\">";
+                if (((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Count() > 0)
                 {
-                    if (((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Any(x => x.EmployeeID == EMP))
+                    var s = ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]);
+                    var EMP = Session["SelectedEmp"].ToString();
+                    if (((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Any(x => x.SalesOrderLine != null))
                     {
-                        if (((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.EmployeeID == Session["SelectedEmp"].ToString()).First().SalesOrderLine != null)
+                        if (((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Any(x => x.EmployeeID == EMP))
                         {
-                            Session["qty"] = ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.EmployeeID == Session["SelectedEmp"].ToString()).First().SalesOrderLine.Sum(x => x.OrdQty);
+                            if (((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.EmployeeID == Session["SelectedEmp"].ToString()).First().SalesOrderLine != null)
+                            {
+                                Session["qty"] = ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.EmployeeID == Session["SelectedEmp"].ToString()).First().SalesOrderLine.Sum(x => x.OrdQty);
+                            }
                         }
+                        else
+                        {
+                            Session["qty"] = 0;
+                        }
+                    }
+                }
+                else
+                {
+                    Session["qty"] = 0;
+                }
+                var salesOrderHeader = (List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"];
+                var emp = Session["SelectedEmp"].ToString();
+                var busine = Session["BuisnessId"].ToString();
+                var address1 = _dataConnection.getEmployeeAddress(Session["SelectedEmp"].ToString(), Session["BuisnessId"].ToString());
+                var addArr = new string[] { };
+                var addresArr = address1.Contains(',') ? address1.Split(',') : addArr;
+                Session["cboDelAddress"] = address1 != "" ? addresArr[0] : "";
+                string businessId = Session["BuisnessId"].ToString();
+                if (!salesOrderHeader.Any(x => x.EmployeeID == emp))
+                {
+                    salesOrderHeader.Add(new SalesOrderHeaderViewModel
+                    {
+                        DelDesc = addresArr.Count() > 0 ? addresArr[1] : "",
+                        DelAddress1 = addresArr.Count() > 0 ? addresArr[2] : "",
+                        DelAddress2 = addresArr.Count() > 0 ? addresArr[3] : "",
+                        DelAddress3 = addresArr.Count() > 0 ? addresArr[4] : "",
+                        DelTown = addresArr.Count() > 0 ? addresArr[5] : "",
+                        DelCity = addresArr.Count() > 0 ? addresArr[6] : "",
+                        DelPostCode = addresArr.Count() > 0 ? addresArr[7] : "",
+                        DelCountry = addresArr.Count() > 0 ? addresArr[8] : "",
+                        EmployeeName = Session["EmpName"].ToString(),
+                        EmployeeID = Session["SelectedEmp"].ToString(),
+                        UCodeId = Ucodes,
+                        WarehouseID = Session["WareHouseID"].ToString(),
+                        Currency_Exchange_Rate = Convert.ToDouble(Session["CurrencyExchangeRate"]),
+                        Currency_Exchange_Code = Session["Currency_Name"].ToString(),
+                        RepID = Convert.ToInt32(Session["Rep_Id"]),
+                        OrderType = Session["OrderType"].ToString(),
+                        OrderDate = DateTime.Now.ToString("yyyy-MM-dd")
+                    });
+                }
+                List<string> ucodeLst = new List<string>();
+                List<UcodeModel> ucodeLst1 = new List<UcodeModel>();
+                if (Ucodes.Contains(';'))
+                {
+                    foreach (var str in Ucodes.Split(';'))
+                    {
+                        ucodeLst.Add(str);
 
+                    }
+
+                }
+                Session["SelectedUcode"] = Ucodes;
+
+                if (ucodeLst.Count > 0)
+                {
+                    foreach (string ucode in ucodeLst)
+                    {
+                        string ucodeDesc = _ucode_Description.Exists(x => x.UCodeID == ucode) ? _ucode_Description.GetAll(x => x.UCodeID == Ucodes).First().Description : ucode;
+                        ucodeHtml = ucodeHtml + " <span>" + ucode + "</span>-<span>" + ucodeDesc + "</span> ";
+                        ucodeLst1.AddRange(_dataConnection.GetAllUcodeLst(ucode));
+
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        string ucodeDesc = _ucode_Description.Exists(x => x.UCodeID == Ucodes) ? _ucode_Description.GetAll(x => x.UCodeID == Ucodes).First().Description : Ucodes;
+                        ucodeHtml = ucodeHtml + " <span>" + Ucodes + "</span>-<span>" + ucodeDesc + "</span> ";
+                        //       var SSS = _ucodeByFreeText.ExecWithStoreProcedure("Call GetAllUcodeByFreeTextProcedure (@uCode)",
+                        //new MySqlParameter("uCode", MySqlDbType.VarChar) { Value = Ucodes }).ToList();
+                        ucodeLst1 = _ucodeByFreeText.GetAll(x => x.UCodeID == Ucodes).Select(x => new UcodeModel { StyleId = x.StyleID, FreeText = x.FreeText }).ToList();
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
+
+                }
+                ucodeHtml = ucodeHtml + "</p>";
+                Session["UcodeDesc"] = ucodeHtml.ToString();
+                var lst = new List<string>();
+                foreach (var data in ucodeLst1)
+                {
+                    if (data.FreeText == null | data.FreeText == "")
+                    {
+                        lst.Add(data.StyleId);
+                    }
+                    else
+                    {
+                        lst.Add(data.FreeText);
+                    }
+                }
+                Session["UcodeStyle"] = ucodeLst1;
+                Session["UcFreeTxt"] = lst.Distinct().ToList();
+            }
+            else
+            {
+                string ucodeHtml = "<p style=\"padding:0px;\">";
+                if (((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Count() > 0)
+                {
+                    var s = ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]);
+
+                    if (((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Any(x => x.SalesOrderLine != null))
+                    {
+                        if (((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Any(x => x.UCodeId.ToLower() == Ucodes.ToLower()))
+                        {
+                            Session["qty"] = ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.UCodeId.ToLower() == Ucodes.ToLower()).Count();
+                        }
+                        else
+                        {
+                            Session["qty"] = 0;
+                        }
                     }
                     else
                     {
                         Session["qty"] = 0;
                     }
                 }
-                //Session["qty"] = ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Any(x => x.SalesOrderLine != null) ? ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.EmployeeID == Session["SelectedEmp"].ToString()).First().SalesOrderLine != null ? ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.EmployeeID == Session["SelectedEmp"].ToString()).First().SalesOrderLine.Sum(x => x.OrdQty) : 0 : 0;
+                else
+                {
+                    Session["qty"] = 0;
+                }
+                var salesOrderHeader = (List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"];
+                var address1 = _dataConnection.getEmployeeAddress(Session["UserName"].ToString(), Session["BuisnessId"].ToString());
+                var addArr = new string[] { };
+
+                var addresArr = address1.Contains(',') ? address1.Split(',') : addArr;
+                Session["cboDelAddress"] = address1 != "" ? addresArr[0] : "";
+                string businessId = Session["BuisnessId"].ToString();
+                if (!salesOrderHeader.Any(x => x.UCodeId.ToLower() == Ucodes.ToLower()))
+                {
+                    salesOrderHeader.Add(new SalesOrderHeaderViewModel
+                    {
+                        DelDesc = addresArr.Count() > 0 ? addresArr[1] : "",
+                        DelAddress1 = addresArr.Count() > 0 ? addresArr[2] : "",
+                        DelAddress2 = addresArr.Count() > 0 ? addresArr[3] : "",
+                        DelAddress3 = addresArr.Count() > 0 ? addresArr[4] : "",
+                        DelTown = addresArr.Count() > 0 ? addresArr[5] : "",
+                        DelCity = addresArr.Count() > 0 ? addresArr[6] : "",
+                        DelPostCode = addresArr.Count() > 0 ? addresArr[7] : "",
+                        DelCountry = addresArr.Count() > 0 ? addresArr[8] : "",
+                        EmployeeName = "",
+                        EmployeeID = "",
+                        UCodeId = Ucodes,
+                        WarehouseID = Session["WareHouseID"].ToString(),
+                        Currency_Exchange_Rate = Convert.ToDouble(Session["CurrencyExchangeRate"]),
+                        Currency_Exchange_Code = Session["Currency_Name"].ToString(),
+                        RepID = Convert.ToInt32(Session["Rep_Id"]),
+                        OrderType = Session["OrderType"].ToString(),
+                        OrderDate = DateTime.Now.ToString("yyyy-MM-dd")
+                    });
+                }
+                List<string> ucodeLst = new List<string>();
+                List<UcodeModel> ucodeLst1 = new List<UcodeModel>();
+                if (Ucodes.Contains(';'))
+                {
+                    foreach (var str in Ucodes.Split(';'))
+                    {
+                        ucodeLst.Add(str);
+
+                    }
+
+                }
+                Session["SelectedUcode"] = Ucodes;
+
+                if (ucodeLst.Count > 0)
+                {
+                    foreach (string ucode in ucodeLst)
+                    {
+                        string ucodeDesc = _ucode_Description.Exists(x => x.UCodeID == ucode) ? _ucode_Description.GetAll(x => x.UCodeID == Ucodes).First().Description : ucode;
+                        ucodeHtml = ucodeHtml + " <span>" + ucode + "</span>-<span>" + ucodeDesc + "</span> ";
+                        ucodeLst1.AddRange(_dataConnection.GetAllUcodeLst(ucode));
+
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        string ucodeDesc = _ucode_Description.Exists(x => x.UCodeID == Ucodes) ? _ucode_Description.GetAll(x => x.UCodeID == Ucodes).First().Description : Ucodes;
+                        ucodeHtml = ucodeHtml + " <span>" + Ucodes + "</span>-<span>" + ucodeDesc + "</span> ";
+                        //       var SSS = _ucodeByFreeText.ExecWithStoreProcedure("Call GetAllUcodeByFreeTextProcedure (@uCode)",
+                        //new MySqlParameter("uCode", MySqlDbType.VarChar) { Value = Ucodes }).ToList();
+                        ucodeLst1 = _ucodeByFreeText.GetAll(x => x.UCodeID == Ucodes).Select(x => new UcodeModel { StyleId = x.StyleID, FreeText = x.FreeText }).ToList();
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
+                }
+                ucodeHtml = ucodeHtml + "</p>";
+                Session["UcodeDesc"] = ucodeHtml.ToString();
+                var lst = new List<string>();
+                foreach (var data in ucodeLst1)
+                {
+                    if (data.FreeText == null | data.FreeText == "")
+                    {
+                        lst.Add(data.StyleId);
+                    }
+                    else
+                    {
+                        lst.Add(data.FreeText);
+                    }
+                }
+                Session["UcodeStyle"] = ucodeLst1;
+                Session["UcFreeTxt"] = lst.Distinct().ToList();
             }
-            else
+
+            return Url.Content("~/Home/Index");
+        }
+        #endregion
+
+        #region TemplateRedirection
+        public string GotoCardTemplate(string EmployeeId, string EmpName, string Template)
+        {
+            Session["EmpName"] = EmpName;
+            Session["SelectedEmp"] = EmployeeId;
+            if ((bool)Session["IsBulkOrder1"] == false && (bool)Session["IsManPack"] == true)
             {
-                Session["qty"] = 0;
-            }
-            var salesOrderHeader = (List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"];
-            var emp = Session["SelectedEmp"].ToString();
-            var busine = Session["BuisnessId"].ToString();
-            var address1 = dp.getEmployeeAddress(Session["SelectedEmp"].ToString(), Session["BuisnessId"].ToString());
-            var addArr = new string[] { };
-            var addresArr = address1.Contains(',') ? address1.Split(',') : addArr;
-            string businessId = Session["BuisnessId"].ToString();
-            if (!salesOrderHeader.Any(x => x.EmployeeID == emp))
-            {
+
+                string result = "";
+                Session["EmpName"] = EmpName;
+                Session["SelectedEmp"] = EmployeeId;
+                string templateHtml = "<ol style=\"padding:0px;\">";
+                if (((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Count() > 0)
+                {
+                    if (((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Any(x => x.SalesOrderLine != null))
+                    {
+                        if (((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Any(x => x.EmployeeID == Session["SelectedEmp"].ToString()))
+                        {
+                            var jvj = ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.EmployeeID == Session["SelectedEmp"].ToString()).First().SalesOrderLine.ToList();
+                            var jvj1 = jvj.Where(x => x.OriginalLineNo == null).ToList();
+                            var jvj12 = jvj1.Sum(x => x.OrdQty);
+                            Session["qty"] = jvj12;
+                        }
+                        else
+                        {
+                            Session["qty"] = 0;
+                        }
+                    }
+                    else
+                    {
+                        Session["qty"] = 0;
+                    }
+                }
+                else
+                {
+                    Session["qty"] = 0;
+                }
+                var salesOrderHeader = (List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"];
+                var emp = Session["SelectedEmp"].ToString();
+                var busine = Session["BuisnessId"].ToString();
+                var address1 = _dataConnection.getEmployeeAddress(Session["SelectedEmp"].ToString(), Session["BuisnessId"].ToString());
+                var addArr = new string[] { };
+                var addresArr = address1.Contains(',') ? address1.Split(',') : addArr;
+                string businessId = Session["BuisnessId"].ToString();
                 salesOrderHeader.Add(new SalesOrderHeaderViewModel
                 {
                     DelDesc = addresArr.Count() > 0 ? addresArr[0] : "",
@@ -243,91 +627,66 @@ namespace Maximus.Controllers
                     DelCountry = addresArr.Count() > 0 ? addresArr[7] : "",
                     EmployeeName = Session["EmpName"].ToString(),
                     EmployeeID = Session["SelectedEmp"].ToString(),
-                    UCodeId = Ucodes,
                     WarehouseID = Session["WareHouseID"].ToString(),
                     Currency_Exchange_Rate = Convert.ToDouble(Session["CurrencyExchangeRate"]),
                     Currency_Exchange_Code = Session["Currency_Name"].ToString(),
                     RepID = Convert.ToInt32(Session["Rep_Id"]),
                     OrderType = Session["OrderType"].ToString(),
-                    OrderDate=DateTime.Now.ToString("yyyy-MM-dd")
-                    //CustRef = entity.tblsop_salesorder_header.Where(x => x.CustID == businessId).First().CustRef,
-                    //Comments = entity.tblsop_salesorder_header.Where(x => x.CustID == businessId).First().Comments,
+                    OrderDate = DateTime.Now.ToString("yyyy-MM-dd")
                 });
-            }
-            List<string> ucodeLst = new List<string>();
-            List<UcodeModel> ucodeLst1 = new List<UcodeModel>();
-            if (Ucodes.Contains(';'))
-            {
-                foreach (var str in Ucodes.Split(';'))
+                List<string> templateLst = new List<string>();
+
+                if (Template.Contains(';'))
                 {
-                    ucodeLst.Add(str);
+                    foreach (var str in Template.Split(';'))
+                    { templateLst.Add(str); }
 
-                }
-
-            }
-            Session["SelectedUcode"] = Ucodes;
-
-            if (ucodeLst.Count > 0)
-            {
-                foreach (string ucode in ucodeLst)
-                {
-                    string ucodeDesc = entity.tblaccemp_ucodes_desc.Any(x => x.UCodeID == ucode) ? entity.tblaccemp_ucodes_desc.Where(x => x.UCodeID == Ucodes).First().Description : ucode;
-                    ucodeHtml = ucodeHtml + " <span>" + ucode + "</span>-<span>" + ucodeDesc + "</span> ";
-                    ucodeLst1.AddRange(entity.ucodeby_freetextview.Where(x => x.UCodeID == ucode).Select(x => new UcodeModel { StyleId = x.StyleID, FreeText = x.FreeText }).ToList());
-
-                }
-            }
-            else
-            {
-                try
-                {
-                    string ucodeDesc = entity.tblaccemp_ucodes_desc.Any(x => x.UCodeID == Ucodes) ? entity.tblaccemp_ucodes_desc.Where(x => x.UCodeID == Ucodes).First().Description : Ucodes;
-                    ucodeHtml = ucodeHtml + " <span>" + Ucodes + "</span>-<span>" + ucodeDesc + "</span> ";
-                    ucodeLst1 = entity.ucodeby_freetextview.Where(x => x.UCodeID == Ucodes).Select(x => new UcodeModel { StyleId = x.StyleID, FreeText = x.FreeText }).ToList();
-                }
-                catch (Exception e)
-                {
-
-                }
-
-            }
-            ucodeHtml = ucodeHtml + "</p>";
-            Session["UcodeDesc"] = ucodeHtml.ToString();
-            var lst = new List<string>();
-            foreach (var data in ucodeLst1)
-            {
-                if (data.FreeText == null | data.FreeText == "")
-                {
-                    lst.Add(data.StyleId);
                 }
                 else
                 {
-                    lst.Add(data.FreeText);
+                    templateLst.Add(Template);
                 }
-            }
-            Session["UcodeStyle"] = ucodeLst1;
-            Session["UcFreeTxt"] = lst.Distinct().ToList();
-            return Url.Content("~/Home/Index");
-        }
-        #endregion
 
-        #region TemplateRedirection
-        public string GotoCardTemplate(string EmployeeId, string EmpName, string Template)
-        {
-            string result = "";
-            Session["EmpName"] = EmpName;
-            Session["SelectedEmp"] = EmployeeId;
-            string templateHtml = "<ol style=\"padding:0px;\">";
-            if (((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Count() > 0)
-            {
-                if (((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Any(x => x.SalesOrderLine != null))
+                Session["SelectedTemplate"] = templateLst;
+                if (templateLst.Count > 0)
                 {
-                    if (((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Any(x => x.EmployeeID == Session["SelectedEmp"].ToString()))
+                    foreach (string temp in templateLst)
                     {
-                        var jvj = ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.EmployeeID == Session["SelectedEmp"].ToString()).First().SalesOrderLine.ToList();
-                        var jvj1 = jvj.Where(x => x.OriginalLineNo == null).ToList();
-                        var jvj12 = jvj1.Sum(x => x.OrdQty);
-                        Session["qty"] = jvj12;
+                        templateHtml = templateHtml + "<li><span>" + temp + "</span></li>";
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        templateHtml = templateHtml + "<li><span>" + Template + "</span> ></li>";
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
+
+                }
+                templateHtml = templateHtml + "</ol>";
+                Session["UcodeDesc"] = templateHtml.ToString();
+            }
+            else
+            {
+                string templateHtml = "<p style=\"padding:0px;\">";
+                if (((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Count() > 0)
+                {
+                    var s = ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]);
+
+                    if (((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Any(x => x.SalesOrderLine != null))
+                    {
+                        if (((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Any(x => x.Template.ToLower() == Template.ToLower()))
+                        {
+                            Session["qty"] = ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.UCodeId.ToLower() == Template.ToLower()).Count();
+                        }
+                        else
+                        {
+                            Session["qty"] = 0;
+                        }
                     }
                     else
                     {
@@ -338,74 +697,72 @@ namespace Maximus.Controllers
                 {
                     Session["qty"] = 0;
                 }
-            }
-            else
-            {
-                Session["qty"] = 0;
-            }
-            var salesOrderHeader = (List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"];
-            var emp = Session["SelectedEmp"].ToString();
-            var busine = Session["BuisnessId"].ToString();
-            var address1 = dp.getEmployeeAddress(Session["SelectedEmp"].ToString(), Session["BuisnessId"].ToString());
-            var addArr = new string[] { };
-            var addresArr = address1.Contains(',') ? address1.Split(',') : addArr;
-            string businessId = Session["BuisnessId"].ToString();
-            salesOrderHeader.Add(new SalesOrderHeaderViewModel
-            {
-                DelDesc = addresArr.Count() > 0 ? addresArr[0] : "",
-                DelAddress1 = addresArr.Count() > 0 ? addresArr[1] : "",
-                DelAddress2 = addresArr.Count() > 0 ? addresArr[2] : "",
-                DelAddress3 = addresArr.Count() > 0 ? addresArr[3] : "",
-                DelTown = addresArr.Count() > 0 ? addresArr[4] : "",
-                DelCity = addresArr.Count() > 0 ? addresArr[5] : "",
-                DelPostCode = addresArr.Count() > 0 ? addresArr[6] : "",
-                DelCountry = addresArr.Count() > 0 ? addresArr[7] : "",
-                EmployeeName = Session["EmpName"].ToString(),
-                EmployeeID = Session["SelectedEmp"].ToString(),
-                WarehouseID = Session["WareHouseID"].ToString(),
-                Currency_Exchange_Rate = Convert.ToDouble(Session["CurrencyExchangeRate"]),
-                Currency_Exchange_Code = Session["Currency_Name"].ToString(),
-                RepID = Convert.ToInt32(Session["Rep_Id"]),
-                OrderType = Session["OrderType"].ToString(),
-                OrderDate = DateTime.Now.ToString("yyyy-MM-dd")
-                //CustRef = entity.tblsop_salesorder_header.Where(x => x.CustID == businessId).First().CustRef,
-                //Comments = entity.tblsop_salesorder_header.Where(x => x.CustID == businessId).First().Comments,
-            });
-            List<string> templateLst = new List<string>();
+                var salesOrderHeader = (List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"];
+                var address1 = _dataConnection.getEmployeeAddress(Session["UserName"].ToString(), Session["BuisnessId"].ToString());
+                var addArr = new string[] { };
 
-            if (Template.Contains(';'))
-            {
-                foreach (var str in Template.Split(';'))
-                { templateLst.Add(str); }
-
-            }
-            else
-            {
-                templateLst.Add(Template);
-            }
-
-            Session["SelectedTemplate"] = templateLst;
-            if (templateLst.Count > 0)
-            {
-                foreach (string temp in templateLst)
+                var addresArr = address1.Contains(',') ? address1.Split(',') : addArr;
+                Session["cboDelAddress"] = address1 != "" ? addresArr[0] : "";
+                string businessId = Session["BuisnessId"].ToString();
+                if (!salesOrderHeader.Any(x => x.Template.ToLower() == Template.ToLower()))
                 {
-                    templateHtml = templateHtml + "<li><span>" + temp + "</span></li>";
+                    salesOrderHeader.Add(new SalesOrderHeaderViewModel
+                    {
+                        DelDesc = addresArr.Count() > 0 ? addresArr[1] : "",
+                        DelAddress1 = addresArr.Count() > 0 ? addresArr[2] : "",
+                        DelAddress2 = addresArr.Count() > 0 ? addresArr[3] : "",
+                        DelAddress3 = addresArr.Count() > 0 ? addresArr[4] : "",
+                        DelTown = addresArr.Count() > 0 ? addresArr[5] : "",
+                        DelCity = addresArr.Count() > 0 ? addresArr[6] : "",
+                        DelPostCode = addresArr.Count() > 0 ? addresArr[7] : "",
+                        DelCountry = addresArr.Count() > 0 ? addresArr[8] : "",
+                        EmployeeName = "",
+                        EmployeeID = "",
+                        Template = Template,
+                        WarehouseID = Session["WareHouseID"].ToString(),
+                        Currency_Exchange_Rate = Convert.ToDouble(Session["CurrencyExchangeRate"]),
+                        Currency_Exchange_Code = Session["Currency_Name"].ToString(),
+                        RepID = Convert.ToInt32(Session["Rep_Id"]),
+                        OrderType = Session["OrderType"].ToString(),
+                        OrderDate = DateTime.Now.ToString("yyyy-MM-dd")
+                    });
                 }
-            }
-            else
-            {
-                try
+                List<string> templateLst = new List<string>();
+
+                if (Template.Contains(';'))
                 {
-                    templateHtml = templateHtml + "<li><span>" + Template + "</span> ></li>";
-                }
-                catch (Exception e)
-                {
+                    foreach (var str in Template.Split(';'))
+                    { templateLst.Add(str); }
 
                 }
+                else
+                {
+                    templateLst.Add(Template);
+                }
 
+                Session["SelectedTemplate"] = templateLst;
+                if (templateLst.Count > 0)
+                {
+                    foreach (string temp in templateLst)
+                    {
+                        templateHtml = templateHtml + "<li><span>" + temp + "</span></li>";
+                    }
+                }
+                else
+                {
+                    try
+                    {
+                        templateHtml = templateHtml + "<li><span>" + Template + "</span> ></li>";
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
+
+                }
+                templateHtml = templateHtml + "</ol>";
+                Session["UcodeDesc"] = templateHtml.ToString();
             }
-            templateHtml = templateHtml + "</ol>";
-            Session["UcodeDesc"] = templateHtml.ToString();
             return Url.Content("~/Home/Index");
         }
         #endregion
@@ -420,124 +777,31 @@ namespace Maximus.Controllers
             if (templates.Count > 0)
             {
                 Session["Templates"] = templates;
-                result = dp.getEmployeeDetailsTemplatesById(busId, empId);
+                result = _employee.GetEmployeeDetailsTemplatesById(busId, empId);
             }
             else
             {
-                result = dp.GetEmployeeById(Session["BuisnessId"].ToString(), empId);
+                result = _employee.GetEmployeeById(Session["BuisnessId"].ToString(), empId);
             }
-            result.EmployeeId = result.EmployeeId == null ? entity.tblaccemp_employee.Where(x => x.EmployeeID == empId && x.BusinessID == busId).First().EmployeeID : empId;
-            result.EmpFirstName = result.EmpFirstName == null ? entity.tblaccemp_employee.Where(x => x.EmployeeID == empId && x.BusinessID == busId).First().Forename : result.EmpFirstName;
-            result.EmpLastName = result.EmpLastName == null ? entity.tblaccemp_employee.Where(x => x.EmployeeID == empId && x.BusinessID == busId).First().Surname : result.EmpLastName;
-            var dept = entity.tblaccemp_employee.Where(x => x.EmployeeID == empId && x.BusinessID == busId).First().DepartmentID;
-            result.Department = result.Department == null ? entity.tblaccemp_departments.Where(x => x.DepartmentID == dept).First().Department : result.Department;
-            result.DepartmentLst = entity.tblaccemp_departments.Where(x => x.BusinessID == busId).Select(x => x.Department).ToList();
-            result.ucodeLst = dp.GetUcodeList(empId, busId);/* entity.tblaccemp_ucodesemployees.Where(x => x.BusinessID == busId).Select(x => x.UCodeID).Distinct().ToList();*/
-            int addId = dp.GetAddressId(busId, empId);
-            result.Address = addId > 0 ? entity.tblbus_address.Where(x => x.AddressID == addId).Select(x => new BusAddress { Address1 = x.Address1, Address2 = x.Address2, Address3 = x.Address3, City = x.City, CountryCode = x.CountryCode.Value, PostCode = x.Postcode, AddressDescription = x.Description, AddressId = x.AddressID }).FirstOrDefault() : new BusAddress();
-            result.AddressLst = entity.tblbus_address.Where(x => x.BusinessID == busId).Select(x => new BusAddress { Address1 = x.Address1, Address2 = x.Address2, Address3 = x.Address3, City = x.City, CountryCode = x.CountryCode.Value, PostCode = x.Postcode, AddressDescription = x.Description, AddressId = x.AddressID }).ToList();
+            var isclosed = _employee1.GetAll(x => x.EmployeeID == empId && x.BusinessID == busId).First().EmployeeClosed;
+            result.EmployeeId = result.EmployeeId == null ? _employee1.GetAll(x => x.EmployeeID == empId && x.BusinessID == busId).First().EmployeeID : empId;
+            result.EmpFirstName = result.EmpFirstName == null ? _employee1.GetAll(x => x.EmployeeID == empId && x.BusinessID == busId).First().Forename : result.EmpFirstName;
+            result.EmpLastName = result.EmpLastName == null ? _employee1.GetAll(x => x.EmployeeID == empId && x.BusinessID == busId).First().Surname : result.EmpLastName;
+            var dept = _employee1.GetAll(x => x.EmployeeID == empId && x.BusinessID == busId).First().DepartmentID;
+            result.EmpIsActive = result.EmpIsActive == false ? isclosed == false ? true : false : result.EmpIsActive;
+            result.Department = result.Department == null ? _departments.GetAll(x => x.DepartmentID == dept).First().Department : result.Department;
+            result.DepartmentLst = _departments.GetAll(x => x.BusinessID == busId).Select(x => x.Department).ToList();
+            result.ucodeLst = _dataConnection.GetUcodeList(empId, busId);
+            int addId = _dataConnection.GetAddressId(busId, empId);
+            result.Address = addId > 0 ? _busAddress.GetAll(x => x.AddressID == addId).Select(x => new BusAddress1 { Address1 = x.Address1, Address2 = x.Address2, Address3 = x.Address3, City = x.City, CountryCode = x.CountryCode.Value, PostCode = x.Postcode, AddressDescription = x.Description, AddressId = x.AddressID }).FirstOrDefault() : new BusAddress1();
+            result.AddressLst = _busAddress.GetAll(x => x.BusinessID == busId).Select(x => new BusAddress1 { Address1 = x.Address1, Address2 = x.Address2, Address3 = x.Address3, City = x.City, CountryCode = x.CountryCode.Value, PostCode = x.Postcode, AddressDescription = x.Description, AddressId = x.AddressID }).ToList();
             return PartialView("_EmployeeEdit", result);
         }
         [HttpPost]
         public string EditEmployee1(DateTime? StartDate = null, DateTime? EndDate = null, string EmpFirstName = "", string EmpLastName = "", string EmployeeId = "", string EmpUcodes = "", string Address = "", string Department = "", string hrsCmb = "", string hoursNo = "", string hoursDept = "", bool isActive = false)
         {
-            try
-            {
-                if (EmpFirstName != "" & EmpLastName != "" & EmployeeId != "" & Department != "")
-                {
-                    string busId = Session["BuisnessId"].ToString();
-                    var templates = (List<string>)Session["Templates"];
-                    var cmpId = entity.tblaccemp_employee.Where(x => x.BusinessID == busId & x.EmployeeID == EmployeeId).Select(x => x.CompanyID).First();
-                    var deptData = entity.tblaccemp_departments.Where(x => x.BusinessID == busId && x.Department == Department).First().DepartmentID;
-                    var emp = entity.tblaccemp_employee.Where(x => x.EmployeeID == EmployeeId && x.BusinessID == busId).First();
-                    emp.Forename = EmpFirstName;
-                    emp.Surname = EmpLastName;
-                    emp.DepartmentID = deptData;
-                    emp.EmployeeClosed = isActive == false ? Convert.ToSByte(true) : Convert.ToSByte(false);
-                    emp.StartDate = StartDate;
-                    emp.EndDate = EndDate;
-                    entity.Entry(emp).State = System.Data.Entity.EntityState.Modified;
-                    var busAddsId = entity.tblbus_address.Where(x => x.Description == Address).First().AddressID;
-                    if (templates.Count == 0)
-                    {
-                        var ucodes = entity.tblaccemp_ucodesemployees.Where(x => x.BusinessID == busId & x.EmployeeID == EmployeeId).Select(x => x.UCodeID.Trim()).ToList();
-                        if (EmpUcodes.Contains(';'))
-                        {
-                            foreach (string ucode in EmpUcodes.Split(';'))
-                            {
-                                if (!ucodes.Contains(ucode.Trim()))
-                                {
-                                    var updateUcode = new tblaccemp_ucodesemployees();
-                                    updateUcode.CompanyID = cmpId;
-                                    updateUcode.UCodeID = ucode;
-                                    updateUcode.EmployeeID = EmployeeId;
-                                    updateUcode.BusinessID = busId;
-                                    entity.Entry(updateUcode).State = System.Data.Entity.EntityState.Added;
-
-                                }
-
-
-                            }
-                        }
-                        else
-                        {
-                            if (ucodes.Contains(EmpUcodes))
-                            {
-                                ucodes.Remove(EmpUcodes);
-                                var ucode1 = ucodes[0];
-                                dp.DeleteEmployee(ucode1, EmployeeId, busId);
-                            }
-                        }
-                    }
-                    if (hoursNo != "" && hoursDept != "")
-                    {
-                        if (Convert.ToBoolean(Session["ShowHourse"].ToString()) && Convert.ToBoolean(Session["REQ_REASONPAGE"].ToString()))
-                        {
-                            var hrsUcode = new tblaccemp_ucodesemployees();
-                            hrsUcode.BusinessID = busId;
-                            hrsUcode.CompanyID = cmpId;
-                            hrsUcode.EmployeeID = EmployeeId;
-                            hrsUcode.UCodeID = "SQ" + hoursDept + hoursNo;
-                            entity.Entry(hrsUcode).State = System.Data.Entity.EntityState.Added;
-                        }
-                    }
-                    if (hrsCmb != "")
-                    {
-                        var hrsUcode = new tblaccemp_ucodesemployees();
-                        hrsUcode.CompanyID = cmpId;
-                        hrsUcode.UCodeID = hrsCmb;
-                        hrsUcode.EmployeeID = EmployeeId;
-                        hrsUcode.BusinessID = busId;
-                        entity.Entry(hrsUcode).State = System.Data.Entity.EntityState.Added;
-                    }
-                    if (entity.SaveChanges() > 0)
-                    {
-                        if (Address != "")
-                        {
-                            int res = dp.UpdateEmployee(Convert.ToInt32(cmpId), Convert.ToInt32(busAddsId), EmployeeId, busId);
-                            if (res > -1)
-                            {
-                                return "success";
-                            }
-                        }
-                        return "success";
-                    }
-                    else
-                    {
-                        return "";
-                    }
-                }
-                else
-                {
-                    return "Validation";
-                }
-                return "success";
-            }
-            catch (Exception e)
-            {
-
-            }
-            return "";
+            var result = _employee.EditEmployee(StartDate, EndDate, EmpFirstName, EmpLastName, EmployeeId, EmpUcodes, Address, Department, hrsCmb, hoursNo, hoursDept, isActive, Session["BuisnessId"].ToString(), (List<string>)Session["Templates"], Session["ShowHourse"].ToString(), Session["REQ_REASONPAGE"].ToString());
+            return result;
         }
         #endregion
 
@@ -546,10 +810,10 @@ namespace Maximus.Controllers
         {
 
             var FillAddressModel = new FillAddressModel();
-            var result = entity.tblbus_address.Where(x => x.AddressID == descAddId).Select(x => new BusAddress { Address1 = x.Address1, Address2 = x.Address2, Address3 = x.Address3, City = x.City, CountryCode = x.CountryCode.Value, PostCode = x.Postcode, AddressDescription = x.Description, AddressId = x.AddressID }).ToList();
+            var result = _busAddress.GetAll(x => x.AddressID == descAddId).Select(x => new BusAddress1 { Address1 = x.Address1, Address2 = x.Address2, Address3 = x.Address3, City = x.City, CountryCode = x.CountryCode.Value, PostCode = x.Postcode, AddressDescription = x.Description, AddressId = x.AddressID }).ToList();
             foreach (var dtat in result)
             {
-                dtat.Country = entity.tblbus_countrycodes.Where(x => x.CountryID == dtat.CountryCode).First().Country;
+                dtat.Country = _countryCodes.GetAll(x => x.CountryID == dtat.CountryCode).First().Country;
             }
             return Json(result, JsonRequestBehavior.AllowGet);
         }
@@ -558,155 +822,40 @@ namespace Maximus.Controllers
         #region createEmployee
         public ActionResult CreateNewEmployee()
         {
-            //var s = dp.FillCombo_CustomerDelivery();
+
             var result = new EmployeeViewModel();
             string busId = Session["BuisnessId"].ToString();
-            result.ucodeLst = dp.GetUcodeList("", busId);
-            result.Roles = dp.GetRoles(busId);
-            /*entity.tblaccemp_ucodesemployees.Where(x => x.BusinessID == busId).Select(x => x.UCodeID).Distinct().ToList();*/
-            result.DepartmentLst = entity.tblaccemp_departments.Where(x => x.BusinessID == busId).Select(x => x.Department).ToList();
-            result.Address = new BusAddress();
-            result.chkMapEmp = dp.LimitEmpUsers(Session["Access"].ToString());
-            result.chkMapAddr = Convert.ToBoolean(dp.BusinessParam("LimitUsrAddr", busId)) == true | !(dp.BusinessParam("DELADDRMAPTO", busId).ToUpper().Trim() == "EMPLOYEE" ? true : false);
-            result.AddressLst = entity.tblbus_address.Where(x => x.BusinessID == busId).Select(x => new BusAddress { Address1 = x.Address1, Address2 = x.Address2, Address3 = x.Address3, City = x.City, CountryCode = x.CountryCode.Value, PostCode = x.Postcode, AddressDescription = x.Description, AddressId = x.AddressID }).ToList();
+            result.ucodeLst = _dataConnection.GetUcodeList("", busId);
+            result.Roles = _employee.GetRoles(busId);
+
+            result.DepartmentLst = _departments.GetAll(x => x.BusinessID == busId).Select(x => x.Department).ToList();
+            result.Address = new BusAddress1();
+            result.chkMapEmp = _employee.LimitEmpUsers(Session["Access"].ToString(), busId);
+            result.chkMapAddr = Convert.ToBoolean(_dataConnection.BusinessParam("LimitUsrAddr", busId)) == true | !(_dataConnection.BusinessParam("DELADDRMAPTO", busId).ToUpper().Trim() == "EMPLOYEE" ? true : false);
+            result.AddressLst = _busAddress.GetAll(x => x.BusinessID == busId).Select(x => new BusAddress1 { Address1 = x.Address1, Address2 = x.Address2, Address3 = x.Address3, City = x.City, CountryCode = x.CountryCode.Value, PostCode = x.Postcode, AddressDescription = x.Description, AddressId = x.AddressID }).ToList();
             Session["Mapemptome"] = !(Session["Access"].ToString().ToUpper().Trim() == "ADMIN" | Session["Access"].ToString().ToUpper().Trim() == "MANAGER");
-            //var s = entity.tblbus_address.Where(x => x.BusinessID == busId && x.AddressID== 817371).ToList() ;
-            Session["datestart"] = dp.ShowHourse(busId);
-            Session["leavedate"] = dp.ShowHourse(busId);
-            Session["roleid"] = dp.ShowHourse(busId);
-            //if(dp.AddressUserCreate(busId))
-            //{
-            //    result.chkMapEmp = Session["Access"].ToString().Trim().ToLower() == "manager" ? true : false;
-            //}
+            Session["datestart"] = _employee.ShowHourse(busId);
+            Session["leavedate"] = _employee.ShowHourse(busId);
+            Session["roleid"] = _employee.ShowHourse(busId);
             ViewBag.create = true;
             return PartialView("_EmployeeEdit", result);
         }
 
-  
+
         [HttpPost]
         public string CreateNewEmployee(DateTime? StartDate = null, DateTime? EndDate = null, string EmpFirstName = "", string EmpLastName = "", string EmployeeId = "", string EmpUcodes = "", string Address = "", string hrsCmb = "", string Department = "", bool isActive = false, bool isMapped = false, string hoursDept = "", string hoursNo = "")
         {
+
+            string result = "";
             try
             {
-                if (EmpFirstName != "" & EmpLastName != "" & EmployeeId != "" & Department != "")
-                {
-                    var templates = (List<string>)Session["Templates"];
-                    string busId = Session["BuisnessId"].ToString();
-                    var deptData = entity.tblaccemp_departments.Where(x => x.BusinessID == busId && x.Department == Department).First().DepartmentID;
-                    var cmpId = entity.tblaccemp_employee.Where(x => x.BusinessID == busId).First().CompanyID;
-                    var emp = new tblaccemp_employee();
-                    emp.CompanyID = cmpId;
-                    emp.BusinessID = busId;
-                    emp.EmployeeID = EmployeeId;
-                    emp.Forename = EmpFirstName;
-                    emp.Surname = EmpLastName;
-                    emp.DepartmentID = deptData;
-                    emp.EmployeeClosed = isActive == false ? Convert.ToSByte(true) : Convert.ToSByte(false);
-                    emp.StartDate = StartDate == null ? DateTime.Now : StartDate;
-                    emp.EndDate = EndDate == null ? DateTime.Now : StartDate;
-                    entity.Entry(emp).State = System.Data.Entity.EntityState.Added;
-                    if (isMapped)
-                    {
-                        var onlineUser = new tblonline_userid_employee();
-                        onlineUser.BusinessID = busId;
-                        onlineUser.CompanyID = cmpId;
-                        onlineUser.EmployeeID = EmployeeId;
-                        onlineUser.OnlineUserID = Session["UserName"].ToString().Trim();
-                        entity.Entry(onlineUser).State = System.Data.Entity.EntityState.Added;
-                    }
-                    entity.SaveChanges();
-                    var busAddsId = entity.tblbus_address.Where(x => x.Description == Address).First().AddressID;
-                    if (templates.Count == 0)
-                    {
-                        if (EmpUcodes.Contains(';'))
-                        {
-                            foreach (string ucode in EmpUcodes.Trim().Split(';'))
-                            {
-                                var tblEmpUcode = new tblaccemp_ucodesemployees();
-                                tblEmpUcode.BusinessID = busId;
-                                tblEmpUcode.CompanyID = cmpId;
-                                tblEmpUcode.UCodeID = ucode;
-                                tblEmpUcode.EmployeeID = EmployeeId;
-                                entity.Entry(tblEmpUcode).State = System.Data.Entity.EntityState.Added;
-                            }
-                        }
-                        else
-                        {
-                            var tblEmpUcode = new tblaccemp_ucodesemployees();
-                            tblEmpUcode.BusinessID = busId;
-                            tblEmpUcode.CompanyID = cmpId;
-                            tblEmpUcode.UCodeID = EmpUcodes;
-                            tblEmpUcode.EmployeeID = EmployeeId;
-                            entity.Entry(tblEmpUcode).State = System.Data.Entity.EntityState.Added;
-                        }
-                        entity.SaveChanges();
-                    }
-                    if (hrsCmb != "")
-                    {
-                        var hrsUcode = new tblaccemp_ucodesemployees();
-                        hrsUcode.BusinessID = busId;
-                        hrsUcode.CompanyID = cmpId;
-                        hrsUcode.UCodeID = hrsCmb;
-                        hrsUcode.EmployeeID = EmployeeId;
-                        entity.Entry(hrsUcode).State = System.Data.Entity.EntityState.Added;
-                        entity.SaveChanges();
-                    }
-                    if (hoursNo == "" && hoursDept == "")
-                    {
-                        if (Convert.ToBoolean(Session["ShowHourse"].ToString()) && Convert.ToBoolean(Session["REQ_REASONPAGE"].ToString()))
-                        {
-                            var hrsUcode = new tblaccemp_ucodesemployees();
-                            hrsUcode.BusinessID = busId;
-                            hrsUcode.CompanyID = cmpId;
-                            hrsUcode.EmployeeID = EmployeeId;
-                            hrsUcode.UCodeID = "SQ" + hoursDept + hoursNo;
-                            entity.Entry(hrsUcode).State = System.Data.Entity.EntityState.Added;
-                        }
-                    }
-                    if (Address != "")
-                    {
-                        if (templates.Count == 0)
-                        {
-                            if (entity.SaveChanges() > 0)
-                            {
-                                int res = dp.UpdateEmployee(Convert.ToInt32(cmpId), Convert.ToInt32(busAddsId), EmployeeId, busId);
-                                if (res > -1)
-                                {
-                                    return "success";
-                                }
-                            }
-                            else
-                            {
-                                return "";
-                            }
-                        }
-                        else
-                        {
-
-
-                            int res = dp.UpdateEmployee(Convert.ToInt32(cmpId), Convert.ToInt32(busAddsId), EmployeeId, busId);
-                            if (res > -1)
-                            {
-                                return "success";
-                            }
-                            else
-                            {
-                                return "";
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    return "Validation";
-                }
-                return "success";
+                result = _employee.CreateNewEmployee(StartDate, EndDate, EmpFirstName, EmpLastName, EmployeeId, EmpUcodes, Address, hrsCmb, Department, isActive, isMapped, hoursDept, hoursNo, (List<string>)Session["Templates"], Session["BuisnessId"].ToString(), Session["UserName"].ToString().Trim(), Session["ShowHourse"].ToString(), Session["REQ_REASONPAGE"].ToString());
             }
-            catch (Exception e)
+            catch
             {
-
+                result = "";
             }
-            return "";
+            return result;
         }
         #endregion
 
@@ -723,14 +872,30 @@ namespace Maximus.Controllers
                 }
                 else
                 {
-                    result = entity.tblaccemp_employee.Any(x => x.EmployeeID == empId && x.BusinessID == busId) ? "" : "Success";
+                    result = _employee1.Exists(x => x.EmployeeID == empId && x.BusinessID == busId) ? "" : "Success";
                     return result;
                 }
             }
             return result;
         }
         #endregion
- 
 
+        #region 
+        public bool ChangeOrderType(string orderType = "")
+        {
+            bool success = false;
+            if (orderType.ToLower() == "bulk")
+            {
+                Session["IsManPack"] = false;
+                Session["IsBulkOrder1"] = true;
+            }
+            else if (orderType.ToLower() == "manpack")
+            {
+                Session["IsManPack"] = true;
+                Session["IsBulkOrder1"] = false;
+            }
+            return success;
+        }
+        #endregion
     }
 }

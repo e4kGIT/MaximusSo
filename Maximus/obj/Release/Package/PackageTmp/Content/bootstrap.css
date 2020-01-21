@@ -4987,7 +4987,7 @@ a.list-group-item.active > .badge,
 
 a.thumbnail:hover,
 a.thumbnail:focus {
-  border-color: #428bca;
+  border-color:black;
 }
 
 .thumbnail > img {

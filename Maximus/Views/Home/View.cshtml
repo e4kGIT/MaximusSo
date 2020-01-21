@@ -25,7 +25,7 @@
         settings.Settings.ShowHeaderPanel = true;
         settings.ClientSideEvents.BeginCallback = "BeginCallback";
 
-        Maximus.Models.e4kmaximusdbEntities entity = new Maximus.Models.e4kmaximusdbEntities();
+        Maximus.Data.Modelse4kmaximusdbEntities entity = new Maximus.Data.Modelse4kmaximusdbEntities();
         settings.SetHeaderPanelTemplateContent(r =>
         {
 
@@ -73,7 +73,7 @@
             x.SetTemplateContent(col =>
             {
                 var style = (DataBinder.Eval(col.DataItem, "StyleID")).ToString();
-                Html.RenderPartial("Model/_StyleDrop", entity.styleby_freetextview.Where(s => s.StyleID.Contains(style)).Select(s=>new Maximus.Models.styleViewmodel {StyleID=s.StyleID }).FirstOrDefault());
+                Html.RenderPartial("Model/_StyleDrop", entity.styleby_freetextview.Where(s => s.StyleID.Contains(style)).Select(s=>new Maximus.Data.Models.styleViewmodel {StyleID=s.StyleID }).FirstOrDefault());
             });
 
 
@@ -105,7 +105,7 @@
             x.SetTemplateContent(col =>
             {
                 var style = (DataBinder.Eval(col.DataItem, "StyleID")).ToString();
-                Html.RenderPartial("Model/_ColorDrop", entity.styleby_freetextview.Where(s => s.StyleID.Contains(style)).Select(s => new Maximus.Models.styleViewmodel { StyleID = s.StyleID }).FirstOrDefault());
+                Html.RenderPartial("Model/_ColorDrop", entity.styleby_freetextview.Where(s => s.StyleID.Contains(style)).Select(s => new Maximus.Data.Models.styleViewmodel { StyleID = s.StyleID }).FirstOrDefault());
 
             });
 
@@ -118,7 +118,7 @@
             {
                 var style = (DataBinder.Eval(col.DataItem, "StyleID")).ToString();
                  
-                Html.RenderPartial("Model/_SizeDrop", entity.styleby_freetextview.Where(s => s.StyleID.Contains(style)).Select(s => new Maximus.Models.styleViewmodel { StyleID = s.StyleID }).FirstOrDefault());
+                Html.RenderPartial("Model/_SizeDrop", entity.styleby_freetextview.Where(s => s.StyleID.Contains(style)).Select(s => new Maximus.Data.Models.styleViewmodel { StyleID = s.StyleID }).FirstOrDefault());
 
                
             });

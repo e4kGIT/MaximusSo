@@ -1,11 +1,14 @@
-﻿@model Maximus.Models.EmployeeViewModel
+﻿@model Maximus.Data.Models.EmployeeViewModel
 
 
 @*Session["datestart"] = dp.ShowHourse(busId);
     Session["leavedate"] = dp.ShowHourse(busId);
     Session["roleid"] = dp.ShowHourse(busId);*@
 @{
-    Maximus.Models.e4kmaximusdbEntities ent = new Maximus.Models.e4kmaximusdbEntities();
+    Maximus.Data.Interface.Concrete.IUnitOfWork _unitOfWork = new Maximus.Data.InterFace.UnitOfWork();
+    Maximus.Controllers.EmployeeController emp = new Maximus.Controllers.EmployeeController(_unitOfWork);
+    Maximus.Data.Models.DataProcessing hc = new Maximus.Data.Models.DataProcessing(_unitOfWork);
+    Maximus.Services.Interface.IDataConnection _dataConnection = new Maximus.Services.DataConnectionService(_unitOfWork);
 }
 <center>
     <div class="row">
@@ -181,9 +184,8 @@
                 <div class="col-md-6 col-xs-6 col-sm-6 col-lg-6">
                     <center>
                         @{
-                            Maximus.Models.e4kmaximusdbEntities enty = new Maximus.Models.e4kmaximusdbEntities();
                             var busID = Session["BuisnessId"].ToString();
-                            var data = enty.tblbus_setvalues.Any(x => x.BusinessID == busID && x.SettingID == "SHOW_HRS_WORK") ? enty.tblbus_setvalues.Where(x => x.SettingID == "SHOW_HRS_WORK" && x.BusinessID.ToLower() == busID.ToLower()).First().Value.ToLower() == "true" ? true : false : false;
+                            var data = emp._busSetValues.Exists(x => x.BusinessID == busID && x.SettingID == "SHOW_HRS_WORK") ? emp._busSetValues.GetAll(x => x.SettingID == "SHOW_HRS_WORK" && x.BusinessID.ToLower() == busID.ToLower()).First().Value.ToLower() == "true" ? true : false : false;
                             if (!data)
                             {
                                 @Html.DevExpress().DropDownEditFor(x => x.EmpUcodes, text =>
@@ -272,12 +274,12 @@
                     @Html.DevExpress().ComboBox(x =>
                {
                    x.Name = "hoursDEPT";
-                   Maximus.Models.DataProcessing dp = new Maximus.Models.DataProcessing();
+
                    System.Data.DataTable dt = new System.Data.DataTable();
 
 
                    var busID = Session["BuisnessId"].ToString();
-                   dt = dp.GetDatatableByQry(1, busID);
+                   dt = _dataConnection.GetDatatableByQry(1, busID);
                    if (dt.Rows.Count > 0)
                    {
                        foreach (System.Data.DataRow dr in dt.Rows)
@@ -295,12 +297,12 @@
                     @Html.DevExpress().ComboBox(x =>
                {
                    x.Name = "hoursNo";
-                   Maximus.Models.DataProcessing dp = new Maximus.Models.DataProcessing();
+
                    System.Data.DataTable dt = new System.Data.DataTable();
 
 
                    var busID = Session["BuisnessId"].ToString();
-                   dt = dp.GetDatatableByQry(0, busID);
+                   dt = _dataConnection.GetDatatableByQry(0, busID);
 
 
                    if (dt.Rows.Count > 0)
@@ -321,37 +323,37 @@
             {
                 <center><h4 style="padding:0px;">Hours Worked</h4></center>
                 @Html.DevExpress().ComboBox(x =>
-   {
-       x.Name = "hoursCmb";
-       Maximus.Models.DataProcessing dp = new Maximus.Models.DataProcessing();
-       System.Data.DataTable dt = new System.Data.DataTable();
-
-       if (ViewBag.empId == null)
-       {
-           var cmpId = System.Configuration.ConfigurationManager.AppSettings["CompanyId"].ToString();
-           dt = dp.FillshowhoursCmb("", cmpId);
-       }
-       else
-       {
-           var cmpId = System.Configuration.ConfigurationManager.AppSettings["CompanyId"].ToString();
-           dt = dp.FillshowhoursCmb(ViewBag.empId.ToString(), cmpId);
-       }
-
-       if (dt.Rows.Count > 0)
-       {
-           foreach (System.Data.DataRow dr in dt.Rows)
            {
-               if (dr["CheckIt"].ToString() == "1")
-               {
-                   x.SelectedIndex = dt.Rows.IndexOf(dr);
-               }
-               x.Properties.Items.Add(dr["UCodeID"].ToString());
-               x.Properties.TextField = dr["UCodeID"].ToString();
-               x.Properties.ValueField = dr["UCodeID"].ToString();
-           }
-       }
+               x.Name = "hoursCmb";
 
-   }).GetHtml()
+               System.Data.DataTable dt = new System.Data.DataTable();
+
+               if (ViewBag.empId == null)
+               {
+                   var cmpId = System.Configuration.ConfigurationManager.AppSettings["CompanyId"].ToString();
+                   dt = _dataConnection.FillshowhoursCmb(Session["BuisnessId"].ToString(), "", cmpId);
+               }
+               else
+               {
+                   var cmpId = System.Configuration.ConfigurationManager.AppSettings["CompanyId"].ToString();
+                   dt = _dataConnection.FillshowhoursCmb(Session["BuisnessId"].ToString(), ViewBag.empId.ToString(), cmpId);
+               }
+
+               if (dt.Rows.Count > 0)
+               {
+                   foreach (System.Data.DataRow dr in dt.Rows)
+                   {
+                       if (dr["CheckIt"].ToString() == "1")
+                       {
+                           x.SelectedIndex = dt.Rows.IndexOf(dr);
+                       }
+                       x.Properties.Items.Add(dr["UCodeID"].ToString());
+                       x.Properties.TextField = dr["UCodeID"].ToString();
+                       x.Properties.ValueField = dr["UCodeID"].ToString();
+                   }
+               }
+
+           }).GetHtml()
             }
         </div>
     }
@@ -375,7 +377,7 @@
                     <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
                         @Html.DevExpress().ComboBox(comboBoxSettings =>
                    {
-                       Maximus.Models.DataProcessing dp = new Maximus.Models.DataProcessing();
+
                        comboBoxSettings.Name = "CmbAddress";
                        comboBoxSettings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
                        comboBoxSettings.Properties.Caption = "Address";
@@ -397,13 +399,13 @@
                        // comboBoxSettings.Properties.DataSource = ViewBag.MultiComboBoxSites;
                        if (Model.Address != null)
                        {
-                           var busAdd = Model.AddressLst.Any(x => x.AddressId == Model.Address.AddressId) ? Model.AddressLst.Where(x => x.AddressId == Model.Address.AddressId).First() : new Maximus.Models.BusAddress();
+                           var busAdd = Model.AddressLst.Any(x => x.AddressId == Model.Address.AddressId) ? Model.AddressLst.Where(x => x.AddressId == Model.Address.AddressId).First() : new Maximus.Data.Models.BusAddress1();
                            comboBoxSettings.SelectedIndex = Model.AddressLst.IndexOf(busAdd);
                        }
-                       var add = dp.GetEmpAddress(Session["UserName"].ToString());
+                       var add = _dataConnection.GetEmpAddress(Session["UserName"].ToString());
                        if (add != 0)
                        {
-                           var busAdd = Model.AddressLst.Any(x => x.AddressId == add) ? Model.AddressLst.Where(x => x.AddressId == add).First() : new Maximus.Models.BusAddress();
+                           var busAdd = Model.AddressLst.Any(x => x.AddressId == add) ? Model.AddressLst.Where(x => x.AddressId == add).First() : new Maximus.Data.Models.BusAddress1();
                            if (busAdd.AddressId != 0)
                            {
                                comboBoxSettings.SelectedIndex = Model.AddressLst.IndexOf(busAdd);
@@ -425,7 +427,7 @@
                            settings.Name = "EmpAddress1"; settings.Properties.Caption = "Address1";
                            if (Model.Address != null)
                            {
-                               var busAdd = Model.AddressLst.Any(x => x.AddressId == Model.Address.AddressId) ? Model.AddressLst.Where(x => x.AddressId == Model.Address.AddressId).First() : new Maximus.Models.BusAddress();
+                               var busAdd = Model.AddressLst.Any(x => x.AddressId == Model.Address.AddressId) ? Model.AddressLst.Where(x => x.AddressId == Model.Address.AddressId).First() : new Maximus.Data.Models.BusAddress1();
                                settings.Text = busAdd.Address1;
                            }
                        }).GetHtml()
@@ -437,7 +439,7 @@
                                               {
                                                   settings.Name = "EmpAddress2"; settings.Properties.Caption = "Address2"; if (Model.Address != null)
                                                   {
-                                                      var busAdd = Model.AddressLst.Any(x => x.AddressId == Model.Address.AddressId) ? Model.AddressLst.Where(x => x.AddressId == Model.Address.AddressId).First() : new Maximus.Models.BusAddress();
+                                                      var busAdd = Model.AddressLst.Any(x => x.AddressId == Model.Address.AddressId) ? Model.AddressLst.Where(x => x.AddressId == Model.Address.AddressId).First() : new Maximus.Data.Models.BusAddress1();
                                                       settings.Text = busAdd.Address2;
                                                   }
                                               }).GetHtml()
@@ -449,7 +451,7 @@
                                               {
                                                   settings.Name = "EmpAddress3"; settings.Properties.Caption = "Address3"; if (Model.Address != null)
                                                   {
-                                                      var busAdd = Model.AddressLst.Any(x => x.AddressId == Model.Address.AddressId) ? Model.AddressLst.Where(x => x.AddressId == Model.Address.AddressId).First() : new Maximus.Models.BusAddress();
+                                                      var busAdd = Model.AddressLst.Any(x => x.AddressId == Model.Address.AddressId) ? Model.AddressLst.Where(x => x.AddressId == Model.Address.AddressId).First() : new Maximus.Data.Models.BusAddress1();
                                                       settings.Text = busAdd.Address3;
                                                   }
                                               }).GetHtml()
@@ -464,7 +466,7 @@
                                               {
                                                   settings.Name = "EmpCity"; settings.Properties.Caption = "City"; if (Model.Address != null)
                                                   {
-                                                      var busAdd = Model.AddressLst.Any(x => x.AddressId == Model.Address.AddressId) ? Model.AddressLst.Where(x => x.AddressId == Model.Address.AddressId).First() : new Maximus.Models.BusAddress();
+                                                      var busAdd = Model.AddressLst.Any(x => x.AddressId == Model.Address.AddressId) ? Model.AddressLst.Where(x => x.AddressId == Model.Address.AddressId).First() : new Maximus.Data.Models.BusAddress1();
                                                       settings.Text = busAdd.City;
                                                   }
                                               }).GetHtml()
@@ -476,7 +478,7 @@
                                               {
                                                   settings.Name = "EmpPostCode"; settings.Properties.Caption = "Postcode"; if (Model.Address != null)
                                                   {
-                                                      var busAdd = Model.AddressLst.Any(x => x.AddressId == Model.Address.AddressId) ? Model.AddressLst.Where(x => x.AddressId == Model.Address.AddressId).First() : new Maximus.Models.BusAddress();
+                                                      var busAdd = Model.AddressLst.Any(x => x.AddressId == Model.Address.AddressId) ? Model.AddressLst.Where(x => x.AddressId == Model.Address.AddressId).First() : new Maximus.Data.Models.BusAddress1();
                                                       settings.Text = busAdd.PostCode;
                                                   }
                                               }).GetHtml()
@@ -488,9 +490,9 @@
                        {
                            settings.Name = "EmpCountry"; settings.Properties.Caption = "Country"; if (Model.Address != null)
                            {
-                               var busAdd = Model.AddressLst.Any(x => x.AddressId == Model.Address.AddressId) ? Model.AddressLst.Where(x => x.AddressId == Model.Address.AddressId).First() : new Maximus.Models.BusAddress();
+                               var busAdd = Model.AddressLst.Any(x => x.AddressId == Model.Address.AddressId) ? Model.AddressLst.Where(x => x.AddressId == Model.Address.AddressId).First() : new Maximus.Data.Models.BusAddress1();
 
-                               settings.Text = ent.tblbus_countrycodes.Where(x => x.CountryID == busAdd.CountryCode).First().Country;
+                               settings.Text = emp._countryCodes.GetAll(x => x.CountryID == busAdd.CountryCode).First().Country;
                            }
                        }).GetHtml()
                         </center>

@@ -19,14 +19,15 @@
                 </div>
                 <div class="col-md-6 col-xs-6 col-sm-6 col-lg-6">
                     @Html.DevExpress().RadioButton(x =>
-           {
-               x.GroupName = "SizenColor";
-               x.Name = "TraditionalCOMBOBOXES";
-               x.Text = "Dropdownbox layout";
-               x.Properties.ClientSideEvents.CheckedChanged = "CheckedChanged";
-               x.ControlStyle.ForeColor = System.Drawing.Color.Black;
-               x.Checked = Session["ColorSizestyle"] == null | Session["ColorSizestyle"].ToString() == "SWATCHES" ? false : true;
-           }).GetHtml()
+               {
+                   x.GroupName = "SizenColor";
+                   x.Name = "TraditionalCOMBOBOXES";
+                   x.Text = "Dropdownbox layout";
+                   x.Properties.ClientSideEvents.CheckedChanged = "CheckedChanged";
+                   x.Enabled = false;
+                   x.ControlStyle.ForeColor = System.Drawing.Color.Black;
+                   x.Checked = Session["ColorSizestyle"] == null | Session["ColorSizestyle"].ToString() == "SWATCHES" ? false : true;
+               }).GetHtml()
                 </div>
             </div>
         </div>
@@ -106,6 +107,44 @@
                 <div class="col-md-1 col-xs-1 col-sm-1 col-lg-1" style="padding:0px">
                 </div>
             </div>
+        </div>
+        <div class="col-md-1 col-xs-1 col-sm-1 col-lg-1"></div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-1 col-xs-1 col-sm-1 col-lg-1"></div>
+        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3">
+            @Html.DevExpress().RadioButton(x =>
+           {
+               x.GroupName = "OrderType";
+               x.Text = "Is ManPack Order";
+               x.Name = "IsManPack";
+               x.Properties.ClientSideEvents.CheckedChanged = "OrderTypeChange";
+               x.ControlStyle.ForeColor = System.Drawing.Color.Black;
+               x.Checked = Session["IsManPack"] != null ?(bool) Session["IsManPack"] :false;
+           }).GetHtml()
+        </div>
+        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3">
+            @Html.DevExpress().RadioButton(x =>
+       {
+           x.GroupName = "OrderType";
+           x.Text = "Is Bulk Order";
+           x.Name = "IsBulkOrder";
+           x.Properties.ClientSideEvents.CheckedChanged = "OrderTypeChange";
+           x.ControlStyle.ForeColor = System.Drawing.Color.Black;
+           x.Checked = Session["IsBulkOrder"] != null ? (bool)Session["IsBulkOrder"] : false;
+       }).GetHtml()
+        </div>
+        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3">
+            @Html.DevExpress().RadioButton(x =>
+       {
+           x.GroupName = "OrderType";
+           x.Text = "Is Bulk Order Type1";
+           x.Name = "IsBulkOrder1";
+           x.Properties.ClientSideEvents.CheckedChanged = "OrderTypeChange";
+           x.ControlStyle.ForeColor = System.Drawing.Color.Black;
+           x.Checked = Session["IsBulkOrder1"] != null ? (bool)Session["IsBulkOrder1"] : false;
+       }).GetHtml()
         </div>
         <div class="col-md-1 col-xs-1 col-sm-1 col-lg-1"></div>
     </div>

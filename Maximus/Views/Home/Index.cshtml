@@ -42,25 +42,34 @@
                           }
                         }
                     </div>
+                          }
+                          else
+                          {
+                            <div class="col-md-6">
+                                @{  <span><b>Ucode:</b></span>
+                                        ViewContext.Writer.Write(string.Format("{0}", Session["UcodeDesc"].ToString()));
+                                    
                                 }
-                            }
-                            else
-                            {
-                                if (Session["SelectedEmp"] != null)
-                                {
-                                    var s = Convert.ToInt32(Session["qty"]);
-                                    string content = "";
-                                    if (((List<string>)Session["Templates"]).Count > 0)
-                                    {
-                                        content = string.Format("<div class=\"col-md-3\"><p><b>Employee Id:</b></p>{0}  </div> <div class=\"col-md-3\"> <p><b>EmployeeName:</b></p> {2}</div><div class=\"col-md-6\"> <p><b>Templates:</b></p> {1}</div><div class=\"col-md-12\"> <p><b>Ucode Description:</b></p>{3}</div>", Session["SelectedEmp"].ToString(), Session["SelectedUcode"].ToString(), Session["EmpName"].ToString(), Session["UcodeDesc"].ToString());
+                            </div>
+                                        }
                                     }
                                     else
                                     {
-                                        content = string.Format("<div class=\"col-md-3\"><p><b>Employee Id:</b></p>{0}  </div> <div class=\"col-md-3\"> <p><b>EmployeeName:</b></p> {2}</div><div class=\"col-md-6\"> <p><b>Ucodes:</b></p> {1}</div><div class=\"col-md-12\"> <p><b>Ucode Description:</b></p>{3}</div>", Session["SelectedEmp"].ToString(), Session["SelectedUcode"].ToString(), Session["EmpName"].ToString(), Session["UcodeDesc"].ToString());
+                                        if (Session["SelectedEmp"] != null)
+                                        {
+                                            var s = Convert.ToInt32(Session["qty"]);
+                                            string content = "";
+                                            if (((List<string>)Session["Templates"]).Count > 0)
+                                            {
+                                                content = string.Format("<div class=\"col-md-3\"><p><b>Employee Id:</b></p>{0}  </div> <div class=\"col-md-3\"> <p><b>EmployeeName:</b></p> {2}</div><div class=\"col-md-6\"> <p><b>Templates:</b></p> {1}</div><div class=\"col-md-12\"> <p><b>Ucode Description:</b></p>{3}</div>", Session["SelectedEmp"].ToString(), Session["SelectedUcode"].ToString(), Session["EmpName"].ToString(), Session["UcodeDesc"].ToString());
+                                            }
+                                            else
+                                            {
+                                                content = string.Format("<div class=\"col-md-3\"><p><b>Employee Id:</b></p>{0}  </div> <div class=\"col-md-3\"> <p><b>EmployeeName:</b></p> {2}</div><div class=\"col-md-6\"> <p><b>Ucodes:</b></p> {1}</div><div class=\"col-md-12\"> <p><b>Ucode Description:</b></p>{3}</div>", Session["SelectedEmp"].ToString(), Session["SelectedUcode"].ToString(), Session["EmpName"].ToString(), Session["UcodeDesc"].ToString());
+                                            }
+                                            ViewContext.Writer.Write(content);
+                                        }
                                     }
-                                    ViewContext.Writer.Write(content);
-                                }
-                            }
         }
         @*<div class="col-md-5 pull-right">
                 <button class="btn" style=""
@@ -197,8 +206,8 @@
 
 @Html.DevExpress().PopupControl(sett =>
 {
-    sett.Width = System.Web.UI.WebControls.Unit.Pixel(1500);
-    sett.Height = System.Web.UI.WebControls.Unit.Percentage(100);
+   // sett.Width = System.Web.UI.WebControls.Unit.Pixel(1500);
+   sett.Height = System.Web.UI.WebControls.Unit.Pixel(800);
     sett.PopupVerticalAlign = PopupVerticalAlign.Middle;
     sett.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
     sett.Name = "DimAllocPop";
@@ -210,7 +219,7 @@
     sett.CloseOnEscape = false;
     sett.PopupAnimationType = AnimationType.Auto;
     sett.Modal = true;
-   
+    sett.ControlStyle.CssClass = "dimPopup";
     sett.ScrollBars = System.Web.UI.WebControls.ScrollBars.Vertical;
     //sett.ScrollBars = System.Web.UI.WebControls.ScrollBars.Horizontal;
     sett.HeaderText = "Grouped products";

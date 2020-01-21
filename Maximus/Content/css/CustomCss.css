@@ -1,0 +1,123 @@
+﻿.qtyTextBox {
+    width: 290px !important;
+    text-align: center;
+}
+
+.styler {
+    margin: -7px;
+    width: 350px  !important;
+}
+  .cartBtn {
+        width: 350px  !important;
+    }
+  .dimPopup{
+      width: 1500px  !important;
+      height:100%;
+  }
+@media screen and (max-width: 1680px) {
+    .qtyTextBox {
+        width: 300px !important;
+        text-align: center;
+    }
+    .styler {
+        margin: -7px;
+        width: 350px  !important;
+    }
+      .cartBtn {
+        width: 350px  !important;
+    }
+       .dimPopup{
+      width: 1500px  !important;
+      height:100%;
+  }
+}
+
+@media screen and (max-width: 1600px) {
+    .qtyTextBox {
+        width: 200px !important;
+        text-align: center;
+    }
+      .styler {
+        margin: -5px;
+        width: 230px  !important;
+    }
+       .cartBtn {
+        width: 230px  !important;
+    }
+        .dimPopup{
+      width: 1300px  !important;
+      height:100%;
+  }
+}
+
+@media screen and (max-width: 1440px) {
+    .qtyTextBox {
+        width: 170px !important;
+        text-align: center;
+    }
+      .styler {
+        margin: -4px;
+        width: 200px  !important;
+    }
+       .cartBtn {
+        width: 200px  !important;
+    }
+        .dimPopup{
+      width: 1200px  !important;
+      height:100%;
+  }
+}
+
+@media screen and (max-width: 1366px) {
+    .qtyTextBox {
+        width: 150px !important;
+        text-align: center;
+    }
+    .styler {
+        margin: -4px;
+        width: 180px  !important;
+    }
+    .cartBtn {
+        width: 180px  !important;
+    }
+     .dimPopup{
+      width: 1000px  !important;
+      height:100%;
+  }
+}
+
+@media screen and (max-width: 1280px) {
+    .qtyTextBox {
+        width: 130px !important;
+        text-align: center;
+    }
+      .styler {
+        margin: -2px;
+        width: 180px  !important;
+    }
+      .cartBtn {
+        width: 180px  !important;
+    }
+       .dimPopup{
+      width: 900px  !important;
+      height:100%;
+  }
+}
+
+@media screen and (max-width: 1024px) {
+    .qtyTextBox {
+        width: 100px !important;
+        text-align: center;
+    }
+      .styler {
+        margin: -2px;
+        width: 180px  !important;
+    }
+      .cartBtn {
+        width: 180px  !important;
+    }
+       .dimPopup{
+      width: 650px  !important;
+      height:500px;
+  }
+}
