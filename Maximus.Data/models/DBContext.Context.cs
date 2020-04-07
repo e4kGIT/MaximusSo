@@ -243,6 +243,7 @@ namespace Maximus.Data.models
         public virtual DbSet<view_ucode_freetext_tsb_rollout> view_ucode_freetext_tsb_rollout { get; set; }
         public virtual DbSet<view_unmatchedcolourwithorgcolour> view_unmatchedcolourwithorgcolour { get; set; }
         public virtual DbSet<view_unmatchedordercolourid> view_unmatchedordercolourid { get; set; }
+        public virtual DbSet<stylebytemplateview> stylebytemplateviews { get; set; }
     
         public virtual int bk_CreateCube_OrderDetail()
         {

@@ -468,7 +468,7 @@
                 if (template.Count > 0)
                 {
                     var style = (DataBinder.Eval(col.DataItem, "StyleID")).ToString();
-
+                    List<Maximus.Data.Models.ObsoleteColor> lstC = hc.getColors(style);
                     var colorLst = home._customerOrderTemplate.GetAll(clr => template.Contains(clr.Template) && clr.Style == style && clr.BusinessID == businessId).Distinct().Select(clr => clr.Colour).Distinct().ToList();
                     if (Session["ColorSizestyle"].ToString() != "SWATCHES")
                     {
@@ -491,36 +491,34 @@
                         var content = "<b>Colour<b><hr style='margin: 0;'/><br/>"; content = content + "<fieldset class='swatch-picker' name=\"Swatch_DemColor_FieldSet_" + style + "\">";
                         if (colorLst != null)
                         {
-                            foreach (var datItem in colorLst)
+                            if (colorLst.Count > 1)
                             {
-                                var hexcode = home._fskColor.Exists(da => da.Description.Contains(datItem)) ? home._fskColor.GetAll(da => da.Description.Contains(datItem)).First().Colour_hexcode : "";
-                                if (colorLst.Count > 1)
+                                foreach (var datItem in colorLst)
                                 {
-                                    if (datItem.ToLower().Contains("yell") | datItem.ToLower().Contains("whit"))
+                                    var hexcode = home._fskColor.Exists(da => da.Description.Contains(datItem)) ? home._fskColor.GetAll(da => da.Description.Contains(datItem)).First().Colour_hexcode : "";
+                                    if (lstC.Where(ax => ax.ObsoleteCode == 0).Select(xsa => xsa.ColorId).ToList().Contains(datItem))
                                     {
-                                        content = content + string.Format("<label class='swatchLabel'><input type='radio'  onchange=\"GetClrDemImg('{0}-{1}')\"  id='radio' name=\"Swatch_ColorTemplate_" + style + "\" value='{1}'/><span class='spanner1'  ><center >{1}</center></span></label>", style, datItem);
-                                    }
-                                    else
-                                    {
-                                        content = content + string.Format("<label class='swatchLabel'><input type='radio'  onchange=\"GetClrDemImg('{0}-{1}')\"   id='radio' name=\"Swatch_ColorTemplate_" + style + "\" value='{1}'/><span class='spanner1'><center >{1}</center></span></label>", style, datItem);
-                                    }
-
-                                }
-                                else
-                                {
-                                    if (datItem.ToLower().Contains("yell") | datItem.ToLower().Contains("whit"))
-                                    {
-                                        content = content + string.Format("<label class='swatchLabel'><input type='radio'   onchange=\"GetClrDemImg('{0}-{1}')\"    id='radio' name=\"Swatch_ColorTemplate_" + style + "\" checked value='{1}'/><span class='spanner1'><center >{1}</center></span></label>", style, datItem);
-                                    }
-                                    else
-                                    {
-                                        content = content + string.Format("<label class='swatchLabel'><input type='radio'  onchange=\"GetClrDemImg('{0}-{1}')\"   id='radio' name=\"Swatch_ColorTemplate_" + style + "\" checked value='{1}'/><span class='spanner1'><center >{1}</center></span></label>", style, datItem);
+                                        if (datItem.ToLower().Contains("yell") | datItem.ToLower().Contains("whit"))
+                                        {
+                                            content = content + string.Format("<label class='swatchLabel'><input type='radio'  onchange=\"GetClrDemImg('{0}-{1}')\"  id='radio' name=\"Swatch_ColorTemplate_" + style + "\" value='{1}'/><span class='spanner1'  ><center >{1}</center></span></label>", style, datItem);
+                                        }
+                                        else
+                                        {
+                                            content = content + string.Format("<label class='swatchLabel'><input type='radio'  onchange=\"GetClrDemImg('{0}-{1}')\"   id='radio' name=\"Swatch_ColorTemplate_" + style + "\" value='{1}'/><span class='spanner1'><center >{1}</center></span></label>", style, datItem);
+                                        }
 
                                     }
 
                                 }
                             }
+                            else if (colorLst.Count == 1)
+                            {
+                                if (lstC.Where(ax => ax.ObsoleteCode == 0).Select(xsa => xsa.ColorId).ToList().Contains(colorLst[0]))
+                                {
 
+                                    content = content + string.Format("<label class='swatchLabel'><input type='radio' checked onchange=\"GetClrDemImg('{0}-{1}')\"   id='radio' name=\"Swatch_ColorTemplate_" + style + "\" value='{1}'/><span class='spanner1'><center >{1}</center></span></label>", style, colorLst[0]);
+                                }
+                            }
                         }
                         content = content + "</fieldset><br/>";
                         ViewContext.Writer.Write(content);
@@ -533,22 +531,23 @@
                     if (Session["ColorSizestyle"].ToString() != "SWATCHES")
                     {
                         Html.DevExpress().ComboBox(
-                                          c =>
-                                          {
-                                              c.Name = "ColorDimview_" + "Drop_" + style;
-                                              List<string> colorIdLst = (List<string>)home._styleColorSize.GetAll(s => s.StyleID == style).OrderBy(s => s.ColourID).Select(s => s.ColourID).Distinct().ToList();
-                                              foreach (string data in colorIdLst)
-                                              {
-                                                  c.Properties.Items.Add(data);
+                                  c =>
+                                  {
+                                      c.Name = "ColorDimview_" + "Drop_" + style;
+                                      List<Maximus.Data.Models.ObsoleteColor> lstC = hc.getColors(style);
+                                      List<string> colorIdLst = (List<string>)home._styleColorSize.GetAll(s => s.StyleID == style).OrderBy(s => s.ColourID).Select(s => s.ColourID).Distinct().ToList();
+                                      foreach (string data in colorIdLst)
+                                      {
+                                          c.Properties.Items.Add(data);
 
-                                              }
-                                              if (colorIdLst.Count() == 1)
-                                              {
-                                                  c.SelectedIndex = 0; c.Enabled = false;
-                                              }
-                                              c.Properties.ClientSideEvents.SelectedIndexChanged = "getSelectedColor";
-                                          }
-                                                          ).Render();
+                                      }
+                                      if (colorIdLst.Count() == 1)
+                                      {
+                                          c.SelectedIndex = 0; c.Enabled = false;
+                                      }
+                                      c.Properties.ClientSideEvents.SelectedIndexChanged = "getSelectedColor";
+                                  }
+                                                  ).Render();
 
                     }
                     else
@@ -573,23 +572,45 @@
 
                         if (style.Contains(','))
                         {
+                            var orgStyle = (DataBinder.Eval(col.DataItem, "OriginalStyleid")).ToString();
                             string style1 = style.Split(',')[0];
-                            List<string> lstC = (List<string>)home._styleColorSize.GetAll(s => s.StyleID == style1).OrderBy(s => s.ColourID).Select(s => s.ColourID).Distinct().ToList();
+                            List<Maximus.Data.Models.ObsoleteColor> lstC = hc.getColors(orgStyle);
+                            var ucodeColor = home._ucodes.GetAll(uc => uc.UCodeID == selUcode & uc.StyleID == orgStyle).Select(uc => uc.ColourID).ToList();
+                            //List<string> lstC = (List<string>)home._styleColorSize.GetAll(s => s.StyleID == style1).OrderBy(s => s.ColourID).Select(s => s.ColourID).Distinct().ToList();
                             if (lstC != null)
                             {
-                                foreach (string data in lstC)
+                                if (ucodeColor.Count > 1)
                                 {
-                                    var hexcode = home._fskColor.Exists(da => da.Description.Contains(data)) ? home._fskColor.GetAll(da => da.Description.Contains(data)).First().Colour_hexcode : "";
-                                    if (lstC.Count > 1)
+                                    foreach (var dr in ucodeColor)
                                     {
-                                        content = content + string.Format("<label class='swatchLabel'><input type='radio'  onchange=\"GetClrDemImg('{0}-{1}')\"  id='radio' name=\"swatch_DemandColor_" + style + "\" class='' value='{1}'/><span class='spanner1'><center><bold>{1}</bold></center></span></label>", style, data);
+                                        if (ucodeColor.IndexOf(dr) == 0)
+                                        {
+                                            firstColor = dr.ToString();
+                                        }
+                                        if (lstC.Where(dts => dts.ObsoleteCode == 0).Select(xs => xs.ColorId).ToList().Contains(dr))
+                                        {
+
+                                            var color = dr.ToString();
+                                            var hexcode = home._fskColor.Exists(da => da.Description.Contains(color)) ? home._fskColor.GetAll(da => da.Description.Contains(color)).First().Colour_hexcode : "";
+                                            if (lstC.Count > 1)
+                                            {
+                                                content = content + string.Format("<label class='swatchLabel'><input type='radio'  onchange=\"GetClrDemImg('{0}-{1}')\"  id='radio' name=\"swatch_DemandColor_" + style + "\" class='' value='{1}'/><span class='spanner1'><center><bold>{1}</bold></center></span></label>", style, color);
+                                            }
+                                            else
+                                            {
+                                                content = content + string.Format("<label class='swatchLabel'><input type='radio'  onchange=\"GetClrDemImg('{0}-{1}')\"  id='radio' name=\"swatch_DemandColor_" + style + "\" class='' value='{1}' checked=\"checked\"/><span class='spanner1'><center><bold>{1}</bold></center></span></label>", style, color);
+
+                                            }
+
+                                        }
                                     }
-                                    else
+                                }
+                                else if (ucodeColor.Count == 1)
+                                {
+                                    if (lstC.Where(dts => dts.ObsoleteCode == 0).Select(xs => xs.ColorId).ToList().Contains(ucodeColor[0]))
                                     {
-                                        content = content + string.Format("<label class='swatchLabel'><input type='radio'  onchange=\"GetClrDemImg('{0}-{1}')\"  id='radio' name=\"swatch_DemandColor_" + style + "\" class='' value='{1}' checked=\"checked\"/><span class='spanner1'><center><bold>{1}</bold></center></span></label>", style, data);
-
+                                        content = content + string.Format("<label class='swatchLabel'><input type='radio'  onchange=\"GetClrDemImg('{0}-{1}')\"  id='radio' name=\"swatch_DemandColor_" + style + "\" class='' value='{1}' checked=\"checked\"/><span class='spanner1'><center><bold>{1}</bold></center></span></label>", style, ucodeColor[0]);
                                     }
-
                                 }
                                 content = content + "</fieldset><br/>";
                                 ViewContext.Writer.Write(content);
@@ -597,23 +618,63 @@
                         }
                         else
                         {
-                            List<string> lstC = (List<string>)home._styleColorSize.GetAll(s => s.StyleID == style).OrderBy(s => s.ColourID).Select(s => s.ColourID).Distinct().ToList();
+                            var orgStyle = (DataBinder.Eval(col.DataItem, "OriginalStyleid")).ToString();
+                            List<Maximus.Data.Models.ObsoleteColor> lstC = hc.getColors(style); var ucodeColor = home._ucodes.GetAll(uc => uc.UCodeID == selUcode & uc.StyleID == orgStyle).Select(uc => uc.ColourID).ToList();
+
                             if (lstC != null)
                             {
-                                foreach (string data in lstC)
+                                if (ucodeColor.Count > 1)
                                 {
-                                    var hexcode = home._fskColor.Exists(da => da.Description.Contains(data)) ? home._fskColor.GetAll(da => da.Description.Contains(data)).First().Colour_hexcode : "";
-                                    if (lstC.Count > 1)
+                                    foreach (var dr in ucodeColor)
                                     {
-                                        content = content + string.Format("<label class='swatchLabel'><input type='radio'  onchange=\"GetClrDemImg('{0}-{1}')\"  id='radio' name=\"swatch_DemandColor_" + style + "\" class='' value='{1}'/><span class='spanner1'><center><bold>{1}</bold></center></span></label>", style, data);
+                                        if (ucodeColor.IndexOf(dr) == 0)
+                                        {
+                                            firstColor = dr.ToString();
+                                        }
+                                        if (lstC.Where(dts => dts.ObsoleteCode == 0).Select(xs => xs.ColorId).ToList().Contains(dr))
+                                        {
+                                            var color = dr.ToString();
+                                            var hexcode = home._fskColor.Exists(da => da.Description.Contains(color)) ? home._fskColor.GetAll(da => da.Description.Contains(color)).First().Colour_hexcode : "";
+                                            if (lstC.Count > 1)
+                                            {
+                                                content = content + string.Format("<label class='swatchLabel'><input type='radio'  onchange=\"GetClrDemImg('{0}-{1}')\"  id='radio' name=\"swatch_DemandColor_" + style + "\" class='' value='{1}'/><span class='spanner1'><center><bold>{1}</bold></center></span></label>", style, color);
+                                            }
+                                            else
+                                            {
+                                                content = content + string.Format("<label class='swatchLabel'><input type='radio'  onchange=\"GetClrDemImg('{0}-{1}')\"  id='radio' name=\"swatch_DemandColor_" + style + "\" class='' value='{1}' checked=\"checked\"/><span class='spanner1'><center><bold>{1}</bold></center></span></label>", style, color);
+
+                                            }
+
+                                        }
+                                        else
+                                        {
+                                            var color = dr.ToString();
+                                            var hexcode = home._fskColor.Exists(da => da.Description.Contains(color)) ? home._fskColor.GetAll(da => da.Description.Contains(color)).First().Colour_hexcode : "";
+                                            if (lstC.Count > 1)
+                                            {
+                                                content = content + string.Format("<label class='swatchLabel'><input type='radio'  onchange=\"GetClrDemImg('{0}-{1}')\"  id='radio' name=\"swatch_DemandColor_" + style + "\" class='' value='{1}'/><span class='spanner1'><center><bold>{1}</bold></center></span></label>", style, color);
+                                            }
+                                            else
+                                            {
+                                                content = content + string.Format("<label class='swatchLabel'><input type='radio'  onchange=\"GetClrDemImg('{0}-{1}')\"  id='radio' name=\"swatch_DemandColor_" + style + "\" class='' value='{1}' checked=\"checked\"/><span class='spanner1'><center><bold>{1}</bold></center></span></label>", style, color);
+
+                                            }
+
+                                        }
+                                    }
+                                }
+                                else if (ucodeColor.Count == 1)
+                                {
+                                    if (lstC.Where(dts => dts.ObsoleteCode == 0).Select(xs => xs.ColorId).ToList().Contains(ucodeColor[0]))
+                                    {
+                                        content = content + string.Format("<label class='swatchLabel'><input type='radio'  onchange=\"GetClrDemImg('{0}-{1}')\"  id='radio' name=\"swatch_DemandColor_" + style + "\" class='' value='{1}' checked=\"checked\"/><span class='spanner1'><center><bold>{1}</bold></center></span></label>", style, ucodeColor[0]);
                                     }
                                     else
                                     {
-                                        content = content + string.Format("<label class='swatchLabel'><input type='radio'  onchange=\"GetClrDemImg('{0}-{1}')\"  id='radio' name=\"swatch_DemandColor_" + style + "\" class='' value='{1}' checked=\"checked\"/><span class='spanner1'><center><bold>{1}</bold></center></span></label>", style, data);
-
+                                        content = content + string.Format("<label class='swatchLabel'><input type='radio'  onchange=\"GetClrDemImg('{0}-{1}')\"  id='radio' name=\"swatch_DemandColor_" + style + "\" class='' value='{1}' checked=\"checked\"/><span class='spanner1'><center><bold>{1}</bold></center></span></label>", style, ucodeColor[0]);
                                     }
-                                    // onclick=\"getSelectedSizeDemandSwatch('{0}','{1}')\"
                                 }
+
                                 content = content + "</fieldset><br/>";
                                 ViewContext.Writer.Write(content);
                             }
@@ -827,9 +888,10 @@
                                         else if (Session["Price"].ToString() == "readonly")
                                         {
                                             content = content + "<div class='col-md-4 BulkOrder1_Demand_" + style + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-4'><center>" + data + "</center></div><div class='col-md-4'><center>" + Session["CurrencySymbol"].ToString() + " " + hc.GetPrice(style, data, Session["BuisnessId"].ToString()) + "</center></div><div class='col-md-4'><center><input type =\"number\" placeholder='Quantity'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
-                                        }else if (Session["Price"].ToString() == "readwrite")
+                                        }
+                                        else if (Session["Price"].ToString() == "readwrite")
                                         {
-                                            content = content + "<div class='col-md-4 BulkOrder1_Demand_" + style + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-3'><center>" + data + "</center></div><div class='col-md-5'><div class='row'><div class='col-md-3'><center>" + Session["CurrencySymbol"].ToString() + "</center></div><div class='col-md-9'><center><input type='number' class='form-control' id='BulkOrder1_price_Demand_"+style+"' style='text-align:right;' value='" + hc.GetPrice(style, data, Session["BuisnessId"].ToString()) + "'/></center></div></div></div><div class='col-md-4'><center><input type =\"number\" placeholder='Quantity'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
+                                            content = content + "<div class='col-md-4 BulkOrder1_Demand_" + style + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-3'><center>" + data + "</center></div><div class='col-md-5'><div class='row'><div class='col-md-3'><center>" + Session["CurrencySymbol"].ToString() + "</center></div><div class='col-md-9'><center><input type='number' class='form-control' id='BulkOrder1_price_Demand_" + style + "' style='text-align:right;' value='" + hc.GetPrice(style, data, Session["BuisnessId"].ToString()) + "'/></center></div></div></div><div class='col-md-4'><center><input type =\"number\" placeholder='Quantity'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
                                         }
                                     }
                                     else
@@ -841,7 +903,8 @@
                                         else if (Session["Price"].ToString() == "readonly")
                                         {
                                             content = content + "<div class='col-md-4 BulkOrder1_Demand_" + style + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-3'><center>" + data + "</center></div><div class='col-md-3'><center>" + Session["CurrencySymbol"].ToString() + " " + hc.GetPrice(style, data, Session["BuisnessId"].ToString()) + "</center></div><div class='col-md-3'><center><input type =\"number\" placeholder='Quantity'  min=\"0\" id='" + style + "_demand_" + data + "'   class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div><div class='col-md-3'><center><input type =\"text\" id='ReqData_demand_" + style + "_" + data + "' placeholder='" + reqDta + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
-                                        }else if (Session["Price"].ToString() == "readwrite")
+                                        }
+                                        else if (Session["Price"].ToString() == "readwrite")
                                         {
                                             content = content + "<div class='col-md-4 BulkOrder1_Demand_" + style + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-2'><center>" + data + "</center></div><div class='col-md-4'><div class='row'><div class='col-md-3'><center>" + Session["CurrencySymbol"].ToString() + "</center></div><div class='col-md-9'><center><input type='number' class='form-control' style='text-align:right;' id='BulkOrder1_price_Demand_" + style + "' onchange=\"GetPriceValue('BulkOrder1_price_Demand_" + style + "')\" value='" + hc.GetPrice(style, data, Session["BuisnessId"].ToString()) + "'/></center></div></div> </div><div class='col-md-3'><center><input type =\"number\" placeholder='Quantity'  min=\"0\" id='" + style + "_demand_" + data + "'   class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div><div class='col-md-3'><center><input type =\"text\" id='ReqData_demand_" + style + "_" + data + "' placeholder='" + reqDta + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
                                         }
@@ -859,7 +922,8 @@
                                         else if (Session["Price"].ToString() == "readonly")
                                         {
                                             content = content + "<div class='col-md-4 BulkOrder1_Demand_" + style + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-4'><center>" + data + "</center></div><div class='col-md-4'><center>" + Session["CurrencySymbol"].ToString() + " " + hc.GetPrice(style, data, Session["BuisnessId"].ToString()) + "</center></div><div class='col-md-4'><center><input type =\"number\" placeholder='Quantity'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
-                                        }else if (Session["Price"].ToString() == "readwrite")
+                                        }
+                                        else if (Session["Price"].ToString() == "readwrite")
                                         {
                                             content = content + "<div class='col-md-4 BulkOrder1_Demand_" + style + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-3'><center>" + data + "</center></div><div class='col-md-5'><div class='row'><div class='col-md-3'><center>" + Session["CurrencySymbol"].ToString() + "</center></div><div class='col-md-9'><center><input type='number' class='form-control' id='BulkOrder1_price_Demand_" + style + "' onchange=\"GetPriceValue('BulkOrder1_price_Demand_" + style + "')\" onchange=\"GetPriceValue('BulkOrder1_price_Demand_" + style + "')\" style='text-align:right;' value='" + hc.GetPrice(style, data, Session["BuisnessId"].ToString()) + "'/></center></div></div></div><div class='col-md-4'><center><input type =\"number\" placeholder='Quantity'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
                                         }
@@ -871,10 +935,11 @@
                                         {
                                             content = content + "<div class='col-md-4 BulkOrder1_Demand_" + style + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-4'><center>" + data + "</center></div> <div class='col-md-4'><center><input type =\"number\" placeholder='Quantity'  min=\"0\" id='" + style + "_demand_" + data + "'   class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div><div class='col-md-4'><center><input type =\"text\" id='ReqData_demand_" + style + "_" + data + "' placeholder='" + reqDta + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
                                         }
-                                        else if(Session["Price"].ToString() == "readonly")
+                                        else if (Session["Price"].ToString() == "readonly")
                                         {
                                             content = content + "<div class='col-md-4 BulkOrder1_Demand_" + style + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-3'><center>" + data + "</center></div><div class='col-md-3'><center>" + Session["CurrencySymbol"].ToString() + " " + hc.GetPrice(style, data, Session["BuisnessId"].ToString()) + "</center></div><div class='col-md-3'><center><input type =\"number\" placeholder='Quantity'  min=\"0\" id='" + style + "_demand_" + data + "'   class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div><div class='col-md-3'><center><input type =\"text\" id='ReqData_demand_" + style + "_" + data + "' placeholder='" + reqDta + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
-                                        }else if (Session["Price"].ToString() == "readwrite")
+                                        }
+                                        else if (Session["Price"].ToString() == "readwrite")
                                         {
                                             content = content + "<div class='col-md-4 BulkOrder1_Demand_" + style + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-2'><center>" + data + "</center></div><div class='col-md-4'><div class='row'><div class='col-md-3'><center>" + Session["CurrencySymbol"].ToString() + "</center></div><div class='col-md-9'><center><input type='number' class='form-control' style='text-align:right;' id='BulkOrder1_price_Demand_" + style + "' onchange=\"GetPriceValue('BulkOrder1_price_Demand_" + style + "')\" value='" + hc.GetPrice(style, data, Session["BuisnessId"].ToString()) + "'/></center></div></div> </div><div class='col-md-3'><center><input type =\"number\" placeholder='Quantity'  min=\"0\" id='" + style + "_demand_" + data + "'   class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div><div class='col-md-3'><center><input type =\"text\" id='ReqData_demand_" + style + "_" + data + "' placeholder='" + reqDta + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
                                         }
@@ -903,6 +968,8 @@
                                 }
                             }
                         }
+                        content = content + "</fieldset>";
+                        ViewContext.Writer.Write(content);
                     }
                     else
                     {
@@ -988,118 +1055,122 @@
 
                                 }
                             }
-                            foreach (string data in sizeIdLst)
+                        }
+                        foreach (string data in sizeIdLst)
+                        {
+                            if ((bool)Session["IsManPack"] == false && (bool)Session["IsBulkOrder1"] == false)
                             {
-                                if ((bool)Session["IsManPack"] == false && (bool)Session["IsBulkOrder1"] == false)
+                                if (sizeIdLst.Count > 1)
                                 {
-                                    if (sizeIdLst.Count > 1)
+                                    if (prevHistory.Size == data)
                                     {
-                                        if (prevHistory.Size == data)
-                                        {
-                                            content = content + string.Format("<div  class='col-md-1'></br><center><p>{0}</p><input  id=\"BulkSizeBoxDim_{0}_{1}\"  onblur=\"GetBulkPriceDim('{0}','{1}')\" type =\"number\" min=\"0\"  class=\"BulkSizeBoxDim_{0}_{1} form-control\" style=\"width:100%; text-align: center; \"/><div  style=\"margin-top:10px;margin-bottom:10px;\"><p><span id='LbPricedim_" + style + "_" + data + "'>" + Session["CurrencySymbol"].ToString() + " " + hc.GetPrice(style, data, Session["BuisnessId"].ToString()) + "</span></p></div></center></br></div> ", data, style);
-                                        }
-                                        else
-                                        {
-                                            content = content + string.Format("<div  class='col-md-1'></br><center><p>{0}</p><input  id=\"BulkSizeBoxDim_{0}_{1}\"  onblur=\"GetBulkPriceDim('{0}','{1}')\" type =\"number\" min=\"0\"  class=\"BulkSizeBoxDim_{0}_{1} form-control\" style=\"width:100%; text-align: center; \"/><div  style=\"margin-top:10px;margin-bottom:10px;\"><p><span id='LbPricedim_" + style + "_" + data + "'>" + Session["CurrencySymbol"].ToString() + " " + hc.GetPrice(style, data, Session["BuisnessId"].ToString()) + "</span></p></div></center></br></div> ", data, style);
-                                        }
+                                        content = content + string.Format("<div  class='col-md-1'></br><center><p>{0}</p><input  id=\"BulkSizeBoxDim_{0}_{1}\"  onblur=\"GetBulkPriceDim('{0}','{1}')\" type =\"number\" min=\"0\"  class=\"BulkSizeBoxDim_{0}_{1} form-control\" style=\"width:100%; text-align: center; \"/><div  style=\"margin-top:10px;margin-bottom:10px;\"><p><span id='LbPricedim_" + style + "_" + data + "'>" + Session["CurrencySymbol"].ToString() + " " + hc.GetPrice(style, data, Session["BuisnessId"].ToString()) + "</span></p></div></center></br></div> ", data, style);
                                     }
                                     else
                                     {
                                         content = content + string.Format("<div  class='col-md-1'></br><center><p>{0}</p><input  id=\"BulkSizeBoxDim_{0}_{1}\"  onblur=\"GetBulkPriceDim('{0}','{1}')\" type =\"number\" min=\"0\"  class=\"BulkSizeBoxDim_{0}_{1} form-control\" style=\"width:100%; text-align: center; \"/><div  style=\"margin-top:10px;margin-bottom:10px;\"><p><span id='LbPricedim_" + style + "_" + data + "'>" + Session["CurrencySymbol"].ToString() + " " + hc.GetPrice(style, data, Session["BuisnessId"].ToString()) + "</span></p></div></center></br></div> ", data, style);
                                     }
                                 }
-                                else if ((bool)Session["IsBulkOrder1"] == true)
+                                else
                                 {
-                                    if (sizeIdLst.Count > 1)
+                                    content = content + string.Format("<div  class='col-md-1'></br><center><p>{0}</p><input  id=\"BulkSizeBoxDim_{0}_{1}\"  onblur=\"GetBulkPriceDim('{0}','{1}')\" type =\"number\" min=\"0\"  class=\"BulkSizeBoxDim_{0}_{1} form-control\" style=\"width:100%; text-align: center; \"/><div  style=\"margin-top:10px;margin-bottom:10px;\"><p><span id='LbPricedim_" + style + "_" + data + "'>" + Session["CurrencySymbol"].ToString() + " " + hc.GetPrice(style, data, Session["BuisnessId"].ToString()) + "</span></p></div></center></br></div> ", data, style);
+                                }
+                            }
+                            else if ((bool)Session["IsBulkOrder1"] == true)
+                            {
+                                if (sizeIdLst.Count > 1)
+                                {
+                                    if (reqDta == "")
                                     {
-                                        if (reqDta == "")
+                                        if (Session["Price"].ToString() == "hide")
                                         {
-                                            if (Session["Price"].ToString() == "hide")
-                                            {
-                                                content = content + "<div class='col-md-4 BulkOrder1_Demand_" + style + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-6'><center>" + data + "</center></div> <div class='col-md-6'><center><input type =\"number\" placeholder='Quantity'  id='" + style + "_demand_" + data + "'   min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
-                                            }
-                                            else if (Session["Price"].ToString() == "readonly")
-                                            {
-                                                content = content + "<div class='col-md-4 BulkOrder1_Demand_" + style + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-4'><center>" + data + "</center></div><div class='col-md-4'><center>" + Session["CurrencySymbol"].ToString() + " " + hc.GetPrice(style, data, Session["BuisnessId"].ToString()) + "</center></div><div class='col-md-4'><center><input type =\"number\" placeholder='Quantity'  id='" + style + "_demand_" + data + "'   min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
-                                            }else if (Session["Price"].ToString() == "readwrite")
-                                            {
-                                                content = content + "<div class='col-md-4 BulkOrder1_Demand_" + style + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-3'><center>" + data + "</center></div><div class='col-md-5'><div class='row'><div class='col-md-3'><center>" + Session["CurrencySymbol"].ToString() + "</center></div><div class='col-md-9'><center><input type='number' class='form-control' id='BulkOrder1_price_Demand_" + style + "' onchange=\"GetPriceValue('BulkOrder1_price_Demand_" + style + "')\" style='text-align:right;' value='" + hc.GetPrice(style, data, Session["BuisnessId"].ToString()) + "'/></center></div></div></div><div class='col-md-4'><center><input type =\"number\" placeholder='Quantity'  id='" + style + "_demand_" + data + "'   min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
-                                            }
+                                            content = content + "<div class='col-md-4 BulkOrder1_Demand_" + style + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-6'><center>" + data + "</center></div> <div class='col-md-6'><center><input type =\"number\" placeholder='Quantity'  id='" + style + "_demand_" + data + "'   min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
                                         }
-                                        else
+                                        else if (Session["Price"].ToString() == "readonly")
                                         {
-                                            if (Session["Price"].ToString() == "hide")
-                                            {
-                                                content = content + "<div class='col-md-4 BulkOrder1_Demand_" + style + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-4'><center>" + data + "</center></div> <div class='col-md-4'><center><input type =\"number\" placeholder='Quantity'   min=\"0\" id='" + style + "_demand_" + data + "'   class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div><div class='col-md-4'><center><input type =\"text\" id='ReqData_demand_" + style + "_" + data + "' placeholder='" + reqDta + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
-                                            }
-                                            else if(Session["Price"].ToString() == "readonly")
-                                            {
-                                                content = content + "<div class='col-md-4 BulkOrder1_Demand_" + style + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-3'><center>" + data + "</center></div><div class='col-md-3'><center>" + Session["CurrencySymbol"].ToString() + " " + hc.GetPrice(style, data, Session["BuisnessId"].ToString()) + "</center></div><div class='col-md-3'><center><input type =\"number\" placeholder='Quantity'   min=\"0\" id='" + style + "_demand_" + data + "'   class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div><div class='col-md-3'><center><input type =\"text\" id='ReqData_demand_" + style + "_" + data + "' placeholder='" + reqDta + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
-                                            }else if (Session["Price"].ToString() == "readwrite")
-                                            {
-                                                content = content + "<div class='col-md-4 BulkOrder1_Demand_" + style + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-2'><center>" + data + "</center></div><div class='col-md-4'><div class='row'><div class='col-md-3'><center>" + Session["CurrencySymbol"].ToString() + "</center></div><div class='col-md-9'><center><input type='number' class='form-control' style='text-align:right;' id='BulkOrder1_price_Demand_" + style + "' onchange=\"GetPriceValue('BulkOrder1_price_Demand_" + style + "')\" value='" + hc.GetPrice(style, data, Session["BuisnessId"].ToString()) + "'/></center></div></div> </div><div class='col-md-3'><center><input type =\"number\" placeholder='Quantity'   min=\"0\" id='" + style + "_demand_" + data + "'   class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div><div class='col-md-3'><center><input type =\"text\" id='ReqData_demand_" + style + "_" + data + "' placeholder='" + reqDta + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
-                                            }
-
+                                            content = content + "<div class='col-md-4 BulkOrder1_Demand_" + style + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-4'><center>" + data + "</center></div><div class='col-md-4'><center>" + Session["CurrencySymbol"].ToString() + " " + hc.GetPrice(style, data, Session["BuisnessId"].ToString()) + "</center></div><div class='col-md-4'><center><input type =\"number\" placeholder='Quantity'  id='" + style + "_demand_" + data + "'   min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
+                                        }
+                                        else if (Session["Price"].ToString() == "readwrite")
+                                        {
+                                            content = content + "<div class='col-md-4 BulkOrder1_Demand_" + style + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-3'><center>" + data + "</center></div><div class='col-md-5'><div class='row'><div class='col-md-3'><center>" + Session["CurrencySymbol"].ToString() + "</center></div><div class='col-md-9'><center><input type='number' class='form-control' id='BulkOrder1_price_Demand_" + style + "' onchange=\"GetPriceValue('BulkOrder1_price_Demand_" + style + "')\" style='text-align:right;' value='" + hc.GetPrice(style, data, Session["BuisnessId"].ToString()) + "'/></center></div></div></div><div class='col-md-4'><center><input type =\"number\" placeholder='Quantity'  id='" + style + "_demand_" + data + "'   min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
                                         }
                                     }
                                     else
                                     {
-
-                                        if (reqDta == "")
+                                        if (Session["Price"].ToString() == "hide")
                                         {
-                                            if (Session["Price"].ToString() == "hide")
-                                            {
-                                                content = content + "<div class='col-md-4 BulkOrder1_Demand_" + style + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-6'><center>" + data + "</center></div> <div class='col-md-6'><center><input type =\"number\" placeholder='Quantity'  id='" + style + "_demand_" + data + "'   min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
-                                            }
-                                            else if (Session["Price"].ToString() == "readonly")
-                                            {
-                                                content = content + "<div class='col-md-4 BulkOrder1_Demand_" + style + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-4'><center>" + data + "</center></div><div class='col-md-4'><center>" + Session["CurrencySymbol"].ToString() + " " + hc.GetPrice(style, data, Session["BuisnessId"].ToString()) + "</center></div><div class='col-md-4'><center><input type =\"number\" placeholder='Quantity'  id='" + style + "_demand_" + data + "'   min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
-                                            }else if (Session["Price"].ToString() == "readwrite")
-                                            {
-                                                content = content + "<div class='col-md-4 BulkOrder1_Demand_" + style + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-3'><center>" + data + "</center></div><div class='col-md-5'><div class='row'><div class='col-md-3'><center>" + Session["CurrencySymbol"].ToString() + "</center></div><div class='col-md-9'><center><input type='number' class='form-control' id='BulkOrder1_price_Demand_" + style + "' onchange=\"GetPriceValue('BulkOrder1_price_Demand_" + style + "')\" style='text-align:right;' value='" + hc.GetPrice(style, data, Session["BuisnessId"].ToString()) + "'/></center></div></div></div><div class='col-md-4'><center><input type =\"number\" placeholder='Quantity'  id='" + style + "_demand_" + data + "'   min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
-                                            }
-
+                                            content = content + "<div class='col-md-4 BulkOrder1_Demand_" + style + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-4'><center>" + data + "</center></div> <div class='col-md-4'><center><input type =\"number\" placeholder='Quantity'   min=\"0\" id='" + style + "_demand_" + data + "'   class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div><div class='col-md-4'><center><input type =\"text\" id='ReqData_demand_" + style + "_" + data + "' placeholder='" + reqDta + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
                                         }
-                                        else
+                                        else if (Session["Price"].ToString() == "readonly")
                                         {
-                                            if (Session["Price"].ToString() == "hide")
-                                            {
-                                                content = content + "<div class='col-md-4 BulkOrder1_Demand_" + style + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-4'><center>" + data + "</center></div> <div class='col-md-4'><center><input type =\"number\" id='" + style + "_demand_" + data + "' placeholder='Quantity'  min=\"0\" id='" + style + "_demand_" + data + "'   class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div><div class='col-md-4'><center><input type =\"text\" id='ReqData_demand_" + style + "_" + data + "' placeholder='" + reqDta + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
-                                            }
-                                            else if(Session["Price"].ToString() == "readonly")
-                                            {
-                                                content = content + "<div class='col-md-4 BulkOrder1_Demand_" + style + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-3'><center>" + data + "</center></div><div class='col-md-3'><center>" + Session["CurrencySymbol"].ToString() + " " + hc.GetPrice(style, data, Session["BuisnessId"].ToString()) + "</center></div><div class='col-md-3'><center><input type =\"number\" id='" + style + "_demand_" + data + "' placeholder='Quantity'  min=\"0\" id='" + style + "_demand_" + data + "'   class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div><div class='col-md-3'><center><input type =\"text\" id='ReqData_demand_" + style + "_" + data + "' placeholder='" + reqDta + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
-                                            }
-                                            else if(Session["Price"].ToString() == "readwrite")
-                                            {
-                                                content = content + "<div class='col-md-4 BulkOrder1_Demand_" + style + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-2'><center>" + data + "</center></div><div class='col-md-4'><div class='row'><div class='col-md-3'><center>" + Session["CurrencySymbol"].ToString() + "</center></div><div class='col-md-9'><center><input type='number' class='form-control' style='text-align:right;' id='BulkOrder1_price_Demand_"+ style + "' value='" + hc.GetPrice(style, data, Session["BuisnessId"].ToString()) + "'/></center></div></div> </div><div class='col-md-3'><center><input type =\"number\" id='" + style + "_demand_" + data + "' placeholder='Quantity'  min=\"0\" id='" + style + "_demand_" + data + "'   class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div><div class='col-md-3'><center><input type =\"text\" id='ReqData_demand_" + style + "_" + data + "' placeholder='" + reqDta + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
-                                            }
-
+                                            content = content + "<div class='col-md-4 BulkOrder1_Demand_" + style + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-3'><center>" + data + "</center></div><div class='col-md-3'><center>" + Session["CurrencySymbol"].ToString() + " " + hc.GetPrice(style, data, Session["BuisnessId"].ToString()) + "</center></div><div class='col-md-3'><center><input type =\"number\" placeholder='Quantity'   min=\"0\" id='" + style + "_demand_" + data + "'   class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div><div class='col-md-3'><center><input type =\"text\" id='ReqData_demand_" + style + "_" + data + "' placeholder='" + reqDta + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
                                         }
+                                        else if (Session["Price"].ToString() == "readwrite")
+                                        {
+                                            content = content + "<div class='col-md-4 BulkOrder1_Demand_" + style + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-2'><center>" + data + "</center></div><div class='col-md-4'><div class='row'><div class='col-md-3'><center>" + Session["CurrencySymbol"].ToString() + "</center></div><div class='col-md-9'><center><input type='number' class='form-control' style='text-align:right;' id='BulkOrder1_price_Demand_" + style + "' onchange=\"GetPriceValue('BulkOrder1_price_Demand_" + style + "')\" value='" + hc.GetPrice(style, data, Session["BuisnessId"].ToString()) + "'/></center></div></div> </div><div class='col-md-3'><center><input type =\"number\" placeholder='Quantity'   min=\"0\" id='" + style + "_demand_" + data + "'   class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div><div class='col-md-3'><center><input type =\"text\" id='ReqData_demand_" + style + "_" + data + "' placeholder='" + reqDta + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
+                                        }
+
                                     }
                                 }
                                 else
                                 {
-                                    if (sizeIdLst.Count > 1)
+
+                                    if (reqDta == "")
                                     {
-                                        if (prevHistory.Size == data)
+                                        if (Session["Price"].ToString() == "hide")
                                         {
-                                            content = content + string.Format("<label class='swatchLabel'><input type='radio'  id='radio'  name=\"swatch_DemandSize_" + style + "\" class=''  checked=\"checked\" value='" + data + "'/><span class='spanner1'  onclick=\"getSelectedSizeDemandSwatch('{0}','{1}')\"><center><bold>{1}</bold></center></span></label>", style, data);
+                                            content = content + "<div class='col-md-4 BulkOrder1_Demand_" + style + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-6'><center>" + data + "</center></div> <div class='col-md-6'><center><input type =\"number\" placeholder='Quantity'  id='" + style + "_demand_" + data + "'   min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
                                         }
-                                        else
+                                        else if (Session["Price"].ToString() == "readonly")
                                         {
-                                            content = content + string.Format("<label class='swatchLabel'><input type='radio'  id='radio'  name=\"swatch_DemandSize_" + style + "\" class='' value='" + data + "'/><span class='spanner1' onclick=\"getSelectedSizeDemandSwatch('{0}','{1}')\"><center><bold>{1}</bold></center></span></label>", style, data);
+                                            content = content + "<div class='col-md-4 BulkOrder1_Demand_" + style + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-4'><center>" + data + "</center></div><div class='col-md-4'><center>" + Session["CurrencySymbol"].ToString() + " " + hc.GetPrice(style, data, Session["BuisnessId"].ToString()) + "</center></div><div class='col-md-4'><center><input type =\"number\" placeholder='Quantity'  id='" + style + "_demand_" + data + "'   min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
                                         }
+                                        else if (Session["Price"].ToString() == "readwrite")
+                                        {
+                                            content = content + "<div class='col-md-4 BulkOrder1_Demand_" + style + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-3'><center>" + data + "</center></div><div class='col-md-5'><div class='row'><div class='col-md-3'><center>" + Session["CurrencySymbol"].ToString() + "</center></div><div class='col-md-9'><center><input type='number' class='form-control' id='BulkOrder1_price_Demand_" + style + "' onchange=\"GetPriceValue('BulkOrder1_price_Demand_" + style + "')\" style='text-align:right;' value='" + hc.GetPrice(style, data, Session["BuisnessId"].ToString()) + "'/></center></div></div></div><div class='col-md-4'><center><input type =\"number\" placeholder='Quantity'  id='" + style + "_demand_" + data + "'   min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
+                                        }
+
                                     }
                                     else
                                     {
-                                        content = content + string.Format("<label class='swatchLabel'><input type='radio'  id='radio' name=\"swatch_DemandSize_" + style + "\" class='' value='" + data + "' checked=\"checked\"/><span class='spanner1'  onclick=\"getSelectedSizeDemandSwatch('{0}','{1}')\"><center><bold>{1}</bold></center></span></label>", style, data);
-                                    }
+                                        if (Session["Price"].ToString() == "hide")
+                                        {
+                                            content = content + "<div class='col-md-4 BulkOrder1_Demand_" + style + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-4'><center>" + data + "</center></div> <div class='col-md-4'><center><input type =\"number\" id='" + style + "_demand_" + data + "' placeholder='Quantity'  min=\"0\" id='" + style + "_demand_" + data + "'   class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div><div class='col-md-4'><center><input type =\"text\" id='ReqData_demand_" + style + "_" + data + "' placeholder='" + reqDta + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
+                                        }
+                                        else if (Session["Price"].ToString() == "readonly")
+                                        {
+                                            content = content + "<div class='col-md-4 BulkOrder1_Demand_" + style + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-3'><center>" + data + "</center></div><div class='col-md-3'><center>" + Session["CurrencySymbol"].ToString() + " " + hc.GetPrice(style, data, Session["BuisnessId"].ToString()) + "</center></div><div class='col-md-3'><center><input type =\"number\" id='" + style + "_demand_" + data + "' placeholder='Quantity'  min=\"0\" id='" + style + "_demand_" + data + "'   class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div><div class='col-md-3'><center><input type =\"text\" id='ReqData_demand_" + style + "_" + data + "' placeholder='" + reqDta + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
+                                        }
+                                        else if (Session["Price"].ToString() == "readwrite")
+                                        {
+                                            content = content + "<div class='col-md-4 BulkOrder1_Demand_" + style + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-2'><center>" + data + "</center></div><div class='col-md-4'><div class='row'><div class='col-md-3'><center>" + Session["CurrencySymbol"].ToString() + "</center></div><div class='col-md-9'><center><input type='number' class='form-control' style='text-align:right;' id='BulkOrder1_price_Demand_" + style + "' value='" + hc.GetPrice(style, data, Session["BuisnessId"].ToString()) + "'/></center></div></div> </div><div class='col-md-3'><center><input type =\"number\" id='" + style + "_demand_" + data + "' placeholder='Quantity'  min=\"0\" id='" + style + "_demand_" + data + "'   class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div><div class='col-md-3'><center><input type =\"text\" id='ReqData_demand_" + style + "_" + data + "' placeholder='" + reqDta + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
+                                        }
 
+                                    }
+                                }
+                            }
+                            else
+                            {
+                                if (sizeIdLst.Count > 1)
+                                {
+                                    if (prevHistory.Size == data)
+                                    {
+                                        content = content + string.Format("<label class='swatchLabel'><input type='radio'  id='radio'  name=\"swatch_DemandSize_" + style + "\" class=''  checked=\"checked\" value='" + data + "'/><span class='spanner1'  onclick=\"getSelectedSizeDemandSwatch('{0}','{1}')\"><center><bold>{1}</bold></center></span></label>", style, data);
+                                    }
+                                    else
+                                    {
+                                        content = content + string.Format("<label class='swatchLabel'><input type='radio'  id='radio'  name=\"swatch_DemandSize_" + style + "\" class='' value='" + data + "'/><span class='spanner1' onclick=\"getSelectedSizeDemandSwatch('{0}','{1}')\"><center><bold>{1}</bold></center></span></label>", style, data);
+                                    }
+                                }
+                                else
+                                {
+                                    content = content + string.Format("<label class='swatchLabel'><input type='radio'  id='radio' name=\"swatch_DemandSize_" + style + "\" class='' value='" + data + "' checked=\"checked\"/><span class='spanner1'  onclick=\"getSelectedSizeDemandSwatch('{0}','{1}')\"><center><bold>{1}</bold></center></span></label>", style, data);
                                 }
 
                             }
+
                         }
+
                         content = content + "</fieldset>";
                         ViewContext.Writer.Write(content);
                     }
@@ -1148,7 +1219,7 @@
                             }
                             if (Session["Price"].ToString().ToLower() != "hide")
                             {
-                                ViewContext.Writer.Write(string.Format("<b>Price</b><hr style='margin: 0;'/><br/><div id='DimviewPriceinput" + style + "'>{0}</div>", price));
+                                ViewContext.Writer.Write(string.Format("<b>Price</b><hr style='margin: 0;'/><br/><div id='DimviewPriceinput1" + style + "'>{0}</div>", price));
                             }
                         }
                         else
@@ -1167,7 +1238,7 @@
                             }
                             if (Session["Price"].ToString().ToLower() != "hide")
                             {
-                                ViewContext.Writer.Write(string.Format("<b>Price</b><hr style='margin: 0;'/><br/><div id='DimviewPriceinput" + style + "'>{0}</div>", price));
+                                ViewContext.Writer.Write(string.Format("<b>Price</b><hr style='margin: 0;'/><br/><div id='DimviewPriceinput1" + style + "'>{0}</div>", price));
                             }
                         }
                     }
@@ -1185,7 +1256,7 @@
             x.SetTemplateContent(cont =>
             {
                 var orgstyl = Convert.ToString(DataBinder.Eval(cont.DataItem, "OriginalStyleid"));
-                var reqDta = DataBinder.Eval(cont.DataItem, "ReqData")!=null?(DataBinder.Eval(cont.DataItem, "ReqData")).ToString():"";
+                var reqDta = DataBinder.Eval(cont.DataItem, "ReqData") != null ? (DataBinder.Eval(cont.DataItem, "ReqData")).ToString() : "";
                 var content = "";
                 if (template.Count > 0)
                 {

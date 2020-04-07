@@ -64,6 +64,8 @@ namespace Maximus.Data.Models
         public Nullable<double> Currency_Exchange_Rate { get; set; }
         public string PinNo { get; set; }
         public string UCodeId { get; set; }
+        public bool IsUcode { get; set; }
+        public bool IsTemplate { get; set; }
         public string ContractNo { get; set; }
         public string VatFlag { get; set; }
        public double VATPercent { get; set; }

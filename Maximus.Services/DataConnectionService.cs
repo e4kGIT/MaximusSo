@@ -497,9 +497,9 @@ namespace Maximus.Services
         #endregion
 
         #region GetDeliveryAddressId
-        public int GetDeliveryAddressId(string emp, string busId)
+        public int GetDeliveryAddressId(string emp, string busId ,string onlineUserId)
         {
-            return _dp.GetDeliveryAddressId(emp, busId);
+            return _dp.GetDeliveryAddressId(emp, busId,onlineUserId);
         }
         #endregion
 
@@ -656,5 +656,7 @@ namespace Maximus.Services
         {
             return _dp.GetAllTemplates(businessId);
         }
+
+        
     }
 }

@@ -8,6 +8,7 @@ using Maximus.Services.Interface;
 using Maximus.Services;
 using Maximus.Data.Models;
 using Maximus.Data.models.RepositoryModels;
+using Maximus.Data.models;
 
 namespace Maximus.Controllers
 {
@@ -140,8 +141,9 @@ namespace Maximus.Controllers
         #region Index and EmpGrid
         public ActionResult Index(string BusinessID)
         {
-
             ViewBag.HideSearch = true;
+            Session["SelectedTemplates"] =new List<string>();
+            Session["StyleMinPoints"] = new List<StyleAndMinPoints>();
             Session["cardRows"] = 10;
             Session["cardColumns"] = 1;
             Session["ColorSizestyle"] = Session["ColorSizestyle"] == null ? "SWATCHES" : Session["ColorSizestyle"].ToString();
@@ -193,6 +195,16 @@ namespace Maximus.Controllers
                 else
                 {
                     ViewBag.HideSearch = true;
+                    var templates = _customerOrderTemplate.Exists(x => x.BusinessID == BusinessID) ? _customerOrderTemplate.GetAll(x => x.BusinessID == BusinessID).OrderBy(x => x.SeqNo).Select(x => x.Template).Distinct().ToList() : new List<string>();
+                    if (templates.Count > 0)
+                    {
+                        Session["Templates"] = templates;
+                    }
+                    else
+                    {
+                        Session["Templates"] = new List<string>();
+
+                    }
                 }
             }
             else
@@ -264,9 +276,18 @@ namespace Maximus.Controllers
 
 
         [AllowAnonymous]
-        public ActionResult EmployeeGridViewPartial(string txtUcode = "", string ddlAddress = "", string txtUcodeDesc = "", string txtCDepartment = "", string txtRole = "", string txtEmpNo = "", string txtName = "", string txtStDate = "")
+        public ActionResult EmployeeGridViewPartial(string txtUcode = "", string ddlAddress = "", string txtUcodeDesc = "", string txtCDepartment = "", string txtRole = "", string txtEmpNo = "", string txtName = "", string txtStDate = "",bool IsCallBack=false)
         {
-
+            if (IsCallBack==false)
+            {
+                EmployeeGridFilterModal filterModel = new EmployeeGridFilterModal();
+                filterModel.Ucode = txtUcodeDesc;
+                filterModel.EmployeeId = txtEmpNo;
+                filterModel.Name = txtName;
+                filterModel.Department = txtCDepartment;
+                filterModel.Role = txtRole;
+                Session["FilterModal"] = filterModel;
+            }
             var templates = new List<string>();
             var businessId = Session["BuisnessId"].ToString();
             templates = _customerOrderTemplate.Exists(x => x.BusinessID == businessId) ? _customerOrderTemplate.GetAll(x => x.BusinessID == businessId).OrderBy(x => x.SeqNo).Select(x => x.Template).Distinct().ToList() : new List<string>();
@@ -282,36 +303,36 @@ namespace Maximus.Controllers
             if (templates.Count > 0)
             {
                 Session["Templates"] = templates;
-                result = _employee.GetEmployeeTemplate(businessId, Session["UserName"].ToString(), Session["OrderPermit"].ToString(), txtUcode, ddlAddress, txtUcodeDesc, txtCDepartment, txtRole, txtEmpNo, txtName, txtStDate);
+                result = _employee.GetEmployeeTemplate(businessId, Session["UserName"].ToString(), Session["OrderPermit"].ToString(), ((EmployeeGridFilterModal)Session["FilterModal"]).Ucode, ddlAddress, ((EmployeeGridFilterModal)Session["FilterModal"]).Ucode, ((EmployeeGridFilterModal)Session["FilterModal"]).Department, ((EmployeeGridFilterModal)Session["FilterModal"]).Role, ((EmployeeGridFilterModal)Session["FilterModal"]).EmployeeId, ((EmployeeGridFilterModal)Session["FilterModal"]).Name, txtStDate);
                 //result = _dataConnection.getEmployeeDetailsTemplates(Session["BuisnessId"].ToString());
             }
             else
             {
                 Session["Templates"] = new List<string>();
-                result = _employee.GetEmployee(businessId, Session["UserName"].ToString(), Session["OrderPermit"].ToString(), txtUcode, ddlAddress, txtUcodeDesc, txtCDepartment, txtRole, txtEmpNo, txtName, txtStDate);
+                result = _employee.GetEmployee(businessId, Session["UserName"].ToString(), Session["OrderPermit"].ToString(), ((EmployeeGridFilterModal)Session["FilterModal"]).Ucode, ddlAddress, ((EmployeeGridFilterModal)Session["FilterModal"]).Ucode, ((EmployeeGridFilterModal)Session["FilterModal"]).Department, ((EmployeeGridFilterModal)Session["FilterModal"]).Role, ((EmployeeGridFilterModal)Session["FilterModal"]).EmployeeId, ((EmployeeGridFilterModal)Session["FilterModal"]).Name, txtStDate);
                 Session["EmployeeModel"] = result;
             }
-            if (txtUcode != "" && txtEmpNo != "" && txtCDepartment != "" && txtRole != "" && txtName != "")
+            if (((EmployeeGridFilterModal)Session["FilterModal"]).Ucode != "" && ((EmployeeGridFilterModal)Session["FilterModal"]).EmployeeId != "" && ((EmployeeGridFilterModal)Session["FilterModal"]).Department != "" && ((EmployeeGridFilterModal)Session["FilterModal"]).Role != "" && ((EmployeeGridFilterModal)Session["FilterModal"]).Name != "")
             {
                 result = result.Where(x => x.EmpUcodes.ToLower().Contains(txtUcode.ToLower()) && x.EmployeeId.ToLower().Contains(txtEmpNo.ToLower()) && x.Department.ToLower().Contains(txtCDepartment.ToLower()) && x.role.ToLower().Contains(txtRole.ToLower()) && (x.EmpFirstName.ToLower().Contains(txtName.ToLower()) || x.EmpLastName.ToLower().Contains(txtName.ToLower()))).ToList();
             }
-            if (txtUcode != "")
+            if (((EmployeeGridFilterModal)Session["FilterModal"]).Ucode != "")
             {
                 result = result.Where(x => x.EmpUcodes.ToLower().Contains(txtUcode.ToLower())).ToList();
             }
-            if (txtCDepartment != "")
+            if (((EmployeeGridFilterModal)Session["FilterModal"]).Department != "")
             {
                 result = result.Where(x => x.Department.ToLower().Contains(txtCDepartment.ToLower())).ToList();
             }
-            if (txtRole != "")
+            if (((EmployeeGridFilterModal)Session["FilterModal"]).Role != "")
             {
                 result = result.Where(x => x.role.ToLower().Contains(txtRole.ToLower())).ToList();
             }
-            if (txtEmpNo != "")
+            if (((EmployeeGridFilterModal)Session["FilterModal"]).EmployeeId != "")
             {
                 result = result.Where(x => x.EmployeeId.ToLower().Contains(txtEmpNo.ToLower())).ToList();
             }
-            if (txtName != "")
+            if (((EmployeeGridFilterModal)Session["FilterModal"]).Name != "")
             {
                 result = result.Where(x => x.EmpFirstName.ToLower().Contains(txtName.ToLower()) || x.EmpLastName.ToLower().Contains(txtName.ToLower())).ToList();
             }
@@ -390,12 +411,16 @@ namespace Maximus.Controllers
                         EmployeeName = Session["EmpName"].ToString(),
                         EmployeeID = Session["SelectedEmp"].ToString(),
                         UCodeId = Ucodes,
+                         
+                        IsUcode = true,
+                        IsTemplate = false,
                         WarehouseID = Session["WareHouseID"].ToString(),
                         Currency_Exchange_Rate = Convert.ToDouble(Session["CurrencyExchangeRate"]),
                         Currency_Exchange_Code = Session["Currency_Name"].ToString(),
                         RepID = Convert.ToInt32(Session["Rep_Id"]),
                         OrderType = Session["OrderType"].ToString(),
-                        OrderDate = DateTime.Now.ToString("yyyy-MM-dd")
+                        OrderDate = DateTime.Now.ToString("yyyy-MM-dd"),
+                        SalesOrderLine = new List<SalesOrderLineViewModel>()
                     });
                 }
                 List<string> ucodeLst = new List<string>();
@@ -463,9 +488,11 @@ namespace Maximus.Controllers
 
                     if (((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Any(x => x.SalesOrderLine != null))
                     {
-                        if (((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Any(x => x.UCodeId.ToLower() == Ucodes.ToLower()))
+                        if (((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Any(x => x.IsUcode && x.SalesOrderLine != null))
                         {
-                            Session["qty"] = ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.UCodeId.ToLower() == Ucodes.ToLower()).Count();
+                         
+                         var saleLines = ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.IsUcode && x.SalesOrderLine != null).First().SalesOrderLine;
+                            Session["qty"] = saleLines.Sum(x => x.OrdQty);
                         }
                         else
                         {
@@ -488,7 +515,7 @@ namespace Maximus.Controllers
                 var addresArr = address1.Contains(',') ? address1.Split(',') : addArr;
                 Session["cboDelAddress"] = address1 != "" ? addresArr[0] : "";
                 string businessId = Session["BuisnessId"].ToString();
-                if (!salesOrderHeader.Any(x => x.UCodeId.ToLower() == Ucodes.ToLower()))
+                if (!salesOrderHeader.Any(x => x.IsUcode))
                 {
                     salesOrderHeader.Add(new SalesOrderHeaderViewModel
                     {
@@ -503,12 +530,15 @@ namespace Maximus.Controllers
                         EmployeeName = "",
                         EmployeeID = "",
                         UCodeId = Ucodes,
+                        IsUcode = true,
+                        IsTemplate=false,
                         WarehouseID = Session["WareHouseID"].ToString(),
                         Currency_Exchange_Rate = Convert.ToDouble(Session["CurrencyExchangeRate"]),
                         Currency_Exchange_Code = Session["Currency_Name"].ToString(),
                         RepID = Convert.ToInt32(Session["Rep_Id"]),
                         OrderType = Session["OrderType"].ToString(),
-                        OrderDate = DateTime.Now.ToString("yyyy-MM-dd")
+                        OrderDate = DateTime.Now.ToString("yyyy-MM-dd"),
+                        SalesOrderLine= new List<SalesOrderLineViewModel>()
                     });
                 }
                 List<string> ucodeLst = new List<string>();
@@ -573,12 +603,11 @@ namespace Maximus.Controllers
 
         #region TemplateRedirection
         public string GotoCardTemplate(string EmployeeId, string EmpName, string Template)
-        {
+         {
             Session["EmpName"] = EmpName;
             Session["SelectedEmp"] = EmployeeId;
             if ((bool)Session["IsBulkOrder1"] == false && (bool)Session["IsManPack"] == true)
             {
-
                 string result = "";
                 Session["EmpName"] = EmpName;
                 Session["SelectedEmp"] = EmployeeId;
@@ -614,28 +643,34 @@ namespace Maximus.Controllers
                 var address1 = _dataConnection.getEmployeeAddress(Session["SelectedEmp"].ToString(), Session["BuisnessId"].ToString());
                 var addArr = new string[] { };
                 var addresArr = address1.Contains(',') ? address1.Split(',') : addArr;
+                Session["cboDelAddress"] = address1 != "" ? addresArr[0] : "";
                 string businessId = Session["BuisnessId"].ToString();
-                salesOrderHeader.Add(new SalesOrderHeaderViewModel
+                if (!salesOrderHeader.Any(x => x.EmployeeID == emp))
                 {
-                    DelDesc = addresArr.Count() > 0 ? addresArr[0] : "",
-                    DelAddress1 = addresArr.Count() > 0 ? addresArr[1] : "",
-                    DelAddress2 = addresArr.Count() > 0 ? addresArr[2] : "",
-                    DelAddress3 = addresArr.Count() > 0 ? addresArr[3] : "",
-                    DelTown = addresArr.Count() > 0 ? addresArr[4] : "",
-                    DelCity = addresArr.Count() > 0 ? addresArr[5] : "",
-                    DelPostCode = addresArr.Count() > 0 ? addresArr[6] : "",
-                    DelCountry = addresArr.Count() > 0 ? addresArr[7] : "",
-                    EmployeeName = Session["EmpName"].ToString(),
-                    EmployeeID = Session["SelectedEmp"].ToString(),
-                    WarehouseID = Session["WareHouseID"].ToString(),
-                    Currency_Exchange_Rate = Convert.ToDouble(Session["CurrencyExchangeRate"]),
-                    Currency_Exchange_Code = Session["Currency_Name"].ToString(),
-                    RepID = Convert.ToInt32(Session["Rep_Id"]),
-                    OrderType = Session["OrderType"].ToString(),
-                    OrderDate = DateTime.Now.ToString("yyyy-MM-dd")
-                });
+                    salesOrderHeader.Add(new SalesOrderHeaderViewModel
+                    {
+                        DelDesc = addresArr.Count() > 0 ? addresArr[0] : "",
+                        DelAddress1 = addresArr.Count() > 0 ? addresArr[1] : "",
+                        DelAddress2 = addresArr.Count() > 0 ? addresArr[2] : "",
+                        DelAddress3 = addresArr.Count() > 0 ? addresArr[3] : "",
+                        DelTown = addresArr.Count() > 0 ? addresArr[4] : "",
+                        DelCity = addresArr.Count() > 0 ? addresArr[5] : "",
+                        DelPostCode = addresArr.Count() > 0 ? addresArr[6] : "",
+                        DelCountry = addresArr.Count() > 0 ? addresArr[7] : "",
+                        EmployeeName = Session["EmpName"].ToString(),
+                        EmployeeID = Session["SelectedEmp"].ToString(),
+                        WarehouseID = Session["WareHouseID"].ToString(),
+                        IsTemplate = true,
+                        IsUcode = false,
+                        Currency_Exchange_Rate = Convert.ToDouble(Session["CurrencyExchangeRate"]),
+                        Currency_Exchange_Code = Session["Currency_Name"].ToString(),
+                        RepID = Convert.ToInt32(Session["Rep_Id"]),
+                        OrderType = Session["OrderType"].ToString(),
+                        OrderDate = DateTime.Now.ToString("yyyy-MM-dd"),
+                        SalesOrderLine = new List<SalesOrderLineViewModel>()
+                    });
+                }
                 List<string> templateLst = new List<string>();
-
                 if (Template.Contains(';'))
                 {
                     foreach (var str in Template.Split(';'))
@@ -646,8 +681,7 @@ namespace Maximus.Controllers
                 {
                     templateLst.Add(Template);
                 }
-
-                Session["SelectedTemplate"] = templateLst;
+                Session["SelectedTemplates"] = templateLst;
                 if (templateLst.Count > 0)
                 {
                     foreach (string temp in templateLst)
@@ -679,9 +713,10 @@ namespace Maximus.Controllers
 
                     if (((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Any(x => x.SalesOrderLine != null))
                     {
-                        if (((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Any(x => x.Template.ToLower() == Template.ToLower()))
+                        if (((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Any(x => x.IsTemplate && x.SalesOrderLine != null))
                         {
-                            Session["qty"] = ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.UCodeId.ToLower() == Template.ToLower()).Count();
+                           var saleLines= ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.IsTemplate && x.SalesOrderLine != null).First().SalesOrderLine;
+                            Session["qty"] = saleLines.Sum(x => x.OrdQty);
                         }
                         else
                         {
@@ -700,11 +735,10 @@ namespace Maximus.Controllers
                 var salesOrderHeader = (List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"];
                 var address1 = _dataConnection.getEmployeeAddress(Session["UserName"].ToString(), Session["BuisnessId"].ToString());
                 var addArr = new string[] { };
-
                 var addresArr = address1.Contains(',') ? address1.Split(',') : addArr;
                 Session["cboDelAddress"] = address1 != "" ? addresArr[0] : "";
                 string businessId = Session["BuisnessId"].ToString();
-                if (!salesOrderHeader.Any(x => x.Template.ToLower() == Template.ToLower()))
+                if (!salesOrderHeader.Any(x =>x.IsTemplate))
                 {
                     salesOrderHeader.Add(new SalesOrderHeaderViewModel
                     {
@@ -719,11 +753,14 @@ namespace Maximus.Controllers
                         EmployeeName = "",
                         EmployeeID = "",
                         Template = Template,
+                        IsTemplate = true,
+                        IsUcode = false,
                         WarehouseID = Session["WareHouseID"].ToString(),
                         Currency_Exchange_Rate = Convert.ToDouble(Session["CurrencyExchangeRate"]),
                         Currency_Exchange_Code = Session["Currency_Name"].ToString(),
                         RepID = Convert.ToInt32(Session["Rep_Id"]),
                         OrderType = Session["OrderType"].ToString(),
+                        SalesOrderLine = new List<SalesOrderLineViewModel>(),
                         OrderDate = DateTime.Now.ToString("yyyy-MM-dd")
                     });
                 }
@@ -733,14 +770,13 @@ namespace Maximus.Controllers
                 {
                     foreach (var str in Template.Split(';'))
                     { templateLst.Add(str); }
-
                 }
                 else
                 {
                     templateLst.Add(Template);
                 }
-
-                Session["SelectedTemplate"] = templateLst;
+                Session["SelectedTemplate"] = Template;
+                Session["SelectedTemplates"] = templateLst;
                 if (templateLst.Count > 0)
                 {
                     foreach (string temp in templateLst)
@@ -881,20 +917,22 @@ namespace Maximus.Controllers
         #endregion
 
         #region 
-        public bool ChangeOrderType(string orderType = "")
+        public string ChangeOrderType(string orderType = "")
         {
             bool success = false;
             if (orderType.ToLower() == "bulk")
             {
                 Session["IsManPack"] = false;
                 Session["IsBulkOrder1"] = true;
+                success = true;
             }
             else if (orderType.ToLower() == "manpack")
             {
                 Session["IsManPack"] = true;
                 Session["IsBulkOrder1"] = false;
+                success = true;
             }
-            return success;
+            return Session["BuisnessId"].ToString();
         }
         #endregion
     }

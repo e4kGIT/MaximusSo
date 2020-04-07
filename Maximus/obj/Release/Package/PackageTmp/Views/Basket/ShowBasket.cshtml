@@ -12,56 +12,61 @@
 <br /> <br />
 <h2><span class="glyphicon glyphicon-shopping-cart" title="Bakset"></span> Your Orders</h2>
 <div class="row" style="background-color:darkgrey;padding:15px;">
-    <div class="col-md-2 col-lg-2 col-xs-12 col-sm-12">
+    @if ((bool)Session["IsBulkOrder1"] == false)
+    { <div class="col-md-2 col-lg-2 col-xs-12 col-sm-12">
+
         @Html.Action("EmployeeView")
+
     </div>
+    }
+    @if ((bool)Session["IsBulkOrder1"] == false)
+    {
+        <div class="col-md-10 col-lg-10 col-xs-12 col-sm-12" style="background-color:white;">
 
-    <div class="col-md-10 col-lg-10 col-xs-12 col-sm-12" style="background-color:white;">
+            <br />
+            @Html.Action("CartView")
+            <br />
+            <br />
+            <div class="row" style="background-color:white;">
 
-        <br />
-        @Html.Action("CartView")
-        <br />
-        <br />
-        <div class="row" style="background-color:white;">
-
-            <div class="col-md-6  col-lg-6 col-xs-12 col-sm-12">
-                @if (Session["Price"].ToString().ToLower() != "hide")
-            {
-                    <div class="row colrer" style="margin:0px">
-                        <br /> <center>
-                            <b>
-                                Charges
-                            </b>
-                        </center>
-                        <br />
-                    </div>
-                    <div class="row">
-                        <div class="col-md-1 col-lg-1 col-xs-12 col-sm-12"></div>
-                        <div class="col-md-11 col-lg-11 col-xs-12 col-sm-12">
-
+                <div class="col-md-6  col-lg-6 col-xs-12 col-sm-12">
+                    @if (Session["Price"].ToString().ToLower() != "hide")
+                {
+                        <div class="row colrer" style="margin:0px">
+                            <br /> <center>
+                                <b>
+                                    Charges
+                                </b>
+                            </center>
                             <br />
-                            <div class="row">
-                                <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12" style="color:black;">
-                                    Total Goods
-                                </div>
-                                <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12 pull-right">
-                                    @Html.DevExpress().TextBox(sett =>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-1 col-lg-1 col-xs-12 col-sm-12"></div>
+                            <div class="col-md-11 col-lg-11 col-xs-12 col-sm-12">
+
+                                <br />
+                                <div class="row">
+                                    <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12" style="color:black;">
+                                        Total Goods
+                                    </div>
+                                    <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12 pull-right">
+                                        @Html.DevExpress().TextBox(sett =>
                                {
                                    sett.Name = "txtTotGoods";
                                    sett.Text = ViewBag.Total != null ? ViewBag.Total.ToString() : "0.0";
                                    sett.ControlStyle.CssClass = "rightaligntext";
                                    sett.ReadOnly = true;
                                }).GetHtml();
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12" style="color:black;">
-                                    Carrier Charges
+                                    </div>
                                 </div>
 
-                                <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12">
-                                    @Html.DevExpress().TextBox(sett =>
+                                <div class="row">
+                                    <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12" style="color:black;">
+                                        Carrier Charges
+                                    </div>
+
+                                    <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12">
+                                        @Html.DevExpress().TextBox(sett =>
                                {
                                    var s = Session["Price"].ToString().ToLower();
                                    sett.Name = "txtCarrierCharges";
@@ -69,91 +74,91 @@
                                    sett.ControlStyle.CssClass = "rightaligntext";
                                    sett.ReadOnly = true;
                                }).GetHtml();
+                                    </div>
+
+
+
                                 </div>
 
-
-
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12" style="color:black;"> Order Total</div>
-                                <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12">
-                                    @Html.DevExpress().TextBox(sett =>
+                                <div class="row">
+                                    <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12" style="color:black;"> Order Total</div>
+                                    <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12">
+                                        @Html.DevExpress().TextBox(sett =>
                                {
                                    sett.Name = "txtOrdTotal";
                                    sett.Text = ViewBag.ordeTotal != null ? ViewBag.ordeTotal.ToString() : "0.0";
                                    sett.ControlStyle.CssClass = "rightaligntext";
                                    sett.ReadOnly = true;
                                }).GetHtml();
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12" style="color:black;">
-                                    <div class="col-md-4 col-lg-4 col-xs-12 col-sm-12" style="padding:0px;">VAT</div> <div class="col-md-2 col-lg-2 col-xs-12 col-sm-12">
-                                        <span>
-                                            @if (ViewBag.VatPercent != null)
-                                            {
-                                                <span id="vatspan"> @ViewBag.VatPercent</span>
-                                                <br /> <br />
-                                            }
-                                        </span>
                                     </div>
-                                    <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12"> of total goods </div>
                                 </div>
 
+                                <div class="row">
+                                    <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12" style="color:black;">
+                                        <div class="col-md-4 col-lg-4 col-xs-12 col-sm-12" style="padding:0px;">VAT</div> <div class="col-md-2 col-lg-2 col-xs-12 col-sm-12">
+                                            <span>
+                                                @if (ViewBag.VatPercent != null)
+                                                {
+                                                    <span id="vatspan"> @ViewBag.VatPercent</span>
+                                                    <br /> <br />
+                                                }
+                                            </span>
+                                        </div>
+                                        <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12"> of total goods </div>
+                                    </div>
 
 
-                                <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12">
-                                    @Html.DevExpress().TextBox(sett =>
+
+                                    <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12">
+                                        @Html.DevExpress().TextBox(sett =>
                                {
                                    sett.Name = "txtVAT";
                                    sett.Text = ViewBag.totalVat != null ? ViewBag.totalVat.ToString() : "0.0";
                                    sett.ControlStyle.CssClass = "rightaligntext";
                                    sett.ReadOnly = true;
                                }).GetHtml()
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="row">
-                                <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12" style="color:black;">Grand Total</div>
-                                <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12">
-                                    @Html.DevExpress().TextBox(sett =>
+                                <div class="row">
+                                    <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12" style="color:black;">Grand Total</div>
+                                    <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12">
+                                        @Html.DevExpress().TextBox(sett =>
                                {
                                    sett.Name = "txtGrndTot";
                                    sett.Text = ViewBag.GrossTotal != null ? ViewBag.GrossTotal.ToString() : "0.0";
                                    sett.ControlStyle.CssClass = "rightaligntext";
                                    sett.ReadOnly = true;
                                }).GetHtml()
+                                    </div>
                                 </div>
+
+
                             </div>
-
-
                         </div>
-                    </div>
-                }
-            </div>
-            <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12">
-                @if (Session["pnlCarriageReason"].ToString().ToLower() != "hide" && Convert.ToBoolean(Session["CarrierPrompt"]))
+                    }
+                </div>
+                <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12">
+                    @if (Session["pnlCarriageReason"].ToString().ToLower() != "hide" && Convert.ToBoolean(Session["CarrierPrompt"]))
                 {
-                    <div class="row colrer" style="margin:0px;">
-                        <br /> <center>
-                            <b>
-                                Carriage and Reasons
-                            </b>
-                        </center>
-                        <br />
-                    </div>
-                    <div class="row">
-                        <div class="col-md-1 col-lg-1 col-xs-12 col-sm-12"></div>
-                        <div class="col-md-11 col-lg-11 col-xs-12 col-sm-12">
-
+                        <div class="row colrer" style="margin:0px;">
+                            <br /> <center>
+                                <b>
+                                    Carriage and Reasons
+                                </b>
+                            </center>
                             <br />
-                            <div class="row">
-                                <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12">
-                                    <div class="col-md-4 col-lg-4 col-xs-12 col-sm-12" style="color:black;">Carrier:</div>
-                                    <div class="col-md-8 col-lg-8 col-xs-12 col-sm-12">
-                                        @Html.DevExpress().ComboBox(x =>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-1 col-lg-1 col-xs-12 col-sm-12"></div>
+                            <div class="col-md-11 col-lg-11 col-xs-12 col-sm-12">
+
+                                <br />
+                                <div class="row">
+                                    <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12">
+                                        <div class="col-md-4 col-lg-4 col-xs-12 col-sm-12" style="color:black;">Carrier:</div>
+                                        <div class="col-md-8 col-lg-8 col-xs-12 col-sm-12">
+                                            @Html.DevExpress().ComboBox(x =>
                                {
                                    x.Name = "CarriageCmbbox";
                                    //x.Properties.Caption = "Carrier";
@@ -168,28 +173,28 @@
                                    }
                                    x.Properties.ClientSideEvents.SelectedIndexChanged = "SettbxValue";
                                }).GetHtml();
+                                        </div>
+
                                     </div>
+                                    <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12">
+                                        <span>
+                                            <b id="CarriageValueBox" style="color:black;">
+                                                @{
 
+                                                    var data = Session["selectedcar"] != null ? Session["selectedcar"].ToString() : "";
+                                                    var res = System.Text.RegularExpressions.Regex.Replace(data, @"[0-9\-]", string.Empty);
+                                                    res = res.Contains('|') ? res.Replace('|', ' ') : "";
+                                                    ViewContext.Writer.Write(res.Trim());}
+                                            </b>
+                                        </span>
+                                    </div>
                                 </div>
-                                <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12">
-                                    <span>
-                                        <b id="CarriageValueBox" style="color:black;">
-                                            @{
-
-                                                var data = Session["selectedcar"] != null ? Session["selectedcar"].ToString() : "";
-                                                var res = System.Text.RegularExpressions.Regex.Replace(data, @"[0-9\-]", string.Empty);
-                                                res = res.Contains('|') ? res.Replace('|', ' ') : "";
-                                                ViewContext.Writer.Write(res.Trim());}
-                                        </b>
-                                    </span>
-                                </div>
-                            </div>
-                            <br />
-                            <div class="row">
-                                <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12">
-                                    <div class="col-md-4 col-lg-4 col-xs-12 col-sm-12" style="color:black;">Carrier style:</div>
-                                    <div class="col-md-8 col-lg-8 col-xs-12 col-sm-12">
-                                        @Html.DevExpress().ComboBox(x =>
+                                <br />
+                                <div class="row">
+                                    <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12">
+                                        <div class="col-md-4 col-lg-4 col-xs-12 col-sm-12" style="color:black;">Carrier style:</div>
+                                        <div class="col-md-8 col-lg-8 col-xs-12 col-sm-12">
+                                            @Html.DevExpress().ComboBox(x =>
                                {
                                    x.Properties.ValidationSettings.RequiredField.IsRequired = true;
                                    x.Properties.ValidationSettings.RequiredField.ErrorText = "*";
@@ -200,62 +205,62 @@
                                    }
 
                                }).GetHtml();
+                                        </div>
                                     </div>
                                 </div>
+                                <br />
+                                <br />
+                                <br />
                             </div>
-                            <br />
-                            <br />
-                            <br />
-                        </div>
-                    </div>}
-                                                @*else
-                                                    {
-                                                        <div class="row" style="color:black">
-                                                            <br /><br /><br /><br /><br />
-                                                            <center>N/A</center>
-                                                            <br /><br /><br /><br /><br />
-                                                        </div>
-                                                    }*@
+                        </div>}
+                                                    @*else
+                                                        {
+                                                            <div class="row" style="color:black">
+                                                                <br /><br /><br /><br /><br />
+                                                                <center>N/A</center>
+                                                                <br /><br /><br /><br /><br />
+                                                            </div>
+                                                        }*@
 
-                                            </div>
-                                        </div>
-                                        <br />
-                                        <br />
-                                        <div class="row" style="background-color:white;">
-                                            <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12">
-                                                <div class="row colrer" style="margin:0px;">
-                                                    <br /> <center>
-                                                        <b>
-                                                            Date & Customer Ref
-                                                        </b>
-                                                    </center>
-                                                    <br />
                                                 </div>
-                                                <div class="row">
-                                                    <br />
-                                                    <div class="col-md-1  col-lg-1 col-xs-12 col-sm-12"></div>
-                                                    <div class="col-md-11  col-lg-11 col-xs-12 col-sm-12">
-                                                        <div class="row">
-                                                            <div class="col-md-5  col-lg-5 col-xs-12 col-sm-12">
-                                                                @Html.DevExpress().DateEdit(settings =>
+                                            </div>
+                                            <br />
+                                            <br />
+                                            <div class="row" style="background-color:white;">
+                                                <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12">
+                                                    <div class="row colrer" style="margin:0px;">
+                                                        <br /> <center>
+                                                            <b>
+                                                                Date & Customer Ref
+                                                            </b>
+                                                        </center>
+                                                        <br />
+                                                    </div>
+                                                    <div class="row">
+                                                        <br />
+                                                        <div class="col-md-1  col-lg-1 col-xs-12 col-sm-12"></div>
+                                                        <div class="col-md-11  col-lg-11 col-xs-12 col-sm-12">
+                                                            <div class="row">
+                                                                <div class="col-md-5  col-lg-5 col-xs-12 col-sm-12">
+                                                                    @Html.DevExpress().DateEdit(settings =>
                            {
                                settings.Properties.Caption = "Order date";
                                settings.Name = "mOrderDate";
                                settings.Properties.NullText = DateTime.Now.Date.ToString("dd-MMM-yyyy");
                                settings.ReadOnly = true;
                            }).GetHtml()
-                                                            </div>
-                                                            @if (Convert.ToBoolean(ViewData["ddlCustRef"]))
-                                                            {
-                                                                <div class="col-md-6">
-                                                                    @Html.DevExpress().ComboBox(sett =>
+                                                                </div>
+                                                                @if (Convert.ToBoolean(ViewData["ddlCustRef"]))
+                                                                {
+                                                                    <div class="col-md-6">
+                                                                        @Html.DevExpress().ComboBox(sett =>
                                {
                                    sett.Name = "ddlCustRef";
                                }).GetHtml()
-                                                                </div>
-                                                            }
-                                                            <div class="col-md-5  col-lg-5 col-xs-12 col-sm-12">
-                                                                @Html.DevExpress().TextBox(set =>
+                                                                    </div>
+                                                                }
+                                                                <div class="col-md-5  col-lg-5 col-xs-12 col-sm-12">
+                                                                    @Html.DevExpress().TextBox(set =>
                                                            {
                                                                set.Name = "txtCustRef";
                                                                set.Properties.Caption = Session["ONLCUSREFLBL"].ToString();
@@ -271,53 +276,53 @@
                                                                    set.Properties.ValidationSettings.RequiredField.ErrorText = "*";
                                                                }
                                                            }).GetHtml()
-                                                            </div>
-                                                            <div class="col-md-6  col-lg-6 col-xs-12 col-sm-12" style="display:none;">
-                                                                @Html.DevExpress().TextBox(sett => { sett.Name = "txtCustID"; }).GetHtml()
-                                                            </div>
-                                                            <div class="col-md-6  col-lg-6 col-xs-12 col-sm-12" style="display:none;">
-                                                                @Html.DevExpress().TextBox(sett => { sett.Name = "txtCustName"; }).GetHtml()
-                                                            </div>
-
-                                                            <div class="row">
-                                                                <br />
-                                                                <div class="col-md-6  col-lg-6 col-xs-12 col-sm-12" style="display:none;">
-                                                                    @Html.DevExpress().TextBox(sett => { sett.Name = "txtBudget"; }).GetHtml()
                                                                 </div>
                                                                 <div class="col-md-6  col-lg-6 col-xs-12 col-sm-12" style="display:none;">
-                                                                    @Html.DevExpress().TextBox(sett => { sett.Name = "txtCurrBudget"; }).GetHtml()
+                                                                    @Html.DevExpress().TextBox(sett => { sett.Name = "txtCustID"; }).GetHtml()
+                                                                </div>
+                                                                <div class="col-md-6  col-lg-6 col-xs-12 col-sm-12" style="display:none;">
+                                                                    @Html.DevExpress().TextBox(sett => { sett.Name = "txtCustName"; }).GetHtml()
+                                                                </div>
+
+                                                                <div class="row">
+                                                                    <br />
+                                                                    <div class="col-md-6  col-lg-6 col-xs-12 col-sm-12" style="display:none;">
+                                                                        @Html.DevExpress().TextBox(sett => { sett.Name = "txtBudget"; }).GetHtml()
+                                                                    </div>
+                                                                    <div class="col-md-6  col-lg-6 col-xs-12 col-sm-12" style="display:none;">
+                                                                        @Html.DevExpress().TextBox(sett => { sett.Name = "txtCurrBudget"; }).GetHtml()
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
 
-                                                    <br />
-                                                    <br />
-                                                    <br />
-
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6  col-lg-6 col-xs-12 col-sm-12">
-                                                @if (Session["pnlCommentsNominal"].ToString().ToLower() != "hide")
-                                                {
-                                                    <div class="row colrer" style="margin:0px;">
-                                                        <br /> <center>
-                                                            <b>
-                                                                Comments and Analysis code
-                                                            </b>
-                                                        </center>
                                                         <br />
+                                                        <br />
+                                                        <br />
+
                                                     </div>
-
-                                                    <div class="row">
-                                                        <div class="col-md-1  col-lg-1 col-xs-12 col-sm-12">
-
-                                                        </div>
-                                                        <div class="col-md-10  col-lg-10 col-xs-12 col-sm-12">
+                                                </div>
+                                                <div class="col-md-6  col-lg-6 col-xs-12 col-sm-12">
+                                                    @if (Session["pnlCommentsNominal"].ToString().ToLower() != "hide")
+                                                    {
+                                                        <div class="row colrer" style="margin:0px;">
+                                                            <br /> <center>
+                                                                <b>
+                                                                    Comments and Analysis code
+                                                                </b>
+                                                            </center>
                                                             <br />
-                                                            <div class="row">
-                                                                <div class="col-md-7  col-lg-7 col-xs-12 col-sm-12">
-                                                                    @Html.DevExpress().Memo(sett =>
+                                                        </div>
+
+                                                        <div class="row">
+                                                            <div class="col-md-1  col-lg-1 col-xs-12 col-sm-12">
+
+                                                            </div>
+                                                            <div class="col-md-10  col-lg-10 col-xs-12 col-sm-12">
+                                                                <br />
+                                                                <div class="row">
+                                                                    <div class="col-md-7  col-lg-7 col-xs-12 col-sm-12">
+                                                                        @Html.DevExpress().Memo(sett =>
                                                                {
                                                                    sett.Name = "txtCommentsExternal";
                                                                    sett.Properties.Caption = "Comments";
@@ -329,174 +334,663 @@
 
                                                                }).GetHtml()
 
-                                                                </div>
-                                                                @{
-                                                                    if (Convert.ToBoolean(Session["ONLNEREQNOM1"]))
-                                                                    {
-                                                                        if (((List<Maximus.Data.Models.SiteCodeModel>)ViewData["SiteCodes"]).Count > 0)
+                                                                    </div>
+                                                                    @{
+                                                                        if (Convert.ToBoolean(Session["ONLNEREQNOM1"]))
                                                                         {
-                                                                            <div class="col-md-5  col-lg-5 col-xs-12 col-sm-12">
-                                                                                @Html.DevExpress().ComboBox(txt =>
+                                                                            if (((List<Maximus.Data.Models.SiteCodeModel>)ViewData["SiteCodes"]).Count > 0)
+                                                                            {
+                                                                                <div class="col-md-5  col-lg-5 col-xs-12 col-sm-12">
+                                                                                    @Html.DevExpress().ComboBox(txt =>
                        {
                            txt.Name = "cboSiteCode";
                            txt.Properties.Caption = Session["ONLNETXTNOM1"].ToString() == "" ? dp.CompanyParam("ONLNETXTNOM1", Session["CmpId"].ToString()) == "" ? "Site Code" : dp.CompanyParam("ONLNETXTNOM1", Session["CmpId"].ToString()) : Session["ONLNETXTNOM1"].ToString();
                        }).GetHtml();
-                                                                            </div>
-                                                                        }
-                                                                        else
-                                                                        {
-                                                                            <div class="col-md-5  col-lg-5 col-xs-12 col-sm-12">
-                                                                                @Html.DevExpress().TextBox(txt =>
+                                                                                </div>
+                                                                            }
+                                                                            else
+                                                                            {
+                                                                                <div class="col-md-5  col-lg-5 col-xs-12 col-sm-12">
+                                                                                    @Html.DevExpress().TextBox(txt =>
                        {
                            txt.Name = "txtNomCode";
                            txt.Properties.Caption = Session["ONLNETXTNOM1"].ToString() == "" ? dp.CompanyParam("ONLNETXTNOM1", Session["CmpId"].ToString()) == "" ? "Site Code" : dp.CompanyParam("ONLNETXTNOM1", Session["CmpId"].ToString()) : Session["ONLNETXTNOM1"].ToString();
                            txt.Text = Session["ONLINEDEFNOM"].ToString() == "" ? dp.CompanyParam("ONLNEDEFNOM1", Session["CmpId"].ToString()) : Session["ONLINEDEFNOM"].ToString();
                        }).GetHtml();
-                                                                            </div>
+                                                                                </div>
+                                                                            }
                                                                         }
+
                                                                     }
+                                                                </div>
+                                                                <br />
+                                                                <div class="row">
+                                                                    @{
 
-                                                                }
-                                                            </div>
-                                                            <br />
-                                                            <div class="row">
-                                                                @{
-
-                                                                    if (Convert.ToBoolean(Session["ONLNEREQNOM2"]))
-                                                                    {
-                                                                        <div class="col-md-7  col-lg-7 col-xs-12 col-sm-12">
-                                                                            @Html.DevExpress().TextBox(txt =>
+                                                                        if (Convert.ToBoolean(Session["ONLNEREQNOM2"]))
+                                                                        {
+                                                                            <div class="col-md-7  col-lg-7 col-xs-12 col-sm-12">
+                                                                                @Html.DevExpress().TextBox(txt =>
                        {
                            txt.Name = "txtNomCode1";
                            txt.Properties.Caption = Session["ONLNETXTNOM2"].ToString();
                            txt.Text = Session["ONLINEDEFNOM"].ToString() == "" ? dp.CompanyParam("ONLNEDEFNOM2", Session["CmpId"].ToString()) : Session["ONLINEDEFNOM"].ToString();
                        }).GetHtml();
-                                                                        </div>
+                                                                            </div>
+                                                                        }
                                                                     }
-                                                                }
-                                                                @{
-                                                                    if (Convert.ToBoolean(Session["ONLNEREQNOM3"]))
-                                                                    {
-                                                                        <div class="col-md-6  col-lg-6 col-xs-12 col-sm-12">
-                                                                            @Html.DevExpress().TextBox(txt =>
+                                                                    @{
+                                                                        if (Convert.ToBoolean(Session["ONLNEREQNOM3"]))
+                                                                        {
+                                                                            <div class="col-md-6  col-lg-6 col-xs-12 col-sm-12">
+                                                                                @Html.DevExpress().TextBox(txt =>
                                {
                                    txt.Name = "txtNomCode2";
                                    txt.Properties.Caption = Session["ONLNETXTNOM3"].ToString();
                                    txt.Text = Session["ONLINEDEFNOM"].ToString() == "" ? dp.CompanyParam("ONLNEDEFNOM3", Session["CmpId"].ToString()) : Session["ONLINEDEFNOM"].ToString();
                                }).GetHtml();
-                                                                        </div>
+                                                                            </div>
+                                                                        }
                                                                     }
-                                                                }
-                                                            </div>
-                                                            <br />
-                                                            <div class="row">
-                                                                @{
-                                                                    if (Convert.ToBoolean(Session["pnlRolloutName"]))
-                                                                    {
-                                                                        if (Convert.ToBoolean(Session["ONLNEREQNOM4"]))
+                                                                </div>
+                                                                <br />
+                                                                <div class="row">
+                                                                    @{
+                                                                        if (Convert.ToBoolean(Session["pnlRolloutName"]))
                                                                         {
-                                                                            <div class="col-md-7  col-lg-7 col-xs-12 col-sm-12">
-                                                                                @Html.DevExpress().TextBox(txt =>
+                                                                            if (Convert.ToBoolean(Session["ONLNEREQNOM4"]))
+                                                                            {
+                                                                                <div class="col-md-7  col-lg-7 col-xs-12 col-sm-12">
+                                                                                    @Html.DevExpress().TextBox(txt =>
                                    {
                                        txt.Name = "txtNomCode3";
                                        txt.Properties.Caption = Session["ONLNETXTNOM4"].ToString();
                                        txt.Text = Session["ONLINEDEFNOM"].ToString() == "" ? dp.CompanyParam("ONLNEDEFNOM4", Session["CmpId"].ToString()) : Session["ONLINEDEFNOM"].ToString();
                                    }).GetHtml();
-                                                                            </div>
+                                                                                </div>
+                                                                            }
                                                                         }
                                                                     }
-                                                                }
-                                                                @{
-                                                                    if (Convert.ToBoolean(Session["ONLNEREQNOM5"]))
-                                                                    {
-                                                                        <div class="col-md-6  col-lg-6 col-xs-12 col-sm-12">
-                                                                            @Html.DevExpress().TextBox(txt =>
+                                                                    @{
+                                                                        if (Convert.ToBoolean(Session["ONLNEREQNOM5"]))
+                                                                        {
+                                                                            <div class="col-md-6  col-lg-6 col-xs-12 col-sm-12">
+                                                                                @Html.DevExpress().TextBox(txt =>
                                {
                                    txt.Name = "txtNomCode4";
                                    txt.Properties.Caption = Session["ONLNETXTNOM5"].ToString();
                                    txt.Text = Session["ONLINEDEFNOM"].ToString() == "" ? dp.CompanyParam("ONLNEDEFNOM5", Session["CmpId"].ToString()) : Session["ONLINEDEFNOM"].ToString();
                                }).GetHtml();
-                                                                        </div>
+                                                                            </div>
+                                                                        }
                                                                     }
-                                                                }
+                                                                </div>
+                                                                <br />
+                                                                <br />
+                                                                <br />
                                                             </div>
-                                                            <br />
-                                                            <br />
-                                                            <br />
-                                                        </div>
 
-                                                        <div class="col-md-1  col-lg-1 col-xs-12 col-sm-12"></div>
-                                                    </div> }
+                                                            <div class="col-md-1  col-lg-1 col-xs-12 col-sm-12"></div>
+                                                        </div> }
 
+                                                </div>
                                             </div>
-                                        </div>
-                                        <br />
-                                        <br />
-                                        <div class="row" style="background-color:white;">
-                                            <div class="row colrer" style="margin:0px;">
-                                                <br /> <center>
-                                                    <b>
-                                                        Delivery Address
-                                                    </b>
-                                                </center>
-                                                <br />
-                                            </div>
-                                            <div class="row">
-                                                <div class="col-md-1  col-lg-1 col-xs-12 col-sm-12"></div>
-                                                <div class="col-md-10  col-lg-10 col-xs-12 col-sm-12" style="padding:0px;">
-
-                                                    <br />
-                                                    @Html.Action("GetEmployeeDeliveryAddress")
-                                                    <br />
-                                                    <br />
+                                            <br />
+                                            <br />
+                                            <div class="row" style="background-color:white;">
+                                                <div class="row colrer" style="margin:0px;">
+                                                    <br /> <center>
+                                                        <b>
+                                                            Delivery Address
+                                                        </b>
+                                                    </center>
                                                     <br />
                                                 </div>
-                                                <div class="col-md-1  col-lg-1 col-xs-12 col-sm-12"></div>
+                                                <div class="row">
+                                                    <div class="col-md-1  col-lg-1 col-xs-12 col-sm-12"></div>
+                                                    <div class="col-md-10  col-lg-10 col-xs-12 col-sm-12" style="padding:0px;">
+
+                                                        <br />
+                                                        @Html.Action("GetEmployeeDeliveryAddress")
+                                                        <br />
+                                                        <br />
+                                                        <br />
+                                                    </div>
+                                                    <div class="col-md-1  col-lg-1 col-xs-12 col-sm-12"></div>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <br />
-                                        <br />
-                                        <div class="row">
-                                            <div class="col-md-2  col-lg-2 col-xs-12 col-sm-12">
-                                                @Html.DevExpress().Button(sett =>
+                                            <br />
+                                            <br />
+                                            <div class="row">
+                                                <div class="col-md-2  col-lg-2 col-xs-12 col-sm-12">
+                                                    @Html.DevExpress().Button(sett =>
            {
                sett.Name = "ContinueShopping"; sett.ClientSideEvents.Click = "ContinueShop"; sett.ControlStyle.CssClass = "pull-right";
                sett.Text = "Continue shopping";
            }).GetHtml()
-                                            </div>
-                                            <div class="col-md-2  col-lg-2 col-xs-12 col-sm-12">
-                                                @Html.DevExpress().Button(sett =>
+                                                </div>
+                                                <div class="col-md-2  col-lg-2 col-xs-12 col-sm-12">
+                                                    @Html.DevExpress().Button(sett =>
            {
                sett.Name = "NextEmp"; sett.ClientSideEvents.Click = "NextEmployee"; sett.ControlStyle.CssClass = "pull-right";
                sett.Text = "Next person pack";
            }).GetHtml()
-                                            </div>
-                                            <div class="col-md-2  col-lg-2 col-xs-12 col-sm-12">
-                                                @Html.DevExpress().Button(sett =>
+                                                </div>
+                                                <div class="col-md-2  col-lg-2 col-xs-12 col-sm-12">
+                                                    @Html.DevExpress().Button(sett =>
            {
                sett.Name = "Update"; sett.ClientSideEvents.Click = "UpdateCurrentEmp"; sett.ControlStyle.CssClass = "pull-right";
                sett.Text = "Update";
            }).GetHtml()
+                                                </div>
                                             </div>
-                                        </div>
-                                        <br />
+                                            <br />
 
-                                    </div>
-                                </div>
-                                <br />
-                                <br />
-                                <div class="row">
-                                    @*<div class="col-md-1 col-xs-1 col-sm-1 col-lg-1 col-xs-1 col-sm-1 col-lg-1" style="padding-right:0px"><a onclick="GetNavigation('<')" title="Back"><span style="color:white;font-size:30px;" class="glyphicon glyphicon-chevron-left"></span></a></div>
-                                        <div class="col-md-2 col-xs-2 col-sm-2 col-lg-2" style="padding-left:0px"><a onclick="GetNavigation('>')" title="Next employee"><span style="color:white;font-size:30px;" class="glyphicon glyphicon-chevron-right"></span></a></div>*@
-                                    <center>
-                                        @Html.DevExpress().Button(sett =>
+                                        </div>
+                                                                        }
+                                                                        else
+                                                                        {
+                                                                            <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12" style="background-color:white;">
+
+                                                                                <br />
+
+                                                                                @Html.Action("CartviewDetailGridViewGridViewPartial");
+
+                                                                                @* @Html.Action("CartView")*@
+                                                                                <br />
+                                                                                <br />
+                                                                                <div class="row" style="background-color:white;">
+
+                                                                                    <div class="col-md-6  col-lg-6 col-xs-12 col-sm-12">
+                                                                                        @if (Session["Price"].ToString().ToLower() != "hide")
+                                                                                        {
+                                                                                            <div class="row colrer" style="margin:0px">
+                                                                                                <br /> <center>
+                                                                                                    <b>
+                                                                                                        Charges
+                                                                                                    </b>
+                                                                                                </center>
+                                                                                                <br />
+                                                                                            </div>
+                                                                                            <div class="row">
+                                                                                                <div class="col-md-1 col-lg-1 col-xs-12 col-sm-12"></div>
+                                                                                                <div class="col-md-11 col-lg-11 col-xs-12 col-sm-12">
+
+                                                                                                    <br />
+                                                                                                    <div class="row">
+                                                                                                        <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12" style="color:black;">
+                                                                                                            Total Goods
+                                                                                                        </div>
+                                                                                                        <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12 pull-right">
+                                                                                                            @Html.DevExpress().TextBox(sett =>
+                               {
+                                   sett.Name = "txtTotGoods";
+                                   sett.Text = ViewBag.Total != null ? ViewBag.Total.ToString() : "0.0";
+                                   sett.ControlStyle.CssClass = "rightaligntext";
+                                   sett.ReadOnly = true;
+                               }).GetHtml();
+                                                                                                        </div>
+                                                                                                    </div>
+
+                                                                                                    <div class="row">
+                                                                                                        <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12" style="color:black;">
+                                                                                                            Carrier Charges
+                                                                                                        </div>
+
+                                                                                                        <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12">
+                                                                                                            @Html.DevExpress().TextBox(sett =>
+                               {
+                                   var s = Session["Price"].ToString().ToLower();
+                                   sett.Name = "txtCarrierCharges";
+                                   sett.Text = ViewBag.carriage != null ? ViewBag.carriage.ToString() : "0.0";
+                                   sett.ControlStyle.CssClass = "rightaligntext";
+                                   sett.ReadOnly = true;
+                               }).GetHtml();
+                                                                                                        </div>
+
+
+
+                                                                                                    </div>
+
+                                                                                                    <div class="row">
+                                                                                                        <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12" style="color:black;"> Order Total</div>
+                                                                                                        <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12">
+                                                                                                            @Html.DevExpress().TextBox(sett =>
+                               {
+                                   sett.Name = "txtOrdTotal";
+                                   sett.Text = ViewBag.ordeTotal != null ? ViewBag.ordeTotal.ToString() : "0.0";
+                                   sett.ControlStyle.CssClass = "rightaligntext";
+                                   sett.ReadOnly = true;
+                               }).GetHtml();
+                                                                                                        </div>
+                                                                                                    </div>
+
+                                                                                                    <div class="row">
+                                                                                                        <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12" style="color:black;">
+                                                                                                            <div class="col-md-4 col-lg-4 col-xs-12 col-sm-12" style="padding:0px;">VAT</div> <div class="col-md-2 col-lg-2 col-xs-12 col-sm-12">
+                                                                                                                <span>
+                                                                                                                    @if (ViewBag.VatPercent != null)
+                                                                                                                    {
+                                                                                                                        <span id="vatspan"> @ViewBag.VatPercent</span>
+                                                                                                                        <br /> <br />
+                                                                                                                    }
+                                                                                                                </span>
+                                                                                                            </div>
+                                                                                                            <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12"> of total goods </div>
+                                                                                                        </div>
+
+
+
+                                                                                                        <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12">
+                                                                                                            @Html.DevExpress().TextBox(sett =>
+                               {
+                                   sett.Name = "txtVAT";
+                                   sett.Text = ViewBag.totalVat != null ? ViewBag.totalVat.ToString() : "0.0";
+                                   sett.ControlStyle.CssClass = "rightaligntext";
+                                   sett.ReadOnly = true;
+                               }).GetHtml()
+                                                                                                        </div>
+                                                                                                    </div>
+
+                                                                                                    <div class="row">
+                                                                                                        <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12" style="color:black;">Grand Total</div>
+                                                                                                        <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12">
+                                                                                                            @Html.DevExpress().TextBox(sett =>
+                               {
+                                   sett.Name = "txtGrndTot";
+                                   sett.Text = ViewBag.GrossTotal != null ? ViewBag.GrossTotal.ToString() : "0.0";
+                                   sett.ControlStyle.CssClass = "rightaligntext";
+                                   sett.ReadOnly = true;
+                               }).GetHtml()
+                                                                                                        </div>
+                                                                                                    </div>
+
+
+                                                                                                </div>
+                                                                                            </div>
+                                                                                        }
+                                                                                    </div>
+                                                                                    <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12">
+                                                                                        @if (Session["pnlCarriageReason"].ToString().ToLower() != "hide" && Convert.ToBoolean(Session["CarrierPrompt"]))
+                {
+                                                                                            <div class="row colrer" style="margin:0px;">
+                                                                                                <br /> <center>
+                                                                                                    <b>
+                                                                                                        Carriage and Reasons
+                                                                                                    </b>
+                                                                                                </center>
+                                                                                                <br />
+                                                                                            </div>
+                                                                                            <div class="row">
+                                                                                                <div class="col-md-1 col-lg-1 col-xs-12 col-sm-12"></div>
+                                                                                                <div class="col-md-11 col-lg-11 col-xs-12 col-sm-12">
+
+                                                                                                    <br />
+                                                                                                    <div class="row">
+                                                                                                        <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12">
+                                                                                                            <div class="col-md-4 col-lg-4 col-xs-12 col-sm-12" style="color:black;">Carrier:</div>
+                                                                                                            <div class="col-md-8 col-lg-8 col-xs-12 col-sm-12">
+                                                                                                                @Html.DevExpress().ComboBox(x =>
+                               {
+                                   x.Name = "CarriageCmbbox";
+                                   //x.Properties.Caption = "Carrier";
+                                   foreach (var dat in (List<string>)ViewData["carrierFill"])
+                                   {
+
+                                       x.Properties.Items.Add(dat);
+                                   }
+                                   if (ViewData["selectedcar"] != null)
+                                   {
+                                       x.SelectedIndex = ((List<string>)ViewData["carrierFill"]).IndexOf(Session["selectedcar"].ToString());
+                                   }
+                                   x.Properties.ClientSideEvents.SelectedIndexChanged = "SettbxValue";
+                               }).GetHtml();
+                                                                                                            </div>
+
+                                                                                                        </div>
+                                                                                                        <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12">
+                                                                                                            <span>
+                                                                                                                <b id="CarriageValueBox" style="color:black;">
+                                                                                                                    @{
+
+                                                                                                                        var data = Session["selectedcar"] != null ? Session["selectedcar"].ToString() : "";
+                                                                                                                        var res = System.Text.RegularExpressions.Regex.Replace(data, @"[0-9\-]", string.Empty);
+                                                                                                                        res = res.Contains('|') ? res.Replace('|', ' ') : "";
+                                                                                                                        ViewContext.Writer.Write(res.Trim());}
+                                                                                                                </b>
+                                                                                                            </span>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <br />
+                                                                                                    <div class="row">
+                                                                                                        <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12">
+                                                                                                            <div class="col-md-4 col-lg-4 col-xs-12 col-sm-12" style="color:black;">Carrier style:</div>
+                                                                                                            <div class="col-md-8 col-lg-8 col-xs-12 col-sm-12">
+                                                                                                                @Html.DevExpress().ComboBox(x =>
+                               {
+                                   x.Properties.ValidationSettings.RequiredField.IsRequired = true;
+                                   x.Properties.ValidationSettings.RequiredField.ErrorText = "*";
+                                   x.Name = "CarriageStyleCmbbox";
+                                   foreach (var dat in (List<string>)ViewData["carrierStyleFill"])
+                                   {
+                                       x.Properties.Items.Add(dat);
+                                   }
+
+                               }).GetHtml();
+                                                                                                            </div>
+                                                                                                        </div>
+                                                                                                    </div>
+                                                                                                    <br />
+                                                                                                    <br />
+                                                                                                    <br />
+                                                                                                </div>
+                                                                                            </div>}
+                                                                                                                        @*else
+                                                                                                                            {
+                                                                                                                                <div class="row" style="color:black">
+                                                                                                                                    <br /><br /><br /><br /><br />
+                                                                                                                                    <center>N/A</center>
+                                                                                                                                    <br /><br /><br /><br /><br />
+                                                                                                                                </div>
+                                                                                                                            }*@
+
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                                <br />
+                                                                                                                <br />
+                                                                                                                <div class="row" style="background-color:white;">
+                                                                                                                    <div class="col-md-6 col-lg-6 col-xs-12 col-sm-12">
+                                                                                                                        <div class="row colrer" style="margin:0px;">
+                                                                                                                            <br /> <center>
+                                                                                                                                <b>
+                                                                                                                                    Date & Customer Ref
+                                                                                                                                </b>
+                                                                                                                            </center>
+                                                                                                                            <br />
+                                                                                                                        </div>
+                                                                                                                        <div class="row">
+                                                                                                                            <br />
+                                                                                                                            <div class="col-md-1  col-lg-1 col-xs-12 col-sm-12"></div>
+                                                                                                                            <div class="col-md-11  col-lg-11 col-xs-12 col-sm-12">
+                                                                                                                                <div class="row">
+                                                                                                                                    <div class="col-md-5  col-lg-5 col-xs-12 col-sm-12">
+                                                                                                                                        @Html.DevExpress().DateEdit(settings =>
+                           {
+                               settings.Properties.Caption = "Order date";
+                               settings.Name = "mOrderDate";
+                               settings.Properties.NullText = DateTime.Now.Date.ToString("dd-MMM-yyyy");
+                               settings.ReadOnly = true;
+                           }).GetHtml()
+                                                                                                                                    </div>
+                                                                                                                                    @if (Convert.ToBoolean(ViewData["ddlCustRef"]))
+                                                                                                                                    {
+                                                                                                                                        <div class="col-md-6">
+                                                                                                                                            @Html.DevExpress().ComboBox(sett =>
+                               {
+                                   sett.Name = "ddlCustRef";
+                               }).GetHtml()
+                                                                                                                                        </div>
+                                                                                                                                    }
+                                                                                                                                    <div class="col-md-5  col-lg-5 col-xs-12 col-sm-12">
+                                                                                                                                        @Html.DevExpress().TextBox(set =>
+                                                           {
+                                                               set.Name = "txtCustRef";
+                                                               set.Properties.Caption = Session["ONLCUSREFLBL"].ToString();
+
+                                                               if (Convert.ToBoolean(Session["DIFF_MANPACK_INFO"]))
+                                                               {
+                                                                   set.Text = Session["CustRef"] != null ? Session["CustRef"].ToString() : "";
+                                                               }
+                                                               set.Properties.ClientSideEvents.LostFocus = "FillCustRefandDeliveryFields";
+                                                               if ((bool)Session["CusRefMan"])
+                                                               {
+                                                                   set.Properties.ValidationSettings.RequiredField.IsRequired = true;
+                                                                   set.Properties.ValidationSettings.RequiredField.ErrorText = "Customer reference is mandatory";
+                                                               }
+                                                           }).GetHtml()
+                                                                                                                                    </div>
+                                                                                                                                    <div class="col-md-6  col-lg-6 col-xs-12 col-sm-12" style="display:none;">
+                                                                                                                                        @Html.DevExpress().TextBox(sett => { sett.Name = "txtCustID"; }).GetHtml()
+                                                                                                                                    </div>
+                                                                                                                                    <div class="col-md-6  col-lg-6 col-xs-12 col-sm-12" style="display:none;">
+                                                                                                                                        @Html.DevExpress().TextBox(sett => { sett.Name = "txtCustName"; }).GetHtml()
+                                                                                                                                    </div>
+
+                                                                                                                                    <div class="row">
+                                                                                                                                        <br />
+                                                                                                                                        <div class="col-md-6  col-lg-6 col-xs-12 col-sm-12" style="display:none;">
+                                                                                                                                            @Html.DevExpress().TextBox(sett => { sett.Name = "txtBudget"; }).GetHtml()
+                                                                                                                                        </div>
+                                                                                                                                        <div class="col-md-6  col-lg-6 col-xs-12 col-sm-12" style="display:none;">
+                                                                                                                                            @Html.DevExpress().TextBox(sett => { sett.Name = "txtCurrBudget"; }).GetHtml()
+                                                                                                                                        </div>
+                                                                                                                                    </div>
+                                                                                                                                </div>
+                                                                                                                            </div>
+
+                                                                                                                            <br />
+                                                                                                                            <br />
+                                                                                                                            <br />
+
+                                                                                                                        </div>
+                                                                                                                    </div>
+                                                                                                                    <div class="col-md-6  col-lg-6 col-xs-12 col-sm-12">
+                                                                                                                        @if (Session["pnlCommentsNominal"].ToString().ToLower() != "hide")
+                                                                                                                        {
+                                                                                                                            <div class="row colrer" style="margin:0px;">
+                                                                                                                                <br /> <center>
+                                                                                                                                    <b>
+                                                                                                                                        Comments and Analysis code
+                                                                                                                                    </b>
+                                                                                                                                </center>
+                                                                                                                                <br />
+                                                                                                                            </div>
+
+                                                                                                                            <div class="row">
+                                                                                                                                <div class="col-md-1  col-lg-1 col-xs-12 col-sm-12">
+
+                                                                                                                                </div>
+                                                                                                                                <div class="col-md-10  col-lg-10 col-xs-12 col-sm-12">
+                                                                                                                                    <br />
+                                                                                                                                    <div class="row">
+                                                                                                                                        <div class="col-md-7  col-lg-7 col-xs-12 col-sm-12">
+                                                                                                                                            @Html.DevExpress().Memo(sett =>
+                                                               {
+                                                                   sett.Name = "txtCommentsExternal";
+                                                                   sett.Properties.Caption = "Comments";
+                                                                   sett.ControlStyle.CssClass = "editor";
+                                                                   sett.Properties.ClientSideEvents.LostFocus = "FillCustRefandDeliveryFields";
+                                                                   sett.Height = System.Web.UI.WebControls.Unit.Pixel(100);
+                                                                   sett.Width = System.Web.UI.WebControls.Unit.Pixel(200);
+                                                                   sett.Text = ViewData["comment"] != null && ViewData["comment"].ToString() != "" ? ViewData["comment"].ToString() : "";
+
+                                                               }).GetHtml()
+
+                                                                                                                                        </div>
+                                                                                                                                        @{
+                                                                                                                                            if (Convert.ToBoolean(Session["ONLNEREQNOM1"]))
+                                                                                                                                            {
+                                                                                                                                                if (((List<Maximus.Data.Models.SiteCodeModel>)ViewData["SiteCodes"]).Count > 0)
+                                                                                                                                                {
+                                                                                                                                                    <div class="col-md-5  col-lg-5 col-xs-12 col-sm-12">
+                                                                                                                                                        @Html.DevExpress().ComboBox(txt =>
+                       {
+                           txt.Name = "cboSiteCode";
+                           txt.Properties.Caption = Session["ONLNETXTNOM1"].ToString() == "" ? dp.CompanyParam("ONLNETXTNOM1", Session["CmpId"].ToString()) == "" ? "Site Code" : dp.CompanyParam("ONLNETXTNOM1", Session["CmpId"].ToString()) : Session["ONLNETXTNOM1"].ToString();
+                       }).GetHtml();
+                                                                                                                                                    </div>
+                                                                                                                                                }
+                                                                                                                                                else
+                                                                                                                                                {
+                                                                                                                                                    <div class="col-md-5  col-lg-5 col-xs-12 col-sm-12">
+                                                                                                                                                        @Html.DevExpress().TextBox(txt =>
+                       {
+                           txt.Name = "txtNomCode";
+                           txt.Properties.Caption = Session["ONLNETXTNOM1"].ToString() == "" ? dp.CompanyParam("ONLNETXTNOM1", Session["CmpId"].ToString()) == "" ? "Site Code" : dp.CompanyParam("ONLNETXTNOM1", Session["CmpId"].ToString()) : Session["ONLNETXTNOM1"].ToString();
+                           txt.Text = Session["ONLINEDEFNOM"].ToString() == "" ? dp.CompanyParam("ONLNEDEFNOM1", Session["CmpId"].ToString()) : Session["ONLINEDEFNOM"].ToString();
+                       }).GetHtml();
+                                                                                                                                                    </div>
+                                                                                                                                                }
+                                                                                                                                            }
+
+                                                                                                                                        }
+                                                                                                                                    </div>
+                                                                                                                                    <br />
+                                                                                                                                    <div class="row">
+                                                                                                                                        @{
+
+                                                                                                                                            if (Convert.ToBoolean(Session["ONLNEREQNOM2"]))
+                                                                                                                                            {
+                                                                                                                                                <div class="col-md-7  col-lg-7 col-xs-12 col-sm-12">
+                                                                                                                                                    @Html.DevExpress().TextBox(txt =>
+                       {
+                           txt.Name = "txtNomCode1";
+                           txt.Properties.Caption = Session["ONLNETXTNOM2"].ToString();
+                           txt.Text = Session["ONLINEDEFNOM"].ToString() == "" ? dp.CompanyParam("ONLNEDEFNOM2", Session["CmpId"].ToString()) : Session["ONLINEDEFNOM"].ToString();
+                       }).GetHtml();
+                                                                                                                                                </div>
+                                                                                                                                            }
+                                                                                                                                        }
+                                                                                                                                        @{
+                                                                                                                                            if (Convert.ToBoolean(Session["ONLNEREQNOM3"]))
+                                                                                                                                            {
+                                                                                                                                                <div class="col-md-6  col-lg-6 col-xs-12 col-sm-12">
+                                                                                                                                                    @Html.DevExpress().TextBox(txt =>
+                               {
+                                   txt.Name = "txtNomCode2";
+                                   txt.Properties.Caption = Session["ONLNETXTNOM3"].ToString();
+                                   txt.Text = Session["ONLINEDEFNOM"].ToString() == "" ? dp.CompanyParam("ONLNEDEFNOM3", Session["CmpId"].ToString()) : Session["ONLINEDEFNOM"].ToString();
+                               }).GetHtml();
+                                                                                                                                                </div>
+                                                                                                                                            }
+                                                                                                                                        }
+                                                                                                                                    </div>
+                                                                                                                                    <br />
+                                                                                                                                    <div class="row">
+                                                                                                                                        @{
+                                                                                                                                            if (Convert.ToBoolean(Session["pnlRolloutName"]))
+                                                                                                                                            {
+                                                                                                                                                if (Convert.ToBoolean(Session["ONLNEREQNOM4"]))
+                                                                                                                                                {
+                                                                                                                                                    <div class="col-md-7  col-lg-7 col-xs-12 col-sm-12">
+                                                                                                                                                        @Html.DevExpress().TextBox(txt =>
+                                   {
+                                       txt.Name = "txtNomCode3";
+                                       txt.Properties.Caption = Session["ONLNETXTNOM4"].ToString();
+                                       txt.Text = Session["ONLINEDEFNOM"].ToString() == "" ? dp.CompanyParam("ONLNEDEFNOM4", Session["CmpId"].ToString()) : Session["ONLINEDEFNOM"].ToString();
+                                   }).GetHtml();
+                                                                                                                                                    </div>
+                                                                                                                                                }
+                                                                                                                                            }
+                                                                                                                                        }
+                                                                                                                                        @{
+                                                                                                                                            if (Convert.ToBoolean(Session["ONLNEREQNOM5"]))
+                                                                                                                                            {
+                                                                                                                                                <div class="col-md-6  col-lg-6 col-xs-12 col-sm-12">
+                                                                                                                                                    @Html.DevExpress().TextBox(txt =>
+                               {
+                                   txt.Name = "txtNomCode4";
+                                   txt.Properties.Caption = Session["ONLNETXTNOM5"].ToString();
+                                   txt.Text = Session["ONLINEDEFNOM"].ToString() == "" ? dp.CompanyParam("ONLNEDEFNOM5", Session["CmpId"].ToString()) : Session["ONLINEDEFNOM"].ToString();
+                               }).GetHtml();
+                                                                                                                                                </div>
+                                                                                                                                            }
+                                                                                                                                        }
+                                                                                                                                    </div>
+                                                                                                                                    <br />
+                                                                                                                                    <br />
+                                                                                                                                    <br />
+                                                                                                                                </div>
+
+                                                                                                                                <div class="col-md-1  col-lg-1 col-xs-12 col-sm-12"></div>
+                                                                                                                            </div> }
+
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                                <br />
+                                                                                                                <br />
+                                                                                                                <div class="row" style="background-color:white;">
+                                                                                                                    <div class="row colrer" style="margin:0px;">
+                                                                                                                        <br /> <center>
+                                                                                                                            <b>
+                                                                                                                                Delivery Address
+                                                                                                                            </b>
+                                                                                                                        </center>
+                                                                                                                        <br />
+                                                                                                                    </div>
+                                                                                                                    <div class="row">
+                                                                                                                        <div class="col-md-1  col-lg-1 col-xs-12 col-sm-12"></div>
+                                                                                                                        <div class="col-md-10  col-lg-10 col-xs-12 col-sm-12" style="padding:0px;">
+
+                                                                                                                            <br />
+                                                                                                                            @Html.Action("GetEmployeeDeliveryAddress")
+                                                                                                                            <br />
+                                                                                                                            <br />
+                                                                                                                            <br />
+                                                                                                                        </div>
+                                                                                                                        <div class="col-md-1  col-lg-1 col-xs-12 col-sm-12"></div>
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                                <br />
+                                                                                                                <br />
+                                                                                                                <div class="row">
+                                                                                                                    <div class="col-md-2  col-lg-2 col-xs-12 col-sm-12">
+                                                                                                                        @Html.DevExpress().Button(sett =>
+                                                                                                                   {
+                                                                                                                       sett.Name = "ContinueShopping"; sett.ClientSideEvents.Click = "ContinueShop"; sett.ControlStyle.CssClass = "pull-right";
+                                                                                                                       if ((bool)Session["IsBulkOrder1"] != true)
+                                                                                                                       {
+                                                                                                                           sett.Text = "Continue shopping";
+                                                                                                                       }
+                                                                                                                       else if ((bool)Session["IsBulkOrder1"] == true)
+                                                                                                                       {
+                                                                                                                           sett.Text = "Add more";
+                                                                                                                       }
+                                                                                                                   }).GetHtml()
+                                                                                                                    </div>
+                                                                                                                    <div class="col-md-2  col-lg-2 col-xs-12 col-sm-12">
+                                                                                                                        @Html.DevExpress().Button(sett =>
+                                                                                                                   {
+                                                                                                                       sett.Name = "NextEmp"; sett.ClientSideEvents.Click = "NextEmployee"; sett.ControlStyle.CssClass = "pull-right";
+                                                                                                                       if ((bool)Session["IsBulkOrder1"] != true)
+                                                                                                                       {
+                                                                                                                           sett.Text = "Next person pack";
+                                                                                                                       }
+                                                                                                                       else if ((bool)Session["IsBulkOrder1"] == true)
+                                                                                                                       {
+                                                                                                                           sett.Text = "Continue shopping";
+                                                                                                                       }
+                                                                                                                   }).GetHtml()
+                                                                                                                    </div>
+                                                                                                                    <div class="col-md-2  col-lg-2 col-xs-12 col-sm-12">
+                                                                                                                        @Html.DevExpress().Button(sett =>
+           {
+               sett.Name = "Update"; sett.ClientSideEvents.Click = "UpdateCurrentEmp"; sett.ControlStyle.CssClass = "pull-right";
+               sett.Text = "Update";
+           }).GetHtml()
+                                                                                                                    </div>
+                                                                                                                </div>
+                                                                                                                <br />
+
+                                                                                                            </div>
+                                                                                                                                            }
+
+
+</div>
+<br />
+<br />
+<div class="row">
+    @*<div class="col-md-1 col-xs-1 col-sm-1 col-lg-1 col-xs-1 col-sm-1 col-lg-1" style="padding-right:0px"><a onclick="GetNavigation('<')" title="Back"><span style="color:white;font-size:30px;" class="glyphicon glyphicon-chevron-left"></span></a></div>
+        <div class="col-md-2 col-xs-2 col-sm-2 col-lg-2" style="padding-left:0px"><a onclick="GetNavigation('>')" title="Next employee"><span style="color:white;font-size:30px;" class="glyphicon glyphicon-chevron-right"></span></a></div>*@
+    <center>
+        @Html.DevExpress().Button(sett =>
 {
     sett.Name = "Acceptorders";
     sett.ClientSideEvents.Click = "AcceptOrder";
     sett.ControlStyle.CssClass = "acceptBtn";
     sett.Text = "Accept order";
 }).GetHtml()
-                                    </center>
+    </center>
 
-                                </div>
+</div>
 

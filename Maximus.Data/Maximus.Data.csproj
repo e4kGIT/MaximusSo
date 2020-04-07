@@ -102,6 +102,7 @@
     <Compile Include="models\dim_fit_styles.cs">
       <DependentUpon>DBContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="models\EmployeeGridFilterModal.cs" />
     <Compile Include="models\getallassembly.cs">
       <DependentUpon>DBContext.tt</DependentUpon>
     </Compile>
@@ -222,6 +223,7 @@
     <Compile Include="models\my_aspnet_usersinroles.cs">
       <DependentUpon>DBContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="models\PointsModel.cs" />
     <Compile Include="models\productlist.cs">
       <DependentUpon>DBContext.tt</DependentUpon>
     </Compile>
@@ -263,6 +265,7 @@
     <Compile Include="models\RepositoryModels\CountryCodes.cs" />
     <Compile Include="models\RepositoryModels\CustomAssembly.cs" />
     <Compile Include="models\RepositoryModels\CustomerOrderTemplate.cs" />
+    <Compile Include="models\RepositoryModels\CUstomerOrderTemplateCostcenters.cs" />
     <Compile Include="models\RepositoryModels\Departments.cs" />
     <Compile Include="models\RepositoryModels\Dimension1.cs" />
     <Compile Include="models\RepositoryModels\DimFitCaption.cs" />
@@ -277,9 +280,13 @@
     <Compile Include="models\RepositoryModels\GenUserDefaults.cs" />
     <Compile Include="models\RepositoryModels\Nextno.cs" />
     <Compile Include="models\RepositoryModels\OnlineUserIdEmployee.cs" />
+    <Compile Include="models\RepositoryModels\PointsByUcode.cs" />
+    <Compile Include="models\RepositoryModels\PointsCard.cs" />
+    <Compile Include="models\RepositoryModels\PointStyle.cs" />
     <Compile Include="models\RepositoryModels\Reasoncodes.cs" />
     <Compile Include="models\RepositoryModels\StockCard.cs" />
     <Compile Include="models\RepositoryModels\StyleByFreetext.cs" />
+    <Compile Include="models\RepositoryModels\StyleByTemplateView.cs" />
     <Compile Include="models\RepositoryModels\StyleColorSize.cs" />
     <Compile Include="models\RepositoryModels\StyleColorSizeObsolete.cs" />
     <Compile Include="models\RepositoryModels\StyleGroups.cs" />
@@ -294,13 +301,19 @@
     <Compile Include="models\RepositoryModels\Ucodes.cs" />
     <Compile Include="models\RepositoryModels\Ucode_Description.cs" />
     <Compile Include="models\RepositoryModels\User.cs" />
+    <Compile Include="models\ResultChk.cs" />
     <Compile Include="models\SalesOrderHeaderViewModel.cs" />
     <Compile Include="models\SalesOrderLineViewModel.cs" />
     <Compile Include="models\SalesOrderViewModel.cs" />
     <Compile Include="models\SaveOrderResultSet.cs" />
     <Compile Include="models\SiteCodeModel.cs" />
+    <Compile Include="models\SiteCodeUserAddress.cs" />
     <Compile Include="models\Size.cs" />
     <Compile Include="models\Structrues.cs" />
+    <Compile Include="models\StyleAndMinPoints.cs" />
+    <Compile Include="models\stylebytemplateview.cs">
+      <DependentUpon>DBContext.tt</DependentUpon>
+    </Compile>
     <Compile Include="models\styleby_freetextview.cs">
       <DependentUpon>DBContext.tt</DependentUpon>
     </Compile>

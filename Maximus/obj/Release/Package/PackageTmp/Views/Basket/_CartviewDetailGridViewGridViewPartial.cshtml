@@ -13,18 +13,18 @@
         // settings.StylesEditors.TextBox.CssClass = "textBoxStyle";
         //settings.ClientSideEvents.RowDblClick = "function(s, e) {s.StartEditRow(e.visibleIndex);}";
         settings.ClientSideEvents.RowDblClick = "function(s, e) {s.StartEditRow(e.visibleIndex);}";
-        settings.ClientSideEvents.EndCallback = "OnEndCallback";
-        settings.ClientSideEvents.BeginCallback = "OnBeginCallback";
+        //settings.ClientSideEvents.EndCallback = "OnEndCallback";
+        //settings.ClientSideEvents.BeginCallback = "OnBeginCallback";
         settings.CommandColumn.Visible = true;
         ////settings.CommandColumn.ShowNewButton = true;
         //settings.CommandColumn.ShowDeleteButton = true;
         //settings.CommandColumn.ShowEditButton = true;
-
+        settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
         settings.KeyFieldName = "LineNo";
 
         settings.SettingsPager.Visible = true;
-        settings.Settings.ShowGroupPanel = true;
-        settings.Settings.ShowFilterRow = true;
+        settings.Settings.ShowGroupPanel = false;
+        settings.Settings.ShowFilterRow = false;
         settings.SettingsBehavior.AllowSelectByRowClick = true;
 
         settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.Off;
@@ -83,7 +83,15 @@
         };
         settings.SetDetailRowTemplateContent(x =>
         {
-            @Html.RenderAction("CardDetailAssembly", new { LineNo = x.KeyValue });
+            try
+            {
+                @Html.RenderAction("CardDetailAssembly", new { LineNo = x.KeyValue });
+            }
+            catch(Exception e)
+            {
+
+            }
+
         });
         settings.SettingsCommandButton.EditButton.Image.IconID = IconID.EditEdit16x16;
         settings.SettingsCommandButton.EditButton.RenderMode = GridCommandButtonRenderMode.Image;
@@ -243,10 +251,10 @@
             x.SetEditItemTemplateContent(c =>
             {
                 GridViewEditItemTemplateContainer templateContainer = c as GridViewEditItemTemplateContainer;
-                string value = (DataBinder.Eval(c.DataItem, "FreeText1")).ToString();
+                string value = DataBinder.Eval(c.DataItem, "FreeText1")==null?"":(DataBinder.Eval(c.DataItem, "FreeText1")).ToString();
                 if (value == "")
                 {
-                     
+
                     Html.DevExpress().Label(lblsettings =>
                     {
                         lblsettings.Name = "FreeText1";

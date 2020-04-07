@@ -24,7 +24,7 @@
                    x.Name = "TraditionalCOMBOBOXES";
                    x.Text = "Dropdownbox layout";
                    x.Properties.ClientSideEvents.CheckedChanged = "CheckedChanged";
-                   x.Enabled = false;
+                  
                    x.ControlStyle.ForeColor = System.Drawing.Color.Black;
                    x.Checked = Session["ColorSizestyle"] == null | Session["ColorSizestyle"].ToString() == "SWATCHES" ? false : true;
                }).GetHtml()

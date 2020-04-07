@@ -9,5 +9,6 @@ namespace Maximus.Data.Models
     {
         public string  EmpId   { get; set; }
         public string  Result { get; set; }
+        public int minMandatoryPts { get; set; }
     }
 }

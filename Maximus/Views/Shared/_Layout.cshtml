@@ -100,17 +100,19 @@
                 background-color: #009885;
                 color: white;
                 border-color: black;
-                cursor:pointer;
+                cursor: pointer;
             }
-             .MyThumbnail1 {
-                  height: 370px;
-                  border: 2px solid black;
-                color: white;
-                padding: 10px;
-                border-radius: 5px;
-                background-color: #009885;
-                cursor:pointer;
-            }
+
+        .MyThumbnail1 {
+            height: 370px;
+            border: 2px solid black;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #009885;
+            cursor: pointer;
+        }
+
         .container {
             padding: 2px 16px;
         }
@@ -471,12 +473,12 @@
             if (selectedItems.length > 0) {
                 selectedColorFil = ""; selectedStyleFil = ""; selectedSizeFil = ""; selectedDescFil = ""; selectedImgFil = false; selectedDimFil = false;
                 grid.PerformCallback({ selectedItem: selectedItems, pages: true });
-
+                MVCxClientUtils.FinalizeCallback();
             }
             else {
                 selectedColorFil = ""; selectedStyleFil = ""; selectedSizeFil = ""; selectedDescFil = ""; selectedImgFil = false; selectedDimFil = false;
                 grid.PerformCallback({ pages: true });
-
+                MVCxClientUtils.FinalizeCallback();
             }
         }
 
@@ -610,6 +612,20 @@
                     if (response == "") {
                         var url = "/Basket/ShowBasket";
                         window.location = url;
+                    }
+                    else if (response.includes("///")) {
+                        var capCatagory = response.replace("///", "");
+                        if (confirm("missing points in " + capCatagory)) {
+                            var url = "/Basket/ShowBasket";
+                            window.location = url;
+                        }
+                    }
+                    else if (response.includes("/--/")) {
+                        var capCatagory = response.replace("/--/", "");
+                        if (confirm(capCatagory)) {
+                            var url = "/Basket/ShowBasket";
+                            window.location = url;
+                        }
                     }
                     else {
                         myFunction("No items in the cart!");
@@ -1000,7 +1016,24 @@
 
             }
             else {
-                alert("Please select all the fields in the cards!");
+
+                if (description == "" | description == null) {
+                    alert("Please fill description");
+                }
+                else if (price == "" | price == null) {
+                    alert("Please select a Price");
+                }
+                else if (size == "" | size == null) {
+                    alert("Please select a Size");
+                } else if (color == "" | color == null) {
+                    alert("Please select a Color");
+                }
+                else if (qty == "" | qty == null) {
+                    alert("Please select a Quantity");
+                }
+                else if (sStyle == "" | sStyle == null) {
+                    alert("Please select a Style");
+                }
             }
         }
 
@@ -1107,7 +1140,23 @@
 
             }
             else {
-                alert("Please select all the fields in the cards!");
+                if (description == "" | description == null) {
+                    alert("Please fill description");
+                }
+                else if (price == "" | price == null) {
+                    alert("Please select a Price");
+                }
+                else if (size == "" | size == null) {
+                    alert("Please select a Size");
+                } else if (color == "" | color == null) {
+                    alert("Please select a Color");
+                }
+                else if (qty == "" | qty == null) {
+                    alert("Please select a Quantity");
+                }
+                else if (sStyle == "" | sStyle == null) {
+                    alert("Please select a Style");
+                }
             }
         }
 
@@ -1218,7 +1267,23 @@
 
             }
             else {
-                alert("Please select all the fields in the cards!");
+                if (description == "" | description == null) {
+                    alert("Please fill description");
+                }
+                else if (price == "" | price == null) {
+                    alert("Please select a Price");
+                }
+                else if (size == "" | size == null) {
+                    alert("Please select a Size");
+                } else if (color == "" | color == null) {
+                    alert("Please select a Color");
+                }
+                else if (qty == "" | qty == null) {
+                    alert("Please select a Quantity");
+                }
+                else if (sStyle == "" | sStyle == null) {
+                    alert("Please select a Style");
+                }
             }
         }
 
@@ -1230,7 +1295,7 @@
         function Getimage(img) {
             if (img != "") {
                 var popup = ASPxClientControl.GetControlCollection().GetByName("ImagePop");
-                var response = "<img src='" + img + "'/> "
+                var response = "<img style='height:300px;width:200px%;' src='" + img + "'/> "
                 $("#ImageDive").html("");
                 $("#ImageDive").html(response);
                 popup.Show();
@@ -1283,7 +1348,7 @@
 
             selectedStyleFil = s.GetSelectedItem("ColorIDFil").value;
         }
-        function getCard1(StyleID, orgStyle) {
+        function getCard1(StyleID, orgStyle, caption) {
             if (StyleID != "" && StyleID != undefined) {
                 var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
                 loadPopup.Show();
@@ -1292,7 +1357,7 @@
                 $.ajax({
                     type: "POST",
                     url: url1,
-                    data: { 'StyleID': StyleID, 'orgStyle': orgStyle },
+                    data: { 'StyleID': StyleID, 'orgStyle': orgStyle, 'caption': caption },
                     success: function (response) {
                         if (response != "" && !response.includes("Login")) {
                             var dim = document.getElementById("DimId");
@@ -1795,7 +1860,7 @@
     @Html.DevExpress().PopupControl(sett =>
 {
     sett.Width = System.Web.UI.WebControls.Unit.Percentage(100);
-    sett.Height = System.Web.UI.WebControls.Unit.Percentage(100);
+    sett.Height = System.Web.UI.WebControls.Unit.Percentage(50);
     sett.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
     sett.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
     sett.Name = "ImagePop";

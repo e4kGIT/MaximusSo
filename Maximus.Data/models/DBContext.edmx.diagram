@@ -221,6 +221,7 @@
         <EntityTypeShape EntityType="e4kmaximusdbModel.view_ucode_freetext_tsb_rollout" Width="1.5" PointX="22.75" PointY="46.75" IsExpanded="true" />
         <EntityTypeShape EntityType="e4kmaximusdbModel.view_unmatchedcolourwithorgcolour" Width="1.5" PointX="24.75" PointY="46.75" IsExpanded="true" />
         <EntityTypeShape EntityType="e4kmaximusdbModel.view_unmatchedordercolourid" Width="1.5" PointX="26.75" PointY="46.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="e4kmaximusdbModel.stylebytemplateview" Width="1.5" PointX="29.375" PointY="46.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

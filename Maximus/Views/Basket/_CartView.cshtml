@@ -20,7 +20,7 @@
         //settings.CommandColumn.ShowEditButton = true;
         settings.SetDetailRowTemplateContent(x =>
         {
-            @Html.RenderAction("CartviewDetailGridViewGridViewPartial", new { empId = x.KeyValue });
+            Html.RenderAction("CartviewDetailGridViewGridViewPartial", new { empId = x.KeyValue });
         });
 
         settings.SettingsCommandButton.EditButton.Image.IconID = IconID.EditEdit16x16;
@@ -36,7 +36,7 @@
         settings.SettingsCommandButton.UpdateButton.RenderMode = GridCommandButtonRenderMode.Image;
         settings.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Right;
         settings.SettingsAdaptivity.AdaptiveDetailColumnCount = 5;
-
+        settings.ClientSideEvents.BeginCallback = "OnBeginCallback";
         settings.KeyFieldName = "EmployeeID";
 
         settings.SettingsPager.Visible = true;

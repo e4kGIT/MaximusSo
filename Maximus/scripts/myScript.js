@@ -119,10 +119,21 @@ function getEntitlementDemand(style, error) {
                 if (response != "") {
                     var errorMsg = "";
                     if (error == 1) {
-                        errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed entitlement exceeded</span></div>"
+                        if (response.Result.includes('points'))
+                        {
+                            var data = response.Result.split("-////-");
+                            errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order" + data[1] + ".Cannot proceed further order</span></div>";
+                             
+                            
+                        }
+                        else
+                        {
+                            errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed entitlement exceeded</span></div>";
+                        }
+                        
                     }
                     var data = document.getElementById("Entitlement");
-                    data.innerHTML = response.Result + errorMsg;
+                    data.innerHTML = response.Result.includes('points') ? response.Result.split("-////-")[0] + errorMsg : response.Result + errorMsg;
                     Entitlement.SetHeaderText("Entitlement for " + response.EmpId);
                     Entitlement.Show();
                 }
@@ -140,10 +151,18 @@ function getEntitlementDemand(style, error) {
             success: function (response) {
                 var errorMsg = "";
                 if (error == 1) {
-                    errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed entitlement exceeded</span></div>"
+                    if (response.Result.includes('points'))
+                    {
+                        errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>"; 
+                         
+                    }
+                    else
+                    {
+                        errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed entitlement exceeded</span></div>";
+                    }
                 }
                 var data = document.getElementById("Entitlement");
-                data.innerHTML = response.Result + errorMsg;
+                data.innerHTML = response.Result.includes('points') ? response.Result.split("-////-")[0] + errorMsg : response.Result + errorMsg;
                 Entitlement.SetHeaderText("Entitlement for " + response.EmpId);
                 Entitlement.Show();
             },
@@ -170,10 +189,15 @@ function getEntitlementDim(style, error) {
                 if (response != "") {
                     var errorMsg = "";
                     if (error == 1) {
-                        errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed entitlement exceeded</span></div>"
+                        if (response.Result.includes('points'))
+                        {  errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";  }
+                        else
+                        {
+                            errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed entitlement exceeded</span></div>";
+                        }
                     }
                     var data = document.getElementById("Entitlement");
-                    data.innerHTML = response.Result + errorMsg;
+                    data.innerHTML = response.Result.includes('points') ? response.Result.split("-////-")[0] + errorMsg : response.Result + errorMsg;
                     Entitlement.SetHeaderText("Entitlement for " + response.EmpId);
                     Entitlement.Show();
                 }
@@ -191,10 +215,15 @@ function getEntitlementDim(style, error) {
             success: function (response) {
                 var errorMsg = "";
                 if (error == 1) {
-                    errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed entitlement exceeded</span></div>"
+                    if (response.Result.includes('points'))
+                    { errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>"; }
+                    else
+                    {
+                        errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed entitlement exceeded</span></div>";
+                    }
                 }
                 var data = document.getElementById("Entitlement");
-                data.innerHTML = response.Result + errorMsg;
+                data.innerHTML = response.Result.includes('points') ? response.Result.split("-////-")[0] + errorMsg : response.Result + errorMsg;
                 Entitlement.SetHeaderText("Entitlement for " + response.EmpId);
                 Entitlement.Show();
             },
@@ -245,7 +274,7 @@ function getSelectedSizeSwatch(style, size, orgStyle) {
                                 var priceId = "LbPrice" + style;
                                 var price = document.getElementById(priceId);
                                 price.innerHTML = "";
-                                price.innerHTML = "<input class='form-control' id='LbPriceinput" + style + "' readonly  type=\"number\" min=\"1\" max=\"10000\" value='" + response + "'/>";
+                                price.innerHTML = "<input class='form-control' id='LbPriceinput" + style + "'    type=\"number\" min=\"1\" max=\"10000\" value='" + response + "'/>";
                             }
                             else {
                                 window.location = "/User/Login/";
@@ -330,10 +359,10 @@ function getSelectedSizeDemandSwatch(style, size, orgStyle) {
                         success: function (response) {
                             ;
                             if (!response.includes("Login")) {
-                                var priceId = "DimviewPrice" + style;
+                                var priceId = "DimviewPriceinput1" + style;
                                 var price = document.getElementById(priceId);
-                                price.innerHTML = "";
-                                price.innerHTML = "<input class='form-control' readonly type=\"number\" min=\"1\" max=\"10000\" value='" + response + "'/>";
+                                price.value = "";
+                                price.value = response;
 
                             }
                             else {
@@ -352,10 +381,10 @@ function getSelectedSizeDemandSwatch(style, size, orgStyle) {
                         success: function (response) {
                             ;
                             if (!response.includes("Login")) {
-                                var priceId = "DimviewPrice" + style;
+                                var priceId = "DimviewPriceinput1" + style;
                                 var price = document.getElementById(priceId);
-                                price.innerHTML = "";
-                                price.innerHTML = "<input class='form-control'  type=\"number\" min=\"1\" max=\"10000\" value='" + response + "'/>";
+                                price.value = "";
+                                price.value = response;
 
                             }
                             else {
@@ -413,10 +442,15 @@ function getEntitlementSwatch(style, orgStyl, error) {
                     if (response != "") {
                         var errorMsg = "";
                         if (error == 1) {
-                            errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed entitlement exceeded</span></div>"
+                            if (response.Result.includes('points'))
+                            {  errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";  }
+                            else
+                            {
+                                errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed entitlement exceeded</span></div>";
+                            }
                         }
                         var data = document.getElementById("Entitlement");
-                        data.innerHTML = response.Result + errorMsg;
+                        data.innerHTML = response.Result.includes('points') ? response.Result.split("-////-")[0] + errorMsg : response.Result + errorMsg;
                         Entitlement.SetHeaderText("Entitlement for " + response.EmpId);
                         Entitlement.Show();
                     }
@@ -434,10 +468,15 @@ function getEntitlementSwatch(style, orgStyl, error) {
                 success: function (response) {
                     var errorMsg = "";
                     if (error == 1) {
-                        errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed entitlement exceeded</span></div>"
+                        if (response.Result.includes('points'))
+                        {  errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";  }
+                        else
+                        {
+                            errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed entitlement exceeded</span></div>";
+                        }
                     }
                     var data = document.getElementById("Entitlement");
-                    data.innerHTML = response.Result + errorMsg;
+                    data.innerHTML = response.Result.includes('points') ? response.Result.split("-////-")[0] + errorMsg : response.Result + errorMsg;
                     Entitlement.SetHeaderText("Entitlement for " + response.EmpId);
                     Entitlement.Show();
                 },
@@ -481,10 +520,15 @@ function getEntitlementDimSwatch(style, error) {
                     if (response != "") {
                         var errorMsg = "";
                         if (error == 1) {
-                            errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed entitlement exceeded</span></div>"
+                            if (response.Result.includes('points'))
+                            {  errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";  }
+                            else
+                            {
+                                errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed entitlement exceeded</span></div>";
+                            }
                         }
                         var data = document.getElementById("Entitlement");
-                        data.innerHTML = response.Result + errorMsg;
+                        data.innerHTML = response.Result.includes('points') ? response.Result.split("-////-")[0] + errorMsg : response.Result + errorMsg;
                         Entitlement.SetHeaderText("Entitlement for " + response.EmpId);
                         Entitlement.Show();
                     }
@@ -502,10 +546,15 @@ function getEntitlementDimSwatch(style, error) {
                 success: function (response) {
                     var errorMsg = "";
                     if (error == 1) {
-                        errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed entitlement exceeded</span></div>"
+                        if (response.Result.includes('points'))
+                        {  errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";  }
+                        else
+                        {
+                            errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed entitlement exceeded</span></div>";
+                        }
                     }
                     var data = document.getElementById("Entitlement");
-                    data.innerHTML = response.Result + errorMsg;
+                    data.innerHTML = response.Result.includes('points') ? response.Result.split("-////-")[0] + errorMsg : response.Result + errorMsg;
                     Entitlement.SetHeaderText("Entitlement for " + response.EmpId);
                     Entitlement.Show();
                 },
@@ -558,9 +607,14 @@ function getEntitlementDemandSwatch(style, orgStyl, error) {
                         var data = document.getElementById("Entitlement");
                         var errorMsg = "";
                         if (error == 1) {
-                            errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed entitlement exceeded</span></div>"
+                            if (response.Result.includes('points'))
+                            {  errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";  }
+                            else
+                            {
+                                errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed entitlement exceeded</span></div>";
+                            }
                         }
-                        data.innerHTML = response.Result + errorMsg;
+                        data.innerHTML = response.Result.includes('points') ? response.Result.split("-////-")[0] + errorMsg : response.Result + errorMsg;
                         Entitlement.SetHeaderText("Entitlement for " + response.EmpId);
                         Entitlement.Show();
                     }
@@ -579,9 +633,14 @@ function getEntitlementDemandSwatch(style, orgStyl, error) {
                     var data = document.getElementById("Entitlement");
                     var errorMsg = "";
                     if (error == 1) {
-                        errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed entitlement exceeded</span></div>"
+                        if (response.Result.includes('points'))
+                        {  errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";  }
+                        else
+                        {
+                            errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed entitlement exceeded</span></div>";
+                        }
                     }
-                    data.innerHTML = response.Result + errorMsg;
+                    data.innerHTML = response.Result.includes('points') ? response.Result.split("-////-")[0] + errorMsg : response.Result + errorMsg;
                     Entitlement.SetHeaderText("Entitlement for " + response.EmpId);
                     Entitlement.Show();
                 },
@@ -594,11 +653,50 @@ function getEntitlementDemandSwatch(style, orgStyl, error) {
         alert("Please select the color!");
     }
 }
+//$('.add-to-cart').on('click', function () {
+//    var cart = $('.shopping-cart');
+//    var imgtodrag = $(this).parent('.item').find("img").eq(0);
+//    if (imgtodrag) {
+//        var imgclone = imgtodrag.clone()
+//            .offset({
+//                top: imgtodrag.offset().top,
+//                left: imgtodrag.offset().left
+//            })
+//            .css({
+//                'opacity': '0.5',
+//                'position': 'absolute',
+//                'height': '150px',
+//                'width': '150px',
+//                'z-index': '100'
+//            })
+//            .appendTo($('body'))
+//            .animate({
+//                'top': cart.offset().top + 10,
+//                'left': cart.offset().left + 10,
+//                'width': 75,
+//                'height': 75
+//            }, 1000, 'easeInOutExpo');
+
+//        setTimeout(function () {
+//            cart.effect("shake", {
+//                times: 2
+//            }, 200);
+//        }, 1500);
+
+//        imgclone.animate({
+//            'width': 0,
+//            'height': 0
+//        }, function () {
+//            $(this).detach()
+//        });
+//    }
+//});
+
 
 function addTocartSwatch(s, e) {
-
     var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
-
+    var sitecode = ASPxClientControl.GetControlCollection().GetByName("SiteCodeCmb");
+    var selectedSitecode = sitecode != null ? sitecode.GetValue() != null ? sitecode.GetValue() : "" : "SITECODENULL";
     var stylearr = s.name.split('_');
     var description = "";
     var price = "";
@@ -673,7 +771,7 @@ function addTocartSwatch(s, e) {
     var reqData = document.getElementsByClassName(clsName);
     if (reqData[0].style.display != "none") {
         var reqtxt = document.getElementsByClassName(reqdatatxt);
-        if (description != "" && price != "" && size != "" && color != "" && qty != "" && qty != "0" && reqtxt[0].value != "") {
+        if (description != "" && price != "" && size != "" && color != "" && qty != "" && qty != "0" && reqtxt[0].value != "" && (selectedSitecode != "" | selectedSitecode == "SITECODENULL")) {
             if (stylearr[2] != "") {
                 $.ajax({
                     url: "/Home/GetBtnStatus/",
@@ -683,16 +781,26 @@ function addTocartSwatch(s, e) {
                         debugger;
                         if (response == "enabled" | (reason != "" && reason != undefined)) {
                             loadPopup.Show();
-
+                            selectedSitecode = selectedSitecode == "SITECODENULL" ? "" : selectedSitecode;
                             $.ajax({
                                 url: "/Home/Addtocart/",
                                 type: "POST",
-                                data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'entQty': stylearr[2], 'reqData1': reqtxt[0].value, 'reason': reason },
+                                data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'entQty': stylearr[2], 'reqData1': reqtxt[0].value, 'reason': reason, 'selectedSitecode': selectedSitecode },
                                 success: function (response) {
                                     if (response != "") {
                                         $("#CartwidCount").html("");
                                         $("#CartwidCount").html(response);
                                         loadPopup.Hide();
+                                        $.ajax({
+                                            url: "/Home/GetPointsDiv/",
+                                            type: "POST",
+                                            success: function (response) {
+                                                if (response != "") {
+                                                    $("#PointsDiv").html("");
+                                                    $("#PointsDiv").html(response);
+                                                }
+                                            }
+                                        });
                                         myFunction("Added to cart..!");
                                         //myFunction("Added to cart..!");  ;
                                     }
@@ -731,14 +839,25 @@ function addTocartSwatch(s, e) {
                     success: function (response) {
                         debugger;
                         if (response == "enabled" | (reason != "" && reason != undefined)) {
+                            selectedSitecode = selectedSitecode == "SITECODENULL" ? "" : selectedSitecode;
                             $.ajax({
                                 url: "/Home/Addtocart/",
                                 type: "POST",
-                                data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reason': reason },
+                                data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reason': reason, 'selectedSitecode': selectedSitecode },
                                 success: function (response) {
                                     if (response != "") {
                                         $("#CartwidCount").html("");
                                         $("#CartwidCount").html(response);
+                                        $.ajax({
+                                            url: "/Home/GetPointsDiv/",
+                                            type: "POST",
+                                            success: function (response) {
+                                                if (response != "") {
+                                                    $("#PointsDiv").html("");
+                                                    $("#PointsDiv").html(response);
+                                                }
+                                            }
+                                        });
                                         myFunction("Added to cart..!");
                                     }
                                     else {
@@ -779,14 +898,17 @@ function addTocartSwatch(s, e) {
             }
             else if (qty == "" || qty == "0" || qty == null || qty == undefined) {
                 alert("Quantity should be greater than 0");
+            } else if (selectedSitecode == "") {
+                alert("Please select a site code");
             }
             else if (reqtxt[0].value == "") {
                 alert("Please select Required leg length");
             }
+
         }
     }
     else {
-        if (description != "" && price != "" && size != "" && color != "" && qty != "" && qty != "0") {
+        if (description != "" && price != "" && size != "" && color != "" && qty != "" && qty != "0" && (selectedSitecode != "" | selectedSitecode == "SITECODENULL")) {
             if (stylearr[2] != "") {
                 $.ajax({
                     url: "/Home/GetBtnStatus/",
@@ -796,16 +918,26 @@ function addTocartSwatch(s, e) {
                         debugger;
                         if (response == "enabled" | (reason != "" && reason != undefined)) {
                             loadPopup.Show();
-
+                            selectedSitecode = selectedSitecode == "SITECODENULL" ? "" : selectedSitecode;
                             $.ajax({
                                 url: "/Home/Addtocart/",
                                 type: "POST",
-                                data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'entQty': stylearr[2], 'reason': reason },
+                                data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'entQty': stylearr[2], 'reason': reason, 'selectedSitecode': selectedSitecode },
                                 success: function (response) {
                                     if (response != "") {
                                         $("#CartwidCount").html("");
                                         $("#CartwidCount").html(response);
                                         loadPopup.Hide();
+                                        $.ajax({
+                                            url: "/Home/GetPointsDiv/",
+                                            type: "POST",
+                                            success: function (response) {
+                                                if (response != "") {
+                                                    $("#PointsDiv").html("");
+                                                    $("#PointsDiv").html(response);
+                                                }
+                                            }
+                                        });
                                         myFunction("Added to cart..!");
                                         //myFunction("Added to cart..!");  ;
                                     }
@@ -844,14 +976,25 @@ function addTocartSwatch(s, e) {
                     success: function (response) {
                         debugger;
                         if (response == "enabled" | (reason != "" && reason != undefined)) {
+                            selectedSitecode = selectedSitecode == "SITECODENULL" ? "" : selectedSitecode;
                             $.ajax({
                                 url: "/Home/Addtocart/",
                                 type: "POST",
-                                data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reason': reason },
+                                data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reason': reason, 'selectedSitecode': selectedSitecode },
                                 success: function (response) {
                                     if (response != "") {
                                         $("#CartwidCount").html("");
                                         $("#CartwidCount").html(response);
+                                        $.ajax({
+                                            url: "/Home/GetPointsDiv/",
+                                            type: "POST",
+                                            success: function (response) {
+                                                if (response != "") {
+                                                    $("#PointsDiv").html("");
+                                                    $("#PointsDiv").html(response);
+                                                }
+                                            }
+                                        });
                                         myFunction("Added to cart..!");
                                     }
                                     else {
@@ -893,11 +1036,29 @@ function addTocartSwatch(s, e) {
             else if (qty == "" || qty == "0" || qty == null || qty == undefined) {
                 alert("Quantity should be greater than 0");
             }
+            else if (selectedSitecode == "") {
+                alert("Please select a site code");
+            }
             else if (reqtxt[0].value == "") {
                 alert("Please select Required leg length");
             }
         }
     }
+}
+
+function PointsEndCallBack(s,e)
+{
+    $.ajax({
+        type: "post",
+        url: "/Home/GetPointsDiv/",
+        success:function(resp)
+        {
+            if (resp != "") {
+                $("#PointsDiv").html("");
+                $("#PointsDiv").html(resp);
+            }
+        }
+    });
 }
 
 function addTocartDimSwatch(s, e) {
@@ -1065,6 +1226,8 @@ function addTocartDimSwatch(s, e) {
         }
         else if (qty == "" || qty == "0" || qty == null || qty == undefined) {
             alert("Quantity should be greater than 0");
+        } else if (selectedSitecode == "") {
+            alert("Please select a site code");
         }
         else if (reqtxt[0].value == "") {
             alert("Please select Required leg length");
@@ -1072,9 +1235,39 @@ function addTocartDimSwatch(s, e) {
     }
 }
 
+function AddClientCode(s, e) {
+    var sitecode = ASPxClientControl.GetControlCollection().GetByName(s.name);
+    var sitecodeVal = sitecode.GetValue();
+    if (sitecodeVal != null && sitecodeVal != "") {
+        $.ajax({
+            url: "/Home/SetClientcode/",
+            type: "POST",
+            data: { 'SetClientcode': sitecodeVal },
+            success: function (resp) {
+            }
+        });
+    }
+}
+function SetSopDetail5(s, e) {
+    var sitecode = ASPxClientControl.GetControlCollection().GetByName(s.name);
+    var sitecodeVal = sitecode.GetValue();
+    if (sitecodeVal != null && sitecodeVal != "") {
+        $.ajax({
+            url: "/Basket/SetSopDetail5/",
+            type: "POST",
+            data: { 'SetClientcode': sitecodeVal },
+            success: function (resp) {
+            }
+        });
+    }
+}
+
+//
+
 function addTocartDemandSwatch(s, e) {
     var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
-
+    var sitecode = ASPxClientControl.GetControlCollection().GetByName("SiteCodeCmbgroupedProducts");
+    var selectedSitecode = sitecode != null ? sitecode.GetValue() != null ? sitecode.GetValue() : "" : "SITECODENULL";
     var stylearr = s.name.split('_');
     var description = "";
     var price = "";
@@ -1148,7 +1341,7 @@ function addTocartDemandSwatch(s, e) {
     var reqData = document.getElementsByClassName(clsName);
     if (reqData[0].style.display != "none") {
         var reqtxt = document.getElementsByClassName(reqdatatxt);
-        if (description != "" && price != "" && size != undefined && price != undefined && color != undefined && size != "" && color != "" && qty != "" && qty != "0" && reqtxt[0].value != "") {
+        if (description != "" && price != "" && size != undefined && price != undefined && color != undefined && size != "" && color != "" && qty != "" && qty != "0" && reqtxt[0].value != "" && (selectedSitecode != "" | selectedSitecode == "SITECODENULL")) {
             if (stylearr[2] != "") {
                 $.ajax({
                     url: "/Home/GetBtnStatus/",
@@ -1159,15 +1352,28 @@ function addTocartDemandSwatch(s, e) {
                         if (response == "enabled" | (reason != "" && reason != undefined)) {
                             loadPopup.Show();
 
+                            selectedSitecode = selectedSitecode == "SITECODENULL" ? "" : selectedSitecode;
                             $.ajax({
                                 url: "/Home/Addtocart/",
                                 type: "POST",
-                                data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reqData1': reqtxt[0].value, 'reason': reason },
+                                data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reqData1': reqtxt[0].value, 'reason': reason, 'selectedSitecode': selectedSitecode },
                                 success: function (response) {
                                     if (response != "") {
                                         $("#CartwidCount").html("");
                                         $("#CartwidCount").html(response);
                                         loadPopup.Hide();
+                                        $.ajax({
+                                            url: "/Home/GetPointsDiv/",
+                                            type: "POST",
+                                            success:function(response)
+                                            {
+                                                if(response!="")
+                                                {
+                                                    $("#PointsDiv").html("");
+                                                    $("#PointsDiv").html(response);
+                                                }
+                                            }
+                                        });
                                         myFunction("Added to cart..!");
                                     }
                                     else {
@@ -1196,6 +1402,8 @@ function addTocartDemandSwatch(s, e) {
             }
             else {
                 loadPopup.Show();
+
+                selectedSitecode = selectedSitecode == "SITECODENULL" ? "" : selectedSitecode;
                 $.ajax({
                     url: "/Home/GetBtnStatus/",
                     type: "POST",
@@ -1206,11 +1414,21 @@ function addTocartDemandSwatch(s, e) {
                             $.ajax({
                                 url: "/Home/Addtocart/",
                                 type: "POST",
-                                data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reason': reason },
+                                data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reason': reason, 'selectedSitecode': selectedSitecode },
                                 success: function (response) {
                                     if (response != "") {
                                         $("#CartwidCount").html("");
                                         $("#CartwidCount").html(response);
+                                        $.ajax({
+                                            url: "/Home/GetPointsDiv/",
+                                            type: "POST",
+                                            success: function (response) {
+                                                if (response != "") {
+                                                    $("#PointsDiv").html("");
+                                                    $("#PointsDiv").html(response);
+                                                }
+                                            }
+                                        });
                                         myFunction("Added to cart..!");
                                     }
                                     else {
@@ -1251,6 +1469,8 @@ function addTocartDemandSwatch(s, e) {
             }
             else if (qty == "" || qty == "0" || qty == null || qty == undefined) {
                 alert("Quantity should be greater than 0");
+            } else if (selectedSitecode == "") {
+                alert("Please select a site code");
             }
             else if (reqtxt[0].value == "") {
                 alert("Please select Required leg length");
@@ -1258,8 +1478,9 @@ function addTocartDemandSwatch(s, e) {
         }
     }
     else {
-        if (description != "" && price != "" && size != undefined && price != undefined && color != undefined && size != "" && color != "" && qty != "" && qty != "0") {
+        if (description != "" && price != "" && size != undefined && price != undefined && color != undefined && size != "" && color != "" && qty != "" && qty != "0" && (selectedSitecode != "" | selectedSitecode == "SITECODENULL")) {
             if (stylearr[2] != "") {
+
                 $.ajax({
                     url: "/Home/GetBtnStatus/",
                     type: "POST",
@@ -1269,15 +1490,26 @@ function addTocartDemandSwatch(s, e) {
                         if (response == "enabled" | (reason != "" && reason != undefined)) {
                             loadPopup.Show();
 
+                            selectedSitecode = selectedSitecode == "SITECODENULL" ? "" : selectedSitecode;
                             $.ajax({
                                 url: "/Home/Addtocart/",
                                 type: "POST",
-                                data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reason': reason },
+                                data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reason': reason, 'selectedSitecode': selectedSitecode },
                                 success: function (response) {
                                     if (response != "") {
                                         $("#CartwidCount").html("");
                                         $("#CartwidCount").html(response);
                                         loadPopup.Hide();
+                                        $.ajax({
+                                            url: "/Home/GetPointsDiv/",
+                                            type: "POST",
+                                            success: function (response) {
+                                                if (response != "") {
+                                                    $("#PointsDiv").html("");
+                                                    $("#PointsDiv").html(response);
+                                                }
+                                            }
+                                        });
                                         myFunction("Added to cart..!");
                                     }
                                     else {
@@ -1313,14 +1545,26 @@ function addTocartDemandSwatch(s, e) {
                     success: function (response) {
                         debugger;
                         if (response == "enabled" | (reason != "" && reason != undefined)) {
+
+                            selectedSitecode = selectedSitecode == "SITECODENULL" ? "" : selectedSitecode;
                             $.ajax({
                                 url: "/Home/Addtocart/",
                                 type: "POST",
-                                data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reason': reason },
+                                data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reason': reason, 'selectedSitecode': selectedSitecode },
                                 success: function (response) {
                                     if (response != "") {
                                         $("#CartwidCount").html("");
                                         $("#CartwidCount").html(response);
+                                        $.ajax({
+                                            url: "/Home/GetPointsDiv/",
+                                            type: "POST",
+                                            success: function (response) {
+                                                if (response != "") {
+                                                    $("#PointsDiv").html("");
+                                                    $("#PointsDiv").html(response);
+                                                }
+                                            }
+                                        });
                                         myFunction("Added to cart..!");
                                     }
                                     else {
@@ -1361,6 +1605,8 @@ function addTocartDemandSwatch(s, e) {
             }
             else if (qty == "" || qty == "0" || qty == null || qty == undefined) {
                 alert("Quantity should be greater than 0");
+            } else if (selectedSitecode == "") {
+                alert("Please select a site code");
             }
             else if (reqtxt[0].value == "") {
                 alert("Please select Required leg length");
@@ -1419,20 +1665,20 @@ function GetDrpResulTemplateModelSwatch(stle, selStyle, orgStyle) {
                                         }
                                         else {
                                             if (response.HasReqData) {
-                                                sizContent = sizContent + "<div class='col-md-4 BulkOrder1_template_" + stle + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-3'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-3'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-3'><center><input type =\"number\" placeholder='Quantity' id='" + stle + "_" + response.PriceList[i].Size + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div><div class='col-md-3'><center><input   id='ReqData_" + stle + "_" + response.PriceList[i].Size + "'  type =\"text\" placeholder='" + response.ReqData + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
+                                                sizContent = sizContent + "<div class='col-md-4 BulkOrder1_template_" + stle + "' style=\"margin-bottom:10px;border: solid 1px;padding: 15px;\"><div class='row'><div class='col-md-3'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-3'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-3'><center><input type =\"number\" placeholder='Quantity' id='" + stle + "_" + response.PriceList[i].Size + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div><div class='col-md-3'><center><input   id='ReqData_" + stle + "_" + response.PriceList[i].Size + "'  type =\"text\" placeholder='" + response.ReqData + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
                                             }
                                             else {
-                                                sizContent = sizContent + "<div class='col-md-4  BulkOrder1_template_" + stle + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-4'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-4'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-4'><center><input id='" + stle + "_" + response.PriceList[i].Size + "' type =\"number\" placeholder='Quantity'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
+                                                sizContent = sizContent + "<div class='col-md-4  BulkOrder1_template_" + stle + "' style=\"margin-bottom:10px;border: solid 1px;padding: 15px;\"><div class='row'><div class='col-md-4'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-4'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-4'><center><input id='" + stle + "_" + response.PriceList[i].Size + "' type =\"number\" placeholder='Quantity'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
                                             }
                                         }
 
                                     }
                                     else {
                                         if (response.SizeList[i] == resp.Size) {
-                                            sizContent = sizContent + "<label class='swatchLabel'><input type='radio'  id='radio' name=\"swatch_Size_" + style_nam + "\" checked=\"checked\"/><span class='spanner1' onclick=\"getSelectedSizeSwatch('" + style_nam + "','" + response.SizeList[i] + "','" + orgStyle + "')\"><center><bold>" + response.SizeList[i] + "</bold></center></span></label>";
+                                            sizContent = sizContent + "<label class='swatchLabel'><input type='radio'  id='radio' name=\"swatchTemplate_Size_" + style_nam + "\" checked=\"checked\"/><span class='spanner1' onclick=\"getSelectedSizeTemplateSwatch('" + style_nam + "','" + response.SizeList[i] + "','" + orgStyle + "')\"><center><bold>" + response.SizeList[i] + "</bold></center></span></label>";
                                         }
                                         else {
-                                            sizContent = sizContent + "<label class='swatchLabel'><input type='radio'  id='radio' name=\"swatch_Size_" + style_nam + "\" value='blue'/><span class='spanner1' onclick=\"getSelectedSizeSwatch('" + style_nam + "','" + response.SizeList[i] + "','" + orgStyle + "')\"><center><bold>" + response.SizeList[i] + "</bold></center></span></label>";
+                                            sizContent = sizContent + "<label class='swatchLabel'><input type='radio'  id='radio' name=\"swatchTemplate_Size_" + style_nam + "\" value='blue'/><span class='spanner1' onclick=\"getSelectedSizeTemplateSwatch('" + style_nam + "','" + response.SizeList[i] + "','" + orgStyle + "')\"><center><bold>" + response.SizeList[i] + "</bold></center></span></label>";
                                         }
                                     }
 
@@ -1440,19 +1686,19 @@ function GetDrpResulTemplateModelSwatch(stle, selStyle, orgStyle) {
                                 else {
                                     if (response.isManpack == false) {
                                         if (response.isBulk) {
-                                            sizContent = sizContent + "<div class='col-md-4  BulkOrder1_template_" + stle + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-4'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-4'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-4'><center><input type =\"number\" placeholder='Quantity'   min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
+                                            sizContent = sizContent + "<div class='col-md-4  BulkOrder1_template_" + stle + "' style=\"margin-bottom:10px;border: solid 1px;padding: 15px;\"><div class='row'><div class='col-md-4'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-4'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-4'><center><input type =\"number\" placeholder='Quantity'   min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
                                         }
                                         else {
                                             if (response.HasReqData) {
-                                                sizContent = sizContent + "<div class='col-md-4 BulkOrder1_template_" + stle + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-3'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-3'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-3'><center><input type =\"number\" placeholder='Quantity' id='" + stle + "_" + response.PriceList[i].Size + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div><div class='col-md-3'><center><input   id='ReqData_" + stle + "_" + response.PriceList[i].Size + "'  type =\"text\" placeholder='" + response.ReqData + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
+                                                sizContent = sizContent + "<div class='col-md-4 BulkOrder1_template_" + stle + "' style=\"margin-bottom:10px;border: solid 1px;padding: 15px;\"><div class='row'><div class='col-md-3'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-3'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-3'><center><input type =\"number\" placeholder='Quantity' id='" + stle + "_" + response.PriceList[i].Size + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div><div class='col-md-3'><center><input   id='ReqData_" + stle + "_" + response.PriceList[i].Size + "'  type =\"text\" placeholder='" + response.ReqData + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
                                             }
                                             else {
-                                                sizContent = sizContent + "<div class='col-md-4  BulkOrder1_template_" + stle + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-4'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-4'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-4'><center><input type =\"number\" id='" + stle + "_" + response.PriceList[i].Size + "' placeholder='Quantity'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
+                                                sizContent = sizContent + "<div class='col-md-4  BulkOrder1_template_" + stle + "' style=\"margin-bottom:10px;border: solid 1px;padding: 15px;\"><div class='row'><div class='col-md-4'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-4'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-4'><center><input type =\"number\" id='" + stle + "_" + response.PriceList[i].Size + "' placeholder='Quantity'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
                                             }
                                         }
                                     }
                                     else {
-                                        sizContent = sizContent + "<label class='swatchLabel'><input type='radio'  id='radio' name=\"swatch_Size_" + style_nam + "\" checked=\"checked\"/><span class='spanner1' onclick=\"getSelectedSizeSwatch('" + style_nam + "','" + response.SizeList[i].Size + "','" + orgStyle + "')\"><center><bold>" + response.SizeList[i] + "</bold></center></span></label>";
+                                        sizContent = sizContent + "<label class='swatchLabel'><input type='radio'  id='radio' name=\"swatchTemplate_Size_" + style_nam + "\" checked=\"checked\"/><span class='spanner1' onclick=\"getSelectedSizeTemplateSwatch('" + style_nam + "','" + response.SizeList[i].Size + "','" + orgStyle + "')\"><center><bold>" + response.SizeList[i] + "</bold></center></span></label>";
                                     }
                                 }
                             }
@@ -1469,7 +1715,7 @@ function GetDrpResulTemplateModelSwatch(stle, selStyle, orgStyle) {
                             }
                             colorFieldset[0].innerHTML = clrContent != "" ? clrContent : colorFieldset[0].innerHTML;
                             sizeFieldset[0].innerHTML = cnt + sizContent;
-                            var priceId = "LbPrice" + style_nam;
+                            var priceId = "LbTemplatePrice" + style_nam;
                             var price = document.getElementById(priceId);
                             price.innerHTML = "";
                             price.innerHTML = response.Price == 0 ? resp.price == "" ? "" : resp.price : response.Price;
@@ -1509,15 +1755,15 @@ function GetDrpResulTemplateModelSwatch(stle, selStyle, orgStyle) {
                                         }
                                         else {
                                             if (response.HasReqData) {
-                                                sizContent = sizContent + "<div class='col-md-4 BulkOrder1_template_" + stle + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-3'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-3'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-3'><center><input type =\"number\" placeholder='Quantity' id='" + stle + "_" + response.PriceList[i].Size + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div><div class='col-md-3'><center><input   id='ReqData_" + stle + "_" + response.PriceList[i].Size + "'  type =\"text\" placeholder='" + response.ReqData + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
+                                                sizContent = sizContent + "<div class='col-md-4 BulkOrder1_template_" + stle + "' style=\"margin-bottom:10px;border: solid 1px;padding: 15px;\"><div class='row'><div class='col-md-3'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-3'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-3'><center><input type =\"number\" placeholder='Quantity' id='" + stle + "_" + response.PriceList[i].Size + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div><div class='col-md-3'><center><input   id='ReqData_" + stle + "_" + response.PriceList[i].Size + "'  type =\"text\" placeholder='" + response.ReqData + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
                                             }
                                             else {
-                                                sizContent = sizContent + "<div class='col-md-4  BulkOrder1_template_" + stle + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-4'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-4'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-4'><center><input type =\"number\" id='" + stle + "_" + response.PriceList[i].Size + "' placeholder='Quantity'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
+                                                sizContent = sizContent + "<div class='col-md-4  BulkOrder1_template_" + stle + "' style=\"margin-bottom:10px;border: solid 1px;padding: 15px;\"><div class='row'><div class='col-md-4'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-4'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-4'><center><input type =\"number\" id='" + stle + "_" + response.PriceList[i].Size + "' placeholder='Quantity'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
                                             }
                                         }
                                     }
                                     else {
-                                        sizContent = sizContent + "<label><input type='radio'  id='radio' name=\"swatch_Size_" + style_nam + "\" checked=\"checked\"/><span class='spanner1' onclick=\"getSelectedSizeSwatch('" + style_nam + "','" + response.SizeList[i] + "','" + stylearr[1] + "')\"><center><bold>" + response.SizeList[i] + "</bold></center></span></label>";
+                                        sizContent = sizContent + "<label><input type='radio'  id='radio' name=\"swatchTemplate_Size_" + style_nam + "\" checked=\"checked\"/><span class='spanner1' onclick=\"getSelectedSizeSwatch('" + style_nam + "','" + response.SizeList[i] + "','" + stylearr[1] + "')\"><center><bold>" + response.SizeList[i] + "</bold></center></span></label>";
                                     }
                                 }
                                 else {
@@ -1527,7 +1773,7 @@ function GetDrpResulTemplateModelSwatch(stle, selStyle, orgStyle) {
                                         }
                                         else {
                                             if (response.HasReqData) {
-                                                sizContent = sizContent + "<div class='col-md-4 BulkOrder1_template_" + stle + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-3'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-3'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-3'><center><input type =\"number\" placeholder='Quantity' id='" + stle + "_" + response.PriceList[i].Size + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div><div class='col-md-3'><center><input   id='ReqData_" + stle + "_" + response.PriceList[i].Size + "'  type =\"text\" placeholder='" + response.ReqData + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
+                                                sizContent = sizContent + "<div class='col-md-4 BulkOrder1_template_" + stle + "' style=\"margin-bottom:10px;border: solid 1px;padding: 15px;\"><div class='row'><div class='col-md-3'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-3'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-3'><center><input type =\"number\" placeholder='Quantity' id='" + stle + "_" + response.PriceList[i].Size + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div><div class='col-md-3'><center><input   id='ReqData_" + stle + "_" + response.PriceList[i].Size + "'  type =\"text\" placeholder='" + response.ReqData + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
                                             }
                                             else {
                                                 sizContent = sizContent + "<div  class='col-md-1'><center><p>" + response.PriceList[i].Size + "</p><input  id=\"BulkSizeBox_" + response.PriceList[i].Size + "_" + style_nam + "\"  onblur=\"GetBulkPrice('" + response.SizeList[i] + "','" + style_nam + "','" + stylearr[1] + "')\" type =\"number\" class=\"BulkSizeBox_" + response.PriceList[i].Size + "_" + style_nam + " form-control\"  min=\"0\"  id='" + stle + "_" + response.PriceList[i].Size + "'  style=\"width:100%; text-align: center;  \"/><div style=\"margin-top:10px;margin-bottom:10px;\"><p><span id='LbPrice_" + style_nam + "_" + response.PriceList[i].Size + "'>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</span></p></div></center></div> ";
@@ -1535,13 +1781,13 @@ function GetDrpResulTemplateModelSwatch(stle, selStyle, orgStyle) {
                                         }
                                     }
                                     else {
-                                        sizContent = sizContent + "<label><input type='radio'  id='radio' name=\"swatch_Size_" + style_nam + "\" checked=\"checked\"/><span class='spanner1'  onclick=\"getSelectedSizeSwatch('" + style_nam + "','" + response.SizeList[i] + "','" + stylearr[1] + "')\"><center><bold>" + response.SizeList[i] + "</bold></center></span></label>";
+                                        sizContent = sizContent + "<label><input type='radio'  id='radio' name=\"swatchTemplate_Size_" + style_nam + "\" checked=\"checked\"/><span class='spanner1'  onclick=\"getSelectedSizeTemplateSwatch('" + style_nam + "','" + response.SizeList[i] + "','" + stylearr[1] + "')\"><center><bold>" + response.SizeList[i] + "</bold></center></span></label>";
                                     }
                                 }
                             }
                             colorFieldset[0].innerHTML = clrContent;
                             sizeFieldset[0].innerHTML = cnt + sizContent;
-                            var priceId = "LbPrice" + style_nam;
+                            var priceId = "LbTemplatePrice" + style_nam;
                             var price = document.getElementById(priceId);
                             price.innerHTML = "";
                             price.innerHTML = response.Price == 0 ? "" : response.Price;
@@ -1631,10 +1877,10 @@ function GetDrpResultModelSwatch(stle, selStyle, orgStyle) {
                                         }
                                         else {
                                             if (response.HasReqData) {
-                                                sizContent = sizContent + "<div class='col-md-4 BulkOrder1_" + stle + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-3'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-3'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-3'><center><input type =\"number\" placeholder='Quantity' id='" + stle + "_" + response.PriceList[i].Size + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div><div class='col-md-3'><center><input   id='ReqData_" + stle + "_" + response.PriceList[i].Size + "'  type =\"text\" placeholder='" + response.ReqData + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
+                                                sizContent = sizContent + "<div class='col-md-4 BulkOrder1_" + stle + "' style=\"margin-bottom:10px;border: solid 1px;padding: 15px;\"><div class='row'><div class='col-md-3'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-3'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-3'><center><input type =\"number\" placeholder='Quantity' id='" + stle + "_" + response.PriceList[i].Size + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div><div class='col-md-3'><center><input   id='ReqData_" + stle + "_" + response.PriceList[i].Size + "'  type =\"text\" placeholder='" + response.ReqData + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
                                             }
                                             else {
-                                                sizContent = sizContent + "<div class='col-md-4  BulkOrder1_" + stle + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-4'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-4'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-4'><center><input id='" + stle + "_" + response.PriceList[i].Size + "' type =\"number\" placeholder='Quantity'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
+                                                sizContent = sizContent + "<div class='col-md-4  BulkOrder1_" + stle + "' style=\"margin-bottom:10px;border: solid 1px;padding: 15px;\"><div class='row'><div class='col-md-4'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-4'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-4'><center><input id='" + stle + "_" + response.PriceList[i].Size + "' type =\"number\" placeholder='Quantity'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
                                             }
                                         }
 
@@ -1652,14 +1898,14 @@ function GetDrpResultModelSwatch(stle, selStyle, orgStyle) {
                                 else {
                                     if (response.isManpack == false) {
                                         if (response.isBulk) {
-                                            sizContent = sizContent + "<div class='col-md-4  BulkOrder1_" + stle + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-4'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-4'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-4'><center><input type =\"number\" placeholder='Quantity'   min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
+                                            sizContent = sizContent + "<div class='col-md-4  BulkOrder1_" + stle + "' style=\"margin-bottom:10px;border: solid 1px;padding: 15px;\"><div class='row'><div class='col-md-4'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-4'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-4'><center><input type =\"number\" placeholder='Quantity'   min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
                                         }
                                         else {
                                             if (response.HasReqData) {
-                                                sizContent = sizContent + "<div class='col-md-4 BulkOrder1_" + stle + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-3'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-3'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-3'><center><input type =\"number\" placeholder='Quantity' id='" + stle + "_" + response.PriceList[i].Size + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div><div class='col-md-3'><center><input   id='ReqData_" + stle + "_" + response.PriceList[i].Size + "'  type =\"text\" placeholder='" + response.ReqData + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
+                                                sizContent = sizContent + "<div class='col-md-4 BulkOrder1_" + stle + "' style=\"margin-bottom:10px;border: solid 1px;padding: 15px;\"><div class='row'><div class='col-md-3'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-3'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-3'><center><input type =\"number\" placeholder='Quantity' id='" + stle + "_" + response.PriceList[i].Size + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div><div class='col-md-3'><center><input   id='ReqData_" + stle + "_" + response.PriceList[i].Size + "'  type =\"text\" placeholder='" + response.ReqData + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
                                             }
                                             else {
-                                                sizContent = sizContent + "<div class='col-md-4  BulkOrder1_" + stle + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-4'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-4'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-4'><center><input type =\"number\" id='" + stle + "_" + response.PriceList[i].Size + "' placeholder='Quantity'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
+                                                sizContent = sizContent + "<div class='col-md-4  BulkOrder1_" + stle + "' style=\"margin-bottom:10px;border: solid 1px;padding: 15px;\"><div class='row'><div class='col-md-4'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-4'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-4'><center><input type =\"number\" id='" + stle + "_" + response.PriceList[i].Size + "' placeholder='Quantity'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
                                             }
                                         }
                                     }
@@ -1721,10 +1967,10 @@ function GetDrpResultModelSwatch(stle, selStyle, orgStyle) {
                                         }
                                         else {
                                             if (response.HasReqData) {
-                                                sizContent = sizContent + "<div class='col-md-4 BulkOrder1_" + stle + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-3'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-3'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-3'><center><input type =\"number\" placeholder='Quantity' id='" + stle + "_" + response.PriceList[i].Size + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div><div class='col-md-3'><center><input   id='ReqData_" + stle + "_" + response.PriceList[i].Size + "'  type =\"text\" placeholder='" + response.ReqData + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
+                                                sizContent = sizContent + "<div class='col-md-4 BulkOrder1_" + stle + "' style=\"margin-bottom:10px;border: solid 1px;padding: 15px;\"><div class='row'><div class='col-md-3'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-3'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-3'><center><input type =\"number\" placeholder='Quantity' id='" + stle + "_" + response.PriceList[i].Size + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div><div class='col-md-3'><center><input   id='ReqData_" + stle + "_" + response.PriceList[i].Size + "'  type =\"text\" placeholder='" + response.ReqData + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
                                             }
                                             else {
-                                                sizContent = sizContent + "<div class='col-md-4  BulkOrder1_" + stle + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-4'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-4'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-4'><center><input type =\"number\" id='" + stle + "_" + response.PriceList[i].Size + "' placeholder='Quantity'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
+                                                sizContent = sizContent + "<div class='col-md-4  BulkOrder1_" + stle + "' style=\"margin-bottom:10px;border: solid 1px;padding: 15px;\"><div class='row'><div class='col-md-4'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-4'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-4'><center><input type =\"number\" id='" + stle + "_" + response.PriceList[i].Size + "' placeholder='Quantity'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
                                             }
                                         }
                                     }
@@ -1739,7 +1985,7 @@ function GetDrpResultModelSwatch(stle, selStyle, orgStyle) {
                                         }
                                         else {
                                             if (response.HasReqData) {
-                                                sizContent = sizContent + "<div class='col-md-4 BulkOrder1_" + stle + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-3'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-3'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-3'><center><input type =\"number\" placeholder='Quantity' id='" + stle + "_" + response.PriceList[i].Size + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div><div class='col-md-3'><center><input   id='ReqData_" + stle + "_" + response.PriceList[i].Size + "'  type =\"text\" placeholder='" + response.ReqData + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
+                                                sizContent = sizContent + "<div class='col-md-4 BulkOrder1_" + stle + "' style=\"margin-bottom:10px;border: solid 1px;padding: 15px;\"><div class='row'><div class='col-md-3'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-3'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-3'><center><input type =\"number\" placeholder='Quantity' id='" + stle + "_" + response.PriceList[i].Size + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div><div class='col-md-3'><center><input   id='ReqData_" + stle + "_" + response.PriceList[i].Size + "'  type =\"text\" placeholder='" + response.ReqData + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
                                             }
                                             else {
                                                 sizContent = sizContent + "<div  class='col-md-1'><center><p>" + response.PriceList[i].Size + "</p><input  id=\"BulkSizeBox_" + response.PriceList[i].Size + "_" + style_nam + "\"  onblur=\"GetBulkPrice('" + response.SizeList[i] + "','" + style_nam + "','" + stylearr[1] + "')\" type =\"number\" class=\"BulkSizeBox_" + response.PriceList[i].Size + "_" + style_nam + " form-control\"  min=\"0\"  id='" + stle + "_" + response.PriceList[i].Size + "'  style=\"width:100%; text-align: center;  \"/><div style=\"margin-top:10px;margin-bottom:10px;\"><p><span id='LbPrice_" + style_nam + "_" + response.PriceList[i].Size + "'>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</span></p></div></center></div> ";
@@ -1835,16 +2081,6 @@ function GetDrpResultModelDemandSwatch(stle, selStyle, orgStyle) {
                             description.innerHTML = response.Description;
 
                             sizeFieldset[0].innerHTML = "";
-                            //for (var i = 0; i < response.ColorList.length ; i++) {
-                            //    if (response.ColorList.length > 1) {
-                            //        colorFieldset[0].innerHTML = "";
-                            //        clrContent = clrContent + "<label class='swatchLabel'><input type='radio'  id='radio' name=\"swatch_DemandColor_" + style_nam + "\" value='blue'/><span class='spanner1' onclick=\"getSelectedColorSwatch('" + style_nam + "','" + response.ColorList[i] + "')\"><center><bold>" + response.ColorList[i] + "</bold></center></span></label>";
-                            //    }
-                            //    else {
-                            //        colorFieldset[0].innerHTML = "";
-                            //        clrContent = clrContent + "<label class='swatchLabel'><input type='radio'  id='radio' name=\"swatch_DemandColor_" + style_nam + "\" checked=\"checked\"/><span class='spanner1' onclick=\"getSelectedColorSwatch('" + style_nam + "','" + response.ColorList[i] + "')\"><center><bold>" + response.ColorList[i] + "</bold></center></span></label>";
-                            //    }
-                            //}
                             for (var i = 0; i < response.SizeList.length ; i++) {
                                 if (response.SizeList.length > 1) {
                                     if (response.isManpack == false) {
@@ -1859,20 +2095,22 @@ function GetDrpResultModelDemandSwatch(stle, selStyle, orgStyle) {
                                         }
                                         else {
                                             if (response.HasReqData) {
-                                                sizContent = sizContent + "<div class='col-md-4 BulkOrder1_Demand_" + stle + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-3'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-3'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-3'><center><input type =\"number\" placeholder='Quantity'   min=\"0\" id='" + stle + "_" + response.PriceList[i].Size + "'   class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div><div class='col-md-3'><center><input type =\"text\" id='ReqData_" + stle + "_" + response.PriceList[i].Size + "' placeholder='" + response.ReqData + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
+                                                sizContent = sizContent + "<div class='col-md-4 BulkOrder1_Demand_" + stle + "' style=\"margin-bottom:10px;border: solid 1px;padding: 15px;\"><div class='row'><div class='col-md-3'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-3'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-3'><center><input type =\"number\" placeholder='Quantity'   min=\"0\" id='" + stle + "_" + response.PriceList[i].Size + "'   class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div><div class='col-md-3'><center><input type =\"text\" id='ReqData_" + stle + "_" + response.PriceList[i].Size + "' placeholder='" + response.ReqData + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
                                             }
                                             else {
-                                                sizContent = sizContent + "<div class='col-md-4 BulkOrder1_Demand_" + stle + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-4'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-4'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-4'><center><input type =\"number\" placeholder='Quantity'  id='" + stle + "_" + response.PriceList[i].Size + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
+                                                sizContent = sizContent + "<div class='col-md-4 BulkOrder1_Demand_" + stle + "' style=\"margin-bottom:10px;border: solid 1px;padding: 15px;\"><div class='row'><div class='col-md-4'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-4'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-4'><center><input type =\"number\" placeholder='Quantity'  id='" + stle + "_" + response.PriceList[i].Size + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
                                             }
                                         }
 
                                     }
                                     else {
                                         if (response.SizeList[i] == resp.Size) {
-                                            sizContent = sizContent + "<label class='swatchLabel'><input type='radio'  id='radio' name=\"swatch_DemandSize_" + style_nam + "\" checked=\"checked\"/><span class='spanner1'><center><bold>" + response.SizeList[i] + "</bold></center></span></label>";
+                                            sizContent = sizContent + "<label class='swatchLabel'><input type='radio'  id='radio' name=\"swatch_DemandSize_" + style_nam + "\" class='' value='" + response.SizeList[i] + "' checked=\"checked\"/><span class='spanner1'  onclick=\"getSelectedSizeDemandSwatch('" + style_nam + "','" + response.SizeList[i] + "')\"><center><bold>" + response.SizeList[i] + "</bold></center></span></label>";
+                                            //sizContent = sizContent + "<label class='swatchLabel'><input type='radio'  id='radio' name=\"swatch_DemandSize_" + style_nam + "\" checked=\"checked\"/><span class='spanner1'><center><bold>" + response.SizeList[i] + "</bold></center></span></label>";
                                         }
                                         else {
-                                            sizContent = sizContent + "<label class='swatchLabel'><input type='radio'  id='radio' name=\"swatch_DemandSize_" + style_nam + "\" value='blue'/><span class='spanner1'><center><bold>" + response.SizeList[i] + "</bold></center></span></label>";
+                                            sizContent = sizContent + "<label class='swatchLabel'><input type='radio'  id='radio' name=\"swatch_DemandSize_" + style_nam + "\" class='' value='" + response.SizeList[i] + "'  /><span class='spanner1'  onclick=\"getSelectedSizeDemandSwatch('" + style_nam + "','" + response.SizeList[i] + "')\"><center><bold>" + response.SizeList[i] + "</bold></center></span></label>";
+                                            //sizContent = sizContent + "<label class='swatchLabel'><input type='radio'  id='radio' name=\"swatch_DemandSize_" + style_nam + "\" value='blue'/><span class='spanner1'><center><bold>" + response.SizeList[i] + "</bold></center></span></label>";
                                         }
                                     }
                                 }
@@ -1883,10 +2121,10 @@ function GetDrpResultModelDemandSwatch(stle, selStyle, orgStyle) {
 
                                         } else {
                                             if (response.HasReqData) {
-                                                sizContent = sizContent + "<div class='col-md-4 BulkOrder1_Demand_" + stle + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-3'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-3'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-3'><center><input type =\"number\" placeholder='Quantity'   min=\"0\" id='" + stle + "_" + response.PriceList[i].Size + "'   class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div><div class='col-md-3'><center><input type =\"text\" id='ReqData_" + stle + "_" + response.PriceList[i].Size + "' placeholder='" + response.ReqData + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
+                                                sizContent = sizContent + "<div class='col-md-4 BulkOrder1_Demand_" + stle + "' style=\"margin-bottom:10px;border: solid 1px;padding: 15px;\"><div class='row'><div class='col-md-3'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-3'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-3'><center><input type =\"number\" placeholder='Quantity'   min=\"0\" id='" + stle + "_" + response.PriceList[i].Size + "'   class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div><div class='col-md-3'><center><input type =\"text\" id='ReqData_" + stle + "_" + response.PriceList[i].Size + "' placeholder='" + response.ReqData + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
                                             }
                                             else {
-                                                sizContent = sizContent + "<div class='col-md-4  BulkOrder1_Demand_" + stle + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-4'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-4'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-4'><center><input type =\"number\" id='" + stle + "_" + response.PriceList[i].Size + "'  placeholder='Quantity'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
+                                                sizContent = sizContent + "<div class='col-md-4  BulkOrder1_Demand_" + stle + "' style=\"margin-bottom:10px;border: solid 1px;padding: 15px;\"><div class='row'><div class='col-md-4'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-4'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-4'><center><input type =\"number\" id='" + stle + "_" + response.PriceList[i].Size + "'  placeholder='Quantity'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
                                             }
                                         }
                                     }
@@ -1908,10 +2146,10 @@ function GetDrpResultModelDemandSwatch(stle, selStyle, orgStyle) {
                             }
                             colorFieldset[0].innerHTML = clrContent != "" ? clrContent : colorFieldset[0].innerHTML;
                             sizeFieldset[0].innerHTML = cnt + sizContent;
-                            var priceId = "DimviewPrice" + style_nam;
+                            var priceId = "DimviewPriceinput1" + style_nam;
                             var price = document.getElementById(priceId);
-                            price.innerHTML = "";
-                            price.innerHTML = response.Price == 0 ? resp.price == "" ? "" : resp.price : response.Price;
+                            price.value = "";
+                            price.value = resp.price == null ? "" : resp.price;
                             $.ajax({
                                 type: "POST",
                                 url: "/Home/GetReqData/",
@@ -1957,10 +2195,10 @@ function GetDrpResultModelDemandSwatch(stle, selStyle, orgStyle) {
                                         }
                                         else {
                                             if (response.HasReqData) {
-                                                sizContent = sizContent + "<div class='col-md-4 BulkOrder1_Demand_" + stle + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-3'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-3'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-3'><center><input type =\"number\" placeholder='Quantity'   min=\"0\" id='" + stle + "_" + response.PriceList[i].Size + "'   class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div><div class='col-md-3'><center><input type =\"text\" id='ReqData_" + stle + "_" + response.PriceList[i].Size + "' placeholder='" + response.ReqData + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
+                                                sizContent = sizContent + "<div class='col-md-4 BulkOrder1_Demand_" + stle + "' style=\"margin-bottom:10px;border: solid 1px;padding: 15px;\"><div class='row'><div class='col-md-3'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-3'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-3'><center><input type =\"number\" placeholder='Quantity'   min=\"0\" id='" + stle + "_" + response.PriceList[i].Size + "'   class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div><div class='col-md-3'><center><input type =\"text\" id='ReqData_" + stle + "_" + response.PriceList[i].Size + "' placeholder='" + response.ReqData + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
                                             }
                                             else {
-                                                sizContent = sizContent + "<div class='col-md-4  BulkOrder1_Demand_" + stle + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-4'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-4'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-4'><center><input type =\"number\" placeholder='Quantity'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
+                                                sizContent = sizContent + "<div class='col-md-4  BulkOrder1_Demand_" + stle + "' style=\"margin-bottom:10px;border: solid 1px;padding: 15px;\"><div class='row'><div class='col-md-4'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-4'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-4'><center><input type =\"number\" placeholder='Quantity'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
                                             }
                                         }
 
@@ -1976,10 +2214,10 @@ function GetDrpResultModelDemandSwatch(stle, selStyle, orgStyle) {
                                         }
                                         else {
                                             if (response.HasReqData) {
-                                                sizContent = sizContent + "<div class='col-md-4 BulkOrder1_Demand_" + stle + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-3'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-3'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-3'><center><input type =\"number\" placeholder='Quantity'   min=\"0\" id='" + stle + "_" + response.PriceList[i].Size + "'   class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div><div class='col-md-3'><center><input type =\"text\" id='ReqData_" + stle + "_" + response.PriceList[i].Size + "' placeholder='" + response.ReqData + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
+                                                sizContent = sizContent + "<div class='col-md-4 BulkOrder1_Demand_" + stle + "' style=\"margin-bottom:10px;border: solid 1px;padding: 15px;\"><div class='row'><div class='col-md-3'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-3'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-3'><center><input type =\"number\" placeholder='Quantity'   min=\"0\" id='" + stle + "_" + response.PriceList[i].Size + "'   class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div><div class='col-md-3'><center><input type =\"text\" id='ReqData_" + stle + "_" + response.PriceList[i].Size + "' placeholder='" + response.ReqData + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
                                             }
                                             else {
-                                                sizContent = sizContent + "<div class='col-md-4  BulkOrder1_Demand_" + stle + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-4'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-4'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-4'><center><input type =\"number\" placeholder='Quantity'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
+                                                sizContent = sizContent + "<div class='col-md-4  BulkOrder1_Demand_" + stle + "' style=\"margin-bottom:10px;border: solid 1px;padding: 15px;\"><div class='row'><div class='col-md-4'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-4'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-4'><center><input type =\"number\" placeholder='Quantity'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
                                             }
                                         }
 
@@ -1991,7 +2229,7 @@ function GetDrpResultModelDemandSwatch(stle, selStyle, orgStyle) {
                             }
                             colorFieldset[0].innerHTML = clrContent;
                             sizeFieldset[0].innerHTML = cnt + sizContent;
-                            var priceId = "DimviewPrice" + style_nam;
+                            var priceId = "DimviewPriceinput" + style_nam;
                             var price = document.getElementById(priceId);
                             price.innerHTML = "";
                             price.innerHTML = response.Price == 0 ? "" : response.Price;
@@ -2172,7 +2410,7 @@ function GetDemandDrpResultModelSwatch(s, e) {
                             }
                             colorFieldset[0].innerHTML = clrContent;
                             sizeFieldset[0].innerHTML = sizContent;
-                            var priceId = "DimviewPrice" + style_nam;
+                            var priceId = "DimviewPriceinput" + style_nam;
                             var price = document.getElementById(priceId);
                             price.innerHTML = "";
                             price.innerHTML = response.Price == 0 ? resp.price == "" ? "" : resp.price : response.Price;
@@ -2199,7 +2437,7 @@ function GetDemandDrpResultModelSwatch(s, e) {
                             }
                             colorFieldset[0].innerHTML = clrContent;
                             sizeFieldset[0].innerHTML = sizContent;
-                            var priceId = "DimviewPrice" + style_nam;
+                            var priceId = "DimviewPriceinput" + style_nam;
                             var price = document.getElementById(priceId);
                             price.innerHTML = "";
                             price.innerHTML = response.Price == 0 ? "" : response.Price;
@@ -2297,13 +2535,25 @@ function getSelectedTemplateSize(s, e) {
 }
 
 function getSelectedSizeTemplateSwatch(style, size) {
-    var selectedSize = size;
+    var selectedSize = size; var selectedStyl = "";
+    var styleNames = "Swatch_Style_" + style;
+    var styles = document.getElementsByName(styleNames);
+    if (style.includes(",")) {
+        for (var i = 0; i < styles.length ; i++) {
+            if (styles[i].checked) {
+                selectedStyl = styles[i].value;
+            }
+        }
+    }
+    else {
+        selectedStyl = style;
+    }
     if (selectedSize != "") {
 
         $.ajax({
             type: "POST",
             url: "/Home/GetPrice/",
-            data: { 'StyleID': style, 'SizeId': selectedSize },
+            data: { 'StyleID': selectedStyl, 'SizeId': selectedSize },
             success: function (response) {
                 if (!response.includes("Login")) {
                     var priceId = "LbTemplatePrice" + style;
@@ -2354,6 +2604,7 @@ function addTocartTemplateSwatch(s, e) {
             sizeValue = sizeSwatch[0].offsetParent.innerText;
         }
     }
+
     if (colorSwatch.length > 1) {
         for (var i = 0; i < colorSwatch.length; i++) {
             if (colorSwatch[i].checked) {
@@ -2366,13 +2617,29 @@ function addTocartTemplateSwatch(s, e) {
             colorValue = colorSwatch[0].offsetParent.innerText;
         }
     }
+
     size = sizeValue != undefined & sizeValue != "" ? sizeValue : "";
     color = colorValue != undefined & colorValue != "" ? colorValue : "";
-    sStyle = stylearr[1];
+    if (stylearr[1].includes(',')) {
+        var name = 'Swatch_Style_FieldSet_' + stylearr[1];
+        var fieldSet = document.getElementsByName(name);
+        var selStyle;
+        for (var i = 0; i < fieldSet[0].elements.length; i++) {
+            if (fieldSet[0].elements[i].checked) {
+                selStyle = fieldSet[0].elements[i].value;
+            }
+        }
+        sStyle = selStyle;
+        descStyle = stylearr[1].split(',');
+    }
+    else {
+        sStyle = stylearr[1];
+    }
+
     var desc = descStyle == undefined ? stylearr[1] : descStyle[0];
     var Spin = "spinEdit_" + stylearr[1];
     var qty1 = document.getElementsByName(Spin);
-    description = document.getElementById("LbDescription" + desc).innerHTML;
+    description = document.getElementById("LbDescription" + stylearr[1].split(',')[0]).innerHTML;
     price = document.getElementById("LbTemplatePrice" + stylearr[1]).innerHTML;
     qty = qty1[0].value;
     if (description != "" && price != "" && size != "" && color != "" && qty != "" && qty != "0") {
@@ -2399,7 +2666,27 @@ function addTocartTemplateSwatch(s, e) {
         });
     }
     else {
-        alert("Please select all the fields in the cards!");
+        if (description == "" | description == null) {
+            alert("Please select a Description");
+        }
+        else if (price == "" | price == null) {
+
+            alert("Please select a Price");
+        }
+        else if (size == "" | size == null) {
+
+            alert("Please select a Size");
+        } else if (color == "" | color == null) {
+
+            alert("Please select a Color");
+        } else if (qty == "" | qty == null) {
+
+            alert("Please select a Qty");
+        }
+        else if (sStyle == "" | sStyle == null) {
+
+            alert("Please select a Style");
+        }
     }
 }
 
@@ -2450,7 +2737,27 @@ function addTocartTemplate(s, e) {
         });
     }
     else {
-        alert("Please select all the fields in the cards!");
+        if (description == "" | description == null) {
+            alert("Please select a Description");
+        }
+        else if (price == "" | price == null) {
+
+            alert("Please select a Price");
+        }
+        else if (size == "" | size == null) {
+
+            alert("Please select a Size");
+        } else if (color == "" | color == null) {
+
+            alert("Please select a Colour");
+        } else if (qty == "" | qty == null) {
+
+            alert("Please select a Quantity");
+        }
+        else if (sStyle == "" | sStyle == null) {
+
+            alert("Please select a Style");
+        }
     }
 }
 
@@ -3205,7 +3512,32 @@ jQuery(document).ready(function () {
             }
         }
     });
+    //$('.qtyplus_pts').click(function (e) {
+    //    fieldName = $(this).attr('field');
+    //    var valuee = document.getElementsByName(fieldName);
+    //    $.ajax({
+    //        type: "post",
+    //        url: "",
+    //        data:,
+    //        success:function(response)
+    //        {
 
+    //        }
+    //    });
+    //});
+    //$(".qtyminus_pts").click(function (e) {
+    //    fieldName = $(this).attr('field');
+    //    var valuee = document.getElementsByName(fieldName);
+    //    $.ajax({
+    //        type: "post",
+    //        url: "",
+    //        data:,
+    //        success:function(response)
+    //        {
+
+    //        }
+    //    });
+    //});
 });
 
 function getAssemblySwatch(style) {
@@ -3259,14 +3591,15 @@ function myFunction(msg) {
 }
 
 function openNav() {
-
     document.getElementById("mySidebar").style.width = "600px";
-    //document.getElementById("main").style.marginLeft = "500px";
+    var searchBtn = document.getElementById("EmpSearch");
+    searchBtn.outerHTML = "<button class='openbtn btn' id='EmpSearch' onclick='closeNav();'><span class='glyphicon glyphicon-search'></span> Employee search </button>";
 }
 
 function closeNav() {
     document.getElementById("mySidebar").style.width = "0";
-    //document.getElementById("main").style.marginLeft = "0";
+    var searchBtn = document.getElementById("EmpSearch");
+    searchBtn.outerHTML = "<button class='openbtn btn' id='EmpSearch' onclick='openNav();'><span class='glyphicon glyphicon-search'></span> Employee search </button>";
 }
 
 function GetEmpGrid() {
@@ -3483,8 +3816,8 @@ function FillCustRefandDeliveryFields(s, e) {
             address3.SetValue(resp.BusAdd.Address3);
             city.SetValue(resp.BusAdd.City);
             postCode.SetValue(resp.BusAdd.PostCode);
-            commentBox.SetValue(resp.CommentExternal);
             ref.SetValue(resp.custRef);
+            commentBox.SetValue(resp.CommentExternal);
             nomCode.SetValue(resp.nomCode);
             nomCode1.SetValue(resp.nomCode);
             nomCode2.SetValue(resp.nomCode);
@@ -3495,6 +3828,8 @@ function FillCustRefandDeliveryFields(s, e) {
 }
 
 function AcceptOrder(s, e) {
+    var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
+    loadPopup.Show();
     var addDescription = ASPxClientControl.GetControlCollection().GetByName("CmbAddress");
     var addDesc = addDescription != null ? addDescription.GetValue() : "";
     var ref = ASPxClientControl.GetControlCollection().GetByName("txtCustRef");
@@ -3521,6 +3856,7 @@ function AcceptOrder(s, e) {
                         message = message + "Your uniform order has been successfully placed,order reference:" + resp.results[k].OrderNo + " (" + resp.results[k].EmployeeId + ")." + resp.results[k].OrderConfirmation + ". \n";
                     }
                     alert(message);
+                    loadPopup.Hide()
                     window.location = "/Employee/Index/";
                 }
             }
@@ -3528,6 +3864,7 @@ function AcceptOrder(s, e) {
     }
     else {
         alert("Please fill address and customer reference");
+        loadPopup.Hide();
     }
     //        }
     //        else {
@@ -3590,11 +3927,11 @@ function GetNavigation(data) {
                         window.location = resp;
                     }
                     else {
-                        alert("Please fill Address & Customer/PO reference");
+                        alert("Please fill Customer/PO reference");
                     }
                 },
                 error: function (resp) {
-                    alert("Please fill Address & Customer/PO reference");
+                    alert("Please fill Customer/PO reference");
                 }
             });
 
@@ -3635,9 +3972,8 @@ function FillAllCurrentHeaderData(s, e) {
                 address3.SetValue(resp.DelAddress3);
                 city.SetValue(resp.DelCity);
                 postCode.SetValue(resp.DelPostCode);
-
-                commentBox.SetValue(resp.CommentExternal);
                 custRef.SetValue(resp.CustRef);
+                commentBox.SetValue(resp.CommentExternal);
                 nomCode.SetValue(resp.nomCode);
                 nomCode1.SetValue(resp.nomCode);
                 nomCode2.SetValue(resp.nomCode);
@@ -3722,14 +4058,14 @@ function GetDetailsBasedonGrid(empId, busId) {
             address3.SetValue(resp.BusAdd.Address3);
             city.SetValue(resp.BusAdd.City);
             postCode.SetValue(resp.BusAdd.PostCode);
+            custRef.SetValue(resp.custRef);
+            commentBox.SetValue(resp.CommentExternal);
             txtTotGoods.SetValue(resp.ordeTotal);
             txtCarrierCharges.SetValue(resp.carriage);
             txtOrdTotal.SetValue(resp.Total);
             txtVAT.innerHTML = resp.VatPercent;
             txtVAT1.SetValue(resp.totalVat);
             txtGrndTot.SetValue(resp.GrossTotal);
-            commentBox.SetValue(resp.CommentExternal);
-            custRef.SetValue(resp.custRef);
             nomCode.SetValue(resp.nomCode);
             nomCode1.SetValue(resp.nomCode1);
             nomCode2.SetValue(resp.nomCode2);
@@ -3794,11 +4130,11 @@ function NextEmployee() {
                     window.location = resp;
                 }
                 else {
-                    alert("Please fill Address & Customer/PO reference");
+                    alert("Please fill Customer/PO reference");
                 }
             },
             error: function (resp) {
-                alert("Please fill Address & Customer/PO reference");
+                alert("Please fill Customer/PO reference");
             }
         });
     }
@@ -3839,11 +4175,11 @@ function ContinueShop() {
                     window.location = resp;
                 }
                 else {
-                    alert("Please fill Address & Customer/PO reference");
+                    alert("Please fill Customer/PO reference");
                 }
             },
             error: function (resp) {
-                alert("Please fill Address & Customer/PO reference");
+                alert("Please fill Customer/PO reference");
             }
         });
     }
@@ -3886,11 +4222,11 @@ function UpdateCurrentEmp() {
                     MVCxClientUtils.FinalizeCallback();
                 }
                 else {
-                    alert("Please fill Address & Customer/PO reference");
+                    alert("Please fill Customer/PO reference");
                 }
             },
             error: function (resp) {
-                alert("Please fill Address & Customer/PO reference");
+                alert("Please fill Customer/PO reference");
             }
         });
 
@@ -4133,9 +4469,11 @@ function addToCartBulkOrder1(s, e) {
     else {
         if (contnt != "") {
             alert(contnt);
+            loadPopup.Hide();
         }
         else {
             alert("Please select add a quantity");
+            loadPopup.Hide();
         }
     }
 
@@ -4146,8 +4484,7 @@ function GetPriceValue(id) {
     $("#" + id).val(s);
 }
 
-function addTocartTemplateBulkOrder1(s, e)
-{
+function addTocartTemplateBulkOrder1(s, e) {
     var SizePriceArray = [];
     var QtySizePriceArr1 = [];
     var QtySizePriceArr;
@@ -4289,7 +4626,14 @@ function addTocartTemplateBulkOrder1(s, e)
             alert(contnt);
         }
         else {
-            alert("Please select add a quantity");
+            if (color == "" | color == null) {
+                loadPopup.Hide();
+                alert("Please select a color");
+            }
+            else if (QtySizePriceArr1.length == 0) {
+                loadPopup.Hide();
+                alert("Please select add a quantity");
+            }
         }
     }
 }
@@ -4451,9 +4795,11 @@ function addToCartDemandBulkOrder1(s, e) {
     else {
         if (contnt != "") {
             alert(contnt);
+            loadPopup.Hide();
         }
         else {
             alert("Please select add a quantity");
+            loadPopup.Hide();
         }
     }
 }
@@ -4474,8 +4820,8 @@ function GetSelectedOrder() {
         data: { 'orderType': orderType },
         type: "Post",
         success: function (resp) {
-            if (resp) {
-                window.location.reload();
+            if (resp != "") {
+                window.location = "/Employee/Index?BusinessID=" + resp;
             }
         },
         failure: function (resp) {
@@ -4525,7 +4871,16 @@ function SetValue111(ucode, type) {
 
             }
         });
-         
+
     }
-   
+
 }
+
+function IsCallBack(s, e) {
+    e.customArgs["IsCallBack"] = true;
+}
+
+
+$('#qty_textbox').change(function () {
+    alert("hi");
+});

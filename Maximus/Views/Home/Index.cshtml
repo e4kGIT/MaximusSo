@@ -9,7 +9,7 @@
         </div>*@
     @*@Html.ActionLink("Return to employee grid", "Index", "Employee")*@
 
-    <div class="col-md-10 col-xs-12 col-sm-12 col-lg-10">
+    <div class="col-md-7 col-xs-7 col-sm-7 col-lg-7">
         @{
             if (Session["BuisnessId"] != null)
             {
@@ -32,60 +32,126 @@
                         </div>
                     </div>
                     <div class="col-md-6">
-                      @{if (((List<string>)Session["Templates"]).Count() > 0)
-                          {
-                            <span><b>Template:</b></span>ViewContext.Writer.Write(string.Format("{0}", Session["UcodeDesc"].ToString()));
-                          }
-                          else
-                          { <span><b>Ucode:</b></span>
-                              ViewContext.Writer.Write(string.Format("{0}", Session["UcodeDesc"].ToString()));
-                          }
+                        @{if (((List<string>)Session["Templates"]).Count() > 0)
+                            {
+                                <span><b>Template:</b></span>ViewContext.Writer.Write(string.Format("{0}", Session["UcodeDesc"].ToString()));
+                            }
+                            else
+                            { <span><b>Ucode:</b></span>
+                                ViewContext.Writer.Write(string.Format("{0}", Session["UcodeDesc"].ToString()));
+                            }
                         }
                     </div>
-                          }
-                          else
-                          {
-                            <div class="col-md-6">
-                                @{  <span><b>Ucode:</b></span>
+                            }
+                            else
+                            {
+                                <div class="col-md-6">
+                                    @{  <span><b>Ucode:</b></span>
                                         ViewContext.Writer.Write(string.Format("{0}", Session["UcodeDesc"].ToString()));
-                                    
-                                }
-                            </div>
-                                        }
+
                                     }
-                                    else
-                                    {
-                                        if (Session["SelectedEmp"] != null)
+                                </div>
+                                            }
+                                        }
+                                        else
                                         {
-                                            var s = Convert.ToInt32(Session["qty"]);
-                                            string content = "";
-                                            if (((List<string>)Session["Templates"]).Count > 0)
+                                            if (Session["SelectedEmp"] != null)
                                             {
-                                                content = string.Format("<div class=\"col-md-3\"><p><b>Employee Id:</b></p>{0}  </div> <div class=\"col-md-3\"> <p><b>EmployeeName:</b></p> {2}</div><div class=\"col-md-6\"> <p><b>Templates:</b></p> {1}</div><div class=\"col-md-12\"> <p><b>Ucode Description:</b></p>{3}</div>", Session["SelectedEmp"].ToString(), Session["SelectedUcode"].ToString(), Session["EmpName"].ToString(), Session["UcodeDesc"].ToString());
+                                                var s = Convert.ToInt32(Session["qty"]);
+                                                string content = "";
+                                                if (((List<string>)Session["Templates"]).Count > 0)
+                                                {
+                                                    content = string.Format("<div class=\"col-md-3\"><p><b>Employee Id:</b></p>{0}  </div> <div class=\"col-md-3\"> <p><b>EmployeeName:</b></p> {2}</div><div class=\"col-md-6\"> <p><b>Templates:</b></p> {1}</div><div class=\"col-md-12\"> <p><b>Ucode Description:</b></p>{3}</div>", Session["SelectedEmp"].ToString(), Session["SelectedUcode"].ToString(), Session["EmpName"].ToString(), Session["UcodeDesc"].ToString());
+                                                }
+                                                else
+                                                {
+                                                    content = string.Format("<div class=\"col-md-3\"><p><b>Employee Id:</b></p>{0}  </div> <div class=\"col-md-3\"> <p><b>EmployeeName:</b></p> {2}</div><div class=\"col-md-6\"> <p><b>Ucodes:</b></p> {1}</div><div class=\"col-md-12\"> <p><b>Ucode Description:</b></p>{3}</div>", Session["SelectedEmp"].ToString(), Session["SelectedUcode"].ToString(), Session["EmpName"].ToString(), Session["UcodeDesc"].ToString());
+                                                }
+                                                ViewContext.Writer.Write(content);
                                             }
-                                            else
-                                            {
-                                                content = string.Format("<div class=\"col-md-3\"><p><b>Employee Id:</b></p>{0}  </div> <div class=\"col-md-3\"> <p><b>EmployeeName:</b></p> {2}</div><div class=\"col-md-6\"> <p><b>Ucodes:</b></p> {1}</div><div class=\"col-md-12\"> <p><b>Ucode Description:</b></p>{3}</div>", Session["SelectedEmp"].ToString(), Session["SelectedUcode"].ToString(), Session["EmpName"].ToString(), Session["UcodeDesc"].ToString());
-                                            }
-                                            ViewContext.Writer.Write(content);
                                         }
-                                    }
         }
-        @*<div class="col-md-5 pull-right">
-                <button class="btn" style=""
-            </div>*@
+
+
     </div>
-    @*<div class="col-md-2 col-sm-12 col-lg-2 col-xs-12" id="CartwidCount">
-        <div class="pull-right">
-            <button class="btn" style="background-color:#009885;color:white" onclick="GetCart()"><b>View Basket &nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-shopping-cart" style="color:white;font-size:25px"></span><sup class="badge" id="lblCartCount">@Convert.ToInt32(Session["qty"])</sup></b></button>
-            <br />
-            <br />
-        </div>
+    <div class="col-md-5 col-lg-5 col-xs-5 col-sm-5">
+        @{
+            if (Convert.ToBoolean(Session["POINTSREQ"].ToString()))
+            {
+                if (Session["Pointsmodel"] != null)
+                {
+                    if (((Maximus.Data.models.PointsModel)Session["Pointsmodel"]).TotalPoints>0)
+                    {
+                                <div id="PointsDiv">
+                    <div class='col-md-6'> <span><b>Total Points: </b></span> @ViewBag.TotalPoints </div> <div class='col-md-6'> <span><b>Available Points: </b></span>  @ViewBag.availabelPoints </div> <div class='col-md-6'> <span><b>Used Points: </b></span>@ViewBag.usedPoints </div><div class='col-md-6'> <span><b>Cart Points: </b></span>@ViewBag.inCartPoints  </div>
+                     
+                </div>
+                        }
+                    }
+                }
+            }
+    </div>
+    @*<div class="col-md-5 col-lg-5 col-xs-5 col-sm-5">
+            @{
 
-    </div>*@
-
+                if (Session["costCenter"] != null)
+                {
+                    if (((List<Maximus.Data.models.tblsop_customerorder_template_costcentre>)Session["costCenter"]).Count > 0)
+                    {
+                        Html.DevExpress().ComboBox(x =>
+                        {
+                            x.Name = "SiteCodeCmb";
+                            x.Properties.Caption = "Sitecode";
+                            x.Properties.ClientSideEvents.SelectedIndexChanged = "AddClientCode";
+                            //
+                            var projectcode = Session["selectedClientcode"] != null ? Session["selectedClientcode"].ToString().Split('|')[0].Trim() : "";
+                            var data =( (List<Maximus.Data.models.tblsop_customerorder_template_costcentre>)Session["costCenter"]).Where(xa=>xa.ProjectCode==projectcode).Select(xa=>xa.ProjectCode).ToList().IndexOf(projectcode);
+                            if (((List<Maximus.Data.models.tblsop_customerorder_template_costcentre>)Session["costCenter"]).Count > 1)
+                            {
+                                foreach (var dat in (List<Maximus.Data.models.tblsop_customerorder_template_costcentre>)Session["costCenter"])
+                                {
+                                    x.Properties.Items.Add(dat.ProjectCode + " | " + dat.SiteName);
+                                }
+                            }
+                            else
+                            {
+                                x.SelectedIndex = 0;
+                                x.Properties.Items.Add(((List<Maximus.Data.models.tblsop_customerorder_template_costcentre>)Session["costCenter"])[0].ProjectCode + " | " + ((List<Maximus.Data.models.tblsop_customerorder_template_costcentre>)Session["costCenter"])[0].SiteName);
+                            }
+                            if(data>-1)
+                            {
+                                x.SelectedIndex = data;
+                            }
+                        }).GetHtml();
+                    }
+                }
+            }
+        </div>*@
 </div>
 <br />
+@*@{
+        <br />
+        if (Convert.ToBoolean(Session["POINTSREQ"]))
+        {
+            if (((Maximus.Data.models.PointsModel)Session["Pointsmodel"]).LstStyles != null)
+            {
+            <div class="row backgrnd">
+                <br />
+                @{
+                    var content = "";
+                    content = content + "<center>" + Session["SelectedUcode"].ToString() + "- (Total Points :" + ViewBag.TotalPoints + ")</center>";
+                    ViewContext.Writer.Write(content);
+                }
+                <br />
+
+
+            </div>
+
+                        }
+                    }
+
+    }
+    <br />*@
 <div class="row" style="padding:0px">
     <div class="col-md-2 col-lg-2 col-xs-2 col-sm-12" style="padding-left:0px;padding-right:3px;">
         <center>
@@ -93,7 +159,7 @@
         </center>
     </div>
     <div class="col-md-10 col-lg-10 col-xs-12 col-sm-12" style="padding-left:3px;padding-right:0px">
- 
+
         @Html.DevExpress().ButtonEdit(sett =>
    {
        sett.Name = "searchPanel";
@@ -111,9 +177,9 @@
         </div>
 
     </div>
-   
+
 </div>
- 
+
 @*<span disabled class="input-group-addon"><span class="glyphicon glyphicon-search"></span></span>*@
 
 
@@ -206,8 +272,8 @@
 
 @Html.DevExpress().PopupControl(sett =>
 {
-   // sett.Width = System.Web.UI.WebControls.Unit.Pixel(1500);
-   sett.Height = System.Web.UI.WebControls.Unit.Pixel(800);
+    // sett.Width = System.Web.UI.WebControls.Unit.Pixel(1500);
+    sett.Height = System.Web.UI.WebControls.Unit.Pixel(800);
     sett.PopupVerticalAlign = PopupVerticalAlign.Middle;
     sett.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
     sett.Name = "DimAllocPop";
@@ -225,7 +291,8 @@
     sett.HeaderText = "Grouped products";
     sett.SetContent(() =>
     {
-        ViewContext.Writer.Write("<div><div id='DimId'></div></div>");
+
+        ViewContext.Writer.Write("<br/><div><div id='DimId'></div></div>");
     });
 }).GetHtml()
 
@@ -253,4 +320,5 @@
         ViewContext.Writer.Write("<div id='AssemblyInfo'></div>");
     });
 }).GetHtml()
+
 

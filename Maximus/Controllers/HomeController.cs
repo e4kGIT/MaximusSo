@@ -70,6 +70,11 @@ namespace Maximus.Controllers
         public readonly FskColour _fskColor;
         public readonly UcodeByFreeTextView _ucodeByFreetext;
         public readonly StyleColorSize _styleColorSize;
+        public readonly CUstomerOrderTemplateCostcenters _costCenter;
+        public readonly PointStyle _pointStyle;
+        public readonly PointsCard _pointsCard;
+        public readonly PointsByUcode _pointsByUcode;
+
         public HomeController(IUnitOfWork unitOfWork = null)
         {
             _unitOfWork = unitOfWork;
@@ -112,6 +117,13 @@ namespace Maximus.Controllers
             Dimension1 dimension = new Dimension1(_unitOfWork);
             FskSetValues fskSetValues = new FskSetValues(_unitOfWork);
             UcodeByFreeTextView ucodeByFreetext = new UcodeByFreeTextView(_unitOfWork);
+            CUstomerOrderTemplateCostcenters costCenter = new CUstomerOrderTemplateCostcenters(_unitOfWork);
+            PointStyle pointStyle = new PointStyle(_unitOfWork);
+            PointsCard pointsCard = new PointsCard(_unitOfWork);
+            PointsByUcode pointsByUcode = new PointsByUcode(_unitOfWork);
+            _pointsByUcode = pointsByUcode;
+            _pointStyle = pointStyle;
+            _pointsCard = pointsCard;
             _ucodeByFreetext = ucodeByFreetext;
             _fskSetValues = fskSetValues;
             _styleColorSize = styleColorSize;
@@ -155,21 +167,77 @@ namespace Maximus.Controllers
         public ActionResult Index()
         {
             Session["BulkQtyModel"] = new List<BulkOrderModel>();
+            string busId = Session["BuisnessId"].ToString();
             if (((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Count() > 0)
             {
                 if ((bool)Session["IsBulkOrder1"] == false)
                 {
+                    if (((List<string>)Session["SelectedTemplates"]).Count > 0)
+                    {
+                        Session["costCenter"] = _home.GetCostCenterTemplate((List<string>)Session["SelectedTemplates"], busId);
+                    }
+                    else if (Session["selectedUcodes"] != null)
+                    {
+                        List<string> selUcode = new List<string>();
+                        selUcode.Add(Session["selectedUcodes"].ToString());
+                        Session["costCenter"] = _home.GetCostCenterUcode(selUcode, busId);
+                    }
                     Session["qty"] = ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Any(x => x.EmployeeID == Session["SelectedEmp"].ToString()) ? ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.EmployeeID == Session["SelectedEmp"].ToString()).First().SalesOrderLine != null ? ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.EmployeeID == Session["SelectedEmp"].ToString()).First().SalesOrderLine.Where(x => x.OriginalLineNo == null).Sum(x => x.OrdQty) : 0 : 0;
                 }
                 else if ((bool)Session["IsManPack"] == false)
                 {
-                    Session["qty"] = ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Any(x => x.UCodeId != null) ? ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Any(x => x.UCodeId.ToLower() == Session["selectedUcodes"].ToString().ToLower()) ? ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.UCodeId.ToLower() == Session["selectedUcodes"].ToString().ToLower()).First().SalesOrderLine != null ? ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.UCodeId.ToLower() == Session["selectedUcodes"].ToString().ToLower()).Any(x => x.SalesOrderLine != null) ? ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.UCodeId.ToLower() == Session["selectedUcodes"].ToString().ToLower()).Where(x => x.SalesOrderLine != null).Count() : 0 : 0 : 0 : 0;
+                    if (((List<string>)Session["SelectedTemplates"]).Count > 0)
+                    {
+
+                        var salesLine = ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Any(x => x.Template != null) ? ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Any(x => x.IsTemplate) ? ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.IsTemplate).First().SalesOrderLine != null ? ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.IsTemplate).First().SalesOrderLine : new List<SalesOrderLineViewModel>() : new List<SalesOrderLineViewModel>() : new List<SalesOrderLineViewModel>();
+                        if (salesLine.Count > 0)
+                        {
+                            Session["qty"] = salesLine.Where(x => x.OrdQty != 0).Sum(x => x.OrdQty);
+                        }
+                        else
+                        {
+                            Session["qty"] = 0;
+                        }
+                    }
+                    else
+                    {
+                        var salesLine = ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Any(x => x.UCodeId != null) ? ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Any(x => x.IsUcode) ? ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.IsUcode).First().SalesOrderLine != null ? ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.IsUcode).First().SalesOrderLine : new List<SalesOrderLineViewModel>() : new List<SalesOrderLineViewModel>() : new List<SalesOrderLineViewModel>();
+                        if (salesLine.Count > 0)
+                        {
+                            Session["qty"] = salesLine.Where(x => x.OrdQty != 0).Sum(x => x.OrdQty);
+                        }
+                        else
+                        {
+                            Session["qty"] = 0;
+
+                        }
+                    }
+
                 }
 
             }
             else
             {
                 Session["qty"] = 0;
+            }
+
+           
+            if (Convert.ToBoolean(Session["POINTSREQ"]))
+            {
+                string ucode = Session["SelectedUcode"].ToString();
+                string empId = Session["SelectedEmp"].ToString();
+                var salesHead = ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Any(x => x.EmployeeID == empId) ? ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.EmployeeID == empId).First() : new SalesOrderHeaderViewModel();
+                var salesLine = salesHead.SalesOrderLine;
+                Session["Pointsmodel"] = _home.GetPointsModel(Session["selectedUcodes"].ToString(), busId);
+                int totPoints = ((Maximus.Data.models.PointsModel)Session["Pointsmodel"]).TotalPoints;
+                int inCartPoints = salesLine.Count > 0 ? salesLine.Sum(x => x.TotalPoints) : 0;
+                int totAvailPts= _pointsCard.Exists(x => x.BusinessID == busId & x.EmployeeID == empId & x.Year == 0) ?_pointsCard.GetAll(x=>x.BusinessID==busId & x.EmployeeID==empId & x.Year==0).ToList().Sum(x=>x.SOPoints).Value:0; 
+                int availabelPoints = totPoints - inCartPoints-totAvailPts;
+                int usedPoints = totPoints - availabelPoints;
+                ViewBag.TotalPoints = totPoints;
+                ViewBag.inCartPoints = inCartPoints;
+                ViewBag.availabelPoints = availabelPoints;
+                ViewBag.usedPoints = totPoints - availabelPoints;
             }
             return View();
         }
@@ -189,9 +257,9 @@ namespace Maximus.Controllers
                     var result = _styleGroups.GetAll(x => x.Description != "" && groups.Contains(x.GroupID)).ToList();
                     return PartialView("_getAllGroups", result);
                 }
-                else if (((List<string>)Session["SelectedTemplate"]).Count > 0)
+                else if (((List<string>)Session["SelectedTemplates"]).Count > 0)
                 {
-                    var result1 = (List<string>)Session["SelectedTemplate"];
+                    var result1 = (List<string>)Session["SelectedTemplates"];
                     var model = new List<int>();
                     foreach (var item in result1)
                     {
@@ -229,7 +297,7 @@ namespace Maximus.Controllers
             string businessId = Session["BuisnessId"].ToString();
             if (((List<string>)Session["Templates"]).Count > 0)
             {
-                List<string> result = (List<string>)Session["SelectedTemplate"];
+                List<string> result = (List<string>)Session["SelectedTemplates"];
                 foreach (var item in result)
                 {
                     model.AddRange(_dataConnection.GetStyleViewModel(item, businessId));
@@ -311,7 +379,6 @@ namespace Maximus.Controllers
                         Price = x.Price
                     }).ToList();
                 }
-
             }
             else
             {
@@ -327,21 +394,6 @@ namespace Maximus.Controllers
                     {
                         string ucode = Session["SelectedUcode"].ToString();
                         List<string> freeTextLst = (List<string>)Session["UcFreeTxt"];
-                        //model = _dataConnection.GetAllUcodeByFreetextview(freeTextLst, ucode).Where(x => freeTextLst.Contains(x.FreeText) & x.UCodeID == ucode).Select(x => new styleViewmodel
-                        //{
-                        //    StyleID = x.StyleID,
-                        //    ProductGroup = x.Product_Group != null ? x.Product_Group.Value : 0,
-                        //    StyleImage = x.StyleImage == "" | x.StyleImage == null ? "/StyleImages/notfound.png" : "/" + x.StyleImage,
-                        //    Assembly = _customAssembly.Exists(d => d.ParentStyleID == x.StyleID & d.isChargeable == false & d.CustID == custId) |
-                        //  _allAssemblies.Exists(d => d.ParentStyleID == x.StyleID & d.isChargeable == false) ? 1 : 0,
-                        //    //Assembly = _customAssembly.GetAll(d => d.ParentStyleID == x.StyleID).Any() ? _customAssembly.GetAll(d => d.ParentStyleID == x.StyleID && d.isChargeable == 0).Any() ? 1 : 0 : 0,
-                        //    isAllocated = x.StyleID.Contains(",") ? _fskStyleFreetext.Exists(s => s.StyleId == x.StyleID.Substring(0, x.StyleID.IndexOf(",")) & s.FreeTextType == "DIMALLOC") ? true : false : _fskStyleFreetext.Exists(s => s.StyleId == x.StyleID & s.FreeTextType == "DIMALLOC") ? true : false,
-                        //    // Dimensions = x.FreeText
-                        //    Dimensions = x.StyleID.Contains(",") ? _fskStyleFreetext.Exists(s => s.StyleId == x.StyleID.Substring(0, x.StyleID.IndexOf(",")) & s.FreeTextType == "DIMALLOC") ? _fskStyleFreetext.GetAll(s => s.StyleId == x.StyleID.Substring(0, x.StyleID.IndexOf(",")) & s.FreeTextType == "DIMALLOC").FirstOrDefault().FreeText : "" : _fskStyleFreetext.Exists(s => s.StyleId == x.StyleID & s.FreeTextType == "DIMALLOC") ? _fskStyleFreetext.GetAll(s => s.StyleId == x.StyleID & s.FreeTextType == "DIMALLOC").FirstOrDefault().FreeText : "",
-                        //    SeqNO = x.SeqNo.Value,
-                        //    Freetext = x.FreeText,
-                        //    OriginalStyleid = x.StyleID
-                        //}).ToList();
                         model = _ucodeByFreeText.GetAll(x => freeTextLst.Contains(x.FreeText) && x.UCodeID == ucode).ToList().Select(x => new styleViewmodel
                         {
                             StyleID = x.StyleID,
@@ -387,10 +439,10 @@ namespace Maximus.Controllers
                     {
                         data1.StyleID = data1.StyleID == data1.Freetext ? data1.StyleID : _dataConnection.GetFitAllocString(data1.Freetext);
                     }
-                    var ssss = Session["SelectedEmp"].ToString();
+
                     foreach (var data1 in model)
                     {
-                        data1.Reqdata = _dataConnection.GetReqData(data1.StyleID);
+                        data1.Reqdata = _dataConnection.GetReqData(data1.OriginalStyleid);
                         data1.Description = _tblFskStyle.GetAll(x => data1.StyleID.Contains(x.StyleID)).First().Description;
                         if (!data1.StyleID.Contains(","))
                         {
@@ -479,6 +531,7 @@ namespace Maximus.Controllers
         #region GetPriceStats
         public string GetPriceStats()
         {
+            var s = Session["Price"].ToString().ToLower();
             return Session["Price"].ToString().ToLower();
         }
         #endregion
@@ -722,9 +775,10 @@ namespace Maximus.Controllers
         #endregion
 
         #region  getCard
-        public ActionResult GetCard(string StyleID, string Orgstyle)
+        public ActionResult GetCard(string StyleID, string Orgstyle, string caption = "")
         {
             //StyleID = "TSB LJ1/L";
+            Session["CatagoryCaption"] = caption;
             var appPath = System.Web.HttpContext.Current.Request.MapPath(@"~\");
             string ucode = Session["SelectedUcode"].ToString();
 
@@ -903,18 +957,54 @@ namespace Maximus.Controllers
         }
         #endregion
 
-        #region AddItemsToCart
-        public JsonResult AddToCart(string description = "", string price = "", string size = "", string color = "", string qty = "", string style = "", string orgStyl = "", string entQty = "", string reqData1 = "", string reason = "", string QtySizePriceArr = "")
+        #region AddClientCode
+        public string SetClientcode(string SetClientcode)
         {
             string result = "";
+            if (SetClientcode != "")
+            {
+                result = "success";
+                Session["selectedClientcode"] = SetClientcode;
+            }
+            return result;
+        }
+        #endregion
+
+        #region AddItemsToCart
+        public JsonResult AddToCart(string description = "", string price = "", string size = "", string color = "", string qty = "", string style = "", string orgStyl = "", string entQty = "", string reqData1 = "", string reason = "", string QtySizePriceArr = "", string selectedSitecode = "")
+        {
+            string result = "";
+            string selUcode = Session["SelectedUcode"] == null ? "" : Session["SelectedUcode"].ToString();
+            string selTemplate = Session["SelectedTemplate"] == null ? "" : Session["SelectedTemplate"].ToString();
             var appPath = System.Web.HttpContext.Current.Request.MapPath(@"~\");
             var salesOrderLines = new List<SalesOrderLineViewModel>();
             var salesOrderHeader = (List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"];
-            long lineNo = 0;
+            long lineNo = 0; string busId = Session["BuisnessId"].ToString();
+
+            var points = _pointStyle.Exists(x => x.BusinessID == busId && x.StyleID == style && x.UcodeID == selUcode) ? _pointStyle.GetAll(x => x.BusinessID == busId && x.StyleID == style && x.UcodeID == selUcode).First().Points : 0;
+
+
             if (salesOrderHeader.Count != 0)
             {
-                salesOrderLines = salesOrderHeader.Any(x => x.EmployeeID == Session["SelectedEmp"].ToString()) ? salesOrderHeader.Where(x => x.EmployeeID == Session["SelectedEmp"].ToString()).FirstOrDefault().SalesOrderLine != null ?
-                  salesOrderHeader.Where(x => x.EmployeeID == Session["SelectedEmp"].ToString()).FirstOrDefault().SalesOrderLine.ToList() : new List<SalesOrderLineViewModel>() : new List<SalesOrderLineViewModel>();
+                if ((bool)Session["IsBulkOrder1"] == false)
+                {
+                    salesOrderLines = salesOrderHeader.Any(x => x.EmployeeID == Session["SelectedEmp"].ToString()) ? salesOrderHeader.Where(x => x.EmployeeID == Session["SelectedEmp"].ToString()).FirstOrDefault().SalesOrderLine != null ?
+                      salesOrderHeader.Where(x => x.EmployeeID == Session["SelectedEmp"].ToString()).FirstOrDefault().SalesOrderLine.ToList() : new List<SalesOrderLineViewModel>() : new List<SalesOrderLineViewModel>();
+                }
+                else if ((bool)Session["IsBulkOrder1"] == true)
+                {
+                    if (((List<string>)Session["SelectedTemplates"]).Count() > 0)
+                    {
+                        salesOrderLines = salesOrderHeader.Any(x => x.IsTemplate) ? salesOrderHeader.Where(x => x.IsTemplate).FirstOrDefault().SalesOrderLine != null ?
+                        salesOrderHeader.Where(x => x.IsTemplate).FirstOrDefault().SalesOrderLine.ToList() : new List<SalesOrderLineViewModel>() : new List<SalesOrderLineViewModel>();
+
+                    }
+                    else
+                    {
+                        salesOrderLines = salesOrderHeader.Any(x => x.IsUcode) ? salesOrderHeader.Where(x => x.IsUcode).FirstOrDefault().SalesOrderLine != null ?
+                     salesOrderHeader.Where(x => x.IsUcode).FirstOrDefault().SalesOrderLine.ToList() : new List<SalesOrderLineViewModel>() : new List<SalesOrderLineViewModel>();
+                    }
+                }
             }
             else
             {
@@ -935,8 +1025,8 @@ namespace Maximus.Controllers
                         DelCountry = addresArr.Count() > 0 ? addresArr[7] : "",
                         EmployeeName = Session["EmpName"].ToString(),
                         EmployeeID = Session["SelectedEmp"].ToString(),
-                        CustRef = _salesOrderHeader.GetAll(x => x.CustID == Session["BuisnessId"].ToString()).First().CustRef,
-                        Comments = _salesOrderHeader.GetAll(x => x.CustID == Session["BuisnessId"].ToString()).First().Comments,
+                        //CustRef = _salesOrderHeader.GetAll(x => x.CustID == Session["BuisnessId"].ToString()).First().CustRef,
+                        //Comments = _salesOrderHeader.GetAll(x => x.CustID == Session["BuisnessId"].ToString()).First().Comments,
                     });
                 }
                 catch (Exception e)
@@ -946,11 +1036,41 @@ namespace Maximus.Controllers
             }
             if (salesOrderLines.Count > 0)
             {
-                lineNo = salesOrderLines.Where(x => x.EmployeeId == Session["SelectedEmp"].ToString()).OrderByDescending(x => x.LineNo).FirstOrDefault().LineNo + 1;
+                if ((bool)Session["IsBulkOrder1"] == false)
+                {
+                    lineNo = salesOrderLines.Where(x => x.EmployeeId == Session["SelectedEmp"].ToString()).OrderByDescending(x => x.LineNo).FirstOrDefault().LineNo + 1;
+                }
+                else if ((bool)Session["IsBulkOrder1"] == true)
+                {
+                    if (((List<string>)Session["SelectedTemplates"]).Count() > 0)
+                    {
+                        lineNo = salesOrderLines.OrderByDescending(x => x.LineNo).FirstOrDefault().LineNo + 1;
+
+                    }
+                    else
+                    {
+                        lineNo = salesOrderLines.OrderByDescending(x => x.LineNo).FirstOrDefault().LineNo + 1;
+                    }
+                }
             }
             else
             {
-                lineNo = salesOrderLines.Any(x => x.EmployeeId == Session["SelectedEmp"].ToString()) ? salesOrderLines.Where(x => x.EmployeeId == Session["SelectedEmp"].ToString()).Count() + 1 : 1;
+
+                if ((bool)Session["IsBulkOrder1"] == false)
+                {
+                    lineNo = salesOrderLines.Any(x => x.EmployeeId == Session["SelectedEmp"].ToString()) ? salesOrderLines.Where(x => x.EmployeeId == Session["SelectedEmp"].ToString()).Count() + 1 : 1;
+                }
+                else if ((bool)Session["IsBulkOrder1"] == true)
+                {
+                    if (((List<string>)Session["SelectedTemplates"]).Count() > 0)
+                    {
+                        lineNo = salesOrderLines.Any(x => x.SelectedTemplate == Session["SelectedTemplate"].ToString()) ? salesOrderLines.Where(x => x.SelectedTemplate == Session["SelectedTemplate"].ToString()).Count() + 1 : 1;
+                    }
+                    else
+                    {
+                        lineNo = salesOrderLines.Any(x => x.SelectedUcode == Session["SelectedUcode"].ToString()) ? salesOrderLines.Where(x => x.SelectedUcode == Session["SelectedUcode"].ToString()).Count() + 1 : 1;
+                    }
+                }
             }
             var chargableAssembs = new List<SalesOrderLineViewModel>();
             var OptionalAssembs = new List<SalesOrderLineViewModel>();
@@ -961,13 +1081,54 @@ namespace Maximus.Controllers
                 {
                     foreach (var item in lst)
                     {
+                        lineNo = salesOrderLines.Count > 0 ? salesOrderLines.Last().LineNo + 1 : 1;
                         try
                         {
                             var Pricenull = Convert.ToDouble(item.Price) == 0 ? Convert.ToDouble(GetPrice(style, item.Size)) : Convert.ToDouble(item.Price);
+                            if ((bool)Session["IsBulkOrder1"] == false)
+                            {
 
+                                salesOrderLines.Add(new SalesOrderLineViewModel
+                                {
+                                    ColourID = color,
+                                    LineNo = lineNo,
+                                    Description = description,
+                                    OrdQty = item.Qty,
+                                    Price = Pricenull,
+                                    SizeID = item.Size,
+                                    StyleID = style,
+                                    EmployeeId = Session["SelectedEmp"].ToString(),
+                                    EmployeeName = Session["EmpName"].ToString(),
+                                    StyleImage = _tblFskStyle.Exists(x => x.StyleID.Contains(orgStyl)) ? _tblFskStyle.GetAll(x => x.StyleID.Contains(orgStyl)).FirstOrDefault().StyleImage : Url.Content("~/StyleImages/notfound.png"),
+                                    orgStyleId = orgStyl,
+                                    VatPercent = _dataConnection.GetVatPercent(style, item.Size),
+                                    EntQty = entQty,
+                                    FreeText1 = item.ReqData,
+                                    DeliveryDate = _dataConnection.GetDeliveryDate(Convert.ToInt32(Session["intNoOfday"]) - 1, Convert.ToBoolean(Session["IncWendsDel"])),
+                                    VatCode1 = _dataConnection.GetVatCode(),
+                                    RepId = Convert.ToInt32(Session["Rep_Id"].ToString()),
+                                    Currency_Exchange_Rate = Convert.ToDouble(Session["CurrencyExchangeRate"]),
+                                    Cost1 = _dataConnection.GetCostPrice(style, item.Size, color, Session["Currency_Name"].ToString(), 1, 0),
+                                    IssueUOM1 = 1,
+                                    IssueQty1 = Convert.ToInt32(item.Qty),
+                                    StockingUOM1 = 1,
+                                    SOPDetail4 = reason,
+                                    SOPDetail5 = selectedSitecode != "" ? selectedSitecode.Split('|')[0].Trim() : "",
+                                    CatagoryCaption = Session["CatagoryCaption"].ToString()
+                                });
+                            }
+                            else if ((bool)Session["IsBulkOrder1"] == true)
+                            {
+                                if (((List<string>)Session["SelectedTemplates"]).Count() > 0)
+                                {
+                                    salesOrderLines.Add(new SalesOrderLineViewModel { ColourID = color, LineNo = lineNo, Description = description, OrdQty = item.Qty, Price = Pricenull, SizeID = item.Size, StyleID = style, SelectedTemplate = Session["SelectedTemplate"].ToString(), StyleImage = _tblFskStyle.Exists(x => x.StyleID.Contains(orgStyl)) ? _tblFskStyle.GetAll(x => x.StyleID.Contains(orgStyl)).FirstOrDefault().StyleImage : Url.Content("~/StyleImages/notfound.png"), orgStyleId = orgStyl, VatPercent = _dataConnection.GetVatPercent(style, item.Size), EntQty = entQty, FreeText1 = item.ReqData, DeliveryDate = _dataConnection.GetDeliveryDate(Convert.ToInt32(Session["intNoOfday"]) - 1, Convert.ToBoolean(Session["IncWendsDel"])), VatCode1 = _dataConnection.GetVatCode(), RepId = Convert.ToInt32(Session["Rep_Id"].ToString()), Currency_Exchange_Rate = Convert.ToDouble(Session["CurrencyExchangeRate"]), Cost1 = _dataConnection.GetCostPrice(style, item.Size, color, Session["Currency_Name"].ToString(), 1, 0), IssueUOM1 = 1, IssueQty1 = Convert.ToInt32(item.Qty), StockingUOM1 = 1, SOPDetail4 = reason, SOPDetail5 = selectedSitecode != "" ? selectedSitecode.Split('|')[0].Trim() : "", CatagoryCaption = Session["CatagoryCaption"] != null ? Session["CatagoryCaption"].ToString() : "" });
+                                }
+                                else
+                                {
+                                    salesOrderLines.Add(new SalesOrderLineViewModel { ColourID = color, LineNo = lineNo, Description = description, OrdQty = item.Qty, Price = Pricenull, SizeID = item.Size, StyleID = style, SelectedUcode = Session["SelectedUcode"].ToString(), StyleImage = _tblFskStyle.Exists(x => x.StyleID.Contains(orgStyl)) ? _tblFskStyle.GetAll(x => x.StyleID.Contains(orgStyl)).FirstOrDefault().StyleImage : Url.Content("~/StyleImages/notfound.png"), orgStyleId = orgStyl, VatPercent = _dataConnection.GetVatPercent(style, item.Size), EntQty = entQty, FreeText1 = item.ReqData, DeliveryDate = _dataConnection.GetDeliveryDate(Convert.ToInt32(Session["intNoOfday"]) - 1, Convert.ToBoolean(Session["IncWendsDel"])), VatCode1 = _dataConnection.GetVatCode(), RepId = Convert.ToInt32(Session["Rep_Id"].ToString()), Currency_Exchange_Rate = Convert.ToDouble(Session["CurrencyExchangeRate"]), Cost1 = _dataConnection.GetCostPrice(style, item.Size, color, Session["Currency_Name"].ToString(), 1, 0), IssueUOM1 = 1, IssueQty1 = Convert.ToInt32(item.Qty), StockingUOM1 = 1, SOPDetail4 = reason, SOPDetail5 = selectedSitecode != "" ? selectedSitecode.Split('|')[0].Trim() : "", CatagoryCaption = Session["CatagoryCaption"] != null ? Session["CatagoryCaption"].ToString() : "" });
+                                }
 
-                            salesOrderLines.Add(new SalesOrderLineViewModel { ColourID = color, LineNo = lineNo, Description = description, OrdQty = item.Qty, Price = Pricenull, SizeID = item.Size, StyleID = style, EmployeeId = Session["SelectedEmp"].ToString(), EmployeeName = Session["EmpName"].ToString(), StyleImage = _tblFskStyle.Exists(x => x.StyleID.Contains(orgStyl)) ? _tblFskStyle.GetAll(x => x.StyleID.Contains(orgStyl)).FirstOrDefault().StyleImage : Url.Content("~/StyleImages/notfound.png"), orgStyleId = orgStyl, VatPercent = _dataConnection.GetVatPercent(style, item.Size), EntQty = entQty, FreeText1 = item.ReqData, DeliveryDate = _dataConnection.GetDeliveryDate(Convert.ToInt32(Session["intNoOfday"]) - 1, Convert.ToBoolean(Session["IncWendsDel"])), VatCode1 = _dataConnection.GetVatCode(), RepId = Convert.ToInt32(Session["Rep_Id"].ToString()), Currency_Exchange_Rate = Convert.ToDouble(Session["CurrencyExchangeRate"]), Cost1 = _dataConnection.GetCostPrice(style, item.Size, color, Session["Currency_Name"].ToString(), 1, 0), IssueUOM1 = 1, IssueQty1 = Convert.ToInt32(item.Qty), StockingUOM1 = 1, SOPDetail4 = reason });
-
+                            }
 
                         }
                         catch (Exception e)
@@ -975,10 +1136,12 @@ namespace Maximus.Controllers
                             var EmployeeId = Session["SelectedEmp"].ToString();
                             var EmployeeName = Session["EmpName"].ToString();
                         }
-                        chargableAssembs = _home.GetChargableAssembly(Session["intNoOfday"].ToString(), Session["IncWendsDel"].ToString(), Session["CurrencyExchangeRate"].ToString(), Session["Currency_Name"].ToString(), Session["Rep_Id"].ToString(), style, lineNo, Convert.ToInt64(item.Qty), Session["SelectedEmp"].ToString(), Session["EmpName"].ToString(), Session["BuisnessId"].ToString());
+
+                        chargableAssembs = _home.GetChargableAssembly(Session["intNoOfday"].ToString(), Session["IncWendsDel"].ToString(), Session["CurrencyExchangeRate"].ToString(), Session["Currency_Name"].ToString(), Session["Rep_Id"].ToString(), style, lineNo, Convert.ToInt64(item.Qty), Session["SelectedEmp"].ToString(), Session["EmpName"].ToString(), Session["BuisnessId"].ToString(), selTemplate, selUcode);
                         if (chargableAssembs.Count > 0)
                         {
                             salesOrderLines.AddRange(chargableAssembs);
+                            chargableAssembs = new List<SalesOrderLineViewModel>();
                         }
 
                         OptionalAssembs = new List<SalesOrderLineViewModel>();
@@ -987,12 +1150,13 @@ namespace Maximus.Controllers
                         {
                             if (((List<string>)Session["assemList"]).Count > 0)
                             {
-                                OptionalAssembs = _home.GetOptionalAssembly(Session["intNoOfday"].ToString(), Session["IncWendsDel"].ToString(), Session["CurrencyExchangeRate"].ToString(), Session["Currency_Name"].ToString(), Session["Rep_Id"].ToString(), (List<string>)Session["assemList"], style, lineNo, salesOrderLines, Convert.ToInt64(item.Qty), Session["SelectedEmp"].ToString(), Session["EmpName"].ToString(), salesOrderLines.Count, Session["BuisnessId"].ToString());
+                                OptionalAssembs = _home.GetOptionalAssembly(Session["intNoOfday"].ToString(), Session["IncWendsDel"].ToString(), Session["CurrencyExchangeRate"].ToString(), Session["Currency_Name"].ToString(), Session["Rep_Id"].ToString(), (List<string>)Session["assemList"], style, lineNo, salesOrderLines, Convert.ToInt64(item.Qty), Session["SelectedEmp"].ToString(), Session["EmpName"].ToString(), salesOrderLines.Count, Session["BuisnessId"].ToString(), selTemplate, selUcode);
                             }
                         }
                         if (OptionalAssembs.Count > 0)
                         {
                             salesOrderLines.AddRange(OptionalAssembs);
+                            OptionalAssembs = new List<SalesOrderLineViewModel>();
                         }
                         foreach (var data1 in salesOrderLines)
                         {
@@ -1029,13 +1193,47 @@ namespace Maximus.Controllers
                                 data1.StyleImage = Url.Content("~/StyleImages/notfound.png");
                             }
                         }
-                        salesOrderHeader.Where(x => x.EmployeeID == Session["SelectedEmp"].ToString()).FirstOrDefault().SalesOrderLine = salesOrderLines;
-                        Session["SalesOrderHeader"] = salesOrderHeader;
-                        Session["assemList"] = null;
-                        Session["SalesOrderLines"] = salesOrderLines.Where(x => x.EmployeeId == Session["SelectedEmp"].ToString()).ToList();
-                        Session["qty"] = salesOrderLines.Where(x => x.EmployeeId == Session["SelectedEmp"].ToString() && x.OriginalLineNo == null).Sum(x => x.OrdQty);
-                        lineNo = lineNo + 1;
                     }
+                    if ((((List<string>)Session["Templates"]).Count() > 0))
+                    {
+                        try
+                        {
+                            var sjcvjv = Session["SelectedTemplate"].ToString();
+                            var jvjv = salesOrderHeader.Where(x => x.IsTemplate).FirstOrDefault();
+                            salesOrderHeader.Where(x => x.IsTemplate).FirstOrDefault().SalesOrderLine = salesOrderLines;
+                        }
+                        catch (Exception e)
+                        {
+
+                        }
+                    }
+                    else
+                    {
+                        var ucodeId = Session["SelectedUcode"].ToString();
+                        try
+                        {
+                            salesOrderHeader.Where(x => x.IsUcode).FirstOrDefault().SalesOrderLine = salesOrderLines;
+                        }
+                        catch (Exception e)
+                        {
+
+                        }
+                    }
+                    Session["SalesOrderHeader"] = salesOrderHeader;
+                    Session["assemList"] = null;
+                    if (((List<string>)Session["SelectedTemplates"]).Count() > 0)
+                    {
+                        Session["SalesOrderLines"] = salesOrderLines.Where(x => x.SelectedTemplate == Session["SelectedTemplate"].ToString()).ToList();
+                        Session["qty"] = salesOrderLines.Where(x => x.SelectedTemplate == Session["SelectedTemplate"].ToString() && x.OriginalLineNo == null).Sum(x => x.OrdQty);
+                    }
+                    else
+                    {
+                        Session["SalesOrderLines"] = salesOrderLines.Where(x => x.SelectedUcode == Session["SelectedUcode"].ToString().ToString()).ToList();
+                        Session["qty"] = salesOrderLines.Where(x => x.SelectedUcode == Session["SelectedUcode"].ToString().ToString() && x.OriginalLineNo == null).Sum(x => x.OrdQty);
+                    }
+
+                    lineNo = lineNo + 1;
+
                     result = "<button class=\"btn\" onclick=\"GetCart()\" style=\"background-color:#009885;color:white\"><b>View Basket &nbsp;&nbsp;&nbsp;<span class=\"glyphicon glyphicon-shopping-cart\" style=\"color:white;font-size:25px\" ></span><sup class=\"badge\" id=\"lblCartCount\">" + Session["qty"].ToString() + "</sup></b></button>";
 
                     return Json(result, JsonRequestBehavior.AllowGet);
@@ -1067,8 +1265,8 @@ namespace Maximus.Controllers
                             DelCountry = addresArr.Count() > 0 ? addresArr[7] : "",
                             EmployeeName = Session["EmpName"].ToString(),
                             EmployeeID = Session["SelectedEmp"].ToString(),
-                            CustRef = _salesOrderHeader.GetAll(x => x.CustID == Session["BuisnessId"].ToString()).First().CustRef,
-                            Comments = _salesOrderHeader.GetAll(x => x.CustID == Session["BuisnessId"].ToString()).First().Comments,
+                            //CustRef = _salesOrderHeader.GetAll(x => x.CustID == Session["BuisnessId"].ToString()).First().CustRef,
+                            //Comments = _salesOrderHeader.GetAll(x => x.CustID == Session["BuisnessId"].ToString()).First().Comments,
                         });
                     }
                     catch (Exception e)
@@ -1088,7 +1286,8 @@ namespace Maximus.Controllers
                 {
                     try
                     {
-                        salesOrderLines.Add(new SalesOrderLineViewModel { ColourID = color, LineNo = lineNo, Description = description, OrdQty = Convert.ToInt64(qty), Price = Convert.ToDouble(price) == 0 ? Convert.ToDouble(GetPrice(style, size)) : Convert.ToDouble(price), SizeID = size, StyleID = style, EmployeeId = Session["SelectedEmp"].ToString(), EmployeeName = Session["EmpName"].ToString(), StyleImage = _tblFskStyle.Exists(x => x.StyleID.Contains(orgStyl)) ? _tblFskStyle.GetAll(x => x.StyleID.Contains(orgStyl)).FirstOrDefault().StyleImage : Url.Content("~/StyleImages/notfound.png"), orgStyleId = orgStyl, VatPercent = _dataConnection.GetVatPercent(style, size), EntQty = entQty, FreeText1 = reqData1, DeliveryDate = _dataConnection.GetDeliveryDate(Convert.ToInt32(Session["intNoOfday"]) - 1, Convert.ToBoolean(Session["IncWendsDel"])), VatCode1 = _dataConnection.GetVatCode(), RepId = Convert.ToInt32(Session["Rep_Id"].ToString()), Currency_Exchange_Rate = Convert.ToDouble(Session["CurrencyExchangeRate"]), Cost1 = _dataConnection.GetCostPrice(style, size, color, Session["Currency_Name"].ToString(), 1, 0), IssueUOM1 = 1, IssueQty1 = Convert.ToInt32(qty), StockingUOM1 = 1, SOPDetail4 = reason });
+
+                        salesOrderLines.Add(new SalesOrderLineViewModel { ColourID = color, LineNo = lineNo, Description = description, OrdQty = Convert.ToInt64(qty), Price = Convert.ToDouble(price) == 0 ? Convert.ToDouble(GetPrice(style, size)) : Convert.ToDouble(price), SizeID = size, StyleID = style, EmployeeId = Session["SelectedEmp"].ToString(), EmployeeName = Session["EmpName"].ToString(), StyleImage = _tblFskStyle.Exists(x => x.StyleID.Contains(orgStyl)) ? _tblFskStyle.GetAll(x => x.StyleID.Contains(orgStyl)).FirstOrDefault().StyleImage : Url.Content("~/StyleImages/notfound.png"), orgStyleId = orgStyl, VatPercent = _dataConnection.GetVatPercent(style, size), EntQty = entQty, FreeText1 = reqData1, DeliveryDate = _dataConnection.GetDeliveryDate(Convert.ToInt32(Session["intNoOfday"]) - 1, Convert.ToBoolean(Session["IncWendsDel"])), VatCode1 = _dataConnection.GetVatCode(), RepId = Convert.ToInt32(Session["Rep_Id"].ToString()), Currency_Exchange_Rate = Convert.ToDouble(Session["CurrencyExchangeRate"]), Cost1 = _dataConnection.GetCostPrice(style, size, color, Session["Currency_Name"].ToString(), 1, 0), IssueUOM1 = 1, IssueQty1 = Convert.ToInt32(qty), StockingUOM1 = 1, SOPDetail4 = reason, SOPDetail5 = selectedSitecode != "" ? selectedSitecode.Split('|')[0].Trim() : "", Points = points.Value, TotalPoints = points.Value * Convert.ToInt32(qty), CatagoryCaption = Session["CatagoryCaption"] != null ? Session["CatagoryCaption"].ToString() : "" });
                     }
                     catch (Exception e)
                     {
@@ -1156,6 +1355,19 @@ namespace Maximus.Controllers
                     Session["qty"] = salesOrderLines.Where(x => x.EmployeeId == Session["SelectedEmp"].ToString() && x.OriginalLineNo == null).Sum(x => x.OrdQty);
                     result = "<button class=\"btn\" onclick=\"GetCart()\" style=\"background-color:#009885;color:white\"><b>View Basket &nbsp;&nbsp;&nbsp;<span class=\"glyphicon glyphicon-shopping-cart\" style=\"color:white;font-size:25px\" ></span><sup class=\"badge\" id=\"lblCartCount\">" + Session["qty"].ToString() + "</sup></b></button>";
 
+                    if (Convert.ToBoolean(Session["POINTSREQ"]))
+                    {
+                        string thisEmp = Session["SelectedEmp"].ToString();
+
+                        string ucode = Session["SelectedUcode"].ToString();
+                        var salesHead = ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]);
+                        var salesLine = salesHead.Any(s => s.SalesOrderLine.Count > 0 && s.UCodeId == ucode) ? salesHead.Where(s => s.SalesOrderLine.Count > 0 && s.UCodeId == ucode).First().SalesOrderLine : new List<SalesOrderLineViewModel>();
+                        int totAvailPts = _pointsCard.Exists(x => x.BusinessID == busId & x.EmployeeID == thisEmp & x.Year == 0) ? _pointsCard.GetAll(x => x.BusinessID == busId & x.EmployeeID == thisEmp & x.Year == 0).ToList().Sum(x => x.SOPoints).Value : 0;
+                        int totalPoints = ((PointsModel)Session["Pointsmodel"]).TotalPoints;
+                        int availablePoints = totalPoints - salesLine.Sum(x => x.TotalPoints)- totAvailPts;
+                        ((PointsModel)Session["Pointsmodel"]).AvailablePoints = availablePoints;
+                        ((PointsModel)Session["Pointsmodel"]).UsedPoints = salesLine.Sum(x => x.TotalPoints);
+                    }
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
             }
@@ -1223,31 +1435,76 @@ namespace Maximus.Controllers
                     basketCount = salesLine.Any(x => x.orgStyleId == orgStyl | x.StyleID == StyleId) ? salesLine.Where(x => x.orgStyleId == orgStyl | x.StyleID == StyleId).Sum(x => x.OrdQty) : 0;
                 }
             }
+            int minMandatoryPts = 0;
+            List<int> missValues = new List<int>();
+            var orgStyleNPoints = ((List<Maximus.Data.models.StyleAndMinPoints>)Session["StyleMinPoints"]);
+            
+                foreach (var sale in salesLine.Where(x => x.OriginalLineNo == null))
+                {
+                if (orgStyleNPoints.Any(x => x.OrgStyle == sale.orgStyleId))
+                {
+                    int minThispts = orgStyleNPoints.Where(x => x.OrgStyle == sale.orgStyleId).First().MinPoints;
+                    int thisQty = Convert.ToInt32(salesLine.Where(x => x.OriginalLineNo == null && x.orgStyleId == sale.orgStyleId).Sum(x => x.OrdQty));
+                    if (thisQty < minThispts)
+                    {
+                        missValues.Add(orgStyleNPoints.Where(x => x.OrgStyle == sale.orgStyleId).OrderBy(x => x.Points).First().Points * (minThispts - thisQty));
+                    }
+                }
+            }
+            minMandatoryPts = missValues.Sum();
             em.EmpId = "<b>" + Session["SelectedEmp"].ToString() + "</b> to style: <b>" + StyleId + "</b>";
-            if (ColorId != "" && orgStyl != "")
+             
+            if (Convert.ToBoolean(Session["POINTSREQ"]))
             {
-                string result = "";
-                var entitlement = _ucodes.Exists(x => x.StyleID == orgStyl && x.ColourID == ColorId && x.UCodeID == Ucodes) ? _ucodes.GetAll(x => x.StyleID == orgStyl && x.ColourID == ColorId && x.UCodeID == Ucodes).FirstOrDefault().AnnualIssue : 0;
-                entitlement = entitlement == 0 ? _ucodes.GetAll(x => x.StyleID == orgStyl && x.UCodeID == Ucodes).FirstOrDefault().AnnualIssue : entitlement;
-                string PreviousOrder = _dataConnection.GetAllPreviousData(Session["SelectedEmp"].ToString(), Session["BuisnessId"].ToString(), orgStyl, basketCount);
-                PreviousOrder = PreviousOrder == "" ? "<tr><td>Issued: 0</td></tr><tr><td>In Basket: " + basketCount + "</td></tr><tr><td>Previous History: N/A</td></tr></table>" : PreviousOrder;
-                result = "<table class=\"table\"><tr><td>Entitlement: " + entitlement + "</td></tr>" + PreviousOrder;
-
-                em.Result = result;
-
-                return Json(em);
+                if (((Maximus.Data.models.PointsModel)Session["Pointsmodel"]).LstStyles != null)
+                {
+                    string result = "";
+                    string ucode = Session["SelectedUcode"].ToString();
+                    string empId = Session["SelectedEmp"].ToString();
+                    string busId = Session["BuisnessId"].ToString();
+                    var salesHead = ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Any(x => x.EmployeeID == empId) ? ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.EmployeeID == empId).First() : new SalesOrderHeaderViewModel();
+                   
+                    Session["Pointsmodel"] = _home.GetPointsModel(Session["selectedUcodes"].ToString(), busId);
+                    int totPoints = ((Maximus.Data.models.PointsModel)Session["Pointsmodel"]).TotalPoints;
+                    int inCartPoints = salesLine.Count > 0 ? salesLine.Sum(x => x.TotalPoints) : 0;
+                    int totAvailPts = _pointsCard.Exists(x => x.BusinessID == busId & x.EmployeeID == empId & x.Year == 0) ? _pointsCard.GetAll(x => x.BusinessID == busId & x.EmployeeID == empId & x.Year == 0).ToList().Sum(x => x.SOPoints).Value : 0;
+                    int availabelPoints = totPoints - totAvailPts - inCartPoints;
+                    int usedPoints = totPoints - availabelPoints;
+                    
+                    result = "<table class=\"table\"><tr><td>Total points: " + totPoints + "</td></tr><tr><td>Used points: " + usedPoints + "</td></tr><tr><td>Available points: " + availabelPoints + "</td></tr></table>";
+                    em.Result = result;
+                    em.minMandatoryPts = minMandatoryPts;
+                    return Json(em);
+                }
             }
-            else if (ColorId == "" && orgStyl != "")
+            else
             {
-                string result = "";
-                var entitlement = _ucodes.Exists(x => x.StyleID == orgStyl && x.UCodeID == Ucodes) ? _ucodes.GetAll(x => x.StyleID == orgStyl && x.UCodeID == Ucodes).FirstOrDefault().AnnualIssue : 0;
-                entitlement = entitlement == 0 ? _ucodes.GetAll(x => x.StyleID == orgStyl && x.UCodeID == Ucodes).FirstOrDefault().AnnualIssue : entitlement;
-                string PreviousOrder = _dataConnection.GetAllPreviousData(Session["SelectedEmp"].ToString(), Session["BuisnessId"].ToString(), orgStyl, basketCount);
-                PreviousOrder = PreviousOrder == "" ? "<tr><td>Issued: 0</td></tr><tr><td>In Basket: " + basketCount + "</td></tr><tr><td>Previous History: N/A</td></tr></table>" : PreviousOrder;
-                result = "<table class=\"table\"><tr><td>Entitlement: " + entitlement + "</td></tr>" + PreviousOrder;
-                em.Result = result;
-                return Json(em);
+                if (ColorId != "" && orgStyl != "")
+                {
+                    string result = "";
+                    var entitlement = _ucodes.Exists(x => x.StyleID == orgStyl && x.ColourID == ColorId && x.UCodeID == Ucodes) ? _ucodes.GetAll(x => x.StyleID == orgStyl && x.ColourID == ColorId && x.UCodeID == Ucodes).FirstOrDefault().AnnualIssue : 0;
+                    entitlement = entitlement == 0 ? _ucodes.GetAll(x => x.StyleID == orgStyl && x.UCodeID == Ucodes).FirstOrDefault().AnnualIssue : entitlement;
+                    string PreviousOrder = _dataConnection.GetAllPreviousData(Session["SelectedEmp"].ToString(), Session["BuisnessId"].ToString(), orgStyl, basketCount);
+                    PreviousOrder = PreviousOrder == "" ? "<tr><td>Issued: 0</td></tr><tr><td>In Basket: " + basketCount + "</td></tr><tr><td>Previous History: N/A</td></tr></table>" : PreviousOrder;
+                    result = "<table class=\"table\"><tr><td>Entitlement: " + entitlement + "</td></tr>" + PreviousOrder;
+
+                    em.Result = result;
+
+                    return Json(em);
+                }
+                else if (ColorId == "" && orgStyl != "")
+                {
+                    string result = "";
+                    var entitlement = _ucodes.Exists(x => x.StyleID == orgStyl && x.UCodeID == Ucodes) ? _ucodes.GetAll(x => x.StyleID == orgStyl && x.UCodeID == Ucodes).FirstOrDefault().AnnualIssue : 0;
+                    entitlement = entitlement == 0 ? _ucodes.GetAll(x => x.StyleID == orgStyl && x.UCodeID == Ucodes).FirstOrDefault().AnnualIssue : entitlement;
+                    string PreviousOrder = _dataConnection.GetAllPreviousData(Session["SelectedEmp"].ToString(), Session["BuisnessId"].ToString(), orgStyl, basketCount);
+                    PreviousOrder = PreviousOrder == "" ? "<tr><td>Issued: 0</td></tr><tr><td>In Basket: " + basketCount + "</td></tr><tr><td>Previous History: N/A</td></tr></table>" : PreviousOrder;
+                    result = "<table class=\"table\"><tr><td>Entitlement: " + entitlement + "</td></tr>" + PreviousOrder;
+                    em.Result = result;
+                    return Json(em);
+                }
             }
+
             em.Result = "<table class=\"table\"><tr><td>Entitlement:  0</td></tr><tr><td>Issued: 0</td></tr><tr><td>Previous History: N/A</td></tr></table>";
             return Json(em, JsonRequestBehavior.AllowGet);
 
@@ -1258,51 +1515,113 @@ namespace Maximus.Controllers
         #region GetBtnStatus
         [HttpPost]
         public string GetBtnStatus(string ordQty = "", string color = "", string style = "", string qty = "", string orgStyl = "")
-        {
+         {
+            var orgStyleNPoints = ((List<Maximus.Data.models.StyleAndMinPoints>)Session["StyleMinPoints"]);
             string result = "";
             string Ucodes = Session["SelectedUcode"] != null ? Session["SelectedUcode"].ToString() : "";
-            string busId = "";
-            string empId = "";
+            string busId = Session["BuisnessId"].ToString();
+            string empId = (Session["SelectedEmp"].ToString());
             var issuedDiff = 0;
             var salesOrderLines = ((List<SalesOrderLineViewModel>)Session["SalesOrderLines"]).Where(X => X.orgStyleId != null).ToList();
             var onCartLst = salesOrderLines.Where(x => x.orgStyleId.Trim().ToLower() == orgStyl.Trim().ToLower()).ToList();
             var onCartVal = onCartLst.Sum(x => x.OrdQty);
+            int minMandatoryPts = 0;
             if (Session["OverrideEnt"].ToString().ToLower().Trim() != "show")
             {
-
-                var s = Session["ALLOW_OVERRIDE_ENT"].ToString().ToLower();
-                if (ordQty != "" & color != "" & style != "" & qty != "")
+                if (((Maximus.Data.models.PointsModel)Session["Pointsmodel"]).LstStyles != null)
                 {
-                    int difference = 0;
-                    int oQty = Convert.ToInt32(ordQty);
-                    var entitlement = _ucodes.Exists(x => x.StyleID.ToLower().Trim() == orgStyl.ToLower().Trim() && x.UCodeID == Ucodes) ? _ucodes.GetAll(x => x.StyleID.ToLower().Trim() == orgStyl.ToLower().Trim() && x.UCodeID == Ucodes).FirstOrDefault().AnnualIssue : 0;
-                    var issuedLst = _stockCard.Exists(x => x.BusinessID == busId && x.ColourID.Trim().ToLower() == color.Trim().ToLower() && x.EmployeeID == empId && x.Year == 0 && x.StyleID.Trim().ToLower() == orgStyl.Trim().ToLower()) ? _stockCard.GetAll(x => x.BusinessID == busId && x.ColourID.Trim().ToLower() == color.Trim().ToLower() && x.EmployeeID == empId && x.Year == 0 && x.StyleID.Trim().ToLower() == orgStyl.Trim().ToLower()).Select(x => new IssuedQtyModel { Invqty = x.InvQty.Value, SOqty = x.SOQty.Value, Pickqty = x.PickQty.Value }).ToList() : new List<IssuedQtyModel>();
-                    var issued = 0;
-                    if (issuedLst.Count > 0)
+                    var salesHeader = ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]);
+                    List<int> values = new List<int>();
+                    if (((Maximus.Data.models.PointsModel)Session["Pointsmodel"]).LstStyles != null)
                     {
-                        foreach (var data in issuedLst)
+                        if (salesHeader.Any(x => x.SalesOrderLine.Count > 0))
                         {
-                            issued = issued + data.Invqty + data.Pickqty + data.SOqty;
+                            string ucode = Session["SelectedUcode"].ToString();
+                            var thisHeader = salesHeader.Where(x => x.EmployeeID == empId && x.UCodeId == ucode).First();
+                            foreach (var saleLines in thisHeader.SalesOrderLine.Where(x => x.orgStyleId != null))
+                            {
+                                var thisOrgStyle = saleLines.orgStyleId;
+                                if (orgStyleNPoints.Any(x => x.OrgStyle == thisOrgStyle))
+                                {
+                                    var minOrdQty = _pointStyle.Exists(x => x.StyleID == thisOrgStyle && x.UcodeID == ucode && x.BusinessID == busId) ? _pointStyle.GetAll(x => x.StyleID == thisOrgStyle && x.UcodeID == ucode && x.BusinessID == busId).First().MinPts : 0;
+                                    long qtny = thisHeader.SalesOrderLine.Where(x => x.orgStyleId == thisOrgStyle && x.orgStyleId != null).Sum(x => x.OrdQty);
+                                    var dataOnCart = orgStyleNPoints.Where(x => x.OrgStyle == thisOrgStyle).OrderBy(x => x.Points).First();
+                                    if (qtny >= minOrdQty)
+                                    {
+                                        values.Add(0);
+                                    }
+                                    else
+                                    {
+                                        if (thisOrgStyle != orgStyl)
+                                        {
+                                            values.Add(dataOnCart.Points);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                    var salesHead = Session["SalesOrderHeader"] != null ? (List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"] : new List<SalesOrderHeaderViewModel>();
+                    var salesLines = salesHead.Any(x => x.UCodeId == Ucodes && x.SalesOrderLine.Count > 0) ? salesHead.Where(x => x.UCodeId == Ucodes && x.SalesOrderLine.Count > 0).Select(x => x.SalesOrderLine).First() : new List<SalesOrderLineViewModel>();
+                    busId = Session["BuisnessId"].ToString();
+                    var points = _pointStyle.Exists(x => x.BusinessID == busId && x.StyleID == style && x.UcodeID == Ucodes) ? _pointStyle.GetAll(x => x.BusinessID == busId && x.StyleID == style && x.UcodeID == Ucodes).First().Points : 0;
+                    int totAvailPts = _pointsCard.Exists(x => x.BusinessID == busId & x.EmployeeID == empId & x.Year == 0) ? _pointsCard.GetAll(x => x.BusinessID == busId & x.EmployeeID == empId & x.Year == 0).ToList().Sum(x => x.SOPoints).Value : 0;
+                    int totalPoints = ((PointsModel)Session["Pointsmodel"]).TotalPoints;
+                    totalPoints = totalPoints - totAvailPts;
+                    int totBaskPoints = salesOrderLines.Count > 0 ? salesOrderLines.Sum(x => x.TotalPoints) : 0;
+                    int valuePts = values.Count > 0 ? values.Sum() : 0;
+
+                    if (orgStyleNPoints.Any(x => x.OrgStyle == orgStyl))
+                    {
+                        if (orgStyleNPoints.Where(x => x.OrgStyle == orgStyl).First().MinPoints > 1 && Convert.ToInt32(qty)< orgStyleNPoints.Where(x => x.OrgStyle == orgStyl).First().MinPoints)
+                        {
+                            valuePts = salesLines.Any(x => x.orgStyleId == orgStyl) ? valuePts : valuePts + orgStyleNPoints.Where(x => x.OrgStyle == orgStyl).OrderBy(x => x.Points).First().Points;
+
                         }
                     }
-                    else
-                    {
-                        issued = 0;
-                    }
-                    if (entitlement != 0)
-                    {
-                        issuedDiff = entitlement.Value - issued;
-                    }
-                    if (onCartVal != 0)
-                    {
-                        issuedDiff = (int)issuedDiff - (int)onCartVal;
-                    }
+                    int availablePoints = totBaskPoints > 0 ? totalPoints- totBaskPoints - valuePts : totalPoints;
+                    int pointsUsed = points.Value * Convert.ToInt32(qty);
+                    availablePoints = availablePoints - pointsUsed;
+                    result = availablePoints >= 0 ? "enabled" : "";
 
-                    if (issuedDiff > 0)
+                }
+                else
+                {
+                    if (ordQty != "" & color != "" & style != "" & qty != "")
                     {
-                        result = Convert.ToInt32(qty) <= issuedDiff ? "enabled" : "";
+                        int difference = 0;
+                        int oQty = Convert.ToInt32(ordQty);
+                        var entitlement = _ucodes.Exists(x => x.StyleID.ToLower().Trim() == orgStyl.ToLower().Trim() && x.UCodeID == Ucodes) ? _ucodes.GetAll(x => x.StyleID.ToLower().Trim() == orgStyl.ToLower().Trim() && x.UCodeID == Ucodes).FirstOrDefault().AnnualIssue : 0;
+                        var issuedLst = _stockCard.Exists(x => x.BusinessID == busId && x.ColourID.Trim().ToLower() == color.Trim().ToLower() && x.EmployeeID == empId && x.Year == 0 && x.StyleID.Trim().ToLower() == orgStyl.Trim().ToLower()) ? _stockCard.GetAll(x => x.BusinessID == busId && x.ColourID.Trim().ToLower() == color.Trim().ToLower() && x.EmployeeID == empId && x.Year == 0 && x.StyleID.Trim().ToLower() == orgStyl.Trim().ToLower()).Select(x => new IssuedQtyModel { Invqty = x.InvQty.Value, SOqty = x.SOQty.Value, Pickqty = x.PickQty.Value }).ToList() : new List<IssuedQtyModel>();
+                        var issued = 0;
+                        if (issuedLst.Count > 0)
+                        {
+                            foreach (var data in issuedLst)
+                            {
+                                issued = issued + data.Invqty + data.Pickqty + data.SOqty;
+                            }
+                        }
+                        else
+                        {
+                            issued = 0;
+                        }
+                        if (entitlement != 0)
+                        {
+                            issuedDiff = entitlement.Value - issued;
+                        }
+                        if (onCartVal != 0)
+                        {
+                            issuedDiff = (int)issuedDiff - (int)onCartVal;
+                        }
+
+                        if (issuedDiff > 0)
+                        {
+                            result = Convert.ToInt32(qty) <= issuedDiff ? "enabled" : "";
+                        }
                     }
                 }
+                //var s = Session["ALLOW_OVERRIDE_ENT"].ToString().ToLower();
             }
             else
             {
@@ -1341,7 +1660,7 @@ namespace Maximus.Controllers
             string businessId = Session["BuisnessId"].ToString();
             if (((List<string>)Session["Templates"]).Count > 0)
             {
-                List<string> result = (List<string>)Session["SelectedTemplate"];
+                List<string> result = (List<string>)Session["SelectedTemplates"];
                 foreach (var item in result)
                 {
                     model.AddRange(_dataConnection.GetStyleViewModel(item, businessId));
@@ -1560,14 +1879,73 @@ namespace Maximus.Controllers
         [HttpPost]
         public string GetBasketStatus()
         {
-            string result = "";
+            string result = "fail";
             string empId = (Session["SelectedEmp"].ToString());
-
+            var orgStyleNPoints = ((List<Maximus.Data.models.StyleAndMinPoints>)Session["StyleMinPoints"]);
+            string busId = Session["BuisnessId"].ToString();
+            string ucode = Session["SelectedUcode"].ToString();
             var salesHeader = ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]);
-            if (!salesHeader.Any(x => x.SalesOrderLine != null))
+            List<ResultChk> values = new List<ResultChk>();
+            if (salesHeader.Any(x => x.SalesOrderLine != null) && salesHeader.Any(x => x.SalesOrderLine.Count > 0))
             {
-                result = "fail";
+                if (Convert.ToBoolean(Session["POINTSREQ"]))
+                {
+                    if (((Maximus.Data.models.PointsModel)Session["Pointsmodel"]).LstStyles != null)
+                    {
+                        if (salesHeader.Any(x => x.SalesOrderLine.Count > 0))
+                        {
+
+                            var thisHeader = salesHeader.Where(x => x.EmployeeID == empId && x.UCodeId == ucode).First();
+                            foreach (var salesLines in thisHeader.SalesOrderLine)
+                            {
+                                var thisOrgStyle = salesLines.orgStyleId;
+                                var minOrdQty = _pointStyle.Exists(x => x.StyleID == thisOrgStyle && x.UcodeID == ucode && x.BusinessID == busId) ? _pointStyle.GetAll(x => x.StyleID == thisOrgStyle && x.UcodeID == ucode && x.BusinessID == busId).First().MinPts : 0;
+                                long qty = thisHeader.SalesOrderLine.Where(x => x.orgStyleId == thisOrgStyle && x.orgStyleId != null).Sum(x => x.OrdQty);
+                                if (qty >= minOrdQty)
+                                {
+
+                                    values.Add(new ResultChk { result = "" });
+                                }
+                                else
+                                {
+                                    values.Add(new ResultChk { result = salesLines.CatagoryCaption + " ///" });
+                                }
+                            }
+                        }
+                        
+                        var stylst = orgStyleNPoints.Where(x => x.MinPoints > 0).Select(x => new { x.OrgStyle, x.CatCaption, x.MinPoints });
+                        var thisHeader1 = salesHeader.Where(x => x.EmployeeID == empId && x.UCodeId == ucode).First();
+                        string Content = "";
+                        foreach (var str in stylst.Distinct())
+                        {
+                            if (thisHeader1.SalesOrderLine.Any(x => x.orgStyleId == str.OrgStyle))
+                            {
+                                Content = thisHeader1.SalesOrderLine.Where(x => x.orgStyleId == str.OrgStyle).Sum(x => x.OrdQty) >= str.MinPoints ? Content : Content + "The mandatory quantity not ordered for catagory " + str.CatCaption + " \n";
+                            }
+                            else
+                            {
+                                Content = Content + "The mandatory quantity not ordered for catagory " + str.CatCaption + " \n";
+                            }
+                        }
+                        return values.Any(x => x.result != "") ? values.Where(x => x.result != "").FirstOrDefault().result + Content + "/--/" : Content == "" ? "" : Content + "/--/";
+                    }
+                    else
+                    {
+                        if (salesHeader.Any(x => x.SalesOrderLine.Count > 0))
+                        {
+                            result = "";
+                        }
+                    }
+                }
+                else
+                {
+                    if (salesHeader.Any(x => x.SalesOrderLine.Count > 0))
+                    {
+                        result = "";
+                    }
+                }
             }
+
             return result;
         }
 
@@ -1582,6 +1960,39 @@ namespace Maximus.Controllers
             return lblValue;
         }
         #endregion
+
+        #region GetMinPointsnBasketPts
+        //public string GetMinPointsnBasketPts(string style)
+        //{
+        //    string result = "";
+
+
+        //}
+        #endregion
+        #region GetPointsDiv
+
+        public string GetPointsDiv()
+        {
+            string result = "";
+            if (((Maximus.Data.models.PointsModel)Session["Pointsmodel"]).LstStyles.Count > 0)
+            {
+                string busId = Session["BuisnessId"].ToString();
+                string ucode = Session["SelectedUcode"].ToString();
+                string empId = Session["SelectedEmp"].ToString();
+                var salesHead = ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Any(x => x.EmployeeID == empId) ? ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.EmployeeID == empId).First() : new SalesOrderHeaderViewModel();
+                var salesLine = salesHead.SalesOrderLine;
+                int totAvailPts = _pointsCard.Exists(x => x.BusinessID == busId & x.EmployeeID == empId & x.Year == 0) ? _pointsCard.GetAll(x => x.BusinessID == busId & x.EmployeeID == empId & x.Year == 0).ToList().Sum(x => x.SOPoints).Value : 0;
+                int totPoints = ((Maximus.Data.models.PointsModel)Session["Pointsmodel"]).TotalPoints;
+                int inCartPoints = salesLine.Count > 0 ? salesLine.Sum(x => x.TotalPoints) : 0;
+                int availabelPoints = totPoints - inCartPoints- totAvailPts;
+                int usedPoints = totPoints - availabelPoints;
+                result = "<div class='col-md-6'> <span><b>Total Points: </b></span>  " + totPoints + " </div> <div class='col-md-6'> <span><b>Available Points: </b></span>" + availabelPoints + " </div> <div class='col-md-6'> <span><b>Used Points: </b></span>" + usedPoints + " </div><div class='col-md-6'> <span><b>Cart Points: </b></span>" + inCartPoints + " </div>";
+            }
+            return result;
+        }
+
+        #endregion
+
 
     }
 }

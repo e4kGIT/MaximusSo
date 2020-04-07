@@ -38,12 +38,17 @@ namespace Maximus.Services
         public readonly UcodeEmployees _ucodeEmployees;
         public readonly Ucodes _ucodes;
         public readonly DataProcessing _dp;
+        public readonly CUstomerOrderTemplateCostcenters _costcenters;
+        public readonly PointsByUcode _pointsByUcode;
+        public readonly PointsCard _pointsCard;
+        public readonly PointStyle _pointStyle; 
         #endregion
 
         #region constructor
         public HomeService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
+            CUstomerOrderTemplateCostcenters costcenters = new CUstomerOrderTemplateCostcenters(_unitOfWork);
             AllAssemblies allAssemblies = new AllAssemblies(_unitOfWork);
             AssemblyDetail assemblyDetail = new AssemblyDetail(_unitOfWork);
             AssemblyHeader assemblyHeader = new AssemblyHeader(_unitOfWork);
@@ -67,7 +72,14 @@ namespace Maximus.Services
             UcodeEmployees ucodeEmployees = new UcodeEmployees(_unitOfWork);
             Ucodes ucodes = new Ucodes(_unitOfWork);
             DataProcessing dp = new DataProcessing(_unitOfWork);
+            PointsByUcode pointsByUcode = new PointsByUcode(_unitOfWork);
+            PointsCard pointsCard = new PointsCard(_unitOfWork);
+            PointStyle pointStyle = new PointStyle(_unitOfWork);
             _dp = dp;
+            _pointsByUcode = pointsByUcode;
+            _pointsCard = pointsCard;
+            _pointStyle = pointStyle;
+            _costcenters = costcenters;
             _allAssemblies = allAssemblies;
             _assemblyDetail = assemblyDetail;
             _assemblyHeader = assemblyHeader;
@@ -184,17 +196,17 @@ namespace Maximus.Services
             return null;
         }
         #endregion
-        public List<SalesOrderLineViewModel> GetChargableAssembly(string intNoOfday, string IncWendsDel, string CurrencyExchangeRate, string Currency_Name, string Rep_Id, string style = "", long lineNo = 0, long qty = 0, string empId = "", string empName = "", string busId = "")
+        public List<SalesOrderLineViewModel> GetChargableAssembly(string intNoOfday, string IncWendsDel, string CurrencyExchangeRate, string Currency_Name, string Rep_Id, string style = "", long lineNo = 0, long qty = 0, string empId = "", string empName = "", string busId = "",string selTemplates="",string selUcode="")
         {
             var chargableAsm = new List<SalesOrderLineViewModel>();
             var result = new List<AssemblyModel>();
             var result1 = new List<AssemblyModel>();
-            result = _customAssembly.GetAll(x => x.ParentStyleID == style & x.isChargeable == false & x.CustID == busId).Select(x => new AssemblyModel { StyleID = x.StyleID, Instruction = x.Instruction, IsChargeable = Convert.ToInt32(x.isChargeable) }).ToList();
-            result1 = _customAssembly.Exists(x => x.ParentStyleID == style & x.isChargeable == false) ? _customAssembly.GetAll(x => x.ParentStyleID == style & x.isChargeable == false).Select(x => new AssemblyModel { StyleID = x.StyleID, Instruction = x.Instruction, IsChargeable = Convert.ToInt32(x.isChargeable) }).ToList() : new List<AssemblyModel>();
+            result = _customAssembly.GetAll(x => x.ParentStyleID == style & x.isChargeable == true & x.CustID == busId).Select(x => new AssemblyModel { StyleID = x.StyleID, Instruction = x.Instruction, IsChargeable = Convert.ToInt32(x.isChargeable) }).ToList();
+            result1 = _customAssembly.Exists(x => x.ParentStyleID == style & x.isChargeable == true & x.CustID.ToLower()=="all") ? _customAssembly.GetAll(x => x.ParentStyleID == style & x.isChargeable == false & x.CustID.ToLower() == "all").Select(x => new AssemblyModel { StyleID = x.StyleID, Instruction = x.Instruction, IsChargeable = Convert.ToInt32(x.isChargeable) }).ToList() : new List<AssemblyModel>();
             result.AddRange(result1);
             if (result.Count == 0)
             {
-                result = _customAssembly.GetAll(x => x.ParentStyleID == style & x.isChargeable == false).Select(x => new AssemblyModel { StyleID = x.StyleID, Instruction = x.Instruction, IsChargeable = Convert.ToInt32(x.isChargeable) }).ToList();
+                result = _allAssemblies.GetAll(x => x.ParentStyleID == style & x.isChargeable == true).Select(x => new AssemblyModel { StyleID = x.StyleID, Instruction = x.Instruction, IsChargeable = Convert.ToInt32(x.isChargeable) }).ToList();
             }
             long curLine = lineNo;
             foreach (var res in result)
@@ -224,14 +236,16 @@ namespace Maximus.Services
                     IssueUOM1 = 1,
                     StockingUOM1 = 1,
                     IssueQty1 = Convert.ToInt32(qty),
-                    VatPercent = _dp.GetVatPercent(res.StyleID, size)
+                    VatPercent = _dp.GetVatPercent(res.StyleID, size),
+                    SelectedTemplate=selTemplates,
+                    SelectedUcode=selUcode
                 });
                 curLine = curLine + 1;
             }
             return chargableAsm;
         }
 
-        public List<SalesOrderLineViewModel> GetOptionalAssembly(string intNoOfday, string IncWendsDel, string CurrencyExchangeRate, string Currency_Name, string Rep_Id, List<string> assemList = null, string style = "", long lineNo = 0, List<SalesOrderLineViewModel> lines = null, long qty = 0, string empId = "", string empName = "", int lastLino = 0, string busId = "")
+        public List<SalesOrderLineViewModel> GetOptionalAssembly(string intNoOfday, string IncWendsDel, string CurrencyExchangeRate, string Currency_Name, string Rep_Id, List<string> assemList = null, string style = "", long lineNo = 0, List<SalesOrderLineViewModel> lines = null, long qty = 0, string empId = "", string empName = "", int lastLino = 0, string busId = "", string selTemplates = "", string selUcode = "")
         {
             var optionalAsm = new List<SalesOrderLineViewModel>();
             long curLine = lines != null ? lines.Last().LineNo : lineNo;
@@ -265,7 +279,9 @@ namespace Maximus.Services
                         IssueUOM1 = 1,
                         StockingUOM1 = 1,
                         IssueQty1 = Convert.ToInt32(qty),
-                        VatPercent = _dp.GetVatPercent(res, size)
+                        VatPercent = _dp.GetVatPercent(res, size),
+                        SelectedTemplate = selTemplates,
+                        SelectedUcode = selUcode
                     });
                     curLine = curLine + 1;
                 }
@@ -278,5 +294,45 @@ namespace Maximus.Services
             return optionalAsm;
         }
 
+        public List<tblsop_customerorder_template_costcentre> GetCostCenterTemplate(List<string>  template, string busId)
+        {
+            List<tblsop_customerorder_template_costcentre> result = new List<tblsop_customerorder_template_costcentre>();
+            List<tblsop_customerorder_template_costcentre> cst = new List<tblsop_customerorder_template_costcentre>();
+            foreach (var temp in template)
+            {
+                cst = _costcenters.Exists(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim() && x.TemplateCode.ToLower().Trim()== temp.ToLower().Trim()) ? _costcenters.GetAll(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim() && x.TemplateCode.ToLower().Trim() == temp.ToLower().Trim()).ToList() : cst;
+                result.AddRange(cst);
+            }
+            return cst;
+        }
+        public List<tblsop_customerorder_template_costcentre> GetCostCenterUcode(List<string> ucodeLst, string busId)
+        {
+            List<tblsop_customerorder_template_costcentre> result = new List<tblsop_customerorder_template_costcentre>();
+            List<tblsop_customerorder_template_costcentre> cst = new List<tblsop_customerorder_template_costcentre>();
+            foreach (var ucode in ucodeLst)
+            {
+                cst = _costcenters.Exists(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim() && x.Uniformcode.ToLower().Trim() == ucode.ToLower().Trim()) ? _costcenters.GetAll(x => x.BusinessID.ToLower().Trim() ==busId && x.Uniformcode.ToLower().Trim() == ucode.ToLower().Trim()).ToList() : cst;
+                result.AddRange(cst);
+            }
+            return cst;
+        }
+
+        public PointsModel GetPointsModel(string uCode ,string busId)
+        {
+            PointsModel ptsModel = new PointsModel();
+            var result = _pointsByUcode.GetAll(x => x.BusinessID == busId && x.UcodeID == uCode).FirstOrDefault();
+            if (result != null)
+            {
+                ptsModel.BusinessID = result.BusinessID;
+                ptsModel.CompanyID = result.CompanyID;
+                ptsModel.UcodeID = result.UcodeID;
+                ptsModel.TotalPoints = result.TotalPoints.Value;
+                ptsModel.FromDate = result.FromDate;
+                ptsModel.ToDate = result.ToDate;
+                ptsModel.LstStyles = _pointStyle.GetAll(x => x.UcodeID == uCode && x.BusinessID == busId).Select(x => new PointsStyle { Points = x.Points.Value, Style = x.StyleID }).ToList();
+            }
+            
+            return ptsModel;
+        }
     }
 }

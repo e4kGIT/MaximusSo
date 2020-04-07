@@ -36,7 +36,7 @@ namespace Maximus.Services.Interface
 
         TotalModel GetAlltotals(List<SalesOrderHeaderViewModel> mod, double carriage);
         bool GetCustRefVisiblity(string busId);
-        int GetDeliveryAddressId(string emp, string busId);
+        int GetDeliveryAddressId(string emp, string busId, string onlineUserId);
 
         List<SiteCodeModel> GetSitecodes(string businessId);
 
@@ -84,6 +84,8 @@ namespace Maximus.Services.Interface
         IEnumerable<tblfsk_style_colour> GetAllStyleColour();
         List<int> GetProductGroup(string Template);
         IEnumerable<styleViewmodel> GetStyleViewModel(string Template, string busId);
+
+       
         IEnumerable<tblfskstyle_dimension1> GetFskStyleDimension1();
         IEnumerable<tblfsk_setvalues> GetallSetvalues();
         IEnumerable<style_dimfitalloc_caption> GetallDimFitAllocCaption();
@@ -117,5 +119,6 @@ namespace Maximus.Services.Interface
         DataTable GetDatatableByQry(int i, string busId);
         DataTable FillshowhoursCmb(string strCustID, string txtEmpID, string strCompanyID);
         int GetEmpAddress(string EmpId);
+       
     }
 }

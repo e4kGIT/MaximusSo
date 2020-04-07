@@ -40,7 +40,7 @@
         settings.SettingsAdaptivity.AdaptiveDetailColumnCount = 1;
         settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = false;
         settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
-
+        settings.ClientSideEvents.BeginCallback = "IsCallBack";
         settings.Columns.Add(c =>
         {
             c.Width = System.Web.UI.WebControls.Unit.Pixel(100);
@@ -70,9 +70,37 @@
         settings.Columns.Add("EmployeeId");
         settings.Columns.Add("Department");
         //settings.Columns.Add("EmpFirstName").Caption = "First name";
-        settings.Columns.Add("EmpFirstName").Caption = "Firstname";
-        settings.Columns.Add("EmpLastName").Caption = "Lastname";
+        if (((List<string>)Session["Templates"]).Count()>0)
+        {
+            settings.Columns.Add(col =>
+            {
+                col.FieldName = "EmpFirstName";
+                col.Caption = "Firstname";
+                col.SetDataItemTemplateContent(x =>
+                {
+                    var data = DataBinder.Eval(x.DataItem, "EmpFirstName").ToString();
+                    var dataArr = data.Split(' ');
+                    ViewContext.Writer.Write(dataArr[0]);
+                });
+            });
+            settings.Columns.Add(col =>
+            {
+                col.FieldName = "EmpLastName";
+                col.Caption = "Lastname";
+                col.SetDataItemTemplateContent(x =>
+                {
+                    var data = DataBinder.Eval(x.DataItem, "EmpFirstName").ToString();
+                    var dataArr = data.Split(' ');
 
+                    ViewContext.Writer.Write(dataArr.Count() > 1 ? dataArr[1] : "");
+                });
+            });
+        }
+        else
+        {
+            settings.Columns.Add("EmpFirstName").Caption = "Firstname";
+            settings.Columns.Add("EmpLastName").Caption = "Lastname";
+        }
         //settings.Columns.Add("StartDate").PropertiesEdit.DisplayFormatString = "dd.MM.yyyy"; ;
         //settings.Columns.Add("EndDate").PropertiesEdit.DisplayFormatString = "dd.MM.yyyy"; ;
         if (((List<string>)Session["Templates"]).Count > 0)
@@ -219,8 +247,8 @@
             col.Caption = "Last order";
             col.SetDataItemTemplateContent(x =>
             {
-                var s = DataBinder.Eval(x.DataItem, "LastOrderDate") != null ? (DataBinder.Eval(x.DataItem, "LastOrderDate")).ToString():"";
-                DateTime LastDate = DataBinder.Eval(x.DataItem, "LastOrderDate") !=null  ? (DataBinder.Eval(x.DataItem, "LastOrderDate")).ToString()!=""? DateTime.Parse((DataBinder.Eval(x.DataItem, "LastOrderDate")).ToString()) : DateTime.Now : DateTime.Now;
+                var s = DataBinder.Eval(x.DataItem, "LastOrderDate") != null ? (DataBinder.Eval(x.DataItem, "LastOrderDate")).ToString() : "";
+                DateTime LastDate = DataBinder.Eval(x.DataItem, "LastOrderDate") != null ? (DataBinder.Eval(x.DataItem, "LastOrderDate")).ToString() != "" ? DateTime.Parse((DataBinder.Eval(x.DataItem, "LastOrderDate")).ToString()) : DateTime.Now : DateTime.Now;
                 long ordNo = Convert.ToInt64((DataBinder.Eval(x.DataItem, "LastOrderNo")).ToString());
                 //{
                 //    string EmployeeId = (DataBinder.Eval(x.DataItem, "EmployeeId")).ToString();
@@ -239,7 +267,7 @@
                 //}
                 if (ordNo > 0)
                 {
-                    ViewContext.Writer.Write(string.Format("Order no: {0} on {1} ", ordNo, LastDate.ToString("dd-MM-yyyy") ));
+                    ViewContext.Writer.Write(string.Format("Order no: {0} on {1} ", ordNo, LastDate.ToString("dd-MM-yyyy")));
                 }
             });
         });
@@ -277,4 +305,3 @@
 }
 @grid.Bind(Model).GetHtml()
 
- 

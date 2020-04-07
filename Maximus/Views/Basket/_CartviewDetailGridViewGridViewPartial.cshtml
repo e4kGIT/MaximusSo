@@ -13,18 +13,25 @@
         // settings.StylesEditors.TextBox.CssClass = "textBoxStyle";
         //settings.ClientSideEvents.RowDblClick = "function(s, e) {s.StartEditRow(e.visibleIndex);}";
         settings.ClientSideEvents.RowDblClick = "function(s, e) {s.StartEditRow(e.visibleIndex);}";
-        settings.ClientSideEvents.EndCallback = "OnEndCallback";
-        settings.ClientSideEvents.BeginCallback = "OnBeginCallback";
+        if (Convert.ToBoolean(Session["POINTSREQ"].ToString()))
+        {
+            if (Session["Pointsmodel"] != null)
+            {
+                settings.ClientSideEvents.EndCallback = "PointsEndCallBack";
+            }
+        }
+        //settings.ClientSideEvents.EndCallback = "OnEndCallback";
+        //settings.ClientSideEvents.BeginCallback = "OnBeginCallback";
         settings.CommandColumn.Visible = true;
         ////settings.CommandColumn.ShowNewButton = true;
         //settings.CommandColumn.ShowDeleteButton = true;
         //settings.CommandColumn.ShowEditButton = true;
-
+        settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
         settings.KeyFieldName = "LineNo";
 
         settings.SettingsPager.Visible = true;
-        settings.Settings.ShowGroupPanel = true;
-        settings.Settings.ShowFilterRow = true;
+        settings.Settings.ShowGroupPanel = false;
+        settings.Settings.ShowFilterRow = false;
         settings.SettingsBehavior.AllowSelectByRowClick = true;
 
         settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.Off;
@@ -83,7 +90,15 @@
         };
         settings.SetDetailRowTemplateContent(x =>
         {
-            @Html.RenderAction("CardDetailAssembly", new { LineNo = x.KeyValue });
+            try
+            {
+                @Html.RenderAction("CardDetailAssembly", new { LineNo = x.KeyValue });
+            }
+            catch (Exception e)
+            {
+
+            }
+
         });
         settings.SettingsCommandButton.EditButton.Image.IconID = IconID.EditEdit16x16;
         settings.SettingsCommandButton.EditButton.RenderMode = GridCommandButtonRenderMode.Image;
@@ -243,10 +258,10 @@
             x.SetEditItemTemplateContent(c =>
             {
                 GridViewEditItemTemplateContainer templateContainer = c as GridViewEditItemTemplateContainer;
-                string value = (DataBinder.Eval(c.DataItem, "FreeText1")).ToString();
+                string value = DataBinder.Eval(c.DataItem, "FreeText1") == null ? "" : (DataBinder.Eval(c.DataItem, "FreeText1")).ToString();
                 if (value == "")
                 {
-                     
+
                     Html.DevExpress().Label(lblsettings =>
                     {
                         lblsettings.Name = "FreeText1";
@@ -291,32 +306,95 @@
                 });
             });
         }
+        if (Session["costCenter"] != null)
+        {
 
-        //settings.Columns.Add(x =>
-        //{
-        //    x.FieldName = "VatPercent"; x.Caption = "VAT"; x.ReadOnly = true; x.Visible = true; x.EditFormSettings.Visible = DefaultBoolean.False;
-        //    x.SetDataItemTemplateContent(c =>
-        //    {
-        //        string data = Convert.ToString((DataBinder.Eval(c.DataItem, "VatPercent")));
-        //        data = data.ToString() + " %";
 
-        //        ViewContext.Writer.Write(data);
 
-        //    });
-        //    x.SetEditItemTemplateContent(c =>
-        //    {
-        //        GridViewEditItemTemplateContainer templateContainer = c as GridViewEditItemTemplateContainer;
-        //        string data1  = Convert.ToString((DataBinder.Eval(c.DataItem, "VatPercent")));
-        //        data1 = data1.ToString() + " %";
-        //        Html.DevExpress().Label(lblsettings =>
-        //        {
-        //            lblsettings.Name = "VatPercent";
-        //            //lblsettings.ControlStyle.CssClass = "align-middle";
-        //            //lblsettings.ClientVisible = visible;
-        //        }).Bind(data1).Render();
+            //settings.Columns.Add(x =>
+            //{
+            //    x.FieldName = "OrdQty"; x.Caption = "OrdQty"; x.Visible = true;
+            //    x.EditFormSettings.Visible = DefaultBoolean.True;
+            //    x.SetEditItemTemplateContent(c =>
+            //    {
+            //        GridViewEditItemTemplateContainer templateContainer = c as GridViewEditItemTemplateContainer;
+            //        bool value = (bool)(DataBinder.Eval(c.DataItem, "Assembly"));
+            //        var value1 = (DataBinder.Eval(c.DataItem, "LineNo"));
+            //        if (value)
+            //        {
+            //            Html.DevExpress().Label(lblsettings =>
+            //            {
+            //                lblsettings.Name = "OrdQty";
+            //            }).Bind(templateContainer.Text).Render();
+            //        }
+            //        else
+            //        {
+            //            Html.DevExpress().TextBox(lblsettings =>
+            //            {
+            //                lblsettings.Name = "OrdQty";
+            //            }).Bind(templateContainer.Text).Render();
+            //        }
+            //    });
+            //});
 
-        //    });
-        //});
+            settings.Columns.Add(x =>
+            {
+                x.FieldName = "SOPDetail5"; x.Caption = "Site Code"; x.Visible = true; x.ReadOnly = true;
+                x.EditFormSettings.Visible = DefaultBoolean.True; x.SetDataItemTemplateContent(c =>
+                {
+                    string data = Convert.ToString((DataBinder.Eval(c.DataItem, "SOPDetail5")));
+                    ViewContext.Writer.Write(data);
+                });
+                x.SetEditItemTemplateContent(c =>
+                {
+                    GridViewEditItemTemplateContainer templateContainer = c as GridViewEditItemTemplateContainer;
+                    string data = Convert.ToString((DataBinder.Eval(c.DataItem, "SOPDetail5")));
+
+                    if (((List<Maximus.Data.models.tblsop_customerorder_template_costcentre>)Session["costCenter"]).Count > 0)
+                    {
+                        Html.DevExpress().ComboBox(xa =>
+                        {
+                            xa.Name = "SiteCodeCmbgroupedProducts";
+                            xa.Properties.ClientSideEvents.SelectedIndexChanged = "SetSopDetail5";
+                            if (((List<Maximus.Data.models.tblsop_customerorder_template_costcentre>)Session["costCenter"]).Count > 1)
+                            {
+                                foreach (var dat in (List<Maximus.Data.models.tblsop_customerorder_template_costcentre>)Session["costCenter"])
+                                {
+                                    xa.Properties.Items.Add(dat.ProjectCode + " | " + dat.SiteName);
+                                }
+                            }
+                            else
+                            {
+                                xa.SelectedIndex = 0;
+                                xa.Properties.Items.Add(((List<Maximus.Data.models.tblsop_customerorder_template_costcentre>)Session["costCenter"])[0].ProjectCode + " | " + ((List<Maximus.Data.models.tblsop_customerorder_template_costcentre>)Session["costCenter"])[0].SiteName);
+                            }
+                        }).Bind(templateContainer.Text).Render();
+                    }
+                });
+            });
+        }
+        if (Convert.ToBoolean(Session["POINTSREQ"]))
+        {
+            if (((Maximus.Data.models.PointsModel)Session["Pointsmodel"]).LstStyles != null)
+            {
+                settings.Columns.Add(x =>
+                {
+                    x.FieldName = "Points"; x.Caption = "Points"; x.Visible = true;
+                    x.EditFormSettings.Visible = DefaultBoolean.True;
+                    x.SetEditItemTemplateContent(c =>
+                    {
+                        GridViewEditItemTemplateContainer templateContainer = c as GridViewEditItemTemplateContainer;
+
+                        Html.DevExpress().Label(lblsettings =>
+                        {
+                            lblsettings.Name = "Points";
+                        }).Bind(templateContainer.Text).Render();
+
+                    });
+                });
+            }
+        }
+
         settings.Columns.Add(x =>
         {
             x.FieldName = "Price"; x.Caption = "Price"; x.Visible = true; x.EditFormSettings.Visible = DefaultBoolean.False; x.SetDataItemTemplateContent(c =>
@@ -347,7 +425,7 @@
                 });
                 x.ReadOnly = true;
             }
-            else if(Session["Price"].ToString().ToLower() == "hide")
+            else if (Session["Price"].ToString().ToLower() == "hide")
             {
                 x.SetEditItemTemplateContent(c =>
                 {
@@ -448,7 +526,29 @@
             //    }).Bind(tot).Render();
             //});
         });
+        if (Convert.ToBoolean(Session["POINTSREQ"]))
+        {
+            if (((Maximus.Data.models.PointsModel)Session["Pointsmodel"]).LstStyles != null)
+            {
+                settings.Columns.Add(x =>
+                {
+                    x.FieldName = "TotalPoints"; x.Caption = "TotalPoints"; x.Visible = true;
+                    x.EditFormSettings.Visible = DefaultBoolean.True;
+                    x.SetEditItemTemplateContent(c =>
+                    {
+                        GridViewEditItemTemplateContainer templateContainer = c as GridViewEditItemTemplateContainer;
+                        int thispt = Convert.ToInt32(DataBinder.Eval(c.DataItem, "Points"));
+                        int ordQty =Convert.ToInt32(DataBinder.Eval(c.DataItem, "OrdQty"));
+                        int totalPoints = thispt * ordQty;
+                        Html.DevExpress().Label(lblsettings =>
+                        {
+                            lblsettings.Name = "TotalPoints";
+                        }).Bind(totalPoints).Render();
 
+                    });
+                });
+            }
+        }
 
 
     });

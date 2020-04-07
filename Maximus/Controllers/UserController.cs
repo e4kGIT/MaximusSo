@@ -123,9 +123,12 @@ namespace Maximus.Controllers
                                     }
                                 }
                             }
+                          
                             //Session["AddressUserCreate"] = _dataConnection.BusinessParam("DELADDR_USER_CREATE",busId);
                             Session["UseMatrix"] = _dataConnection.CompanyParam("UseMatrix", cmpId);
                             Session["CC_PREFIXLETTERS"] = _dataConnection.BusinessParam("CC_PREFIXLETTERS", busId);
+                            Session["POINTSREQ"] = _dataConnection.BusinessParam("POINTSREQ", busId);
+                            Session["POINTSLNEREQ"] = _dataConnection.BusinessParam("POINTSLNEREQ", busId);
                             Session["BudgetReq"] = _dataConnection.CompanyParam("BUDGETREQ", cmpId);
                             Session["MANPACK"] = _dataConnection.BusinessParam("MANPACK", data.First().BusinessID.ToUpper().Trim());
                             Session["CARRREQAMT"] = _dataConnection.BusinessParam("CARRREQAMT", data.First().BusinessID.ToUpper().Trim());
@@ -140,6 +143,7 @@ namespace Maximus.Controllers
                             Session["ONL_REORDER_REQ"] = _dataConnection.BusinessParam("ONL_REORDER_REQ", data.First().BusinessID.ToUpper().Trim());
                             Session["IsSiteCode"] = _dataConnection.IsSiteCode(busId);
                             Session["RolloutName"] = "";
+                            Session["SiteCodeNAddress"] = _user.GetSiteCodeAndUserAddress(logDetails.UserName, busId);
                             if (Session["RolloutName"].ToString() != "")
                             {
                                 Session["FITALLOC"] = "FITALLOC_RO";
@@ -147,6 +151,7 @@ namespace Maximus.Controllers
                             }
                             Session["BUDGETREQ"] = Convert.ToBoolean(_dataConnection.BusinessParam("BUDGETREQ", busId));
                             Session["RolloutOrder"] = Session["RolloutName"] == null | Session["RolloutName"].ToString() == "" ? false : true;
+                            Session["RolloutOrder"] = true;
                             booNom = _dataConnection.CompanyParam("ONLNEREQNOM1", cmpId);
                             Session["ONLNEREQNOM1"] = booNom == "" ? false : booNom.ToLower() == "true" ? true : false;
                             booNom = _dataConnection.CompanyParam("ONLNEREQNOM2", cmpId);
@@ -164,6 +169,7 @@ namespace Maximus.Controllers
                             onlineDefNom = _dataConnection.BusinessParam("ONLINEDEFNOM", data.First().BusinessID.Trim().ToUpper());
                             Session["CUSTREFDEF"] = _dataConnection.BusinessParam("CUSTREFDEF", data.First().BusinessID.Trim().ToUpper());
                             Session["ONLINEDEFNOM"] = onlineDefNom;
+                            Session["boolDeleteConfirm"] = false;
                             booDefNomCode = _dataConnection.BusinessParam("DEFDELREFNOM", data.First().BusinessID.Trim().ToUpper());
                             Session["DEFDELREFNOM"] = booDefNomCode == "" ? false : booDefDelAddr.ToLower() == "true" ? true : false;
                             booDivBudget = _dataConnection.BusinessParam("REQDIVBUDGET", data.First().BusinessID.Trim().ToUpper());
@@ -173,7 +179,7 @@ namespace Maximus.Controllers
                             booBudgetEmail = _dataConnection.BusinessParam("REQBUDGETEMAIL", data.First().BusinessID.Trim().ToUpper());
                             Session["REQBUDGETEMAIL"] = booBudgetEmail == "" ? false : booDefDelAddr.ToLower() == "true" ? true : false;
                             booPointsReq = _dataConnection.BusinessParam("POINTSREQ", data.First().BusinessID.Trim().ToUpper());
-                            Session["POINTSREQD"] = booPointsReq == "" ? false : booDefDelAddr.ToLower() == "true" ? true : false;
+                            
                             booCusRefMan = _dataConnection.BusinessParam("CusRefMan", data.First().BusinessID.Trim().ToUpper());
                             Session["CusRefMan"] = booCusRefMan == "" ? false : booCusRefMan.ToLower() == "true" ? true : false;
                             Session["DIFF_MANPACK_INFO"] = _dataConnection.BusinessParam("DIFF_MANPACK_INFO", busId);
@@ -224,7 +230,7 @@ namespace Maximus.Controllers
                             Session["IsAddressToAll"] = _dataConnection.BusinessParam("DELADDRMAPTO", busId).ToUpper().Trim() == "ALL" ? true : false;
                             Session["pandeliverypanelid"] = (bool)Session["IsAddressToEmployee"] | (bool)Session["IsAddressToAll"];
                             var permissionLst = _dataConnection.PermissionSettings(Session["BuisnessId"].ToString(), Session["UserName"].ToString(), "chkMapEmp", Session["Access"].ToString());
-                            Session["permissionLst"] = permissionLst;
+                             Session["menuBulkNew"] = permissionLst.Any(x => x.ControlId.Trim() == "menuBulkNew") ? permissionLst.Where(x => x.ControlId.Trim() == "menuBulkNew").First().Permission.ToLower() : "hide";
                             Session["chkMapEmp"] = permissionLst.Any(x => x.ControlId.Trim() == "chkMapEmp") ? permissionLst.Where(x => x.ControlId.Trim() == "chkMapEmp").First().Permission.ToLower() : "hide";
                             Session[""] =
                             Session["Price"] = permissionLst.Any(x => x.ControlId.Trim() == "Price") ? permissionLst.Where(x => x.ControlId.Trim() == "Price").First().Permission.ToLower() : "hide";
@@ -257,7 +263,7 @@ namespace Maximus.Controllers
                             Session["ONLNETXTNOM4"] = _dataConnection.CompanyParam("ONLNETXTNOM4", busId);
                             Session["ONLNETXTNOM5"] = _dataConnection.CompanyParam("ONLNETXTNOM5", busId);
                             Session["txtcarriercharge"] = permissionLst.Any(x => x.ControlId.Trim() == "txtcarriercharge") ? permissionLst.Where(x => x.ControlId.Trim() == "txtcarriercharge").First().Permission.ToLower() : "hide";
-                            Session["IsManPack"] = false;
+                            Session["IsManPack"] = true;
                             Session["IsBulkOrder"] = false;
                             Session["IsBulkOrder1"] = false;
                             //Session["IsBulkOrder"] = true;
@@ -286,6 +292,7 @@ namespace Maximus.Controllers
                             Session["goto"] = null;
                             Session["CarrierPrompt"] = _dataConnection.BusinessParam("CarrierPrompt", busId);
                             VInfo = _dataConnection.BusinessParam("VISITINFOREQ", Session["BuisnessId"].ToString().ToUpper());
+                             
                             if (VInfo == "")
                             {
                                 booVinfo = false;

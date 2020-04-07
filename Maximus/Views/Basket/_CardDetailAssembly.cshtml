@@ -1,8 +1,8 @@
 @{
     var grid = Html.DevExpress().GridView(settings =>
     {
-        settings.Name = "GridView";
-        settings.CallbackRouteValues = new { Controller = "Basket", Action = "GridViewPartial" };
+        settings.Name = "GridView"+Guid.NewGuid().ToString();
+        settings.CallbackRouteValues = new { Controller = "Basket", Action = "CardDetailAssembly" };
 
         settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "Basket", Action = "GridViewPartialAddNew" };
         settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "Basket", Action = "GridViewPartialUpdate" };
