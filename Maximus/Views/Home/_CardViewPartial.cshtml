@@ -533,9 +533,6 @@
                 x.ShowCaption = DefaultBoolean.False;
                 x.SetTemplateContent(col =>
                 {
-
-
-
                     var freeText = (string)(DataBinder.Eval(col.DataItem, "Dimensions"));
                     var style = (DataBinder.Eval(col.DataItem, "StyleID")).ToString();
                     string appPath = System.Web.HttpContext.Current.Request.MapPath(@"~\");
@@ -548,7 +545,7 @@
                         string selecetedUcode = Session["SelectedUcode"].ToString();
                         int minPoints = home._pointStyle.Exists(sq => sq.UcodeID == selecetedUcode && sq.StyleID == orgStyle && sq.BusinessID == businessId) ? home._pointStyle.GetAll(sq => sq.UcodeID == selecetedUcode && sq.StyleID == orgStyle && sq.BusinessID == businessId).First().MinPts.Value : 0;
                         var content = "<div class='row'><div class='col-md-11'><div class='row'><center>" + data1 + "</center><hr/>";
-                        content = minPoints > 0 ? content + "<div class='row'><center>The mandatory quantity should be :" + minPoints + "</center></div>" : content + "";
+                        content = minPoints > 0 && Convert.ToBoolean(Session["POINTSREQ"].ToString()) ? content + "<div class='row'><center>The mandatory quantity should be :" + minPoints + "</center></div>" : content + "";
 
                         foreach (var svm in svmLst)
                         {

@@ -122,8 +122,13 @@ function getEntitlementDemand(style, error) {
                         if (response.Result.includes('points'))
                         {
                             var data = response.Result.split("-////-");
-                            errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order" + data[1] + ".Cannot proceed further order</span></div>";
-                             
+ 
+                            if (response.availPts > 0) {
+                                errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";
+                            }
+                            else {
+                                errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.Cannot proceed.</span></div>";
+                            }
                             
                         }
                         else
@@ -153,7 +158,12 @@ function getEntitlementDemand(style, error) {
                 if (error == 1) {
                     if (response.Result.includes('points'))
                     {
-                        errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>"; 
+                        if (response.availPts > 0) {
+                            errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";
+                        }
+                        else {
+                            errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.Cannot proceed.</span></div>";
+                        }
                          
                     }
                     else
@@ -190,7 +200,14 @@ function getEntitlementDim(style, error) {
                     var errorMsg = "";
                     if (error == 1) {
                         if (response.Result.includes('points'))
-                        {  errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";  }
+                        {
+                            if (response.availPts > 0) {
+                                errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";
+                            }
+                            else {
+                                errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.Cannot proceed.</span></div>";
+                            }
+                        }
                         else
                         {
                             errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed entitlement exceeded</span></div>";
@@ -216,7 +233,14 @@ function getEntitlementDim(style, error) {
                 var errorMsg = "";
                 if (error == 1) {
                     if (response.Result.includes('points'))
-                    { errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>"; }
+                    {
+                        if (response.availPts > 0) {
+                            errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";
+                        }
+                        else {
+                            errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.Cannot proceed.</span></div>";
+                        }
+                    }
                     else
                     {
                         errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed entitlement exceeded</span></div>";
@@ -443,7 +467,14 @@ function getEntitlementSwatch(style, orgStyl, error) {
                         var errorMsg = "";
                         if (error == 1) {
                             if (response.Result.includes('points'))
-                            {  errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";  }
+                            {
+                                if (response.availPts > 0) {
+                                    errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";
+                                }
+                                else {
+                                    errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.Cannot proceed.</span></div>";
+                                }
+                            }
                             else
                             {
                                 errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed entitlement exceeded</span></div>";
@@ -469,7 +500,14 @@ function getEntitlementSwatch(style, orgStyl, error) {
                     var errorMsg = "";
                     if (error == 1) {
                         if (response.Result.includes('points'))
-                        {  errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";  }
+                        {
+                            if (response.availPts > 0) {
+                                errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";
+                            }
+                            else {
+                                errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.Cannot proceed.</span></div>";
+                            }
+                        }
                         else
                         {
                             errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed entitlement exceeded</span></div>";
@@ -521,7 +559,14 @@ function getEntitlementDimSwatch(style, error) {
                         var errorMsg = "";
                         if (error == 1) {
                             if (response.Result.includes('points'))
-                            {  errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";  }
+                            {
+                                if (response.availPts > 0) {
+                                    errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";
+                                }
+                                else {
+                                    errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.Cannot proceed.</span></div>";
+                                }
+                            }
                             else
                             {
                                 errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed entitlement exceeded</span></div>";
@@ -547,7 +592,14 @@ function getEntitlementDimSwatch(style, error) {
                     var errorMsg = "";
                     if (error == 1) {
                         if (response.Result.includes('points'))
-                        {  errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";  }
+                        {
+                            if (response.availPts > 0) {
+                                errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";
+                            }
+                            else {
+                                errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.Cannot proceed.</span></div>";
+                            }
+                        }
                         else
                         {
                             errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed entitlement exceeded</span></div>";
@@ -608,7 +660,14 @@ function getEntitlementDemandSwatch(style, orgStyl, error) {
                         var errorMsg = "";
                         if (error == 1) {
                             if (response.Result.includes('points'))
-                            {  errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";  }
+                            {
+                                if (response.availPts>0) {
+                                    errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";
+                                }
+                                else {
+                                    errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.Cannot proceed.</span></div>";
+                                }
+                            }
                             else
                             {
                                 errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed entitlement exceeded</span></div>";
@@ -634,7 +693,14 @@ function getEntitlementDemandSwatch(style, orgStyl, error) {
                     var errorMsg = "";
                     if (error == 1) {
                         if (response.Result.includes('points'))
-                        {  errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";  }
+                        {
+                            if (response.availPts > 0) {
+                                errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";
+                            }
+                            else {
+                                errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.Cannot proceed.</span></div>";
+                            }
+                        }
                         else
                         {
                             errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed entitlement exceeded</span></div>";
@@ -3826,7 +3892,7 @@ function FillCustRefandDeliveryFields(s, e) {
         }
     });
 }
-
+ 
 function AcceptOrder(s, e) {
     var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
     loadPopup.Show();
@@ -3843,24 +3909,66 @@ function AcceptOrder(s, e) {
     //        if (result) {
     if (addDesc != null && addDesc != "") {
         $.ajax({
-            url: "/Basket/AcceptOrder/",
-            type: "POST",
-            data: { 'addDesc': addDesc },
-            success: function (resp) {
-                if (resp.type != "" && resp.type != null) {
-                    alert("Please fill  customer reference")
+            url: "/Home/GetBasketStatus/",
+            type: "post",
+            success:function(response)
+            {
+                if(response=="")
+                {
+                    $.ajax({
+                        url: "/Basket/AcceptOrder/",
+                        type: "POST",
+                        data: { 'addDesc': addDesc },
+                        success: function (resp) {
+                            if (resp.type != "" && resp.type != null) {
+                                alert("Please fill  customer reference")
+                            }
+                            else {
+                                var message = "";
+                                for (var k = 0; k < resp.results.length; k++) {
+                                    message = message + "Your uniform order has been successfully placed,order reference:" + resp.results[k].OrderNo + " (" + resp.results[k].EmployeeId + ")." + resp.results[k].OrderConfirmation + ". \n";
+                                }
+                                alert(message);
+                                loadPopup.Hide()
+                                window.location = "/Employee/Index/";
+                            }
+                        }
+                    });
                 }
-                else {
-                    var message = "";
-                    for (var k = 0; k < resp.results.length; k++) {
-                        message = message + "Your uniform order has been successfully placed,order reference:" + resp.results[k].OrderNo + " (" + resp.results[k].EmployeeId + ")." + resp.results[k].OrderConfirmation + ". \n";
+                else
+                {
+                    response = response.replace("///", "");
+                    if (confirm(response))
+                    {
+                        $.ajax({
+                            url: "/Basket/AcceptOrder/",
+                            type: "POST",
+                            data: { 'addDesc': addDesc },
+                            success: function (resp) {
+                                if (resp.type != "" && resp.type != null) {
+                                    alert("Please fill  customer reference")
+                                }
+                                else {
+                                    var message = "";
+                                    for (var k = 0; k < resp.results.length; k++) {
+                                        message = message + "Your uniform order has been successfully placed,order reference:" + resp.results[k].OrderNo + " (" + resp.results[k].EmployeeId + ")." + resp.results[k].OrderConfirmation + ". \n";
+                                    }
+                                    alert(message);
+                                    loadPopup.Hide()
+                                    window.location = "/Employee/Index/";
+                                }
+                            }
+                        });
                     }
-                    alert(message);
-                    loadPopup.Hide()
-                    window.location = "/Employee/Index/";
+                    else
+                    {
+                        loadPopup.Hide();
+                    }
+                   
                 }
             }
         });
+      
     }
     else {
         alert("Please fill address and customer reference");

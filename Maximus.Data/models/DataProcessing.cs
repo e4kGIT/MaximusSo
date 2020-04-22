@@ -4661,7 +4661,8 @@ namespace Maximus.Data.Models
             bool isPersonalOrder = false;
             long returnOrderNo = 0;
             long returnOrderLine = 0;
-            sYear = IsRolloutOrder ? 99 : 0;
+            // sYear = IsRolloutOrder | Convert.ToBoolean(POINTSREQ) ? 99 : 0;
+            sYear =  Convert.ToBoolean(POINTSREQ) ? 0 : 0;
 
             if (Convert.ToBoolean(BusinessParam("REQ_REASONPAGE", busId)) && saleHead.ReasonCode == 0)
             {
@@ -4748,14 +4749,14 @@ namespace Maximus.Data.Models
                                         if (Convert.ToBoolean(POINTSREQ))
                                         {
                                             string existQry = "";
-                                            existQry = existQry + "SELECT * FROM `tblaccemp_pointscard` WHERE `CompanyID`='"+cmpId+ "' AND `BusinessID`='" + busId + "' AND `EmployeeID`='" + line.EmployeeId + "' AND `StyleID`='" + line.StyleID + "' AND `ColourID`='" + line.ColourID + "' AND `Year`=0";
+                                            existQry = existQry + "SELECT * FROM `tblaccemp_pointscard` WHERE `CompanyID`='"+cmpId+ "' AND `BusinessID`='" + busId + "' AND `EmployeeID`='" + line.EmployeeId + "' AND `StyleID`='" + line.StyleID + "' AND `ColourID`='" + line.ColourID + "' AND `Year`="+sYear;
                                             DataTable dt = new DataTable();
                                             dt = GetDataTable(existQry);
                                             if (dt.Rows.Count > 0)
                                             {
                                                 string sSql1 = "";
                                                 int sum = Convert.ToInt32(dt.Rows[0]["SOPoints"].ToString()) + (line.TotalPoints);
-                                                sSql1 = sSql1 + "UPDATE `tblaccemp_pointscard` SET `SOPoints`="+ sum + " WHERE `CompanyID`='"+cmpId+ "' AND `BusinessID`='" + busId + "' AND `EmployeeID`='" + line.EmployeeId + "' AND `StyleID`='" + line.StyleID + "' AND `ColourID`='" + line.ColourID + "' AND `Year`=0";
+                                                sSql1 = sSql1 + "UPDATE `tblaccemp_pointscard` SET `SOPoints`="+ sum + " WHERE `CompanyID`='"+cmpId+ "' AND `BusinessID`='" + busId + "' AND `EmployeeID`='" + line.EmployeeId + "' AND `StyleID`='" + line.StyleID + "' AND `ColourID`='" + line.ColourID + "' AND `Year`=" + sYear;
                                                 if (ExecuteQuery(sSql1) > 0)
                                                 {
                                                     result = true;

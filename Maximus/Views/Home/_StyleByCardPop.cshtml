@@ -1468,10 +1468,18 @@
                         Maximus.Data.Models.PreviousQty prevHistory = (Maximus.Data.Models.PreviousQty)(DataBinder.Eval(cont.DataItem, "HasPreviousSize"));
                         Html.DevExpress().Button(btn =>
                         {
-                            if (((Maximus.Data.models.PointsModel)Session["Pointsmodel"]).LstStyles != null)
+                            if ((Convert.ToBoolean(Session["POINTSREQ"])))
                             {
-                                btn.Name = "CartbtnDemandPts_" + style + "_" + prevHistory.OrdQty + "_" + orgstyl;
-                            }else
+                                if (((Maximus.Data.models.PointsModel)Session["Pointsmodel"]).LstStyles != null)
+                                {
+                                    btn.Name = "CartbtnDemandPts_" + style + "_" + prevHistory.OrdQty + "_" + orgstyl;
+                                }
+                                else
+                                {
+                                    btn.Name = "CartbtnDemand_" + style + "_" + prevHistory.OrdQty + "_" + orgstyl;
+                                }
+                            }
+                            else
                             {
                                 btn.Name = "CartbtnDemand_" + style + "_" + prevHistory.OrdQty + "_" + orgstyl;
                             }

@@ -397,7 +397,7 @@
 
         settings.Columns.Add(x =>
         {
-            x.FieldName = "Price"; x.Caption = "Price"; x.Visible = true; x.EditFormSettings.Visible = DefaultBoolean.False; x.SetDataItemTemplateContent(c =>
+            x.FieldName = "Price"; x.Caption = "Price";x.Width=System.Web.UI.WebControls.Unit.Pixel(200) ; x.Visible = true; x.EditFormSettings.Visible = DefaultBoolean.False; x.SetDataItemTemplateContent(c =>
             {
                 if (Session["Price"].ToString().ToLower() != "hide")
                 {
@@ -418,6 +418,7 @@
                 x.SetEditItemTemplateContent(c =>
                 {
                     GridViewEditItemTemplateContainer templateContainer = c as GridViewEditItemTemplateContainer;
+                    templateContainer.Column.Width = System.Web.UI.WebControls.Unit.Pixel(200);
                     Html.DevExpress().Label(lblsettings =>
                     {
                         lblsettings.Name = "Price";
@@ -430,6 +431,7 @@
                 x.SetEditItemTemplateContent(c =>
                 {
                     GridViewEditItemTemplateContainer templateContainer = c as GridViewEditItemTemplateContainer;
+                    templateContainer.Column.Width = System.Web.UI.WebControls.Unit.Pixel(200);
                     Html.DevExpress().Label(lblsettings =>
                     {
                         lblsettings.Name = "Price";
@@ -437,6 +439,19 @@
                     }).Bind("N/A").Render();
                 });
                 x.ReadOnly = true;
+            }
+            else
+            {
+                x.SetEditItemTemplateContent(c =>
+                {
+                    GridViewEditItemTemplateContainer templateContainer = c as GridViewEditItemTemplateContainer;
+                    templateContainer.Column.Width = System.Web.UI.WebControls.Unit.Pixel(200);
+                    Html.DevExpress().TextBox(tbsettings =>
+                    {
+                        tbsettings.Name = "Price";
+                        tbsettings.Width = System.Web.UI.WebControls.Unit.Pixel(200);
+                    }).Bind(templateContainer.Text).Render();
+                });
             }
 
         });

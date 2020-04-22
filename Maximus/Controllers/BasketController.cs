@@ -298,10 +298,10 @@ namespace Maximus.Controllers
                 ViewBag.inCartPoints = inCartPoints;
                 ViewBag.availabelPoints = availabelPoints;
                 ViewBag.usedPoints = totPoints - availabelPoints;
-                if (((Maximus.Data.models.PointsModel)Session["Pointsmodel"]).TotalPoints > 0)
-                {
-                    GetMissingPointsDetail();
-                }
+                //if (((Maximus.Data.models.PointsModel)Session["Pointsmodel"]).TotalPoints > 0)
+                //{
+                //  //  GetMissingPointsDetail();
+                //}
             }
             return View();
         }
@@ -667,6 +667,53 @@ namespace Maximus.Controllers
                                     ViewData["EditError"] = "Ordered points values exceeds total points";
                                 }
                             //}
+                        }
+                        else if (GetEntitlement(model.Where(x => x.OriginalLineNo == null).First().EntQty, model.Where(x => x.OriginalLineNo == null).First().ColourID, model.Where(x => x.OriginalLineNo == null).First().StyleID, item.OrdQty.ToString(), model.Where(x => x.OriginalLineNo == null).First().orgStyleId, item.LineNo) && item.FreeText1 != "")
+                        {
+                            try
+                            {
+                                foreach (var data in model)
+                                {
+                                    var parentStyle = model.Where(s => s.LineNo == item.LineNo).First().StyleID;
+                                    var assemblyID = _assemblyHeader.Exists(x => x.StyleID == parentStyle && x.CustID == businessId) ? _assemblyHeader.GetAll(x => x.StyleID == parentStyle && x.CustID == businessId).First().AssemblyID : 0;
+                                    var qty = assemblyID != 0 ? _assemblyDetail.Exists(x => x.StyleID == data.StyleID && x.AssemblyID == assemblyID) ? _assemblyDetail.GetAll(x => x.StyleID == data.StyleID && x.AssemblyID == assemblyID).First().Qty.Value : 1 : 1;
+                                    data.OrdQty = qty * item.OrdQty;
+                                    data.FreeText1 = item.FreeText1;
+                                }
+                                foreach (var data1 in result.Where(x => x.LineNo == item.LineNo).ToList())
+                                {
+                                    if (Session["Price"].ToString().ToLower() == "readwrite")
+                                    {
+
+                                        data1.Price = item.Price == 0 ? data1.Price : item.Price;
+                                        data1.VAT = _dataConnection.GetlineVat(data1.OrdQty, data1.Price, data1.VatPercent);
+                                        data1.Total = _dataConnection.GetlineTotals(data1.OrdQty, data1.Price, data1.VatPercent);
+                                    }
+                                    else
+                                    {
+                                        data1.VAT = _dataConnection.GetlineVat(data1.OrdQty, data1.Price, data1.VatPercent);
+                                        data1.Total = _dataConnection.GetlineTotals(data1.OrdQty, data1.Price, data1.VatPercent);
+                                    }
+                                    data1.SOPDetail5 = Session["SopDetail5"] != null ? Session["SopDetail5"].ToString().Split('|')[0].Trim() : data1.SOPDetail5;
+
+                                }
+                            }
+                            catch (Exception e)
+                            {
+                                ViewData["EditError"] = e.Message;
+                            }
+                            Session["SopDetail5"] = null;
+                        }
+                        else
+                        {
+                            if (item.FreeText1 == "")
+                            {
+                                ViewData["EditError"] = "Please enter require data";
+                            }
+                            else
+                            {
+                                ViewData["EditError"] = "Entitlement exceeded";
+                            }
                         }
                     }
                     else

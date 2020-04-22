@@ -615,7 +615,7 @@
                     }
                     else if (response.includes("///")) {
                         var capCatagory = response.replace("///", "");
-                        if (confirm("missing points in " + capCatagory)) {
+                        if (confirm(capCatagory)) {
                             var url = "/Basket/ShowBasket";
                             window.location = url;
                         }
