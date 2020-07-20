@@ -24,6 +24,7 @@ namespace Maximus
             container.RegisterType<IBasket, BasketService>();
             container.RegisterType<ISettings, SettingsService>();
             container.RegisterType<IEmployee, EmployeeService>();
+            container.RegisterType<IOrderDisplay, OrderDisplayService>();
             container.RegisterType<IUnitOfWork, UnitOfWork>();
             DependencyResolver.SetResolver(new UnityDependencyResolver(container));
         }

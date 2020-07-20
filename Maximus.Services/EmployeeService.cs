@@ -39,6 +39,8 @@ namespace Maximus.Services
         public readonly UcodeByFreeTextView _ucodeByFreeText;
         public readonly UcodeEmployees _ucodeEmployees;
         public readonly Ucodes _ucodes;
+        public readonly ParentMenu _parentMenu;
+        public readonly ChildMenu _childMenu;
         public readonly DataProcessing _dp;
         public readonly IDataConnection _dataConnection;
         #endregion
@@ -47,6 +49,8 @@ namespace Maximus.Services
         public EmployeeService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
+            ParentMenu parentMenu = new ParentMenu(_unitOfWork);
+            ChildMenu childMenu = new ChildMenu(_unitOfWork);
             AllAssemblies allAssemblies = new AllAssemblies(_unitOfWork);
             AssemblyDetail assemblyDetail = new AssemblyDetail(_unitOfWork);
             AssemblyHeader assemblyHeader = new AssemblyHeader(_unitOfWork);
@@ -85,6 +89,8 @@ namespace Maximus.Services
             _employee = employee;
             _fskStyleFreetext = fskStyleFreetext;
             _nextno = nextno;
+            _parentMenu = parentMenu;
+            _childMenu = childMenu;
             _stockCard = stockCard;
             _style_Colour = style_Colour;
             _style_Sizes = style_Sizes;
@@ -157,6 +163,44 @@ namespace Maximus.Services
         }
         #endregion
 
+        #region GetMenu
+        public MenuLayoutModel GetAllMenu()
+        {
+            MenuLayoutModel menu = new MenuLayoutModel();
+            try
+            {
+                menu.ChildMenuItms = _childMenu.GetAll(x=>x.IsEnable==1).OrderBy(x => x.SeqNo).Select(x => new ChildMenuLayout
+                {
+                    ChildID = x.ChildID,
+                    Description = x.Description,
+                    SeqNo = x.SeqNo,
+                    IsEnable = x.IsEnable,
+                    IsPopUp = x.IsPopUp,
+                    OnlyNewLayout = x.OnlyNewLayout,
+                    ParentID = x.ParentID,
+                    TitleDesc = x.TitleDesc,
+                    URL = x.URL
+                }).OrderBy(x => x.SeqNo).ToList().ToList();
+                menu.ParentMenuItms = _parentMenu.GetAll(x => x.IsEnable == 1).OrderBy(x => x.SeqNo).Select(x => new ParentMenuLayout
+                {
+                    Description = x.Description,
+                    IsEnable = x.IsEnable,
+                    IsPermissionReq = x.IsPermissionReq,
+                    OnlyNewLayout = x.OnlyNewLayout,
+                    ParentID = x.ParentID,
+                    SeqNo = x.SeqNo,
+                    URL = x.URL
+                }).OrderBy(x => x.SeqNo).ToList();
+            }
+            catch
+            {
+
+            }
+            return menu;
+
+        }
+        #endregion
+
         #region DeleteEmployee
         public int DeleteEmployee(string Ucode, string employeeId, string busId)
         {
@@ -174,87 +218,177 @@ namespace Maximus.Services
         #region editEmployee
         public string EditEmployee(DateTime? StartDate = null, DateTime? EndDate = null, string EmpFirstName = "", string EmpLastName = "", string EmployeeId = "", string EmpUcodes = "", string Address = "", string Department = "", string hrsCmb = "", string hoursNo = "", string hoursDept = "", bool isActive = false, string busId = "", List<string> templates = null, string ShowHourse = "", string REQ_REASONPAGE = "")
         {
+            var depts = _departments.GetAll(x => x.BusinessID == busId).Select(x => x.Department).ToList();
             try
             {
-                if (EmpFirstName != "" & EmpLastName != "" & EmployeeId != "" & Department != "")
+                if(depts.Count()>0)
                 {
-                    var cmpId = _employee.GetAll(x => x.BusinessID == busId & x.EmployeeID == EmployeeId).Select(x => x.CompanyID).First();
-                    var deptData = _departments.GetAll(x => x.BusinessID == busId && x.Department == Department).First().DepartmentID;
-                    var emp =_employee.GetAll(x => x.EmployeeID == EmployeeId && x.BusinessID == busId).First();
-                    emp.Forename = EmpFirstName;
-                    emp.Surname = EmpLastName;
-                    emp.DepartmentID = deptData;
-                    emp.EmployeeClosed = isActive == false ? true : false;
-                    emp.StartDate = StartDate;
-                    emp.EndDate = EndDate;
-                    _employee.Update(emp);
-                    var busAddsId = _busAddress.GetAll(x => x.Description == Address).First().AddressID;
-                    if (templates.Count == 0)
+                    if (EmpFirstName != "" & EmpLastName != "" & EmployeeId != "" & Department != "")
                     {
-                        var ucodes =_ucodeEmployees.GetAll(x => x.BusinessID == busId & x.EmployeeID == EmployeeId).Select(x => x.UCodeID.Trim()).ToList();
-                        if (EmpUcodes.Contains(';'))
+                        var cmpId = _employee.GetAll(x => x.BusinessID == busId & x.EmployeeID == EmployeeId).Select(x => x.CompanyID).First();
+                        var deptData = _departments.GetAll(x => x.BusinessID == busId && x.Department == Department).First().DepartmentID;
+                        var emp = _employee.GetAll(x => x.EmployeeID == EmployeeId && x.BusinessID == busId).First();
+                        emp.Forename = EmpFirstName;
+                        emp.Surname = EmpLastName;
+                        emp.DepartmentID = deptData;
+                        emp.EmployeeClosed = isActive == false ? true : false;
+                        emp.StartDate = StartDate;
+                        emp.EndDate = EndDate;
+                        _employee.Update(emp);
+                        int a = 0;
+                        var busAddsId = int.TryParse(Address,out a) ? _busAddress.GetAll(x => x.AddressID.ToString() == Address).First().AddressID : _busAddress.GetAll(x => x.Description  == Address).First().AddressID;
+                        if (templates.Count == 0)
                         {
-                            foreach (string ucode in EmpUcodes.Split(';'))
+                            var ucodes = _ucodeEmployees.GetAll(x => x.BusinessID == busId & x.EmployeeID == EmployeeId).Select(x => x.UCodeID.Trim()).ToList();
+                            if (EmpUcodes.Contains(';'))
                             {
-                                if (!ucodes.Contains(ucode.Trim()))
+                                foreach (string ucode in EmpUcodes.Split(';'))
                                 {
-                                    var updateUcode = new tblaccemp_ucodesemployees();
-                                    updateUcode.CompanyID = cmpId;
-                                    updateUcode.UCodeID = ucode;
-                                    updateUcode.EmployeeID = EmployeeId;
-                                    updateUcode.BusinessID = busId;
-                                    _ucodeEmployees.Insert(updateUcode);
+                                    if (!ucodes.Contains(ucode.Trim()))
+                                    {
+                                        var updateUcode = new tblaccemp_ucodesemployees();
+                                        updateUcode.CompanyID = cmpId;
+                                        updateUcode.UCodeID = ucode;
+                                        updateUcode.EmployeeID = EmployeeId;
+                                        updateUcode.BusinessID = busId;
+                                        _ucodeEmployees.Insert(updateUcode);
+                                    }
+
+
                                 }
-
-
                             }
-                        }
-                        else
-                        {
-                            if (ucodes.Contains(EmpUcodes))
+                            else
                             {
-                                ucodes.Remove(EmpUcodes);
-                                var ucode1 = ucodes[0];
-                                DeleteEmployee(ucode1, EmployeeId, busId);
+                                if (ucodes.Contains(EmpUcodes))
+                                {
+                                    ucodes.Remove(EmpUcodes);
+                                    var ucode1 = ucodes[0];
+                                    DeleteEmployee(ucode1, EmployeeId, busId);
+                                }
                             }
                         }
-                    }
-                    if (hoursNo != "" && hoursDept != "")
-                    {
-                        if (Convert.ToBoolean(ShowHourse) && Convert.ToBoolean(REQ_REASONPAGE))
+                        if (hoursNo != "" && hoursDept != "")
+                        {
+                            if (Convert.ToBoolean(ShowHourse) && Convert.ToBoolean(REQ_REASONPAGE))
+                            {
+                                var hrsUcode = new tblaccemp_ucodesemployees();
+                                hrsUcode.BusinessID = busId;
+                                hrsUcode.CompanyID = cmpId;
+                                hrsUcode.EmployeeID = EmployeeId;
+                                hrsUcode.UCodeID = "SQ" + hoursDept + hoursNo;
+                                _ucodeEmployees.Insert(hrsUcode);
+                            }
+                        }
+                        if (hrsCmb != "")
                         {
                             var hrsUcode = new tblaccemp_ucodesemployees();
-                            hrsUcode.BusinessID = busId;
                             hrsUcode.CompanyID = cmpId;
+                            hrsUcode.UCodeID = hrsCmb;
                             hrsUcode.EmployeeID = EmployeeId;
-                            hrsUcode.UCodeID = "SQ" + hoursDept + hoursNo;
+                            hrsUcode.BusinessID = busId;
                             _ucodeEmployees.Insert(hrsUcode);
                         }
-                    }
-                    if (hrsCmb != "")
-                    {
-                        var hrsUcode = new tblaccemp_ucodesemployees();
-                        hrsUcode.CompanyID = cmpId;
-                        hrsUcode.UCodeID = hrsCmb;
-                        hrsUcode.EmployeeID = EmployeeId;
-                        hrsUcode.BusinessID = busId;
-                        _ucodeEmployees.Insert(hrsUcode);
-                    }
 
-                    if (Address != "")
-                    {
-                        int res = UpdateEmployee(Convert.ToInt32(cmpId), Convert.ToInt32(busAddsId), EmployeeId, busId);
-                        if (res > -1)
+                        if (Address != "")
                         {
-                            return "success";
+                            int res = UpdateEmployee(Convert.ToInt32(cmpId), Convert.ToInt32(busAddsId), EmployeeId, busId);
+                            if (res > -1)
+                            {
+                                return "success";
+                            }
                         }
                     }
+                    else
+                    {
+                        return "Validation";
+                    }
+                    return "success";
                 }
                 else
                 {
-                    return "Validation";
+                    if (EmpFirstName != "" & EmpLastName != "" & EmployeeId != "" )
+                    {
+                        var cmpId = _employee.GetAll(x => x.BusinessID == busId & x.EmployeeID == EmployeeId).Select(x => x.CompanyID).First();
+                        var deptData = _departments.Exists(x => x.BusinessID == busId && x.Department == Department)? _departments.GetAll(x => x.BusinessID == busId && x.Department == Department).First().DepartmentID:0;
+                        var emp = _employee.GetAll(x => x.EmployeeID == EmployeeId && x.BusinessID == busId).First();
+                        emp.Forename = EmpFirstName;
+                        emp.Surname = EmpLastName;
+                        emp.DepartmentID = deptData;
+                        emp.EmployeeClosed = isActive == false ? true : false;
+                        emp.StartDate = StartDate;
+                        emp.EndDate = EndDate;
+                        _employee.Update(emp);
+                        int a = 0;
+                        var busAddsId = int.TryParse(Address, out a) ? _busAddress.GetAll(x => x.AddressID.ToString() == Address).First().AddressID : _busAddress.GetAll(x => x.Description == Address).First().AddressID;
+ 
+                        if (templates.Count == 0)
+                        {
+                            var ucodes = _ucodeEmployees.GetAll(x => x.BusinessID == busId & x.EmployeeID == EmployeeId).Select(x => x.UCodeID.Trim()).ToList();
+                            if (EmpUcodes.Contains(';'))
+                            {
+                                foreach (string ucode in EmpUcodes.Split(';'))
+                                {
+                                    if (!ucodes.Contains(ucode.Trim()))
+                                    {
+                                        var updateUcode = new tblaccemp_ucodesemployees();
+                                        updateUcode.CompanyID = cmpId;
+                                        updateUcode.UCodeID = ucode;
+                                        updateUcode.EmployeeID = EmployeeId;
+                                        updateUcode.BusinessID = busId;
+                                        _ucodeEmployees.Insert(updateUcode);
+                                    }
+
+
+                                }
+                            }
+                            else
+                            {
+                                if (ucodes.Contains(EmpUcodes))
+                                {
+                                    ucodes.Remove(EmpUcodes);
+                                    var ucode1 = ucodes[0];
+                                    DeleteEmployee(ucode1, EmployeeId, busId);
+                                }
+                            }
+                        }
+                        if (hoursNo != "" && hoursDept != "")
+                        {
+                            if (Convert.ToBoolean(ShowHourse) && Convert.ToBoolean(REQ_REASONPAGE))
+                            {
+                                var hrsUcode = new tblaccemp_ucodesemployees();
+                                hrsUcode.BusinessID = busId;
+                                hrsUcode.CompanyID = cmpId;
+                                hrsUcode.EmployeeID = EmployeeId;
+                                hrsUcode.UCodeID = "SQ" + hoursDept + hoursNo;
+                                _ucodeEmployees.Insert(hrsUcode);
+                            }
+                        }
+                        if (hrsCmb != "")
+                        {
+                            var hrsUcode = new tblaccemp_ucodesemployees();
+                            hrsUcode.CompanyID = cmpId;
+                            hrsUcode.UCodeID = hrsCmb;
+                            hrsUcode.EmployeeID = EmployeeId;
+                            hrsUcode.BusinessID = busId;
+                            _ucodeEmployees.Insert(hrsUcode);
+                        }
+
+                        if (Address != "")
+                        {
+                            int res = UpdateEmployee(Convert.ToInt32(cmpId), Convert.ToInt32(busAddsId), EmployeeId, busId);
+                            if (res > -1)
+                            {
+                                return "success";
+                            }
+                        }
+                    }
+                    else
+                    {
+                        return "Validation";
+                    }
+                    return "success";
                 }
-                return "success";
+               
             }
             catch (Exception e)
             {
@@ -268,110 +402,224 @@ namespace Maximus.Services
 
         public string CreateNewEmployee(DateTime? StartDate = null, DateTime? EndDate = null, string EmpFirstName = "", string EmpLastName = "", string EmployeeId = "", string EmpUcodes = "", string Address = "", string hrsCmb = "", string Department = "", bool isActive = false, bool isMapped = false, string hoursDept = "", string hoursNo = "", List<string> templates = null, string busId = "", string UserName = "", string ShowHourse = "", string REQ_REASONPAGE = "")
         {
+            var depts = _departments.GetAll(x => x.BusinessID == busId).Select(x => x.Department).ToList();
             try
             {
-                if (EmpFirstName != "" & EmpLastName != "" & EmployeeId != "" & Department != "")
+                if (depts.Count() > 0)
                 {
-                    var deptData = _departments.GetAll(x => x.BusinessID == busId && x.Department == Department).First().DepartmentID;
-                    var cmpId = _employee.GetAll(x => x.BusinessID == busId).First().CompanyID;
-                    var emp = new tblaccemp_employee();
-                    emp.CompanyID = cmpId;
-                    emp.BusinessID = busId;
-                    emp.EmployeeID = EmployeeId;
-                    emp.Forename = EmpFirstName;
-                    emp.Surname = EmpLastName;
-                    emp.DepartmentID = deptData;
-                    emp.EmployeeClosed = isActive == false ? true : false;
-                    emp.StartDate = StartDate == null ? DateTime.Now : StartDate;
-                    emp.EndDate = EndDate == null ? DateTime.Now : StartDate;
-                    _employee.Insert(emp);
-                    if (isMapped)
+                    if (EmpFirstName != "" & EmpLastName != "" & EmployeeId != "" & Department != "")
                     {
-                        var onlineUser = new tblonline_userid_employee();
-                        onlineUser.BusinessID = busId;
-                        onlineUser.CompanyID = cmpId;
-                        onlineUser.EmployeeID = EmployeeId;
-                        onlineUser.OnlineUserID = UserName.ToString().Trim();
-
-                    }
-                    var busAddsId = _busAddress.GetAll(x => x.Description == Address).First().AddressID;
-                    if (templates.Count == 0)
-                    {
-                        if (EmpUcodes.Contains(';'))
+                        var deptData = _departments.GetAll(x => x.BusinessID == busId && x.Department == Department).First().DepartmentID;
+                        var cmpId = _employee.GetAll(x => x.BusinessID == busId).First().CompanyID;
+                        var emp = new tblaccemp_employee();
+                        emp.CompanyID = cmpId;
+                        emp.BusinessID = busId;
+                        emp.EmployeeID = EmployeeId;
+                        emp.Forename = EmpFirstName;
+                        emp.Surname = EmpLastName;
+                        emp.DepartmentID = deptData;
+                        emp.EmployeeClosed = isActive == false ? true : false;
+                        emp.StartDate = StartDate == null ? DateTime.Now : StartDate;
+                        emp.EndDate = EndDate == null ? DateTime.Now : StartDate;
+                        _employee.Insert(emp);
+                        if (isMapped)
                         {
-                            foreach (string ucode in EmpUcodes.Trim().Split(';'))
+                            var onlineUser = new tblonline_userid_employee();
+                            onlineUser.BusinessID = busId;
+                            onlineUser.CompanyID = cmpId;
+                            onlineUser.EmployeeID = EmployeeId;
+                            onlineUser.OnlineUserID = UserName.ToString().Trim();
+
+                        }
+                        int a = 0;
+                        var busAddsId =Address!=""? int.TryParse(Address, out a) ? _busAddress.GetAll(x => x.AddressID.ToString() == Address).First().AddressID : _busAddress.GetAll(x => x.Description == Address).First().AddressID:0;
+
+                        if (templates.Count == 0)
+                        {
+                            if (EmpUcodes.Contains(';'))
+                            {
+                                foreach (string ucode in EmpUcodes.Trim().Split(';'))
+                                {
+                                    var tblEmpUcode = new tblaccemp_ucodesemployees();
+                                    tblEmpUcode.BusinessID = busId;
+                                    tblEmpUcode.CompanyID = cmpId;
+                                    tblEmpUcode.UCodeID = ucode;
+                                    tblEmpUcode.EmployeeID = EmployeeId;
+                                    _ucodeEmployees.Insert(tblEmpUcode);
+                                }
+                            }
+                            else
                             {
                                 var tblEmpUcode = new tblaccemp_ucodesemployees();
                                 tblEmpUcode.BusinessID = busId;
                                 tblEmpUcode.CompanyID = cmpId;
-                                tblEmpUcode.UCodeID = ucode;
+                                tblEmpUcode.UCodeID = EmpUcodes;
                                 tblEmpUcode.EmployeeID = EmployeeId;
                                 _ucodeEmployees.Insert(tblEmpUcode);
+
                             }
-                        }
-                        else
-                        {
-                            var tblEmpUcode = new tblaccemp_ucodesemployees();
-                            tblEmpUcode.BusinessID = busId;
-                            tblEmpUcode.CompanyID = cmpId;
-                            tblEmpUcode.UCodeID = EmpUcodes;
-                            tblEmpUcode.EmployeeID = EmployeeId;
-                            _ucodeEmployees.Insert(tblEmpUcode);
 
                         }
-
-                    }
-                    if (hrsCmb != "")
-                    {
-                        var hrsUcode = new tblaccemp_ucodesemployees();
-                        hrsUcode.BusinessID = busId;
-                        hrsUcode.CompanyID = cmpId;
-                        hrsUcode.UCodeID = hrsCmb;
-                        hrsUcode.EmployeeID = EmployeeId;
-                        _ucodeEmployees.Insert(hrsUcode);
-                    }
-                    if (hoursNo == "" && hoursDept == "")
-                    {
-                        if (Convert.ToBoolean(ShowHourse) && Convert.ToBoolean(REQ_REASONPAGE))
+                        if (hrsCmb != "")
                         {
                             var hrsUcode = new tblaccemp_ucodesemployees();
                             hrsUcode.BusinessID = busId;
                             hrsUcode.CompanyID = cmpId;
+                            hrsUcode.UCodeID = hrsCmb;
                             hrsUcode.EmployeeID = EmployeeId;
-                            hrsUcode.UCodeID = "SQ" + hoursDept + hoursNo;
                             _ucodeEmployees.Insert(hrsUcode);
                         }
-                    }
-                    if (Address != "")
-                    {
-                        if (templates.Count == 0)
+                        if (hoursNo == "" && hoursDept == "")
                         {
-
-                            int res = UpdateEmployee(Convert.ToInt32(cmpId), Convert.ToInt32(busAddsId), EmployeeId, busId);
-                            if (res > -1)
+                            if (Convert.ToBoolean(ShowHourse) && Convert.ToBoolean(REQ_REASONPAGE))
                             {
-                                return "success";
+                                var hrsUcode = new tblaccemp_ucodesemployees();
+                                hrsUcode.BusinessID = busId;
+                                hrsUcode.CompanyID = cmpId;
+                                hrsUcode.EmployeeID = EmployeeId;
+                                hrsUcode.UCodeID = "SQ" + hoursDept + hoursNo;
+                                _ucodeEmployees.Insert(hrsUcode);
                             }
                         }
-                        else
+                        if (Address != "")
                         {
-                            int res = UpdateEmployee(Convert.ToInt32(cmpId), Convert.ToInt32(busAddsId), EmployeeId, busId);
-                            if (res > -1)
+                            if (templates.Count == 0)
                             {
-                                return "success";
+
+                                int res = UpdateEmployee(Convert.ToInt32(cmpId), Convert.ToInt32(busAddsId), EmployeeId, busId);
+                                if (res > -1)
+                                {
+                                    return "success";
+                                }
                             }
                             else
                             {
-                                return "";
+                                int res = UpdateEmployee(Convert.ToInt32(cmpId), Convert.ToInt32(busAddsId), EmployeeId, busId);
+                                if (res > -1)
+                                {
+                                    return "success";
+                                }
+                                else
+                                {
+                                    return "";
+                                }
                             }
                         }
                     }
+                    else
+                    {
+                        return "Validation";
+                    }
+                    return "success";
                 }
                 else
                 {
-                    return "Validation";
+                    if (EmpFirstName != "" & EmpLastName != "" & EmployeeId != "")
+                    {
+                        var deptData = _departments.Exists(x => x.BusinessID == busId && x.Department == Department) ? _departments.GetAll(x => x.BusinessID == busId && x.Department == Department).First().DepartmentID : 0;
+                        var cmpId = _employee.GetAll(x => x.BusinessID == busId).First().CompanyID;
+                        var emp = new tblaccemp_employee();
+                        emp.CompanyID = cmpId;
+                        emp.BusinessID = busId;
+                        emp.EmployeeID = EmployeeId;
+                        emp.Forename = EmpFirstName;
+                        emp.Surname = EmpLastName;
+                        emp.DepartmentID = deptData;
+                        emp.EmployeeClosed = isActive == false ? true : false;
+                        emp.StartDate = StartDate == null ? DateTime.Now : StartDate;
+                        emp.EndDate = EndDate == null ? DateTime.Now : StartDate;
+                        _employee.Insert(emp);
+                        if (isMapped)
+                        {
+                            var onlineUser = new tblonline_userid_employee();
+                            onlineUser.BusinessID = busId;
+                            onlineUser.CompanyID = cmpId;
+                            onlineUser.EmployeeID = EmployeeId;
+                            onlineUser.OnlineUserID = UserName.ToString().Trim();
+
+                        }
+                        int a = 0;
+                        var busAddsId = Address != "" ? int.TryParse(Address, out a) ? _busAddress.GetAll(x => x.AddressID.ToString() == Address).First().AddressID : _busAddress.GetAll(x => x.Description == Address).First().AddressID : 0;
+
+                        if (templates.Count == 0)
+                        {
+                            if (EmpUcodes.Contains(';'))
+                            {
+                                foreach (string ucode in EmpUcodes.Trim().Split(';'))
+                                {
+                                    var tblEmpUcode = new tblaccemp_ucodesemployees();
+                                    tblEmpUcode.BusinessID = busId;
+                                    tblEmpUcode.CompanyID = cmpId;
+                                    tblEmpUcode.UCodeID = ucode;
+                                    tblEmpUcode.EmployeeID = EmployeeId;
+                                    _ucodeEmployees.Insert(tblEmpUcode);
+                                }
+                            }
+                            else
+                            {
+                                var tblEmpUcode = new tblaccemp_ucodesemployees();
+                                tblEmpUcode.BusinessID = busId;
+                                tblEmpUcode.CompanyID = cmpId;
+                                tblEmpUcode.UCodeID = EmpUcodes;
+                                tblEmpUcode.EmployeeID = EmployeeId;
+                                _ucodeEmployees.Insert(tblEmpUcode);
+
+                            }
+
+                        }
+                        if (hrsCmb != "")
+                        {
+                            var hrsUcode = new tblaccemp_ucodesemployees();
+                            hrsUcode.BusinessID = busId;
+                            hrsUcode.CompanyID = cmpId;
+                            hrsUcode.UCodeID = hrsCmb;
+                            hrsUcode.EmployeeID = EmployeeId;
+                            _ucodeEmployees.Insert(hrsUcode);
+                        }
+                        if (hoursNo == "" && hoursDept == "")
+                        {
+                            if (Convert.ToBoolean(ShowHourse) && Convert.ToBoolean(REQ_REASONPAGE))
+                            {
+                                var hrsUcode = new tblaccemp_ucodesemployees();
+                                hrsUcode.BusinessID = busId;
+                                hrsUcode.CompanyID = cmpId;
+                                hrsUcode.EmployeeID = EmployeeId;
+                                hrsUcode.UCodeID = "SQ" + hoursDept + hoursNo;
+                                _ucodeEmployees.Insert(hrsUcode);
+                            }
+                        }
+                        if (Address != "")
+                        {
+                            if (templates.Count == 0)
+                            {
+
+                                int res = UpdateEmployee(Convert.ToInt32(cmpId), Convert.ToInt32(busAddsId), EmployeeId, busId);
+                                if (res > -1)
+                                {
+                                    return "success";
+                                }
+                            }
+                            else
+                            {
+                                int res = UpdateEmployee(Convert.ToInt32(cmpId), Convert.ToInt32(busAddsId), EmployeeId, busId);
+                                if (res > -1)
+                                {
+                                    return "success";
+                                }
+                                else
+                                {
+                                    return "";
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        return "Validation";
+                    }
+                    return "success";
                 }
-                return "success";
+                
             }
             catch (Exception e)
             {
@@ -380,6 +628,13 @@ namespace Maximus.Services
             return "";
         }
 
+        #endregion
+
+        #region  GetContactRef 
+        public string GetContactRef(int cntId)
+        {
+          return  _busContact.Exists(s => s.ContactID == cntId && s.ContactType_ID == 7) ? _busContact.GetAll(s => s.ContactID == cntId && s.ContactType_ID == 7).First().Value:"";
+        }
         #endregion
     }
 }

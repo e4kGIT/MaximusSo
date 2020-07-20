@@ -73,5 +73,8 @@ namespace Maximus.Data.Models
         public List<string> ucodeLst { get; set; }
         public List<string> Roles { get; set; }
         public string roleId { get; set; }
+        public int TotalPoints { get; set; }
+
+        public int PointsUsed { get; set; }
     }
 }

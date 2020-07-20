@@ -1,0 +1,128 @@
+﻿<div class="row">
+    <center><h4>Search order</h4></center>
+    <hr />
+    <br />
+    <div class="row" style="border:solid .5px;padding:10px;">
+        <div class="col-md-6">
+            @Html.DevExpress().TextBox(set =>
+                         {
+                             set.Name = "FromOrderNo";
+                             set.Properties.Caption = "From Order no";
+                             set.Properties.CaptionCellStyle.Width = 150;
+                         }).GetHtml()
+        </div>
+        <div class="col-md-6">
+            @Html.DevExpress().TextBox(set =>
+                         {
+                             set.Name = "ToOrderNo";
+                             set.Properties.Caption = "To Order no";
+                             set.Properties.CaptionCellStyle.Width = 150;
+                         }).GetHtml()
+        </div>
+        <div class="col-md-4"></div><div class="col-md-4">
+            <br /><center>
+                @Html.DevExpress().Button(btn =>
+                                                                   {
+                                                                       btn.Name = "btnordno";
+                                                                       btn.Text = "Order";
+                                                                       btn.ClientSideEvents.Click = "GetallOrders";
+                                                                   }).GetHtml()
+            </center>
+        </div><div class="col-md-4"></div>
+    </div><br />
+    <div class="row" style="border:solid .5px;padding:10px;">
+        <div class="col-md-6">
+            @Html.DevExpress().DateEdit(set =>
+                         {
+                             set.Name = "FromOrderdate";
+                             set.Properties.Caption = "From order date";
+                             set.Properties.CaptionCellStyle.Width = 150;
+                             set.Date = DateTime.Now.AddMonths(-3);
+                         }).GetHtml()
+        </div>
+        <div class="col-md-6">
+            @Html.DevExpress().DateEdit(set =>
+{
+    set.Name = "ToOrderdate";
+    set.Properties.Caption = "To order date";
+    set.Properties.CaptionCellStyle.Width = 150;
+    set.Date = DateTime.Now;
+}).GetHtml()
+        </div><br />
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <br /><center>
+                @Html.DevExpress().Button(btn =>
+                                   {
+                                       btn.Name = "btnorddate";
+                                       btn.Text = "Date";
+                                       btn.ClientSideEvents.Click = "GetallOrders";
+                                   }).GetHtml()
+            </center>
+        </div><div class="col-md-4"></div>
+    </div><br />
+    <div class="row">
+        <div class="col-md-6">
+            @Html.DevExpress().TextBox(set =>
+                         {
+                             set.Name = "CustomerOrderno";
+                             set.Properties.Caption = "Customer order no";
+                             set.Properties.CaptionCellStyle.Width = 150;
+                         }).GetHtml()
+        </div>
+        <div class="col-md-2">
+            @Html.DevExpress().Button(btn =>
+                         {
+                             btn.Name = "btnShwlike";
+                             btn.Text = "Show like";
+                             btn.ClientSideEvents.Click = "GetallOrders";
+                         }).GetHtml()
+        </div>
+        <div class="col-md-2">
+            @Html.DevExpress().Button(btn =>
+       {
+           btn.Name = "btnShwexac";
+           btn.Text = "Show exactly";
+           btn.ClientSideEvents.Click = "GetallOrders";
+       }).GetHtml()
+        </div>
+
+    </div><br />
+    <div class="row">
+        <div class="col-md-6">
+            @Html.DevExpress().ComboBox(set =>
+                         {
+                             set.Name = "Orderstatus";
+                             set.Properties.Caption = "Order status";
+                             set.Properties.CaptionCellStyle.Width = 150; set.Properties.ClientSideEvents.SelectedIndexChanged = "GetallOrders"; set.Properties.Items.Add("Show all"); set.Properties.Items.Add("Confirm orders"); set.Properties.Items.Add("Unconfirm orders");
+                         }).GetHtml()
+        </div>
+        <div class="col-md-6">
+            @Html.DevExpress().ComboBox(set =>
+       {
+           set.Name = "User";
+           set.Properties.Caption = "User";
+           set.Properties.CaptionCellStyle.Width = 150;
+           set.Properties.ClientSideEvents.SelectedIndexChanged = "GetallOrders";
+           foreach (var usr in ((List<string>)Session["usrModel"]))
+           {
+               set.Properties.Items.Add(usr);
+           }
+
+       }).GetHtml()
+        </div>
+
+    </div><br />
+    <div class="row">
+        <div class="col-md-6">
+            @Html.DevExpress().ComboBox(set =>
+                         {
+                             set.Name = "recstodisplay"; set.Properties.Caption = "Records to displays"; set.Properties.CaptionCellStyle.Width = 150; set.Properties.ClientSideEvents.SelectedIndexChanged = "GetallOrders"; set.Properties.Items.Add("all");
+                             set.Properties.Items.Add("10");
+                             set.Properties.Items.Add("25");
+                             set.Properties.Items.Add("50");
+                             set.Properties.Items.Add("100");
+                         }).GetHtml()
+        </div>
+    </div>
+</div>

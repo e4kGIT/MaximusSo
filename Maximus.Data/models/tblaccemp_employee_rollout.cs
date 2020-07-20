@@ -20,5 +20,6 @@ namespace Maximus.Data.models
         public bool IsProcessed { get; set; }
         public Nullable<int> PrevOrder { get; set; }
         public string RolloutName { get; set; }
+        public Nullable<System.DateTime> NextOrder { get; set; }
     }
 }

@@ -8,19 +8,30 @@
         {
             if (item.SalesOrderLine.Count > 0)
             {
-                if (item.EmployeeID.Trim() != Session["SelectedEmp"].ToString())
+                if (Convert.ToBoolean(Session["ISEDITING"]) == false)
                 {
-                    Session["clickedEmp"] = Session["SelectedEmp"].ToString();
+                    if (item.EmployeeID.Trim() != Session["SelectedEmp"].ToString())
+                    {
+
+                        Session["clickedEmp"] = Session["SelectedEmp"].ToString();
+
                     <div class="col-md-8 col-lg-8 col-sm-12 col-xs-12" id="@item.EmployeeID" style="cursor:pointer"><span onclick="GetDetailsBasedonGrid('@item.EmployeeID','@Session["BuisnessId"].ToString()')">@item.EmployeeName (@item.EmployeeID) </span>&nbsp;&nbsp;</div>
                     <div class="col-lg-2"><span id="delete+@item.EmployeeID"></span></div>
                     <div class="col-lg-2" id="col+@item.EmployeeID"></div>
-                }
-                else
-                {
-                    Session["clickedEmp"] = Session["SelectedEmp"].ToString();
+                    }
+                    else
+                    {
+                        Session["clickedEmp"] = Session["SelectedEmp"].ToString();
                     <div class="col-md-8 col-lg-8 col-sm-12 col-xs-12 ActiveRes" id="@item.EmployeeID" style="cursor:pointer;color:#009885"><span onclick="GetDetailsBasedonGrid('@item.EmployeeID','@Session["BuisnessId"].ToString()')">@item.EmployeeName (@item.EmployeeID) </span>&nbsp;&nbsp;</div>
                     <div class="col-lg-2"><span id="delete+@item.EmployeeID"><span style="color:red;" title="Click to remove this employee" onclick="RemoveSelecetedEmp('@item.EmployeeID','@Session["BuisnessId"].ToString()')" class="glyphicon glyphicon-remove"></span></span></div>
                     <div class="col-lg-2" id="col+@item.EmployeeID"><span class="glyphicon glyphicon-chevron-right" style="color:#009885"></span></div>
+                    }
+                }
+                else
+                {
+                    <div class="col-md-8 col-lg-8 col-sm-12 col-xs-12" id="@item.EmployeeID" style="cursor:pointer"><span >@item.EmployeeName (@item.EmployeeID) </span>&nbsp;&nbsp;</div>
+                    <div class="col-lg-2"></div>
+                    <div class="col-lg-2" id="col+@item.EmployeeID"></div>
                 }
             }
         }

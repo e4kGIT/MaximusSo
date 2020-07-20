@@ -119,23 +119,26 @@ function getEntitlementDemand(style, error) {
                 if (response != "") {
                     var errorMsg = "";
                     if (error == 1) {
-                        if (response.Result.includes('points'))
-                        {
+                        if (response.Result.includes('points')) {
                             var data = response.Result.split("-////-");
- 
+
                             if (response.availPts > 0) {
-                                errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";
+                                if (response.minMandatoryPts > 0) {
+                                    errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";
+                                }
+                                else {
+                                    errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.Cannot proceed.</span></div>";
+                                }
                             }
                             else {
                                 errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.Cannot proceed.</span></div>";
                             }
-                            
+
                         }
-                        else
-                        {
+                        else {
                             errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed entitlement exceeded</span></div>";
                         }
-                        
+
                     }
                     var data = document.getElementById("Entitlement");
                     data.innerHTML = response.Result.includes('points') ? response.Result.split("-////-")[0] + errorMsg : response.Result + errorMsg;
@@ -156,18 +159,21 @@ function getEntitlementDemand(style, error) {
             success: function (response) {
                 var errorMsg = "";
                 if (error == 1) {
-                    if (response.Result.includes('points'))
-                    {
+                    if (response.Result.includes('points')) {
                         if (response.availPts > 0) {
-                            errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";
+                            if (response.minMandatoryPts > 0) {
+                                errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";
+                            }
+                            else {
+                                errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.Cannot proceed.</span></div>";
+                            }
                         }
                         else {
                             errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.Cannot proceed.</span></div>";
                         }
-                         
+
                     }
-                    else
-                    {
+                    else {
                         errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed entitlement exceeded</span></div>";
                     }
                 }
@@ -199,17 +205,20 @@ function getEntitlementDim(style, error) {
                 if (response != "") {
                     var errorMsg = "";
                     if (error == 1) {
-                        if (response.Result.includes('points'))
-                        {
+                        if (response.Result.includes('points')) {
                             if (response.availPts > 0) {
-                                errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";
+                                if (response.minMandatoryPts > 0) {
+                                    errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";
+                                }
+                                else {
+                                    errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.Cannot proceed.</span></div>";
+                                }
                             }
                             else {
                                 errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.Cannot proceed.</span></div>";
                             }
                         }
-                        else
-                        {
+                        else {
                             errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed entitlement exceeded</span></div>";
                         }
                     }
@@ -232,17 +241,20 @@ function getEntitlementDim(style, error) {
             success: function (response) {
                 var errorMsg = "";
                 if (error == 1) {
-                    if (response.Result.includes('points'))
-                    {
+                    if (response.Result.includes('points')) {
                         if (response.availPts > 0) {
-                            errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";
+                            if (response.minMandatoryPts > 0) {
+                                errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";
+                            }
+                            else {
+                                errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.Cannot proceed.</span></div>";
+                            }
                         }
                         else {
                             errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.Cannot proceed.</span></div>";
                         }
                     }
-                    else
-                    {
+                    else {
                         errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed entitlement exceeded</span></div>";
                     }
                 }
@@ -466,17 +478,20 @@ function getEntitlementSwatch(style, orgStyl, error) {
                     if (response != "") {
                         var errorMsg = "";
                         if (error == 1) {
-                            if (response.Result.includes('points'))
-                            {
+                            if (response.Result.includes('points')) {
                                 if (response.availPts > 0) {
-                                    errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";
+                                    if (response.minMandatoryPts > 0) {
+                                        errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";
+                                    }
+                                    else {
+                                        errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.Cannot proceed.</span></div>";
+                                    }
                                 }
                                 else {
                                     errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.Cannot proceed.</span></div>";
                                 }
                             }
-                            else
-                            {
+                            else {
                                 errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed entitlement exceeded</span></div>";
                             }
                         }
@@ -499,17 +514,20 @@ function getEntitlementSwatch(style, orgStyl, error) {
                 success: function (response) {
                     var errorMsg = "";
                     if (error == 1) {
-                        if (response.Result.includes('points'))
-                        {
+                        if (response.Result.includes('points')) {
                             if (response.availPts > 0) {
-                                errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";
+                                if (response.minMandatoryPts > 0) {
+                                    errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";
+                                }
+                                else {
+                                    errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.Cannot proceed.</span></div>";
+                                }
                             }
                             else {
                                 errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.Cannot proceed.</span></div>";
                             }
                         }
-                        else
-                        {
+                        else {
                             errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed entitlement exceeded</span></div>";
                         }
                     }
@@ -558,17 +576,20 @@ function getEntitlementDimSwatch(style, error) {
                     if (response != "") {
                         var errorMsg = "";
                         if (error == 1) {
-                            if (response.Result.includes('points'))
-                            {
+                            if (response.Result.includes('points')) {
                                 if (response.availPts > 0) {
-                                    errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";
+                                    if (response.minMandatoryPts > 0) {
+                                        errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";
+                                    }
+                                    else {
+                                        errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.Cannot proceed.</span></div>";
+                                    }
                                 }
                                 else {
                                     errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.Cannot proceed.</span></div>";
                                 }
                             }
-                            else
-                            {
+                            else {
                                 errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed entitlement exceeded</span></div>";
                             }
                         }
@@ -591,17 +612,20 @@ function getEntitlementDimSwatch(style, error) {
                 success: function (response) {
                     var errorMsg = "";
                     if (error == 1) {
-                        if (response.Result.includes('points'))
-                        {
+                        if (response.Result.includes('points')) {
                             if (response.availPts > 0) {
-                                errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";
+                                if (response.minMandatoryPts > 0) {
+                                    errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";
+                                }
+                                else {
+                                    errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.Cannot proceed.</span></div>";
+                                }
                             }
                             else {
                                 errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.Cannot proceed.</span></div>";
                             }
                         }
-                        else
-                        {
+                        else {
                             errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed entitlement exceeded</span></div>";
                         }
                     }
@@ -659,17 +683,20 @@ function getEntitlementDemandSwatch(style, orgStyl, error) {
                         var data = document.getElementById("Entitlement");
                         var errorMsg = "";
                         if (error == 1) {
-                            if (response.Result.includes('points'))
-                            {
-                                if (response.availPts>0) {
-                                    errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";
+                            if (response.Result.includes('points')) {
+                                if (response.availPts > 0) {
+                                    if (response.minMandatoryPts > 0) {
+                                        errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";
+                                    }
+                                    else {
+                                        errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.Cannot proceed.</span></div>";
+                                    }
                                 }
                                 else {
                                     errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.Cannot proceed.</span></div>";
                                 }
                             }
-                            else
-                            {
+                            else {
                                 errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed entitlement exceeded</span></div>";
                             }
                         }
@@ -692,17 +719,20 @@ function getEntitlementDemandSwatch(style, orgStyl, error) {
                     var data = document.getElementById("Entitlement");
                     var errorMsg = "";
                     if (error == 1) {
-                        if (response.Result.includes('points'))
-                        {
+                        if (response.Result.includes('points')) {
                             if (response.availPts > 0) {
-                                errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";
+                                if (response.minMandatoryPts > 0) {
+                                    errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";
+                                }
+                                else {
+                                    errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.Cannot proceed.</span></div>";
+                                }
                             }
                             else {
                                 errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.Cannot proceed.</span></div>";
                             }
                         }
-                        else
-                        {
+                        else {
                             errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed entitlement exceeded</span></div>";
                         }
                     }
@@ -780,6 +810,7 @@ function addTocartSwatch(s, e) {
     var reasonName = "CmbReason_" + stylearr[1];
     var reasonControl = document.getElementsByName(reasonName);
     var reason;
+
     if (reasonControl.length > 0) {
         reason = reasonControl[0].value == "" | reasonControl[0].value == undefined ? reasonControl[0].defaultValue == "" | reasonControl[0].defaultValue == "" ? "" : reasonControl[0].defaultValue : reasonControl[0].value;
     }
@@ -825,19 +856,21 @@ function addTocartSwatch(s, e) {
     else {
         sStyle = stylearr[1];
     }
+    var minPtsDivName = "minPtsDiv_" + sStyle;
+    var minPtsDiv = document.getElementsByClassName(minPtsDivName)
     var desc = descStyle == undefined ? stylearr[1] : descStyle[0];
     var Spin = document.getElementsByName("spinEdit_" + stylearr[1]);
     var descriptionDiv = document.getElementById("LbDescription" + desc);
     description = descriptionDiv.innerHTML;
     var priceId = document.getElementById("LbPriceinput" + stylearr[1]);
-    price = priceId != undefined && priceId != null ? priceId.value : "0";
+    price = priceId != undefined && priceId != null ? priceId.value : priceId == undefined ? "0.0" : "0";
     qty = Spin[0].value;
     var clsName = "reqData" + stylearr[1];
     var reqdatatxt = "reqdatatxt" + stylearr[1];
     var reqData = document.getElementsByClassName(clsName);
     if (reqData[0].style.display != "none") {
         var reqtxt = document.getElementsByClassName(reqdatatxt);
-        if (description != "" && price != "" && size != "" && color != "" && qty != "" && qty != "0" && reqtxt[0].value != "" && (selectedSitecode != "" | selectedSitecode == "SITECODENULL")) {
+        if (description != "" && price != "" && price != "0" && size != "" && color != "" && qty != "" && qty != "0" && reqtxt[0].value != "" && (selectedSitecode != "" | selectedSitecode == "SITECODENULL")) {
             if (stylearr[2] != "") {
                 $.ajax({
                     url: "/Home/GetBtnStatus/",
@@ -860,19 +893,43 @@ function addTocartSwatch(s, e) {
                                         $.ajax({
                                             url: "/Home/GetPointsDiv/",
                                             type: "POST",
+                                            data: { 'orgStyle': stylearr[3] },
                                             success: function (response) {
-                                                if (response != "") {
+                                                if (response.PointsDiv != "") {
                                                     $("#PointsDiv").html("");
-                                                    $("#PointsDiv").html(response);
+                                                    $("#PointsDiv").html(response.PointsDiv);
+                                                    if (response.PointsTaken != "") {
+                                                        var division = "minPtsDiv_" + stylearr[3];
+                                                        var pts = document.getElementsByClassName(division);
+                                                        if (pts != null && pts != undefined) {
+                                                            for (var k = 0; k < pts.length; k++) {
+                                                                pts[k].innerHTML = response.PointsTaken;
+                                                            }
+                                                        }
+                                                    }
                                                 }
                                             }
                                         });
                                         myFunction("Added to cart..!");
+
                                         //myFunction("Added to cart..!");  ;
                                     }
                                     else {
                                         loadPopup.Hide();
-                                        myFunction("Try again..!");
+                                        $.ajax({
+                                            url: "/Home/IsEmergencyreasonFailed/",
+                                            type: "POST",
+                                            data: { 'reason': reason },
+                                            success: function (response) {
+                                                if (response != "") {
+                                                    alert(response);
+                                                }
+                                                else {
+                                                    alert("Try again..!");
+                                                }
+
+                                            }
+                                        });
                                         //alert("Try again!");
                                     }
                                 },
@@ -892,7 +949,7 @@ function addTocartSwatch(s, e) {
                     },
                     error: function () {
                         loadPopup.Hide();
-                        myFunction("Added to cart..!"); ("Try again!");
+                        myFunction("Try again!");
                     }
                 });
             }
@@ -917,18 +974,43 @@ function addTocartSwatch(s, e) {
                                         $.ajax({
                                             url: "/Home/GetPointsDiv/",
                                             type: "POST",
+                                            data: { 'orgStyle': stylearr[3] },
                                             success: function (response) {
-                                                if (response != "") {
+                                                if (response.PointsDiv != "") {
                                                     $("#PointsDiv").html("");
-                                                    $("#PointsDiv").html(response);
+                                                    $("#PointsDiv").html(response.PointsDiv);
+                                                    if (response.PointsTaken != "") {
+                                                        var division = "minPtsDiv_" + stylearr[3];
+                                                        var pts = document.getElementsByClassName(division);
+                                                        if (pts != null && pts != undefined) {
+                                                            for (var k = 0; k < pts.length; k++) {
+                                                                pts[k].innerHTML = response.PointsTaken;
+                                                            }
+                                                        }
+                                                    }
+
                                                 }
                                             }
                                         });
                                         myFunction("Added to cart..!");
+
                                     }
                                     else {
                                         loadPopup.Hide();
-                                        alert("Try again!");
+                                        $.ajax({
+                                            url: "/Home/IsEmergencyreasonFailed/",
+                                            type: "POST",
+                                            data: { 'reason': reason },
+                                            success: function (response) {
+                                                if (response != "") {
+                                                    alert(response);
+                                                }
+                                                else {
+                                                    alert("Try again..!");
+                                                }
+
+                                            }
+                                        });
                                     }
                                 },
                                 error: function () {
@@ -953,7 +1035,7 @@ function addTocartSwatch(s, e) {
 
         }
         else {
-            if (price == "" || price == null || price == undefined) {
+            if (price == "" || price == null || price == undefined || price == "0") {
                 alert("Please choose a size");
             }
             else if (size == "" || size == null || size == undefined) {
@@ -974,7 +1056,7 @@ function addTocartSwatch(s, e) {
         }
     }
     else {
-        if (description != "" && price != "" && size != "" && color != "" && qty != "" && qty != "0" && (selectedSitecode != "" | selectedSitecode == "SITECODENULL")) {
+        if (description != "" && price != "" && price != "0" && size != "" && color != "" && qty != "" && qty != "0" && (selectedSitecode != "" | selectedSitecode == "SITECODENULL")) {
             if (stylearr[2] != "") {
                 $.ajax({
                     url: "/Home/GetBtnStatus/",
@@ -997,19 +1079,44 @@ function addTocartSwatch(s, e) {
                                         $.ajax({
                                             url: "/Home/GetPointsDiv/",
                                             type: "POST",
+                                            data: { 'orgStyle': stylearr[3] },
                                             success: function (response) {
-                                                if (response != "") {
+                                                if (response.PointsDiv != "") {
                                                     $("#PointsDiv").html("");
-                                                    $("#PointsDiv").html(response);
+                                                    $("#PointsDiv").html(response.PointsDiv);
+                                                    if (response.PointsTaken != "") {
+                                                        var division = "minPtsDiv_" + stylearr[3];
+                                                        var pts = document.getElementsByClassName(division);
+                                                        if (pts != null && pts != undefined) {
+                                                            for (var k = 0; k < pts.length; k++) {
+                                                                pts[k].innerHTML = response.PointsTaken;
+                                                            }
+                                                        }
+                                                    }
+
                                                 }
                                             }
                                         });
                                         myFunction("Added to cart..!");
+
                                         //myFunction("Added to cart..!");  ;
                                     }
                                     else {
                                         loadPopup.Hide();
-                                        myFunction("Try again..!");
+                                        $.ajax({
+                                            url: "/Home/IsEmergencyreasonFailed/",
+                                            type: "POST",
+                                            data: { 'reason': reason },
+                                            success: function (response) {
+                                                if (response != "") {
+                                                    alert(response);
+                                                }
+                                                else {
+                                                    alert("Try again..!");
+                                                }
+
+                                            }
+                                        });
                                         //alert("Try again!");
                                     }
                                 },
@@ -1054,18 +1161,42 @@ function addTocartSwatch(s, e) {
                                         $.ajax({
                                             url: "/Home/GetPointsDiv/",
                                             type: "POST",
+                                            data: { 'orgStyle': stylearr[3] },
                                             success: function (response) {
-                                                if (response != "") {
+                                                if (response.PointsDiv != "") {
                                                     $("#PointsDiv").html("");
-                                                    $("#PointsDiv").html(response);
+                                                    $("#PointsDiv").html(response.PointsDiv);
+                                                    if (response.PointsTaken != "") {
+                                                        var division = "minPtsDiv_" + stylearr[3];
+                                                        var pts = document.getElementsByClassName(division);
+                                                        if (pts != null && pts != undefined) {
+                                                            for (var k = 0; k < pts.length; k++) {
+                                                                pts[k].innerHTML = response.PointsTaken;
+                                                            }
+                                                        }
+                                                    }
                                                 }
                                             }
                                         });
                                         myFunction("Added to cart..!");
+
                                     }
                                     else {
                                         loadPopup.Hide();
-                                        alert("Try again!");
+                                        $.ajax({
+                                            url: "/Home/IsEmergencyreasonFailed/",
+                                            type: "POST",
+                                            data: { 'reason': reason },
+                                            success: function (response) {
+                                                if (response != "") {
+                                                    alert(response);
+                                                }
+                                                else {
+                                                    alert("Try again..!");
+                                                }
+
+                                            }
+                                        });
                                     }
                                 },
                                 error: function () {
@@ -1090,7 +1221,7 @@ function addTocartSwatch(s, e) {
 
         }
         else {
-            if (price == "" || price == null || undefined) {
+            if (price == "" || price == null || price == undefined || price == "0") {
                 alert("Please choose a size");
             }
             else if (size == "" || size == null || size == undefined) {
@@ -1112,16 +1243,15 @@ function addTocartSwatch(s, e) {
     }
 }
 
-function PointsEndCallBack(s,e)
-{
+function PointsEndCallBack() {
+
     $.ajax({
         type: "post",
         url: "/Home/GetPointsDiv/",
-        success:function(resp)
-        {
-            if (resp != "") {
+        success: function (resp) {
+            if (resp.PointsDiv != "") {
                 $("#PointsDiv").html("");
-                $("#PointsDiv").html(resp);
+                $("#PointsDiv").html(resp.PointsDiv);
             }
         }
     });
@@ -1396,18 +1526,20 @@ function addTocartDemandSwatch(s, e) {
     else {
         sStyle = stylearr[1];
     }
+    var minPtsDivName = "minPtsDiv_" + stylearr[3];
+    var minPtsDiv = document.getElementsByClassName(minPtsDivName)
     var desc = descStyle == undefined ? stylearr[1] : descStyle[0];
     var Spin = document.getElementsByName("spinDemandEdit_" + stylearr[1]);
-    var priceId = document.getElementById("DimviewPriceinput" + stylearr[1]);
+    var priceId = document.getElementById("DimviewPriceinput1" + stylearr[1]);
     description = document.getElementById("LbdemandDescription" + desc).innerHTML;
-    price = priceId != undefined && priceId != null ? priceId.value : "0";
+    price = priceId != undefined && priceId != null ? priceId.value : priceId == undefined ? "0.0" : "0"; "0";
     qty = Spin[0].value;
     var clsName = "reqDatadim" + stylearr[1];
     var reqdatatxt = "reqdatatxtdim" + stylearr[1];
     var reqData = document.getElementsByClassName(clsName);
     if (reqData[0].style.display != "none") {
         var reqtxt = document.getElementsByClassName(reqdatatxt);
-        if (description != "" && price != "" && size != undefined && price != undefined && color != undefined && size != "" && color != "" && qty != "" && qty != "0" && reqtxt[0].value != "" && (selectedSitecode != "" | selectedSitecode == "SITECODENULL")) {
+        if (description != "" && price != "" && price != "0" && size != undefined && price != undefined && color != undefined && size != "" && color != "" && qty != "" && qty != "0" && reqtxt[0].value != "" && (selectedSitecode != "" | selectedSitecode == "SITECODENULL")) {
             if (stylearr[2] != "") {
                 $.ajax({
                     url: "/Home/GetBtnStatus/",
@@ -1416,42 +1548,210 @@ function addTocartDemandSwatch(s, e) {
                     success: function (response) {
                         debugger;
                         if (response == "enabled" | (reason != "" && reason != undefined)) {
-                            loadPopup.Show();
+                            if (minPtsDiv != undefined || minPtsDiv != null) {
+                                $.ajax({
+                                    url: "/Home/UpdateMinPoints/",
+                                    type: "POST",
+                                    data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reason': reason, 'selectedSitecode': selectedSitecode },
+                                    success: function (response) {
+                                        if (response.message != "" && response.message != null) {
+                                            if (response.message.includes("__ALERT__")) {
+                                                var cnfmessage = response.message.split("__ALERT__")[1] + "\n\nPlease click Ok to proceed to cart or Cancel to continue shopping";
+                                                if (confirm(cnfmessage)) {
+                                                    loadPopup.Show();
+                                                    selectedSitecode = selectedSitecode == "SITECODENULL" ? "" : selectedSitecode;
+                                                    $.ajax({
+                                                        url: "/Home/Addtocart/",
+                                                        type: "POST",
+                                                        data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reqData1': reqtxt[0].value, 'reason': reason, 'selectedSitecode': selectedSitecode },
+                                                        success: function (response) {
+                                                            if (response != "") {
+                                                                $("#CartwidCount").html("");
+                                                                $("#CartwidCount").html(response);
+                                                                loadPopup.Hide();
+                                                                $.ajax({
+                                                                    url: "/Home/GetPointsDiv/",
+                                                                    type: "POST",
+                                                                    data: { 'orgStyle': stylearr[3] },
+                                                                    success: function (response) {
+                                                                        if (response.PointsDiv != "") {
+                                                                            $("#PointsDiv").html("");
+                                                                            $("#PointsDiv").html(response.PointsDiv);
+                                                                            if (response.PointsTaken != "") {
+                                                                                var division = "minPtsDiv_" + stylearr[3];
+                                                                                var pts = document.getElementsByClassName(division);
+                                                                                if (pts != null && pts != undefined) {
+                                                                                    for (var k = 0; k < pts.length; k++) {
+                                                                                        pts[k].innerHTML = response.PointsTaken;
+                                                                                    }
+                                                                                }
+                                                                            }
 
-                            selectedSitecode = selectedSitecode == "SITECODENULL" ? "" : selectedSitecode;
-                            $.ajax({
-                                url: "/Home/Addtocart/",
-                                type: "POST",
-                                data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reqData1': reqtxt[0].value, 'reason': reason, 'selectedSitecode': selectedSitecode },
-                                success: function (response) {
-                                    if (response != "") {
-                                        $("#CartwidCount").html("");
-                                        $("#CartwidCount").html(response);
-                                        loadPopup.Hide();
-                                        $.ajax({
-                                            url: "/Home/GetPointsDiv/",
-                                            type: "POST",
-                                            success:function(response)
-                                            {
-                                                if(response!="")
-                                                {
-                                                    $("#PointsDiv").html("");
-                                                    $("#PointsDiv").html(response);
+                                                                        }
+                                                                    }
+                                                                });
+                                                                myFunction("Added to cart..!");
+                                                            }
+                                                            else {
+                                                                loadPopup.Hide();
+                                                                $.ajax({
+                                                                    url: "/Home/IsEmergencyreasonFailed/",
+                                                                    type: "POST",
+                                                                    data: { 'reason': reason },
+                                                                    success: function (response) {
+                                                                        if (response != "") {
+                                                                            alert(response);
+                                                                        }
+                                                                        else {
+                                                                            alert("Try again..!");
+                                                                        }
+
+                                                                    }
+                                                                });
+                                                            }
+                                                        },
+                                                        error: function () {
+                                                            loadPopup.Hide();
+                                                            alert("Try again!");
+                                                        }
+                                                    });
                                                 }
                                             }
-                                        });
-                                        myFunction("Added to cart..!");
+                                            else {
+                                                if (response.pointsStyle.length > 0) {
+                                                    for (var k = 0; k < response.pointsStyle.length; k++) {
+                                                        var idMinPts = "minPtsDiv_" + response.pointsStyle[k];
+                                                        var pointsDivReplace = document.getElementsByClassName(idMinPts);
+                                                        if (pointsDivReplace != undefined && pointsDivReplace != null && pointsDivReplace != "") {
+                                                            for (var j = 0; j < pointsDivReplace.length; j++) {
+                                                                pointsDivReplace[j].innerHTML = response.message;
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                loadPopup.Show();
+                                                selectedSitecode = selectedSitecode == "SITECODENULL" ? "" : selectedSitecode;
+                                                $.ajax({
+                                                    url: "/Home/Addtocart/",
+                                                    type: "POST",
+                                                    data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reqData1': reqtxt[0].value, 'reason': reason, 'selectedSitecode': selectedSitecode },
+                                                    success: function (response) {
+                                                        if (response != "") {
+                                                            $("#CartwidCount").html("");
+                                                            $("#CartwidCount").html(response);
+                                                            loadPopup.Hide();
+                                                            $.ajax({
+                                                                url: "/Home/GetPointsDiv/",
+                                                                type: "POST",
+                                                                data: { 'orgStyle': stylearr[3] },
+                                                                success: function (response) {
+                                                                    if (response.PointsDiv != "") {
+                                                                        $("#PointsDiv").html("");
+                                                                        $("#PointsDiv").html(response.PointsDiv);
+                                                                        if (response.PointsTaken != "") {
+                                                                            var division = "minPtsDiv_" + stylearr[3];
+                                                                            var pts = document.getElementsByClassName(division);
+                                                                            if (pts != null && pts != undefined) {
+                                                                                for (var k = 0; k < pts.length; k++) {
+                                                                                    pts[k].innerHTML = response.PointsTaken;
+                                                                                }
+                                                                            }
+                                                                        }
+
+                                                                    }
+                                                                }
+                                                            });
+                                                            myFunction("Added to cart..!");
+                                                        }
+                                                        else {
+                                                            loadPopup.Hide();
+                                                            $.ajax({
+                                                                url: "/Home/IsEmergencyreasonFailed/",
+                                                                type: "POST",
+                                                                data: { 'reason': reason },
+                                                                success: function (response) {
+                                                                    if (response != "") {
+                                                                        alert(response);
+                                                                    }
+                                                                    else {
+                                                                        alert("Try again..!");
+                                                                    }
+
+                                                                }
+                                                            });
+                                                        }
+                                                    },
+                                                    error: function () {
+                                                        loadPopup.Hide();
+                                                        alert("Try again!");
+                                                    }
+                                                });
+
+                                            }
+                                        }
                                     }
-                                    else {
+                                });
+                            }
+                            else {
+                                loadPopup.Show();
+                                selectedSitecode = selectedSitecode == "SITECODENULL" ? "" : selectedSitecode;
+                                $.ajax({
+                                    url: "/Home/Addtocart/",
+                                    type: "POST",
+                                    data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reqData1': reqtxt[0].value, 'reason': reason, 'selectedSitecode': selectedSitecode },
+                                    success: function (response) {
+                                        if (response != "") {
+                                            $("#CartwidCount").html("");
+                                            $("#CartwidCount").html(response);
+                                            loadPopup.Hide();
+                                            $.ajax({
+                                                url: "/Home/GetPointsDiv/",
+                                                type: "POST",
+                                                data: { 'orgStyle': stylearr[3] },
+                                                success: function (response) {
+                                                    if (response.PointsDiv != "") {
+                                                        $("#PointsDiv").html("");
+                                                        $("#PointsDiv").html(response.PointsDiv);
+                                                        if (response.PointsTaken != "") {
+                                                            var division = "minPtsDiv_" + stylearr[3];
+                                                            var pts = document.getElementsByClassName(division);
+                                                            if (pts != null && pts != undefined) {
+                                                                for (var k = 0; k < pts.length; k++) {
+                                                                    pts[k].innerHTML = response.PointsTaken;
+                                                                }
+                                                            }
+                                                        }
+
+                                                    }
+                                                }
+                                            });
+                                            myFunction("Added to cart..!");
+                                        }
+                                        else {
+                                            loadPopup.Hide();
+                                            $.ajax({
+                                                url: "/Home/IsEmergencyreasonFailed/",
+                                                type: "POST",
+                                                data: { 'reason': reason },
+                                                success: function (response) {
+                                                    if (response != "") {
+                                                        alert(response);
+                                                    }
+                                                    else {
+                                                        alert("Try again..!");
+                                                    }
+
+                                                }
+                                            });
+                                        }
+                                    },
+                                    error: function () {
                                         loadPopup.Hide();
                                         alert("Try again!");
                                     }
-                                },
-                                error: function () {
-                                    loadPopup.Hide();
-                                    alert("Try again!");
-                                }
-                            })
+                                });
+                            }
+
                         }
                         else {
                             // document.getElementById("ErrorMessage").style.display = 'block';
@@ -1475,38 +1775,204 @@ function addTocartDemandSwatch(s, e) {
                     type: "POST",
                     data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty, 'orgStyl': stylearr[3] },
                     success: function (response) {
-                        debugger;
                         if (response == "enabled" | (reason != "" && reason != undefined)) {
-                            $.ajax({
-                                url: "/Home/Addtocart/",
-                                type: "POST",
-                                data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reason': reason, 'selectedSitecode': selectedSitecode },
-                                success: function (response) {
-                                    if (response != "") {
-                                        $("#CartwidCount").html("");
-                                        $("#CartwidCount").html(response);
-                                        $.ajax({
-                                            url: "/Home/GetPointsDiv/",
-                                            type: "POST",
-                                            success: function (response) {
-                                                if (response != "") {
-                                                    $("#PointsDiv").html("");
-                                                    $("#PointsDiv").html(response);
+                            if (minPtsDiv != undefined || minPtsDiv != null) {
+                                $.ajax({
+                                    url: "/Home/UpdateMinPoints/",
+                                    type: "POST",
+                                    data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reason': reason, 'selectedSitecode': selectedSitecode },
+                                    success: function (response) {
+                                        if (response.message != "" && response.message != null) {
+                                            if (response.message.includes("__ALERT__")) {
+                                                var cnfmessage = response.message.split("__ALERT__")[1] + "\n\nPlease click Ok to proceed to cart or Cancel to continue shopping";
+                                                if (confirm(response.message.split("__ALERT__")[1])) {
+                                                    $.ajax({
+                                                        url: "/Home/Addtocart/",
+                                                        type: "POST",
+                                                        data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reason': reason, 'selectedSitecode': selectedSitecode },
+                                                        success: function (response) {
+                                                            if (response != "") {
+                                                                $("#CartwidCount").html("");
+                                                                $("#CartwidCount").html(response);
+                                                                $.ajax({
+                                                                    url: "/Home/GetPointsDiv/",
+                                                                    type: "POST",
+                                                                    data: { 'orgStyle': stylearr[3] },
+                                                                    success: function (response) {
+                                                                        if (response.PointsDiv != "") {
+                                                                            $("#PointsDiv").html("");
+                                                                            $("#PointsDiv").html(response.PointsDiv);
+                                                                            if (response.PointsTaken != "") {
+                                                                                var division = "minPtsDiv_" + stylearr[3];
+                                                                                var pts = document.getElementsByClassName(division);
+                                                                                if (pts != null && pts != undefined) {
+                                                                                    for (var k = 0; k < pts.length; k++) {
+                                                                                        pts[k].innerHTML = response.PointsTaken;
+                                                                                    }
+                                                                                }
+                                                                            }
+
+                                                                        }
+                                                                    }
+                                                                });
+                                                                myFunction("Added to cart..!");
+
+                                                            }
+                                                            else {
+                                                                loadPopup.Hide();
+                                                                $.ajax({
+                                                                    url: "/Home/IsEmergencyreasonFailed/",
+                                                                    type: "POST",
+                                                                    data: { 'reason': reason },
+                                                                    success: function (response) {
+                                                                        if (response != "") {
+                                                                            alert(response);
+                                                                        }
+                                                                        else {
+                                                                            alert("Try again..!");
+                                                                        }
+
+                                                                    }
+                                                                });
+                                                            }
+                                                        },
+                                                        error: function () {
+                                                            loadPopup.Hide();
+                                                            alert("Try again!");
+                                                        }
+                                                    });
                                                 }
                                             }
-                                        });
-                                        myFunction("Added to cart..!");
+                                            else {
+                                                if (response.pointsStyle.length > 0) {
+                                                    for (var k = 0; k < response.pointsStyle.length; k++) {
+                                                        var idMinPts = "minPtsDiv_" + response.pointsStyle[k];
+                                                        var pointsDivReplace = document.getElementsByClassName(idMinPts);
+                                                        if (pointsDivReplace != undefined && pointsDivReplace != null && pointsDivReplace != "") {
+                                                            for (var j = 0; j < pointsDivReplace.length; j++) {
+                                                                pointsDivReplace[j].innerHTML = response.message;
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                $.ajax({
+                                                    url: "/Home/Addtocart/",
+                                                    type: "POST",
+                                                    data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reason': reason, 'selectedSitecode': selectedSitecode },
+                                                    success: function (response) {
+                                                        if (response != "") {
+                                                            $("#CartwidCount").html("");
+                                                            $("#CartwidCount").html(response);
+                                                            $.ajax({
+                                                                url: "/Home/GetPointsDiv/",
+                                                                type: "POST",
+                                                                data: { 'orgStyle': stylearr[3] },
+                                                                success: function (response) {
+                                                                    if (response.PointsDiv != "") {
+                                                                        $("#PointsDiv").html("");
+                                                                        $("#PointsDiv").html(response.PointsDiv);
+                                                                        if (response.PointsTaken != "") {
+                                                                            var division = "minPtsDiv_" + stylearr[3];
+                                                                            var pts = document.getElementsByClassName(division);
+                                                                            if (pts != null && pts != undefined) {
+                                                                                for (var k = 0; k < pts.length; k++) {
+                                                                                    pts[k].innerHTML = response.PointsTaken;
+                                                                                }
+                                                                            }
+                                                                        }
+
+                                                                    }
+                                                                }
+                                                            });
+                                                            myFunction("Added to cart..!");
+
+                                                        }
+                                                        else {
+                                                            loadPopup.Hide();
+                                                            $.ajax({
+                                                                url: "/Home/IsEmergencyreasonFailed/",
+                                                                type: "POST",
+                                                                data: { 'reason': reason },
+                                                                success: function (response) {
+                                                                    if (response != "") {
+                                                                        alert(response);
+                                                                    }
+                                                                    else {
+                                                                        alert("Try again..!");
+                                                                    }
+
+                                                                }
+                                                            });
+                                                        }
+                                                    },
+                                                    error: function () {
+                                                        loadPopup.Hide();
+                                                        alert("Try again!");
+                                                    }
+                                                });
+                                            }
+                                        }
                                     }
-                                    else {
+                                });
+                            }
+                            else {
+                                $.ajax({
+                                    url: "/Home/Addtocart/",
+                                    type: "POST",
+                                    data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reason': reason, 'selectedSitecode': selectedSitecode },
+                                    success: function (response) {
+                                        if (response != "") {
+                                            $("#CartwidCount").html("");
+                                            $("#CartwidCount").html(response);
+                                            $.ajax({
+                                                url: "/Home/GetPointsDiv/",
+                                                type: "POST",
+                                                data: { 'orgStyle': stylearr[3] },
+                                                success: function (response) {
+                                                    if (response.PointsDiv != "") {
+                                                        $("#PointsDiv").html("");
+                                                        $("#PointsDiv").html(response.PointsDiv);
+                                                        if (response.PointsTaken != "") {
+                                                            var division = "minPtsDiv_" + stylearr[3];
+                                                            var pts = document.getElementsByClassName(division);
+                                                            if (pts != null && pts != undefined) {
+                                                                for (var k = 0; k < pts.length; k++) {
+                                                                    pts[k].innerHTML = response.PointsTaken;
+                                                                }
+                                                            }
+                                                        }
+
+                                                    }
+                                                }
+                                            });
+                                            myFunction("Added to cart..!");
+
+                                        }
+                                        else {
+                                            loadPopup.Hide();
+                                            $.ajax({
+                                                url: "/Home/IsEmergencyreasonFailed/",
+                                                type: "POST",
+                                                data: { 'reason': reason },
+                                                success: function (response) {
+                                                    if (response != "") {
+                                                        alert(response);
+                                                    }
+                                                    else {
+                                                        alert("Try again..!");
+                                                    }
+
+                                                }
+                                            });
+                                        }
+                                    },
+                                    error: function () {
                                         loadPopup.Hide();
                                         alert("Try again!");
                                     }
-                                },
-                                error: function () {
-                                    loadPopup.Hide();
-                                    alert("Try again!");
-                                }
-                            })
+                                });
+                            }
+
                         }
                         else {
                             // document.getElementById("ErrorMessage").style.display = 'block';
@@ -1524,7 +1990,7 @@ function addTocartDemandSwatch(s, e) {
 
         }
         else {
-            if (price == "" || price == null || undefined) {
+            if (price == "" || price == null || price == undefined || price == "0") {
                 alert("Please choose a size");
             }
             else if (size == "" || size == null || size == undefined) {
@@ -1544,7 +2010,7 @@ function addTocartDemandSwatch(s, e) {
         }
     }
     else {
-        if (description != "" && price != "" && size != undefined && price != undefined && color != undefined && size != "" && color != "" && qty != "" && qty != "0" && (selectedSitecode != "" | selectedSitecode == "SITECODENULL")) {
+        if (description != "" && price != "" && price != "0" && size != undefined && price != undefined && color != undefined && size != "" && color != "" && qty != "" && qty != "0" && (selectedSitecode != "" | selectedSitecode == "SITECODENULL")) {
             if (stylearr[2] != "") {
 
                 $.ajax({
@@ -1554,40 +2020,215 @@ function addTocartDemandSwatch(s, e) {
                     success: function (response) {
                         debugger;
                         if (response == "enabled" | (reason != "" && reason != undefined)) {
-                            loadPopup.Show();
+                            if (minPtsDiv != undefined || minPtsDiv != null) {
+                                $.ajax({
+                                    url: "/Home/UpdateMinPoints/",
+                                    type: "POST",
+                                    data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reason': reason, 'selectedSitecode': selectedSitecode },
+                                    success: function (response) {
+                                        if (response.message != "" && response.message != null) {
+                                            if (response.message.includes("__ALERT__")) {
+                                                var cnfmessage = response.message.split("__ALERT__")[1] + "\n\nPlease click Ok to proceed to cart or Cancel to continue shopping";
+                                                if (confirm(cnfmessage)) {
+                                                    loadPopup.Show();
+                                                    selectedSitecode = selectedSitecode == "SITECODENULL" ? "" : selectedSitecode;
+                                                    $.ajax({
+                                                        url: "/Home/Addtocart/",
+                                                        type: "POST",
+                                                        data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reason': reason, 'selectedSitecode': selectedSitecode },
+                                                        success: function (response) {
+                                                            if (response != "") {
+                                                                $("#CartwidCount").html("");
+                                                                $("#CartwidCount").html(response);
+                                                                loadPopup.Hide();
+                                                                $.ajax({
+                                                                    url: "/Home/GetPointsDiv/",
+                                                                    type: "POST",
+                                                                    data: { 'orgStyle': stylearr[3] },
+                                                                    success: function (response) {
+                                                                        if (response.PointsDiv != "") {
+                                                                            $("#PointsDiv").html("");
+                                                                            $("#PointsDiv").html(response.PointsDiv);
+                                                                            if (response.PointsTaken != "") {
+                                                                                var division = "minPtsDiv_" + stylearr[3];
+                                                                                var pts = document.getElementsByClassName(division);
+                                                                                if (pts != null && pts != undefined) {
+                                                                                    for (var k = 0; k < pts.length; k++) {
+                                                                                        pts[k].innerHTML = response.PointsTaken;
+                                                                                    }
+                                                                                }
+                                                                            }
 
-                            selectedSitecode = selectedSitecode == "SITECODENULL" ? "" : selectedSitecode;
-                            $.ajax({
-                                url: "/Home/Addtocart/",
-                                type: "POST",
-                                data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reason': reason, 'selectedSitecode': selectedSitecode },
-                                success: function (response) {
-                                    if (response != "") {
-                                        $("#CartwidCount").html("");
-                                        $("#CartwidCount").html(response);
-                                        loadPopup.Hide();
-                                        $.ajax({
-                                            url: "/Home/GetPointsDiv/",
-                                            type: "POST",
-                                            success: function (response) {
-                                                if (response != "") {
-                                                    $("#PointsDiv").html("");
-                                                    $("#PointsDiv").html(response);
+                                                                        }
+                                                                    }
+                                                                });
+                                                                myFunction("Added to cart..!");
+
+                                                            }
+                                                            else {
+                                                                loadPopup.Hide();
+                                                                $.ajax({
+                                                                    url: "/Home/IsEmergencyreasonFailed/",
+                                                                    type: "POST",
+                                                                    data: { 'reason': reason },
+                                                                    success: function (response) {
+                                                                        if (response != "") {
+                                                                            alert(response);
+                                                                        }
+                                                                        else {
+                                                                            alert("Try again..!");
+                                                                        }
+
+                                                                    }
+                                                                });
+                                                            }
+                                                        },
+                                                        error: function () {
+                                                            loadPopup.Hide();
+                                                            alert("Try again!");
+                                                        }
+                                                    });
                                                 }
                                             }
-                                        });
-                                        myFunction("Added to cart..!");
+                                            else {
+
+                                                if (response.pointsStyle.length > 0) {
+                                                    for (var k = 0; k < response.pointsStyle.length; k++) {
+                                                        var idMinPts = "minPtsDiv_" + response.pointsStyle[k];
+                                                        var pointsDivReplace = document.getElementsByClassName(idMinPts);
+                                                        if (pointsDivReplace != undefined && pointsDivReplace != null && pointsDivReplace != "") {
+                                                            for (var j = 0; j < pointsDivReplace.length; j++) {
+                                                                pointsDivReplace[j].innerHTML = response.message;
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                loadPopup.Show();
+                                                selectedSitecode = selectedSitecode == "SITECODENULL" ? "" : selectedSitecode;
+                                                $.ajax({
+                                                    url: "/Home/Addtocart/",
+                                                    type: "POST",
+                                                    data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reason': reason, 'selectedSitecode': selectedSitecode },
+                                                    success: function (response) {
+                                                        if (response != "") {
+                                                            $("#CartwidCount").html("");
+                                                            $("#CartwidCount").html(response);
+                                                            loadPopup.Hide();
+                                                            $.ajax({
+                                                                url: "/Home/GetPointsDiv/",
+                                                                type: "POST",
+                                                                data: { 'orgStyle': stylearr[3] },
+                                                                success: function (response) {
+                                                                    if (response.PointsDiv != "") {
+                                                                        $("#PointsDiv").html("");
+                                                                        $("#PointsDiv").html(response.PointsDiv);
+                                                                        if (response.PointsTaken != "") {
+                                                                            var division = "minPtsDiv_" + stylearr[3];
+                                                                            var pts = document.getElementsByClassName(division);
+                                                                            if (pts != null && pts != undefined) {
+                                                                                for (var k = 0; k < pts.length; k++) {
+                                                                                    pts[k].innerHTML = response.PointsTaken;
+                                                                                }
+                                                                            }
+                                                                        }
+
+                                                                    }
+                                                                }
+                                                            });
+                                                            myFunction("Added to cart..!");
+
+                                                        }
+                                                        else {
+                                                            loadPopup.Hide();
+                                                            $.ajax({
+                                                                url: "/Home/IsEmergencyreasonFailed/",
+                                                                type: "POST",
+                                                                data: { 'reason': reason },
+                                                                success: function (response) {
+                                                                    if (response != "") {
+                                                                        alert(response);
+                                                                    }
+                                                                    else {
+                                                                        alert("Try again..!");
+                                                                    }
+
+                                                                }
+                                                            });
+                                                        }
+                                                    },
+                                                    error: function () {
+                                                        loadPopup.Hide();
+                                                        alert("Try again!");
+                                                    }
+                                                });
+                                            }
+
+                                        }
                                     }
-                                    else {
+
+                                });
+                            }
+                            else {
+                                loadPopup.Show();
+                                selectedSitecode = selectedSitecode == "SITECODENULL" ? "" : selectedSitecode;
+                                $.ajax({
+                                    url: "/Home/Addtocart/",
+                                    type: "POST",
+                                    data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reason': reason, 'selectedSitecode': selectedSitecode },
+                                    success: function (response) {
+                                        if (response != "") {
+                                            $("#CartwidCount").html("");
+                                            $("#CartwidCount").html(response);
+                                            loadPopup.Hide();
+                                            $.ajax({
+                                                url: "/Home/GetPointsDiv/",
+                                                type: "POST",
+                                                data: { 'orgStyle': stylearr[3] },
+                                                success: function (response) {
+                                                    if (response.PointsDiv != "") {
+                                                        $("#PointsDiv").html("");
+                                                        $("#PointsDiv").html(response.PointsDiv);
+                                                        if (response.PointsTaken != "") {
+                                                            var division = "minPtsDiv_" + stylearr[3];
+                                                            var pts = document.getElementsByClassName(division);
+                                                            if (pts != null && pts != undefined) {
+                                                                for (var k = 0; k < pts.length; k++) {
+                                                                    pts[k].innerHTML = response.PointsTaken;
+                                                                }
+                                                            }
+                                                        }
+
+                                                    }
+                                                }
+                                            });
+                                            myFunction("Added to cart..!");
+
+                                        }
+                                        else {
+                                            loadPopup.Hide();
+                                            $.ajax({
+                                                url: "/Home/IsEmergencyreasonFailed/",
+                                                type: "POST",
+                                                data: { 'reason': reason },
+                                                success: function (response) {
+                                                    if (response != "") {
+                                                        alert(response);
+                                                    }
+                                                    else {
+                                                        alert("Try again..!");
+                                                    }
+
+                                                }
+                                            });
+                                        }
+                                    },
+                                    error: function () {
                                         loadPopup.Hide();
                                         alert("Try again!");
                                     }
-                                },
-                                error: function () {
-                                    loadPopup.Hide();
-                                    alert("Try again!");
-                                }
-                            })
+                                });
+                            }
+
                         }
                         else {
                             // document.getElementById("ErrorMessage").style.display = 'block';
@@ -1611,38 +2252,206 @@ function addTocartDemandSwatch(s, e) {
                     success: function (response) {
                         debugger;
                         if (response == "enabled" | (reason != "" && reason != undefined)) {
+                            if (minPtsDiv != undefined || minPtsDiv != null) {
+                                $.ajax({
+                                    url: "/Home/UpdateMinPoints/",
+                                    type: "POST",
+                                    data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reason': reason, 'selectedSitecode': selectedSitecode },
+                                    success: function (response) {
+                                        if (response.message != "" && response.message != null) {
+                                            if (response.message.includes("__ALERT__")) {
+                                                var cnfmessage = response.message.split("__ALERT__")[1] + "\n\nPlease click Ok to proceed to cart or Cancel to continue shopping";
+                                                if (confirm(cnfmessage)) {
+                                                    selectedSitecode = selectedSitecode == "SITECODENULL" ? "" : selectedSitecode;
+                                                    $.ajax({
+                                                        url: "/Home/Addtocart/",
+                                                        type: "POST",
+                                                        data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reason': reason, 'selectedSitecode': selectedSitecode },
+                                                        success: function (response) {
+                                                            if (response != "") {
+                                                                $("#CartwidCount").html("");
+                                                                $("#CartwidCount").html(response);
+                                                                $.ajax({
+                                                                    url: "/Home/GetPointsDiv/",
+                                                                    type: "POST",
+                                                                    data: { 'orgStyle': stylearr[3] },
+                                                                    success: function (response) {
+                                                                        if (response.PointsDiv != "") {
+                                                                            $("#PointsDiv").html("");
+                                                                            $("#PointsDiv").html(response.PointsDiv);
+                                                                            if (response.PointsTaken != "") {
+                                                                                var division = "minPtsDiv_" + stylearr[3];
+                                                                                var pts = document.getElementsByClassName(division);
+                                                                                if (pts != null && pts != undefined) {
+                                                                                    for (var k = 0; k < pts.length; k++) {
+                                                                                        pts[k].innerHTML = response.PointsTaken;
+                                                                                    }
+                                                                                }
+                                                                            }
 
-                            selectedSitecode = selectedSitecode == "SITECODENULL" ? "" : selectedSitecode;
-                            $.ajax({
-                                url: "/Home/Addtocart/",
-                                type: "POST",
-                                data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reason': reason, 'selectedSitecode': selectedSitecode },
-                                success: function (response) {
-                                    if (response != "") {
-                                        $("#CartwidCount").html("");
-                                        $("#CartwidCount").html(response);
-                                        $.ajax({
-                                            url: "/Home/GetPointsDiv/",
-                                            type: "POST",
-                                            success: function (response) {
-                                                if (response != "") {
-                                                    $("#PointsDiv").html("");
-                                                    $("#PointsDiv").html(response);
+                                                                        }
+                                                                    }
+                                                                });
+                                                                myFunction("Added to cart..!");
+
+                                                            }
+                                                            else {
+                                                                loadPopup.Hide();
+                                                                $.ajax({
+                                                                    url: "/Home/IsEmergencyreasonFailed/",
+                                                                    type: "POST",
+                                                                    data: { 'reason': reason },
+                                                                    success: function (response) {
+                                                                        if (response != "") {
+                                                                            alert(response);
+                                                                        }
+                                                                        else {
+                                                                            alert("Try again..!");
+                                                                        }
+
+                                                                    }
+                                                                });
+                                                            }
+                                                        },
+                                                        error: function () {
+                                                            loadPopup.Hide();
+                                                            alert("Try again!");
+                                                        }
+                                                    });
                                                 }
                                             }
-                                        });
-                                        myFunction("Added to cart..!");
+                                            else {
+                                                if (response.pointsStyle.length > 0) {
+                                                    for (var k = 0; k < response.pointsStyle.length; k++) {
+                                                        var idMinPts = "minPtsDiv_" + response.pointsStyle[k];
+                                                        var pointsDivReplace = document.getElementsByClassName(idMinPts);
+                                                        if (pointsDivReplace != undefined && pointsDivReplace != null && pointsDivReplace != "") {
+                                                            for (var j = 0; j < pointsDivReplace.length; j++) {
+                                                                pointsDivReplace[j].innerHTML = response.message;
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                                selectedSitecode = selectedSitecode == "SITECODENULL" ? "" : selectedSitecode;
+                                                $.ajax({
+                                                    url: "/Home/Addtocart/",
+                                                    type: "POST",
+                                                    data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reason': reason, 'selectedSitecode': selectedSitecode },
+                                                    success: function (response) {
+                                                        if (response != "") {
+                                                            $("#CartwidCount").html("");
+                                                            $("#CartwidCount").html(response);
+                                                            $.ajax({
+                                                                url: "/Home/GetPointsDiv/",
+                                                                type: "POST",
+                                                                data: { 'orgStyle': stylearr[3] },
+                                                                success: function (response) {
+                                                                    if (response.PointsDiv != "") {
+                                                                        $("#PointsDiv").html("");
+                                                                        $("#PointsDiv").html(response.PointsDiv);
+                                                                        if (response.PointsTaken != "") {
+                                                                            var division = "minPtsDiv_" + stylearr[3];
+                                                                            var pts = document.getElementsByClassName(division);
+                                                                            if (pts != null && pts != undefined) {
+                                                                                for (var k = 0; k < pts.length; k++) {
+                                                                                    pts[k].innerHTML = response.PointsTaken;
+                                                                                }
+                                                                            }
+                                                                        }
+
+                                                                    }
+                                                                }
+                                                            });
+                                                            myFunction("Added to cart..!");
+
+                                                        }
+                                                        else {
+                                                            loadPopup.Hide();
+                                                            $.ajax({
+                                                                url: "/Home/IsEmergencyreasonFailed/",
+                                                                type: "POST",
+                                                                data: { 'reason': reason },
+                                                                success: function (response) {
+                                                                    if (response != "") {
+                                                                        alert(response);
+                                                                    }
+                                                                    else {
+                                                                        alert("Try again..!");
+                                                                    }
+
+                                                                }
+                                                            });
+                                                        }
+                                                    },
+                                                    error: function () {
+                                                        loadPopup.Hide();
+                                                        alert("Try again!");
+                                                    }
+                                                });
+                                            }
+                                        }
                                     }
-                                    else {
+                                });
+                            }
+                            else {
+                                selectedSitecode = selectedSitecode == "SITECODENULL" ? "" : selectedSitecode;
+                                $.ajax({
+                                    url: "/Home/Addtocart/",
+                                    type: "POST",
+                                    data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reason': reason, 'selectedSitecode': selectedSitecode },
+                                    success: function (response) {
+                                        if (response != "") {
+                                            $("#CartwidCount").html("");
+                                            $("#CartwidCount").html(response);
+                                            $.ajax({
+                                                url: "/Home/GetPointsDiv/",
+                                                type: "POST",
+                                                data: { 'orgStyle': stylearr[3] },
+                                                success: function (response) {
+                                                    if (response.PointsDiv != "") {
+                                                        $("#PointsDiv").html("");
+                                                        $("#PointsDiv").html(response.PointsDiv);
+                                                        if (response.PointsTaken != "") {
+                                                            var division = "minPtsDiv_" + stylearr[3];
+                                                            var pts = document.getElementsByClassName(division);
+                                                            if (pts != null && pts != undefined) {
+                                                                for (var k = 0; k < pts.length; k++) {
+                                                                    pts[k].innerHTML = response.PointsTaken;
+                                                                }
+                                                            }
+                                                        }
+
+                                                    }
+                                                }
+                                            });
+                                            myFunction("Added to cart..!");
+
+                                        }
+                                        else {
+                                            loadPopup.Hide();
+                                            $.ajax({
+                                                url: "/Home/IsEmergencyreasonFailed/",
+                                                type: "POST",
+                                                data: { 'reason': reason },
+                                                success: function (response) {
+                                                    if (response != "") {
+                                                        alert(response);
+                                                    }
+                                                    else {
+                                                        alert("Try again..!");
+                                                    }
+
+                                                }
+                                            });
+                                        }
+                                    },
+                                    error: function () {
                                         loadPopup.Hide();
                                         alert("Try again!");
                                     }
-                                },
-                                error: function () {
-                                    loadPopup.Hide();
-                                    alert("Try again!");
-                                }
-                            })
+                                });
+                            }
+
                         }
                         else {
                             // document.getElementById("ErrorMessage").style.display = 'block';
@@ -1660,7 +2469,7 @@ function addTocartDemandSwatch(s, e) {
 
         }
         else {
-            if (price == "" || price == null || undefined) {
+            if (price == "" || price == null || price == undefined || price == "0") {
                 alert("Please choose a size");
             }
             else if (size == "" || size == null || size == undefined) {
@@ -2863,12 +3672,30 @@ function CreateNewEmployee() {
     });
 }
 
+function DeleteOrder(orderNo, empId) {
+    if (orderNo > 0 && empId != "" && empId != null) {
+        if (confirm("Are you sure you want to delete this order?")) {
+            $.ajax({
+                type: "post",
+                url: "/Basket/DeleteOrder/",
+                data: { 'orderNo': orderNo, 'empId': empId },
+                success: function (response) {
+                    if (response != "") {
+                        alert("Order deleted successfully");
+                        window.location.reload();
+                    }
+                }
+            });
+        }
+    }
+}
 function UpdateEmployee(s, e) {
     var EditPop = ASPxClientControl.GetControlCollection().GetByName("CreateEditPop");
     var empID = ASPxClientControl.GetControlCollection().GetByName("editEmpId");
     var frstName = ASPxClientControl.GetControlCollection().GetByName("editEmpFirstName");
     var lstName = ASPxClientControl.GetControlCollection().GetByName("editEmpLastName");
     var dept = ASPxClientControl.GetControlCollection().GetByName("editDepartment");
+    var deptCnt = dept != null ? dept.GetItemCount() : 0;
     var selUcode;
     var hoursCmb = ASPxClientControl.GetControlCollection().GetByName("hoursCmb");
     var hoursDept = ASPxClientControl.GetControlCollection().GetByName("hoursDEPT");
@@ -2885,23 +3712,45 @@ function UpdateEmployee(s, e) {
     if (s.name != "UpdateBtn_Template") {
         if ((hoursCmb == undefined || hoursCmb == null) && (hoursDept == undefined || hoursDept == null)) {
             if (empID.lastChangedValue != null & frstName.lastChangedValue != null & lstName.lastChangedValue != null & dept.lastSuccessText != null & selUcode.lastChangedValue != null) {
-                if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & dept.lastSuccessText.trim() != "" & selUcode.lastChangedValue.trim() != "") {
-                    var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue, 'Address': addressVal };
-                    $.ajax({
-                        type: "POST",
-                        url: "/Employee/EditEmployee1/",
-                        data: data1,
-                        success: function (response) {
-                            if (response == "success") {
-                                alert("Successfully updated!");
-                                EditPop.Hide();
-                                window.location.reload();
+                if (deptCnt > 0) {
+                    if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & dept.lastSuccessText.trim() != "" & selUcode.lastChangedValue.trim() != "") {
+                        var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue, 'Address': addressVal };
+                        $.ajax({
+                            type: "POST",
+                            url: "/Employee/EditEmployee1/",
+                            data: data1,
+                            success: function (response) {
+                                if (response == "success") {
+                                    alert("Successfully updated!");
+                                    EditPop.Hide();
+                                    window.location.reload();
+                                }
+                                else if (response == "Validation") {
+                                    alert("Please fill all data");
+                                }
                             }
-                            else if (response == "Validation") {
-                                alert("Please fill all data");
+                        });
+                    }
+                }
+                else {
+                    if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & selUcode.lastChangedValue.trim() != "") {
+                        var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue, 'Address': addressVal };
+                        $.ajax({
+                            type: "POST",
+                            url: "/Employee/EditEmployee1/",
+                            data: data1,
+                            success: function (response) {
+                                if (response == "success") {
+                                    alert("Successfully updated!");
+                                    EditPop.Hide();
+                                    window.location.reload();
+                                }
+                                else if (response == "Validation") {
+                                    alert("Please fill all data");
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
                 }
             }
             else {
@@ -2912,24 +3761,47 @@ function UpdateEmployee(s, e) {
             var hrsDept = hoursDept.GetValue();
             var hrsNo = hoursNo.GetValue();
             if (empID.lastChangedValue != null & frstName.lastChangedValue != null & lstName.lastChangedValue != null & dept.lastSuccessText != null & hrsDept != null) {
-                if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & dept.lastSuccessText.trim() != "" & hrsDept.trim() != "") {
-                    var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursDept': hrsDept.trim(), 'hoursNo': hrsNo.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue, 'Address': addressVal };
-                    $.ajax({
-                        type: "POST",
-                        url: "/Employee/EditEmployee1/",
-                        data: data1,
-                        success: function (response) {
-                            if (response == "success") {
-                                alert("Successfully updated!");
-                                EditPop.Hide();
-                                window.location.reload();
-                            }
-                            else if (response == "Validation") {
-                                alert("Please fill all data");
-                            }
+                if (deptCnt > 0) {
+                    if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & dept.lastSuccessText.trim() != "" & hrsDept.trim() != "") {
+                        var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursDept': hrsDept.trim(), 'hoursNo': hrsNo.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue, 'Address': addressVal };
+                        $.ajax({
+                            type: "POST",
+                            url: "/Employee/EditEmployee1/",
+                            data: data1,
+                            success: function (response) {
+                                if (response == "success") {
+                                    alert("Successfully updated!");
+                                    EditPop.Hide();
+                                    window.location.reload();
+                                }
+                                else if (response == "Validation") {
+                                    alert("Please fill all data");
+                                }
 
-                        }
-                    });
+                            }
+                        });
+                    }
+                }
+                else {
+                    if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & hrsDept.trim() != "") {
+                        var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursDept': hrsDept.trim(), 'hoursNo': hrsNo.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue, 'Address': addressVal };
+                        $.ajax({
+                            type: "POST",
+                            url: "/Employee/EditEmployee1/",
+                            data: data1,
+                            success: function (response) {
+                                if (response == "success") {
+                                    alert("Successfully updated!");
+                                    EditPop.Hide();
+                                    window.location.reload();
+                                }
+                                else if (response == "Validation") {
+                                    alert("Please fill all data");
+                                }
+
+                            }
+                        });
+                    }
                 }
             }
             else {
@@ -2938,24 +3810,47 @@ function UpdateEmployee(s, e) {
         }
         else {
             if (empID.lastChangedValue != null & frstName.lastChangedValue != null & lstName.lastChangedValue != null & dept.lastSuccessText != null & hoursCmb.lastChangedValue != null) {
-                if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & dept.lastSuccessText.trim() != "" & hoursCmb.lastChangedValue.trim() != "") {
-                    var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hrsCmb': hoursCmb.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue, 'Address': addressVal };
-                    $.ajax({
-                        type: "POST",
-                        url: "/Employee/EditEmployee1/",
-                        data: data1,
-                        success: function (response) {
-                            if (response == "success") {
-                                alert("Successfully updated!");
-                                EditPop.Hide();
-                                window.location.reload();
-                            }
-                            else if (response == "Validation") {
-                                alert("Please fill all data");
-                            }
+                if (deptCnt > 0) {
+                    if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & dept.lastSuccessText.trim() != "" & hoursCmb.lastChangedValue.trim() != "") {
+                        var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hrsCmb': hoursCmb.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue, 'Address': addressVal };
+                        $.ajax({
+                            type: "POST",
+                            url: "/Employee/EditEmployee1/",
+                            data: data1,
+                            success: function (response) {
+                                if (response == "success") {
+                                    alert("Successfully updated!");
+                                    EditPop.Hide();
+                                    window.location.reload();
+                                }
+                                else if (response == "Validation") {
+                                    alert("Please fill all data");
+                                }
 
-                        }
-                    });
+                            }
+                        });
+                    }
+                }
+                else {
+                    if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & hoursCmb.lastChangedValue.trim() != "") {
+                        var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hrsCmb': hoursCmb.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue, 'Address': addressVal };
+                        $.ajax({
+                            type: "POST",
+                            url: "/Employee/EditEmployee1/",
+                            data: data1,
+                            success: function (response) {
+                                if (response == "success") {
+                                    alert("Successfully updated!");
+                                    EditPop.Hide();
+                                    window.location.reload();
+                                }
+                                else if (response == "Validation") {
+                                    alert("Please fill all data");
+                                }
+
+                            }
+                        });
+                    }
                 }
             }
             else {
@@ -2965,23 +3860,45 @@ function UpdateEmployee(s, e) {
     }
     else {
         if (empID.lastChangedValue != null & frstName.lastChangedValue != null & lstName.lastChangedValue != null & dept.lastSuccessText != null) {
-            if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & dept.lastSuccessText.trim() != "") {
-                var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue, 'Address': addressVal };
-                $.ajax({
-                    type: "POST",
-                    url: "/Employee/EditEmployee1/",
-                    data: data1,
-                    success: function (response) {
-                        if (response == "success") {
-                            alert("Successfully updated!");
-                            EditPop.Hide();
-                            window.location.reload();
+            if (deptCnt > 0) {
+                if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & dept.lastSuccessText.trim() != "") {
+                    var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue, 'Address': addressVal };
+                    $.ajax({
+                        type: "POST",
+                        url: "/Employee/EditEmployee1/",
+                        data: data1,
+                        success: function (response) {
+                            if (response == "success") {
+                                alert("Successfully updated!");
+                                EditPop.Hide();
+                                window.location.reload();
+                            }
+                            else if (response == "Validation") {
+                                alert("Please fill all data");
+                            }
                         }
-                        else if (response == "Validation") {
-                            alert("Please fill all data");
+                    });
+                }
+            }
+            else {
+                if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "") {
+                    var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue, 'Address': addressVal };
+                    $.ajax({
+                        type: "POST",
+                        url: "/Employee/EditEmployee1/",
+                        data: data1,
+                        success: function (response) {
+                            if (response == "success") {
+                                alert("Successfully updated!");
+                                EditPop.Hide();
+                                window.location.reload();
+                            }
+                            else if (response == "Validation") {
+                                alert("Please fill all data");
+                            }
                         }
-                    }
-                });
+                    });
+                }
             }
         }
         else {
@@ -2997,6 +3914,7 @@ function CreateEmployee(s, e) {
     var frstName = ASPxClientControl.GetControlCollection().GetByName("editEmpFirstName");
     var lstName = ASPxClientControl.GetControlCollection().GetByName("editEmpLastName");
     var dept = ASPxClientControl.GetControlCollection().GetByName("editDepartment");
+    var deptCnt = dept != null ? dept.GetItemCount() : 0;
     var selUcode;
     var hoursCmb = ASPxClientControl.GetControlCollection().GetByName("hoursCmb");
     var hoursDept = ASPxClientControl.GetControlCollection().GetByName("hoursDEPT");
@@ -3013,10 +3931,612 @@ function CreateEmployee(s, e) {
     if (s.name != "CreateBtn_Template") {
         if ((hoursCmb == undefined || hoursCmb == null) && (hoursDept == undefined || hoursDept == null)) {
             if (empID.lastChangedValue != null & frstName.lastChangedValue != null & lstName.lastChangedValue != null & dept.lastSuccessText != null & selUcode.lastChangedValue != null) {
-                if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & dept.lastSuccessText.trim() != "" & selUcode.lastChangedValue.trim() != "") {
+                if (deptCnt > 0) {
+                    if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & dept.lastSuccessText.trim() != "" & selUcode.lastChangedValue.trim() != "") {
+
+                        var data1;
+                        var date = new Date().toISOString();
+                        $.ajax({
+                            type: "POST",
+                            url: "/Employee/EmployeeIdValidation/",
+                            data: { 'empId': empID.lastChangedValue.trim() },
+                            success: function (response) {
+                                if (response == "Success") {
+                                    if (isAct.previousValue == false) {
+                                        if (confirm("Do you want to set the employee Active")) {
+                                            data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': true, 'isMapped': isMapped };
+                                            $.ajax({
+                                                type: "POST",
+                                                url: "/Employee/CreateNewEmployee/",
+                                                data: data1,
+                                                success: function (response) {
+                                                    if (response == "success") {
+                                                        alert("Successfully created employee!");
+                                                        EditPop.Hide();
+                                                        window.location.reload();
+                                                    }
+                                                    else {
+
+                                                    }
+                                                },
+                                                error: function (response) {
+                                                }
+                                            });
+                                        }
+                                        else {
+                                            data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
+                                            $.ajax({
+                                                type: "POST",
+                                                url: "/Employee/CreateNewEmployee/",
+                                                data: data1,
+                                                success: function (response) {
+                                                    if (response == "success") {
+                                                        alert("Successfully created employee!");
+                                                        EditPop.Hide();
+                                                        window.location.reload();
+                                                    }
+                                                    else {
+
+                                                    }
+                                                },
+                                                error: function (response) {
+                                                }
+                                            });
+                                        }
+
+                                    }
+                                    else {
+                                        data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
+                                        $.ajax({
+                                            type: "POST",
+                                            url: "/Employee/CreateNewEmployee/",
+                                            data: data1,
+                                            success: function (response) {
+                                                if (response == "success") {
+                                                    alert("Successfully created employee!");
+                                                    EditPop.Hide();
+                                                    window.location.reload();
+                                                }
+                                                else {
+
+                                                }
+                                            },
+                                            error: function (response) {
+                                            }
+                                        });
+                                    }
+                                }
+                                else if (response == "") {
+                                    alert("The Employee id already registered please select different employee id");
+                                }
+                                else {
+                                    alert(response);
+                                }
+                            }
+                        });
+                        //$.ajax({
+                        //    type: "POST",
+                        //    url: "/Employee/EditEmployee/",
+                        //    data: data1,
+                        //    success: function (response) {
+                        //        if (response == "success") {
+                        //            alert("Successfully updated!");
+                        //            EditPop.Hide();
+                        //        }
+                        //        else if (response == "Validation") {
+                        //            alert("Please fill all data");
+                        //        }
+                        //    }
+                        //});
+
+
+                    }
+                }
+                else {
+                    if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & selUcode.lastChangedValue.trim() != "") {
+
+                        var data1;
+                        var date = new Date().toISOString();
+                        $.ajax({
+                            type: "POST",
+                            url: "/Employee/EmployeeIdValidation/",
+                            data: { 'empId': empID.lastChangedValue.trim() },
+                            success: function (response) {
+                                if (response == "Success") {
+                                    if (isAct.previousValue == false) {
+                                        if (confirm("Do you want to set the employee Active")) {
+                                            data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': true, 'isMapped': isMapped };
+                                            $.ajax({
+                                                type: "POST",
+                                                url: "/Employee/CreateNewEmployee/",
+                                                data: data1,
+                                                success: function (response) {
+                                                    if (response == "success") {
+                                                        alert("Successfully created employee!");
+                                                        EditPop.Hide();
+                                                        window.location.reload();
+                                                    }
+                                                    else {
+
+                                                    }
+                                                },
+                                                error: function (response) {
+                                                }
+                                            });
+                                        }
+                                        else {
+                                            data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
+                                            $.ajax({
+                                                type: "POST",
+                                                url: "/Employee/CreateNewEmployee/",
+                                                data: data1,
+                                                success: function (response) {
+                                                    if (response == "success") {
+                                                        alert("Successfully created employee!");
+                                                        EditPop.Hide();
+                                                        window.location.reload();
+                                                    }
+                                                    else {
+
+                                                    }
+                                                },
+                                                error: function (response) {
+                                                }
+                                            });
+                                        }
+
+                                    }
+                                    else {
+                                        data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
+                                        $.ajax({
+                                            type: "POST",
+                                            url: "/Employee/CreateNewEmployee/",
+                                            data: data1,
+                                            success: function (response) {
+                                                if (response == "success") {
+                                                    alert("Successfully created employee!");
+                                                    EditPop.Hide();
+                                                    window.location.reload();
+                                                }
+                                                else {
+
+                                                }
+                                            },
+                                            error: function (response) {
+                                            }
+                                        });
+                                    }
+                                }
+                                else if (response == "") {
+                                    alert("The Employee id already registered please select different employee id");
+                                }
+                                else {
+                                    alert(response);
+                                }
+                            }
+                        });
+                        //$.ajax({
+                        //    type: "POST",
+                        //    url: "/Employee/EditEmployee/",
+                        //    data: data1,
+                        //    success: function (response) {
+                        //        if (response == "success") {
+                        //            alert("Successfully updated!");
+                        //            EditPop.Hide();
+                        //        }
+                        //        else if (response == "Validation") {
+                        //            alert("Please fill all data");
+                        //        }
+                        //    }
+                        //});
+
+
+                    }
+                }
+
+            }
+            else {
+                alert("Please fill all details");
+            }
+        }
+        else if ((hoursCmb == undefined || hoursCmb == null) && (hoursDept != undefined || hoursDept != null)) {
+            var hrsDept = hoursDept.GetValue();
+            var hrsNo = hoursNo.GetValue();
+            if (empID.lastChangedValue != null & frstName.lastChangedValue != null & lstName.lastChangedValue != null & dept.lastSuccessText != null & hoursDept.lastChangedValue != null & hrsDept != null) {
+                if (deptCnt > 0) {
+                    if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & dept.lastSuccessText.trim() != "" & hrsDept != "") {
+
+                        var data1;
+                        var date = new Date().toISOString();
+                        $.ajax({
+                            type: "POST",
+                            url: "/Employee/EmployeeIdValidation/",
+                            data: { 'empId': empID.lastChangedValue.trim() },
+                            success: function (response) {
+                                if (response == "Success") {
+                                    if (isAct.previousValue == false) {
+                                        if (confirm("Do you want to set the employee Active")) {
+                                            data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursDept': hrsDept.trim(), 'hoursNo': hrsNo.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': true, 'isMapped': isMapped };
+                                            $.ajax({
+                                                type: "POST",
+                                                url: "/Employee/CreateNewEmployee/",
+                                                data: data1,
+                                                success: function (response) {
+                                                    if (response == "success") {
+                                                        alert("Successfully created employee!");
+                                                        EditPop.Hide();
+                                                        window.location.reload();
+                                                    }
+                                                    else {
+
+                                                    }
+                                                },
+                                                error: function (response) {
+                                                }
+                                            });
+                                        }
+                                        else {
+                                            data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursDept': hrsDept.trim(), 'hoursNo': hrsNo.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
+                                            $.ajax({
+                                                type: "POST",
+                                                url: "/Employee/CreateNewEmployee/",
+                                                data: data1,
+                                                success: function (response) {
+                                                    if (response == "success") {
+                                                        alert("Successfully created employee!");
+                                                        EditPop.Hide();
+                                                        window.location.reload();
+                                                    }
+                                                    else {
+
+                                                    }
+                                                },
+                                                error: function (response) {
+                                                }
+                                            });
+                                        }
+
+                                    }
+                                    else {
+                                        data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursDept': hrsDept.trim(), 'hoursNo': hrsNo.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
+                                        $.ajax({
+                                            type: "POST",
+                                            url: "/Employee/CreateNewEmployee/",
+                                            data: data1,
+                                            success: function (response) {
+                                                if (response == "success") {
+                                                    alert("Successfully created employee!");
+                                                    EditPop.Hide();
+                                                    window.location.reload();
+                                                }
+                                                else {
+
+                                                }
+                                            },
+                                            error: function (response) {
+                                            }
+                                        });
+                                    }
+                                }
+                                else if (response == "") {
+                                    alert("The Employee id already registered please select different employee id");
+                                }
+                                else {
+                                    alert(response);
+                                }
+                            }
+                        });
+                    }
+                }
+                else {
+                    if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & hrsDept != "") {
+
+                        var data1;
+                        var date = new Date().toISOString();
+                        $.ajax({
+                            type: "POST",
+                            url: "/Employee/EmployeeIdValidation/",
+                            data: { 'empId': empID.lastChangedValue.trim() },
+                            success: function (response) {
+                                if (response == "Success") {
+                                    if (isAct.previousValue == false) {
+                                        if (confirm("Do you want to set the employee Active")) {
+                                            data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursDept': hrsDept.trim(), 'hoursNo': hrsNo.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': true, 'isMapped': isMapped };
+                                            $.ajax({
+                                                type: "POST",
+                                                url: "/Employee/CreateNewEmployee/",
+                                                data: data1,
+                                                success: function (response) {
+                                                    if (response == "success") {
+                                                        alert("Successfully created employee!");
+                                                        EditPop.Hide();
+                                                        window.location.reload();
+                                                    }
+                                                    else {
+
+                                                    }
+                                                },
+                                                error: function (response) {
+                                                }
+                                            });
+                                        }
+                                        else {
+                                            data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursDept': hrsDept.trim(), 'hoursNo': hrsNo.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
+                                            $.ajax({
+                                                type: "POST",
+                                                url: "/Employee/CreateNewEmployee/",
+                                                data: data1,
+                                                success: function (response) {
+                                                    if (response == "success") {
+                                                        alert("Successfully created employee!");
+                                                        EditPop.Hide();
+                                                        window.location.reload();
+                                                    }
+                                                    else {
+
+                                                    }
+                                                },
+                                                error: function (response) {
+                                                }
+                                            });
+                                        }
+
+                                    }
+                                    else {
+                                        data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursDept': hrsDept.trim(), 'hoursNo': hrsNo.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
+                                        $.ajax({
+                                            type: "POST",
+                                            url: "/Employee/CreateNewEmployee/",
+                                            data: data1,
+                                            success: function (response) {
+                                                if (response == "success") {
+                                                    alert("Successfully created employee!");
+                                                    EditPop.Hide();
+                                                    window.location.reload();
+                                                }
+                                                else {
+
+                                                }
+                                            },
+                                            error: function (response) {
+                                            }
+                                        });
+                                    }
+                                }
+                                else if (response == "") {
+                                    alert("The Employee id already registered please select different employee id");
+                                }
+                                else {
+                                    alert(response);
+                                }
+                            }
+                        });
+                    }
+                }
+
+            }
+            else {
+                alert("Please fill all details");
+            }
+        }
+        else {
+            if (empID.lastChangedValue != null & frstName.lastChangedValue != null & lstName.lastChangedValue != null & dept.lastSuccessText != null & hoursCmb.lastChangedValue != null) {
+                if (deptCnt > 0) {
+                    if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & dept.lastSuccessText.trim() != "" & hoursCmb.lastChangedValue.trim() != "") {
+
+                        var data1;
+                        var date = new Date().toISOString();
+                        $.ajax({
+                            type: "POST",
+                            url: "/Employee/EmployeeIdValidation/",
+                            data: { 'empId': empID.lastChangedValue.trim() },
+                            success: function (response) {
+                                if (response == "Success") {
+                                    if (isAct.previousValue == false) {
+                                        if (confirm("Do you want to set the employee Active")) {
+                                            data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursCmb': hoursCmb.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': true, 'isMapped': isMapped };
+                                            $.ajax({
+                                                type: "POST",
+                                                url: "/Employee/CreateNewEmployee/",
+                                                data: data1,
+                                                success: function (response) {
+                                                    if (response == "success") {
+                                                        alert("Successfully created employee!");
+                                                        EditPop.Hide();
+                                                        window.location.reload();
+                                                    }
+                                                    else {
+
+                                                    }
+                                                },
+                                                error: function (response) {
+                                                }
+                                            });
+                                        }
+                                        else {
+                                            data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursCmb': hoursCmb.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
+                                            $.ajax({
+                                                type: "POST",
+                                                url: "/Employee/CreateNewEmployee/",
+                                                data: data1,
+                                                success: function (response) {
+                                                    if (response == "success") {
+                                                        alert("Successfully created employee!");
+                                                        EditPop.Hide();
+                                                        window.location.reload();
+                                                    }
+                                                    else {
+
+                                                    }
+                                                },
+                                                error: function (response) {
+                                                }
+                                            });
+                                        }
+
+                                    }
+                                    else {
+                                        data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursCmb': hoursCmb.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
+                                        $.ajax({
+                                            type: "POST",
+                                            url: "/Employee/CreateNewEmployee/",
+                                            data: data1,
+                                            success: function (response) {
+                                                if (response == "success") {
+                                                    alert("Successfully created employee!");
+                                                    EditPop.Hide();
+                                                    window.location.reload();
+                                                }
+                                                else {
+
+                                                }
+                                            },
+                                            error: function (response) {
+                                            }
+                                        });
+                                    }
+                                }
+                                else if (response == "") {
+                                    alert("The Employee id already registered please select different employee id");
+                                }
+                                else {
+                                    alert(response);
+                                }
+                            }
+                        });
+                        //$.ajax({
+                        //    type: "POST",
+                        //    url: "/Employee/EditEmployee/",
+                        //    data: data1,
+                        //    success: function (response) {
+                        //        if (response == "success") {
+                        //            alert("Successfully updated!");
+                        //            EditPop.Hide();
+                        //        }
+                        //        else if (response == "Validation") {
+                        //            alert("Please fill all data");
+                        //        }
+                        //    }
+                        //});
+
+
+                    }
+                }
+                else {
+                    if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & hoursCmb.lastChangedValue.trim() != "") {
+
+                        var data1;
+                        var date = new Date().toISOString();
+                        $.ajax({
+                            type: "POST",
+                            url: "/Employee/EmployeeIdValidation/",
+                            data: { 'empId': empID.lastChangedValue.trim() },
+                            success: function (response) {
+                                if (response == "Success") {
+                                    if (isAct.previousValue == false) {
+                                        if (confirm("Do you want to set the employee Active")) {
+                                            data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursCmb': hoursCmb.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': true, 'isMapped': isMapped };
+                                            $.ajax({
+                                                type: "POST",
+                                                url: "/Employee/CreateNewEmployee/",
+                                                data: data1,
+                                                success: function (response) {
+                                                    if (response == "success") {
+                                                        alert("Successfully created employee!");
+                                                        EditPop.Hide();
+                                                        window.location.reload();
+                                                    }
+                                                    else {
+
+                                                    }
+                                                },
+                                                error: function (response) {
+                                                }
+                                            });
+                                        }
+                                        else {
+                                            data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursCmb': hoursCmb.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
+                                            $.ajax({
+                                                type: "POST",
+                                                url: "/Employee/CreateNewEmployee/",
+                                                data: data1,
+                                                success: function (response) {
+                                                    if (response == "success") {
+                                                        alert("Successfully created employee!");
+                                                        EditPop.Hide();
+                                                        window.location.reload();
+                                                    }
+                                                    else {
+
+                                                    }
+                                                },
+                                                error: function (response) {
+                                                }
+                                            });
+                                        }
+
+                                    }
+                                    else {
+                                        data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursCmb': hoursCmb.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
+                                        $.ajax({
+                                            type: "POST",
+                                            url: "/Employee/CreateNewEmployee/",
+                                            data: data1,
+                                            success: function (response) {
+                                                if (response == "success") {
+                                                    alert("Successfully created employee!");
+                                                    EditPop.Hide();
+                                                    window.location.reload();
+                                                }
+                                                else {
+
+                                                }
+                                            },
+                                            error: function (response) {
+                                            }
+                                        });
+                                    }
+                                }
+                                else if (response == "") {
+                                    alert("The Employee id already registered please select different employee id");
+                                }
+                                else {
+                                    alert(response);
+                                }
+                            }
+                        });
+                        //$.ajax({
+                        //    type: "POST",
+                        //    url: "/Employee/EditEmployee/",
+                        //    data: data1,
+                        //    success: function (response) {
+                        //        if (response == "success") {
+                        //            alert("Successfully updated!");
+                        //            EditPop.Hide();
+                        //        }
+                        //        else if (response == "Validation") {
+                        //            alert("Please fill all data");
+                        //        }
+                        //    }
+                        //});
+
+
+                    }
+                }
+
+            }
+            else {
+                alert("Please fill all details");
+            }
+        }
+    }
+    else {
+        if (empID.lastChangedValue != null & frstName.lastChangedValue != null & lstName.lastChangedValue != null & dept.lastSuccessText != null) {
+            if (deptCnt > 0) {
+                if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & dept.lastSuccessText.trim() != "") {
 
                     var data1;
-                    var date = new Date().toISOString();
+                    var date = new Date();
                     $.ajax({
                         type: "POST",
                         url: "/Employee/EmployeeIdValidation/",
@@ -3025,7 +4545,7 @@ function CreateEmployee(s, e) {
                             if (response == "Success") {
                                 if (isAct.previousValue == false) {
                                     if (confirm("Do you want to set the employee Active")) {
-                                        data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': true, 'isMapped': isMapped };
+                                        data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': true };
                                         $.ajax({
                                             type: "POST",
                                             url: "/Employee/CreateNewEmployee/",
@@ -3045,7 +4565,7 @@ function CreateEmployee(s, e) {
                                         });
                                     }
                                     else {
-                                        data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
+                                        data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
                                         $.ajax({
                                             type: "POST",
                                             url: "/Employee/CreateNewEmployee/",
@@ -3110,21 +4630,12 @@ function CreateEmployee(s, e) {
                     //    }
                     //});
 
-
                 }
             }
             else {
-                alert("Please fill all details");
-            }
-        }
-        else if ((hoursCmb == undefined || hoursCmb == null) && (hoursDept != undefined || hoursDept != null)) {
-            var hrsDept = hoursDept.GetValue();
-            var hrsNo = hoursNo.GetValue();
-            if (empID.lastChangedValue != null & frstName.lastChangedValue != null & lstName.lastChangedValue != null & dept.lastSuccessText != null & hoursDept.lastChangedValue != null & hrsDept != null) {
-                if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & dept.lastSuccessText.trim() != "" & hrsDept != "") {
-
+                if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "") {
                     var data1;
-                    var date = new Date().toISOString();
+                    var date = new Date();
                     $.ajax({
                         type: "POST",
                         url: "/Employee/EmployeeIdValidation/",
@@ -3133,7 +4644,7 @@ function CreateEmployee(s, e) {
                             if (response == "Success") {
                                 if (isAct.previousValue == false) {
                                     if (confirm("Do you want to set the employee Active")) {
-                                        data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursDept': hrsDept.trim(), 'hoursNo': hrsNo.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': true, 'isMapped': isMapped };
+                                        data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': true };
                                         $.ajax({
                                             type: "POST",
                                             url: "/Employee/CreateNewEmployee/",
@@ -3153,7 +4664,7 @@ function CreateEmployee(s, e) {
                                         });
                                     }
                                     else {
-                                        data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursDept': hrsDept.trim(), 'hoursNo': hrsNo.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
+                                        data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
                                         $.ajax({
                                             type: "POST",
                                             url: "/Employee/CreateNewEmployee/",
@@ -3175,97 +4686,7 @@ function CreateEmployee(s, e) {
 
                                 }
                                 else {
-                                    data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursDept': hrsDept.trim(), 'hoursNo': hrsNo.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
-                                    $.ajax({
-                                        type: "POST",
-                                        url: "/Employee/CreateNewEmployee/",
-                                        data: data1,
-                                        success: function (response) {
-                                            if (response == "success") {
-                                                alert("Successfully created employee!");
-                                                EditPop.Hide();
-                                                window.location.reload();
-                                            }
-                                            else {
-
-                                            }
-                                        },
-                                        error: function (response) {
-                                        }
-                                    });
-                                }
-                            }
-                            else if (response == "") {
-                                alert("The Employee id already registered please select different employee id");
-                            }
-                            else {
-                                alert(response);
-                            }
-                        }
-                    });
-                }
-            }
-            else {
-                alert("Please fill all details");
-            }
-        }
-        else {
-            if (empID.lastChangedValue != null & frstName.lastChangedValue != null & lstName.lastChangedValue != null & dept.lastSuccessText != null & hoursCmb.lastChangedValue != null) {
-                if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & dept.lastSuccessText.trim() != "" & hoursCmb.lastChangedValue.trim() != "") {
-
-                    var data1;
-                    var date = new Date().toISOString();
-                    $.ajax({
-                        type: "POST",
-                        url: "/Employee/EmployeeIdValidation/",
-                        data: { 'empId': empID.lastChangedValue.trim() },
-                        success: function (response) {
-                            if (response == "Success") {
-                                if (isAct.previousValue == false) {
-                                    if (confirm("Do you want to set the employee Active")) {
-                                        data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursCmb': hoursCmb.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': true, 'isMapped': isMapped };
-                                        $.ajax({
-                                            type: "POST",
-                                            url: "/Employee/CreateNewEmployee/",
-                                            data: data1,
-                                            success: function (response) {
-                                                if (response == "success") {
-                                                    alert("Successfully created employee!");
-                                                    EditPop.Hide();
-                                                    window.location.reload();
-                                                }
-                                                else {
-
-                                                }
-                                            },
-                                            error: function (response) {
-                                            }
-                                        });
-                                    }
-                                    else {
-                                        data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursCmb': hoursCmb.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
-                                        $.ajax({
-                                            type: "POST",
-                                            url: "/Employee/CreateNewEmployee/",
-                                            data: data1,
-                                            success: function (response) {
-                                                if (response == "success") {
-                                                    alert("Successfully created employee!");
-                                                    EditPop.Hide();
-                                                    window.location.reload();
-                                                }
-                                                else {
-
-                                                }
-                                            },
-                                            error: function (response) {
-                                            }
-                                        });
-                                    }
-
-                                }
-                                else {
-                                    data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursCmb': hoursCmb.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
+                                    data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
                                     $.ajax({
                                         type: "POST",
                                         url: "/Employee/CreateNewEmployee/",
@@ -3308,114 +4729,9 @@ function CreateEmployee(s, e) {
                     //    }
                     //});
 
-
                 }
             }
-            else {
-                alert("Please fill all details");
-            }
-        }
-    }
-    else {
-        if (empID.lastChangedValue != null & frstName.lastChangedValue != null & lstName.lastChangedValue != null & dept.lastSuccessText != null) {
-            if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & dept.lastSuccessText.trim() != "") {
 
-                var data1;
-                var date = new Date();
-                $.ajax({
-                    type: "POST",
-                    url: "/Employee/EmployeeIdValidation/",
-                    data: { 'empId': empID.lastChangedValue.trim() },
-                    success: function (response) {
-                        if (response == "Success") {
-                            if (isAct.previousValue == false) {
-                                if (confirm("Do you want to set the employee Active")) {
-                                    data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': true };
-                                    $.ajax({
-                                        type: "POST",
-                                        url: "/Employee/CreateNewEmployee/",
-                                        data: data1,
-                                        success: function (response) {
-                                            if (response == "success") {
-                                                alert("Successfully created employee!");
-                                                EditPop.Hide();
-                                                window.location.reload();
-                                            }
-                                            else {
-
-                                            }
-                                        },
-                                        error: function (response) {
-                                        }
-                                    });
-                                }
-                                else {
-                                    data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
-                                    $.ajax({
-                                        type: "POST",
-                                        url: "/Employee/CreateNewEmployee/",
-                                        data: data1,
-                                        success: function (response) {
-                                            if (response == "success") {
-                                                alert("Successfully created employee!");
-                                                EditPop.Hide();
-                                                window.location.reload();
-                                            }
-                                            else {
-
-                                            }
-                                        },
-                                        error: function (response) {
-                                        }
-                                    });
-                                }
-
-                            }
-                            else {
-                                data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
-                                $.ajax({
-                                    type: "POST",
-                                    url: "/Employee/CreateNewEmployee/",
-                                    data: data1,
-                                    success: function (response) {
-                                        if (response == "success") {
-                                            alert("Successfully created employee!");
-                                            EditPop.Hide();
-                                            window.location.reload();
-                                        }
-                                        else {
-
-                                        }
-                                    },
-                                    error: function (response) {
-                                    }
-                                });
-                            }
-                        }
-                        else if (response == "") {
-                            alert("The Employee id already registered please select different employee id");
-                        }
-                        else {
-                            alert(response);
-                        }
-                    }
-                });
-                //$.ajax({
-                //    type: "POST",
-                //    url: "/Employee/EditEmployee/",
-                //    data: data1,
-                //    success: function (response) {
-                //        if (response == "success") {
-                //            alert("Successfully updated!");
-                //            EditPop.Hide();
-                //        }
-                //        else if (response == "Validation") {
-                //            alert("Please fill all data");
-                //        }
-                //    }
-                //});
-
-            }
         }
         else {
             alert("Please fill all details");
@@ -3704,11 +5020,12 @@ function GetEmpGrid() {
             data: { 'txtUcode': ucodes1, 'txtCDepartment': dept1, 'txtRole': roles1, 'txtEmpNo': empId1, 'txtName': firstName1 },
             success: function (response) {
                 if (response != "") {
-                    closeNav();
                     loadPopup.Hide();
                     var EmployeeGrid = document.getElementById("EmployeeGridViewPartial");
                     EmployeeGrid.innerHTML = response;
                     MVCxClientUtils.FinalizeCallback();
+                    setCollapsed();
+                    checkEmpEmail();
                 }
             }
         });
@@ -3742,11 +5059,12 @@ function GetAllEmps() {
                 } if (ucodes != null) {
                     ucodes.SetValue("");
                 }
-                closeNav();
                 loadPopup.Hide();
                 var EmployeeGrid = document.getElementById("EmployeeGridViewPartial");
                 EmployeeGrid.innerHTML = response;
                 MVCxClientUtils.FinalizeCallback();
+                setCollapsed();
+                checkEmpEmail();
             }
             else {
                 window.location = "/User/Login";
@@ -3892,7 +5210,7 @@ function FillCustRefandDeliveryFields(s, e) {
         }
     });
 }
- 
+
 function AcceptOrder(s, e) {
     var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
     loadPopup.Show();
@@ -3911,64 +5229,140 @@ function AcceptOrder(s, e) {
         $.ajax({
             url: "/Home/GetBasketStatus/",
             type: "post",
-            success:function(response)
-            {
-                if(response=="")
-                {
+            success: function (response) {
+                if (response == "") {
+
                     $.ajax({
-                        url: "/Basket/AcceptOrder/",
-                        type: "POST",
-                        data: { 'addDesc': addDesc },
-                        success: function (resp) {
-                            if (resp.type != "" && resp.type != null) {
-                                alert("Please fill  customer reference")
+                        url: "/Home/GetOrderEnforcementStatus/",
+                        type: "post",
+                        success: function (response) {
+                            if (response == "") {
+                                $.ajax({
+                                    url: "/Basket/AcceptOrder/",
+                                    type: "POST",
+                                    data: { 'addDesc': addDesc },
+                                    success: function (resp) {
+                                        if (resp.type != "" && resp.type != null) {
+                                            if (resp.type.includes("Carrier")) {
+                                                alert(resp.type);
+                                            }
+                                            else {
+                                                alert(resp.type);
+                                            }
+
+                                            loadPopup.Hide();
+                                        }
+                                        else {
+                                            var message = "";
+                                            for (var k = 0; k < resp.results.length; k++) {
+                                                message = message + "Your uniform order has been successfully placed,order reference:" + resp.results[k].OrderNo + " (" + resp.results[k].EmployeeId + ")." + resp.results[k].OrderConfirmation + ". \n";
+                                            }
+                                            if (resp.results[0].OrderConfirmationPop != "" && resp.results[0].OrderConfirmationPop != null) {
+                                                message = message + " \n\n\n Do you wanr to print confirmation? \n (Click ok to print,Cancel to not print)";
+                                                if (confirm(message)) {
+                                                    var orderConfirmationPopup = ASPxClientControl.GetControlCollection().GetByName("orderConfirmation");
+                                                    loadPopup.Hide()
+                                                    var ordConfim = document.getElementById("ordeConfirm");
+                                                    ordConfim.innerHTML = "";
+                                                    ordConfim.innerHTML = resp.results[0].OrderConfirmationPop;
+                                                    orderConfirmationPopup.Show();
+                                                }
+                                                else {
+                                                    loadPopup.Hide();
+                                                    window.location = "/Employee/Index/";
+                                                }
+
+                                            }
+                                            else {
+                                                alert(message);
+                                                loadPopup.Hide();
+                                                window.location = "/Employee/Index/";
+                                            }
+                                        }
+                                    }
+                                });
                             }
                             else {
-                                var message = "";
-                                for (var k = 0; k < resp.results.length; k++) {
-                                    message = message + "Your uniform order has been successfully placed,order reference:" + resp.results[k].OrderNo + " (" + resp.results[k].EmployeeId + ")." + resp.results[k].OrderConfirmation + ". \n";
-                                }
-                                alert(message);
+                                alert(response);
                                 loadPopup.Hide()
-                                window.location = "/Employee/Index/";
                             }
                         }
                     });
+
                 }
-                else
-                {
-                    response = response.replace("///", "");
-                    if (confirm(response))
-                    {
-                        $.ajax({
-                            url: "/Basket/AcceptOrder/",
-                            type: "POST",
-                            data: { 'addDesc': addDesc },
-                            success: function (resp) {
-                                if (resp.type != "" && resp.type != null) {
-                                    alert("Please fill  customer reference")
-                                }
-                                else {
-                                    var message = "";
-                                    for (var k = 0; k < resp.results.length; k++) {
-                                        message = message + "Your uniform order has been successfully placed,order reference:" + resp.results[k].OrderNo + " (" + resp.results[k].EmployeeId + ")." + resp.results[k].OrderConfirmation + ". \n";
+                else {
+                    if (response == "fail") {
+                        alert("There are no items in the cart please continue shopping.");
+                        window.location="/Employee/Index/"
+                    }
+                    else {
+                        response = response.replace("///", "");
+                        if (confirm(response)) {
+                            $.ajax({
+                                url: "/Home/GetOrderEnforcementStatus/",
+                                type: "post",
+                                success: function (response) {
+                                    if (response == "") {
+                                        $.ajax({
+                                            url: "/Basket/AcceptOrder/",
+                                            type: "POST",
+                                            data: { 'addDesc': addDesc },
+                                            success: function (resp) {
+                                                if (resp.type != "" && resp.type != null) {
+                                                    if (resp.type.includes("Carrier")) {
+                                                        alert(resp.type);
+                                                    }
+                                                    else {
+                                                        alert(resp.type);
+                                                    }
+                                                    loadPopup.Hide();
+                                                }
+                                                else {
+                                                    var message = "";
+                                                    for (var k = 0; k < resp.results.length; k++) {
+                                                        message = message + "Your uniform order has been successfully placed,order reference:" + resp.results[k].OrderNo + " (" + resp.results[k].EmployeeId + ")." + resp.results[k].OrderConfirmation + ". \n";
+                                                    }
+                                                    if (resp.results[0].OrderConfirmationPop != "" && resp.results[0].OrderConfirmationPop != null) {
+                                                        message = message + " \n\n\n Do you wanr to print confirmation? \n (Click ok to print,Cancel to not print)";
+                                                        if (confirm(message)) {
+                                                            var orderConfirmationPopup = ASPxClientControl.GetControlCollection().GetByName("orderConfirmation");
+                                                            loadPopup.Hide()
+                                                            var ordConfim = document.getElementById("ordeConfirm");
+                                                            ordConfim.innerHTML = "";
+                                                            ordConfim.innerHTML = resp.results[0].OrderConfirmationPop;
+                                                            orderConfirmationPopup.Show();
+                                                        }
+                                                        else {
+                                                            loadPopup.Hide();
+                                                            window.location = "/Employee/Index/";
+                                                        }
+
+                                                    }
+                                                    else {
+                                                        alert(message);
+                                                        loadPopup.Hide();
+                                                        window.location = "/Employee/Index/";
+                                                    }
+                                                }
+                                            }
+                                        });
                                     }
-                                    alert(message);
-                                    loadPopup.Hide()
-                                    window.location = "/Employee/Index/";
+                                    else {
+                                        alert(response);
+                                        loadPopup.Hide();
+                                    }
                                 }
-                            }
-                        });
+                            });
+
+                        }
+                        else {
+                            loadPopup.Hide();
+                        }
                     }
-                    else
-                    {
-                        loadPopup.Hide();
-                    }
-                   
                 }
             }
         });
-      
+
     }
     else {
         alert("Please fill address and customer reference");
@@ -4153,6 +5547,7 @@ function GetDetailsBasedonGrid(empId, busId) {
     var nomCode4 = ASPxClientControl.GetControlCollection().GetByName("txtNomCode4");
     var grid = ASPxClientControl.GetControlCollection().GetByName("CartView");
     var commentBox = ASPxClientControl.GetControlCollection().GetByName("txtCommentsExternal");
+    var CarriageStyleCmbbox = ASPxClientControl.GetControlCollection().GetByName("CarriageStyleCmbbox");
     comment = commentBox != null ? commentBox.GetValue() : "";
     grid.PerformCallback({ empid: empId });
     $.ajax({
@@ -4167,19 +5562,29 @@ function GetDetailsBasedonGrid(empId, busId) {
             city.SetValue(resp.BusAdd.City);
             postCode.SetValue(resp.BusAdd.PostCode);
             custRef.SetValue(resp.custRef);
-            commentBox.SetValue(resp.CommentExternal);
-            txtTotGoods.SetValue(resp.ordeTotal);
-            txtCarrierCharges.SetValue(resp.carriage);
-            txtOrdTotal.SetValue(resp.Total);
-            txtVAT.innerHTML = resp.VatPercent;
-            txtVAT1.SetValue(resp.totalVat);
-            txtGrndTot.SetValue(resp.GrossTotal);
-            nomCode.SetValue(resp.nomCode);
-            nomCode1.SetValue(resp.nomCode1);
-            nomCode2.SetValue(resp.nomCode2);
-            nomCode3.SetValue(resp.nomCode3);
-            nomCode4.SetValue(resp.nomCode4);
-
+            if (commentBox != null) {
+                commentBox.SetValue(resp.CommentExternal);
+            } if (txtTotGoods != null) {
+                txtTotGoods.SetValue(resp.ordeTotal);
+            } if (txtCarrierCharges != null) {
+                txtCarrierCharges.SetValue(resp.carriage);
+            } if (txtOrdTotal != null) {
+                txtOrdTotal.SetValue(resp.Total);
+            } if (txtVAT != null) {
+                txtVAT.innerHTML = resp.VatPercent;
+            } if (txtGrndTot != null) {
+                txtGrndTot.SetValue(resp.GrossTotal);
+            } if (CarriageStyleCmbbox != null) {
+                CarriageStyleCmbbox.SetSelectedIndex(-1);
+            } if (nomCode1 != null) {
+                nomCode1.SetValue(resp.nomCode1);
+            } if (nomCode2 != null) {
+                nomCode2.SetValue(resp.nomCode2);
+            } if (nomCode3 != null) {
+                nomCode3.SetValue(resp.nomCode3);
+            } if (nomCode4 != null) {
+                nomCode4.SetValue(resp.nomCode4);
+            }
         }
     });
 }
@@ -4992,3 +6397,402 @@ function IsCallBack(s, e) {
 $('#qty_textbox').change(function () {
     alert("hi");
 });
+
+
+
+function setCollapsed() {
+    var lookups = ASPxClientControl.GetControlCollection().GetByName("empFilter");
+    lookups.SetCollapsed(true);
+    $("#wrapper").toggleClass("active");
+}
+function setCollapsedOrderFilter() {
+    var lookups = ASPxClientControl.GetControlCollection().GetByName("OrderFilter");
+    lookups.SetCollapsed(true);
+    $("#wrapper").toggleClass("active");
+}
+function Adjustment(s, e) {
+    if (s.cpErrorString != null) {
+        alert(s.cpErrorString);
+    }
+    var adjustment = document.getElementById("adjustmentPts");
+    if (adjustment != null) {
+        adjustment.innerText = s.cpErrorString;
+    }
+    PointsEndCallBack();
+}
+
+function CarriageStyleCmbboxchange(s, e) {
+    var carrierStylecmb = ASPxClientControl.GetControlCollection().GetByName("CarriageStyleCmbbox");
+    var selStyle = carrierStylecmb.GetValue();
+    if (selStyle != null && selStyle != "") {
+        $.ajax({
+            url: "/Basket/InsertCarriageLine/",
+            type: "POST",
+            data: { 'carrStyle': selStyle },
+            success: function (response) {
+                if (response != "") {
+                    window.location.reload();
+                }
+                else {
+                    alert("The carriage style already exists in the cart");
+                }
+            }
+        });
+    }
+
+}
+
+function Expand(s, e) {
+    grid = ASPxClientControl.GetControlCollection().GetByName(s.name);
+    grid.ExpandAllDetailRows();
+}
+
+function OrderEdit(orderNo, empId) {
+    $.ajax({
+        url: "/OrderDisplay/SetEmployee/",
+        type: "post",
+        data: { 'empId': empId },
+        success: function (resp) {
+            if (resp.toLowerCase().includes("emp") == false) {
+                window.location = "/Basket/ShowBasket?ordeNo=" + orderNo;
+            }
+            else {
+                alert(resp);
+            }
+        }
+    });
+
+}
+
+function GetallOrders(s, e) {
+    var controlName = s.name;
+    var Empidsear = ASPxClientControl.GetControlCollection().GetByName("Empidsear");
+    var Empid = Empidsear == null ? "" : Empidsear.GetValue();
+    var Empnamesear = ASPxClientControl.GetControlCollection().GetByName("Empnamesear");
+    var StrtDatesear = ASPxClientControl.GetControlCollection().GetByName("StrtDatesear");
+    var Empname = Empnamesear == null ? "" : Empnamesear.GetValue(); var StrtDate = StrtDatesear == null ? "" : StrtDatesear.GetValue();
+    var frmOrderno = ASPxClientControl.GetControlCollection().GetByName("FromOrderNo");
+    var frmOno = frmOrderno == null ? 0 : frmOrderno.GetValue();
+    var toOrderno = ASPxClientControl.GetControlCollection().GetByName("ToOrderNo");
+    var toOno = toOrderno == null ? 0 : toOrderno.GetValue();
+    var frmOrderDate = ASPxClientControl.GetControlCollection().GetByName("FromOrderdate");
+    var frmODate = frmOrderDate.GetValue();
+    var toOrderDate = ASPxClientControl.GetControlCollection().GetByName("ToOrderdate");
+    var toODate = toOrderDate.GetValue();
+    var custRef = ASPxClientControl.GetControlCollection().GetByName("CustomerOrderno");
+    var cref = custRef.GetValue();
+    var ordStat = ASPxClientControl.GetControlCollection().GetByName("Orderstatus");
+    var orsTat = ordStat.GetValue();
+    var noOfrecs = ASPxClientControl.GetControlCollection().GetByName("recstodisplay");
+    var noOfrec = noOfrecs.GetValue();
+    var usr = ASPxClientControl.GetControlCollection().GetByName("User");
+    var usrVal = usr.GetValue();
+    if (controlName != null && controlName != "") {
+        if ((frmOno == null | frmOno == "") && (toOno == null | toOno == "") && (frmODate == null | frmODate == "") && (toODate == null | toODate == "") && (cref == null | cref == "") && (orsTat == null | orsTat == "") && (usrVal == null | usrVal == "") && (noOfrec == null | noOfrec == "")) {
+        }
+        else if (controlName == "btnordno") {
+
+            if (frmOno != null | toOno != null) {
+                $.ajax({
+                    url: "/OrderDisplay/ShowOrderGridViewPartial/",
+                    type: "post",
+                    data: { 'frmOrderno': frmOno, 'toOrderNo': toOno, 'frmOrderdate': frmODate.toJSON(), 'toOrderDate': toODate.toJSON(), 'custRef': cref, 'ordStatus': orsTat, 'users': usrVal, 'recsToDisplay': noOfrec, 'like': false, 'exact': false },
+                    success: function (response) {
+                        if (response != null && response != "") {
+                            var gridDiv = document.getElementById("ShowOrders");
+                            gridDiv.innerHTML = "";
+                            gridDiv.innerHTML = response;
+                        }
+                    }
+
+                });
+            }
+        }
+        else if (controlName == "btnorddate") {
+
+            if (frmODate != null || toODate != null) {
+                $.ajax({
+                    url: "/OrderDisplay/ShowOrderGridViewPartial/",
+                    type: "post",
+                    data: { 'frmOrderno': frmOno, 'toOrderNo': toOno, 'frmOrderdate': frmODate.toJSON(), 'toOrderDate': toODate.toJSON(), 'custRef': cref, 'ordStatus': orsTat, 'users': usrVal, 'recsToDisplay': noOfrec, 'like': false, 'exact': false },
+                    success: function (response) {
+                        if (response != null && response != "") {
+                            var gridDiv = document.getElementById("ShowOrders");
+                            gridDiv.innerHTML = "";
+                            gridDiv.innerHTML = response;
+                        }
+                    }
+                });
+            }
+        }
+        else if (controlName == "btnsearch") {
+            if ((Empid != null && Empid != "") || (Empname != null && Empname != "") || (StrtDate != null)) {
+                $.ajax({
+                    url: "/OrderDisplay/ShowOrderGridViewPartial/",
+                    type: "post",
+                    data: { 'frmOrderno': frmOno, 'toOrderNo': toOno, 'frmOrderdate': frmODate.toJSON(), 'toOrderDate': toODate.toJSON(), 'custRef': cref, 'ordStatus': orsTat, 'users': usrVal, 'recsToDisplay': noOfrec, 'like': false, 'exact': false, 'Empid': Empid, 'Empname': Empname, 'StrtDate': StrtDate != null ? StrtDate.toJSON() : null },
+                    success: function (response) {
+                        if (response != null && response != "") {
+                            var gridDiv = document.getElementById("ShowOrders");
+                            gridDiv.innerHTML = "";
+                            gridDiv.innerHTML = response;
+                        }
+                    }
+                });
+
+            }
+        }
+        else if (controlName == "btnShwlike") {
+
+            if (cref != null && cref != "") {
+                $.ajax({
+                    url: "/OrderDisplay/ShowOrderGridViewPartial/",
+                    type: "post",
+                    data: { 'frmOrderno': frmOno, 'toOrderNo': toOno, 'frmOrderdate': frmODate.toJSON(), 'toOrderDate': toODate.toJSON(), 'custRef': cref, 'ordStatus': orsTat, 'users': usrVal, 'recsToDisplay': noOfrec, 'like': true, 'exact': false },
+                    success: function (response) {
+                        if (response != null && response != "") {
+                            var gridDiv = document.getElementById("ShowOrders");
+                            gridDiv.innerHTML = "";
+                            gridDiv.innerHTML = response;
+                        }
+                    }
+                });
+            }
+        }
+        else if (controlName == "btnShwexac") {
+
+            if (cref != null && cref != "") {
+                $.ajax({
+                    url: "/OrderDisplay/ShowOrderGridViewPartial/",
+                    type: "post",
+                    data: { 'frmOrderno': frmOno, 'toOrderNo': toOno, 'frmOrderdate': frmODate.toJSON(), 'toOrderDate': toODate.toJSON(), 'custRef': cref, 'ordStatus': orsTat, 'users': usrVal, 'recsToDisplay': noOfrec, 'like': false, 'exact': true },
+                    success: function (response) {
+                        if (response != null && response != "") {
+                            var gridDiv = document.getElementById("ShowOrders");
+                            gridDiv.innerHTML = "";
+                            gridDiv.innerHTML = response;
+                        }
+                    }
+                });
+            }
+        }
+        else if (controlName == "Orderstatus") {
+
+            if (orsTat != null && orsTat != "") {
+                $.ajax({
+                    url: "/OrderDisplay/ShowOrderGridViewPartial/",
+                    type: "post",
+                    data: { 'frmOrderno': frmOno, 'toOrderNo': toOno, 'frmOrderdate': frmODate.toJSON(), 'toOrderDate': toODate.toJSON(), 'custRef': cref, 'ordStatus': orsTat, 'users': usrVal, 'recsToDisplay': noOfrec, 'like': false, 'exact': false },
+                    success: function (response) {
+                        if (response != null && response != "") {
+                            var gridDiv = document.getElementById("ShowOrders");
+                            gridDiv.innerHTML = "";
+                            gridDiv.innerHTML = response;
+                        }
+                    }
+                });
+            }
+        }
+        else if (controlName == "User") {
+
+            if (usrVal != null && usrVal != "") {
+                $.ajax({
+                    url: "/OrderDisplay/ShowOrderGridViewPartial/",
+                    type: "post",
+                    data: { 'frmOrderno': frmOno, 'toOrderNo': toOno, 'frmOrderdate': frmODate.toJSON(), 'toOrderDate': toODate.toJSON(), 'custRef': cref, 'ordStatus': orsTat, 'users': usrVal, 'recsToDisplay': noOfrec, 'like': false, 'exact': false },
+                    success: function (response) {
+                        if (response != null && response != "") {
+                            var gridDiv = document.getElementById("ShowOrders");
+                            gridDiv.innerHTML = "";
+                            gridDiv.innerHTML = response;
+                        }
+                    }
+                });
+            }
+        }
+        else if (controlName == "recstodisplay") {
+
+            if (noOfrec != null && noOfrec != "") {
+                $.ajax({
+                    url: "/OrderDisplay/ShowOrderGridViewPartial/",
+                    type: "post",
+                    data: { 'frmOrderno': frmOno, 'toOrderNo': toOno, 'frmOrderdate': frmODate.toJSON(), 'toOrderDate': toODate.toJSON(), 'custRef': cref, 'ordStatus': orsTat, 'users': usrVal, 'recsToDisplay': noOfrec, 'like': false, 'exact': false },
+                    success: function (response) {
+                        if (response != null && response != "") {
+                            var gridDiv = document.getElementById("ShowOrders");
+                            gridDiv.innerHTML = "";
+                            gridDiv.innerHTML = response;
+                        }
+                    }
+                });
+            }
+        }
+    }
+}
+
+function ShowDetailOrder(s, e) {
+    var grid = ASPxClientControl.GetControlCollection().GetByName(s.name);
+    var ordno = grid.GetRowKey(e.visibleIndex);
+    var pop = ASPxClientControl.GetControlCollection().GetByName("OrderDetailPop");
+    var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
+    loadPopup.Show();
+    if (ordno > 0) {
+        $.ajax({
+            url: "/OrderDisplay/OrderDetailGridViewPartial/",
+            type: "post",
+            data: { 'ordno': ordno },
+            success: function (response) {
+                if (response != null && response != "") {
+                    $.ajax({
+                        url: "/OrderDisplay/OrderDetailGridView1Partial/",
+                        type: "post",
+                        data: { 'ordno': ordno },
+                        success: function (response1) {
+                            if (response1 != null && response1 != "") {
+                                var head = document.getElementById("OrderHead");
+                                var detail = document.getElementById("OrderDetail");
+                                head.innerHTML = "";
+                                detail.innerHTML = "";
+                                head.innerHTML = response;
+                                detail.innerHTML = response1;
+                                loadPopup.Hide();
+                                pop.SetHeaderText("Order details of  order number: " + ordno);
+                                pop.Show();
+                            }
+                        }
+
+                    });
+                }
+            }
+
+        });
+    }
+}
+
+function checkEmpEmail() {
+    $.ajax({
+        type: "POST",
+        url: "/Home/CheckEmpEmail",
+        success: function (response) {
+            if (response != "") {
+                var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
+                loadPopup.Hide();
+                var pop = ASPxClientControl.GetControlCollection().GetByName("EmailPrompt");
+                var content = document.getElementById("EmailPromptContent");
+                content.innerHTML = "";
+                content.innerHTML = response;
+                pop.Show();
+                MVCxClientUtils.FinalizeCallback();
+            }
+        },
+        error: function () {
+
+        }
+    });
+}
+function GetRolloutCheck() {
+    $.ajax({
+        type: "POST",
+        url: "/Home/GetRolloutCheck",
+        success: function (response) {
+            if (response != null && response != "") {
+                var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
+                loadPopup.Hide();
+                var pop = ASPxClientControl.GetControlCollection().GetByName("RolloutPrompt");
+                var content = document.getElementById("RolloutPromptContent");
+                content.innerHTML = "";
+                content.innerHTML = response;
+                pop.Show();
+                MVCxClientUtils.FinalizeCallback();
+            }
+        },
+        error: function () {
+
+        }
+    });
+}
+function PROCEEDFURTHERROLLOUT() {
+    var pop = ASPxClientControl.GetControlCollection().GetByName("RolloutPrompt");
+    $.ajax({
+        url: "/Home/SetRolloutTrue/",
+        type: "Post",
+        success: function (response) {
+
+        }
+    });
+    pop.Hide();
+}
+
+function SaveEmailData(s, e) {
+    var emailValidation = document.getElementById("ValidEMail");
+    var Email = ASPxClientControl.GetControlCollection().GetByName("emailAlerttxtBox");
+    var emailValue = Email != null ? Email.GetValue() : "";
+    emailValidation.style.visibility = "hidden";
+    if (validateEmail(emailValue)) {
+
+        if (emailValue != "" && emailValue != null) {
+            $.ajax({
+                type: "post",
+                url: "/Home/SaveEmailData/",
+                data: { 'email': emailValue },
+                success: function (resp) {
+                    if (resp == "") {
+                        var pop = ASPxClientControl.GetControlCollection().GetByName("EmailPrompt");
+                        pop.Hide();
+                    }
+                }
+            });
+        }
+    }
+    else {
+
+        emailValidation.style.visibility = "visible";
+    }
+
+}
+function validateEmail(emailValue) {
+
+    var pattern = /^[a-zA-Z0-9\-_]+(\.[a-zA-Z0-9\-_]+)*@[a-zA-Z0-9]+(\-[a-zA-Z0-9]+)*(\.[a-zA-Z0-9]+(\-[a-zA-Z0-9]+)*)*\.[a-zA-Z]{2,4}$/;
+    if (pattern.test(emailValue)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+function logoff() {
+    window.location = "/OrderDisplay/ShowOrders/";
+}
+function gotoindex() {
+    window.location = "/Employee/Index/";
+}
+
+function CheckConditions() {
+    checkEmpEmail();
+    GetRolloutCheck();
+}
+function SaveEmpGrid(chart) {
+    window.open('/Employee/exporter/', '_blank');
+}
+
+
+function redirect() {
+    window.location = "/Employee/Index/";
+}
+
+function print(divName) {
+    var winPrint = window.open('', '', 'left=0,top=0,width=800,height=600,toolbar=0,scrollbars=0,status=0');
+    var printContents = document.getElementById(divName).innerHTML;
+    winPrint.document.write(printContents);
+    winPrint.document.close();
+    winPrint.focus();
+    winPrint.print();
+    winPrint.close();
+
+    //var originalContents = document.body.innerHTML;
+
+    //document.body.innerHTML = printContents;
+
+    //window.print();
+
+    //document.body.innerHTML = originalContents;
+}

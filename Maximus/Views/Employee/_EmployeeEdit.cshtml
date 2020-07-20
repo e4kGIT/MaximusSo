@@ -15,59 +15,6 @@
         <center><h4 style="padding:0px;">Employee</h4></center>
         <div class="row">
             <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
-                @Html.DevExpress().ComboBoxFor(x => x.Department, text =>
-           {
-               text.Name = "editDepartment";
-               text.Properties.Caption = "Department";
-               if (ViewBag.create != null)
-               {
-                   text.SelectedIndex = Model.DepartmentLst.Count == 1 ? 0 : -1;
-                   text.ReadOnly = true;
-               }
-           }).BindList(Model.DepartmentLst).GetHtml()
-            </div>
-
-            <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
-                @if (Convert.ToBoolean(Session["datestart"]) | Convert.ToBoolean(Session["ShowHourse"]))
-                {
-                    @Html.DevExpress().DateEditFor(m => m.StartDate, settings =>
-               {
-                   settings.Properties.Caption = "Start date";
-                   if (ViewBag.create != null)
-                   {
-                       settings.Date = DateTime.Now;
-                   }
-                   settings.Name = "editStartDate";
-                   settings.Properties.EditFormat = EditFormat.Custom;
-                   settings.Properties.DisplayFormatString = "dd.MM.yyyy";
-                   settings.Properties.EditFormatString = "dd.MM.yyyy";
-
-               }).GetHtml()
-                }
-            </div>
-
-            <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
-                @if (Convert.ToBoolean(Session["leavedate"]))
-                {
-                    @Html.DevExpress().DateEditFor(m => m.EndDate, settings =>
-               {
-                   settings.Properties.Caption = "End Date";
-                   if (ViewBag.create != null)
-                   {
-                       settings.Date = DateTime.Now.AddYears(1);
-                   }
-                   settings.Name = "editEndDate";
-                   settings.Properties.EditFormat = EditFormat.Custom;
-                   settings.Properties.DisplayFormatString = "dd.MM.yyyy";
-                   settings.Properties.EditFormatString = "dd.MM.yyyy";
-
-               }).GetHtml()
-                }
-            </div>
-        </div><br />
-
-        <div class="row">
-            <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
                 @Html.DevExpress().TextBoxFor(x => x.EmployeeId, text =>
            {
                text.Name = "editEmpId";
@@ -99,7 +46,65 @@
            }).GetHtml()
             </div>
         </div>
-        <br />
+        <br /> <div class="row">
+            <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                @Html.DevExpress().ComboBoxFor(x => x.Department, text =>
+           {
+               text.Name = "editDepartment";
+               text.Properties.Caption = "Department";
+               if (ViewBag.create != null)
+               {
+                   text.SelectedIndex = Model.DepartmentLst.Count == 1 ? 0 : -1;
+                   text.ReadOnly = true;
+               }
+           }).BindList(Model.DepartmentLst).GetHtml()
+            </div>
+
+            <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                @if (Convert.ToBoolean(Session["datestart"]) | Convert.ToBoolean(Session["ShowHourse"]))
+                {
+                    @Html.DevExpress().DateEditFor(m => m.StartDate, settings =>
+               {
+                   settings.Properties.Caption = "Start date";
+                   if (ViewBag.create != null)
+                   {
+                       settings.Date = DateTime.Now;
+                       settings.ReadOnly = true;
+                       settings.Properties.NullText = DateTime.Now.Date.ToString("dd-MMM-yyyy");
+                   }
+                   settings.Name = "editStartDate";
+                   settings.Properties.EditFormat = EditFormat.Custom;
+                   settings.Properties.DisplayFormatString = "dd.MM.yyyy";
+                   settings.Properties.EditFormatString = "dd.MM.yyyy";
+
+               }).GetHtml()
+                }
+            </div>
+
+            <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
+                @if (Convert.ToBoolean(Session["leavedate"]))
+                {
+                    @Html.DevExpress().DateEditFor(m => m.EndDate, settings =>
+               {
+                   settings.Properties.Caption = "End Date";
+                   if (ViewBag.create != null)
+                   {
+                       //int valEmpRenew=
+                       settings.Date = DateTime.Now.AddYears(1);
+                       settings.ReadOnly = true;
+                       //settings.Properties.NullText = DateTime.Now.AddMonths().ToString("dd-MMM-yyyy");
+                   }
+                   settings.Name = "editEndDate";
+                   settings.Properties.EditFormat = EditFormat.Custom;
+                   settings.Properties.DisplayFormatString = "dd.MM.yyyy";
+                   settings.Properties.EditFormatString = "dd.MM.yyyy";
+
+               }).GetHtml()
+                }
+            </div>
+        </div><br />
+
+       
         <div class="row">
 
             <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
@@ -172,7 +177,7 @@
             <hr />
             <center><h4 style="padding:0px;">Ucodes</h4></center>
             <div class="row">
-                <div class="col-md-6 col-xs-6 col-sm-6 col-lg-6">
+                @*@*<div class="col-md-6 col-xs-6 col-sm-6 col-lg-6">
                     @Html.DevExpress().MemoFor(X => X.EmpUcodes, text =>
            {
                text.Properties.Caption = "Ucodes";
@@ -180,8 +185,9 @@
 
 
            }).GetHtml()
-                </div>
-                <div class="col-md-6 col-xs-6 col-sm-6 col-lg-6">
+                </div>*@ 
+                <div class="col-md-2"></div>
+                <div class="col-md-8 col-xs-8 col-sm-8 col-lg-8">
                     <center>
                         @{
                             var busID = Session["BuisnessId"].ToString();
@@ -259,6 +265,7 @@
                         }
                     </center>
                 </div>
+                <div class="col-md-2"></div>
             </div>
                                 }
                             }
@@ -424,7 +431,7 @@
 
                             @Html.DevExpress().TextBox(settings =>
                        {
-                           settings.Name = "EmpAddress1"; settings.Properties.Caption = "Address1";
+                           settings.Name = "EmpAddress1"; settings.ReadOnly = true; settings.Properties.Caption = "Address1";
                            if (Model.Address != null)
                            {
                                var busAdd = Model.AddressLst.Any(x => x.AddressId == Model.Address.AddressId) ? Model.AddressLst.Where(x => x.AddressId == Model.Address.AddressId).First() : new Maximus.Data.Models.BusAddress1();
@@ -436,25 +443,25 @@
                     <div class="col-md-4">
                         <center>
                             @Html.DevExpress().TextBox(settings =>
-                                              {
-                                                  settings.Name = "EmpAddress2"; settings.Properties.Caption = "Address2"; if (Model.Address != null)
-                                                  {
-                                                      var busAdd = Model.AddressLst.Any(x => x.AddressId == Model.Address.AddressId) ? Model.AddressLst.Where(x => x.AddressId == Model.Address.AddressId).First() : new Maximus.Data.Models.BusAddress1();
-                                                      settings.Text = busAdd.Address2;
-                                                  }
-                                              }).GetHtml()
+                       {
+                           settings.Name = "EmpAddress2"; settings.ReadOnly = true; settings.Properties.Caption = "Address2"; if (Model.Address != null)
+                           {
+                               var busAdd = Model.AddressLst.Any(x => x.AddressId == Model.Address.AddressId) ? Model.AddressLst.Where(x => x.AddressId == Model.Address.AddressId).First() : new Maximus.Data.Models.BusAddress1();
+                               settings.Text = busAdd.Address2;
+                           }
+                       }).GetHtml()
                         </center>
                     </div>
                     <div class="col-md-4">
                         <center>
                             @Html.DevExpress().TextBox(settings =>
-                                              {
-                                                  settings.Name = "EmpAddress3"; settings.Properties.Caption = "Address3"; if (Model.Address != null)
-                                                  {
-                                                      var busAdd = Model.AddressLst.Any(x => x.AddressId == Model.Address.AddressId) ? Model.AddressLst.Where(x => x.AddressId == Model.Address.AddressId).First() : new Maximus.Data.Models.BusAddress1();
-                                                      settings.Text = busAdd.Address3;
-                                                  }
-                                              }).GetHtml()
+                       {
+                           settings.Name = "EmpAddress3"; settings.ReadOnly = true; settings.Properties.Caption = "Address3"; if (Model.Address != null)
+                           {
+                               var busAdd = Model.AddressLst.Any(x => x.AddressId == Model.Address.AddressId) ? Model.AddressLst.Where(x => x.AddressId == Model.Address.AddressId).First() : new Maximus.Data.Models.BusAddress1();
+                               settings.Text = busAdd.Address3;
+                           }
+                       }).GetHtml()
                         </center>
                     </div>
                 </div>
@@ -463,32 +470,32 @@
                     <div class="col-md-4">
                         <center>
                             @Html.DevExpress().TextBox(settings =>
-                                              {
-                                                  settings.Name = "EmpCity"; settings.Properties.Caption = "City"; if (Model.Address != null)
-                                                  {
-                                                      var busAdd = Model.AddressLst.Any(x => x.AddressId == Model.Address.AddressId) ? Model.AddressLst.Where(x => x.AddressId == Model.Address.AddressId).First() : new Maximus.Data.Models.BusAddress1();
-                                                      settings.Text = busAdd.City;
-                                                  }
-                                              }).GetHtml()
-                        </center>
-                    </div>
-                    <div class="col-md-4">
-                        <center>
-                            @Html.DevExpress().TextBox(settings =>
-                                              {
-                                                  settings.Name = "EmpPostCode"; settings.Properties.Caption = "Postcode"; if (Model.Address != null)
-                                                  {
-                                                      var busAdd = Model.AddressLst.Any(x => x.AddressId == Model.Address.AddressId) ? Model.AddressLst.Where(x => x.AddressId == Model.Address.AddressId).First() : new Maximus.Data.Models.BusAddress1();
-                                                      settings.Text = busAdd.PostCode;
-                                                  }
-                                              }).GetHtml()
+                       {
+                           settings.Name = "EmpCity"; settings.ReadOnly = true; settings.Properties.Caption = "City"; if (Model.Address != null)
+                           {
+                               var busAdd = Model.AddressLst.Any(x => x.AddressId == Model.Address.AddressId) ? Model.AddressLst.Where(x => x.AddressId == Model.Address.AddressId).First() : new Maximus.Data.Models.BusAddress1();
+                               settings.Text = busAdd.City;
+                           }
+                       }).GetHtml()
                         </center>
                     </div>
                     <div class="col-md-4">
                         <center>
                             @Html.DevExpress().TextBox(settings =>
                        {
-                           settings.Name = "EmpCountry"; settings.Properties.Caption = "Country"; if (Model.Address != null)
+                           settings.Name = "EmpPostCode"; settings.ReadOnly = true; settings.Properties.Caption = "Postcode"; if (Model.Address != null)
+                           {
+                               var busAdd = Model.AddressLst.Any(x => x.AddressId == Model.Address.AddressId) ? Model.AddressLst.Where(x => x.AddressId == Model.Address.AddressId).First() : new Maximus.Data.Models.BusAddress1();
+                               settings.Text = busAdd.PostCode;
+                           }
+                       }).GetHtml()
+                        </center>
+                    </div>
+                    <div class="col-md-4">
+                        <center>
+                            @Html.DevExpress().TextBox(settings =>
+                       {
+                           settings.Name = "EmpCountry";settings.ReadOnly = true; settings.Properties.Caption = "Country"; if (Model.Address != null)
                            {
                                var busAdd = Model.AddressLst.Any(x => x.AddressId == Model.Address.AddressId) ? Model.AddressLst.Where(x => x.AddressId == Model.Address.AddressId).First() : new Maximus.Data.Models.BusAddress1();
 

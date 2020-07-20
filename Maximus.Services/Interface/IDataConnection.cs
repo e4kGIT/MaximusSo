@@ -12,6 +12,7 @@ namespace Maximus.Services.Interface
 {
    public interface IDataConnection
     {
+        List<string> GetEmployeeProvedure(string busId, string usrId);
         List<UcodeModel> GetAllUcodeLst(string ucode);
         string CompanyParam(string paramID, string companyId);
         string SetDefaultWarehouse(string userId, string businessId);
@@ -34,13 +35,13 @@ namespace Maximus.Services.Interface
         bool GetBooValue(string sSqry);
         void displayOrderListGrid(bool booShowManpack = false);
 
-        TotalModel GetAlltotals(List<SalesOrderHeaderViewModel> mod, double carriage);
+        TotalModel GetAlltotals(List<SalesOrderHeaderViewModel> mod, double carriage,bool isEdit=false);
         bool GetCustRefVisiblity(string busId);
         int GetDeliveryAddressId(string emp, string busId, string onlineUserId);
 
         List<SiteCodeModel> GetSitecodes(string businessId);
 
-        List<string> GetCarrierStyleCmbValue();
+        List<string> GetCarrierStyleCmbValue(string busId="");
 
         bool checkCarriageLine(List<SalesOrderHeaderViewModel> currentOrder);
         List<string> GetCarrierCmbValue();
@@ -94,7 +95,7 @@ namespace Maximus.Services.Interface
         IEnumerable<tblfsk_colour> GetAllColours();
         PreviousQty GetPreviousHistory(string EmpId, string BuisnessId, string styleId);
         string GetReqData(string StyleID);
-        decimal GetPrice(string StyleID = "", string SizeId = "", string busId = "");
+        decimal GetPrice(string StyleID = "", string SizeId = "", string busId = "",string priceId="");
         string getStyleFromFretxt(string freetxt);
         string getEmployeeAddress(string EmpId, string BuisnessId);
         double GetVatPercent(string style, string size);
@@ -105,7 +106,7 @@ namespace Maximus.Services.Interface
         decimal GetBulkPrice1(int qty, string StyleID = "", string SizeId = "", string busId = "");
         string GetAllPreviousData(string EmpId, string BuisnessId, string styleId, long inBasket = 0);
         IEnumerable<tblfsk_style_sizes_prices> GetAllStyleSizePrices();
-        decimal GetStyleSizePrices(string StyleID = "", string SizeId = "", string busId = "");
+        decimal GetStyleSizePrices(string StyleID = "", string SizeId = "", string busId = "",string priceId="");
         styleViewmodel GetDimallocStyles(string style);
         IEnumerable<tblsop_customerorder_template> GetAllCustomerOrder();
         IEnumerable<tblaccemp_ucodes_desc> GetAllUcodeDesc();

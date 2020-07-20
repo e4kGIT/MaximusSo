@@ -1,0 +1,37 @@
+﻿
+<div class="row"> 
+    <center><h4>Employee search</h4></center>
+    <hr />
+    <br />
+   
+    @Html.DevExpress().TextBox(set => { set.Name = "Empidsear"; set.Properties.Caption = "Employee Id"; set.Properties.CaptionCellStyle.Width =150; }).GetHtml() <br />
+    @Html.DevExpress().TextBox(set => { set.Name = "Empnamesear"; set.Properties.Caption = "Employee Name"; set.Properties.CaptionCellStyle.Width = 150; }).GetHtml() <br />
+    @Html.DevExpress().DateEdit(set => { set.Name = "StrtDatesear"; set.Properties.Caption = "Start date"; set.Properties.CaptionCellStyle.Width = 150; }).GetHtml() <br />
+    <center>@Html.DevExpress().Button(set => { set.Name = "btnsearch"; set.Text = "Search";set.ClientSideEvents.Click = "GetallOrders"; }).GetHtml()</center>
+    
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+@*@Html.Action("OrderDetailGridViewPartial")
+
+
+@Html.Action("OrderDetailGridView1Partial")*@
+
+
+
+
+
+
+
+

@@ -13,6 +13,10 @@ using Maximus.Data.Models;
 using Maximus.Data.models.RepositoryModels;
 using Maximus.Data.Interface.Concrete;
 using Maximus.Data.models;
+using System.Globalization;
+using System.Net.Mail;
+using System.Net;
+using System.Net.Http;
 
 namespace Maximus.Data.Models
 {
@@ -100,11 +104,21 @@ namespace Maximus.Data.Models
         public readonly GenParameter _genParameter;
         public readonly BusAccount _busAccount;
         public readonly StyleByTemplateView _styleByTemplateView;
+        public readonly PointsByUcode _pointsByUcode;
+        public readonly PointsCard _pointsCard;
+        public readonly SalesDetail _salesDetail;
+        public readonly tblSalesOrderHeader _salesHead;
+        public readonly ViewPointsCard _vuPointsCard;
+        public readonly Warehouses _wareHouses;
+        public readonly Company _company;
         public DataProcessing(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
             UcodeByFreeTextView ucodeByFreeText = new UcodeByFreeTextView(_unitOfWork);
+            Warehouses wareHouses=new Warehouses(_unitOfWork);
+            tblSalesOrderHeader salesHead = new tblSalesOrderHeader(_unitOfWork);
             AllAssemblies allAssembly = new AllAssemblies(_unitOfWork);
+            PointsByUcode pointsByUcode = new PointsByUcode(_unitOfWork);
             CustomAssembly customAssembly = new CustomAssembly(_unitOfWork);
             BusBusiness busBusiness = new BusBusiness(_unitOfWork);
             AllAssemblies allAssemblies = new AllAssemblies(_unitOfWork);
@@ -114,6 +128,7 @@ namespace Maximus.Data.Models
             BusContact busContact = new BusContact(_unitOfWork);
             CountryCodes countryCodes = new CountryCodes(_unitOfWork);
             Departments departments = new Departments(_unitOfWork);
+            PointsCard pointsCard = new PointsCard(_unitOfWork);
             Employee employee = new Employee(_unitOfWork);
             FskStyleFreetext fskStyleFreetext = new FskStyleFreetext(_unitOfWork);
             Nextno nextno = new Nextno(_unitOfWork);
@@ -125,6 +140,7 @@ namespace Maximus.Data.Models
             StyleGroups styleGroups = new StyleGroups(_unitOfWork);
             StylesView stylesView = new StylesView(_unitOfWork);
             TblFskStyle tblFskStyle = new TblFskStyle(_unitOfWork);
+            ViewPointsCard vuPointsCard = new ViewPointsCard(_unitOfWork);
             Ucode_Description ucode_Description = new Ucode_Description(_unitOfWork);
             UcodeEmployees ucodeEmployees = new UcodeEmployees(_unitOfWork);
             Ucodes ucodes = new Ucodes(_unitOfWork);
@@ -143,8 +159,13 @@ namespace Maximus.Data.Models
             GenParameter genParameter = new GenParameter(_unitOfWork);
             BusAccount busAccount = new BusAccount(_unitOfWork);
             StyleByTemplateView styleByTemplateView = new StyleByTemplateView(_unitOfWork);
+            SalesDetail salesDetail = new SalesDetail(_unitOfWork);
+            Company company=new Company(_unitOfWork);
+            _salesDetail = salesDetail;
+            _company = company;
             _styleByTemplateView = styleByTemplateView;
             _user = user;
+            _salesHead = salesHead;
             _busAccount = busAccount;
             _allAssemblies = allAssemblies;
             _assemblyDetail = assemblyDetail;
@@ -164,6 +185,7 @@ namespace Maximus.Data.Models
             _styleGroups = styleGroups;
             _stylesView = stylesView;
             _tblFskStyle = tblFskStyle;
+            _pointsByUcode = pointsByUcode;
             _ucode_Description = ucode_Description;
             _ucodeByFreeText = ucodeByFreeText;
             _ucodeEmployees = ucodeEmployees;
@@ -177,13 +199,16 @@ namespace Maximus.Data.Models
             _onlineUserIdEmployee = onlineUserIdEmployee;
             _genUserDefaults = genUserDefaults;
             _fskStyle = fskStyle;
+            _wareHouses = wareHouses;
             _fskSetValues = fskSetValues;
             _fskSettings = fskSettings;
+            _vuPointsCard = vuPointsCard;
             _customerOrderTemplate = customerOrderTemplate;
             _busSetValues = busSetValues;
             _cmpDefaults = cmpDefaults;
             _busSettings = busSettings;
             _genParameter = genParameter;
+            _pointsCard = pointsCard;
             _accVatCodes = accVatCodes;
         }
 
@@ -786,7 +811,7 @@ namespace Maximus.Data.Models
 
         #region GetPrice
 
-        public decimal GetPrice(string StyleID = "", string SizeId = "", string busId = "")
+        public decimal GetPrice(string StyleID = "", string SizeId = "", string busId = "", string priceId = "")
         {
             decimal result = 0;
             string sSqry = "", sSqry1 = "";
@@ -796,8 +821,17 @@ namespace Maximus.Data.Models
                 string businessId = busId;
                 if (StyleID.Contains(",") == false)
                 {
-                    sSqry = "select price from tblfsk_style_sizes_prices where SizeID='" + SizeId.Trim() + "' and StyleID='" + StyleID.Trim() + "' and BusinessId='" + businessId + "' and PriceID=2";
-                    sSqry1 = "select price from tblfsk_style_sizes_prices where SizeID='" + SizeId.Trim() + "' and StyleID='" + StyleID.Trim() + "' and BusinessId='All' and PriceID=2";
+                    if (priceId != "")
+                    {
+                        sSqry = "select price from tblfsk_style_sizes_prices where SizeID='" + SizeId.Trim() + "' and StyleID='" + StyleID.Trim() + "' and BusinessId='" + businessId + "' PriceID=" + priceId + "";
+                        sSqry1 = "select price from tblfsk_style_sizes_prices where SizeID='" + SizeId.Trim() + "' and StyleID='" + StyleID.Trim() + "' and BusinessId='All' and PriceID=" + priceId + "";
+                    }
+                    else
+                    {
+                        sSqry = "select price from tblfsk_style_sizes_prices where SizeID='" + SizeId.Trim() + "' and StyleID='" + StyleID.Trim() + "' and BusinessId='" + businessId + "' and PriceID=2";
+                        sSqry1 = "select price from tblfsk_style_sizes_prices where SizeID='" + SizeId.Trim() + "' and StyleID='" + StyleID.Trim() + "' and BusinessId='All' and PriceID=2";
+
+                    }
                     res1 = GetScalar(sSqry);
                     res2 = GetScalar(sSqry1);
                 }
@@ -852,49 +886,95 @@ namespace Maximus.Data.Models
         }
         #endregion
 
-        //#region GetBulkPrice
-        //public decimal GetBulkPrice(int qty, string StyleID = "", string SizeId = "", string busId = "")
-        //{
-        //    decimal resPric = 0;
-        //    List<BulkOrderModel> qtyMode = new List<BulkOrderModel>();
-        //    qtyMode = (List<BulkOrderModel>)HttpContext.Current.Session["BulkQtyModel"];
+        #region GetTotalSOPoints
+        public int GetTotalSOPointsByStyle(string businessId, string employeeId, int year, string styleId)
+        {
 
-        //    if (qtyMode.Count > 0)
-        //    {
-        //        if (qtyMode.Any(x => x.style.ToString().ToLower() == StyleID.ToLower() && x.size.ToLower() == SizeId.ToLower()))
-        //        {
-        //            qtyMode.Remove(qtyMode.Where(x => x.style.ToString().ToLower() == StyleID.ToLower() && x.size.ToLower() == SizeId.ToLower()).First());
-        //        }
-        //    }
-        //    try
-        //    {
-        //        if (qty > 0)
-        //        {
-        //            qtyMode.Add(new BulkOrderModel { size = SizeId, style = StyleID, qty = qty });
+            int totSoPts = 0;
+            totSoPts = _vuPointsCard.Exists(s => s.BusinessID == businessId && s.EmployeeID == employeeId && s.StyleID == styleId) ? _vuPointsCard.GetAll(s => s.BusinessID == businessId && s.EmployeeID == employeeId && s.StyleID == styleId).Sum(s => s.TOTSOPOINTS).Value : 0;
+            return totSoPts;
+            //string stylLst = "";
 
-        //            string businessId = busId;
-        //            decimal result = _styleSizePrice.Exists(x => x.StyleID == StyleID.Trim() & x.SizeID == SizeId.Trim() & x.BusinessId == businessId && x.PriceID == 2) ? (decimal)_styleSizePrice.GetAll(x => x.StyleID == StyleID.Trim() & x.SizeID == SizeId.Trim() & x.BusinessId == businessId && x.PriceID == 2).FirstOrDefault().Price.Value : 0;
-        //            result = result == 0 ? _styleSizePrice.Exists(x => x.StyleID == StyleID.Trim() & x.SizeID == SizeId.Trim() & x.BusinessId == "ALL" && x.PriceID == 2) ? (decimal)_styleSizePrice.GetAll(x => x.StyleID == StyleID.Trim() & x.SizeID == SizeId.Trim() & x.BusinessId == "ALL" && x.PriceID == 2).FirstOrDefault().Price.Value : result : result;
-        //            if (result != 0)
-        //            {
-        //                resPric = System.Math.Round(result, 2);
-        //                qtyMode.Where(x => x.style.ToString().ToLower() == StyleID.ToLower() && x.size.ToLower() == SizeId.ToLower()).First().price = resPric * qty;
-        //            }
-        //            else
-        //            {
-        //                qtyMode.Where(x => x.style.ToString().ToLower() == StyleID.ToLower() && SizeId.ToLower() == SizeId.ToLower()).First().price = 0 * qty;
-        //            }
-        //            HttpContext.Current.Session["BulkQtyModel"] = qtyMode;
-        //        }
-        //        return qtyMode.Where(x => x.style.ToLower() == StyleID.ToLower()).Sum(x => x.price);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //    }
-        //    return 0;
-        //}
-        //#endregion
+            //string qry = "SELECT SUM(IF(SOPoints IS NULL,0,SOPoints)+IF(PickPoints IS NULL,0,PickPoints)+IF(InvPoints IS NULL ,0,InvPoints)) AS TOTSOPOINTS FROM `tblaccemp_pointscard` WHERE EmployeeId='" + employeeId + "' AND BusinessID = '" + businessId + "' AND Year=" + year + " AND StyleID ='" + styleId + "'";
+            //MySqlConnection conn = new MySqlConnection(ConnectionString);
+            //try
+            //{
+            //    conn.Open();
+            //    MySqlCommand cmd = new MySqlCommand(qry, conn);
+            //    totSoPts = cmd.ExecuteScalar() != null ? Convert.ToInt32(cmd.ExecuteScalar()) : 0;
+            //}
+            //catch
+            //{
 
+            //}
+            //finally
+            //{
+            //    conn.Close();
+            //}
+            //return totSoPts;
+        }
+        #endregion
+        #region GetTotalSOPoints
+        public int GetTotalSOPointsByStyleMap(string businessId, string employeeId, int year, List<string> styleIdLst)
+        {
+            int totSoPts = 0;
+            totSoPts = _vuPointsCard.Exists(s => s.BusinessID == businessId && s.EmployeeID == employeeId && styleIdLst.Contains(s.StyleID)) ? _vuPointsCard.GetAll(s => s.BusinessID == businessId && s.EmployeeID == employeeId && styleIdLst.Contains(s.StyleID)).Sum(s => s.TOTSOPOINTS).Value : 0;
+            return totSoPts;
+            //int totSoPts = 0;
+            //string stylLst = "";
+            //stylLst = string.Join(",", styleIdLst);
+
+
+            //if (stylLst.Last() == ',')
+            //{
+            //    stylLst = stylLst.Remove(stylLst.Length - 1);
+            //}
+            //string qry = "SELECT SUM(IF(SOPoints IS NULL,0,SOPoints)+IF(PickPoints IS NULL,0,PickPoints)+IF(InvPoints IS NULL ,0,InvPoints)) AS TOTSOPOINTS FROM `tblaccemp_pointscard` WHERE EmployeeId='" + employeeId + "' AND BusinessID = '" + businessId + "' AND Year=" + year + " AND StyleID in (" + stylLst + ")";
+            //MySqlConnection conn = new MySqlConnection(ConnectionString);
+            //try
+            //{
+            //    conn.Open();
+            //    MySqlCommand cmd = new MySqlCommand(qry, conn);
+            //    totSoPts = cmd.ExecuteScalar() != null ? Convert.ToInt32(cmd.ExecuteScalar()) : 0;
+            //}
+            //catch
+            //{
+
+            //}
+            //finally
+            //{
+            //    conn.Close();
+            //}
+            //return totSoPts;
+
+        }
+        #endregion
+
+        #region getTotalSopoints
+        public int GetTotalSoPoints(string businessId, string employeeId, int year = 0)
+        {
+            int totSoPts = 0;
+            totSoPts = _vuPointsCard.Exists(s => s.BusinessID == businessId && s.EmployeeID == employeeId) ? _vuPointsCard.GetAll(s => s.BusinessID == businessId && s.EmployeeID == employeeId).Sum(s => s.TOTSOPOINTS).Value : 0;
+            return totSoPts;
+            //string qry = "SELECT SUM(IF(SOPoints IS NULL,0,SOPoints)+IF(PickPoints IS NULL,0,PickPoints)+IF(InvPoints IS NULL ,0,InvPoints)) AS TOTSOPOINTS FROM `tblaccemp_pointscard` WHERE EmployeeId='" + employeeId + "' AND BusinessID = '" + businessId + "' AND Year=" + year;
+            //MySqlConnection conn = new MySqlConnection(ConnectionString);
+            //try
+            //{
+            //    conn.Open();
+            //    MySqlCommand cmd = new MySqlCommand(qry, conn);
+            //    totSoPts = cmd.ExecuteScalar() != null ? Convert.ToInt32(cmd.ExecuteScalar()) : 0;
+            //}
+            //catch
+            //{
+
+            //}
+            //finally
+            //{
+            //    conn.Close();
+            //}
+            //return totSoPts;
+        }
+        #endregion
         #region GetBulkPrice1
         public decimal GetBulkPrice1(int qty, string StyleID = "", string SizeId = "", string busId = "")
         {
@@ -1035,9 +1115,9 @@ namespace Maximus.Data.Models
         #endregion
 
         #region GetPermission
-        public string getPermissionUsers(string Permission, string CurrUser, string busID)
+        public string getPermissionUsers(string Permission, string CurrUser, string busID, string mRole)
         {
-            string result = "", mRole = "", AllowUsers = "", Users = "";
+            string result = "", AllowUsers = "", Users = "";
             mRole = GetDBScalarString("SELECT AccessID FROM tblUsers WHERE BusinessID='" + busID + "' AND Active='Y' AND UserName='" + CurrUser + "'");
             if (mRole.ToLower() == "admin")
             {
@@ -1197,6 +1277,204 @@ namespace Maximus.Data.Models
 
             }
             return result;
+        }
+        #endregion
+
+        #region sendDeleteMail
+        public void sendDeleteMail(long orderno,string busId,string userId,string employeeid, string adminMail, string mailUsername, string mailPassword, string mailPort, string mailServer)
+        {
+            string UeEmailId = BusinessParam("UsersManageEmail", busId);
+            UeEmailId = UeEmailId == "" ? UeEmailId : UeEmailId;
+            string msg = "";
+            string subject = "";
+            string managerName = "";
+            string UserManagerID = "";
+            string UserManagerName = "";
+            msg = "The Order No " + orderno + " has been deleted by the user " + userId + " on " + DateTime.Now.ToString("dd-MM-yyyy") + "";
+            subject = "Online Order Deleted...";
+            var Qry = "SELECT * FROM tblusers WHERE UserName='" + userId + "' AND BusinessID='" + busId + "'";
+            string orgUseremail = "",mailCC=""; /*Email_ID*/
+             MySqlConnection conn = new MySqlConnection(ConnectionString);
+            conn.Open();
+            try
+            {
+                MySqlCommand cmd = new MySqlCommand(Qry, conn);
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                if(dt.Rows.Count>0)
+                {
+                    foreach(DataRow dr in dt.Rows)
+                    {
+                        if (dr["Email_ID"]!=null)
+                        {
+                            orgUseremail= dr["Email_ID"].ToString();
+                        }
+                    }
+
+                }
+                
+
+            }
+            catch(Exception e)
+            {
+
+            }
+            finally
+            {
+                conn.Close();
+            }
+            if (employeeid.ToLower().Trim() != userId.ToLower().Trim())
+            {
+               mailCC= GetScalar("SELECT DISTINCT Email_ID FROM tblusers WHERE UserName = '" +employeeid+ "' AND BusinessID = '"  +busId+"'");
+                try
+                {
+                    sendSmtpMail(subject, adminMail, mailUsername, mailPassword, mailPort, mailServer, msg);
+                }
+                catch(Exception e)
+                {
+
+                }
+                //ObjMail1.To = rsEmail("Email_ID").Value
+                //ObjMail1.From = ConfigurationSettings.AppSettings.Item("EmailID")
+                //If Trim(Session("OrgOnlineUserID")) <> "" Then
+                //    orgUserEmail = GetDBScalarString("SELECT DISTINCT Email_ID FROM tblusers WHERE UserName='" & Trim(Session("OrgOnlineUserID")) & "' AND BusinessID='" & Session("CustID") & "'")
+                //    If orgUserEmail <> "" And UCase(orgUserEmail) <> UCase(ObjMail1.To) Then
+                //        ObjMail1.Cc = orgUserEmail
+                //    End If
+                //End If
+                //ObjMail1.Subject = strSubject
+                //ObjMail1.BodyFormat = MailFormat.Text
+                //ObjMail1.Body = strMsg
+                //SmtpMail.SmtpServer = ConfigurationSettings.AppSettings.Item("smtpserver")
+            }
+            MySqlConnection conn1 = new MySqlConnection(ConnectionString);
+            conn1.Open();
+            try
+            {
+                string sq1l = "SELECT * FROM tblusers WHERE Email_ID='" +UeEmailId+ "' AND BusinessID='"+busId+"'";
+                MySqlCommand cmd = new MySqlCommand(sq1l, conn);
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                if (dt.Rows.Count > 0)
+                {
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        if (dr["ForeName"] != null)
+                        {
+                            managerName = dr["ForeName"].ToString() + " "+ dr["SurName"].ToString();
+                        }
+                    }
+
+                }
+
+
+            }
+            catch (Exception e)
+            {
+
+            }
+            finally
+            {
+                conn1.Close();
+            }
+            if(UeEmailId!="")
+            {
+                //    ObjMail1.To = UEEmailID
+                //    ObjMail1.From = ConfigurationSettings.AppSettings.Item("EmailID")
+                //    ObjMail1.Subject = strSubject
+                //    ObjMail1.BodyFormat = MailFormat.Text
+                //    ObjMail1.Body = strMsg
+                //    SmtpMail.SmtpServer = ConfigurationSettings.AppSettings.Item("smtpserver")
+                //    Try
+                //        SMTPClientMethodToSendMail(ObjMail1)
+                //        'SmtpMail.Send(ObjMail1)
+                //    Catch exe As Exception
+                //    End Try
+                //End If
+            }
+            ///'User Level Manager EmailID
+
+            if(Convert.ToBoolean(BusinessParam("REQ_USRMANAGER_EMAIL", busId)))
+            {
+              
+                string sSqry = "";
+                sSqry = "SELECT UserName, Email_ID, ForeName, SurName FROM tblusers t1 JOIN tblpermission_users_allow t2 ON t1.BusinessID=t2.BusinessID AND t1.UserName=t2.UserID  WHERE t1.Active='Y' AND t2.AllowUser='" + userId + "' AND t2.BusinessID='" + busId + "'";
+                MySqlConnection conn2 = new MySqlConnection(ConnectionString);
+                conn1.Open();
+                try
+                {
+                    string sq1l = "SELECT * FROM tblusers WHERE Email_ID='" + UeEmailId + "' AND BusinessID='" + busId + "'";
+                    MySqlCommand cmd = new MySqlCommand(sSqry, conn);
+                    MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+                    if (dt.Rows.Count > 0)
+                    {
+                        foreach (DataRow dr in dt.Rows)
+                        {
+                            if (dr["Email_ID"] != null)
+                            {
+                                UserManagerID = dr["Email_ID"].ToString();
+                                UserManagerName = dr["ForeName"].ToString() + " " + dr["SurName"].ToString();
+                            }
+                        }
+
+                    }
+                }
+                catch (Exception e)
+                {
+
+                }
+                finally
+                {
+                    conn2.Close();
+                }
+            }
+            if(UserManagerID!="")
+            {
+                //        ObjMail1.To = UserManagerID
+                //        ObjMail1.From = ConfigurationSettings.AppSettings.Item("EmailID")
+                //        ObjMail1.Subject = strSubject
+                //        ObjMail1.BodyFormat = MailFormat.Text
+                //        ObjMail1.Body = strMsg
+                //        SmtpMail.SmtpServer = ConfigurationSettings.AppSettings.Item("smtpserver")
+                //        Try
+                //            SMTPClientMethodToSendMail(ObjMail1)
+                //            ' SmtpMail.Send(ObjMail1)
+                //        Catch exe As Exception
+                //        End Try
+            }
+        }
+        #endregion
+
+        #region sendSmtpMail
+        public void sendSmtpMail(string subject, string adminMail, string mailUsername, string mailPassword, string mailPort, string mailServer, string htmlString)
+        {
+            try
+            {
+                 
+                MailMessage message = new MailMessage();
+                SmtpClient smtp = new SmtpClient();
+                message.From = new MailAddress(adminMail);
+                message.To.Add(new MailAddress("sasidharan@e4k.co"));
+                message.Subject = subject;
+                message.IsBodyHtml = true; //to make message body as html  
+                message.Body = htmlString;
+                smtp.Port = Convert.ToInt32(mailPort);
+                smtp.Host = mailServer; //for webmai host  
+                smtp.EnableSsl = true;
+                smtp.Timeout = 100000;
+                smtp.UseDefaultCredentials = false;
+                smtp.Credentials = new NetworkCredential(mailUsername,mailPassword);
+                smtp.DeliveryMethod = SmtpDeliveryMethod.Network;
+                smtp.Send(message);
+            }
+            catch(Exception e)
+            {
+
+            }
         }
         #endregion
 
@@ -1413,7 +1691,7 @@ namespace Maximus.Data.Models
             //CustBudgetPeriodDays = BusinessParam("BudgetPeriodDays", busId);
             booBudget = Convert.ToBoolean(BusinessParam("BUDGETREQ", busId));
             booPoints = Convert.ToBoolean(BusinessParam("POINTSREQ", busId));
-            strsql = "SELECT e.employeeid, concat(concat(e.forename,' '),e.surname) as employeename, e.EmployeeClosed AS `STATUS` ";
+            strsql = "SELECT e.employeeid, concat(concat(e.forename,' '),e.surname) as employeename,sop.orderdate,sop.`OrderNo`, e.EmployeeClosed AS `STATUS` ";
             if (booBudget)
             {
                 strsql = strsql + ",t1.Budget as EntBudget,b.CurrBudget";
@@ -1446,7 +1724,7 @@ namespace Maximus.Data.Models
             }
             if (Convert.ToBoolean(BusinessParam("LimitUsrEmp", busId)))
             {
-                allUsers = getPermissionUsers(OrderPermission, userId, busId);
+                allUsers = getPermissionUsers(OrderPermission, userId, busId, txtRole);
                 strsql += " JOIN (SELECT DISTINCT employeeid FROM tblonline_userid_employee WHERE CompanyID='" + strCompanyID + "' AND onlineuserid in (" + allUsers + ") AND onlineuserid not in (" + getDenyPermissionUsers(OrderPermission, userId, busId) + ") AND businessid='" + busId + "') onlemp ON e.employeeid=onlemp.employeeid ";
             }
             if (ddlAddress != "")
@@ -1457,6 +1735,7 @@ namespace Maximus.Data.Models
             {
                 strsql += " JOIN (SELECT DISTINCT employeeid FROM tblaccemp_ucodesemployees t1 left join tblaccemp_ucodes_desc t2 on (t2.UcodeID=t1.UcodeID) WHERE t1.companyid='" + strCompanyID + "' AND t1.businessid='" + busId + "' and if(isnull(t2.Description),t1.UCodeID,t2.Description) like '% " + txtUcodeDesc.Trim() + "%') u1  ON e.employeeid=u1.employeeid";
             }
+            strsql += "JOIN  (SELECT DISTINCT pinno, MAX(orderdate) orderdate, orderno FROM `tblsop_salesorder_header` WHERE  custid = '" + busId + "' GROUP BY pinno) sop ON sop.`PinNo`= e.`EmployeeID`";
             strsql += " WHERE e.companyid='" + strCompanyID + "' AND  e.businessid='" + busId + "'";
 
             if (txtCDepartment != "")
@@ -1513,7 +1792,8 @@ namespace Maximus.Data.Models
                     foreach (DataRow dr in dt.Rows)
                     {
                         var empId = dr.ItemArray[0].ToString();
-                        result.Add(new EmployeeViewModel { EmployeeId = dr.ItemArray[0].ToString(), EmpFirstName = dr.ItemArray[1].ToString(), Department = dr.ItemArray[3].ToString(), EmpIsActive = dr.ItemArray[3].ToString() == "0" ? true : false });
+                        //var lm = GetLastOrder(empId);
+                        result.Add(new EmployeeViewModel { EmployeeId = dr.ItemArray[0].ToString(), EmpFirstName = dr.ItemArray[1].ToString(), Department = dr.ItemArray[3].ToString(), LastOrderNo = dr["OrderNo"].ToString() != "" ? Convert.ToInt64(dr["OrderNo"].ToString()) : 0, LastOrderDate = dr["orderdate"].ToString() != "" ? dr["orderdate"].ToString() : "", EmpIsActive = dr.ItemArray[3].ToString() == "0" ? true : false });
                     }
                 }
                 else
@@ -1528,6 +1808,18 @@ namespace Maximus.Data.Models
             return result;
         }
 
+        #endregion
+
+        #region  GetLastOrder
+        public LastOrderModel GetLastOrder(string empId)
+        {
+            LastOrderModel lm = new LastOrderModel();
+
+            lm.LastOrderNO = _salesHead.Exists(x => x.PinNo.Trim().ToLower() == empId.Trim().ToLower()) ? _salesHead.GetAll(x => x.PinNo.Trim().ToLower() == empId.Trim().ToLower()).OrderByDescending(s => s.OrderDate).First().OrderNo : 0;
+
+            lm.LastOrderDate = _salesHead.Exists(x => x.PinNo.Trim().ToLower() == empId.Trim().ToLower()) ? _salesHead.GetAll(x => x.PinNo.Trim().ToLower() == empId.Trim().ToLower()).OrderByDescending(s => s.OrderDate).First().OrderDate.Value : DateTime.Now;
+            return lm;
+        }
         #endregion
 
         #region GetEmployee
@@ -1796,6 +2088,7 @@ namespace Maximus.Data.Models
                 {
                     return data;
                 }
+
             }
             return "";
         }
@@ -2218,11 +2511,23 @@ namespace Maximus.Data.Models
             {
                 DataTable dt = new DataTable();
                 string sQry = "CALL `GetEmployeeAddressProcedure`('" + EmpId + "','" + BuisnessId + "')";
-
                 con.Open();
                 MySqlCommand cmd = new MySqlCommand(sQry, con);
 
                 result = (cmd.ExecuteScalar()).ToString();
+                if (result == "")
+                {
+                    string usrQry = "SELECT OnlineUserId FROM `tblonline_emp_address` t3 WHERE t3.`BusinessId` = '" + BuisnessId + "' AND t3.`OnlineUserId` IN (SELECT t1.`OnlineUserID` FROM `tblonline_userid_employee` t1 JOIN tblusers t2 ON t1.`OnlineUserID` = t2.`UserName` AND t1.`BusinessID` = t2.`BusinessID` WHERE t1.Businessid = '" + BuisnessId + "' AND t1.EmployeeID = '" + EmpId + "' AND t1.OnlineUserID <> '" + EmpId + "')";
+                    MySqlCommand cmd1 = new MySqlCommand(usrQry, con);
+                    string user = (cmd1.ExecuteScalar()).ToString();
+                    if (user != null && user != "")
+                    {
+                        sQry = "CALL `GetEmployeeAddressProcedure`('" + user + "','" + BuisnessId + "')";
+                        MySqlCommand cmd3 = new MySqlCommand(sQry, con);
+                        result = (cmd3.ExecuteScalar()).ToString();
+                    }
+
+                }
             }
             catch (Exception e)
             {
@@ -2388,6 +2693,42 @@ namespace Maximus.Data.Models
         }
         #endregion
         #endregion
+
+        #region GetIssuedLst
+
+        public List<IssuedQtyModel> GetIssuedList(string busId, string color, string empId, string style)
+        {
+            var result = new List<IssuedQtyModel>();
+            string qry = "SELECT `tblaccemp_stockcard`.`BusinessID` AS `BusinessID`, `tblaccemp_stockcard`.`EmployeeID` AS `EmployeeID`,  `tblaccemp_stockcard`.`StyleID`    AS `StyleID`, `tblaccemp_stockcard`.`ColourID`   AS `ColourID`, IF(ISNULL(`tblaccemp_stockcard`.`SOQty`), 0,`tblaccemp_stockcard`.`SOQty`) SOQTY , IF(ISNULL(`tblaccemp_stockcard`.`PickQty`), 0,`tblaccemp_stockcard`.`PickQty`) PICKQTY, IF(ISNULL(`tblaccemp_stockcard`.`InvQty`), 0,`tblaccemp_stockcard`.`InvQty`) INVQTY FROM `tblaccemp_stockcard` WHERE(`tblaccemp_stockcard`.`Year` = 0 AND `tblaccemp_stockcard`.`BusinessID`='" + busId + "' AND `tblaccemp_stockcard`.`EmployeeID`='" + empId + "' AND `tblaccemp_stockcard`.`StyleID`='" + style + "' AND `tblaccemp_stockcard`.`ColourID`='" + color + "') GROUP BY `tblaccemp_stockcard`.`BusinessID`,`tblaccemp_stockcard`.`EmployeeID`,`tblaccemp_stockcard`.`StyleID`,`tblaccemp_stockcard`.`ColourID`";
+            MySqlConnection conn = new MySqlConnection(ConnectionString);
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand(qry, conn);
+                DataTable dt = new DataTable();
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                da.Fill(dt);
+                if (dt.Rows.Count > 0)
+                {
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        result.Add(new IssuedQtyModel { Invqty = Convert.ToInt32(dr["INVQTY"].ToString()), Pickqty = Convert.ToInt32(dr["PICKQTY"].ToString()), SOqty = Convert.ToInt32(dr["SOQTY"].ToString()) });
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return result;
+        }
+
+        #endregion
+
 
         #region Employee
         public int GetDeliveryAddressId(string employeeId, string busId, string onlineUserId)
@@ -2603,7 +2944,7 @@ namespace Maximus.Data.Models
         #region basket
 
         #region GetAllTotals
-        public TotalModel GetAlltotals(List<SalesOrderHeaderViewModel> mod, double carriage)
+        public TotalModel GetAlltotals(List<SalesOrderHeaderViewModel> mod, double carriage, bool isEdit = false)
         {
             TotalModel tot = new TotalModel();
             double orgTotal = 0;
@@ -2618,7 +2959,7 @@ namespace Maximus.Data.Models
                 foreach (var dat in header.SalesOrderLine)
                 {
                     orgTotal = orgTotal + (dat.OrdQty * dat.Price);
-                    totalVat = totalVat + GetlineVat(dat.OrdQty, dat.Price, dat.VatPercent);
+                    totalVat = isEdit ? totalVat + GetlineVat(dat.OrdQty, dat.Price, GetVatPercent(dat.StyleID, dat.SizeID)) : totalVat + GetlineVat(dat.OrdQty, dat.Price, dat.VatPercent);
                 }
                 lineTotal = lineTotal + orgTotal;
                 vatTotal = vatTotal + totalVat;
@@ -2626,7 +2967,7 @@ namespace Maximus.Data.Models
                 totalVat = 0;
                 foreach (var line in header.SalesOrderLine)
                 {
-                    double VatPercent = line.VatPercent;
+                    double VatPercent = isEdit ? GetVatPercent(line.StyleID, line.SizeID) : line.VatPercent;
                     varpercents.Add(VatPercent);
                     double lineVat = line.OrdQty != 0 ? ((line.OrdQty * line.Price) * VatPercent) / 100 : 0.0;
                     totalVat = totalVat + lineVat;
@@ -2672,7 +3013,7 @@ namespace Maximus.Data.Models
             double result = 0;
             if (value > 0)
             {
-                result = Convert.ToDouble(decimal.Divide(Convert.ToInt32(Convert.ToDouble((value * 100).ToString("0.0000")) + 0.4), 100));
+                result = Convert.ToDouble(decimal.Divide(Convert.ToInt64(Convert.ToDouble((value * 100).ToString("0.0000")) + 0.4), 100));
             }
             return result;
         }
@@ -2833,16 +3174,19 @@ namespace Maximus.Data.Models
 
         #region GetCarrierStyle
 
-        public List<string> GetCarrierStyleCmbValue()
+        public List<string> GetCarrierStyleCmbValue(string busId = "")
         {
             var result = new List<string>();
             string sQry = "";
+            string sQry1 = "";
+            sQry1 = sQry1 + "SELECT DISTINCT StyleId FROM `tblonlinebus_carriage` WHERE BusinessId ='" + busId + "'";
             sQry = sQry + " SELECT DISTINCT tblfsk_style.StyleID, tblfsk_style.Description  FROM tblfsk_style INNER JOIN tblonlinesop_carriage ON (tblfsk_style.StyleID = tblonlinesop_carriage.StyleID) AND (tblfsk_style.CompanyID = tblonlinesop_carriage.CompanyID)  WHERE tblfsk_style.CompanyID='" + cmpId + "'  ORDER BY tblfsk_style.StyleID";
+
             MySqlConnection conn = new MySqlConnection(ConnectionString);
             try
             {
                 conn.Open();
-                MySqlCommand cmd = new MySqlCommand(sQry, conn);
+                MySqlCommand cmd = new MySqlCommand(sQry1, conn);
                 MySqlDataAdapter da = new MySqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
                 da.Fill(dt);
@@ -2850,7 +3194,21 @@ namespace Maximus.Data.Models
                 {
                     foreach (DataRow dr in dt.Rows)
                     {
-                        result.Add(dr.ItemArray[0] + "|" + dr.ItemArray[1]);
+                        result.Add(dr.ItemArray[0].ToString());
+                    }
+                }
+                else
+                {
+                    MySqlCommand cmd1 = new MySqlCommand(sQry, conn);
+                    MySqlDataAdapter da1 = new MySqlDataAdapter(cmd1);
+                    DataTable dt1 = new DataTable();
+                    da1.Fill(dt1);
+                    if (dt1.Rows.Count > 0)
+                    {
+                        foreach (DataRow dr in dt1.Rows)
+                        {
+                            result.Add(dr.ItemArray[0] + "|" + dr.ItemArray[1]);
+                        }
                     }
                 }
             }
@@ -2975,16 +3333,51 @@ namespace Maximus.Data.Models
         }
         #endregion
 
+        #region GetUserCount
+        public int GetUserCount(string userName)
+        {
+            string sSql = "SELECT Count(*) FROM tblusers WHERE ASPUserID='" + userName + "' AND Active='Y'";
+            return GetScalar(sSql) == "" ? 0 : Convert.ToInt32(GetScalar(sSql));
+        }
+        #endregion
+
         #region FillCombo_CustomerDelivery
         public List<BusAddress1> FillCombo_CustomerDelivery(string busId, string access, string orderPermit, string UserName, bool IsManpack = false, string selEmp = "")
         {
             var result = new List<BusAddress1>();
             string extraQry = "";
             string sQry = "";
+            string usersLst = "";
+            var usersLst1 = getPermissionUsers(GetOrderPermission(orderPermit), UserName, busId, access);
+            if (usersLst1.Contains(","))
+            {
+                var usrArr = usersLst1.Split(',');
+                foreach (var usr in usrArr)
+                {
+                    if (usr != null && usr != "")
+                    {
+                        int index = Array.IndexOf(usrArr, usr);
+                        if (usrArr.Count() - 1 == index)
+                        {
+                            usersLst = usersLst + usr;
+                        }
+                        else
+                        {
+                            usersLst = usersLst + usr + ",";
+                        }
+                    }
+                }
+            }
+            if (usersLst.Last() == ',')
+            {
+                usersLst = usersLst.Remove(usersLst.Length - 1);
+            }
 
+
+            //usersLst ===","?
             if (IsManpack)
             {
-                extraQry = extraQry + " (onusraddr.`OnlineUserId`IN (" + getPermissionUsers(GetOrderPermission(orderPermit), UserName, busId) + ") OR onusraddr.`Employeeid` = '" + selEmp + "') ";
+                extraQry = extraQry + " (onusraddr.`OnlineUserId`IN (" + usersLst + ") OR onusraddr.`Employeeid` = '" + selEmp + "') ";
                 //extraQry = extraQry + " (onusraddr.`OnlineUserId`IN (" + getPermissionUsers(GetOrderPermission(), System.Web.HttpContext.Current.Session["UserName"].ToString(), busId) + ") OR onusraddr.`Employeeid` = '" & Emplist1.CurrentEmployee & "') ";
             }
             else
@@ -3016,18 +3409,54 @@ namespace Maximus.Data.Models
                 }
                 else
                 {
-                    sQry = "SELECT DISTINCT tblbus_address.Description, tblbus_address.Address1, tblbus_address.Address2, tblbus_address.Address3, tblbus_address.Town, tblbus_address.City, tblbus_address.Postcode, tblbus_countrycodes.Country, tblbus_address.CountryCode, tblbus_address.AddressID,tblbus_address.ContactID   FROM tblbus_countrycodes INNER JOIN (tblbus_addresstype_ref INNER JOIN (tblbus_business INNER JOIN (tblbus_addresstypes INNER JOIN tblbus_address ON tblbus_addresstypes.AddressTypeID = tblbus_address.AddressTypeID) ON tblbus_business.BusinessID = tblbus_address.BusinessID) ON tblbus_addresstype_ref.Actual_TypeID = tblbus_addresstypes.Actual_TypeID) ON tblbus_countrycodes.CountryID = tblbus_address.CountryCode   WHERE tblbus_addresstype_ref.Actual_TypeID=2 AND tblbus_business.BusinessID='" + busId + "' and tblbus_countrycodes.CompanyID ='" + cmpId + "' order by tblbus_address.Description";
-                    MySqlCommand cmd1 = new MySqlCommand(sQry, conn);
-                    MySqlDataAdapter da1 = new MySqlDataAdapter(cmd1);
-                    DataTable dt1 = new DataTable();
-                    da1.Fill(dt1);
-                    if (dt1.Rows.Count > 0)
+                    extraQry = ""; sQry = "";
+                    if (IsManpack)
                     {
-                        foreach (DataRow dr in dt1.Rows)
+                        string user = "";
+                        MySqlCommand cmdUser = new MySqlCommand("SELECT OnlineUserId FROM `tblonline_emp_address` t3 WHERE t3.`BusinessId` = '" + busId + "' AND t3.`OnlineUserId` IN (SELECT t1.`OnlineUserID` FROM `tblonline_userid_employee` t1 JOIN tblusers t2 ON t1.`OnlineUserID` = t2.`UserName` AND t1.`BusinessID` = t2.`BusinessID` WHERE t1.Businessid = '" + busId + "' AND t1.EmployeeID = '" + selEmp + "' AND t1.OnlineUserID <> '" + selEmp + "')", conn);
+                        user = cmdUser.ExecuteScalar() != null ? (cmdUser.ExecuteScalar()).ToString() : "";
+                        extraQry = extraQry + " (onusraddr.`OnlineUserId`IN (" + usersLst + ",'" + user + "') OR onusraddr.`Employeeid` = '" + selEmp + "') ";
+                        //extraQry = extraQry + " (onusraddr.`OnlineUserId`IN (" + getPermissionUsers(GetOrderPermission(), System.Web.HttpContext.Current.Session["UserName"].ToString(), busId) + ") OR onusraddr.`Employeeid` = '" & Emplist1.CurrentEmployee & "') ";
+                    }
+                    else
+                    {
+                        extraQry = extraQry + " onusraddr.`OnlineUserId`='" + UserName + "' ";
+                    }
+                    if (Convert.ToBoolean(BusinessParam("LIMITUSRADDR", busId)) && !IsGetAllDelAddress(access, busId))
+                    {
+                        sQry = sQry + "SELECT DISTINCT tblbus_address.Description, tblbus_address.Address1, tblbus_address.Address2, tblbus_address.Address3, tblbus_address.Town, tblbus_address.City, tblbus_address.Postcode,  tblbus_countrycodes.Country, tblbus_address.CountryCode, tblbus_address.AddressID,tblbus_address.ContactID   FROM tblbus_countrycodes INNER JOIN (tblbus_addresstype_ref INNER JOIN (tblbus_business INNER JOIN (tblbus_addresstypes  INNER JOIN tblbus_address ON tblbus_addresstypes.AddressTypeID = tblbus_address.AddressTypeID) ON tblbus_business.BusinessID = tblbus_address.BusinessID) ON  tblbus_addresstype_ref.Actual_TypeID = tblbus_addresstypes.Actual_TypeID) ON tblbus_countrycodes.CountryID = tblbus_address.CountryCode  JOIN tblonline_emp_address onusraddr on onusraddr.AddressID=tblbus_address.AddressID AND tblbus_address.BusinessID= onusraddr.BusinessID AND onusraddr.CompanyID=tblbus_address.CompanyID   WHERE tblbus_addresstype_ref.Actual_TypeID=2 AND tblbus_business.BusinessID='" + busId + "' and tblbus_countrycodes.CompanyID ='" + cmpId + "' AND " + extraQry + "  order by tblbus_address.Description";
+                    }
+                    else
+                    {
+                        sQry = sQry + "SELECT DISTINCT tblbus_address.Description, tblbus_address.Address1, tblbus_address.Address2, tblbus_address.Address3, tblbus_address.Town, tblbus_address.City, tblbus_address.Postcode, tblbus_countrycodes.Country, tblbus_address.CountryCode, tblbus_address.AddressID,tblbus_address.ContactID   FROM tblbus_countrycodes INNER JOIN (tblbus_addresstype_ref INNER JOIN (tblbus_business INNER JOIN (tblbus_addresstypes INNER JOIN tblbus_address ON tblbus_addresstypes.AddressTypeID = tblbus_address.AddressTypeID) ON tblbus_business.BusinessID = tblbus_address.BusinessID) ON tblbus_addresstype_ref.Actual_TypeID = tblbus_addresstypes.Actual_TypeID) ON tblbus_countrycodes.CountryID = tblbus_address.CountryCode   WHERE tblbus_addresstype_ref.Actual_TypeID=2 AND tblbus_business.BusinessID='" + busId + "' and tblbus_countrycodes.CompanyID ='" + cmpId + "' order by tblbus_address.Description";
+                    }
+                    MySqlCommand cmd11 = new MySqlCommand(sQry, conn);
+                    MySqlDataAdapter da11 = new MySqlDataAdapter(cmd11);
+                    DataTable dt11 = new DataTable();
+                    da11.Fill(dt11);
+                    if (dt11.Rows.Count > 0)
+                    {
+                        foreach (DataRow dr in dt11.Rows)
                         {
                             result.Add(new BusAddress1 { AddressDescription = dr.ItemArray[0].ToString(), Address1 = dr.ItemArray[1].ToString(), Address2 = dr.ItemArray[2].ToString(), Address3 = dr.ItemArray[3].ToString(), City = dr.ItemArray[5].ToString(), PostCode = dr.ItemArray[6].ToString(), AddressId = Convert.ToInt32(dr.ItemArray[9].ToString()), Country = dr.ItemArray[7].ToString(), contactId = dr.ItemArray[10].ToString() });
                         }
                     }
+                    else
+                    {
+                        sQry = "SELECT DISTINCT tblbus_address.Description, tblbus_address.Address1, tblbus_address.Address2, tblbus_address.Address3, tblbus_address.Town, tblbus_address.City, tblbus_address.Postcode, tblbus_countrycodes.Country, tblbus_address.CountryCode, tblbus_address.AddressID,tblbus_address.ContactID   FROM tblbus_countrycodes INNER JOIN (tblbus_addresstype_ref INNER JOIN (tblbus_business INNER JOIN (tblbus_addresstypes INNER JOIN tblbus_address ON tblbus_addresstypes.AddressTypeID = tblbus_address.AddressTypeID) ON tblbus_business.BusinessID = tblbus_address.BusinessID) ON tblbus_addresstype_ref.Actual_TypeID = tblbus_addresstypes.Actual_TypeID) ON tblbus_countrycodes.CountryID = tblbus_address.CountryCode   WHERE tblbus_addresstype_ref.Actual_TypeID=2 AND tblbus_business.BusinessID='" + busId + "' and tblbus_countrycodes.CompanyID ='" + cmpId + "' order by tblbus_address.Description";
+                        MySqlCommand cmd1 = new MySqlCommand(sQry, conn);
+                        MySqlDataAdapter da1 = new MySqlDataAdapter(cmd1);
+                        DataTable dt1 = new DataTable();
+                        da1.Fill(dt1);
+                        if (dt1.Rows.Count > 0)
+                        {
+                            foreach (DataRow dr in dt1.Rows)
+                            {
+                                result.Add(new BusAddress1 { AddressDescription = dr.ItemArray[0].ToString(), Address1 = dr.ItemArray[1].ToString(), Address2 = dr.ItemArray[2].ToString(), Address3 = dr.ItemArray[3].ToString(), City = dr.ItemArray[5].ToString(), PostCode = dr.ItemArray[6].ToString(), AddressId = Convert.ToInt32(dr.ItemArray[9].ToString()), Country = dr.ItemArray[7].ToString(), contactId = dr.ItemArray[10].ToString() });
+                            }
+                        }
+                    }
+
                 }
             }
             catch (Exception e)
@@ -3161,7 +3590,8 @@ namespace Maximus.Data.Models
             var salesLines = headers.Select(x => x.SalesOrderLine).First();
             foreach (var data in salesLines)
             {
-                carrstr = "SELECT * FROM tblonlinesop_carriage WHERE StyleID='" + data.StyleID + "' AND CompanyID='" + cmpId + "'";
+                var styl = data.StyleID.Contains("|") ? data.StyleID.Split('|')[0] : data.StyleID;
+                carrstr = "SELECT * FROM tblonlinesop_carriage WHERE StyleID='" + styl + "' AND CompanyID='" + cmpId + "'";
                 if (qryResult(carrstr) > 0)
                 {
                     checkCarriageLine = true;
@@ -3173,34 +3603,36 @@ namespace Maximus.Data.Models
         #endregion
 
         #region  getbusienssAccounts
-        public TBusinessAccount GetBusinessAccount(List<TBusinessAccount> colBuis, string business)
+        public TBusinessAccount GetBusinessAcount(string business)
         {
-            int i;
-            TBusinessAccount getBusinessAccount = new TBusinessAccount();
+            TBusinessAccount tbusAccount = new TBusinessAccount();
             string sSqry = "";
             sSqry = BusinessAccountSQL() + " AND tblbus_account.businessid='" + business + "'";
             MySqlConnection conn = new MySqlConnection(ConnectionString);
-            TBusinessAccount tmpType;
-            for (i = 0; i < colBuis.Count(); i++)
-            {
-                tmpType = colBuis[i];
-                if (tmpType.BusinessID == business)
-                {
-                    return tmpType;
-                }
-            }
             try
             {
                 conn.Open();
                 MySqlCommand cmd = new MySqlCommand(sSqry, conn);
-                var reader = cmd.ExecuteReader();
-                if (reader.Read())
+                DataTable dt = new DataTable();
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                da.Fill(dt);
+                if (dt.Rows.Count > 0)
                 {
-                    getBusinessAccount = readBusinessAccount(reader);
+                    foreach (DataRow dr in dt.Rows)
+                    {
+                        tbusAccount.BusinessID = dr["BusinessID"].ToString();
+                        tbusAccount.VatFlag = dr["VATFlag"].ToString();
+                        tbusAccount.VatCode = Convert.ToInt32(dr["VATCode"].ToString());
+                        tbusAccount.RepID = Convert.ToInt32(dr["RepID"].ToString());
+                        tbusAccount.ExchangeRate = Convert.ToDouble(dr["Currency_Exchange_Rate"].ToString());
+                        tbusAccount.Rep_Comission = Convert.ToInt32(dr["Rep_Comission"].ToString());
+                        tbusAccount.KAM_Comission = Convert.ToInt32(dr["KAM_Comission"].ToString());
+                        tbusAccount.Country_CurrencyID = Convert.ToInt32(dr["Country_Currency"].ToString());
+                    }
                 }
-                colBuis[colBuis.Count - 1] = getBusinessAccount;
+
             }
-            catch
+            catch (Exception e)
             {
 
             }
@@ -3208,41 +3640,78 @@ namespace Maximus.Data.Models
             {
                 conn.Close();
             }
-            return getBusinessAccount;
+            return tbusAccount;
         }
+        //public TBusinessAccount GetBusinessAccount(List<TBusinessAccount> colBuis, string business)
+        //{
+        //    int i;
+        //    TBusinessAccount getBusinessAccount = new TBusinessAccount();
+        //    string sSqry = "";
+        //    sSqry = BusinessAccountSQL() + " AND tblbus_account.businessid='" + business + "'";
+        //    MySqlConnection conn = new MySqlConnection(ConnectionString);
+        //    TBusinessAccount tmpType;
+        //    for (i = 0; i < colBuis.Count(); i++)
+        //    {
+        //        tmpType = colBuis[i];
+        //        if (tmpType.BusinessID == business)
+        //        {
+        //            return tmpType;
+        //        }
+        //    }
+        //    try
+        //    {
+        //        conn.Open();
+        //        MySqlCommand cmd = new MySqlCommand(sSqry, conn);
+        //        var reader = cmd.ExecuteReader();
+        //        if (reader.Read())
+        //        {
+        //            getBusinessAccount = readBusinessAccount(reader);
+        //        }
+        //        colBuis[colBuis.Count - 1] = getBusinessAccount;
+        //    }
+        //    catch
+        //    {
+
+        //    }
+        //    finally
+        //    {
+        //        conn.Close();
+        //    }
+        //    return getBusinessAccount;
+        //}
         #endregion
 
-        #region readBusinessAccount
-        public TBusinessAccount readBusinessAccount(MySqlDataReader reader)
-        {
-            TBusinessAccount tmpType;
-            tmpType.BusinessID = reader.GetString("BusinessID");
-            tmpType.Credit_Limit = Convert.ToDouble(reader.GetString("Credit_Limit"));
-            tmpType.Cash_Days1 = Convert.ToInt32(reader.GetString("Cash_Days1"));
-            tmpType.Cash_Days2 = Convert.ToInt32(reader.GetString("Cash_Days2"));
-            tmpType.Currency = reader.GetString("Currency");
-            tmpType.VatCode = Convert.ToInt32(reader.GetString("VATCode"));
-            if (reader.GetString("VATFlag") == "")
-            {
-                tmpType.VatFlag = "";
-            }
-            else
-            {
-                tmpType.VatFlag = reader.GetString("VATFlag");
-            }
-            tmpType.Balance = Convert.ToDouble(reader.GetString("Balance"));
-            tmpType.RepID = Convert.ToInt32(reader.GetString("RepID"));
-            tmpType.Rep_Comission = Convert.ToSingle(reader.GetString("Rep_Comission"));
-            tmpType.KAM_Comission = Convert.ToSingle(reader.GetString("KAM_Comission"));
-            tmpType.Balance = Convert.ToDouble(reader.GetString("Balance"));
-            tmpType.PaymentTermsID = Convert.ToInt32(reader.GetString("PaymentTermsID"));
-            tmpType.Country_CurrencyID = Convert.ToInt32(reader.GetString("Country_Currency"));
-            tmpType.CurrencyName = reader.GetString("Currency_name");
-            tmpType.ExchangeRate = Convert.ToDouble(reader.GetString("Currency_Exchange_Rate"));
-            tmpType.booSet = true;
-            return tmpType;
-        }
-        #endregion
+        //#region readBusinessAccount
+        //public TBusinessAccount readBusinessAccount(MySqlDataReader reader)
+        //{
+        //    TBusinessAccount tmpType;
+        //    tmpType.BusinessID = reader.GetString("BusinessID");
+        //    tmpType.Credit_Limit = Convert.ToDouble(reader.GetString("Credit_Limit"));
+        //    tmpType.Cash_Days1 = Convert.ToInt32(reader.GetString("Cash_Days1"));
+        //    tmpType.Cash_Days2 = Convert.ToInt32(reader.GetString("Cash_Days2"));
+        //    tmpType.Currency = reader.GetString("Currency");
+        //    tmpType.VatCode = Convert.ToInt32(reader.GetString("VATCode"));
+        //    if (reader.GetString("VATFlag") == "")
+        //    {
+        //        tmpType.VatFlag = "";
+        //    }
+        //    else
+        //    {
+        //        tmpType.VatFlag = reader.GetString("VATFlag");
+        //    }
+        //    tmpType.Balance = Convert.ToDouble(reader.GetString("Balance"));
+        //    tmpType.RepID = Convert.ToInt32(reader.GetString("RepID"));
+        //    tmpType.Rep_Comission = Convert.ToSingle(reader.GetString("Rep_Comission"));
+        //    tmpType.KAM_Comission = Convert.ToSingle(reader.GetString("KAM_Comission"));
+        //    tmpType.Balance = Convert.ToDouble(reader.GetString("Balance"));
+        //    tmpType.PaymentTermsID = Convert.ToInt32(reader.GetString("PaymentTermsID"));
+        //    tmpType.Country_CurrencyID = Convert.ToInt32(reader.GetString("Country_Currency"));
+        //    tmpType.CurrencyName = reader.GetString("Currency_name");
+        //    tmpType.ExchangeRate = Convert.ToDouble(reader.GetString("Currency_Exchange_Rate"));
+        //    tmpType.booSet = true;
+        //    return tmpType;
+        //}
+        //#endregion
 
         #region Setbusinessaccount
 
@@ -4278,6 +4747,31 @@ namespace Maximus.Data.Models
         }
         #endregion
 
+        #region GetReasoncode
+        public string GetReasonCodes(Int64 reasonLie, string busId)
+        {
+            string result = "";
+            string sSqry = "select  Description from tblsop_reasoncodes where ReasonCode=" + reasonLie + " and businessid='" + busId + "'";
+            MySqlConnection conn = new MySqlConnection(ConnectionString);
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand(sSqry, conn);
+                result = cmd.ExecuteScalar() != null ? cmd.ExecuteScalar().ToString() : "";
+            }
+            catch
+            {
+
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return result;
+        }
+
+        #endregion
+
         #region StyleParam
         public string StyleParam(string paramId, string styleId)
         {
@@ -4385,21 +4879,24 @@ namespace Maximus.Data.Models
             double ItemPrice = 0;
             string sSqry = "";
             sSqry = "SELECT tblfsk_style_sizes.StyleID, tblfsk_style_sizes.SizeID, tblfsk_style_sizes.SeqNo, tblfsk_style_sizes.CompanyID, tblfsk_style_sizes_prices.Price, tblfsk_price.Description, tblfsk_price.PriceID   FROM (tblfsk_price INNER JOIN tblfsk_style_sizes_prices ON (tblfsk_price.PriceID = tblfsk_style_sizes_prices.PriceID) AND (tblfsk_price.CompanyID = tblfsk_style_sizes_prices.CompanyID))   INNER JOIN tblfsk_style_sizes ON (tblfsk_style_sizes.CompanyID = tblfsk_style_sizes_prices.CompanyID) AND (tblfsk_style_sizes.SizeID = tblfsk_style_sizes_prices.SizeID) AND (tblfsk_style_sizes.StyleID = tblfsk_style_sizes_prices.StyleID)   AND (tblfsk_style_sizes_prices.SizeID = tblfsk_style_sizes.SizeID) AND (tblfsk_style_sizes_prices.StyleID = tblfsk_style_sizes.StyleID) AND (tblfsk_style_sizes_prices.CompanyID = tblfsk_style_sizes.CompanyID)   Where (((tblfsk_style_sizes.StyleID) = '" + mStyle + "') And BusinessId='" + busId + "' And tblfsk_style_sizes.SizeID='" + mSizeid + "' and  Country_Currency=" + mCustCountry + " and ((tblfsk_style_sizes.CompanyID) = '" + cmpId + "') And ((tblfsk_price.PriceId) = " + mPriceList + "))  ORDER BY tblfsk_style_sizes.SeqNo, tblfsk_price.Price_Type";
-            tmpBusiness = GetBusinessAccount(tBusinessAccount, busId);
+            tmpBusiness = GetBusinessAcount(busId);
             MySqlConnection conn = new MySqlConnection(ConnectionString);
             try
             {
                 conn.Open();
                 MySqlCommand cmd = new MySqlCommand(sSqry, conn);
+
                 var reader = cmd.ExecuteReader();
 
-                if (reader.Read())
+                if (reader.Read() == false)
                 {
+                    reader.Close();
                     sSqry = "SELECT tblfsk_style_sizes.StyleID, tblfsk_style_sizes.SizeID, tblfsk_style_sizes.SeqNo, tblfsk_style_sizes.CompanyID, tblfsk_style_sizes_prices.Price, tblfsk_price.Description, tblfsk_price.PriceID   FROM (tblfsk_price INNER JOIN tblfsk_style_sizes_prices ON (tblfsk_price.PriceID = tblfsk_style_sizes_prices.PriceID) AND (tblfsk_price.CompanyID = tblfsk_style_sizes_prices.CompanyID))   INNER JOIN tblfsk_style_sizes ON (tblfsk_style_sizes.CompanyID = tblfsk_style_sizes_prices.CompanyID) AND (tblfsk_style_sizes.SizeID = tblfsk_style_sizes_prices.SizeID) AND (tblfsk_style_sizes.StyleID = tblfsk_style_sizes_prices.StyleID)  AND (tblfsk_style_sizes_prices.SizeID = tblfsk_style_sizes.SizeID) AND (tblfsk_style_sizes_prices.StyleID = tblfsk_style_sizes.StyleID) AND (tblfsk_style_sizes_prices.CompanyID = tblfsk_style_sizes.CompanyID)   Where (((tblfsk_style_sizes.StyleID) = '" + mStyle + "') And BusinessId='ALL' And tblfsk_style_sizes.SizeID='" + mSizeid + "' and  Country_Currency=" + mCustCountry + " and ((tblfsk_style_sizes.CompanyID) = '" + cmpId + "') And ((tblfsk_price.PriceId) = " + mPriceList + "))  ORDER BY tblfsk_style_sizes.SeqNo, tblfsk_price.Price_Type";
                     MySqlCommand cmd1 = new MySqlCommand(sSqry, conn);
                     var reader1 = cmd.ExecuteReader();
-                    if (reader1.Read())
+                    if (reader1.Read() == false)
                     {
+                        reader1.Close();
                         sSqry = "SELECT tblfsk_style_sizes.StyleID, tblfsk_style_sizes.SizeID, tblfsk_style_sizes.SeqNo, tblfsk_style_sizes.CompanyID, tblfsk_style_sizes_prices.Price, tblfsk_price.Description, tblfsk_price.PriceID   FROM (tblfsk_price INNER JOIN tblfsk_style_sizes_prices ON (tblfsk_price.PriceID = tblfsk_style_sizes_prices.PriceID) AND (tblfsk_price.CompanyID = tblfsk_style_sizes_prices.CompanyID))   INNER JOIN tblfsk_style_sizes ON (tblfsk_style_sizes.CompanyID = tblfsk_style_sizes_prices.CompanyID) AND (tblfsk_style_sizes.SizeID = tblfsk_style_sizes_prices.SizeID) AND (tblfsk_style_sizes.StyleID = tblfsk_style_sizes_prices.StyleID)   AND (tblfsk_style_sizes_prices.SizeID = tblfsk_style_sizes.SizeID) AND (tblfsk_style_sizes_prices.StyleID = tblfsk_style_sizes.StyleID) AND (tblfsk_style_sizes_prices.CompanyID = tblfsk_style_sizes.CompanyID)   Where (((tblfsk_style_sizes.StyleID) = '" + mStyle + "') And tblfsk_style_sizes.SizeID='" + mSizeid + "' And ((tblfsk_style_sizes.CompanyID) = '" + cmpId + "') And ((tblfsk_price.priceid) = " + mPriceList + "))  ORDER BY tblfsk_style_sizes.SeqNo, tblfsk_price.Price_Type";
                         MySqlCommand cmd2 = new MySqlCommand(sSqry, conn);
                         MySqlDataAdapter da2 = new MySqlDataAdapter(cmd2);
@@ -4425,10 +4922,10 @@ namespace Maximus.Data.Models
                 }
                 else
                 {
-                    ItemPrice = Convert.ToDouble(reader.GetString("Price"));
+                    ItemPrice = 0;
                 }
             }
-            catch
+            catch (Exception e)
             {
 
             }
@@ -4445,9 +4942,8 @@ namespace Maximus.Data.Models
 
         #endregion
 
-
-        #region SaveSalesOrder
-        public bool SaveSalesOrder(SalesOrderHeaderViewModel salesHead, string Browser, string HTTP_X_FORWARDED_FOR, string REMOTE_ADDR, bool IsRollOutOrder, long salesNo = 0, string busId = "", string usrId = "", bool editFlag = false, string POINTSREQ = "")
+        #region Update SalesOrder
+        public bool UpdateSalesOrder(SalesOrderHeaderViewModel salesHead, int empResetMnths, string Browser, string HTTP_X_FORWARDED_FOR, string REMOTE_ADDR, bool IsRollOutOrder, long salesNo = 0, string busId = "", string usrId = "", bool editFlag = false, string POINTSREQ = "")
         {
             bool result = false;
             int execVal = 0;
@@ -4461,6 +4957,196 @@ namespace Maximus.Data.Models
             {
                 conn.Open();
                 trans = conn.BeginTransaction();
+
+                if (salesHead.SalesOrderLine.Count > 0)
+                {
+                    try
+                    {
+                        var delcCode = Convert.ToInt32(salesHead.DelCountry);
+                        var invcCode = Convert.ToInt32(salesHead.DelCountry);
+                        salesHead.DelCountry = _countryCodes.Exists(x => x.CountryID == delcCode) ? _countryCodes.GetAll(x => x.CountryID == delcCode).First().Country : "";
+                        salesHead.InvCountry = _countryCodes.Exists(x => x.CountryID == invcCode) ? _countryCodes.GetAll(x => x.CountryID == invcCode).First().Country : "";
+                    }
+                    catch
+                    {
+
+
+                    }
+                    string DefUserID = BusinessParam("DEFUSRID", busId);
+                    string sqlUserXref = "";
+                    string UserIDXref = "";
+                    sqlUserXref = "SELECT UserID FROM tblOnline_UserID_Xref  WHERE OnlineUserID='" + usrId + "' AND CompanyID='" + cmpId + "' AND BusinessID='" + busId + "'";
+                    MySqlCommand cmd = new MySqlCommand(sqlUserXref, conn);
+                    var reader = cmd.ExecuteReader();
+                    if (reader.Read())
+                    {
+                        UserIDXref = reader.GetString(0);
+                    }
+                    else if (DefUserID != "")
+                    {
+                        UserIDXref = DefUserID;
+                    }
+                    else
+                    {
+                        UserIDXref = usrId;
+                    }
+                    reader.Close();
+                    StringBuilder oString;
+                    string budgetString = "";
+                    var partShipment = Convert.ToBoolean(BusinessParam("Partshipment", busId)) == true ? -1 : 0;
+                    var cntName = salesHead.ContactName == "" | salesHead.ContactName == null ? "" : salesHead.ContactName + " mobile:" + salesHead.Mobile;
+                    sSqry = "Update  tblsop_salesorder_header set CompanyID='" + cmpId + "',WarehouseId='" + salesHead.WarehouseID + "', CustID='" + busId + "',InvDesc='" + salesHead.InvDesc + "',InvAddress1='" + salesHead.InvAddress1 + "',InvAddress2='" + salesHead.InvAddress2 + "',InvAddress3='" + salesHead.InvAddress3 + "',InvCity='" + salesHead.InvCity + "',InvTown='" + salesHead.InvTown + "',InvPostCode='" + salesHead.InvPostCode + "',InvCountry='" + salesHead.InvCountry + "', DelDesc='" + salesHead.DelDesc + "',DelAddress1='" + salesHead.DelAddress1 + "',DelAddress2='" + salesHead.DelAddress2 + "',DelAddress3='" + salesHead.DelTown + "',DelCity='" + salesHead.DelCity + "',DelTown='" + salesHead.DelTown + "',DelPostCode='" + salesHead.DelPostCode + "',DelCountry='" + salesHead.DelCountry + "', CustRef='" + salesHead.CustRef + "',Carrier='" + salesHead.Carrier + "',CarrierCharge='" + salesHead.CarrierCharge + "',Comments='" + salesHead.Comments + "',CommentsExternal='" + salesHead.CommentsExternal + "',Totalgoods=" + GetAlltotals(salLst, salesHead.CarrierCharge.Value).Total + ",ordergoods=" + GetAlltotals(salLst, salesHead.CarrierCharge.Value).gross + ",Currency_Exchange_Rate=" + salesHead.Currency_Exchange_Rate + ",UserId='" + UserIDXref + "',PinNo='" + salesHead.EmployeeID + "',UCodeId='" + salesHead.UCodeId + "',Currency_Exchange_Code='" + salesHead.Currency_Exchange_Code + "',TimeOfEntry='" + DateTime.Now.ToString("hh:mm:ss") + "',RepID=" + salesHead.RepID + ",ReasonCode=" + salesHead.ReasonCode + ",OnlineUserID='" + usrId + "', OrderAnalysisCode1='" + salesHead.NomCode + "', OrderAnalysisCode2='" + salesHead.NomCode1 + "', OrderAnalysisCode3='" + salesHead.NomCode2 + "', OrderAnalysisCode4='" + salesHead.NomCode3 + "', OrderAnalysisCode5='" + salesHead.NomCode4 + "', AllowPartShipment=" + partShipment + ", OrderType='" + salesHead.OrderType + "',`ContractRef`='" + salesHead.ContractRef + "',`EmailID`='" + salesHead.EmailID + "',`ContactName`='" + cntName + "' where OrderNo=" + salesHead.OrderNo;
+
+                    execVal = ExecuteQuery(sSqry);
+                    if (execVal > 0)
+                    {
+                        string orderFlg = "Edit Order";
+                        OrderLog(Browser, HTTP_X_FORWARDED_FOR, REMOTE_ADDR, salesHead.OrderNo, salesHead.OrderType.ToUpper() + "-Start", salesHead.OrderType.ToUpper() + "- Header Saved Mode : " + orderFlg);
+                        if (os == null)
+                        {
+                            oString = new StringBuilder();
+                        }
+                        else
+                        {
+                            oString = os;
+                        }
+                        budgetString = salesHead.OrderDate + "," + salesHead.OrderNo + "," + salesHead.EmployeeID + "," + usrId;
+                        oString.AppendLine(budgetString);
+                        os = oString;
+                        if (salesHead.CustRef != "")
+                        {
+
+                            string sSQL = "SELECT * FROM tblsop_customer_ref WHERE CompanyID='" + cmpId + "' AND Custid='" + salesHead.CustID + "' AND Custref='" + salesHead.CustRef + "'";
+                            try
+                            {
+                                MySqlCommand cmd2 = new MySqlCommand(sSQL, conn);
+                                MySqlDataAdapter da = new MySqlDataAdapter(cmd2);
+                                DataTable dt = new DataTable();
+                                da.Fill(dt);
+                                if (dt.Rows.Count == 0)
+                                {
+                                    sSQL = "INSERT INTO tblsop_customer_ref (CompanyID,Custid,custref ) VALUES('" + cmpId + "','" + busId + "','" + salesHead.CustRef + "')";
+                                    if (ExecuteQuery(sSQL) == 0)
+                                    {
+
+                                    }
+                                }
+                            }
+                            catch (Exception e)
+                            {
+
+                            }
+                            finally
+                            {
+
+                            }
+
+                        }
+                        // saving salesorder lines
+                        result = SaveSalesorderlines(IsRollOutOrder, conn, salesHead, salesNo, busId, POINTSREQ, empResetMnths);
+                        if (result == false)
+                        {
+                            trans.Rollback();
+                        }
+                        else
+                        {
+                            trans.Commit();
+                        }
+                    }
+                    else
+                    {
+                        trans.Rollback();
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return result;
+        }
+        #endregion
+        #region 
+        public int CheckForProjectCode(string sSql)
+        {
+            int result = 0;
+            if (sSql != "")
+            {
+                MySqlConnection conn = new MySqlConnection(ConnectionString);
+                try
+                {
+                    conn.Open();
+                    MySqlCommand cmd = new MySqlCommand(sSql, conn);
+                    result = cmd.ExecuteScalar() != null ? Convert.ToInt32(cmd.ExecuteScalar()) : 0;
+                }
+                catch (Exception e)
+                {
+
+                }
+                finally
+                {
+                    conn.Close();
+                }
+            }
+            return result;
+        }
+        #endregion
+
+        #region IsChargableItem
+        public bool IsChargableItem(int assmId, int assLine)
+        {
+            string sqlC = "";
+            bool result = false;
+            sqlC = "SELECT *  FROM tblasm_assemblydetail  WHERE AssemblyID=" + assmId + " AND LineNo=" + assLine + " AND isChargeable = True";
+            MySqlConnection conn = new MySqlConnection(ConnectionString);
+            conn.Open();
+            try
+            {
+                MySqlCommand cmd = new MySqlCommand(sqlC, conn);
+                DataTable dt = new DataTable();
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                da.Fill(dt);
+                if (dt.Rows.Count > 0)
+                {
+                    result = true;
+                }
+                else
+                {
+                    result = false;
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return result;
+        }
+        #endregion
+
+        #region SaveSalesOrder
+        public bool SaveSalesOrder(SalesOrderHeaderViewModel salesHead, int empResetMnths, string Browser, string HTTP_X_FORWARDED_FOR, string REMOTE_ADDR, bool IsRollOutOrder, long salesNo = 0, string busId = "", string usrId = "", bool editFlag = false, string POINTSREQ = "")
+        {
+            bool result = false;
+            int execVal = 0;
+            string sSqry = "";
+            StringBuilder os = new StringBuilder();
+            MySqlConnection conn = new MySqlConnection(ConnectionString);
+            MySqlTransaction trans;
+            var salLst = new List<SalesOrderHeaderViewModel>();
+            salLst.Add(salesHead);
+            conn.Open();
+            trans = conn.BeginTransaction();
+            try
+            {
+
 
                 if (salesHead.SalesOrderLine.Count > 0 && salesNo > 0)
                 {
@@ -4525,7 +5211,7 @@ namespace Maximus.Data.Models
                                 try
                                 {
                                     MySqlCommand cmd2 = new MySqlCommand(sSQL, conn);
-                                    MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                                    MySqlDataAdapter da = new MySqlDataAdapter(cmd2);
                                     DataTable dt = new DataTable();
                                     da.Fill(dt);
                                     if (dt.Rows.Count == 0)
@@ -4552,7 +5238,7 @@ namespace Maximus.Data.Models
                             }
                         }
                         // saving salesorder lines
-                        result = SaveSalesorderlines(IsRollOutOrder, conn, salesHead, salesNo, busId, POINTSREQ);
+                        result = SaveSalesorderlines(IsRollOutOrder, conn, salesHead, salesNo, busId, POINTSREQ, empResetMnths);
                         if (result == false)
                         {
                             trans.Rollback();
@@ -4570,7 +5256,7 @@ namespace Maximus.Data.Models
             }
             catch (Exception e)
             {
-
+                trans.Rollback();
             }
             finally
             {
@@ -4652,7 +5338,7 @@ namespace Maximus.Data.Models
 
         #region SaveSalesorderlines
 
-        public bool SaveSalesorderlines(bool IsRolloutOrder, MySqlConnection conn, SalesOrderHeaderViewModel saleHead, long saleno, string busId, string POINTSREQ)
+        public bool SaveSalesorderlines(bool IsRolloutOrder, MySqlConnection conn, SalesOrderHeaderViewModel saleHead, long saleno, string busId, string POINTSREQ, int empResetMnths)
         {
             bool result = false;
             string sSQL = "";
@@ -4661,8 +5347,9 @@ namespace Maximus.Data.Models
             bool isPersonalOrder = false;
             long returnOrderNo = 0;
             long returnOrderLine = 0;
+
             // sYear = IsRolloutOrder | Convert.ToBoolean(POINTSREQ) ? 99 : 0;
-            sYear =  Convert.ToBoolean(POINTSREQ) ? 0 : 0;
+            sYear = Convert.ToBoolean(POINTSREQ) ? 0 : 0;
 
             if (Convert.ToBoolean(BusinessParam("REQ_REASONPAGE", busId)) && saleHead.ReasonCode == 0)
             {
@@ -4687,7 +5374,7 @@ namespace Maximus.Data.Models
                                 {
                                     returnOrderLine = Convert.ToInt32(dr["OrderNo"].ToString());
                                     returnOrderNo = Convert.ToInt32(dr["OrderNo"].ToString());
-                                    line.OriginalLineNo = 0;
+
                                     line.OriginalOrderNo = 0;
                                 }
                             }
@@ -4695,7 +5382,7 @@ namespace Maximus.Data.Models
                             {
                                 returnOrderLine = 0;
                                 returnOrderNo = 0;
-                                line.OriginalLineNo = 0;
+
                                 line.OriginalOrderNo = 0;
                             }
                         }
@@ -4704,11 +5391,29 @@ namespace Maximus.Data.Models
 
                         }
                     }
-                    var orgLineno = line.OriginalLineNo == null ? 0 : line.OriginalLineNo;
-                    sSQL = "INSERT INTO tblsop_salesorder_detail (CompanyID, Warehouseid, OrderNo, LineNo,   LineType , StyleID, ColourID, SizeID,  Description, Price, OrdQty, AllQty, InvQty, DespQty,  CommissionRate, Deliverydate, VatCode, RepId, KamId, KAMrate, REPRate, Currency_Exchange_Rate,styleIDref,FreeText,Cost, IssueUOM, IssueQty,StockingUOM, NomCode, OriginalOrderNo, OriginalLineNo, AssemblyID, AsmLineNo, ReasonCode, ReturnOrderNo, ReturnLineNo, SOPDETAIL5, SOPDETAIL4)  VALUES('" + cmpId + "','" + saleHead.WarehouseID + "'," + saleno + "," + line.LineNo + ",1,'" + line.StyleID + "','" + line.ColourID + "','" + line.SizeID + "','" + line.Description + "'," + line.Price + "," + line.OrdQty + "," + line.AllQty + "," + line.InvQty + "," + line.InvQty + ",0,'" + line.DeliveryDate + "'," + line.VatCode1 + "," + line.RepId + "," + line.KAMID + "," + line.KAMRate1 + "," + line.RepRate1 + "," + line.Currency_Exchange_Rate + ",'" + line.StyleIDref + "','" + line.FreeText1 + "'," + line.Cost1 + "," + line.IssueUOM1 + "," + line.IssueQty1 + "," + line.StockingUOM1 + ",'" + line.NomCode + "'," + line.OriginalOrderNo + "," + orgLineno + "," + line.AssemblyID + "," + line.AsmLineNo + "," + line.ReasonCodeLine + "," + returnOrderNo + "," + returnOrderLine + ",'" + line.SOPDetail5 + "','" + line.SOPDetail4 + "')";
+                    var orgLineno = line.OriginalLineNo == null | line.OriginalLineNo == 0 ? 0 : line.OriginalLineNo;
+                    if (line.Isedit == false)
+                    {
+                        if (saleno == 0)
+                        {
+                            saleno = saleHead.OrderNo;
+                        }
+                        sSQL = "INSERT INTO tblsop_salesorder_detail (CompanyID, Warehouseid, OrderNo, LineNo,   LineType , StyleID, ColourID, SizeID,  Description, Price, OrdQty, AllQty, InvQty, DespQty,  CommissionRate, Deliverydate, VatCode, RepId, KamId, KAMrate, REPRate, Currency_Exchange_Rate,styleIDref,FreeText,Cost, IssueUOM, IssueQty,StockingUOM, NomCode, OriginalOrderNo, OriginalLineNo, AssemblyID, AsmLineNo, ReasonCode, ReturnOrderNo, ReturnLineNo, SOPDETAIL5, SOPDETAIL4)  VALUES('" + cmpId + "','" + saleHead.WarehouseID + "'," + saleno + "," + line.LineNo + ",1,'" + line.StyleID + "','" + line.ColourID + "','" + line.SizeID + "','" + line.Description + "'," + line.Price + "," + line.OrdQty + "," + line.AllQty + "," + line.InvQty + "," + line.InvQty + ",0,'" + line.DeliveryDate + "'," + line.VatCode1 + "," + line.RepId + "," + line.KAMID + "," + line.KAMRate1 + "," + line.RepRate1 + "," + line.Currency_Exchange_Rate + ",'" + line.StyleIDref + "','" + line.FreeText1 + "'," + line.Cost1 + "," + line.IssueUOM1 + "," + line.IssueQty1 + "," + line.StockingUOM1 + ",'" + line.NomCode + "'," + line.OriginalOrderNo + "," + orgLineno + "," + line.AssemblyID + "," + line.AsmLineNo + "," + line.ReasonCodeLine + "," + returnOrderNo + "," + returnOrderLine + ",'" + line.SOPDetail5 + "','" + line.SOPDetail4 + "')";
+                    }
+                    else
+                    {
+                        sSQL = "Update tblsop_salesorder_detail set Price=" + line.Price + ", OrdQty=" + line.OrdQty + ", AllQty=" + line.AllQty + ", InvQty=" + line.InvQty + ", DespQty=" + line.InvQty + ", VatCode=" + line.VatCode1 + ", RepId=" + cmpId + ",styleIDref='" + line.StyleIDref + "',FreeText='" + line.FreeText1 + "',Cost=" + line.Cost1 + ", IssueQty=" + line.IssueQty1 + ",NomCode=" + line.NomCode + ", AssemblyID=" + line.AssemblyID + ", AsmLineNo=" + line.AsmLineNo + ", ReasonCode=" + line.ReasonCodeLine + ", ReturnOrderNo=" + returnOrderNo + ", ReturnLineNo=" + returnOrderLine + ", SOPDETAIL5='" + line.SOPDetail5 + "', SOPDETAIL4='" + line.SOPDetail4 + "' Where OrderNo=" + line.OrderNo + " and LineNo=" + line.LineNo + " and  StyleID='" + line.StyleID + "' and  ColourID='" + line.ColourID + "' and SizeID='" + line.SizeID + "' and   Description='" + line.Description + "'";
+                    }
                     if (ExecuteQuery(sSQL) == 0)
                     {
-                        return false;
+                        if (sSQL.ToLower().Contains("update"))
+                        {
+                            result = true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
                     }
                     else
                     {
@@ -4722,66 +5427,141 @@ namespace Maximus.Data.Models
                         }
                         if (Convert.ToBoolean(BusinessParam("EmployeeDetails", busId)))
                         {
-                            if (line.EmployeeId != null)
+                            if (line.EmployeeId != null && line.EmployeeId != "")
                             {
                                 if (line.EmployeeId.Length > 0)
                                 {
                                     if (booStock)
                                     {
-                                        sSQL = "SELECT * FROM tblAccEmp_StockCard WHERE CompanyID='" + cmpId + "' AND BusinessID='" + busId + "' AND EmployeeID='" + line.EmployeeId + "' AND StyleID='" + line.StyleID + "' AND ColourID='" + line.ColourID + "' AND Year=" + sYear;
-                                        MySqlCommand cmd1 = new MySqlCommand(sSQL, conn);
-                                        MySqlDataAdapter da = new MySqlDataAdapter(cmd1);
-                                        DataTable dt1 = new DataTable();
-                                        da.Fill(dt1);
-                                        if (dt1.Rows.Count == 0)
+
+                                        //sSQL = "SELECT * FROM tblAccEmp_StockCard WHERE CompanyID='" + cmpId + "' AND BusinessID='" + busId + "' AND EmployeeID='" + line.EmployeeId + "' AND StyleID='" + line.StyleID + "' AND ColourID='" + line.ColourID + "' AND Year=" + sYear;
+                                        //MySqlCommand cmd1 = new MySqlCommand(sSQL, conn);
+                                        //MySqlDataAdapter da = new MySqlDataAdapter(cmd1);
+                                        //DataTable dt1 = new DataTable();
+                                        //da.Fill(dt1);
+
+                                        if (_stockCard.Exists(s => s.BusinessID == busId && s.CompanyID == cmpId && s.EmployeeID == line.EmployeeId && s.StyleID == line.StyleID && s.ColourID == line.ColourID && s.Year == sYear) == false)
                                         {
-                                            sSQL = "INSERT INTO tblaccemp_stockcard (CompanyID,BusinessID,EmployeeID,StyleID,ColourID,SOQty,StartIssuedate,LastIssueDate,FirstIssueDate,Year)  VALUES('" + cmpId + "','" + saleHead.CustID + "','" + line.EmployeeId + "','" + line.StyleID + "','" + line.ColourID + "'," + line.OrdQty + ",'" + saleHead.OrderDate + "','" + saleHead.OrderDate + "','" + saleHead.OrderDate + "'," + sYear + ")";
+
+                                            sSQL = "INSERT INTO tblaccemp_stockcard (CompanyID,BusinessID,EmployeeID,StyleID,ColourID,SOQty,StartIssuedate,LastIssueDate,FirstIssueDate,Year)  VALUES('" + cmpId + "','" + saleHead.CustID + "','" + line.EmployeeId + "','" + line.StyleID + "','" + line.ColourID + "'," + line.OrdQty + ",'" + DateTime.Parse(saleHead.OrderDate).ToString("yyyy-MM-dd") + "','" + DateTime.Parse(saleHead.OrderDate).ToString("yyyy-MM-dd") + "','" + DateTime.Parse(saleHead.OrderDate).ToString("yyyy-MM-dd") + "'," + sYear + ")";
                                         }
                                         else
                                         {
-                                            sSQL = "UPDATE tblaccemp_stockcard SET SOQty=SOQty+" + line.OrdQty + " WHERE CompanyID='" + cmpId + "' AND BusinessID='" + saleHead.CustID + "' AND EmployeeID='" + saleHead.EmployeeID + "' AND StyleID='" + line.StyleID + "' AND ColourID='" + line.ColourID + "' AND Year=" + sYear;
+                                            if (_stockCard.Exists(s => s.BusinessID == busId && s.CompanyID == cmpId && s.EmployeeID == line.EmployeeId && s.StyleID == line.StyleID && s.ColourID == line.ColourID && s.Year == sYear) && empResetMnths > 0)
+                                            {
+                                                var stockCard = _stockCard.GetAll(s => s.BusinessID == busId && s.CompanyID == cmpId && s.EmployeeID == line.EmployeeId && s.StyleID == line.StyleID && s.ColourID == line.ColourID && s.Year == sYear).First();
+                                                var date1 = DateTime.Now;
+                                                var date2 = stockCard.FirstIssueDate.Value;
+                                                int months = (date1.Year - date2.Year) * 12 + date1.Month - date2.Month;
+                                                if (months >= empResetMnths)
+                                                {
+                                                    ResetStockcard(stockCard);
+                                                }
+
+                                            }
+                                            var empSoQty = _stockCard.GetAll(s => s.BusinessID == busId && s.CompanyID == cmpId && s.EmployeeID == line.EmployeeId && s.StyleID == line.StyleID && s.ColourID == line.ColourID && s.Year == sYear).ToList();
+                                            long sum = 0; long totPointsSty = 0; int soqty = 0;
+                                            if (line.Isedit)
+                                            {
+                                                totPointsSty = saleHead.SalesOrderLine.Where(x => x.StyleID == line.StyleID).Sum(x => x.OrdQty);
+                                                soqty = Convert.ToInt32(empSoQty.Sum(s => s.SOQty)) - Convert.ToInt32(line.SoqtyForempSO);
+                                                sum = soqty + totPointsSty;
+                                                sSQL = "UPDATE tblaccemp_stockcard SET SOQty=" + sum + " WHERE CompanyID='" + cmpId + "' AND BusinessID='" + saleHead.CustID + "' AND EmployeeID='" + saleHead.EmployeeID + "' AND StyleID='" + line.StyleID + "' AND ColourID='" + line.ColourID + "' AND Year=" + sYear;
+
+                                            }
+                                            else
+                                            {
+                                                sSQL = "UPDATE tblaccemp_stockcard SET SOQty=SOQty+" + line.OrdQty + " WHERE CompanyID='" + cmpId + "' AND BusinessID='" + saleHead.CustID + "' AND EmployeeID='" + saleHead.EmployeeID + "' AND StyleID='" + line.StyleID + "' AND ColourID='" + line.ColourID + "' AND Year=" + sYear;
+
+                                            }
+
                                         }
                                         if (ExecuteQuery(sSQL) > 0)
                                         {
                                             result = true;
-                                            //AddtologStockCard(SQL)
                                         }
                                         if (Convert.ToBoolean(POINTSREQ))
                                         {
-                                            string existQry = "";
-                                            existQry = existQry + "SELECT * FROM `tblaccemp_pointscard` WHERE `CompanyID`='"+cmpId+ "' AND `BusinessID`='" + busId + "' AND `EmployeeID`='" + line.EmployeeId + "' AND `StyleID`='" + line.StyleID + "' AND `ColourID`='" + line.ColourID + "' AND `Year`="+sYear;
-                                            DataTable dt = new DataTable();
-                                            dt = GetDataTable(existQry);
-                                            if (dt.Rows.Count > 0)
+                                            if (_pointsByUcode.Exists(s => s.UcodeID.ToLower().Trim() == saleHead.UCodeId.ToLower().Trim()))
                                             {
-                                                string sSql1 = "";
-                                                int sum = Convert.ToInt32(dt.Rows[0]["SOPoints"].ToString()) + (line.TotalPoints);
-                                                sSql1 = sSql1 + "UPDATE `tblaccemp_pointscard` SET `SOPoints`="+ sum + " WHERE `CompanyID`='"+cmpId+ "' AND `BusinessID`='" + busId + "' AND `EmployeeID`='" + line.EmployeeId + "' AND `StyleID`='" + line.StyleID + "' AND `ColourID`='" + line.ColourID + "' AND `Year`=" + sYear;
-                                                if (ExecuteQuery(sSql1) > 0)
+                                                string existQry = "";
+                                                existQry = existQry + "SELECT * FROM `tblaccemp_pointscard` WHERE `CompanyID`='" + cmpId + "' AND `BusinessID`='" + busId + "' AND `EmployeeID`='" + line.EmployeeId + "' AND `StyleID`='" + line.StyleID + "' AND `ColourID`='" + line.ColourID + "' AND `Year`=" + sYear;
+                                                DataTable dt = new DataTable();
+                                                dt = GetDataTable(existQry);
+                                                if (dt.Rows.Count > 0)
                                                 {
-                                                    result = true;
-                                                    //AddtologStockCard(SQL)
+                                                    string sSql1 = "";
+                                                    int sum = 0;
+                                                    if (_pointsCard.Exists(s => s.BusinessID == busId && s.CompanyID == cmpId && s.EmployeeID == line.EmployeeId && s.StyleID == line.StyleID) && empResetMnths > 0)
+                                                    {
+                                                        var pointsCard = _pointsCard.GetAll(s => s.BusinessID == busId && s.CompanyID == cmpId && s.EmployeeID == line.EmployeeId && s.StyleID == line.StyleID).First();
+                                                        var date1 = DateTime.Now;
+                                                        var date2 = pointsCard.FirstIssueDate.Value;
+                                                        int months = (date1.Year - date2.Year) * 12 + date1.Month - date2.Month;
+                                                        if (DateTime.Now >= pointsCard.FirstIssueDate.Value.AddMonths(empResetMnths))
+                                                        {
+                                                            ResetPointscard(pointsCard);
+                                                        }
+                                                    }
+                                                    if (line.Isedit)
+                                                    {
+                                                        var empSoQty = _pointsCard.GetAll(s => s.BusinessID == busId && s.CompanyID == cmpId && s.EmployeeID == line.EmployeeId && s.StyleID == line.StyleID).ToList();
+                                                        int totPointsSty = saleHead.SalesOrderLine.Where(x => x.StyleID == line.StyleID).Sum(x => x.TotalPoints);
+                                                        var sssoqty = Convert.ToInt32(empSoQty.Sum(s => s.SOPoints)) - Convert.ToInt32(line.SoqtyForempSOPoints);
+                                                        sum = sssoqty + totPointsSty;
+
+
+                                                        //int canedit = Convert.ToInt32(dt.Rows[0]["SOPoints"].ToString()) - totPointsSty;
+                                                        //if (canedit < 0)
+                                                        //{
+                                                        // sum = Convert.ToInt32(dt.Rows[0]["SOPoints"].ToString()) + (-(canedit));
+                                                        sSql1 = sSql1 + "UPDATE `tblaccemp_pointscard` SET `SOPoints`=" + sum + " WHERE `CompanyID`='" + cmpId + "' AND `BusinessID`='" + busId + "' AND `EmployeeID`='" + line.EmployeeId + "' AND `StyleID`='" + line.StyleID + "' AND `ColourID`='" + line.ColourID + "' AND `Year`=" + sYear;
+                                                        //}
+                                                        //else
+                                                        //{
+                                                        //    sSql1 = sSql1 + "UPDATE `tblaccemp_pointscard` SET `SOPoints`=" + Convert.ToInt32(dt.Rows[0]["SOPoints"].ToString()) + " WHERE `CompanyID`='" + cmpId + "' AND `BusinessID`='" + busId + "' AND `EmployeeID`='" + line.EmployeeId + "' AND `StyleID`='" + line.StyleID + "' AND `ColourID`='" + line.ColourID + "' AND `Year`=" + sYear;
+                                                        //}
+                                                    }
+                                                    else
+                                                    {
+                                                        int totPointsSty = saleHead.SalesOrderLine.Where(x => x.StyleID == line.StyleID).Sum(x => x.TotalPoints);
+                                                        int soPts = Convert.ToInt32(dt.Rows[0]["SOPoints"].ToString());
+                                                        if (soPts != totPointsSty)
+                                                        {
+                                                            sum = Convert.ToInt32(dt.Rows[0]["SOPoints"].ToString()) + (line.TotalPoints);
+                                                            sSql1 = sSql1 + "UPDATE `tblaccemp_pointscard` SET `SOPoints`=" + sum + " WHERE `CompanyID`='" + cmpId + "' AND `BusinessID`='" + busId + "' AND `EmployeeID`='" + line.EmployeeId + "' AND `StyleID`='" + line.StyleID + "' AND `ColourID`='" + line.ColourID + "' AND `Year`=" + sYear;
+                                                        }
+                                                        else
+                                                        {
+                                                            sSql1 = sSql1 + "UPDATE `tblaccemp_pointscard` SET `SOPoints`=SOPoints+" + soPts + " WHERE `CompanyID`='" + cmpId + "' AND `BusinessID`='" + busId + "' AND `EmployeeID`='" + line.EmployeeId + "' AND `StyleID`='" + line.StyleID + "' AND `ColourID`='" + line.ColourID + "' AND `Year`=" + sYear;
+                                                        }
+                                                    }
+
+                                                    if (ExecuteQuery(sSql1) > 0)
+                                                    {
+                                                        result = true;
+                                                        //AddtologStockCard(SQL)
+                                                    }
+                                                    else
+                                                    {
+                                                        result = false;
+                                                    }
                                                 }
                                                 else
                                                 {
-                                                    result = false;
+                                                    string sSql1 = "";
+                                                    sSql1 = sSql1 + "INSERT INTO `tblaccemp_pointscard`(`CompanyID`,`BusinessID`,`EmployeeID`,`StyleID`,`ColourID`,`Year`,`SOPoints`,`FirstIssueDate`,`StartIssueDate`,`LastIssueDate`) VALUES ('" + cmpId + "','" + busId + "','" + saleHead.EmployeeID + "','" + line.StyleID + "','" + line.ColourID + "',0," + line.Points * line.OrdQty + ",'" + DateTime.Now.ToString("yyyy-MM-dd") + "','" + DateTime.Now.ToString("yyyy-MM-dd") + "','" + DateTime.Now.ToString("yyyy-MM-dd") + "')";
+                                                    if (ExecuteQuery(sSql1) > 0)
+                                                    {
+                                                        result = true;
+                                                        //AddtologStockCard(SQL)
+                                                    }
+                                                    else
+                                                    {
+                                                        result = false;
+                                                    }
                                                 }
                                             }
-                                            else
-                                            {
-                                                string sSql1 = "";
-                                                sSql1 = sSql1 + "INSERT INTO `tblaccemp_pointscard`(`CompanyID`,`BusinessID`,`EmployeeID`,`StyleID`,`ColourID`,`Year`,`SOPoints`,`FirstIssueDate`,`StartIssueDate`,`LastIssueDate`) VALUES ('" + cmpId + "','" + busId + "','" + saleHead.EmployeeID + "','" + line.StyleID + "','" + line.ColourID + "',0," + line.Points * line.OrdQty + ",'" + DateTime.Now.ToString("yyyy-MM-dd") + "','" + DateTime.Now.ToString("yyyy-MM-dd") + "','" + DateTime.Now.ToString("yyyy-MM-dd") + "')";
-                                                if (ExecuteQuery(sSql1) > 0)
-                                                {
-                                                    result = true;
-                                                    //AddtologStockCard(SQL)
-                                                }
-                                                else
-                                                {
-                                                    result = false;
-                                                }
-                                            }
-                                           
                                         }
                                     }
                                 }
@@ -4795,6 +5575,65 @@ namespace Maximus.Data.Models
         }
 
         #endregion
+
+        #region ResetStockcard
+
+        public void ResetStockcard(tblaccemp_stockcard stockCard)
+        {
+            string updQry = "Update tblaccemp_stockcard set year=1 where  `CompanyID`='" + stockCard.CompanyID + "' AND `BusinessID`='" + stockCard.BusinessID + "' AND `EmployeeID`='" + stockCard.EmployeeID + "' AND `StyleID`='" + stockCard.StyleID + "' AND `ColourID`='" + stockCard.ColourID + "'";
+            MySqlConnection conn = new MySqlConnection(ConnectionString);
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand(updQry, conn);
+                if (cmd.ExecuteNonQuery() > 0)
+                {
+                    string insert = "";
+                    insert = "INSERT INTO tblaccemp_stockcard (CompanyID,BusinessID,EmployeeID,StyleID,ColourID,SOQty,StartIssuedate,LastIssueDate,FirstIssueDate,Year)  VALUES('" + stockCard.CompanyID + "','" + stockCard.BusinessID + "','" + stockCard.EmployeeID + "','" + stockCard.StyleID + "','" + stockCard.ColourID + "'," + 0 + ",'" + DateTime.Now.ToString("yyyy-MM-dd") + "','" + DateTime.Now.ToString("yyyy-MM-dd") + "','" + DateTime.Now.ToString("yyyy-MM-dd") + "'," + 0 + ")";
+                    MySqlCommand cmd1 = new MySqlCommand(insert, conn);
+                    cmd1.ExecuteNonQuery();
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
+        #endregion
+        #region ResetStockcard
+
+        public void ResetPointscard(tblaccemp_pointscard ptsCard)
+        {
+            string updQry = "Update tblaccemp_pointscard set year=1 where  `CompanyID`='" + ptsCard.CompanyID + "' AND `BusinessID`='" + ptsCard.BusinessID + "' AND `EmployeeID`='" + ptsCard.EmployeeID + "' AND `StyleID`='" + ptsCard.StyleID + "' AND `ColourID`='" + ptsCard.ColourID + "'";
+            MySqlConnection conn = new MySqlConnection(ConnectionString);
+            try
+            {
+                conn.Open();
+                MySqlCommand cmd = new MySqlCommand(updQry, conn);
+                if (cmd.ExecuteNonQuery() > 0)
+                {
+                    string insert = "INSERT INTO `tblaccemp_pointscard`(`CompanyID`,`BusinessID`,`EmployeeID`,`StyleID`,`ColourID`,`Year`,`SOPoints`,`FirstIssueDate`,`StartIssueDate`,`LastIssueDate`) VALUES ('" + ptsCard.CompanyID + "','" + ptsCard.BusinessID + "','" + ptsCard.EmployeeID + "','" + ptsCard.StyleID + "','" + ptsCard.ColourID + "',0," + 0 + ",'" + DateTime.Now.ToString("yyyy-MM-dd") + "','" + DateTime.Now.ToString("yyyy-MM-dd") + "','" + DateTime.Now.ToString("yyyy-MM-dd") + "')";
+                    MySqlCommand cmd1 = new MySqlCommand(insert, conn);
+                    cmd1.ExecuteNonQuery();
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+            finally
+            {
+                conn.Close();
+            }
+        }
+
+        #endregion
+
 
         #region override entitlement
 
@@ -4882,6 +5721,15 @@ namespace Maximus.Data.Models
 
             }
             return intOpenManpack;
+        }
+        #endregion
+
+        #region PointsEntilementCheck
+
+        public bool PointsEntilementCheck()
+        {
+            bool result = false;
+            return result;
         }
         #endregion
 
@@ -5221,6 +6069,32 @@ namespace Maximus.Data.Models
             return result;
         }
 
+        public bool SaveEmailUser(string sSry = "")
+        {
+            bool result = false;
+            MySqlConnection conn = new MySqlConnection(ConnectionString);
+            conn.Open();
+            try
+            {
+                MySqlCommand cmd = new MySqlCommand(sSry, conn);
+                if (cmd.ExecuteNonQuery() > 0)
+                {
+                    result = true;
+                }
+
+            }
+            catch (Exception e)
+            {
+                return result;
+            }
+            finally
+            {
+                conn.Close();
+
+            }
+            return result;
+        }
+
         public int ExecuteQuerywidTrans(string sSqry = "")
         {
             int result = 0;
@@ -5251,6 +6125,296 @@ namespace Maximus.Data.Models
 
 
 
+        #endregion
+
+        #region GetNecessaryMailTemplates
+
+        public OrderConfirmation GetNecessaryMailTemplates(SalesOrderHeaderViewModel salesHead, string rolloutname, string custLogo, string cmpLogo, long manpackNo, string pricePermission, string ONLCUSREFLBL, long orderNo)
+        {
+            OrderConfirmation ocnfirm = new OrderConfirmation();
+            string finalEmailTemplate = "";
+            List<string> mailTemplates = new List<string>();
+            string appPath = AppDomain.CurrentDomain.BaseDirectory + "MailTemplates";
+            string orderHeaderTemplate = System.IO.File.ReadAllText(appPath + "\\OrderHeader_Template.html");
+            string orderLinesTemplate = System.IO.File.ReadAllText(appPath + "\\OrderLines_Template.html");
+            string emailTemplate = System.IO.File.ReadAllText(appPath + "\\OrderLines_email.html");
+            string orderDetailTemplate = System.IO.File.ReadAllText(appPath + "\\OrderDetail_Template.html");
+            string txtNomlbl = BusinessParam("ONLNETXTNOM1", salesHead.CustID);
+            string reqnom = CompanyParam("ONLNEREQNOM1", cmpId);
+            BusAddress1 custAdd = new BusAddress1();
+            if (1 == 1)
+            {
+                string SQL = "SELECT tblbus_address.Description, tblbus_address.Address1, tblbus_address.Address2, tblbus_address.Address3, tblbus_address.Town, tblbus_address.City, tblbus_address.Postcode, tblbus_countrycodes.Country, tblbus_address.countrycode  FROM tblbus_countrycodes INNER JOIN (tblbus_addresstype_ref INNER JOIN (tblbus_business INNER JOIN (tblbus_addresstypes INNER JOIN tblbus_address ON tblbus_addresstypes.AddressTypeID = tblbus_address.AddressTypeID) ON tblbus_business.BusinessID = tblbus_address.BusinessID) ON tblbus_addresstype_ref.Actual_TypeID = tblbus_addresstypes.Actual_TypeID) ON tblbus_countrycodes.CountryID = tblbus_address.CountryCode  WHERE tblbus_addresstype_ref.Actual_TypeID=3 AND tblbus_business.BusinessID='" + salesHead.CustID + "' and tblbus_countrycodes.CompanyID = '" + cmpId + "' Order By tblbus_address.Description";
+                custAdd = GetAddressDetails(SQL);
+            }
+            if (txtNomlbl == "")
+            {
+                if (reqnom != "")
+                {
+                    if (Convert.ToBoolean(reqnom))
+                    {
+                        txtNomlbl = CompanyParam("ONLNETXTNOM1", cmpId);
+                    }
+                    else
+                    {
+                        txtNomlbl = "Nominal Code";
+                    }
+                }
+            }
+            var orderLinesBuilder = new StringBuilder(emailTemplate);
+            var orderHeaderbuilder = new StringBuilder(orderHeaderTemplate);
+            orderHeaderbuilder = orderHeaderbuilder.Replace("%ReportTitle%", salesHead.OrderType.ToUpper() == "RT" ? "Return Order Confirmation" : "Order Confirmation");
+            if (salesHead.NomCode3 != "")
+            {
+                orderHeaderbuilder = orderHeaderbuilder.Replace("%RollOutName%", rolloutname);
+            }
+            else if (rolloutname == "")
+            {
+
+            }
+            else
+            {
+
+            }
+            if (custLogo != "")
+            {
+                if (custLogo != "")
+                {
+                     
+                    var custLogoPath =     custLogo;
+                    orderHeaderbuilder = orderHeaderbuilder.Replace("%LogoPath%", custLogoPath);
+                }
+                else
+                {
+                    // "Images/no_image.gif"
+                }
+
+            }
+            if (cmpLogo != "")
+            {
+                var cmpLogoPath =  cmpLogo;
+                orderHeaderbuilder = orderHeaderbuilder.Replace("%CompLogoPath%", cmpLogoPath);
+            }
+            else
+            {
+                // "Images/no_image.gif"
+            }
+            try
+            {
+                var cmp = _company.Exists(s => s.CompanyID == cmpId) ? _company.GetAll(s => s.CompanyID == cmpId).First() : new tblcompany();
+                orderHeaderbuilder.Replace("%first_companyname%", cmp.Name);
+                orderHeaderbuilder.Replace("%first_companyaddress1%", cmp.Address1);
+                orderHeaderbuilder.Replace("%first_companyaddress2%", cmp.Address2);
+                orderHeaderbuilder.Replace("%first_companyaddress3%", cmp.Address3);
+                orderHeaderbuilder.Replace("%first_companyaddress4%", cmp.Address4);
+                orderHeaderbuilder.Replace("%first_companypostcode%", cmp.PostCode);
+                orderHeaderbuilder.Replace("%first_companytel%", cmp.Phone);
+                orderHeaderbuilder.Replace("%first_companyfax%", cmp.Fax);
+                orderHeaderbuilder.Replace("%first_companyemail%", cmp.Email); ;
+                orderHeaderbuilder.Replace("%first_companyvat%", cmp.VATno); ;
+            }
+            catch(Exception e)
+            { }
+             
+            if (salesHead.OrderType.ToUpper() == "RT")
+            {
+                finalEmailTemplate = orderHeaderbuilder + "<br/><br/><br/>" + FillmailTemplate(orderDetailTemplate, salesHead, manpackNo, orderLinesTemplate, pricePermission, "N", ONLCUSREFLBL,orderNo);
+            }
+            else
+            {
+                finalEmailTemplate = orderHeaderbuilder + "<br/><br/><br/>" + FillmailTemplate(orderDetailTemplate, salesHead, manpackNo, orderLinesTemplate, pricePermission, "N", ONLCUSREFLBL, orderNo);
+            }
+            try
+            {
+                string warehouseCompanyName = _wareHouses.Exists(s => s.WarehouseID == salesHead.WarehouseID) ? _wareHouses.GetAll(s => s.WarehouseID == salesHead.WarehouseID).First().WarehouseName : "";
+                orderLinesBuilder = orderLinesBuilder.Replace("%first_companyname%", warehouseCompanyName);
+                ocnfirm.OrderConfirmationPOP = "<html><head></head><body><div style='width:10%;'></div><div style='width:80%;'>" + finalEmailTemplate + "</div><div style='width:10%;'></div></body></html>";
+                finalEmailTemplate = "<html><head></head><body><div style='width:10%;'></div><div style='width:80%;'>" + finalEmailTemplate + "<br/>" + orderLinesBuilder + "</div><div style='width:10%;'></div></body></html>";
+                ocnfirm.OrderConfirmationemail = finalEmailTemplate;
+
+            }
+            catch(Exception e)
+            {
+
+            }
+            
+            return ocnfirm;
+
+        }
+
+        #endregion
+
+        #region getEmergencyTemplate
+        public string getEmergencyTemplate(SalesOrderHeaderViewModel saleshead, long orderNo)
+        {
+            string appPath = AppDomain.CurrentDomain.BaseDirectory + "MailTemplates";
+            string emergencyEmailTemplate = System.IO.File.ReadAllText(appPath + "\\EmergencyEmail.html");
+            var  emergencyBuilder = new StringBuilder(emergencyEmailTemplate);
+            var compnay = _company.Exists(s => s.CompanyID == cmpId) ? _company.GetAll(s => s.CompanyID == cmpId).First().Name : "";
+            emergencyBuilder.Replace("%CustName%",saleshead.CustomerName);
+            emergencyBuilder.Replace("%OrderNo%",orderNo.ToString());
+            emergencyBuilder.Replace("%OrdDate%",saleshead.OrderDate);
+            emergencyBuilder.Replace("%EmpName%",saleshead.EmployeeName);
+            emergencyBuilder.Replace("%CompanyName%", compnay);
+            emergencyBuilder.Replace("%EmpID%", saleshead.EmployeeID);
+            string message = "";
+            message= message+  "<html><head></head><body>" + emergencyBuilder + "</body></html>";
+            return message;
+        }
+        #endregion
+
+        #region fillmailTemplate
+        public string FillmailTemplate(string detailTemp, SalesOrderHeaderViewModel saleshead, long manPack, string emailLine, string pricePermission, string carrierCharges,string ONLCUSREFLBL,long orderNo)
+        {
+            string Barcode = "";
+            string stlLine = "", returnString = "";
+            string strsql = "SELECT count(t1.ProjectCode) as cntproject  FROM tblsop_customerorder_template_costcentre t1 WHERE t1.Businessid='{0}'  ORDER BY t1.ProjectCode ASC";
+            var builder1 = new StringBuilder(detailTemp);
+            int projCode = CheckForProjectCode(strsql);
+            string empTite = "";
+            try
+            {
+                empTite = _employee.Exists(s => s.EmployeeID == saleshead.EmployeeID) ? _employee.GetAll(s => s.EmployeeID == saleshead.EmployeeID).First().Title : "";
+            }
+            catch(Exception e)
+            {
+
+            }
+            if (projCode == 0)
+            {
+                builder1.Replace("<th>ProjectCode</th>", "");
+            }
+            builder1.Replace("%BarcodeOrderNo%", "");
+            builder1.Replace("%customer_name%", saleshead.CustomerName);
+            builder1.Replace("%customer_address1%", saleshead.InvAddress1);
+            builder1.Replace("%customer_address2%", saleshead.InvAddress2);
+            builder1.Replace("%customer_address3%", saleshead.InvAddress3);
+            builder1.Replace("%customer_town%", saleshead.InvTown);
+            builder1.Replace("%customer_city%", saleshead.InvCity);
+            builder1.Replace("%customer_postcode%", saleshead.InvPostCode);
+            builder1.Replace("%customer_country%", saleshead.InvCountry);
+            if (saleshead.OrderType.ToUpper() == "RT")
+            {
+
+            }
+            else
+            {
+                builder1.Replace("%delivery_name%", saleshead.CustomerName);
+                builder1.Replace("%delivery_address1%", saleshead.DelAddress1);
+                builder1.Replace("%delivery_address2%", saleshead.DelAddress2);
+                builder1.Replace("%delivery_address3%", saleshead.DelAddress3);
+                builder1.Replace("%delivery_town%", saleshead.DelTown);
+                builder1.Replace("%delivery_city%", saleshead.DelCity);
+                builder1.Replace("%delivery_postcode%", saleshead.DelPostCode);
+                builder1.Replace("%delivery_country%", saleshead.DelCountry);
+            }
+            Barcode = CompanyParam("BARCODESOPTYPE", saleshead.CompanyID);
+
+            //builder1.Replace("%BarcodeOrderNo%", saleshead.OrderType.ToUpper()=="RT", returnBarcode(myReader("OrderNo").Value, Barcode), ""))
+            builder1.Replace("%OrderNo%", orderNo.ToString());
+            builder1.Replace("%OrderDate%", saleshead.OrderDate.ToString());
+            builder1.Replace("%CustRef%", saleshead.CustRef);
+            builder1.Replace("Cust Ref", ONLCUSREFLBL);
+            builder1.Replace("%ManPackNo%", manPack == 0 ? "" : manPack.ToString());
+
+            builder1.Replace("%AccountNo%", saleshead.CustID);
+            builder1.Replace("%NominalCode%", saleshead.NomCode == "" ? "" : saleshead.NomCode);
+            builder1.Replace("%Employee%", saleshead.EmployeeID + " - " + empTite + " " + saleshead.EmployeeName);
+            try
+            {
+                if (saleshead.ContractRef != null)
+                {
+                    builder1.Replace("%RC%", saleshead.ContractRef.ToUpper() == "RC" ? "*This Return Requires Collection" + saleshead.ContactName == null ? "" : "<br /><b><u>Contact Detail</u></b><br />" + String.Format("Name: {0}, Email: {1}", saleshead.ContactName, saleshead.EmailID, "") : "");
+                }
+                else
+                {
+                    builder1.Replace("%RC%", "<br /><b><u>Contact Detail</u></b><br />" + String.Format("Name: {0}, Email: {1}", saleshead.ContactName, saleshead.EmailID, ""));
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+           
+            foreach (var saleLine in saleshead.SalesOrderLine)
+            {
+                var builder2 = new StringBuilder(emailLine);
+                if (projCode == 0)
+                {
+                    builder2.Replace("<td>%ProjectCode%</td>", "");
+                }
+                builder2.Replace("%style%", saleLine.StyleID);
+                builder2.Replace("%Description%", saleLine.Description);
+                builder2.Replace("%Colour%", saleLine.ColourID);
+                builder2.Replace("%Size%", saleLine.SizeID);
+                //If CBool(Session.Item("UseMatrix")) Then
+                //    builder2.Replace("%Colour%", rs1("ColourID").Value)
+                //    builder2.Replace("%Size%", rs1("SizeID").Value)
+                //End If
+                builder2.Replace("%qty%", saleLine.OrdQty.ToString());
+                if (pricePermission.ToUpper() == "READWRITE")
+                {
+                    builder2.Replace("%price%", string.Format(CultureInfo.InvariantCulture, "{0:F}", Math.Round(saleLine.Price), 2));
+                    builder2.Replace("%netvalue%", string.Format(CultureInfo.InvariantCulture, "{0:F}", Math.Round((saleLine.Price) * (saleLine.OrdQty)), 2));
+                }
+                else if (pricePermission.ToUpper() == "READONLY")
+                {
+                    builder2.Replace("%price%", String.Format(CultureInfo.InvariantCulture, "{0:F}", Math.Round(saleLine.Price, 2)));
+                    builder2.Replace("%netvalue%", String.Format(CultureInfo.InvariantCulture, "{0:F}", Math.Round
+                    ((saleLine.OrdQty) * saleLine.Price, 2)));
+                }
+                else if (pricePermission.ToUpper() == "HIDE")
+                {
+                    builder2.Replace("%price%", "N/A");
+                    builder2.Replace("%netvalue%", "N/A");
+                    builder2.Replace("%vat%", "N/A");
+                }
+                string strFreeText = StyleParam("REQDATA1", saleLine.StyleID) + " " + saleLine.FreeText1 + saleLine.NomCode;
+               // builder2.Replace("%freetext%", strFreeText.Trim() == "" ? "" : "(" + strFreeText + ")");
+                builder2.Replace("%reason%", GetReasonCodes(saleLine.ReasonCodeLine, saleshead.CustID));
+                if (saleshead.OrderType.ToUpper() != "RT")
+                {
+                    builder2.Replace("%OrgOrderNo%", saleshead.OrderNo.ToString());
+                    builder2.Replace("%OrgPORef%", saleshead.CustRef);
+                }
+                else
+                {
+                    //builder2.Replace("%OrgOrderNo%", rs1("ReturnOrderNo").Value.ToString)
+                    //         builder2.Replace("%OrgPORef%", "")
+                }
+                builder2.Replace("%ProjectCode%", projCode.ToString());
+                stlLine = stlLine + builder2;
+            }
+            builder1.Replace("%DeliveryDate%", saleshead.OrderDate);
+            builder1.Replace("%OrderLines%", stlLine);
+            builder1.Replace("%comments%", saleshead.CommentsExternal);
+            builder1.Replace("%totalgoods%", pricePermission.ToUpper() == "HIDE" ? "N/A" : String.Format(CultureInfo.InvariantCulture, "{0:F}", Math.Round(saleshead.TotalGoods.Value, 2)));
+            if (carrierCharges.ToLower() == "hide")
+            {
+                builder1.Replace("Carrier Charges", "");
+                builder1.Replace("%carriercharges%", "");
+            }
+            else
+            {
+                builder1.Replace("%carriercharges%", pricePermission.ToUpper() == "HIDE" ? "N/A" : String.Format(CultureInfo.InvariantCulture, "{0:F}", Math.Round(saleshead.CarrierCharge.Value, 2)));
+            }
+            builder1.Replace("%vattotal%", pricePermission.ToUpper() == "HIDE" ? "N/A" : String.Format(CultureInfo.InvariantCulture, "{0:F}", Math.Round(saleshead.TotalVat, 2)));
+            builder1.Replace("%ordertotal%", pricePermission.ToUpper() == "HIDE" ? "N/A" : String.Format(CultureInfo.InvariantCulture, "{0:F}", Math.Round(Convert.ToDouble(saleshead.TotalGoods.Value) + saleshead.CarrierCharge.Value, 2)));
+            builder1.Replace("%grandtotal%", pricePermission.ToUpper() == "HIDE" ? "N/A" : String.Format(CultureInfo.InvariantCulture, "{0:F}", Math.Round(Convert.ToDouble(saleshead.TotalGoods.Value) + saleshead.CarrierCharge.Value, 2)));
+            //builder1.Replace()
+            if (saleshead.OrderType.ToUpper() != "RT")
+            {
+                builder1.Replace("%OrgOrdHead%", "Org.OrderNo");
+                builder1.Replace("%OrgPORef%", "Org.PORef");
+            }
+            else
+            {
+                builder1.Replace("%OrgOrdHead%", "Return.No");
+                builder1.Replace("%OrgPORef%", "");
+            }
+            returnString = returnString + builder1;
+            return returnString;
+        }
         #endregion
 
     }

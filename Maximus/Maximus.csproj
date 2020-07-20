@@ -207,6 +207,7 @@
     <Content Include="Content\bootstrap.min.css" />
     <Content Include="Content\css\CustomCss.css" />
     <Content Include="Content\css\Media.css" />
+    <Content Include="Content\css\menu.css" />
     <Content Include="Content\Images\dimensions.jpg" />
     <Content Include="Content\Images\doc.png" />
     <Content Include="Content\Images\embroidery.png" />
@@ -220,6 +221,7 @@
     <Content Include="Content\Images\ui-icons_777777_256x240.png" />
     <Content Include="Content\Images\ui-icons_cc0000_256x240.png" />
     <Content Include="Content\Images\ui-icons_ffffff_256x240.png" />
+    <Content Include="Content\Images\xls.png" />
     <Content Include="Content\jquery-ui.css" />
     <Content Include="Content\jquery-ui.structure.css" />
     <Content Include="Content\jquery-ui.theme.css" />
@@ -271,6 +273,13 @@
     <Content Include="Content\themes\base\tooltip.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="MailTemplates\EmergencyEmail.html" />
+    <Content Include="MailTemplates\OrderDetail_Template.html" />
+    <Content Include="MailTemplates\OrderHeader_Template.html" />
+    <Content Include="MailTemplates\OrderLines_email.html" />
+    <Content Include="MailTemplates\OrderLines_Template.html" />
+    <Content Include="MailTemplates\testtemplate.html" />
+    <Content Include="scripts\3deye.min.js" />
     <Content Include="scripts\ai.0.22.9-build00167.js" />
     <Content Include="scripts\ai.0.22.9-build00167.min.js" />
     <Content Include="scripts\bootstrap.js" />
@@ -478,11 +487,16 @@
     <Content Include="StyleImages\ISSBOLT\ISS BAR WTU1.JPG" />
     <Content Include="StyleImages\ISSBOLT\ISS BAR WTU3.jpg" />
     <Content Include="StyleImages\ISSBOLT\ISS BAR WWC1.jpg" />
+    <Content Include="StyleImages\J3002N.jpg" />
     <Content Include="StyleImages\logos\AN POC.png" />
+    <Content Include="StyleImages\logos\BarclaysLogo.jpg" />
+    <Content Include="StyleImages\logos\Cordant-Security-Logo.jpg" />
     <Content Include="StyleImages\logos\CORPSE01.jpg" />
     <Content Include="StyleImages\logos\IronMountain.gif" />
     <Content Include="StyleImages\logos\logo.gif" />
     <Content Include="StyleImages\logos\Mitie logo.png" />
+    <Content Include="StyleImages\logos\NCP1.jpg" />
+    <Content Include="StyleImages\logos\Parkdean Logo.jpg" />
     <Content Include="StyleImages\logos\SJABOIIE.jpg" />
     <Content Include="StyleImages\logos\three_logo_black.gif" />
     <Content Include="StyleImages\logos\TSBLogo.jpg" />
@@ -730,6 +744,7 @@
     <Content Include="StyleImages\shield\T07.jpg" />
     <Content Include="StyleImages\shield\T11.jpg" />
     <Content Include="StyleImages\shield\T18.jpg" />
+    <Content Include="StyleImages\TRB SH2.jpg" />
     <Content Include="StyleImages\TSB\Blouse.jpg" />
     <Content Include="StyleImages\TSB\Cardigan.jpg" />
     <Content Include="StyleImages\TSB\Dress.jpg" />
@@ -895,6 +910,8 @@
     <Content Include="StyleImages\Waitrose\Waitrose Garments 054.jpg" />
     <Content Include="StyleImages\Waitrose\Waitrose Garments 056.jpg" />
     <Content Include="StyleImages\Waitrose\Waitrose Garments 058.jpg" />
+    <Content Include="StyleImages\WJ B324 TMW352.jpg" />
+    <Content Include="StyleImages\WJ F247 VEST1.jpg" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -902,20 +919,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="App_Start\Startup.cs" />
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="Controllers\BasketController.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\OrderDisplayController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\UserController.cs" />
-    <Compile Include="Filter\CustomFilter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\ControllerHelperMethods.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Startup.cs" />
     <Compile Include="Utilities\Log.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -965,6 +980,19 @@
     <Content Include="scripts\jquery.jgrowl.map" />
     <Content Include="Views\Basket\model\_EmployeeView.cshtml" />
     <Content Include="Views\Employee\_bulkOrderPartial.cshtml" />
+    <Content Include="Views\Employee\_GridViewPartial.cshtml" />
+    <Content Include="Views\Employee\_EmpFilter.cshtml" />
+    <Content Include="Views\OrderDisplay\ShowOrder.cshtml" />
+    <Content Include="Views\OrderDisplay\_EmployeeSearchShowOrders.cshtml" />
+    <Content Include="Views\OrderDisplay\_SearchOrderShowOrders.cshtml" />
+    <Content Include="Views\OrderDisplay\_ShowOrderGridViewPartial.cshtml" />
+    <Content Include="Views\OrderDisplay\_OrderDetailGridViewPartial.cshtml" />
+    <Content Include="Views\OrderDisplay\_OrderDetailGridView1Partial.cshtml" />
+    <Content Include="Views\Home\CheckEmpEmail.cshtml" />
+    <Content Include="Views\Home\GetRolloutCheck.cshtml" />
+    <Content Include="Views\OrderDisplay\_OrdFilter.cshtml" />
+    <Content Include="Views\OrderDisplay\_OrderDetail.cshtml" />
+    <Content Include="Views\OrderDisplay\ConfrimOrder.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -974,6 +1002,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Content\ExternalFiles\" />
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>

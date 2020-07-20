@@ -381,6 +381,14 @@ warning 6002: The table/view 'def.e4kmaximusdb.hr_users_removed' does not have a
           <Property Name="AspUserID" Type="varchar" MaxLength="256" />
           <Property Name="BusinessName" Type="varchar" MaxLength="255" />
         </EntityType>
+        <EntityType Name="ht_kbus">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Forname" Type="varchar" MaxLength="250" />
+          <Property Name="Surname" Type="varchar" MaxLength="250" />
+        </EntityType>
         <EntityType Name="ht_tsb_2020_custref_change">
           <Key>
             <PropertyRef Name="OrderNo" />
@@ -626,6 +634,7 @@ warning 6002: The table/view 'def.e4kmaximusdb.hr_users_removed' does not have a
           <Property Name="IsProcessed" Type="bool" Nullable="false" />
           <Property Name="PrevOrder" Type="int" />
           <Property Name="RolloutName" Type="varchar" MaxLength="150" Nullable="false" />
+          <Property Name="NextOrder" Type="date" />
         </EntityType>
         <EntityType Name="tblaccemp_employee_rollout_atlasfm">
           <Key>
@@ -655,6 +664,20 @@ warning 6002: The table/view 'def.e4kmaximusdb.hr_users_removed' does not have a
           <Property Name="ToDate" Type="timestamp" Precision="6" />
           <Property Name="TotalPoints" Type="int" />
           <Property Name="RoleDesc" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="tblaccemp_pointsadjustment">
+          <Key>
+            <PropertyRef Name="CompanyID" />
+            <PropertyRef Name="BusinessID" />
+            <PropertyRef Name="UcodeID" />
+            <PropertyRef Name="StyleID" />
+            <PropertyRef Name="MapStyleID" />
+          </Key>
+          <Property Name="CompanyID" Type="varchar" MaxLength="3" Nullable="false" />
+          <Property Name="BusinessID" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="UcodeID" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="StyleID" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="MapStyleID" Type="varchar" MaxLength="25" Nullable="false" />
         </EntityType>
         <EntityType Name="tblaccemp_pointscard">
           <Key>
@@ -1213,6 +1236,21 @@ warning 6002: The table/view 'def.e4kmaximusdb.tblbus_settings' does not have a 
           <Property Name="OnlyNewLayout" Type="tinyint" />
         </EntityType>
         <EntityType Name="tblchildmenu_newlayout">
+          <Key>
+            <PropertyRef Name="ParentID" />
+            <PropertyRef Name="ChildID" />
+          </Key>
+          <Property Name="ParentID" Type="int" Nullable="false" />
+          <Property Name="ChildID" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="100" />
+          <Property Name="IsEnable" Type="tinyint" />
+          <Property Name="SeqNo" Type="int" />
+          <Property Name="URL" Type="varchar" MaxLength="200" />
+          <Property Name="TitleDesc" Type="varchar" MaxLength="250" />
+          <Property Name="IsPopUp" Type="tinyint" />
+          <Property Name="OnlyNewLayout" Type="tinyint" />
+        </EntityType>
+        <EntityType Name="tblchildmenu_newlayout_newsystem">
           <Key>
             <PropertyRef Name="ParentID" />
             <PropertyRef Name="ChildID" />
@@ -1853,6 +1891,16 @@ warning 6002: The table/view 'def.e4kmaximusdb.tblbus_settings' does not have a 
           <Property Name="SubGroupID" Type="int" Nullable="false" />
           <Property Name="StyleID" Type="varchar" MaxLength="25" Nullable="false" />
         </EntityType>
+        <EntityType Name="tblonlinebus_carriage">
+          <Key>
+            <PropertyRef Name="CompanyId" />
+            <PropertyRef Name="StyleID" />
+            <PropertyRef Name="BusinessID" />
+          </Key>
+          <Property Name="CompanyId" Type="varchar" MaxLength="3" Nullable="false" />
+          <Property Name="StyleID" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="BusinessID" Type="varchar" MaxLength="10" Nullable="false" />
+        </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'def.e4kmaximusdb.tblonlinesop_backorders' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="tblonlinesop_backorders">
@@ -1931,6 +1979,18 @@ warning 6002: The table/view 'def.e4kmaximusdb.tblonlinesop_backorders' does not
           <Property Name="OnlyNewLayout" Type="tinyint" />
         </EntityType>
         <EntityType Name="tblparentmenu_newlayout">
+          <Key>
+            <PropertyRef Name="ParentID" />
+          </Key>
+          <Property Name="ParentID" Type="int" Nullable="false" />
+          <Property Name="Description" Type="varchar" MaxLength="100" />
+          <Property Name="IsEnable" Type="tinyint" />
+          <Property Name="SeqNo" Type="int" />
+          <Property Name="URL" Type="varchar" MaxLength="200" />
+          <Property Name="IsPermissionReq" Type="tinyint" />
+          <Property Name="OnlyNewLayout" Type="tinyint" />
+        </EntityType>
+        <EntityType Name="tblparentmenu_newlayout_newsystem">
           <Key>
             <PropertyRef Name="ParentID" />
           </Key>
@@ -2613,59 +2673,6 @@ warning 6002: The table/view 'def.e4kmaximusdb.tblonlinesop_backorders' does not
           <Property Name="ReturnOrderNo" Type="bigint" />
           <Property Name="ReturnLineNo" Type="bigint" />
         </EntityType>
-        <EntityType Name="tblsop_salesorder_detail_before_merge">
-          <Key>
-            <PropertyRef Name="CompanyID" />
-            <PropertyRef Name="OrderNo" />
-            <PropertyRef Name="LineNo" />
-          </Key>
-          <Property Name="CompanyID" Type="varchar" MaxLength="3" Nullable="false" />
-          <Property Name="Warehouseid" Type="varchar" MaxLength="10" />
-          <Property Name="OrderNo" Type="bigint" Nullable="false" />
-          <Property Name="LineNo" Type="bigint" Nullable="false" />
-          <Property Name="LineType" Type="int" />
-          <Property Name="StyleID" Type="varchar" MaxLength="25" />
-          <Property Name="ColourID" Type="varchar" MaxLength="15" />
-          <Property Name="SizeID" Type="varchar" MaxLength="10" />
-          <Property Name="Description" Type="varchar" MaxLength="100" />
-          <Property Name="Price" Type="decimal" Precision="20" Scale="4" />
-          <Property Name="Cost" Type="decimal" Precision="20" Scale="4" />
-          <Property Name="OrdQty" Type="bigint" />
-          <Property Name="AllQty" Type="bigint" />
-          <Property Name="InvQty" Type="bigint" />
-          <Property Name="DespQty" Type="bigint" />
-          <Property Name="CommissionRate" Type="double" />
-          <Property Name="Discount" Type="double" />
-          <Property Name="Deliverydate" Type="date" />
-          <Property Name="VatCode" Type="int" />
-          <Property Name="NomCode" Type="int" />
-          <Property Name="PartShip" Type="tinyint" />
-          <Property Name="LineNoRef" Type="float" />
-          <Property Name="Currency_Exchange_Rate" Type="double" />
-          <Property Name="StyleIDref" Type="varchar" MaxLength="15" />
-          <Property Name="FreeText" Type="varchar" MaxLength="250" />
-          <Property Name="RepID" Type="bigint" />
-          <Property Name="RepRate" Type="double" />
-          <Property Name="KamID" Type="bigint" />
-          <Property Name="KAMRate" Type="double" />
-          <Property Name="IssueUOM" Type="bigint" />
-          <Property Name="IssueQty" Type="double" />
-          <Property Name="StockingUOM" Type="bigint" />
-          <Property Name="OriginalOrderNo" Type="bigint" />
-          <Property Name="OriginalLineNo" Type="bigint" />
-          <Property Name="SOPDETAIL1" Type="varchar" MaxLength="100" />
-          <Property Name="SOPDETAIL2" Type="varchar" MaxLength="100" />
-          <Property Name="SOPDETAIL3" Type="varchar" MaxLength="100" />
-          <Property Name="SOPDETAIL4" Type="varchar" MaxLength="100" />
-          <Property Name="SOPDETAIL5" Type="varchar" MaxLength="100" />
-          <Property Name="Jobsheetno" Type="int" />
-          <Property Name="JobsheetLineNo" Type="int" />
-          <Property Name="AssemblyID" Type="int" />
-          <Property Name="AsmLineNo" Type="int" />
-          <Property Name="ReasonCode" Type="int" />
-          <Property Name="ReturnOrderNo" Type="bigint" />
-          <Property Name="ReturnLineNo" Type="bigint" />
-        </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'def.e4kmaximusdb.tblsop_salesorder_detail_console' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="tblsop_salesorder_detail_console">
@@ -2774,59 +2781,6 @@ warning 6002: The table/view 'def.e4kmaximusdb.tblsop_salesorder_detail_console'
           <Property Name="ReturnOrderNo" Type="int" />
           <Property Name="ReturnLineNo" Type="int" />
         </EntityType>
-        <EntityType Name="tblsop_salesorder_detail_tremot02">
-          <Key>
-            <PropertyRef Name="CompanyID" />
-            <PropertyRef Name="OrderNo" />
-            <PropertyRef Name="LineNo" />
-          </Key>
-          <Property Name="CompanyID" Type="varchar" MaxLength="3" Nullable="false" />
-          <Property Name="Warehouseid" Type="varchar" MaxLength="10" />
-          <Property Name="OrderNo" Type="bigint" Nullable="false" />
-          <Property Name="LineNo" Type="bigint" Nullable="false" />
-          <Property Name="LineType" Type="int" />
-          <Property Name="StyleID" Type="varchar" MaxLength="25" />
-          <Property Name="ColourID" Type="varchar" MaxLength="15" />
-          <Property Name="SizeID" Type="varchar" MaxLength="10" />
-          <Property Name="Description" Type="varchar" MaxLength="100" />
-          <Property Name="Price" Type="decimal" Precision="20" Scale="4" />
-          <Property Name="Cost" Type="decimal" Precision="20" Scale="4" />
-          <Property Name="OrdQty" Type="bigint" />
-          <Property Name="AllQty" Type="bigint" />
-          <Property Name="InvQty" Type="bigint" />
-          <Property Name="DespQty" Type="bigint" />
-          <Property Name="CommissionRate" Type="double" />
-          <Property Name="Discount" Type="double" />
-          <Property Name="Deliverydate" Type="date" />
-          <Property Name="VatCode" Type="int" />
-          <Property Name="NomCode" Type="int" />
-          <Property Name="PartShip" Type="tinyint" />
-          <Property Name="LineNoRef" Type="float" />
-          <Property Name="Currency_Exchange_Rate" Type="double" />
-          <Property Name="StyleIDref" Type="varchar" MaxLength="15" />
-          <Property Name="FreeText" Type="varchar" MaxLength="250" />
-          <Property Name="RepID" Type="bigint" />
-          <Property Name="RepRate" Type="double" />
-          <Property Name="KamID" Type="bigint" />
-          <Property Name="KAMRate" Type="double" />
-          <Property Name="IssueUOM" Type="bigint" />
-          <Property Name="IssueQty" Type="double" />
-          <Property Name="StockingUOM" Type="bigint" />
-          <Property Name="OriginalOrderNo" Type="bigint" />
-          <Property Name="OriginalLineNo" Type="bigint" />
-          <Property Name="SOPDETAIL1" Type="varchar" MaxLength="100" />
-          <Property Name="SOPDETAIL2" Type="varchar" MaxLength="100" />
-          <Property Name="SOPDETAIL3" Type="varchar" MaxLength="100" />
-          <Property Name="SOPDETAIL4" Type="varchar" MaxLength="100" />
-          <Property Name="SOPDETAIL5" Type="varchar" MaxLength="100" />
-          <Property Name="Jobsheetno" Type="int" />
-          <Property Name="JobsheetLineNo" Type="int" />
-          <Property Name="AssemblyID" Type="int" />
-          <Property Name="AsmLineNo" Type="int" />
-          <Property Name="ReasonCode" Type="int" />
-          <Property Name="ReturnOrderNo" Type="bigint" />
-          <Property Name="ReturnLineNo" Type="bigint" />
-        </EntityType>
         <EntityType Name="tblsop_salesorder_header">
           <Key>
             <PropertyRef Name="CompanyID" />
@@ -2903,81 +2857,6 @@ warning 6002: The table/view 'def.e4kmaximusdb.tblsop_salesorder_detail_console'
           <Property Name="ContactName" Type="varchar" MaxLength="150" />
         </EntityType>
         <EntityType Name="tblsop_salesorder_header_atlasfm">
-          <Key>
-            <PropertyRef Name="CompanyID" />
-            <PropertyRef Name="OrderNo" />
-          </Key>
-          <Property Name="CompanyID" Type="varchar" MaxLength="3" Nullable="false" />
-          <Property Name="WarehouseID" Type="varchar" MaxLength="50" />
-          <Property Name="OrderNo" Type="bigint" Nullable="false" />
-          <Property Name="CustID" Type="varchar" MaxLength="10" />
-          <Property Name="OrderDate" Type="date" />
-          <Property Name="InvDesc" Type="varchar" MaxLength="50" />
-          <Property Name="InvAddress1" Type="varchar" MaxLength="50" />
-          <Property Name="InvAddress2" Type="varchar" MaxLength="50" />
-          <Property Name="InvAddress3" Type="varchar" MaxLength="50" />
-          <Property Name="InvCity" Type="varchar" MaxLength="50" />
-          <Property Name="InvTown" Type="varchar" MaxLength="50" />
-          <Property Name="InvPostCode" Type="varchar" MaxLength="50" />
-          <Property Name="InvCountry" Type="varchar" MaxLength="50" />
-          <Property Name="DelDesc" Type="varchar" MaxLength="50" />
-          <Property Name="DelAddress1" Type="varchar" MaxLength="50" />
-          <Property Name="DelAddress2" Type="varchar" MaxLength="50" />
-          <Property Name="DelAddress3" Type="varchar" MaxLength="50" />
-          <Property Name="DelCity" Type="varchar" MaxLength="50" />
-          <Property Name="DelTown" Type="varchar" MaxLength="50" />
-          <Property Name="DelPostCode" Type="varchar" MaxLength="50" />
-          <Property Name="DelCountry" Type="varchar" MaxLength="50" />
-          <Property Name="CustRef" Type="varchar" MaxLength="50" />
-          <Property Name="ContractRef" Type="varchar" MaxLength="50" />
-          <Property Name="Comments" Type="varchar" MaxLength="250" />
-          <Property Name="InvoiceDate" Type="date" />
-          <Property Name="Carrier" Type="varchar" MaxLength="12" />
-          <Property Name="CarrierCharge" Type="decimal" Precision="20" Scale="4" />
-          <Property Name="CustDisc" Type="double" />
-          <Property Name="SettDisc" Type="double" />
-          <Property Name="VolDisc" Type="double" />
-          <Property Name="SettlementDays" Type="int" />
-          <Property Name="OrderConfirm" Type="utinyint" />
-          <Property Name="CommentsExternal" Type="varchar" MaxLength="250" />
-          <Property Name="Cancelled" Type="tinyint" />
-          <Property Name="ProForma" Type="tinyint" />
-          <Property Name="Completed" Type="tinyint" />
-          <Property Name="WorksOrderNo" Type="double" />
-          <Property Name="AllowPartShipment" Type="tinyint" />
-          <Property Name="TotalGoods" Type="double" />
-          <Property Name="OrderGoods" Type="double" />
-          <Property Name="UserID" Type="varchar" MaxLength="20" />
-          <Property Name="pRINTINVOICE" Type="tinyint" />
-          <Property Name="Currency_Exchange_Rate" Type="double" />
-          <Property Name="PinNo" Type="varchar" MaxLength="50" />
-          <Property Name="UCodeId" Type="varchar" MaxLength="50" />
-          <Property Name="ContractNo" Type="varchar" MaxLength="50" />
-          <Property Name="Currency_Exchange_Code" Type="varchar" MaxLength="50" />
-          <Property Name="TIMEOFENTRY" Type="time" Precision="0" />
-          <Property Name="RepID" Type="bigint" />
-          <Property Name="RepNo" Type="bigint" />
-          <Property Name="OnlineConfirm" Type="tinyint" />
-          <Property Name="OnlineConfirmDate" Type="datetime" Precision="0" />
-          <Property Name="OnlineConfirmedBy" Type="varchar" MaxLength="50" />
-          <Property Name="OnlineProcessed" Type="tinyint" />
-          <Property Name="OnlineProcessedDate" Type="datetime" Precision="0" />
-          <Property Name="OnlineProcessedBy" Type="varchar" MaxLength="50" />
-          <Property Name="ReasonCode" Type="int" />
-          <Property Name="OnlineUserID" Type="varchar" MaxLength="30" />
-          <Property Name="OrderAnalysisCode1" Type="varchar" MaxLength="30" />
-          <Property Name="OrderAnalysisCode2" Type="varchar" MaxLength="30" />
-          <Property Name="OrderAnalysisCode3" Type="varchar" MaxLength="30" />
-          <Property Name="OrderAnalysisCode4" Type="varchar" MaxLength="30" />
-          <Property Name="OrderAnalysisCode5" Type="varchar" MaxLength="30" />
-          <Property Name="PrintLabel" Type="tinyint" />
-          <Property Name="ProFormaPrint" Type="tinyint" />
-          <Property Name="ConfirmPrint" Type="tinyint" />
-          <Property Name="OrderType" Type="varchar" MaxLength="2" />
-          <Property Name="EmailID" Type="varchar" MaxLength="200" />
-          <Property Name="ContactName" Type="varchar" MaxLength="150" />
-        </EntityType>
-        <EntityType Name="tblsop_salesorder_header_before_merge">
           <Key>
             <PropertyRef Name="CompanyID" />
             <PropertyRef Name="OrderNo" />
@@ -3199,81 +3078,6 @@ warning 6002: The table/view 'def.e4kmaximusdb.tblsop_salesorder_header_console'
           <Property Name="EmailID" Type="varchar" MaxLength="200" />
           <Property Name="ContactName" Type="varchar" MaxLength="150" />
         </EntityType>
-        <EntityType Name="tblsop_salesorder_header_tremot02">
-          <Key>
-            <PropertyRef Name="CompanyID" />
-            <PropertyRef Name="OrderNo" />
-          </Key>
-          <Property Name="CompanyID" Type="varchar" MaxLength="3" Nullable="false" />
-          <Property Name="WarehouseID" Type="varchar" MaxLength="50" />
-          <Property Name="OrderNo" Type="bigint" Nullable="false" />
-          <Property Name="CustID" Type="varchar" MaxLength="10" />
-          <Property Name="OrderDate" Type="date" />
-          <Property Name="InvDesc" Type="varchar" MaxLength="50" />
-          <Property Name="InvAddress1" Type="varchar" MaxLength="50" />
-          <Property Name="InvAddress2" Type="varchar" MaxLength="50" />
-          <Property Name="InvAddress3" Type="varchar" MaxLength="50" />
-          <Property Name="InvCity" Type="varchar" MaxLength="50" />
-          <Property Name="InvTown" Type="varchar" MaxLength="50" />
-          <Property Name="InvPostCode" Type="varchar" MaxLength="50" />
-          <Property Name="InvCountry" Type="varchar" MaxLength="50" />
-          <Property Name="DelDesc" Type="varchar" MaxLength="50" />
-          <Property Name="DelAddress1" Type="varchar" MaxLength="50" />
-          <Property Name="DelAddress2" Type="varchar" MaxLength="50" />
-          <Property Name="DelAddress3" Type="varchar" MaxLength="50" />
-          <Property Name="DelCity" Type="varchar" MaxLength="50" />
-          <Property Name="DelTown" Type="varchar" MaxLength="50" />
-          <Property Name="DelPostCode" Type="varchar" MaxLength="50" />
-          <Property Name="DelCountry" Type="varchar" MaxLength="50" />
-          <Property Name="CustRef" Type="varchar" MaxLength="50" />
-          <Property Name="ContractRef" Type="varchar" MaxLength="50" />
-          <Property Name="Comments" Type="varchar" MaxLength="250" />
-          <Property Name="InvoiceDate" Type="date" />
-          <Property Name="Carrier" Type="varchar" MaxLength="12" />
-          <Property Name="CarrierCharge" Type="decimal" Precision="20" Scale="4" />
-          <Property Name="CustDisc" Type="double" />
-          <Property Name="SettDisc" Type="double" />
-          <Property Name="VolDisc" Type="double" />
-          <Property Name="SettlementDays" Type="int" />
-          <Property Name="OrderConfirm" Type="utinyint" />
-          <Property Name="CommentsExternal" Type="varchar" MaxLength="250" />
-          <Property Name="Cancelled" Type="tinyint" />
-          <Property Name="ProForma" Type="tinyint" />
-          <Property Name="Completed" Type="tinyint" />
-          <Property Name="WorksOrderNo" Type="double" />
-          <Property Name="AllowPartShipment" Type="tinyint" />
-          <Property Name="TotalGoods" Type="double" />
-          <Property Name="OrderGoods" Type="double" />
-          <Property Name="UserID" Type="varchar" MaxLength="20" />
-          <Property Name="pRINTINVOICE" Type="tinyint" />
-          <Property Name="Currency_Exchange_Rate" Type="double" />
-          <Property Name="PinNo" Type="varchar" MaxLength="50" />
-          <Property Name="UCodeId" Type="varchar" MaxLength="50" />
-          <Property Name="ContractNo" Type="varchar" MaxLength="50" />
-          <Property Name="Currency_Exchange_Code" Type="varchar" MaxLength="50" />
-          <Property Name="TIMEOFENTRY" Type="time" Precision="0" />
-          <Property Name="RepID" Type="bigint" />
-          <Property Name="RepNo" Type="bigint" />
-          <Property Name="OnlineConfirm" Type="tinyint" />
-          <Property Name="OnlineConfirmDate" Type="datetime" Precision="0" />
-          <Property Name="OnlineConfirmedBy" Type="varchar" MaxLength="50" />
-          <Property Name="OnlineProcessed" Type="tinyint" />
-          <Property Name="OnlineProcessedDate" Type="datetime" Precision="0" />
-          <Property Name="OnlineProcessedBy" Type="varchar" MaxLength="50" />
-          <Property Name="ReasonCode" Type="int" />
-          <Property Name="OnlineUserID" Type="varchar" MaxLength="30" />
-          <Property Name="OrderAnalysisCode1" Type="varchar" MaxLength="30" />
-          <Property Name="OrderAnalysisCode2" Type="varchar" MaxLength="30" />
-          <Property Name="OrderAnalysisCode3" Type="varchar" MaxLength="30" />
-          <Property Name="OrderAnalysisCode4" Type="varchar" MaxLength="30" />
-          <Property Name="OrderAnalysisCode5" Type="varchar" MaxLength="30" />
-          <Property Name="PrintLabel" Type="tinyint" />
-          <Property Name="ProFormaPrint" Type="tinyint" />
-          <Property Name="ConfirmPrint" Type="tinyint" />
-          <Property Name="OrderType" Type="varchar" MaxLength="2" />
-          <Property Name="EmailID" Type="varchar" MaxLength="200" />
-          <Property Name="ContactName" Type="varchar" MaxLength="150" />
-        </EntityType>
         <EntityType Name="tblsqlstrings">
           <Key>
             <PropertyRef Name="ID" />
@@ -3482,134 +3286,6 @@ warning 6002: The table/view 'def.e4kmaximusdb.tblupload_orderheader' does not h
           <Property Name="Fax" Type="varchar" MaxLength="15" />
           <Property Name="Email" Type="varchar" MaxLength="50" />
           <Property Name="VATno" Type="varchar" MaxLength="12" />
-        </EntityType>
-        <EntityType Name="tsb_tblsop_salesorder_detail_merge">
-          <Key>
-            <PropertyRef Name="CompanyID" />
-            <PropertyRef Name="OrderNo" />
-            <PropertyRef Name="LineNo" />
-          </Key>
-          <Property Name="CompanyID" Type="varchar" MaxLength="3" Nullable="false" />
-          <Property Name="Warehouseid" Type="varchar" MaxLength="10" />
-          <Property Name="OrderNo" Type="bigint" Nullable="false" />
-          <Property Name="LineNo" Type="bigint" Nullable="false" />
-          <Property Name="LineType" Type="int" />
-          <Property Name="StyleID" Type="varchar" MaxLength="25" />
-          <Property Name="ColourID" Type="varchar" MaxLength="15" />
-          <Property Name="SizeID" Type="varchar" MaxLength="10" />
-          <Property Name="Description" Type="varchar" MaxLength="100" />
-          <Property Name="Price" Type="decimal" Precision="20" Scale="4" />
-          <Property Name="Cost" Type="decimal" Precision="20" Scale="4" />
-          <Property Name="OrdQty" Type="bigint" />
-          <Property Name="AllQty" Type="bigint" />
-          <Property Name="InvQty" Type="bigint" />
-          <Property Name="DespQty" Type="bigint" />
-          <Property Name="CommissionRate" Type="double" />
-          <Property Name="Discount" Type="double" />
-          <Property Name="Deliverydate" Type="date" />
-          <Property Name="VatCode" Type="int" />
-          <Property Name="NomCode" Type="int" />
-          <Property Name="PartShip" Type="tinyint" />
-          <Property Name="LineNoRef" Type="float" />
-          <Property Name="Currency_Exchange_Rate" Type="double" />
-          <Property Name="StyleIDref" Type="varchar" MaxLength="15" />
-          <Property Name="FreeText" Type="varchar" MaxLength="250" />
-          <Property Name="RepID" Type="bigint" />
-          <Property Name="RepRate" Type="double" />
-          <Property Name="KamID" Type="bigint" />
-          <Property Name="KAMRate" Type="double" />
-          <Property Name="IssueUOM" Type="bigint" />
-          <Property Name="IssueQty" Type="double" />
-          <Property Name="StockingUOM" Type="bigint" />
-          <Property Name="OriginalOrderNo" Type="bigint" />
-          <Property Name="OriginalLineNo" Type="bigint" />
-          <Property Name="SOPDETAIL1" Type="varchar" MaxLength="100" />
-          <Property Name="SOPDETAIL2" Type="varchar" MaxLength="100" />
-          <Property Name="SOPDETAIL3" Type="varchar" MaxLength="100" />
-          <Property Name="SOPDETAIL4" Type="varchar" MaxLength="100" />
-          <Property Name="SOPDETAIL5" Type="varchar" MaxLength="100" />
-          <Property Name="Jobsheetno" Type="int" />
-          <Property Name="JobsheetLineNo" Type="int" />
-          <Property Name="AssemblyID" Type="int" />
-          <Property Name="AsmLineNo" Type="int" />
-          <Property Name="ReasonCode" Type="int" />
-          <Property Name="ReturnOrderNo" Type="bigint" />
-          <Property Name="ReturnLineNo" Type="bigint" />
-        </EntityType>
-        <EntityType Name="tsb_tblsop_salesorder_header_merge">
-          <Key>
-            <PropertyRef Name="CompanyID" />
-            <PropertyRef Name="OrderNo" />
-          </Key>
-          <Property Name="CompanyID" Type="varchar" MaxLength="3" Nullable="false" />
-          <Property Name="WarehouseID" Type="varchar" MaxLength="50" />
-          <Property Name="OrderNo" Type="bigint" Nullable="false" />
-          <Property Name="CustID" Type="varchar" MaxLength="10" />
-          <Property Name="OrderDate" Type="date" />
-          <Property Name="InvDesc" Type="varchar" MaxLength="50" />
-          <Property Name="InvAddress1" Type="varchar" MaxLength="50" />
-          <Property Name="InvAddress2" Type="varchar" MaxLength="50" />
-          <Property Name="InvAddress3" Type="varchar" MaxLength="50" />
-          <Property Name="InvCity" Type="varchar" MaxLength="50" />
-          <Property Name="InvTown" Type="varchar" MaxLength="50" />
-          <Property Name="InvPostCode" Type="varchar" MaxLength="50" />
-          <Property Name="InvCountry" Type="varchar" MaxLength="50" />
-          <Property Name="DelDesc" Type="varchar" MaxLength="50" />
-          <Property Name="DelAddress1" Type="varchar" MaxLength="50" />
-          <Property Name="DelAddress2" Type="varchar" MaxLength="50" />
-          <Property Name="DelAddress3" Type="varchar" MaxLength="50" />
-          <Property Name="DelCity" Type="varchar" MaxLength="50" />
-          <Property Name="DelTown" Type="varchar" MaxLength="50" />
-          <Property Name="DelPostCode" Type="varchar" MaxLength="50" />
-          <Property Name="DelCountry" Type="varchar" MaxLength="50" />
-          <Property Name="CustRef" Type="varchar" MaxLength="50" />
-          <Property Name="ContractRef" Type="varchar" MaxLength="50" />
-          <Property Name="Comments" Type="varchar" MaxLength="250" />
-          <Property Name="InvoiceDate" Type="date" />
-          <Property Name="Carrier" Type="varchar" MaxLength="12" />
-          <Property Name="CarrierCharge" Type="decimal" Precision="20" Scale="4" />
-          <Property Name="CustDisc" Type="double" />
-          <Property Name="SettDisc" Type="double" />
-          <Property Name="VolDisc" Type="double" />
-          <Property Name="SettlementDays" Type="int" />
-          <Property Name="OrderConfirm" Type="utinyint" />
-          <Property Name="CommentsExternal" Type="varchar" MaxLength="250" />
-          <Property Name="Cancelled" Type="tinyint" />
-          <Property Name="ProForma" Type="tinyint" />
-          <Property Name="Completed" Type="tinyint" />
-          <Property Name="WorksOrderNo" Type="double" />
-          <Property Name="AllowPartShipment" Type="tinyint" />
-          <Property Name="TotalGoods" Type="double" />
-          <Property Name="OrderGoods" Type="double" />
-          <Property Name="UserID" Type="varchar" MaxLength="20" />
-          <Property Name="pRINTINVOICE" Type="tinyint" />
-          <Property Name="Currency_Exchange_Rate" Type="double" />
-          <Property Name="PinNo" Type="varchar" MaxLength="50" />
-          <Property Name="UCodeId" Type="varchar" MaxLength="50" />
-          <Property Name="ContractNo" Type="varchar" MaxLength="50" />
-          <Property Name="Currency_Exchange_Code" Type="varchar" MaxLength="50" />
-          <Property Name="TIMEOFENTRY" Type="time" Precision="0" />
-          <Property Name="RepID" Type="bigint" />
-          <Property Name="RepNo" Type="bigint" />
-          <Property Name="OnlineConfirm" Type="tinyint" />
-          <Property Name="OnlineConfirmDate" Type="datetime" Precision="0" />
-          <Property Name="OnlineConfirmedBy" Type="varchar" MaxLength="50" />
-          <Property Name="OnlineProcessed" Type="tinyint" />
-          <Property Name="OnlineProcessedDate" Type="datetime" Precision="0" />
-          <Property Name="OnlineProcessedBy" Type="varchar" MaxLength="50" />
-          <Property Name="ReasonCode" Type="int" />
-          <Property Name="OnlineUserID" Type="varchar" MaxLength="30" />
-          <Property Name="OrderAnalysisCode1" Type="varchar" MaxLength="30" />
-          <Property Name="OrderAnalysisCode2" Type="varchar" MaxLength="30" />
-          <Property Name="OrderAnalysisCode3" Type="varchar" MaxLength="30" />
-          <Property Name="OrderAnalysisCode4" Type="varchar" MaxLength="30" />
-          <Property Name="OrderAnalysisCode5" Type="varchar" MaxLength="30" />
-          <Property Name="PrintLabel" Type="tinyint" />
-          <Property Name="ProFormaPrint" Type="tinyint" />
-          <Property Name="ConfirmPrint" Type="tinyint" />
-          <Property Name="OrderType" Type="varchar" MaxLength="2" />
-          <Property Name="EmailID" Type="varchar" MaxLength="200" />
-          <Property Name="ContactName" Type="varchar" MaxLength="150" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'def.e4kmaximusdb.ucode_employee_rollout_tsb' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -3947,12 +3623,28 @@ warning 6002: The table/view 'def.e4kmaximusdb.styleby_freetextview' does not ha
           <Key>
             <PropertyRef Name="CompanyID" />
             <PropertyRef Name="StyleID" />
+            <PropertyRef Name="FreeText" />
           </Key>
           <Property Name="CompanyID" Type="varchar" MaxLength="3" Nullable="false" />
           <Property Name="StyleID" Type="text" Nullable="false" />
           <Property Name="StyleImage" Type="varchar" MaxLength="255" />
           <Property Name="Product_Group" Type="int" />
-          <Property Name="FreeText" Type="text" />
+          <Property Name="FreeText" Type="text" Nullable="false" />
+        </EntityType>
+        <!--Errors Found During Generation:
+warning 6002: The table/view 'def.e4kmaximusdb.styleby_freetextview_ucode' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="styleby_freetextview_ucode">
+          <Key>
+            <PropertyRef Name="CompanyID" />
+            <PropertyRef Name="StyleID" />
+            <PropertyRef Name="FreeText" />
+          </Key>
+          <Property Name="CompanyID" Type="varchar" MaxLength="3" Nullable="false" />
+          <Property Name="StyleID" Type="text" Nullable="false" />
+          <Property Name="StyleImage" Type="varchar" MaxLength="255" />
+          <Property Name="Product_Group" Type="int" />
+          <Property Name="UCodeID" Type="varchar" MaxLength="15" />
+          <Property Name="FreeText" Type="text" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'def.e4kmaximusdb.stylebytemplateview' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -3961,10 +3653,9 @@ warning 6002: The table/view 'def.e4kmaximusdb.stylebytemplateview' does not hav
             <PropertyRef Name="CompanyID" />
             <PropertyRef Name="Template" />
             <PropertyRef Name="BusinessID" />
-            <PropertyRef Name="StyleID" />
           </Key>
           <Property Name="CompanyID" Type="varchar" MaxLength="3" Nullable="false" />
-          <Property Name="StyleID" Type="text" Nullable="false" />
+          <Property Name="StyleID" Type="text" />
           <Property Name="StyleImage" Type="varchar" MaxLength="255" />
           <Property Name="Product_Group" Type="int" />
           <Property Name="Template" Type="varchar" MaxLength="50" Nullable="false" />
@@ -3993,13 +3684,15 @@ warning 6002: The table/view 'def.e4kmaximusdb.ucodeby_freetextview' does not ha
             <PropertyRef Name="CompanyID" />
             <PropertyRef Name="UCodeID" />
             <PropertyRef Name="StyleID" />
+            <PropertyRef Name="FreeText" />
+            <PropertyRef Name="DimFreeText" />
           </Key>
           <Property Name="CompanyID" Type="varchar" MaxLength="3" Nullable="false" />
           <Property Name="StyleID" Type="text" Nullable="false" />
           <Property Name="StyleImage" Type="varchar" MaxLength="255" />
           <Property Name="Product_Group" Type="int" />
-          <Property Name="FreeText" Type="text" />
-          <Property Name="DimFreeText" Type="text" />
+          <Property Name="FreeText" Type="text" Nullable="false" />
+          <Property Name="DimFreeText" Type="text" Nullable="false" />
           <Property Name="UCodeID" Type="varchar" MaxLength="15" Nullable="false" />
           <Property Name="SeqNo" Type="int" />
         </EntityType>
@@ -4313,6 +4006,21 @@ warning 6002: The table/view 'def.e4kmaximusdb.view_reissueorderwithnormalucode'
           <Property Name="OrderType" Type="varchar" MaxLength="2" />
         </EntityType>
         <!--Errors Found During Generation:
+warning 6002: The table/view 'def.e4kmaximusdb.view_totalpointsused' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
+        <EntityType Name="view_totalpointsused">
+          <Key>
+            <PropertyRef Name="BusinessID" />
+            <PropertyRef Name="EmployeeID" />
+            <PropertyRef Name="StyleID" />
+            <PropertyRef Name="ColourID" />
+          </Key>
+          <Property Name="BusinessID" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="EmployeeID" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="StyleID" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="ColourID" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="TOTSOPOINTS" Type="decimal" Precision="34" Scale="0" />
+        </EntityType>
+        <!--Errors Found During Generation:
 warning 6002: The table/view 'def.e4kmaximusdb.view_ucode_freetext_tsb_rollout' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="view_ucode_freetext_tsb_rollout">
           <Key>
@@ -4424,6 +4132,7 @@ warning 6002: The table/view 'def.e4kmaximusdb.view_unmatchedordercolourid' does
           <EntitySet Name="hr_tsb_delivery_day" EntityType="Self.hr_tsb_delivery_day" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="hr_tsb_leavers" EntityType="Self.hr_tsb_leavers" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="hr_tsb_leavers_2019_final" EntityType="Self.hr_tsb_leavers_2019_final" Schema="e4kmaximusdb" store:Type="Tables" />
+          <EntitySet Name="ht_kbus" EntityType="Self.ht_kbus" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="ht_tsb_2020_custref_change" EntityType="Self.ht_tsb_2020_custref_change" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="my_aspnet_applications" EntityType="Self.my_aspnet_applications" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="my_aspnet_membership" EntityType="Self.my_aspnet_membership" Schema="e4kmaximusdb" store:Type="Tables" />
@@ -4446,6 +4155,7 @@ warning 6002: The table/view 'def.e4kmaximusdb.view_unmatchedordercolourid' does
           <EntitySet Name="tblaccemp_employee_rollout" EntityType="Self.tblaccemp_employee_rollout" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblaccemp_employee_rollout_atlasfm" EntityType="Self.tblaccemp_employee_rollout_atlasfm" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblaccemp_points" EntityType="Self.tblaccemp_points" Schema="e4kmaximusdb" store:Type="Tables" />
+          <EntitySet Name="tblaccemp_pointsadjustment" EntityType="Self.tblaccemp_pointsadjustment" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblaccemp_pointscard" EntityType="Self.tblaccemp_pointscard" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblaccemp_rollout_names" EntityType="Self.tblaccemp_rollout_names" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblaccemp_rollout_ucode_ref" EntityType="Self.tblaccemp_rollout_ucode_ref" Schema="e4kmaximusdb" store:Type="Tables" />
@@ -4482,6 +4192,7 @@ warning 6002: The table/view 'def.e4kmaximusdb.view_unmatchedordercolourid' does
           <EntitySet Name="tblchildmenu" EntityType="Self.tblchildmenu" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblchildmenu_new" EntityType="Self.tblchildmenu_new" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblchildmenu_newlayout" EntityType="Self.tblchildmenu_newlayout" Schema="e4kmaximusdb" store:Type="Tables" />
+          <EntitySet Name="tblchildmenu_newlayout_newsystem" EntityType="Self.tblchildmenu_newlayout_newsystem" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblcmp_defaults" EntityType="Self.tblcmp_defaults" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblcompany" EntityType="Self.tblcompany" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblcontent_lang" EntityType="Self.tblcontent_lang" Schema="e4kmaximusdb" store:Type="Tables" />
@@ -4531,11 +4242,13 @@ warning 6002: The table/view 'def.e4kmaximusdb.view_unmatchedordercolourid' does
           <EntitySet Name="tblonline_userid_employee" EntityType="Self.tblonline_userid_employee" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblonline_userid_employee_atlasfm" EntityType="Self.tblonline_userid_employee_atlasfm" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblonline_userid_favourites" EntityType="Self.tblonline_userid_favourites" Schema="e4kmaximusdb" store:Type="Tables" />
+          <EntitySet Name="tblonlinebus_carriage" EntityType="Self.tblonlinebus_carriage" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblonlinesop_carriage" EntityType="Self.tblonlinesop_carriage" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblonlinesop_sitecode" EntityType="Self.tblonlinesop_sitecode" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblparentmenu" EntityType="Self.tblparentmenu" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblparentmenu_new" EntityType="Self.tblparentmenu_new" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblparentmenu_newlayout" EntityType="Self.tblparentmenu_newlayout" Schema="e4kmaximusdb" store:Type="Tables" />
+          <EntitySet Name="tblparentmenu_newlayout_newsystem" EntityType="Self.tblparentmenu_newlayout_newsystem" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblpayment_gateways" EntityType="Self.tblpayment_gateways" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblpayment_trans" EntityType="Self.tblpayment_trans" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblpermission_controls" EntityType="Self.tblpermission_controls" Schema="e4kmaximusdb" store:Type="Tables" />
@@ -4570,21 +4283,15 @@ warning 6002: The table/view 'def.e4kmaximusdb.view_unmatchedordercolourid' does
           <EntitySet Name="tblsop_salesorder_approved" EntityType="Self.tblsop_salesorder_approved" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblsop_salesorder_detail" EntityType="Self.tblsop_salesorder_detail" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblsop_salesorder_detail_atlasfm" EntityType="Self.tblsop_salesorder_detail_atlasfm" Schema="e4kmaximusdb" store:Type="Tables" />
-          <EntitySet Name="tblsop_salesorder_detail_before_merge" EntityType="Self.tblsop_salesorder_detail_before_merge" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblsop_salesorder_detail_offline" EntityType="Self.tblsop_salesorder_detail_offline" Schema="e4kmaximusdb" store:Type="Tables" />
-          <EntitySet Name="tblsop_salesorder_detail_tremot02" EntityType="Self.tblsop_salesorder_detail_tremot02" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblsop_salesorder_header" EntityType="Self.tblsop_salesorder_header" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblsop_salesorder_header_atlasfm" EntityType="Self.tblsop_salesorder_header_atlasfm" Schema="e4kmaximusdb" store:Type="Tables" />
-          <EntitySet Name="tblsop_salesorder_header_before_merge" EntityType="Self.tblsop_salesorder_header_before_merge" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblsop_salesorder_header_offline" EntityType="Self.tblsop_salesorder_header_offline" Schema="e4kmaximusdb" store:Type="Tables" />
-          <EntitySet Name="tblsop_salesorder_header_tremot02" EntityType="Self.tblsop_salesorder_header_tremot02" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblsqlstrings" EntityType="Self.tblsqlstrings" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblupdate_status_three" EntityType="Self.tblupdate_status_three" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblusers" EntityType="Self.tblusers" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblwho_warehouses" EntityType="Self.tblwho_warehouses" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblwho_warehousesx" EntityType="Self.tblwho_warehousesx" Schema="e4kmaximusdb" store:Type="Tables" />
-          <EntitySet Name="tsb_tblsop_salesorder_detail_merge" EntityType="Self.tsb_tblsop_salesorder_detail_merge" Schema="e4kmaximusdb" store:Type="Tables" />
-          <EntitySet Name="tsb_tblsop_salesorder_header_merge" EntityType="Self.tsb_tblsop_salesorder_header_merge" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="xml_salesorder_detail" EntityType="Self.xml_salesorder_detail" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="xml_salesorder_header" EntityType="Self.xml_salesorder_header" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="bak_tblaccemp_employee_tsb" EntityType="Self.bak_tblaccemp_employee_tsb" store:Type="Tables" store:Schema="e4kmaximusdb">
@@ -5133,6 +4840,16 @@ FROM `style_dimfitalloc_caption` AS `style_dimfitalloc_caption`</DefiningQuery>
 `styleby_freetextview`.`FreeText`
 FROM `styleby_freetextview` AS `styleby_freetextview`</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="styleby_freetextview_ucode" EntityType="Self.styleby_freetextview_ucode" store:Type="Views" store:Schema="e4kmaximusdb">
+            <DefiningQuery>SELECT
+`styleby_freetextview_ucode`.`CompanyID`, 
+`styleby_freetextview_ucode`.`StyleID`, 
+`styleby_freetextview_ucode`.`StyleImage`, 
+`styleby_freetextview_ucode`.`Product_Group`, 
+`styleby_freetextview_ucode`.`UCodeID`, 
+`styleby_freetextview_ucode`.`FreeText`
+FROM `styleby_freetextview_ucode` AS `styleby_freetextview_ucode`</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="stylebytemplateview" EntityType="Self.stylebytemplateview" store:Type="Views" store:Schema="e4kmaximusdb">
             <DefiningQuery>SELECT
 `stylebytemplateview`.`CompanyID`, 
@@ -5442,6 +5159,15 @@ FROM `view_privateorders` AS `view_privateorders`</DefiningQuery>
 `view_reissueorderwithnormalucode`.`OrderType`
 FROM `view_reissueorderwithnormalucode` AS `view_reissueorderwithnormalucode`</DefiningQuery>
           </EntitySet>
+          <EntitySet Name="view_totalpointsused" EntityType="Self.view_totalpointsused" store:Type="Views" store:Schema="e4kmaximusdb">
+            <DefiningQuery>SELECT
+`view_totalpointsused`.`BusinessID`, 
+`view_totalpointsused`.`EmployeeID`, 
+`view_totalpointsused`.`StyleID`, 
+`view_totalpointsused`.`ColourID`, 
+`view_totalpointsused`.`TOTSOPOINTS`
+FROM `view_totalpointsused` AS `view_totalpointsused`</DefiningQuery>
+          </EntitySet>
           <EntitySet Name="view_ucode_freetext_tsb_rollout" EntityType="Self.view_ucode_freetext_tsb_rollout" store:Type="Views" store:Schema="e4kmaximusdb">
             <DefiningQuery>SELECT
 `view_ucode_freetext_tsb_rollout`.`UCodeID`, 
@@ -5689,6 +5415,14 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
           <Property Name="SortCode" Type="Int32" Nullable="false" />
           <Property Name="IsClosed" Type="String" MaxLength="1" FixedLength="false" Unicode="false" Nullable="false" />
         </EntityType>
+        <EntityType Name="ht_kbus">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Forname" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="Surname" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+        </EntityType>
         <EntityType Name="ht_tsb_2020_custref_change">
           <Key>
             <PropertyRef Name="OrderNo" />
@@ -5934,6 +5668,7 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
           <Property Name="IsProcessed" Type="Boolean" Nullable="false" />
           <Property Name="PrevOrder" Type="Int32" />
           <Property Name="RolloutName" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="NextOrder" Type="DateTime" />
         </EntityType>
         <EntityType Name="tblaccemp_employee_rollout_atlasfm">
           <Key>
@@ -5963,6 +5698,20 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
           <Property Name="ToDate" Type="DateTime" />
           <Property Name="TotalPoints" Type="Int32" />
           <Property Name="RoleDesc" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="tblaccemp_pointsadjustment">
+          <Key>
+            <PropertyRef Name="CompanyID" />
+            <PropertyRef Name="BusinessID" />
+            <PropertyRef Name="UcodeID" />
+            <PropertyRef Name="StyleID" />
+            <PropertyRef Name="MapStyleID" />
+          </Key>
+          <Property Name="CompanyID" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="BusinessID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="UcodeID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="StyleID" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="MapStyleID" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
         </EntityType>
         <EntityType Name="tblaccemp_pointscard">
           <Key>
@@ -6485,6 +6234,21 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
           <Property Name="OnlyNewLayout" Type="SByte" />
         </EntityType>
         <EntityType Name="tblchildmenu_newlayout">
+          <Key>
+            <PropertyRef Name="ParentID" />
+            <PropertyRef Name="ChildID" />
+          </Key>
+          <Property Name="ParentID" Type="Int32" Nullable="false" />
+          <Property Name="ChildID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="IsEnable" Type="SByte" />
+          <Property Name="SeqNo" Type="Int32" />
+          <Property Name="URL" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="TitleDesc" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
+          <Property Name="IsPopUp" Type="SByte" />
+          <Property Name="OnlyNewLayout" Type="SByte" />
+        </EntityType>
+        <EntityType Name="tblchildmenu_newlayout_newsystem">
           <Key>
             <PropertyRef Name="ParentID" />
             <PropertyRef Name="ChildID" />
@@ -7125,6 +6889,16 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
           <Property Name="SubGroupID" Type="Int32" Nullable="false" />
           <Property Name="StyleID" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
         </EntityType>
+        <EntityType Name="tblonlinebus_carriage">
+          <Key>
+            <PropertyRef Name="CompanyId" />
+            <PropertyRef Name="StyleID" />
+            <PropertyRef Name="BusinessID" />
+          </Key>
+          <Property Name="CompanyId" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="StyleID" Type="String" MaxLength="25" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="BusinessID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
         <EntityType Name="tblonlinesop_carriage">
           <Key>
             <PropertyRef Name="CompanyId" />
@@ -7169,6 +6943,18 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
           <Property Name="OnlyNewLayout" Type="SByte" />
         </EntityType>
         <EntityType Name="tblparentmenu_newlayout">
+          <Key>
+            <PropertyRef Name="ParentID" />
+          </Key>
+          <Property Name="ParentID" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
+          <Property Name="IsEnable" Type="SByte" />
+          <Property Name="SeqNo" Type="Int32" />
+          <Property Name="URL" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="IsPermissionReq" Type="SByte" />
+          <Property Name="OnlyNewLayout" Type="SByte" />
+        </EntityType>
+        <EntityType Name="tblparentmenu_newlayout_newsystem">
           <Key>
             <PropertyRef Name="ParentID" />
           </Key>
@@ -7851,59 +7637,6 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
           <Property Name="ReturnOrderNo" Type="Int64" />
           <Property Name="ReturnLineNo" Type="Int64" />
         </EntityType>
-        <EntityType Name="tblsop_salesorder_detail_before_merge">
-          <Key>
-            <PropertyRef Name="CompanyID" />
-            <PropertyRef Name="OrderNo" />
-            <PropertyRef Name="LineNo" />
-          </Key>
-          <Property Name="CompanyID" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Warehouseid" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="OrderNo" Type="Int64" Nullable="false" />
-          <Property Name="LineNo" Type="Int64" Nullable="false" />
-          <Property Name="LineType" Type="Int32" />
-          <Property Name="StyleID" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
-          <Property Name="ColourID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Name="SizeID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="Price" Type="Decimal" />
-          <Property Name="Cost" Type="Decimal" />
-          <Property Name="OrdQty" Type="Int64" />
-          <Property Name="AllQty" Type="Int64" />
-          <Property Name="InvQty" Type="Int64" />
-          <Property Name="DespQty" Type="Int64" />
-          <Property Name="CommissionRate" Type="Double" />
-          <Property Name="Discount" Type="Double" />
-          <Property Name="Deliverydate" Type="DateTime" />
-          <Property Name="VatCode" Type="Int32" />
-          <Property Name="NomCode" Type="Int32" />
-          <Property Name="PartShip" Type="SByte" />
-          <Property Name="LineNoRef" Type="Single" />
-          <Property Name="Currency_Exchange_Rate" Type="Double" />
-          <Property Name="StyleIDref" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Name="FreeText" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
-          <Property Name="RepID" Type="Int64" />
-          <Property Name="RepRate" Type="Double" />
-          <Property Name="KamID" Type="Int64" />
-          <Property Name="KAMRate" Type="Double" />
-          <Property Name="IssueUOM" Type="Int64" />
-          <Property Name="IssueQty" Type="Double" />
-          <Property Name="StockingUOM" Type="Int64" />
-          <Property Name="OriginalOrderNo" Type="Int64" />
-          <Property Name="OriginalLineNo" Type="Int64" />
-          <Property Name="SOPDETAIL1" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="SOPDETAIL2" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="SOPDETAIL3" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="SOPDETAIL4" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="SOPDETAIL5" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="Jobsheetno" Type="Int32" />
-          <Property Name="JobsheetLineNo" Type="Int32" />
-          <Property Name="AssemblyID" Type="Int32" />
-          <Property Name="AsmLineNo" Type="Int32" />
-          <Property Name="ReasonCode" Type="Int32" />
-          <Property Name="ReturnOrderNo" Type="Int64" />
-          <Property Name="ReturnLineNo" Type="Int64" />
-        </EntityType>
         <EntityType Name="tblsop_salesorder_detail_offline">
           <Key>
             <PropertyRef Name="CompanyID" />
@@ -7956,59 +7689,6 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
           <Property Name="ReasonCode" Type="Int32" />
           <Property Name="ReturnOrderNo" Type="Int32" />
           <Property Name="ReturnLineNo" Type="Int32" />
-        </EntityType>
-        <EntityType Name="tblsop_salesorder_detail_tremot02">
-          <Key>
-            <PropertyRef Name="CompanyID" />
-            <PropertyRef Name="OrderNo" />
-            <PropertyRef Name="LineNo" />
-          </Key>
-          <Property Name="CompanyID" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Warehouseid" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="OrderNo" Type="Int64" Nullable="false" />
-          <Property Name="LineNo" Type="Int64" Nullable="false" />
-          <Property Name="LineType" Type="Int32" />
-          <Property Name="StyleID" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
-          <Property Name="ColourID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Name="SizeID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="Price" Type="Decimal" />
-          <Property Name="Cost" Type="Decimal" />
-          <Property Name="OrdQty" Type="Int64" />
-          <Property Name="AllQty" Type="Int64" />
-          <Property Name="InvQty" Type="Int64" />
-          <Property Name="DespQty" Type="Int64" />
-          <Property Name="CommissionRate" Type="Double" />
-          <Property Name="Discount" Type="Double" />
-          <Property Name="Deliverydate" Type="DateTime" />
-          <Property Name="VatCode" Type="Int32" />
-          <Property Name="NomCode" Type="Int32" />
-          <Property Name="PartShip" Type="SByte" />
-          <Property Name="LineNoRef" Type="Single" />
-          <Property Name="Currency_Exchange_Rate" Type="Double" />
-          <Property Name="StyleIDref" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Name="FreeText" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
-          <Property Name="RepID" Type="Int64" />
-          <Property Name="RepRate" Type="Double" />
-          <Property Name="KamID" Type="Int64" />
-          <Property Name="KAMRate" Type="Double" />
-          <Property Name="IssueUOM" Type="Int64" />
-          <Property Name="IssueQty" Type="Double" />
-          <Property Name="StockingUOM" Type="Int64" />
-          <Property Name="OriginalOrderNo" Type="Int64" />
-          <Property Name="OriginalLineNo" Type="Int64" />
-          <Property Name="SOPDETAIL1" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="SOPDETAIL2" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="SOPDETAIL3" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="SOPDETAIL4" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="SOPDETAIL5" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="Jobsheetno" Type="Int32" />
-          <Property Name="JobsheetLineNo" Type="Int32" />
-          <Property Name="AssemblyID" Type="Int32" />
-          <Property Name="AsmLineNo" Type="Int32" />
-          <Property Name="ReasonCode" Type="Int32" />
-          <Property Name="ReturnOrderNo" Type="Int64" />
-          <Property Name="ReturnLineNo" Type="Int64" />
         </EntityType>
         <EntityType Name="tblsop_salesorder_header">
           <Key>
@@ -8160,81 +7840,6 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
           <Property Name="EmailID" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="ContactName" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
         </EntityType>
-        <EntityType Name="tblsop_salesorder_header_before_merge">
-          <Key>
-            <PropertyRef Name="CompanyID" />
-            <PropertyRef Name="OrderNo" />
-          </Key>
-          <Property Name="CompanyID" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="WarehouseID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="OrderNo" Type="Int64" Nullable="false" />
-          <Property Name="CustID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="OrderDate" Type="DateTime" />
-          <Property Name="InvDesc" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="InvAddress1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="InvAddress2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="InvAddress3" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="InvCity" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="InvTown" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="InvPostCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="InvCountry" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="DelDesc" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="DelAddress1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="DelAddress2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="DelAddress3" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="DelCity" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="DelTown" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="DelPostCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="DelCountry" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="CustRef" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="ContractRef" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Comments" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
-          <Property Name="InvoiceDate" Type="DateTime" />
-          <Property Name="Carrier" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
-          <Property Name="CarrierCharge" Type="Decimal" />
-          <Property Name="CustDisc" Type="Double" />
-          <Property Name="SettDisc" Type="Double" />
-          <Property Name="VolDisc" Type="Double" />
-          <Property Name="SettlementDays" Type="Int32" />
-          <Property Name="OrderConfirm" Type="Byte" />
-          <Property Name="CommentsExternal" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
-          <Property Name="Cancelled" Type="SByte" />
-          <Property Name="ProForma" Type="SByte" />
-          <Property Name="Completed" Type="SByte" />
-          <Property Name="WorksOrderNo" Type="Double" />
-          <Property Name="AllowPartShipment" Type="SByte" />
-          <Property Name="TotalGoods" Type="Double" />
-          <Property Name="OrderGoods" Type="Double" />
-          <Property Name="UserID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="pRINTINVOICE" Type="SByte" />
-          <Property Name="Currency_Exchange_Rate" Type="Double" />
-          <Property Name="PinNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="UCodeId" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="ContractNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Currency_Exchange_Code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="TIMEOFENTRY" Type="Time" />
-          <Property Name="RepID" Type="Int64" />
-          <Property Name="RepNo" Type="Int64" />
-          <Property Name="OnlineConfirm" Type="SByte" />
-          <Property Name="OnlineConfirmDate" Type="DateTime" />
-          <Property Name="OnlineConfirmedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="OnlineProcessed" Type="SByte" />
-          <Property Name="OnlineProcessedDate" Type="DateTime" />
-          <Property Name="OnlineProcessedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="ReasonCode" Type="Int32" />
-          <Property Name="OnlineUserID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="OrderAnalysisCode1" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="OrderAnalysisCode2" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="OrderAnalysisCode3" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="OrderAnalysisCode4" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="OrderAnalysisCode5" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="PrintLabel" Type="SByte" />
-          <Property Name="ProFormaPrint" Type="SByte" />
-          <Property Name="ConfirmPrint" Type="SByte" />
-          <Property Name="OrderType" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
-          <Property Name="EmailID" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="ContactName" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
-        </EntityType>
         <EntityType Name="tblsop_salesorder_header_offline">
           <Key>
             <PropertyRef Name="CompanyID" />
@@ -8307,81 +7912,6 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
           <Property Name="OrderAnalysisCode10" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
           <Property Name="OrderType" Type="String" MaxLength="3" FixedLength="false" Unicode="false" />
           <Property Name="IsStockMove" Type="SByte" />
-          <Property Name="EmailID" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="ContactName" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="tblsop_salesorder_header_tremot02">
-          <Key>
-            <PropertyRef Name="CompanyID" />
-            <PropertyRef Name="OrderNo" />
-          </Key>
-          <Property Name="CompanyID" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="WarehouseID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="OrderNo" Type="Int64" Nullable="false" />
-          <Property Name="CustID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="OrderDate" Type="DateTime" />
-          <Property Name="InvDesc" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="InvAddress1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="InvAddress2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="InvAddress3" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="InvCity" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="InvTown" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="InvPostCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="InvCountry" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="DelDesc" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="DelAddress1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="DelAddress2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="DelAddress3" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="DelCity" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="DelTown" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="DelPostCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="DelCountry" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="CustRef" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="ContractRef" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Comments" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
-          <Property Name="InvoiceDate" Type="DateTime" />
-          <Property Name="Carrier" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
-          <Property Name="CarrierCharge" Type="Decimal" />
-          <Property Name="CustDisc" Type="Double" />
-          <Property Name="SettDisc" Type="Double" />
-          <Property Name="VolDisc" Type="Double" />
-          <Property Name="SettlementDays" Type="Int32" />
-          <Property Name="OrderConfirm" Type="Byte" />
-          <Property Name="CommentsExternal" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
-          <Property Name="Cancelled" Type="SByte" />
-          <Property Name="ProForma" Type="SByte" />
-          <Property Name="Completed" Type="SByte" />
-          <Property Name="WorksOrderNo" Type="Double" />
-          <Property Name="AllowPartShipment" Type="SByte" />
-          <Property Name="TotalGoods" Type="Double" />
-          <Property Name="OrderGoods" Type="Double" />
-          <Property Name="UserID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="pRINTINVOICE" Type="SByte" />
-          <Property Name="Currency_Exchange_Rate" Type="Double" />
-          <Property Name="PinNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="UCodeId" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="ContractNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Currency_Exchange_Code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="TIMEOFENTRY" Type="Time" />
-          <Property Name="RepID" Type="Int64" />
-          <Property Name="RepNo" Type="Int64" />
-          <Property Name="OnlineConfirm" Type="SByte" />
-          <Property Name="OnlineConfirmDate" Type="DateTime" />
-          <Property Name="OnlineConfirmedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="OnlineProcessed" Type="SByte" />
-          <Property Name="OnlineProcessedDate" Type="DateTime" />
-          <Property Name="OnlineProcessedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="ReasonCode" Type="Int32" />
-          <Property Name="OnlineUserID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="OrderAnalysisCode1" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="OrderAnalysisCode2" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="OrderAnalysisCode3" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="OrderAnalysisCode4" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="OrderAnalysisCode5" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="PrintLabel" Type="SByte" />
-          <Property Name="ProFormaPrint" Type="SByte" />
-          <Property Name="ConfirmPrint" Type="SByte" />
-          <Property Name="OrderType" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
           <Property Name="EmailID" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
           <Property Name="ContactName" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
         </EntityType>
@@ -8477,134 +8007,6 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
           <Property Name="Fax" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
           <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="VATno" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="tsb_tblsop_salesorder_detail_merge">
-          <Key>
-            <PropertyRef Name="CompanyID" />
-            <PropertyRef Name="OrderNo" />
-            <PropertyRef Name="LineNo" />
-          </Key>
-          <Property Name="CompanyID" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="Warehouseid" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="OrderNo" Type="Int64" Nullable="false" />
-          <Property Name="LineNo" Type="Int64" Nullable="false" />
-          <Property Name="LineType" Type="Int32" />
-          <Property Name="StyleID" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
-          <Property Name="ColourID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Name="SizeID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="Description" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="Price" Type="Decimal" />
-          <Property Name="Cost" Type="Decimal" />
-          <Property Name="OrdQty" Type="Int64" />
-          <Property Name="AllQty" Type="Int64" />
-          <Property Name="InvQty" Type="Int64" />
-          <Property Name="DespQty" Type="Int64" />
-          <Property Name="CommissionRate" Type="Double" />
-          <Property Name="Discount" Type="Double" />
-          <Property Name="Deliverydate" Type="DateTime" />
-          <Property Name="VatCode" Type="Int32" />
-          <Property Name="NomCode" Type="Int32" />
-          <Property Name="PartShip" Type="SByte" />
-          <Property Name="LineNoRef" Type="Single" />
-          <Property Name="Currency_Exchange_Rate" Type="Double" />
-          <Property Name="StyleIDref" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Name="FreeText" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
-          <Property Name="RepID" Type="Int64" />
-          <Property Name="RepRate" Type="Double" />
-          <Property Name="KamID" Type="Int64" />
-          <Property Name="KAMRate" Type="Double" />
-          <Property Name="IssueUOM" Type="Int64" />
-          <Property Name="IssueQty" Type="Double" />
-          <Property Name="StockingUOM" Type="Int64" />
-          <Property Name="OriginalOrderNo" Type="Int64" />
-          <Property Name="OriginalLineNo" Type="Int64" />
-          <Property Name="SOPDETAIL1" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="SOPDETAIL2" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="SOPDETAIL3" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="SOPDETAIL4" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="SOPDETAIL5" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="Jobsheetno" Type="Int32" />
-          <Property Name="JobsheetLineNo" Type="Int32" />
-          <Property Name="AssemblyID" Type="Int32" />
-          <Property Name="AsmLineNo" Type="Int32" />
-          <Property Name="ReasonCode" Type="Int32" />
-          <Property Name="ReturnOrderNo" Type="Int64" />
-          <Property Name="ReturnLineNo" Type="Int64" />
-        </EntityType>
-        <EntityType Name="tsb_tblsop_salesorder_header_merge">
-          <Key>
-            <PropertyRef Name="CompanyID" />
-            <PropertyRef Name="OrderNo" />
-          </Key>
-          <Property Name="CompanyID" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="WarehouseID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="OrderNo" Type="Int64" Nullable="false" />
-          <Property Name="CustID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="OrderDate" Type="DateTime" />
-          <Property Name="InvDesc" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="InvAddress1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="InvAddress2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="InvAddress3" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="InvCity" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="InvTown" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="InvPostCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="InvCountry" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="DelDesc" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="DelAddress1" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="DelAddress2" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="DelAddress3" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="DelCity" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="DelTown" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="DelPostCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="DelCountry" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="CustRef" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="ContractRef" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Comments" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
-          <Property Name="InvoiceDate" Type="DateTime" />
-          <Property Name="Carrier" Type="String" MaxLength="12" FixedLength="false" Unicode="false" />
-          <Property Name="CarrierCharge" Type="Decimal" />
-          <Property Name="CustDisc" Type="Double" />
-          <Property Name="SettDisc" Type="Double" />
-          <Property Name="VolDisc" Type="Double" />
-          <Property Name="SettlementDays" Type="Int32" />
-          <Property Name="OrderConfirm" Type="Byte" />
-          <Property Name="CommentsExternal" Type="String" MaxLength="250" FixedLength="false" Unicode="false" />
-          <Property Name="Cancelled" Type="SByte" />
-          <Property Name="ProForma" Type="SByte" />
-          <Property Name="Completed" Type="SByte" />
-          <Property Name="WorksOrderNo" Type="Double" />
-          <Property Name="AllowPartShipment" Type="SByte" />
-          <Property Name="TotalGoods" Type="Double" />
-          <Property Name="OrderGoods" Type="Double" />
-          <Property Name="UserID" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
-          <Property Name="pRINTINVOICE" Type="SByte" />
-          <Property Name="Currency_Exchange_Rate" Type="Double" />
-          <Property Name="PinNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="UCodeId" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="ContractNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="Currency_Exchange_Code" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="TIMEOFENTRY" Type="Time" />
-          <Property Name="RepID" Type="Int64" />
-          <Property Name="RepNo" Type="Int64" />
-          <Property Name="OnlineConfirm" Type="SByte" />
-          <Property Name="OnlineConfirmDate" Type="DateTime" />
-          <Property Name="OnlineConfirmedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="OnlineProcessed" Type="SByte" />
-          <Property Name="OnlineProcessedDate" Type="DateTime" />
-          <Property Name="OnlineProcessedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="ReasonCode" Type="Int32" />
-          <Property Name="OnlineUserID" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="OrderAnalysisCode1" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="OrderAnalysisCode2" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="OrderAnalysisCode3" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="OrderAnalysisCode4" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="OrderAnalysisCode5" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
-          <Property Name="PrintLabel" Type="SByte" />
-          <Property Name="ProFormaPrint" Type="SByte" />
-          <Property Name="ConfirmPrint" Type="SByte" />
-          <Property Name="OrderType" Type="String" MaxLength="2" FixedLength="false" Unicode="false" />
-          <Property Name="EmailID" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Name="ContactName" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="xml_salesorder_detail">
           <Key>
@@ -9365,11 +8767,26 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
           <Key>
             <PropertyRef Name="CompanyID" />
             <PropertyRef Name="StyleID" />
+            <PropertyRef Name="FreeText" />
           </Key>
           <Property Name="CompanyID" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="StyleID" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="StyleImage" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="Product_Group" Type="Int32" />
+          <Property Name="FreeText" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="stylebytemplateview">
+          <Key>
+            <PropertyRef Name="CompanyID" />
+            <PropertyRef Name="Template" />
+            <PropertyRef Name="BusinessID" />
+          </Key>
+          <Property Name="CompanyID" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="StyleID" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="StyleImage" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Product_Group" Type="Int32" />
+          <Property Name="Template" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="BusinessID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="FreeText" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="tblfskstyle_dimension1">
@@ -9388,15 +8805,17 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
         <EntityType Name="ucodeby_freetextview">
           <Key>
             <PropertyRef Name="CompanyID" />
-            <PropertyRef Name="UCodeID" />
             <PropertyRef Name="StyleID" />
+            <PropertyRef Name="UCodeID" />
+            <PropertyRef Name="DimFreeText" />
+            <PropertyRef Name="FreeText" />
           </Key>
           <Property Name="CompanyID" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="StyleID" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="StyleImage" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="Product_Group" Type="Int32" />
-          <Property Name="FreeText" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="DimFreeText" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="FreeText" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DimFreeText" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="UCodeID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="SeqNo" Type="Int32" />
         </EntityType>
@@ -9745,6 +9164,7 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
           <EntitySet Name="hr_tsb_delivery_day" EntityType="Self.hr_tsb_delivery_day" />
           <EntitySet Name="hr_tsb_leavers" EntityType="Self.hr_tsb_leavers" />
           <EntitySet Name="hr_tsb_leavers_2019_final" EntityType="Self.hr_tsb_leavers_2019_final" />
+          <EntitySet Name="ht_kbus" EntityType="Self.ht_kbus" />
           <EntitySet Name="ht_tsb_2020_custref_change" EntityType="Self.ht_tsb_2020_custref_change" />
           <EntitySet Name="my_aspnet_applications" EntityType="Self.my_aspnet_applications" />
           <EntitySet Name="my_aspnet_membership" EntityType="Self.my_aspnet_membership" />
@@ -9767,6 +9187,7 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
           <EntitySet Name="tblaccemp_employee_rollout" EntityType="Self.tblaccemp_employee_rollout" />
           <EntitySet Name="tblaccemp_employee_rollout_atlasfm" EntityType="Self.tblaccemp_employee_rollout_atlasfm" />
           <EntitySet Name="tblaccemp_points" EntityType="Self.tblaccemp_points" />
+          <EntitySet Name="tblaccemp_pointsadjustment" EntityType="Self.tblaccemp_pointsadjustment" />
           <EntitySet Name="tblaccemp_pointscard" EntityType="Self.tblaccemp_pointscard" />
           <EntitySet Name="tblaccemp_rollout_names" EntityType="Self.tblaccemp_rollout_names" />
           <EntitySet Name="tblaccemp_rollout_ucode_ref" EntityType="Self.tblaccemp_rollout_ucode_ref" />
@@ -9803,6 +9224,7 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
           <EntitySet Name="tblchildmenus" EntityType="Self.tblchildmenu" />
           <EntitySet Name="tblchildmenu_new" EntityType="Self.tblchildmenu_new" />
           <EntitySet Name="tblchildmenu_newlayout" EntityType="Self.tblchildmenu_newlayout" />
+          <EntitySet Name="tblchildmenu_newlayout_newsystem" EntityType="Self.tblchildmenu_newlayout_newsystem" />
           <EntitySet Name="tblcmp_defaults" EntityType="Self.tblcmp_defaults" />
           <EntitySet Name="tblcompanies" EntityType="Self.tblcompany" />
           <EntitySet Name="tblcontent_lang" EntityType="Self.tblcontent_lang" />
@@ -9852,11 +9274,13 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
           <EntitySet Name="tblonline_userid_employee" EntityType="Self.tblonline_userid_employee" />
           <EntitySet Name="tblonline_userid_employee_atlasfm" EntityType="Self.tblonline_userid_employee_atlasfm" />
           <EntitySet Name="tblonline_userid_favourites" EntityType="Self.tblonline_userid_favourites" />
+          <EntitySet Name="tblonlinebus_carriage" EntityType="Self.tblonlinebus_carriage" />
           <EntitySet Name="tblonlinesop_carriage" EntityType="Self.tblonlinesop_carriage" />
           <EntitySet Name="tblonlinesop_sitecode" EntityType="Self.tblonlinesop_sitecode" />
           <EntitySet Name="tblparentmenus" EntityType="Self.tblparentmenu" />
           <EntitySet Name="tblparentmenu_new" EntityType="Self.tblparentmenu_new" />
           <EntitySet Name="tblparentmenu_newlayout" EntityType="Self.tblparentmenu_newlayout" />
+          <EntitySet Name="tblparentmenu_newlayout_newsystem" EntityType="Self.tblparentmenu_newlayout_newsystem" />
           <EntitySet Name="tblpayment_gateways" EntityType="Self.tblpayment_gateways" />
           <EntitySet Name="tblpayment_trans" EntityType="Self.tblpayment_trans" />
           <EntitySet Name="tblpermission_controls" EntityType="Self.tblpermission_controls" />
@@ -9891,21 +9315,15 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
           <EntitySet Name="tblsop_salesorder_approved" EntityType="Self.tblsop_salesorder_approved" />
           <EntitySet Name="tblsop_salesorder_detail" EntityType="Self.tblsop_salesorder_detail" />
           <EntitySet Name="tblsop_salesorder_detail_atlasfm" EntityType="Self.tblsop_salesorder_detail_atlasfm" />
-          <EntitySet Name="tblsop_salesorder_detail_before_merge" EntityType="Self.tblsop_salesorder_detail_before_merge" />
           <EntitySet Name="tblsop_salesorder_detail_offline" EntityType="Self.tblsop_salesorder_detail_offline" />
-          <EntitySet Name="tblsop_salesorder_detail_tremot02" EntityType="Self.tblsop_salesorder_detail_tremot02" />
           <EntitySet Name="tblsop_salesorder_header" EntityType="Self.tblsop_salesorder_header" />
           <EntitySet Name="tblsop_salesorder_header_atlasfm" EntityType="Self.tblsop_salesorder_header_atlasfm" />
-          <EntitySet Name="tblsop_salesorder_header_before_merge" EntityType="Self.tblsop_salesorder_header_before_merge" />
           <EntitySet Name="tblsop_salesorder_header_offline" EntityType="Self.tblsop_salesorder_header_offline" />
-          <EntitySet Name="tblsop_salesorder_header_tremot02" EntityType="Self.tblsop_salesorder_header_tremot02" />
           <EntitySet Name="tblsqlstrings" EntityType="Self.tblsqlstring" />
           <EntitySet Name="tblupdate_status_three" EntityType="Self.tblupdate_status_three" />
           <EntitySet Name="tblusers" EntityType="Self.tbluser" />
           <EntitySet Name="tblwho_warehouses" EntityType="Self.tblwho_warehouses" />
           <EntitySet Name="tblwho_warehousesx" EntityType="Self.tblwho_warehousesx" />
-          <EntitySet Name="tsb_tblsop_salesorder_detail_merge" EntityType="Self.tsb_tblsop_salesorder_detail_merge" />
-          <EntitySet Name="tsb_tblsop_salesorder_header_merge" EntityType="Self.tsb_tblsop_salesorder_header_merge" />
           <EntitySet Name="xml_salesorder_detail" EntityType="Self.xml_salesorder_detail" />
           <EntitySet Name="xml_salesorder_header" EntityType="Self.xml_salesorder_header" />
           <EntitySet Name="bak_tblaccemp_employee_tsb" EntityType="Self.bak_tblaccemp_employee_tsb" />
@@ -9939,6 +9357,7 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
           <EntitySet Name="productlists" EntityType="Self.productlist" />
           <EntitySet Name="style_dimfitalloc_caption" EntityType="Self.style_dimfitalloc_caption" />
           <EntitySet Name="styleby_freetextview" EntityType="Self.styleby_freetextview" />
+          <EntitySet Name="stylebytemplateviews" EntityType="Self.stylebytemplateview" />
           <EntitySet Name="tblfskstyle_dimension1" EntityType="Self.tblfskstyle_dimension1" />
           <EntitySet Name="ucodeby_freetextview" EntityType="Self.ucodeby_freetextview" />
           <EntitySet Name="unrelatedorders" EntityType="Self.unrelatedorder" />
@@ -9994,27 +9413,39 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
             <Parameter Name="pUserID" Mode="In" Type="String" />
             <Parameter Name="pRole" Mode="In" Type="String" />
           </FunctionImport>
-          <EntitySet Name="stylebytemplateviews" EntityType="e4kmaximusdbModel.stylebytemplateview" />
+          <EntitySet Name="view_totalpointsused" EntityType="e4kmaximusdbModel.view_totalpointsused" />
+          <EntitySet Name="styleby_freetextview_ucode" EntityType="e4kmaximusdbModel.styleby_freetextview_ucode" />
         </EntityContainer>
         <ComplexType Name="GetAllUcodeByFreeTextProcedure_Result" />
         <ComplexType Name="getColorProcedure_Result" />
         <ComplexType Name="getColors_Result" />
         <ComplexType Name="getColors_prod_Result" />
         <ComplexType Name="GetEmployeebyId_Result" />
-        <EntityType Name="stylebytemplateview">
+        <EntityType Name="view_totalpointsused">
+          <Key>
+            <PropertyRef Name="BusinessID" />
+            <PropertyRef Name="EmployeeID" />
+            <PropertyRef Name="StyleID" />
+            <PropertyRef Name="ColourID" />
+          </Key>
+          <Property Name="BusinessID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="EmployeeID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="StyleID" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="ColourID" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="TOTSOPOINTS" Type="Int32" />
+        </EntityType>
+        <EntityType Name="styleby_freetextview_ucode">
           <Key>
             <PropertyRef Name="CompanyID" />
-            <PropertyRef Name="Template" />
-            <PropertyRef Name="BusinessID" />
             <PropertyRef Name="StyleID" />
+            <PropertyRef Name="FreeText" />
           </Key>
           <Property Name="CompanyID" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
           <Property Name="StyleID" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="StyleImage" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="Product_Group" Type="Int32" />
-          <Property Name="Template" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
-          <Property Name="BusinessID" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="FreeText" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+          <Property Name="UCodeID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="FreeText" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -10214,6 +9645,15 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
                 <ScalarProperty Name="Surname" ColumnName="Surname" />
                 <ScalarProperty Name="SortCode" ColumnName="SortCode" />
                 <ScalarProperty Name="IsClosed" ColumnName="IsClosed" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ht_kbus">
+            <EntityTypeMapping TypeName="e4kmaximusdbModel.ht_kbus">
+              <MappingFragment StoreEntitySet="ht_kbus">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Forname" ColumnName="Forname" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -10456,6 +9896,7 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
           <EntitySetMapping Name="tblaccemp_employee_rollout">
             <EntityTypeMapping TypeName="e4kmaximusdbModel.tblaccemp_employee_rollout">
               <MappingFragment StoreEntitySet="tblaccemp_employee_rollout">
+                <ScalarProperty Name="NextOrder" ColumnName="NextOrder" />
                 <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
                 <ScalarProperty Name="BusinessID" ColumnName="BusinessID" />
                 <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
@@ -10487,6 +9928,17 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
                 <ScalarProperty Name="ToDate" ColumnName="ToDate" />
                 <ScalarProperty Name="TotalPoints" ColumnName="TotalPoints" />
                 <ScalarProperty Name="RoleDesc" ColumnName="RoleDesc" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblaccemp_pointsadjustment">
+            <EntityTypeMapping TypeName="e4kmaximusdbModel.tblaccemp_pointsadjustment">
+              <MappingFragment StoreEntitySet="tblaccemp_pointsadjustment">
+                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+                <ScalarProperty Name="BusinessID" ColumnName="BusinessID" />
+                <ScalarProperty Name="UcodeID" ColumnName="UcodeID" />
+                <ScalarProperty Name="StyleID" ColumnName="StyleID" />
+                <ScalarProperty Name="MapStyleID" ColumnName="MapStyleID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -10971,6 +10423,21 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
           <EntitySetMapping Name="tblchildmenu_newlayout">
             <EntityTypeMapping TypeName="e4kmaximusdbModel.tblchildmenu_newlayout">
               <MappingFragment StoreEntitySet="tblchildmenu_newlayout">
+                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+                <ScalarProperty Name="ChildID" ColumnName="ChildID" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
+                <ScalarProperty Name="SeqNo" ColumnName="SeqNo" />
+                <ScalarProperty Name="URL" ColumnName="URL" />
+                <ScalarProperty Name="TitleDesc" ColumnName="TitleDesc" />
+                <ScalarProperty Name="IsPopUp" ColumnName="IsPopUp" />
+                <ScalarProperty Name="OnlyNewLayout" ColumnName="OnlyNewLayout" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblchildmenu_newlayout_newsystem">
+            <EntityTypeMapping TypeName="e4kmaximusdbModel.tblchildmenu_newlayout_newsystem">
+              <MappingFragment StoreEntitySet="tblchildmenu_newlayout_newsystem">
                 <ScalarProperty Name="ParentID" ColumnName="ParentID" />
                 <ScalarProperty Name="ChildID" ColumnName="ChildID" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
@@ -11574,6 +11041,15 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="tblonlinebus_carriage">
+            <EntityTypeMapping TypeName="e4kmaximusdbModel.tblonlinebus_carriage">
+              <MappingFragment StoreEntitySet="tblonlinebus_carriage">
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="StyleID" ColumnName="StyleID" />
+                <ScalarProperty Name="BusinessID" ColumnName="BusinessID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="tblonlinesop_carriage">
             <EntityTypeMapping TypeName="e4kmaximusdbModel.tblonlinesop_carriage">
               <MappingFragment StoreEntitySet="tblonlinesop_carriage">
@@ -11621,6 +11097,19 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
           <EntitySetMapping Name="tblparentmenu_newlayout">
             <EntityTypeMapping TypeName="e4kmaximusdbModel.tblparentmenu_newlayout">
               <MappingFragment StoreEntitySet="tblparentmenu_newlayout">
+                <ScalarProperty Name="ParentID" ColumnName="ParentID" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
+                <ScalarProperty Name="SeqNo" ColumnName="SeqNo" />
+                <ScalarProperty Name="URL" ColumnName="URL" />
+                <ScalarProperty Name="IsPermissionReq" ColumnName="IsPermissionReq" />
+                <ScalarProperty Name="OnlyNewLayout" ColumnName="OnlyNewLayout" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblparentmenu_newlayout_newsystem">
+            <EntityTypeMapping TypeName="e4kmaximusdbModel.tblparentmenu_newlayout_newsystem">
+              <MappingFragment StoreEntitySet="tblparentmenu_newlayout_newsystem">
                 <ScalarProperty Name="ParentID" ColumnName="ParentID" />
                 <ScalarProperty Name="Description" ColumnName="Description" />
                 <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
@@ -12277,58 +11766,6 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="tblsop_salesorder_detail_before_merge">
-            <EntityTypeMapping TypeName="e4kmaximusdbModel.tblsop_salesorder_detail_before_merge">
-              <MappingFragment StoreEntitySet="tblsop_salesorder_detail_before_merge">
-                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
-                <ScalarProperty Name="Warehouseid" ColumnName="Warehouseid" />
-                <ScalarProperty Name="OrderNo" ColumnName="OrderNo" />
-                <ScalarProperty Name="LineNo" ColumnName="LineNo" />
-                <ScalarProperty Name="LineType" ColumnName="LineType" />
-                <ScalarProperty Name="StyleID" ColumnName="StyleID" />
-                <ScalarProperty Name="ColourID" ColumnName="ColourID" />
-                <ScalarProperty Name="SizeID" ColumnName="SizeID" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
-                <ScalarProperty Name="Cost" ColumnName="Cost" />
-                <ScalarProperty Name="OrdQty" ColumnName="OrdQty" />
-                <ScalarProperty Name="AllQty" ColumnName="AllQty" />
-                <ScalarProperty Name="InvQty" ColumnName="InvQty" />
-                <ScalarProperty Name="DespQty" ColumnName="DespQty" />
-                <ScalarProperty Name="CommissionRate" ColumnName="CommissionRate" />
-                <ScalarProperty Name="Discount" ColumnName="Discount" />
-                <ScalarProperty Name="Deliverydate" ColumnName="Deliverydate" />
-                <ScalarProperty Name="VatCode" ColumnName="VatCode" />
-                <ScalarProperty Name="NomCode" ColumnName="NomCode" />
-                <ScalarProperty Name="PartShip" ColumnName="PartShip" />
-                <ScalarProperty Name="LineNoRef" ColumnName="LineNoRef" />
-                <ScalarProperty Name="Currency_Exchange_Rate" ColumnName="Currency_Exchange_Rate" />
-                <ScalarProperty Name="StyleIDref" ColumnName="StyleIDref" />
-                <ScalarProperty Name="FreeText" ColumnName="FreeText" />
-                <ScalarProperty Name="RepID" ColumnName="RepID" />
-                <ScalarProperty Name="RepRate" ColumnName="RepRate" />
-                <ScalarProperty Name="KamID" ColumnName="KamID" />
-                <ScalarProperty Name="KAMRate" ColumnName="KAMRate" />
-                <ScalarProperty Name="IssueUOM" ColumnName="IssueUOM" />
-                <ScalarProperty Name="IssueQty" ColumnName="IssueQty" />
-                <ScalarProperty Name="StockingUOM" ColumnName="StockingUOM" />
-                <ScalarProperty Name="OriginalOrderNo" ColumnName="OriginalOrderNo" />
-                <ScalarProperty Name="OriginalLineNo" ColumnName="OriginalLineNo" />
-                <ScalarProperty Name="SOPDETAIL1" ColumnName="SOPDETAIL1" />
-                <ScalarProperty Name="SOPDETAIL2" ColumnName="SOPDETAIL2" />
-                <ScalarProperty Name="SOPDETAIL3" ColumnName="SOPDETAIL3" />
-                <ScalarProperty Name="SOPDETAIL4" ColumnName="SOPDETAIL4" />
-                <ScalarProperty Name="SOPDETAIL5" ColumnName="SOPDETAIL5" />
-                <ScalarProperty Name="Jobsheetno" ColumnName="Jobsheetno" />
-                <ScalarProperty Name="JobsheetLineNo" ColumnName="JobsheetLineNo" />
-                <ScalarProperty Name="AssemblyID" ColumnName="AssemblyID" />
-                <ScalarProperty Name="AsmLineNo" ColumnName="AsmLineNo" />
-                <ScalarProperty Name="ReasonCode" ColumnName="ReasonCode" />
-                <ScalarProperty Name="ReturnOrderNo" ColumnName="ReturnOrderNo" />
-                <ScalarProperty Name="ReturnLineNo" ColumnName="ReturnLineNo" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="tblsop_salesorder_detail_offline">
             <EntityTypeMapping TypeName="e4kmaximusdbModel.tblsop_salesorder_detail_offline">
               <MappingFragment StoreEntitySet="tblsop_salesorder_detail_offline">
@@ -12373,58 +11810,6 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
                 <ScalarProperty Name="SOPDETAIL5" ColumnName="SOPDETAIL5" />
                 <ScalarProperty Name="JobSheetNo" ColumnName="JobSheetNo" />
                 <ScalarProperty Name="JobSheetLineNo" ColumnName="JobSheetLineNo" />
-                <ScalarProperty Name="AssemblyID" ColumnName="AssemblyID" />
-                <ScalarProperty Name="AsmLineNo" ColumnName="AsmLineNo" />
-                <ScalarProperty Name="ReasonCode" ColumnName="ReasonCode" />
-                <ScalarProperty Name="ReturnOrderNo" ColumnName="ReturnOrderNo" />
-                <ScalarProperty Name="ReturnLineNo" ColumnName="ReturnLineNo" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tblsop_salesorder_detail_tremot02">
-            <EntityTypeMapping TypeName="e4kmaximusdbModel.tblsop_salesorder_detail_tremot02">
-              <MappingFragment StoreEntitySet="tblsop_salesorder_detail_tremot02">
-                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
-                <ScalarProperty Name="Warehouseid" ColumnName="Warehouseid" />
-                <ScalarProperty Name="OrderNo" ColumnName="OrderNo" />
-                <ScalarProperty Name="LineNo" ColumnName="LineNo" />
-                <ScalarProperty Name="LineType" ColumnName="LineType" />
-                <ScalarProperty Name="StyleID" ColumnName="StyleID" />
-                <ScalarProperty Name="ColourID" ColumnName="ColourID" />
-                <ScalarProperty Name="SizeID" ColumnName="SizeID" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
-                <ScalarProperty Name="Cost" ColumnName="Cost" />
-                <ScalarProperty Name="OrdQty" ColumnName="OrdQty" />
-                <ScalarProperty Name="AllQty" ColumnName="AllQty" />
-                <ScalarProperty Name="InvQty" ColumnName="InvQty" />
-                <ScalarProperty Name="DespQty" ColumnName="DespQty" />
-                <ScalarProperty Name="CommissionRate" ColumnName="CommissionRate" />
-                <ScalarProperty Name="Discount" ColumnName="Discount" />
-                <ScalarProperty Name="Deliverydate" ColumnName="Deliverydate" />
-                <ScalarProperty Name="VatCode" ColumnName="VatCode" />
-                <ScalarProperty Name="NomCode" ColumnName="NomCode" />
-                <ScalarProperty Name="PartShip" ColumnName="PartShip" />
-                <ScalarProperty Name="LineNoRef" ColumnName="LineNoRef" />
-                <ScalarProperty Name="Currency_Exchange_Rate" ColumnName="Currency_Exchange_Rate" />
-                <ScalarProperty Name="StyleIDref" ColumnName="StyleIDref" />
-                <ScalarProperty Name="FreeText" ColumnName="FreeText" />
-                <ScalarProperty Name="RepID" ColumnName="RepID" />
-                <ScalarProperty Name="RepRate" ColumnName="RepRate" />
-                <ScalarProperty Name="KamID" ColumnName="KamID" />
-                <ScalarProperty Name="KAMRate" ColumnName="KAMRate" />
-                <ScalarProperty Name="IssueUOM" ColumnName="IssueUOM" />
-                <ScalarProperty Name="IssueQty" ColumnName="IssueQty" />
-                <ScalarProperty Name="StockingUOM" ColumnName="StockingUOM" />
-                <ScalarProperty Name="OriginalOrderNo" ColumnName="OriginalOrderNo" />
-                <ScalarProperty Name="OriginalLineNo" ColumnName="OriginalLineNo" />
-                <ScalarProperty Name="SOPDETAIL1" ColumnName="SOPDETAIL1" />
-                <ScalarProperty Name="SOPDETAIL2" ColumnName="SOPDETAIL2" />
-                <ScalarProperty Name="SOPDETAIL3" ColumnName="SOPDETAIL3" />
-                <ScalarProperty Name="SOPDETAIL4" ColumnName="SOPDETAIL4" />
-                <ScalarProperty Name="SOPDETAIL5" ColumnName="SOPDETAIL5" />
-                <ScalarProperty Name="Jobsheetno" ColumnName="Jobsheetno" />
-                <ScalarProperty Name="JobsheetLineNo" ColumnName="JobsheetLineNo" />
                 <ScalarProperty Name="AssemblyID" ColumnName="AssemblyID" />
                 <ScalarProperty Name="AsmLineNo" ColumnName="AsmLineNo" />
                 <ScalarProperty Name="ReasonCode" ColumnName="ReasonCode" />
@@ -12583,81 +11968,6 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="tblsop_salesorder_header_before_merge">
-            <EntityTypeMapping TypeName="e4kmaximusdbModel.tblsop_salesorder_header_before_merge">
-              <MappingFragment StoreEntitySet="tblsop_salesorder_header_before_merge">
-                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
-                <ScalarProperty Name="WarehouseID" ColumnName="WarehouseID" />
-                <ScalarProperty Name="OrderNo" ColumnName="OrderNo" />
-                <ScalarProperty Name="CustID" ColumnName="CustID" />
-                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
-                <ScalarProperty Name="InvDesc" ColumnName="InvDesc" />
-                <ScalarProperty Name="InvAddress1" ColumnName="InvAddress1" />
-                <ScalarProperty Name="InvAddress2" ColumnName="InvAddress2" />
-                <ScalarProperty Name="InvAddress3" ColumnName="InvAddress3" />
-                <ScalarProperty Name="InvCity" ColumnName="InvCity" />
-                <ScalarProperty Name="InvTown" ColumnName="InvTown" />
-                <ScalarProperty Name="InvPostCode" ColumnName="InvPostCode" />
-                <ScalarProperty Name="InvCountry" ColumnName="InvCountry" />
-                <ScalarProperty Name="DelDesc" ColumnName="DelDesc" />
-                <ScalarProperty Name="DelAddress1" ColumnName="DelAddress1" />
-                <ScalarProperty Name="DelAddress2" ColumnName="DelAddress2" />
-                <ScalarProperty Name="DelAddress3" ColumnName="DelAddress3" />
-                <ScalarProperty Name="DelCity" ColumnName="DelCity" />
-                <ScalarProperty Name="DelTown" ColumnName="DelTown" />
-                <ScalarProperty Name="DelPostCode" ColumnName="DelPostCode" />
-                <ScalarProperty Name="DelCountry" ColumnName="DelCountry" />
-                <ScalarProperty Name="CustRef" ColumnName="CustRef" />
-                <ScalarProperty Name="ContractRef" ColumnName="ContractRef" />
-                <ScalarProperty Name="Comments" ColumnName="Comments" />
-                <ScalarProperty Name="InvoiceDate" ColumnName="InvoiceDate" />
-                <ScalarProperty Name="Carrier" ColumnName="Carrier" />
-                <ScalarProperty Name="CarrierCharge" ColumnName="CarrierCharge" />
-                <ScalarProperty Name="CustDisc" ColumnName="CustDisc" />
-                <ScalarProperty Name="SettDisc" ColumnName="SettDisc" />
-                <ScalarProperty Name="VolDisc" ColumnName="VolDisc" />
-                <ScalarProperty Name="SettlementDays" ColumnName="SettlementDays" />
-                <ScalarProperty Name="OrderConfirm" ColumnName="OrderConfirm" />
-                <ScalarProperty Name="CommentsExternal" ColumnName="CommentsExternal" />
-                <ScalarProperty Name="Cancelled" ColumnName="Cancelled" />
-                <ScalarProperty Name="ProForma" ColumnName="ProForma" />
-                <ScalarProperty Name="Completed" ColumnName="Completed" />
-                <ScalarProperty Name="WorksOrderNo" ColumnName="WorksOrderNo" />
-                <ScalarProperty Name="AllowPartShipment" ColumnName="AllowPartShipment" />
-                <ScalarProperty Name="TotalGoods" ColumnName="TotalGoods" />
-                <ScalarProperty Name="OrderGoods" ColumnName="OrderGoods" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
-                <ScalarProperty Name="pRINTINVOICE" ColumnName="pRINTINVOICE" />
-                <ScalarProperty Name="Currency_Exchange_Rate" ColumnName="Currency_Exchange_Rate" />
-                <ScalarProperty Name="PinNo" ColumnName="PinNo" />
-                <ScalarProperty Name="UCodeId" ColumnName="UCodeId" />
-                <ScalarProperty Name="ContractNo" ColumnName="ContractNo" />
-                <ScalarProperty Name="Currency_Exchange_Code" ColumnName="Currency_Exchange_Code" />
-                <ScalarProperty Name="TIMEOFENTRY" ColumnName="TIMEOFENTRY" />
-                <ScalarProperty Name="RepID" ColumnName="RepID" />
-                <ScalarProperty Name="RepNo" ColumnName="RepNo" />
-                <ScalarProperty Name="OnlineConfirm" ColumnName="OnlineConfirm" />
-                <ScalarProperty Name="OnlineConfirmDate" ColumnName="OnlineConfirmDate" />
-                <ScalarProperty Name="OnlineConfirmedBy" ColumnName="OnlineConfirmedBy" />
-                <ScalarProperty Name="OnlineProcessed" ColumnName="OnlineProcessed" />
-                <ScalarProperty Name="OnlineProcessedDate" ColumnName="OnlineProcessedDate" />
-                <ScalarProperty Name="OnlineProcessedBy" ColumnName="OnlineProcessedBy" />
-                <ScalarProperty Name="ReasonCode" ColumnName="ReasonCode" />
-                <ScalarProperty Name="OnlineUserID" ColumnName="OnlineUserID" />
-                <ScalarProperty Name="OrderAnalysisCode1" ColumnName="OrderAnalysisCode1" />
-                <ScalarProperty Name="OrderAnalysisCode2" ColumnName="OrderAnalysisCode2" />
-                <ScalarProperty Name="OrderAnalysisCode3" ColumnName="OrderAnalysisCode3" />
-                <ScalarProperty Name="OrderAnalysisCode4" ColumnName="OrderAnalysisCode4" />
-                <ScalarProperty Name="OrderAnalysisCode5" ColumnName="OrderAnalysisCode5" />
-                <ScalarProperty Name="PrintLabel" ColumnName="PrintLabel" />
-                <ScalarProperty Name="ProFormaPrint" ColumnName="ProFormaPrint" />
-                <ScalarProperty Name="ConfirmPrint" ColumnName="ConfirmPrint" />
-                <ScalarProperty Name="OrderType" ColumnName="OrderType" />
-                <ScalarProperty Name="EmailID" ColumnName="EmailID" />
-                <ScalarProperty Name="ContactName" ColumnName="ContactName" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="tblsop_salesorder_header_offline">
             <EntityTypeMapping TypeName="e4kmaximusdbModel.tblsop_salesorder_header_offline">
               <MappingFragment StoreEntitySet="tblsop_salesorder_header_offline">
@@ -12728,81 +12038,6 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
                 <ScalarProperty Name="OrderAnalysisCode10" ColumnName="OrderAnalysisCode10" />
                 <ScalarProperty Name="OrderType" ColumnName="OrderType" />
                 <ScalarProperty Name="IsStockMove" ColumnName="IsStockMove" />
-                <ScalarProperty Name="EmailID" ColumnName="EmailID" />
-                <ScalarProperty Name="ContactName" ColumnName="ContactName" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tblsop_salesorder_header_tremot02">
-            <EntityTypeMapping TypeName="e4kmaximusdbModel.tblsop_salesorder_header_tremot02">
-              <MappingFragment StoreEntitySet="tblsop_salesorder_header_tremot02">
-                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
-                <ScalarProperty Name="WarehouseID" ColumnName="WarehouseID" />
-                <ScalarProperty Name="OrderNo" ColumnName="OrderNo" />
-                <ScalarProperty Name="CustID" ColumnName="CustID" />
-                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
-                <ScalarProperty Name="InvDesc" ColumnName="InvDesc" />
-                <ScalarProperty Name="InvAddress1" ColumnName="InvAddress1" />
-                <ScalarProperty Name="InvAddress2" ColumnName="InvAddress2" />
-                <ScalarProperty Name="InvAddress3" ColumnName="InvAddress3" />
-                <ScalarProperty Name="InvCity" ColumnName="InvCity" />
-                <ScalarProperty Name="InvTown" ColumnName="InvTown" />
-                <ScalarProperty Name="InvPostCode" ColumnName="InvPostCode" />
-                <ScalarProperty Name="InvCountry" ColumnName="InvCountry" />
-                <ScalarProperty Name="DelDesc" ColumnName="DelDesc" />
-                <ScalarProperty Name="DelAddress1" ColumnName="DelAddress1" />
-                <ScalarProperty Name="DelAddress2" ColumnName="DelAddress2" />
-                <ScalarProperty Name="DelAddress3" ColumnName="DelAddress3" />
-                <ScalarProperty Name="DelCity" ColumnName="DelCity" />
-                <ScalarProperty Name="DelTown" ColumnName="DelTown" />
-                <ScalarProperty Name="DelPostCode" ColumnName="DelPostCode" />
-                <ScalarProperty Name="DelCountry" ColumnName="DelCountry" />
-                <ScalarProperty Name="CustRef" ColumnName="CustRef" />
-                <ScalarProperty Name="ContractRef" ColumnName="ContractRef" />
-                <ScalarProperty Name="Comments" ColumnName="Comments" />
-                <ScalarProperty Name="InvoiceDate" ColumnName="InvoiceDate" />
-                <ScalarProperty Name="Carrier" ColumnName="Carrier" />
-                <ScalarProperty Name="CarrierCharge" ColumnName="CarrierCharge" />
-                <ScalarProperty Name="CustDisc" ColumnName="CustDisc" />
-                <ScalarProperty Name="SettDisc" ColumnName="SettDisc" />
-                <ScalarProperty Name="VolDisc" ColumnName="VolDisc" />
-                <ScalarProperty Name="SettlementDays" ColumnName="SettlementDays" />
-                <ScalarProperty Name="OrderConfirm" ColumnName="OrderConfirm" />
-                <ScalarProperty Name="CommentsExternal" ColumnName="CommentsExternal" />
-                <ScalarProperty Name="Cancelled" ColumnName="Cancelled" />
-                <ScalarProperty Name="ProForma" ColumnName="ProForma" />
-                <ScalarProperty Name="Completed" ColumnName="Completed" />
-                <ScalarProperty Name="WorksOrderNo" ColumnName="WorksOrderNo" />
-                <ScalarProperty Name="AllowPartShipment" ColumnName="AllowPartShipment" />
-                <ScalarProperty Name="TotalGoods" ColumnName="TotalGoods" />
-                <ScalarProperty Name="OrderGoods" ColumnName="OrderGoods" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
-                <ScalarProperty Name="pRINTINVOICE" ColumnName="pRINTINVOICE" />
-                <ScalarProperty Name="Currency_Exchange_Rate" ColumnName="Currency_Exchange_Rate" />
-                <ScalarProperty Name="PinNo" ColumnName="PinNo" />
-                <ScalarProperty Name="UCodeId" ColumnName="UCodeId" />
-                <ScalarProperty Name="ContractNo" ColumnName="ContractNo" />
-                <ScalarProperty Name="Currency_Exchange_Code" ColumnName="Currency_Exchange_Code" />
-                <ScalarProperty Name="TIMEOFENTRY" ColumnName="TIMEOFENTRY" />
-                <ScalarProperty Name="RepID" ColumnName="RepID" />
-                <ScalarProperty Name="RepNo" ColumnName="RepNo" />
-                <ScalarProperty Name="OnlineConfirm" ColumnName="OnlineConfirm" />
-                <ScalarProperty Name="OnlineConfirmDate" ColumnName="OnlineConfirmDate" />
-                <ScalarProperty Name="OnlineConfirmedBy" ColumnName="OnlineConfirmedBy" />
-                <ScalarProperty Name="OnlineProcessed" ColumnName="OnlineProcessed" />
-                <ScalarProperty Name="OnlineProcessedDate" ColumnName="OnlineProcessedDate" />
-                <ScalarProperty Name="OnlineProcessedBy" ColumnName="OnlineProcessedBy" />
-                <ScalarProperty Name="ReasonCode" ColumnName="ReasonCode" />
-                <ScalarProperty Name="OnlineUserID" ColumnName="OnlineUserID" />
-                <ScalarProperty Name="OrderAnalysisCode1" ColumnName="OrderAnalysisCode1" />
-                <ScalarProperty Name="OrderAnalysisCode2" ColumnName="OrderAnalysisCode2" />
-                <ScalarProperty Name="OrderAnalysisCode3" ColumnName="OrderAnalysisCode3" />
-                <ScalarProperty Name="OrderAnalysisCode4" ColumnName="OrderAnalysisCode4" />
-                <ScalarProperty Name="OrderAnalysisCode5" ColumnName="OrderAnalysisCode5" />
-                <ScalarProperty Name="PrintLabel" ColumnName="PrintLabel" />
-                <ScalarProperty Name="ProFormaPrint" ColumnName="ProFormaPrint" />
-                <ScalarProperty Name="ConfirmPrint" ColumnName="ConfirmPrint" />
-                <ScalarProperty Name="OrderType" ColumnName="OrderType" />
                 <ScalarProperty Name="EmailID" ColumnName="EmailID" />
                 <ScalarProperty Name="ContactName" ColumnName="ContactName" />
               </MappingFragment>
@@ -12900,133 +12135,6 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
                 <ScalarProperty Name="Fax" ColumnName="Fax" />
                 <ScalarProperty Name="Email" ColumnName="Email" />
                 <ScalarProperty Name="VATno" ColumnName="VATno" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tsb_tblsop_salesorder_detail_merge">
-            <EntityTypeMapping TypeName="e4kmaximusdbModel.tsb_tblsop_salesorder_detail_merge">
-              <MappingFragment StoreEntitySet="tsb_tblsop_salesorder_detail_merge">
-                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
-                <ScalarProperty Name="Warehouseid" ColumnName="Warehouseid" />
-                <ScalarProperty Name="OrderNo" ColumnName="OrderNo" />
-                <ScalarProperty Name="LineNo" ColumnName="LineNo" />
-                <ScalarProperty Name="LineType" ColumnName="LineType" />
-                <ScalarProperty Name="StyleID" ColumnName="StyleID" />
-                <ScalarProperty Name="ColourID" ColumnName="ColourID" />
-                <ScalarProperty Name="SizeID" ColumnName="SizeID" />
-                <ScalarProperty Name="Description" ColumnName="Description" />
-                <ScalarProperty Name="Price" ColumnName="Price" />
-                <ScalarProperty Name="Cost" ColumnName="Cost" />
-                <ScalarProperty Name="OrdQty" ColumnName="OrdQty" />
-                <ScalarProperty Name="AllQty" ColumnName="AllQty" />
-                <ScalarProperty Name="InvQty" ColumnName="InvQty" />
-                <ScalarProperty Name="DespQty" ColumnName="DespQty" />
-                <ScalarProperty Name="CommissionRate" ColumnName="CommissionRate" />
-                <ScalarProperty Name="Discount" ColumnName="Discount" />
-                <ScalarProperty Name="Deliverydate" ColumnName="Deliverydate" />
-                <ScalarProperty Name="VatCode" ColumnName="VatCode" />
-                <ScalarProperty Name="NomCode" ColumnName="NomCode" />
-                <ScalarProperty Name="PartShip" ColumnName="PartShip" />
-                <ScalarProperty Name="LineNoRef" ColumnName="LineNoRef" />
-                <ScalarProperty Name="Currency_Exchange_Rate" ColumnName="Currency_Exchange_Rate" />
-                <ScalarProperty Name="StyleIDref" ColumnName="StyleIDref" />
-                <ScalarProperty Name="FreeText" ColumnName="FreeText" />
-                <ScalarProperty Name="RepID" ColumnName="RepID" />
-                <ScalarProperty Name="RepRate" ColumnName="RepRate" />
-                <ScalarProperty Name="KamID" ColumnName="KamID" />
-                <ScalarProperty Name="KAMRate" ColumnName="KAMRate" />
-                <ScalarProperty Name="IssueUOM" ColumnName="IssueUOM" />
-                <ScalarProperty Name="IssueQty" ColumnName="IssueQty" />
-                <ScalarProperty Name="StockingUOM" ColumnName="StockingUOM" />
-                <ScalarProperty Name="OriginalOrderNo" ColumnName="OriginalOrderNo" />
-                <ScalarProperty Name="OriginalLineNo" ColumnName="OriginalLineNo" />
-                <ScalarProperty Name="SOPDETAIL1" ColumnName="SOPDETAIL1" />
-                <ScalarProperty Name="SOPDETAIL2" ColumnName="SOPDETAIL2" />
-                <ScalarProperty Name="SOPDETAIL3" ColumnName="SOPDETAIL3" />
-                <ScalarProperty Name="SOPDETAIL4" ColumnName="SOPDETAIL4" />
-                <ScalarProperty Name="SOPDETAIL5" ColumnName="SOPDETAIL5" />
-                <ScalarProperty Name="Jobsheetno" ColumnName="Jobsheetno" />
-                <ScalarProperty Name="JobsheetLineNo" ColumnName="JobsheetLineNo" />
-                <ScalarProperty Name="AssemblyID" ColumnName="AssemblyID" />
-                <ScalarProperty Name="AsmLineNo" ColumnName="AsmLineNo" />
-                <ScalarProperty Name="ReasonCode" ColumnName="ReasonCode" />
-                <ScalarProperty Name="ReturnOrderNo" ColumnName="ReturnOrderNo" />
-                <ScalarProperty Name="ReturnLineNo" ColumnName="ReturnLineNo" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tsb_tblsop_salesorder_header_merge">
-            <EntityTypeMapping TypeName="e4kmaximusdbModel.tsb_tblsop_salesorder_header_merge">
-              <MappingFragment StoreEntitySet="tsb_tblsop_salesorder_header_merge">
-                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
-                <ScalarProperty Name="WarehouseID" ColumnName="WarehouseID" />
-                <ScalarProperty Name="OrderNo" ColumnName="OrderNo" />
-                <ScalarProperty Name="CustID" ColumnName="CustID" />
-                <ScalarProperty Name="OrderDate" ColumnName="OrderDate" />
-                <ScalarProperty Name="InvDesc" ColumnName="InvDesc" />
-                <ScalarProperty Name="InvAddress1" ColumnName="InvAddress1" />
-                <ScalarProperty Name="InvAddress2" ColumnName="InvAddress2" />
-                <ScalarProperty Name="InvAddress3" ColumnName="InvAddress3" />
-                <ScalarProperty Name="InvCity" ColumnName="InvCity" />
-                <ScalarProperty Name="InvTown" ColumnName="InvTown" />
-                <ScalarProperty Name="InvPostCode" ColumnName="InvPostCode" />
-                <ScalarProperty Name="InvCountry" ColumnName="InvCountry" />
-                <ScalarProperty Name="DelDesc" ColumnName="DelDesc" />
-                <ScalarProperty Name="DelAddress1" ColumnName="DelAddress1" />
-                <ScalarProperty Name="DelAddress2" ColumnName="DelAddress2" />
-                <ScalarProperty Name="DelAddress3" ColumnName="DelAddress3" />
-                <ScalarProperty Name="DelCity" ColumnName="DelCity" />
-                <ScalarProperty Name="DelTown" ColumnName="DelTown" />
-                <ScalarProperty Name="DelPostCode" ColumnName="DelPostCode" />
-                <ScalarProperty Name="DelCountry" ColumnName="DelCountry" />
-                <ScalarProperty Name="CustRef" ColumnName="CustRef" />
-                <ScalarProperty Name="ContractRef" ColumnName="ContractRef" />
-                <ScalarProperty Name="Comments" ColumnName="Comments" />
-                <ScalarProperty Name="InvoiceDate" ColumnName="InvoiceDate" />
-                <ScalarProperty Name="Carrier" ColumnName="Carrier" />
-                <ScalarProperty Name="CarrierCharge" ColumnName="CarrierCharge" />
-                <ScalarProperty Name="CustDisc" ColumnName="CustDisc" />
-                <ScalarProperty Name="SettDisc" ColumnName="SettDisc" />
-                <ScalarProperty Name="VolDisc" ColumnName="VolDisc" />
-                <ScalarProperty Name="SettlementDays" ColumnName="SettlementDays" />
-                <ScalarProperty Name="OrderConfirm" ColumnName="OrderConfirm" />
-                <ScalarProperty Name="CommentsExternal" ColumnName="CommentsExternal" />
-                <ScalarProperty Name="Cancelled" ColumnName="Cancelled" />
-                <ScalarProperty Name="ProForma" ColumnName="ProForma" />
-                <ScalarProperty Name="Completed" ColumnName="Completed" />
-                <ScalarProperty Name="WorksOrderNo" ColumnName="WorksOrderNo" />
-                <ScalarProperty Name="AllowPartShipment" ColumnName="AllowPartShipment" />
-                <ScalarProperty Name="TotalGoods" ColumnName="TotalGoods" />
-                <ScalarProperty Name="OrderGoods" ColumnName="OrderGoods" />
-                <ScalarProperty Name="UserID" ColumnName="UserID" />
-                <ScalarProperty Name="pRINTINVOICE" ColumnName="pRINTINVOICE" />
-                <ScalarProperty Name="Currency_Exchange_Rate" ColumnName="Currency_Exchange_Rate" />
-                <ScalarProperty Name="PinNo" ColumnName="PinNo" />
-                <ScalarProperty Name="UCodeId" ColumnName="UCodeId" />
-                <ScalarProperty Name="ContractNo" ColumnName="ContractNo" />
-                <ScalarProperty Name="Currency_Exchange_Code" ColumnName="Currency_Exchange_Code" />
-                <ScalarProperty Name="TIMEOFENTRY" ColumnName="TIMEOFENTRY" />
-                <ScalarProperty Name="RepID" ColumnName="RepID" />
-                <ScalarProperty Name="RepNo" ColumnName="RepNo" />
-                <ScalarProperty Name="OnlineConfirm" ColumnName="OnlineConfirm" />
-                <ScalarProperty Name="OnlineConfirmDate" ColumnName="OnlineConfirmDate" />
-                <ScalarProperty Name="OnlineConfirmedBy" ColumnName="OnlineConfirmedBy" />
-                <ScalarProperty Name="OnlineProcessed" ColumnName="OnlineProcessed" />
-                <ScalarProperty Name="OnlineProcessedDate" ColumnName="OnlineProcessedDate" />
-                <ScalarProperty Name="OnlineProcessedBy" ColumnName="OnlineProcessedBy" />
-                <ScalarProperty Name="ReasonCode" ColumnName="ReasonCode" />
-                <ScalarProperty Name="OnlineUserID" ColumnName="OnlineUserID" />
-                <ScalarProperty Name="OrderAnalysisCode1" ColumnName="OrderAnalysisCode1" />
-                <ScalarProperty Name="OrderAnalysisCode2" ColumnName="OrderAnalysisCode2" />
-                <ScalarProperty Name="OrderAnalysisCode3" ColumnName="OrderAnalysisCode3" />
-                <ScalarProperty Name="OrderAnalysisCode4" ColumnName="OrderAnalysisCode4" />
-                <ScalarProperty Name="OrderAnalysisCode5" ColumnName="OrderAnalysisCode5" />
-                <ScalarProperty Name="PrintLabel" ColumnName="PrintLabel" />
-                <ScalarProperty Name="ProFormaPrint" ColumnName="ProFormaPrint" />
-                <ScalarProperty Name="ConfirmPrint" ColumnName="ConfirmPrint" />
-                <ScalarProperty Name="OrderType" ColumnName="OrderType" />
-                <ScalarProperty Name="EmailID" ColumnName="EmailID" />
-                <ScalarProperty Name="ContactName" ColumnName="ContactName" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -13760,6 +12868,19 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="stylebytemplateviews">
+            <EntityTypeMapping TypeName="e4kmaximusdbModel.stylebytemplateview">
+              <MappingFragment StoreEntitySet="stylebytemplateview">
+                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+                <ScalarProperty Name="StyleID" ColumnName="StyleID" />
+                <ScalarProperty Name="StyleImage" ColumnName="StyleImage" />
+                <ScalarProperty Name="Product_Group" ColumnName="Product_Group" />
+                <ScalarProperty Name="Template" ColumnName="Template" />
+                <ScalarProperty Name="BusinessID" ColumnName="BusinessID" />
+                <ScalarProperty Name="FreeText" ColumnName="FreeText" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="tblfskstyle_dimension1">
             <EntityTypeMapping TypeName="e4kmaximusdbModel.tblfskstyle_dimension1">
               <MappingFragment StoreEntitySet="tblfskstyle_dimension1">
@@ -14158,12 +13279,22 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
           <FunctionImportMapping FunctionImportName="GetEmployeeByRole" FunctionName="e4kmaximusdbModel.Store.GetEmployeeByRole" />
           <FunctionImportMapping FunctionImportName="GetEmployeeByRoles1" FunctionName="e4kmaximusdbModel.Store.GetEmployeeByRoles1" />
           <FunctionImportMapping FunctionImportName="GetEmployeeByRolesLast" FunctionName="e4kmaximusdbModel.Store.GetEmployeeByRolesLast" />
-          <EntitySetMapping Name="stylebytemplateviews">
-            <EntityTypeMapping TypeName="e4kmaximusdbModel.stylebytemplateview">
-              <MappingFragment StoreEntitySet="stylebytemplateview">
-                <ScalarProperty Name="FreeText" ColumnName="FreeText" />
+          <EntitySetMapping Name="view_totalpointsused">
+            <EntityTypeMapping TypeName="e4kmaximusdbModel.view_totalpointsused">
+              <MappingFragment StoreEntitySet="view_totalpointsused">
+                <ScalarProperty Name="TOTSOPOINTS" ColumnName="TOTSOPOINTS" />
+                <ScalarProperty Name="ColourID" ColumnName="ColourID" />
+                <ScalarProperty Name="StyleID" ColumnName="StyleID" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
                 <ScalarProperty Name="BusinessID" ColumnName="BusinessID" />
-                <ScalarProperty Name="Template" ColumnName="Template" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="styleby_freetextview_ucode">
+            <EntityTypeMapping TypeName="e4kmaximusdbModel.styleby_freetextview_ucode">
+              <MappingFragment StoreEntitySet="styleby_freetextview_ucode">
+                <ScalarProperty Name="FreeText" ColumnName="FreeText" />
+                <ScalarProperty Name="UCodeID" ColumnName="UCodeID" />
                 <ScalarProperty Name="Product_Group" ColumnName="Product_Group" />
                 <ScalarProperty Name="StyleImage" ColumnName="StyleImage" />
                 <ScalarProperty Name="StyleID" ColumnName="StyleID" />

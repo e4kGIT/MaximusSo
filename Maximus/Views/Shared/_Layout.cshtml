@@ -9,6 +9,7 @@
     <link href="~/Content/css/CustomCss.css" rel="stylesheet" />
     <link href="~/Content/css/Media.css" rel="stylesheet" />
     <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/css/menu.css" rel="stylesheet" />
     @*<link href="~/Content/jquery.jgrowl.css" rel="stylesheet" /*@>
     <script src="~/scripts/jquery-1.12.4.min.js"></script>
     <link href="~/Content/snackbar.css" rel="stylesheet" />
@@ -16,18 +17,9 @@
     <script src="~/scripts/jquery.growl.js"></script>
     <link href="~/Content/jquery.growl.css" rel="stylesheet" />
     <script src="~/scripts/jquery.unobtrusive-ajax.min.js"></script>
-    <script src="~/Scripts/bootstrap.min.js"></script>
     <script src="~/Scripts/modernizr-2.6.2.js"></script>
-    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
-    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
-
-
+    <script src="~/scripts/3deye.min.js"></script>
     <script src="~/scripts/myScript.js"></script>
-
-
-
-
-
 
     @Html.DevExpress().GetStyleSheets(
         new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
@@ -43,7 +35,8 @@
          new Script { ExtensionSuite = ExtensionSuite.CardView }
     )
 
-
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
     @* <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>*@
     @*<script src="~/scripts/myScript.js"></script>*@
     <style type="text/css">
@@ -53,6 +46,20 @@
 
         .hideElement {
             visibility: hidden;
+        }
+
+        .Highlighter:hover {
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .vl {
+            border-left: 6px solid green;
+            height: 500px;
+            position: absolute;
+            left: 50%;
+            margin-left: -3px;
+            top: 0;
         }
 
         .changethisone span {
@@ -200,6 +207,14 @@
         .label-warning[href],
         .badge-warning[href] {
             background-color: #c67605;
+        }
+
+        .mandatoryStyle {
+            font-weight: 700;
+        }
+
+        .mandatoryStylecart {
+            font-size: 17px;
         }
 
         #lblCartCount {
@@ -434,14 +449,39 @@
         .dxlbd {
             z-index: 100000;
         }
+
+
+
+        .dropdown1 {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content1 {
+            display: none;
+            position: absolute;
+            background-color: #f1f1f1;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+            .dropdown-content1 a {
+                color: black;
+                padding: 12px 16px;
+                text-decoration: none;
+                display: block;
+            }
+
+                .dropdown-content1 a:hover {
+                    background-color: #ddd;
+                }
+
+        .dropdown1:hover .dropdown-content1 {
+            display: block;
+        }
     </style>
 
-
-
-
-    @*@Html.DevExpress().GetStyleSheets(
-
-        )*@
     <script type="text/javascript">
         var selectedItems = [];
         var selectedColor = "";
@@ -605,26 +645,78 @@
             }
         }
         function GetCart() {
+            var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
+            loadPopup.Show();
             $.ajax({
                 type: "POST",
                 url: "/Home/GetBasketStatus",
                 success: function (response) {
+                    loadPopup.Hide()
                     if (response == "") {
-                        var url = "/Basket/ShowBasket";
-                        window.location = url;
+                        $.ajax({
+                            url: "/Home/GetOrderEnforcementStatus/",
+                            type: "post",
+                            success: function (respo ) {
+                                if (respo == "") {
+                                    var url = "/Basket/ShowBasket";
+                                    window.location = url;
+                                }
+                                else {
+                                    respo = respo + "\n\nPlease click Ok to proceed to cart or Cancel to continue shopping";
+                                    if (confirm(respo)) 
+                                    {
+                                        var url = "/Basket/ShowBasket";
+                                        window.location = url;
+                                    }
+                                }
+                            }
+                        });
+                        
                     }
                     else if (response.includes("///")) {
                         var capCatagory = response.replace("///", "");
+                        capCatagory = capCatagory + "\n\nPlease click Ok to proceed to cart or Cancel to continue shopping";
                         if (confirm(capCatagory)) {
-                            var url = "/Basket/ShowBasket";
-                            window.location = url;
+                            $.ajax({
+                                url: "/Home/GetOrderEnforcementStatus/",
+                                type: "post",
+                                success: function (respo) {
+                                    if (respo == "") {
+                                        var url = "/Basket/ShowBasket";
+                                        window.location = url;
+                                    }
+                                    else {
+                                        respo = respo + "\n\nPlease click Ok to proceed to cart or Cancel to continue shopping";
+                                        if (confirm(respo)) {
+                                            var url = "/Basket/ShowBasket";
+                                            window.location = url;
+                                        }
+                                    }
+                                }
+                            });
                         }
                     }
                     else if (response.includes("/--/")) {
                         var capCatagory = response.replace("/--/", "");
+                        capCatagory = capCatagory + "\n\nPlease click Ok to proceed to cart or Cancel to continue shopping";
                         if (confirm(capCatagory)) {
-                            var url = "/Basket/ShowBasket";
-                            window.location = url;
+                            $.ajax({
+                                url: "/Home/GetOrderEnforcementStatus/",
+                                type: "post",
+                                success: function (respo) {
+                                    respo = respo + "\n\nPlease click Ok to proceed to cart or Cancel to continue shopping";
+                                    if (respo == "") {
+                                        var url = "/Basket/ShowBasket";
+                                        window.location = url;
+                                    }
+                                    else {
+                                        if (confirm(respo)) {
+                                            var url = "/Basket/ShowBasket";
+                                            window.location = url;
+                                        }
+                                    }
+                                }
+                            });
                         }
                     }
                     else {
@@ -632,6 +724,17 @@
                     }
                 },
             });
+        }
+        function GetEnforcement() {
+            $.ajax({
+                url: "/Home/GetOrderEnforcementStatus/",
+                type: "post",
+                success: function (response) {
+                    return response;
+                }
+            }
+            );
+
         }
 
         function getSelectedSize(s, e) {
@@ -1295,7 +1398,7 @@
         function Getimage(img) {
             if (img != "") {
                 var popup = ASPxClientControl.GetControlCollection().GetByName("ImagePop");
-                var response = "<img style='height:300px;width:200px%;' src='" + img + "'/> "
+                var response = "<img style='height:100%;width:100%;' src='" + img + "'/> "
                 $("#ImageDive").html("");
                 $("#ImageDive").html(response);
                 popup.Show();
@@ -1794,7 +1897,7 @@
                     $.ajax({
                         type: "Post",
                         url: "@Url.Content("~/Employee/GotoCard")",
-                        data: { 'EmployeeId': EmployeeId, 'Ucodes': ucodeCmb.lastSuccessText, 'EmpName': EmployeeName },
+                        data: { 'EmployeeId': EmployeeId, 'Ucodes1': ucodeCmb.lastSuccessText, 'EmpName': EmployeeName },
                         success: function (response) {
                             if (response != null) {
                                 popup.Hide();
@@ -1848,6 +1951,7 @@
             return actualValues;
         }
 
+
     </script>
 
 </head>
@@ -1859,8 +1963,8 @@
    }).GetHtml()
     @Html.DevExpress().PopupControl(sett =>
 {
-    sett.Width = System.Web.UI.WebControls.Unit.Percentage(100);
-    sett.Height = System.Web.UI.WebControls.Unit.Percentage(50);
+    sett.Width = System.Web.UI.WebControls.Unit.Pixel(500);
+    sett.Height = System.Web.UI.WebControls.Unit.Pixel(250);
     sett.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
     sett.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
     sett.Name = "ImagePop";
@@ -1875,7 +1979,93 @@
     sett.HeaderText = "Style Image";
     sett.SetContent(() =>
     {
-        ViewContext.Writer.Write("<div><div id='ImageDive'></div></div>");
+        ViewContext.Writer.Write("<div><div class='row'><div class='col-md-3'></div><div clss='col-md-9'><div id='ImageDive'></div></div></div></div>");
+    });
+
+}).GetHtml()
+    @Html.DevExpress().PopupControl(sett =>
+{
+    sett.Width = System.Web.UI.WebControls.Unit.Pixel(1000);
+    sett.Height = System.Web.UI.WebControls.Unit.Pixel(800);
+    sett.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+    sett.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    sett.Name = "orderConfirmation";
+    sett.AllowResize = false;
+    sett.ShowHeader = true;
+    sett.ShowOnPageLoad = false;
+    sett.AllowDragging = true;
+    sett.CloseAction = CloseAction.OuterMouseClick;
+    sett.CloseOnEscape = false;
+    sett.PopupAnimationType = AnimationType.Auto;
+    sett.Modal = true;
+    sett.HeaderText = "";
+    sett.ClientSideEvents.Closing = "redirect";
+    sett.ScrollBars = System.Web.UI.WebControls.ScrollBars.Vertical;
+    sett.SetContent(() =>
+    {
+        ViewContext.Writer.Write("<div><div class='row'><div class='col-md-1'></div><div clss='col-md-10'><center><div id='ordeConfirm'></div></center></div><div class='col-md-1'></div></div></div><br/><br/><br/><div><center><button type='button' class='btn btn-primary' onclick=\"print('ordeConfirm')\">Print</button></center></div>");
+    });
+}).GetHtml()
+    
+    @Html.DevExpress().PopupControl(sett =>
+{
+    sett.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+    sett.Height = System.Web.UI.WebControls.Unit.Pixel(600);
+    sett.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+    sett.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    sett.Name = "OrderDetailPop";
+    sett.AllowResize = false;
+    sett.ShowHeader = true;
+    sett.ShowOnPageLoad = false;
+    sett.AllowDragging = false;
+    sett.CloseAction = CloseAction.OuterMouseClick;
+    sett.CloseOnEscape = false;
+    sett.PopupAnimationType = AnimationType.Auto;
+    sett.Modal = true;
+    sett.HeaderText = "Order details";
+    sett.SetContent(() =>
+    {
+        ViewContext.Writer.Write("<div><div id='OrderHead'></div><br/><br/><div id='OrderDetail' style='overflow:scroll;'></div></div>");
+    });
+}).GetHtml()
+    @Html.DevExpress().PopupControl(sett =>
+{
+    sett.Width = System.Web.UI.WebControls.Unit.Pixel(500);
+    sett.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+    sett.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    sett.Name = "EmailPrompt";
+    sett.AllowResize = true;
+    sett.ShowHeader = true;
+    sett.ShowOnPageLoad = false;
+    sett.AllowDragging = false;
+    sett.CloseAction = CloseAction.None;
+    sett.CloseOnEscape = false;
+    sett.PopupAnimationType = AnimationType.Auto;
+    sett.Modal = true;
+    sett.HeaderText = "";
+    sett.SetContent(() =>
+    {
+        ViewContext.Writer.Write("<div><div id='EmailPromptContent'></div></div>");
+    });
+}).GetHtml()
+    @Html.DevExpress().PopupControl(sett =>
+{
+    sett.Width = System.Web.UI.WebControls.Unit.Pixel(500);
+    sett.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+    sett.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    sett.Name = "RolloutPrompt";
+    sett.AllowResize = true;
+    sett.ShowHeader = true;
+    sett.ShowOnPageLoad = false;
+    sett.AllowDragging = false;
+    sett.CloseAction = CloseAction.None;
+    sett.CloseOnEscape = false;
+    sett.PopupAnimationType = AnimationType.Auto;
+    sett.Modal = true;
+    sett.HeaderText = "";
+    sett.SetContent(() =>
+    {
+        ViewContext.Writer.Write("<div><div id='RolloutPromptContent'></div></div>");
     });
 }).GetHtml()
     @Html.DevExpress().PopupControl(sett =>
@@ -1900,78 +2090,256 @@
         ViewContext.Writer.Write("<div><div id='EditLayout'></div></div>");
     });
 }).GetHtml()
-    <div class="navbar navbar-inverse navbar-fixed-top checList">
-        @*<div class="container">*@
-        @* <div class="row">*@
-        <div class="col-lg-4">
-            <a href="Home/Index"><img src="~/Content/Images/saleLogo.png" height="75" /></a>
-        </div>
-        @*@if (Session["BuisnessId"] != null)
-            {*@
-        @if (User.Identity.IsAuthenticated)
-        {
+    <div id="wrapper">
+        <nav class="navbar navbar-inverse navbar-fixed-top" style="background-color:white" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-header" style="height:65px;">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <div class="navbar-brand">
+                        <a id="menu-toggle" style="color:#009885" href="#" class="glyphicon glyphicon-align-justify btn-menu toggle">
+                            <i class="fa fa-bars"></i>
+                        </a>
+                        @{
+                            if (Session["LOGO"] != null)
+                            {
+                                var src = "/" + Session["LOGO"].ToString();
+                                <img height="45" src="@src" />
+                            }
+                            else
+                            {
+                                <a href="#">Sales order processing</a>
+                            }
+                        }
+                    </div>
+                </div>
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <div id="navbar" class="navbar-collapse collapse pull-right">
+                        <div class="navbar-collapse collapse pull-right">
+                            <ul class="nav navbar-nav">
 
-            // <div class="col-lg-"></div>
-            <div class="col-lg-8">
-                <center>
-                    <div class="navbar-collapse collapse pull-right">
-                        <ul class="nav navbar-nav">
+                                <li style="color:white" class="navbar-light">
+                                    <a class="navbar-light"><b><span class="glyphicon glyphicon-user" title="User"></span></b> @Session["UserName"].ToString().Trim()</a>
+                                    @*   @Html.ActionLink("Settings", "Index", "Settings", new { area = "" }, new { @class = "navbar-light" })*@
+                                </li>
+                                <li style="color:white" class="navbar-light">
+                                    <a class="navbar-light"><b>Role: </b>@Session["Access"].ToString().Trim()</a>
+                                    @*   @Html.ActionLink("Settings", "Index", "Settings", new { area = "" }, new { @class = "navbar-light" })*@
+                                </li>
 
-                            <li style="color:white" class="navbar-light">
-                                <a class="navbar-light"><b><span class="glyphicon glyphicon-user" title="User"></span></b> @Session["UserName"].ToString().Trim()</a>
-                                @*   @Html.ActionLink("Settings", "Index", "Settings", new { area = "" }, new { @class = "navbar-light" })*@
-                            </li>
-                            <li style="color:white" class="navbar-light">
-                                <a class="navbar-light"><b>Role: </b>@Session["Access"].ToString().Trim()</a>
-                                @*   @Html.ActionLink("Settings", "Index", "Settings", new { area = "" }, new { @class = "navbar-light" })*@
-                            </li>
+                                <li style="color:white" class="navbar-light">
+                                    <a class="navbar-light"><b>Customer: </b>@Session["Buisness"].ToString().Trim()</a>
+                                    @*   @Html.ActionLink("Settings", "Index", "Settings", new { area = "" }, new { @class = "navbar-light" })*@
+                                </li>
+                                <li style="color:white" class="navbar-light">
+                                    <a class="navbar-light pull-right glyphicon glyphicon-cog" title="Settings" href="/Settings/Index"></a>
+                                    @*   @Html.ActionLink("Settings", "Index", "Settings", new { area = "" }, new { @class = "navbar-light" })*@
+                                </li>
+                                <li style="color:white" class="navbar-light">
+                                    @*<a class="navbar-light  pull-right glyphicon glyphicon-log-out" title="Logout" href="/User/Logoff"></a>*@
+                                    @* @Html.ActionLink("Logout", "Logoff", "User", new { area = "" }, new { @class = "navbar-light" })*@
+                                </li>
+                                <li id="CartwidCount">
+                                    <button class="btn" style="background-color:#009885;color:white" onclick="GetCart()"><b>View Basket &nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-shopping-cart" style="color:white;font-size:25px"></span><sup class="badge" id="lblCartCount">@Convert.ToInt32(Session["qty"])</sup></b></button>
+                                </li>
+                            </ul>
+                            <br />
+                            <div class="col-md-2 col-sm-12 col-lg-2 col-xs-12"></div><div class="col-md-2 col-sm-12 col-lg-2 col-xs-12"></div><div class="col-md-2 col-sm-12 col-lg-2 col-xs-12"></div>
+                            <div class="col-md-2 col-sm-12 col-lg-2 col-xs-12">
+                                @*<div id="CartwidCount">
+                                        <button class="btn" style="background-color:#009885;color:white" onclick="GetCart()"><b>View Basket &nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-shopping-cart" style="color:white;font-size:25px"></span><sup class="badge" id="lblCartCount">@Convert.ToInt32(Session["qty"])</sup></b></button>
+                                    </div>*@
 
-                            <li style="color:white" class="navbar-light">
-                                <a class="navbar-light"><b>Customer: </b>@Session["Buisness"].ToString().Trim()</a>
-                                @*   @Html.ActionLink("Settings", "Index", "Settings", new { area = "" }, new { @class = "navbar-light" })*@
-                            </li>
-                            <li style="color:white" class="navbar-light">
-                                <a class="navbar-light pull-right glyphicon glyphicon-cog" title="Settings" href="/Settings/Index"></a>
-                                @*   @Html.ActionLink("Settings", "Index", "Settings", new { area = "" }, new { @class = "navbar-light" })*@
-                            </li>
-                            <li style="color:white" class="navbar-light">
-                                <a class="navbar-light  pull-right glyphicon glyphicon-log-out" title="Logout" href="/User/Logoff"></a>
-                                @* @Html.ActionLink("Logout", "Logoff", "User", new { area = "" }, new { @class = "navbar-light" })*@
-                            </li>
-                        </ul>
-                        <br />
-                        <div class="col-md-2 col-sm-12 col-lg-2 col-xs-12"></div><div class="col-md-2 col-sm-12 col-lg-2 col-xs-12"></div><div class="col-md-2 col-sm-12 col-lg-2 col-xs-12"></div>
-                        <div class="col-md-2 col-sm-12 col-lg-2 col-xs-12">
-                            <div id="CartwidCount">
-                                <button class="btn" style="background-color:#009885;color:white" onclick="GetCart()"><b>View Basket &nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-shopping-cart" style="color:white;font-size:25px"></span><sup class="badge" id="lblCartCount">@Convert.ToInt32(Session["qty"])</sup></b></button>
                             </div>
-
                         </div>
                     </div>
-                    <br />
-                    <br />
-                    <div class="row">
-                        <div class="col-lg-4"></div>
-                        <div class="col-lg-4"></div>
-                        <div class="col-lg-4"></div>
-                    </div>
-                </center>
+                }
             </div>
-        }
-        @*  @Html.ActionLink("Sales order processing", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })*@
-    </div>
+        </nav>
+        <!-- Sidebar -->
+        @if (User.Identity.IsAuthenticated)
+        { <div id="sidebar-wrapper">
+            <nav id="spy">
+                <ul class="sidebar-nav nav">
+                    @{
+                        foreach (var mainMenu in ((Maximus.Data.models.MenuLayoutModel)Session["MenuItems"]).ParentMenuItms)
+                        {
+                            if (((List<Maximus.Data.Models.PermissionList>)Session["PermissionLst"]).Any(x => x.ControlId == "MenuPLit" + mainMenu.ParentID))
+                            {
+                                if (((List<Maximus.Data.Models.PermissionList>)Session["PermissionLst"]).Any(x => x.ControlId == "MenuPLit" + mainMenu.ParentID & x.Permission.ToLower() == "show"))
+                                {
+                                    <li class="sidebar-brand collapsed sidebar-nav-li" data-toggle="collapse" data-target="#@mainMenu.ParentID">
+                                        <a style="padding:0px;" href="@mainMenu.URL"><i class="fa fa-gift fa-lg"></i><b>@mainMenu.Description</b><span class="arrow"></span></a>
+                                    </li>
+                                    <ul style="height:auto;padding:23px 0px 0px 54px;" class="sub-menu  collapse" id="@mainMenu.ParentID">
+                                        @foreach (var childMenu in ((Maximus.Data.models.MenuLayoutModel)Session["MenuItems"]).ChildMenuItms.Where(x => x.ParentID == mainMenu.ParentID))
+                                        {
+                                            if (((List<Maximus.Data.Models.PermissionList>)Session["PermissionLst"]).Any(x => x.ControlId.ToLower() == childMenu.ChildID.ToLower() & x.Permission.ToLower() == "show"))
+                                            {
+                                                if (childMenu.ChildID == "menuEmergencyOrders")
+                                                {
+                                                    if (Session["emergencyUcode"] != null)
+                                                    {
+                                                        <li class="submenuside"><a href="@childMenu.URL" title="@childMenu.TitleDesc" style="text-decoration: none; color: #009885">@childMenu.Description</a><br /><br /></li>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <li class="submenuside"><a href="@childMenu.URL" title="@childMenu.TitleDesc" style="text-decoration: none; color: #009885">@childMenu.Description</a><br /><br /></li>
+                                                }
+                                            }
+                                        }
+                                    </ul>
+                                }
+                            }
+                            else
+                            {
+                                <li class="sidebar-brand collapsed sidebar-nav-li" data-toggle="collapse" data-target="#@mainMenu.ParentID">
+                                    <a style="padding:0px;" href="@mainMenu.URL"><i class="fa fa-gift fa-lg"></i><b>@mainMenu.Description</b><span class="arrow"></span></a>
+                                </li>
+                                <ul style="height:auto;padding:23px 0px 0px 54px;" class="sub-menu collapse" id="@mainMenu.ParentID">
+                                    @foreach (var childMenu in ((Maximus.Data.models.MenuLayoutModel)Session["MenuItems"]).ChildMenuItms.Where(x => x.ParentID == mainMenu.ParentID))
+                                    {
+                                        if (((List<Maximus.Data.Models.PermissionList>
+                                            )Session["PermissionLst"]).Any(x => x.ControlId == childMenu.ChildID))
+                                        {
+                                            if (((List<Maximus.Data.Models.PermissionList>
+                                                )Session["PermissionLst"]).Any(x => x.ControlId.ToLower() == childMenu.ChildID.ToLower() & x.Permission.ToLower() == "show"))
+                                            {
+                                                <li class="submenuside"><a href="@childMenu.URL" title="@childMenu.TitleDesc" style="text-decoration: none; color: #009885">@childMenu.Description</a><br /><br /></li>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <li class="submenuside"><a href="@childMenu.URL" title="@childMenu.TitleDesc" style="text-decoration: none; color: #009885">@childMenu.Description</a><br /><br /></li>
+                                        }
+                                    }
+                                </ul>
 
-    @*</div>
-        </div>*@
+                            }
+                        }
 
-    <div class="container-fluid body-content">
-        <br /><br />
-        <div class="col-md-1" style="padding:0px"></div>
-        <div class="col-md-11" style="padding:0px">
-            <br /> <br />
-            @RenderBody()
+                    }
+                    <br />
+                    <li class="Para" data-toggle="collapse">
+                        <div>
+                            @{
+                                var SiteCodeUserAddress = (Maximus.Data.models.SiteCodeUserAddress)Session["SiteCodeNAddress"];
+                                if (Convert.ToBoolean(Session["hasSiteCode"].ToString()))
+                                {
+                                    if (Session["SiteCodeNAddress"] != null)
+                                    {
+                                        if ((SiteCodeUserAddress.UserAddress != null))
+                                        {
+                                            if ((SiteCodeUserAddress.UserAddress.Address1 != null) && (SiteCodeUserAddress.UserAddress.Address1 != ""))
+                                            {
+                                                <h5>ADDRESS</h5>
+                                                <hr />
+                                                <p>@SiteCodeUserAddress.UserAddress.Address1</p>
+                                                <p>
+                                                    @SiteCodeUserAddress.UserAddress.Address2
+                                                </p>
+                                                <p>
+                                                    @SiteCodeUserAddress.UserAddress.Address3
+                                                </p>
+                                                <p>
+                                                    @SiteCodeUserAddress.UserAddress.Town
+                                                </p> <p>
+                                                    @SiteCodeUserAddress.UserAddress.City
+                                                </p>
+                                                <p>   @SiteCodeUserAddress.UserAddress.Postcode</p>
+
+                                            }
+                                        }
+
+                                        if ((SiteCodeUserAddress.SiteCode != null))
+                                        {
+                                            if (SiteCodeUserAddress.SiteCode.Count > 0)
+                                            {<br />
+                                            <h5>SITECODE</h5>
+                                            <hr />
+                                                foreach (var item in SiteCodeUserAddress.SiteCode)
+                                                {
+                                                    if (SiteCodeUserAddress.SiteCode.IndexOf(item) == SiteCodeUserAddress.SiteCode.Count)
+                                                    {
+                                                        <p>@item</p>
+                                                    }
+                                                    else
+                                                    {
+                                                        <p>@item</p>
+                                                    }
+
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                else if (Session["SHOWSITEADDR"] != null)
+                                {
+                                    if (Session["SHOWSITEADDR"].ToString().ToLower() == "show")
+                                    {
+                                        if (Session["SiteAddress"] != null)
+                                        {
+                                            var SiteCodeUserAddress1 = (Maximus.Data.models.tblbus_address)Session["SiteAddress"];
+                                            <h5>ADDRESS</h5>
+                                            <hr />
+                                            <p>@SiteCodeUserAddress1.Address1</p>
+                                            <p>
+                                                @SiteCodeUserAddress1.Address2
+                                            </p>
+                                            <p>
+                                                @SiteCodeUserAddress1.Address3
+                                            </p>
+                                            <p>
+                                                @SiteCodeUserAddress1.Town
+                                            </p> <p>
+                                                @SiteCodeUserAddress1.City
+                                            </p>
+                                            <p>   @SiteCodeUserAddress1.Postcode</p>
+                                        }
+                                    }
+                                }
+                            }
+
+
+
+                        </div>
+                    </li>
+                </ul>
+
+            </nav>
+
+        </div>
+
+                                }
+        <!-- Page content -->
+        <div id="page-content-wrapper">
+            <div class="page-content">
+                <div class="container-fluid">
+                    @RenderBody()
+                </div>
+            </div>
         </div>
     </div>
     <div id="snackbar"> </div>
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#wrapper").toggleClass("active");
+
+        });
+        $("#menu-toggle").click(function (e) {
+            e.preventDefault();
+            $("#wrapper").toggleClass("active");
+
+        });
+
+    </script>
 </body>
 </html>

@@ -1,0 +1,51 @@
+﻿<div class="row">
+    <center> <p style="font-size:18px;">Please enter a valid email to proceed further.</p></center>
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+        <center>
+            @Html.DevExpress().TextBox(s =>
+{
+    s.Name = "emailAlerttxtBox";
+    s.Width = System.Web.UI.WebControls.Unit.Pixel(300);
+    s.Properties.ValidationSettings.RegularExpression.ValidationExpression = @"\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*";
+    //s.Properties.ValidationSettings.ValidateOnLeave = true;
+    //s.Properties.ValidationSettings.RequiredField.IsRequired = true;
+    //s.Properties.ValidationSettings.RequiredField.ErrorText = "Please enter a valid email";
+    //s.Properties.ValidationSettings.Display = Display.Dynamic;
+    ///s.Properties.ValidationSettings.SetFocusOnError = true;
+   // s.Properties.ValidationSettings.ErrorTextPosition = ErrorTextPosition.Bottom;
+    s.ControlStyle.CssClass = "form-control";
+}).GetHtml()
+            <p id="ValidEMail" style="visibility:hidden;color:red">Please enter a valid email</p>
+            <br />
+            <br />
+        </center>
+
+    </div>
+    <div class="col-md-1"></div>
+    <div class="col-md-3"></div>
+    <div class="col-md-3">
+        @Html.DevExpress().Button(s =>
+{
+    s.Name = "EmailSubmit";
+    s.Text = "submit";
+    s.ClientSideEvents.Click = "SaveEmailData";
+    s.ControlStyle.CssClass = "btn";
+}).GetHtml()
+    </div>
+    <div class="col-md-3">
+        @Html.DevExpress().Button(s =>
+{
+    s.Name = "exit";
+    s.Text = "Exit";
+    s.ClientSideEvents.Click = "logoff";
+    s.ControlStyle.CssClass = "btn";
+}).GetHtml()
+    </div>
+    <div class="col-md-3"></div>
+
+
+
+
+
+</div>

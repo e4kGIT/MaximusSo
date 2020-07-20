@@ -22,6 +22,7 @@
         {
             Html.RenderAction("CartviewDetailGridViewGridViewPartial", new { empId = x.KeyValue });
         });
+        settings.ClientSideEvents.Init = "Expand";
 
         settings.SettingsCommandButton.EditButton.Image.IconID = IconID.EditEdit16x16;
         settings.SettingsCommandButton.EditButton.RenderMode = GridCommandButtonRenderMode.Image;
@@ -36,7 +37,10 @@
         settings.SettingsCommandButton.UpdateButton.RenderMode = GridCommandButtonRenderMode.Image;
         settings.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Right;
         settings.SettingsAdaptivity.AdaptiveDetailColumnCount = 5;
-        settings.ClientSideEvents.BeginCallback = "OnBeginCallback";
+        if (Convert.ToBoolean(Session["ISEDITING"])==false)
+        {
+            settings.ClientSideEvents.BeginCallback = "OnBeginCallback";
+        }
         settings.KeyFieldName = "EmployeeID";
 
         settings.SettingsPager.Visible = true;
@@ -54,7 +58,7 @@
         //settings.Columns.Add(x => { x.FieldName = "LineNo"; x.Caption = "Line no"; x.ReadOnly = true; });
         settings.Columns.Add(x => { x.FieldName = "EmployeeID"; x.Caption = "Employee Id"; x.ReadOnly = true; x.EditFormSettings.Visible = DefaultBoolean.False; });
         settings.Columns.Add(x => { x.FieldName = "EmployeeName"; x.Caption = "Employee Name"; x.ReadOnly = true; x.EditFormSettings.Visible = DefaultBoolean.False; });
-        settings.Columns.Add(x => { x.FieldName = "CustRef"; x.Caption = "CustRef"; x.ReadOnly = false; x.Visible = true; x.EditFormSettings.Visible = DefaultBoolean.True; });
+        settings.Columns.Add(x => { x.FieldName = "CustRef"; x.Caption = "Custromer Reference"; x.ReadOnly = false; x.Visible = true; x.EditFormSettings.Visible = DefaultBoolean.True; });
         settings.Columns.Add(x => { x.FieldName = "DelDesc"; x.Caption = "Description"; x.Visible = true; x.EditFormSettings.Visible = DefaultBoolean.True; });
         settings.Columns.Add(x => { x.FieldName = "DelAddress1"; x.Caption = "Address1"; x.Visible = true; x.EditFormSettings.Visible = DefaultBoolean.True; });
         settings.Columns.Add(x => { x.FieldName = "DelAddress2"; x.Caption = "Address2"; x.Visible = true; x.EditFormSettings.Visible = DefaultBoolean.True; });

@@ -1,0 +1,53 @@
+﻿
+<div class="row">
+    <center>
+        @Html.DevExpress().RoundPanel(settings =>
+   {
+       settings.Name = "OrderFilter";
+       settings.AllowCollapsingByHeaderClick = true;
+       settings.ShowCollapseButton = true;
+       settings.ShowHeader = true;
+       if (Session["Access"].ToString().ToLower() != "user")
+       {
+           settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+       }
+       else
+       {
+           settings.Width = System.Web.UI.WebControls.Unit.Pixel(800);
+       }
+       //settings.View = Model.View;
+       settings.EnableAnimation = true;
+       settings.Collapsed = true;
+       settings.HeaderText = "Order Search";
+       // settings.ClientSideEvents.BeginCallback = "setCollapsedOrderFilter";
+       // settings.ClientSideEvents.EndCallback = "setCollapsedOrderFilter";
+       settings.SetHeaderTemplateContent(X => { ViewContext.Writer.Write("<center><span class='glyphicon glyphicon-search'></span>  Order search</center>"); });
+       settings.SetContent(() => Html.RenderPartial("_OrdFilter"));
+   }).GetHtml()
+         
+
+    </center>
+</div>
+
+
+<br />
+@*@Html.DevExpress().RoundPanel(settings =>
+    {
+        settings.Name = "orderFilter";
+        settings.AllowCollapsingByHeaderClick = true;
+        settings.ShowCollapseButton = true;
+        settings.ShowHeader = true;
+        settings.Width = System.Web.UI.WebControls.Unit.Pixel(500);
+        //settings.View = Model.View;
+        settings.EnableAnimation = true;
+        settings.HeaderText = "Order search";
+        settings.ClientSideEvents.BeginCallback = "setCollapsed";
+        settings.ClientSideEvents.EndCallback = "setCollapsed";
+        settings.SetHeaderTemplateContent(X => { ViewContext.Writer.Write("<center><span class='glyphicon glyphicon-search'></span> Order search</center>"); });
+        settings.SetContent(() => Html.RenderPartial("_EmpFilter"));
+    }).GetHtml()*@
+
+ <div id="ShowOrders" style="overflow:scroll">
+    
+    @Html.Action("ShowOrderGridViewPartial")
+</div>

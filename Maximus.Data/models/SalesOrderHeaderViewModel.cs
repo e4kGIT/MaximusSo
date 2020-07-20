@@ -7,6 +7,8 @@ namespace Maximus.Data.Models
 {
     public class SalesOrderHeaderViewModel
     {
+        public string CustomerName { get; set; }
+        public bool IsEditing { get; set; }
         public string EmployeeID { get; set; }
         public string EmployeeName { get; set; }
         public string Address { get; set; }
@@ -38,6 +40,7 @@ namespace Maximus.Data.Models
         public string ContractRef { get; set; }
         public Nullable<System.DateTime> InvoiceDate { get; set; }
         public string Carrier { get; set; }
+        public double TotalVat { get; set; }
         public Nullable<double> CarrierCharge { get; set; }
         public Nullable<double> CustDisc { get; set; }
         public Nullable<double> SettDisc { get; set; }

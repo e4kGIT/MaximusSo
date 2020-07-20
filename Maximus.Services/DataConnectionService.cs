@@ -186,9 +186,9 @@ namespace Maximus.Services
         }
         #endregion
 
-        public decimal GetStyleSizePrices(string StyleID = "", string SizeId = "", string busId = "")
+        public decimal GetStyleSizePrices(string StyleID = "", string SizeId = "", string busId = "",string priceId="")
         {
-            return _dp.GetPrice(StyleID, SizeId, busId);
+            return _dp.GetPrice(StyleID, SizeId, busId, priceId);
         }
 
         #region getAddressID
@@ -298,9 +298,9 @@ namespace Maximus.Services
         #endregion
 
         #region GetPrice
-        public decimal GetPrice(string StyleID = "", string SizeId = "", string busId = "")
+        public decimal GetPrice(string StyleID = "", string SizeId = "", string busId = "",string priceId="")
         {
-            return _dp.GetPrice(StyleID, SizeId, busId);
+            return _dp.GetPrice(StyleID, SizeId, busId, priceId);
         }
         #endregion
 
@@ -483,9 +483,9 @@ namespace Maximus.Services
         #endregion
 
         #region  GetAllTotals
-        public TotalModel GetAlltotals(List<SalesOrderHeaderViewModel> mod, double carriage)
+        public TotalModel GetAlltotals(List<SalesOrderHeaderViewModel> mod, double carriage,bool isEdit=false)
         {
-            return _dp.GetAlltotals(mod, carriage);
+            return _dp.GetAlltotals(mod, carriage, isEdit);
         }
         #endregion
 
@@ -507,14 +507,14 @@ namespace Maximus.Services
         public List<SiteCodeModel> GetSitecodes(string businessId)
         {
             return _dp.GetSitecodes(businessId);
-            _dp.GetCarrierStyleCmbValue();
+           // _dp.GetCarrierStyleCmbValue();
         }
         #endregion
 
         #region  GetCarrierStyleCmbValue
-        public List<string> GetCarrierStyleCmbValue()
+        public List<string> GetCarrierStyleCmbValue(string busId)
         {
-            return _dp.GetCarrierStyleCmbValue();
+            return _dp.GetCarrierStyleCmbValue(busId);
         }
         #endregion
 
@@ -532,6 +532,7 @@ namespace Maximus.Services
         }
 
         #endregion
+
         #region GetAllAssembly
         public IEnumerable<getallassembly> GetAllAssembly()
         {
@@ -539,6 +540,7 @@ namespace Maximus.Services
         }
 
 #endregion
+
         #region GetAllSalesOrderHeader
         public IEnumerable<tblsop_salesorder_header> GetAllSalesOrderHeader()
         {
@@ -657,6 +659,15 @@ namespace Maximus.Services
             return _dp.GetAllTemplates(businessId);
         }
 
-        
+        #region getemployee
+
+        public List<string> GetEmployeeProvedure(string busId, string usrId)
+        {
+            List<string> empLst = new List<string>();
+            empLst = _dp.GetEmployeeByProcedure(busId, usrId).Select(s=>s.EmployeeId).ToList();
+            return empLst; 
+        }
+        #endregion
+
     }
 }

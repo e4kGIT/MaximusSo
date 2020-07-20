@@ -1,0 +1,50 @@
+@{
+    var grid = Html.DevExpress().GridView(settings => {
+        settings.Name = "OrderDetail";
+        settings.CallbackRouteValues = new { Controller = "OrderDisplay", Action = "OrderDetailGridViewPartial" };
+
+        settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "OrderDisplay", Action = "OrderDetailGridViewPartialAddNew" };
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "OrderDisplay", Action = "OrderDetailGridViewPartialUpdate" };
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "OrderDisplay", Action = "OrderDetailGridViewPartialDelete" };
+        settings.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
+        settings.SettingsBehavior.ConfirmDelete = true;
+
+        settings.CommandColumn.Visible = false;
+        settings.CommandColumn.ShowNewButton = true;
+        settings.CommandColumn.ShowDeleteButton = true;
+        settings.CommandColumn.ShowEditButton = true;
+
+        settings.KeyFieldName = "OrderNo";
+
+        settings.SettingsPager.Visible = false;
+        settings.Settings.ShowGroupPanel = false;
+        settings.Settings.ShowFilterRow = false;
+        settings.SettingsBehavior.AllowSelectByRowClick = false;
+
+        settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.Off;
+        settings.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Right;
+        settings.SettingsAdaptivity.AdaptiveDetailColumnCount = 1;
+        settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = false;
+        settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
+
+        settings.Columns.Add(s=> { s.FieldName = "OrderNo";s.Caption = "Order no"; });
+        settings.Columns.Add(s => { s.FieldName = "OrderDate"; s.Caption = "Order date"; s.SetDataItemTemplateContent(k => {
+            var date =DateTime.Parse (DataBinder.Eval(k.DataItem, "OrderDate").ToString()).ToString("dd-MM-yyyy");
+            ViewContext.Writer.Write(date);
+        }); });
+        settings.Columns.Add(s => { s.FieldName = ""; s.Caption = "Customer";s.SetDataItemTemplateContent(k => { ViewContext.Writer.Write(Session["BuisnessId"].ToString()); }); });
+        settings.Columns.Add(s => { s.FieldName = "CustomerRef"; s.Caption = "Customer reference"; });
+        settings.Columns.Add(s => { s.FieldName = "NominalCode"; s.Caption = "Nominal code"; });
+        settings.Columns.Add(s => { s.FieldName = "DelDesc"; s.Caption = "Delivery description"; });
+        settings.Columns.Add(s => { s.FieldName = "TotalQty"; s.Caption = "Total quantity"; });
+        settings.Columns.Add(s => { s.FieldName = "UserId"; s.Caption = "User id"; });
+        settings.Columns.Add(s => { s.FieldName = "EmpID"; s.Caption = "Employee Id"; });
+        settings.Columns.Add(s => { s.FieldName = "EmpName"; s.Caption = "Employee name"; });
+        settings.Columns.Add(s => { s.FieldName = "IsConfirmed"; s.Caption = "Confirmed"; });
+        settings.Columns.Add(s => { s.FieldName = "IsProcessed"; s.Caption = "Processed"; });
+    });
+    if (ViewData["EditError"] != null){
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()

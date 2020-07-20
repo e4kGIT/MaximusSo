@@ -221,4 +221,21 @@ namespace Maximus.Helpers
 
         //#endregion
     }
+
+    public class CusComparer : IEqualityComparer<List<StyleAndMinPoints>>
+    {
+        public bool Equals(List<StyleAndMinPoints> x, List<StyleAndMinPoints> y)
+        {
+            throw new NotImplementedException();
+        }
+        public int GetHashCode(List<StyleAndMinPoints> obj)
+        {
+            int hashCode = 0;
+            for (var index = 0; index < obj.Count; index++)
+            {
+                hashCode ^= new { Index = index, Item = obj[index] }.GetHashCode();
+            }
+            return hashCode;
+        }
+    }
 }

@@ -1,0 +1,154 @@
+@{
+    var grid = Html.DevExpress().GridView(settings =>
+    {
+        settings.Name = "ShowOrderGridView";
+
+
+        settings.CallbackRouteValues = new { Controller = "OrderDisplay", Action = "ShowOrderGridViewPartial" };
+
+        settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "OrderDisplay", Action = "ShowOrderGridViewPartialAddNew" };
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "OrderDisplay", Action = "ShowOrderGridViewPartialUpdate" };
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "OrderDisplay", Action = "ShowOrderGridViewPartialDelete" };
+        settings.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
+
+        settings.SettingsDetail.ShowDetailButtons = true;
+        settings.CommandColumn.Visible = false;
+        settings.CommandColumn.ShowNewButton = true;
+        settings.CommandColumn.ShowDeleteButton = true;
+        settings.CommandColumn.ShowEditButton = true;
+        settings.SettingsBehavior.AllowSelectByRowClick = true;
+        settings.KeyFieldName = "OrderNo";
+        //settings.ClientSideEvents.RowDblClick = "ShowDetailOrder";
+        settings.SettingsPager.Visible = true;
+        settings.Settings.ShowGroupPanel = true;
+        settings.Settings.ShowFilterRow = true;
+        // settings.Settings.ShowFilterRowMenu = true;
+        settings.SettingsBehavior.AllowSelectByRowClick = true;
+        //settings.SettingsDetail.ShowDetailRow = true;
+        settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCellsWindowLimit;
+        settings.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Right;
+        settings.SettingsAdaptivity.AdaptiveDetailColumnCount = 6;
+        settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = false;
+        settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
+        settings.SettingsDetail.ShowDetailRow = true;
+        settings.SettingsDetail.AllowOnlyOneMasterRowExpanded = true;
+        settings.SettingsCommandButton.EditButton.Image.IconID = IconID.EditEdit16x16;
+        settings.SettingsCommandButton.EditButton.RenderMode = GridCommandButtonRenderMode.Image;
+        settings.HtmlRowPrepared = (s, e) =>
+        {
+            if (e.GetValue("IsConfirmed") != null)
+            {
+                if (e.GetValue("IsConfirmed").ToString().ToLower() == "yes")
+                {
+                    e.Row.BackColor = System.Drawing.Color.Beige;
+                }
+            }
+        };
+        settings.SetDetailRowTemplateContent(x =>
+        {
+            Html.RenderAction("GetOrderDetail", new { ordno = x.KeyValue });
+        });
+        settings.Columns.Add(column =>
+        {
+            column.SetDataItemTemplateContent(c =>
+            {
+                Html.DevExpress().CheckBox(checkboxSettings =>
+                {
+                    checkboxSettings.Name = "cb_" + c.KeyValue.ToString();
+                    //checkboxSettings.Properties.ClientSideEvents.CheckedChanged = "OnCheckedChanged";
+                    
+                }).Render();
+            });
+        });
+        settings.Columns.Add(set =>
+        {
+            set.FieldName = "OrderNo";
+
+            set.SetDataItemTemplateContent(x =>
+            {
+                string ordeNos = DataBinder.Eval(x.DataItem, "OrderNo").ToString();
+                string isConfirmed = DataBinder.Eval(x.DataItem, "isConfirmed").ToString();
+                string isProcessed = DataBinder.Eval(x.DataItem, "isProcessed").ToString();
+                string empId = DataBinder.Eval(x.DataItem, "EmpID").ToString();
+                var htmlString = "";
+                if (isConfirmed == "YES" | isProcessed == "YES")
+                {
+                    htmlString = "<span><b>" + ordeNos + "</b></span>";
+                }
+                else
+                {
+                    htmlString = "<span class='Highlighter' onclick=\"OrderEdit("+ ordeNos + ",'"+ empId + "');\"><b>" + ordeNos + "</b></span>";
+                    //htmlString =  "<img  title=\"Edit\" class=\"pull-left dxIcon_edit_edit_16x16 dx-vam\" src=\"/DXR.axd?r=1_57-FIfvj\"alt='Edit' id=\"ShowOrderGridView_DXCBtn0Img\" ><span>" + ordeNos + "</span>";
+                }
+                ViewContext.Writer.Write(htmlString);
+            });
+        });
+
+        settings.Columns.Add(set =>
+        {
+            set.FieldName = "OrderDate";
+            set.PropertiesEdit.DisplayFormatString = "dd-MM-yyyy";
+        });
+        settings.Columns.Add("CustomerRef");
+        settings.Columns.Add("NominalCode");
+        settings.Columns.Add("Address1");
+        settings.Columns.Add("DelDesc");
+        if (Session["Price"].ToString().ToLower() != "hide")
+        {
+            settings.Columns.Add("TotalQty");
+            settings.Columns.Add("TotalIncVat");
+            settings.Columns.Add("GoodsValue");
+        }
+        settings.Columns.Add("UserId");
+        settings.Columns.Add("EmpID");
+        settings.Columns.Add("EmpName");
+        if (Convert.ToBoolean(Session["POINTSREQ"]))
+        {
+            settings.Columns.Add("PointsSpent");
+            settings.Columns.Add("TotalPoints");
+        }
+        settings.Columns.Add("IsConfirmed");
+        settings.Columns.Add("IsProcessed");
+        settings.Columns.Add("PersonPackNo");
+        if (Session["OrderDelete"].ToString().ToLower() == "show")
+        {
+            settings.Columns.Add(set =>
+            {
+                set.FieldName = "";
+                set.Caption = "";
+                set.SetDataItemTemplateContent(x =>
+                {
+                    string ordeNos = DataBinder.Eval(x.DataItem, "OrderNo").ToString();
+                    string isConfirmed = DataBinder.Eval(x.DataItem, "isConfirmed").ToString();
+                    string isProcessed = DataBinder.Eval(x.DataItem, "isProcessed").ToString();
+                    string empId = DataBinder.Eval(x.DataItem, "EmpID").ToString();
+                    var htmlString = "";
+                    if (isConfirmed == "YES" | isProcessed == "YES")
+                    {
+                        htmlString = "";
+                    }
+                    else
+                    {
+                        htmlString = "<button class=\"btn btn-primary\" onclick=\"DeleteOrder(" + ordeNos + ",'" + empId + "')\" style=\"background-color:#009885;color:white\">Delete</button>";
+                    }
+                    ViewContext.Writer.Write(htmlString);
+                });
+
+
+            });
+        }
+        settings.Columns.Add("FirstDespatch");
+        settings.Columns.Add("CourrierRef");
+
+    });
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()
+
+
+
+
+

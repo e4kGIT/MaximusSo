@@ -6,28 +6,140 @@
         ViewBag.Title = "Employee";
     }
     Layout = "~/Views/Shared/_Layout.cshtml";
+    var SiteCodeUserAddress = (Maximus.Data.models.SiteCodeUserAddress)Session["SiteCodeNAddress"];
 }
- <div class="row">
-     <div class="col-md-1">Order Type:</div>
-     <div class="col-md-3">@Html.DevExpress().ComboBox(x =>
-                      {
-                          x.Name = "OrderType";
+<div class="row">
+    <center>
+        @*<div class="col-md-3">
+            @{
 
-                          if (Session["menuBulkNew"].ToString().ToLower() == "show")
-                          {
-                              x.Properties.Items.Add("Manpack", "manpack");
-                              x.Properties.Items.Add("Bulk Order", "bulk");
-                          }
-                          else
-                          {
-                              x.Properties.Items.Add("Manpack", "manpack");
-                          }
+                if (Convert.ToBoolean(Session["hasSiteCode"].ToString()))
+                {
+                    if (Session["SiteCodeNAddress"] != null)
+                    {
+                        if ((SiteCodeUserAddress.UserAddress != null) && SiteCodeUserAddress.SiteCode != null)
+                        {
+                            if ((SiteCodeUserAddress.UserAddress.Address1 != null) && (SiteCodeUserAddress.UserAddress.Address1 != "") && SiteCodeUserAddress.SiteCode.Count() > 0)
+                            {
+                <div class="row">
+                    <br />
+                    <div class="colmd-1">
 
-                          x.Properties.ClientSideEvents.SelectedIndexChanged = "GetSelectedOrder";
-                      }
-).GetHtml()</div>
- </div>
-                      
+                    </div>
+                    <div class="colmd-10">
+                        <div class="container" style="background:white;color:#009885;border-radius:20px">
+                            <div class="col-md-2"></div>
+                            @if (SiteCodeUserAddress.UserAddress.Address1 != "" && SiteCodeUserAddress.UserAddress.Address1 != null)
+                            {
+                                <div class="col-md-4">
+                                    <h3>Address:</h3>
+                                    <br />
+                                    <p style="font-weight:600;margin-bottom:3px">@SiteCodeUserAddress.UserAddress.Address1 ,</p>  <p style="font-weight:600;margin-bottom:3px">@SiteCodeUserAddress.UserAddress.Address2,</p> <p style="font-weight:600;margin-bottom:3px">@SiteCodeUserAddress.UserAddress.Address3,</p>  <p style="font-weight:600;margin-bottom:3px">@SiteCodeUserAddress.UserAddress.Town,</p>  <p style="font-weight:600;margin-bottom:3px">@SiteCodeUserAddress.UserAddress.City,</p> <p style="font-weight:600;margin-bottom:3px">@SiteCodeUserAddress.UserAddress.Postcode </p><br />
+                                </div>
+                            }
+                            @if (SiteCodeUserAddress.SiteCode.Count() > 0)
+                            {
+                                <div class="col-md-4">
+                                    <h3>SiteCode:</h3>
+                                    <br />
+                                    @foreach (var item in SiteCodeUserAddress.SiteCode)
+                                    {
+                                        if (SiteCodeUserAddress.SiteCode.IndexOf(item) == SiteCodeUserAddress.SiteCode.Count)
+                                        {
+                                            <b>@item</b><br />
+                                        }
+                                        else
+                                        {
+                                            <b>@item</b>
+
+                                        }
+
+                                    }
+                                </div>
+                            }
+
+                            <div class="col-md-2"></div>
+                        </div>
+                    </div>
+                    <div class="colmd-1">
+
+                    </div><br />
+                </div>     }
+                            else if (SiteCodeUserAddress.SiteCode.Count() > 0)
+                            {
+
+                <h3>Sitecodes:</h3>
+                                foreach (var item in SiteCodeUserAddress.SiteCode)
+                                {
+                                    if (SiteCodeUserAddress.SiteCode.IndexOf(item) == SiteCodeUserAddress.SiteCode.Count)
+                                    {
+                <b>@item</b><br />
+                                    }
+                                    else
+                                    {
+                <b>@item</b>
+
+                                    }
+
+                                }
+
+
+                            }
+                        }
+                        else if (SiteCodeUserAddress.SiteCode != null)
+                        {
+                            if (SiteCodeUserAddress.SiteCode.Count() > 0)
+                            {
+                <h3>Sitecodes:</h3>
+                                foreach (var item in SiteCodeUserAddress.SiteCode)
+                                {
+                                    if (SiteCodeUserAddress.SiteCode.IndexOf(item) == SiteCodeUserAddress.SiteCode.Count)
+                                    {
+                <b>@item</b><br />
+                                    }
+                                    else
+                                    {
+                <b>@item</b>
+
+                                    }
+
+                                }
+
+
+
+                            }
+                        }<br /><br />
+                        }
+                    }
+                }
+                </div>*@
+
+        @if (Convert.ToBoolean(Session["OnStop"])==false)
+        {
+            if (((List<Maximus.Data.Models.EmployeeViewModel>)Session["EmployeeViewModel"]).Count!=1)
+            {
+            @Html.DevExpress().RoundPanel(settings =>
+       {
+           settings.Name = "empFilter";
+           settings.AllowCollapsingByHeaderClick = true;
+           settings.ShowCollapseButton = true;
+           settings.ShowHeader = true;
+           settings.Width = System.Web.UI.WebControls.Unit.Pixel(500);
+           //settings.View = Model.View;
+           settings.EnableAnimation = true;
+           settings.HeaderText = "Employee Search";
+           settings.ClientSideEvents.BeginCallback = "setCollapsed";
+           settings.ClientSideEvents.EndCallback = "setCollapsed";
+           settings.SetHeaderTemplateContent(X => { ViewContext.Writer.Write("<center><span class='glyphicon glyphicon-search'></span> Employee search</center>"); });
+           settings.SetContent(() => Html.RenderPartial("_EmpFilter"));
+       }).GetHtml()
+            }
+        }
+
+
+    </center>
+</div>
+
 
 @if ((bool)Session["IsBulkOrder1"])
 {
@@ -40,143 +152,37 @@
 
 @if ((bool)Session["IsManPack"])
 {
-    <h2>Employee</h2>
-
-    if (Convert.ToBoolean(Session["OnStop"]))
-    {
-        <br />
-        <center>
-            <h3 style="color:white">Cannot place any orders please contact customer services</h3>
-        </center>
-        <br />
-    }
-
-    if (ViewBag.HideSearch)
-    {
-        <div id="mySidebar" class="sidebar" style="background-color:transparent;">
-            <br /><br /><br /><br /><br /><br /><br /><br />
-            <button class="btn btn-primary pull-right" onclick="closeNav()">X</button>
-            <div style="height:70px;background-color:black"><br /><center><h2>Employee Filter</h2></center><br /></div>
-            <div class="row" style="background-color:black;">
-                <div class="col-md-11 col-xs-11 col-sm-11 col-lg-11 checList">
-                    @* @Html.Action("EmployeeGridViewPartial")*@
-
-                    <fieldset>
-                        <br /><br />
-
-                        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 divpadder">
-                            <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
-                                @Html.Label("EmployeeId")
-                            </div>
-                            <div class="col-md-6 col-xs-6 col-sm-6 col-lg-6">
-                                @Html.DevExpress().TextBox(x => { x.Name = "FilterEmployeeId"; x.Width = System.Web.UI.WebControls.Unit.Pixel(300); }).GetHtml()
-                            </div>
-                        </div>
-                        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 divpadder">
-                            <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
-                                @Html.Label("Name")
-                            </div>
-                            <div class="col-md-6 col-xs-6 col-sm-6 col-lg-6">
-                                @Html.DevExpress().TextBox(x => { x.Name = "FilterEmpFirstName"; x.Width = System.Web.UI.WebControls.Unit.Pixel(300); }).GetHtml()
-                            </div>
-                        </div>@if (((List<Maximus.Data.Models.EmployeeViewModel>)Session["EmployeeViewModel"]).Where(x => x.role != "" && x.role != null).Select(x => x.role).Distinct().Count() > 1)
-                        {
-                            <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 divpadder">
-                                <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
-                                    @Html.Label("Roles")
-                                </div>
-                                <div class="col-md-6 col-xs-6 col-sm-6 col-lg-6">
-                                    @Html.DevExpress().TextBox(x => { x.Name = "FilterRoles"; x.Width = System.Web.UI.WebControls.Unit.Pixel(300); }).GetHtml()
-                                </div>
-                            </div>
-                        }
-                        @if (((List<Maximus.Data.Models.EmployeeViewModel>)Session["EmployeeViewModel"]).Select(x => x.Department).Distinct().Count() > 1)
-                        {
-                            var sq = ((List<Maximus.Data.Models.EmployeeViewModel>)Session["EmployeeViewModel"]).Where(x => x.Department != "" && x.Department != null).Select(x => x.Department).Distinct();
-                            <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 divpadder">
-                                <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
-                                    @Html.Label("Department")
-                                </div>
-                                <div class="col-md-6 col-xs-6 col-sm-6 col-lg-6">
-                                    @Html.DevExpress().TextBox(x => { x.Name = "FilterDepartment"; x.Width = System.Web.UI.WebControls.Unit.Pixel(300); }).GetHtml()
-                                </div>
-                            </div>}
-                        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12">
-                            @*  @Html.DevExpress().TextBox(x => { x.Name = "EmpUcodes"; }).GetHtml();*@
-                        </div>
-                        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 divpadder">
-                            <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
-                                @Html.Label("Ucode")
-                            </div>
-                            <div class="col-md-6 col-xs-6 col-sm-6 col-lg-6">
-                                @Html.DevExpress().TextBox(x => { x.Name = "FilterEmpUcodes"; x.Width = System.Web.UI.WebControls.Unit.Pixel(300); }).GetHtml()
-                            </div>
-                        </div>
-                        @*<div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 divpadder">
-                                 <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
-                                     @Html.Label("Ucode description")
-                                 </div>
-                                 <div class="col-md-6 col-xs-6 col-sm-6 col-lg-6">
-                                     @Html.DevExpress().TextBox(x => { x.Name = "FilterUcodeDesc"; x.Width = System.Web.UI.WebControls.Unit.Pixel(300);  }).GetHtml()
-                                 </div>
-                             </div>
-
-                             <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 divpadder">
-                                 <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
-                                     @Html.Label("Address")
-                                 </div>
-                                 <div class="col-md-6 col-xs-6 col-sm-6 col-lg-6">
-                                     @Html.DevExpress().TextBox(x => { x.Name = "FilterAddress"; x.Width = System.Web.UI.WebControls.Unit.Pixel(300);  }).GetHtml()
-                                 </div>
-                             </div>
-                             <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 divpadder">
-                                 <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
-                                     @Html.Label("Start date")
-                                 </div>
-                                 <div class="col-md-6 col-xs-6 col-sm-6 col-lg-6">
-                                     @Html.DevExpress().DateEdit(settings =>
-                            {
-                                settings.Name = "FilterDateEdit";
-                                settings.Properties.NullText = "Select date";
-                            }).GetHtml()
-
-                                 </div>
-                             </div>*@
-                        <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 divpadder">
-                            <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4"></div>
-                            <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
-                                @Html.DevExpress().Button(x => { x.Name = "btnFilterSubmit"; x.Text = "Submit"; x.ControlStyle.CssClass = "btn btn-primary"; x.ClientSideEvents.Click = "GetEmpGrid"; }).GetHtml()
-                            </div>
-                            <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
-                                @Html.DevExpress().Button(x => { x.Name = "btnGetAll"; x.Text = "Get all"; x.ControlStyle.CssClass = "btn btn-primary"; x.ClientSideEvents.Click = "GetAllEmps"; }).GetHtml()
-                            </div>
-                        </div>
-                        <br />
-                        <br />
-                    </fieldset>
-                </div>
-                <div class="col-md-1 col-xs-1 col-sm-1 col-lg-1" style="background-color:black"><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /><br /></div>
-            </div>
-            <div style="height:10px;background-color:black"><br /></div>
-        </div>
-        <button class="openbtn btn" onclick="openNav()"><span class="glyphicon glyphicon-search"></span> Employee search </button>
-        <div class="row">
-            <div id="EmployeeGridViewPartial">
-            </div>
-        </div>
-    }
-    else
-    {
-        <div class="row">
-            <div class="col-md-2"></div>
-            <div class="col-md-8">
-                <div id="EmployeeGridViewPartial">
-                    @Html.Action("EmployeeGridViewPartial")
-                </div>
-            </div>
-            <div class="col-md-2"></div>
-        </div>
-    }
-}
+    
 
 
+                                                    if (Convert.ToBoolean(Session["OnStop"]))
+                                                    {
+                                                        <br />
+                                                        <center>
+                                                            <h3 style="color:white"> Sorry but you cannot place any orders at the moment . Please contact customer services
+</h3>
+                                                        </center>
+                                                        <br />
+                                                    }
+
+                                                    if (ViewBag.HideSearch)
+                                                    {
+
+                                                        <div class="row">
+                                                            <div id="EmployeeGridViewPartial">
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                    else
+                                                    {
+                                                        <div class="row">
+                                                             
+                                                            <div class="col-md-12">
+                                                                <div id="EmployeeGridViewPartial">
+                                                                    @Html.Action("EmployeeGridViewPartial")
+                                                                </div>
+                                                            </div>
+                                                            
+                                                        </div>
+                                                        }
+                                                    }

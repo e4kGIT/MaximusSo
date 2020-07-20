@@ -1,6 +1,17 @@
-﻿<br /><br /><br />
-<a href="/Employee/Index?BusinessID=@Session["BuisnessId"].ToString()"><span style="color:white;font-size:30px;" class="glyphicon glyphicon-chevron-left" title="Back"></span></a>
-<br /><br />
+﻿                                 
+<br /><br /><br />
+
+@if (Convert.ToBoolean(Session["ISEDITING"]) && ((List<Maximus.Data.Models.SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.IsEditing).First().IsTemplate)
+{
+<div class="row">
+   @Html.Action( "EmployeeGridViewPartial", "Employee", new { txtEmpNO = ((List<Maximus.Data.Models.SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.IsEditing).First().PinNo })
+</div><br />
+}
+else
+{
+    <a href="/Employee/Index?BusinessID=@Session["BuisnessId"].ToString()"><span style="color:white;font-size:30px;" class="glyphicon glyphicon-chevron-left" title="Back"></span></a>
+    <br />
+}
 <div class="row backgrnd">
     <br />
     @*<div class="col-md-2">
@@ -17,7 +28,7 @@
                 {
                     var s = Convert.ToInt32(Session["qty"]);
                     //string content = string.Format("<div class=\"col-md-3\" style=\"padding:0px;\" ><p><b>Employee Id:</b></p>{0}</div> <div style=\"padding:0px;\" class=\"col-md-3\"> <p><b>EmployeeName:</b></p> {2}</div><div style=\"padding:0px;\" class=\"col-md-4\"> <p><b>Ucodes:</b></p> {1}</div><div class=\"col-md-2\"> <p><b>Business Id:</b></p>" + Session["BuisnessId"].ToString() + "</div>", Session["SelectedEmp"].ToString(), Session["UcodeDesc"].ToString(), Session["EmpName"].ToString());
-                    <div class="col-md-6">
+                    <div class="col-md-7">
                         <div class="row">
                             <div class="col-md-2">
                                 <center><span style="font-size:35px;" class="glyphicon glyphicon-user"></span></center>
@@ -31,10 +42,12 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-6">
+                    <div class="col-md-5">
                         @{if (((List<string>)Session["Templates"]).Count() > 0)
                             {
+                                
                                 <span><b>Template:</b></span>ViewContext.Writer.Write(string.Format("{0}", Session["UcodeDesc"].ToString()));
+                                
                             }
                             else
                             { <span><b>Ucode:</b></span>
@@ -91,7 +104,7 @@
                 }
             }
     </div>
-    @*<div class="col-md-5 col-lg-5 col-xs-5 col-sm-5">
+    <div class="col-md-5 col-lg-5 col-xs-5 col-sm-5">
             @{
 
                 if (Session["costCenter"] != null)
@@ -126,32 +139,9 @@
                     }
                 }
             }
-        </div>*@
+        </div>
 </div>
 <br />
-@*@{
-        <br />
-        if (Convert.ToBoolean(Session["POINTSREQ"]))
-        {
-            if (((Maximus.Data.models.PointsModel)Session["Pointsmodel"]).LstStyles != null)
-            {
-            <div class="row backgrnd">
-                <br />
-                @{
-                    var content = "";
-                    content = content + "<center>" + Session["SelectedUcode"].ToString() + "- (Total Points :" + ViewBag.TotalPoints + ")</center>";
-                    ViewContext.Writer.Write(content);
-                }
-                <br />
-
-
-            </div>
-
-                        }
-                    }
-
-    }
-    <br />*@
 <div class="row" style="padding:0px">
     <div class="col-md-2 col-lg-2 col-xs-2 col-sm-12" style="padding-left:0px;padding-right:3px;">
         <center>
@@ -272,8 +262,8 @@
 
 @Html.DevExpress().PopupControl(sett =>
 {
-    // sett.Width = System.Web.UI.WebControls.Unit.Pixel(1500);
-    sett.Height = System.Web.UI.WebControls.Unit.Pixel(800);
+    //sett.Width = System.Web.UI.WebControls.Unit.Pixel(100);
+    sett.Height = System.Web.UI.WebControls.Unit.Pixel(920);
     sett.PopupVerticalAlign = PopupVerticalAlign.Middle;
     sett.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
     sett.Name = "DimAllocPop";
@@ -291,7 +281,6 @@
     sett.HeaderText = "Grouped products";
     sett.SetContent(() =>
     {
-
         ViewContext.Writer.Write("<br/><div><div id='DimId'></div></div>");
     });
 }).GetHtml()

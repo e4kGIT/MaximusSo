@@ -1,0 +1,102 @@
+
+<center>
+    <table style="width:50%;font-family: arial, sans-serif;border-collapse: collapse;">
+        <tr>
+            <th style="border: 1px solid #dddddd;text-align: left;padding: 15px;font-size:18px;">Customer Address</th>
+            <th style="border: 1px solid #dddddd;text-align: left;padding: 15px;font-size:18px;">Delivery Address</th>
+        </tr>
+        <tr>
+            <td style="border: 1px solid #dddddd;text-align: left;padding: 8px;"><strong>%customer_name%</strong></td>
+            <td style="border: 1px solid #dddddd;text-align: left;padding: 8px;"><strong>%delivery_name%</strong></td>
+        </tr>
+        <tr>
+            <td style="border: 1px solid #dddddd;text-align: left;padding: 8px;">%customer_address1%</td>
+            <td style="border: 1px solid #dddddd;text-align: left;padding: 8px;">%delivery_address1% </td>
+        </tr>
+        <tr>
+            <td style="border: 1px solid #dddddd;text-align: left;padding: 8px;">%customer_address2%</td>
+            <td style="border: 1px solid #dddddd;text-align: left;padding: 8px;">%delivery_address2%</td>
+        </tr>
+        <tr>
+            <td style="border: 1px solid #dddddd;text-align: left;padding: 8px;">%customer_address3%</td>
+            <td style="border: 1px solid #dddddd;text-align: left;padding: 8px;">%delivery_address3%</td>
+        </tr>
+        <tr>
+            <td style="border: 1px solid #dddddd;text-align: left;padding: 8px;">%customer_town%</td>
+            <td style="border: 1px solid #dddddd;text-align: left;padding: 8px;">%delivery_town%</td>
+        </tr>
+        <tr>
+            <td style="border: 1px solid #dddddd;text-align: left;padding: 8px;">%customer_city%</td>
+            <td style="border: 1px solid #dddddd;text-align: left;padding: 8px;">%delivery_city% </td>
+        </tr>
+        <tr>
+            <td style="border: 1px solid #dddddd;text-align: left;padding: 8px;">%customer_postcode%</td>
+            <td style="border: 1px solid #dddddd;text-align: left;padding: 8px;">%delivery_postcode%</td>
+        </tr>
+        <tr>
+            <td style="border: 1px solid #dddddd;text-align: left;padding: 8px;">%customer_country%</td>
+            <td style="border: 1px solid #dddddd;text-align: left;padding: 8px;">%delivery_country%</td>
+        </tr>
+    </table>
+    <br />
+    <br />
+    <table style="width:100%;font-family: arial, sans-serif;border-collapse: collapse;">
+        <tr>
+            <th style="border: 1px solid #dddddd;text-align: left;padding: 8px;"><strong>Order No</strong></th>
+            <td style="border: 1px solid #dddddd;text-align: left;padding: 8px;">%OrderNo%</td>
+            <th style="border: 1px solid #dddddd;text-align: left;padding: 8px;"><strong>Order Date</strong></th>
+            <td style="border: 1px solid #dddddd;text-align: left;padding: 8px;">%OrderDate%</td>
+            <th style="border: 1px solid #dddddd;text-align: left;padding: 8px;"><strong>Cust Ref</strong></th>
+            <td style="border: 1px solid #dddddd;text-align: left;padding: 8px;">%CustRef%</td>
+            <th style="border: 1px solid #dddddd;text-align: left;padding: 8px;"><strong>Account No</strong></th>
+            <td style="border: 1px solid #dddddd;text-align: left;padding: 8px;">%AccountNo%</td>
+        </tr>
+        <tr>
+            <th style="border: 1px solid #dddddd;text-align: left;padding: 8px;"><strong>ManPackNo</strong></th>
+            <td style="border: 1px solid #dddddd;text-align: left;padding: 8px;">%ManPackNo%</td>
+            <th style="border: 1px solid #dddddd;text-align: left;padding: 8px;"><strong>Delivery Date</strong></th>
+            <td style="border: 1px solid #dddddd;text-align: left;padding: 8px;">%DeliveryDate%</td>
+            <th style="border: 1px solid #dddddd;text-align: left;padding: 8px;"><strong>Nominal Code</strong></th>
+            <td style="border: 1px solid #dddddd;text-align: left;padding: 8px;">%NominalCode%</td>
+            <th style="border: 1px solid #dddddd;text-align: left;padding: 8px;"><strong>Employee</strong></th>
+            <td style="border: 1px solid #dddddd;text-align: left;padding: 8px;">%Employee%</td>
+        </tr>
+    </table>
+    <br /><br />
+    <table width="100%">
+        <tr>
+            <th style="border: 1px solid #dddddd;text-align: left;padding: 8px;">Style</th>
+            <th style="border: 1px solid #dddddd;text-align: left;padding: 8px;">Description</th>
+            <th style="border: 1px solid #dddddd;text-align: left;padding: 8px;">Colour</th>
+            <th style="border: 1px solid #dddddd;text-align: left;padding: 8px;">Size</th>
+            <th style="border: 1px solid #dddddd;text-align: left;padding: 8px;">Qty</th>
+            <th style="border: 1px solid #dddddd;text-align: left;padding: 8px;" align='right'>Price</th>
+            <th style="border: 1px solid #dddddd;text-align: left;padding: 8px;" align='right'>Net Value</th>
+            <th style="border: 1px solid #dddddd;text-align: left;padding: 8px;" align='right'>VAT</th>
+            <th style="border: 1px solid #dddddd;text-align: left;padding: 8px;">Reason</th>
+        </tr>
+        %OrderLines%
+        <tr>
+            <th colspan="3" align='left'>Comments</th>
+            <th colspan="3" align='right'>Total Goods</th>
+            <td align='right'><strong>%totalgoods%</strong></td>
+        </tr>
+        <tr>
+            <td colspan="3" rowspan="4" align='left' valign='top'>%comments%</td>
+            <th colspan="3" align='right'>Carrier Charges</th>
+            <td align='right'><strong>%carriercharges%</strong></td>
+        </tr>
+        <tr>
+            <th colspan="3" align='right'>Order Total</th>
+            <td align='right'><strong>%ordertotal%</strong></td>
+        </tr>
+        <tr>
+            <th colspan="3" align='right'>VAT</th>
+            <td align='right'><strong>%vattotal%</strong></td>
+        </tr>
+        <tr>
+            <th colspan="3" align='right'><font color='blue'>Grand Total</font></th>
+            <td align='right'><strong><font color='blue'>%grandtotal%</font></strong></td>
+        </tr>
+    </table>
+</center>

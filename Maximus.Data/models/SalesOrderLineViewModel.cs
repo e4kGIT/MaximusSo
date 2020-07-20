@@ -9,6 +9,8 @@ namespace Maximus.Data.Models
     {
         public int IssueUOM1 { get; set; }
 
+        public bool isCarrline { get; set; }
+        public string CompanyID { get; set; }
         public int Points { get; set; }
         public int TotalPoints { get; set; }
         public int IssueQty1 { get; set; }
@@ -26,9 +28,11 @@ namespace Maximus.Data.Models
         public string DeliveryDate { get; set; }
         public int KAMID { get; set; }
         public int RepId { get; set; }
-        public static string CompanyID { get { return "001"; } }
-        public static string Warehouseid { get { return "MAX01"; } }
-        public long OrderNo { get { return 10000; } }
+       
+        public long SoqtyForempSO { get; set; }
+        public long SoqtyForempSOPoints { get; set; }
+        public   string Warehouseid { get; set; }
+        public long OrderNo { get; set; }
         public long LineNo { get; set; }
         public static int LineType { get { return 1; } }
         public string StyleID { get; set; }
@@ -43,7 +47,7 @@ namespace Maximus.Data.Models
         public double Total { get; set; }
         public long AllQty { get; set; }
         public long InvQty { get; set; }
-        public static long DespQty { get { return 0; } }
+        public   long DespQty { get; set; }
         public static double CommissionRate { get { return 0; } }
         public static double Discount { get { return 0; } }
         public static System.DateTime Deliverydate { get { return DateTime.Now.Date; } }
@@ -62,14 +66,15 @@ namespace Maximus.Data.Models
         public string SelectedUcode { get; set; }
         public string FreeText1 { get; set; }
         public static long RepID { get { return 0; } }
-        public static double RepRate { get { return 0; } }
+        public   double RepRate { get; set; }
         public static long KamID { get { return 0; } }
-        public static double KAMRate { get { return 0; } }
+        public   double KAMRate { get; set; }
         public static long IssueUOM { get { return 1; } }
         public static double IssueQty { get { return 0; } }
         public static long StockingUOM { get { return 1; } }
         public long OriginalOrderNo { get; set; }
         public Nullable<long> OriginalLineNo { get; set; }
+        public bool Isedit { get ; set; }
         public static string SOPDETAIL1 { get { return null; } }
         public static string SOPDETAIL2 { get { return null; } }
         public static string SOPDETAIL3 { get { return null; } }
@@ -80,8 +85,8 @@ namespace Maximus.Data.Models
         public int AssemblyID { get; set; }
         public int AsmLineNo { get; set; }
         public static int ReasonCode { get { return 0; } }
-        public static long ReturnOrderNo { get { return 0; } }
-        public static long ReturnLineNo { get { return 0; } }
+        public   long ReturnOrderNo { get; set; }
+        public   long ReturnLineNo { get; set; }
         public string EmployeeId { get; set; }
         public string EmployeeName { get; set; }
         public bool? Ischargable { get; set; }

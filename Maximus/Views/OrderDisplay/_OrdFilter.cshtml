@@ -1,0 +1,33 @@
+﻿
+
+@if (Convert.ToBoolean(Session["Access"].ToString().ToLower() == "user"))
+{
+    <div class="row" style="background-color:white;">
+        <div class="col-md-1" style="padding:0px;"></div>
+        <div class="col-md-10">
+            <div class="row" style="background:white;color:black;padding:10px">
+                @{Html.RenderAction("SearchOrders");}
+            </div>
+        </div>
+        <div class="col-md-1" style="padding:0px;"></div>
+    </div>
+                    }
+                    else
+                    {
+                        <div class="row">
+                            <div class="col-md-1" style="padding:0px;"></div>
+                            <div class="col-md-10">
+                                <div class="row" style="background:white;color:black;padding:10px">
+                                    <div class="col-md-4" style="padding:25px">
+                                        @{Html.RenderAction("EmpFiltersOrders");}
+                                    </div>
+
+                                    <div class="col-md-8" style="padding:25px">
+                                        @{Html.RenderAction("SearchOrders");}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-1" style="padding:0px;"></div>
+                        </div>
+                                            }
+

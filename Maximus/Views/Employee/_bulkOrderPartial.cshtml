@@ -1,6 +1,5 @@
 ﻿@model IEnumerable<Maximus.Data.models.UcodenDescModal>
-<br />
-<br /><br />
+
 @{<div class="row">
         @foreach (var item in Model)
         {
@@ -14,7 +13,7 @@
                             <h4>@item.UcodeId</h4>
                             <hr />
                             <div>
-                                <img src="~/StyleImages/notfound.png" height="200" />
+                                <img src="~/StyleImages/notfound.png"  style="width:100%;height:100%" />
                             </div><br />
                             <span>@item.UcodeDescription</span>
                         </center>
@@ -29,7 +28,7 @@
                             <br />
                             <h4>@item.UcodeId</h4>
                             <hr /><div>
-                                <img src="~/StyleImages/notfound.png" height="200" />
+                                <img src="~/StyleImages/notfound.png" style="width:100%;height:100%"  />
                             </div><br />
                             <span>@item.UcodeDescription</span>
                         </center>

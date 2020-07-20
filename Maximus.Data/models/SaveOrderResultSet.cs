@@ -11,10 +11,18 @@ namespace Maximus.Data.Models
         public string EmployeeId { get; set; }
         public string OrderConfirmation { get; set; }
 
+        public string OrderConfirmationPop { get; set; }
+
+
     }
     public class AcceptResultSet
     {
         public List<SaveOrderResultSet> results { get; set; }
         public string type { get; set; }
+    }
+    public class PointsResult
+    {
+        public List<string> pointsStyle { get; set; }
+        public string message { get; set; }
     }
 }

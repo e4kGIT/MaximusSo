@@ -1,0 +1,59 @@
+﻿<center><p style="font-size:15px;">@ViewBag.RolloutMessage</p></center>
+<br />
+<br />
+
+<div class="row">
+    @if (ViewBag.ROLLOUTTYPE == 2)
+    {
+        <div class="col-md-3"></div>
+        <div class="col-md-3">
+            @Html.DevExpress().Button(s =>
+{
+    s.Name = "PROCEED";
+    s.Text = "PROCEED";
+    s.ClientSideEvents.Click = "PROCEEDFURTHERROLLOUT";
+    s.ControlStyle.CssClass = "btn";
+}).GetHtml()
+        </div>
+        <div class="col-md-3">
+            @Html.DevExpress().Button(s =>
+       {
+           s.Name = "exit";
+           s.Text = "Exit";
+           if (Session["Access"].ToString().ToLower() == "user")
+           {
+               s.ClientSideEvents.Click = "logoff";
+           }
+           else
+           {
+               s.ClientSideEvents.Click = "gotoindex";
+           }
+           s.ControlStyle.CssClass = "btn";
+       }).GetHtml()
+    </div>
+    <div class="col-md-3"></div>
+    }
+    else
+    {
+        <div class="col-md-4"></div>
+        <div class="col-md-4">
+            <center>
+                @Html.DevExpress().Button(s =>
+           {
+               s.Name = "exit";
+               s.Text = "Exit";
+               if (Session["Access"].ToString().ToLower() == "user")
+               {
+                   s.ClientSideEvents.Click = "logoff";
+               }
+               else
+               {
+                   s.ClientSideEvents.Click = "gotoindex";
+               }
+               s.ControlStyle.CssClass = "btn";
+           }).GetHtml()
+            </center>
+    </div>
+    <div class="col-md-4"></div>
+    }
+</div>

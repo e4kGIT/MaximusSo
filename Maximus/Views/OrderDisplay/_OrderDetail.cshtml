@@ -1,0 +1,8 @@
+﻿<div class="row">
+   @{Html.RenderAction("OrderDetailGridViewPartial", new { ordno = ViewBag.orderNo }); }
+    <br />
+    <br />
+    <br />
+    @{Html.RenderAction("OrderDetailGridView1Partial", new { ordno = ViewBag.orderNo });
+    }
+</div>

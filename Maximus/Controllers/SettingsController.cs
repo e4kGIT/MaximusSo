@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using System.Web.Mvc;
-using Maximus.Filter;
+using System.Web.Mvc; 
 namespace Maximus.Controllers
 {
 

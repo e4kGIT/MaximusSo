@@ -611,7 +611,8 @@
                     else
                     {
 
-                        var content = "<b>Colour<b><hr style='margin: 0;'/><br/>"; content = content + "<fieldset class='swatch-picker' name=\"Swatch_DemColor_FieldSet_" + style + "\">";
+                        var content = "<b>Colour<b><hr style='margin: 0;'/><br/>";
+                        content = content + "<fieldset class='swatch-picker' name=\"Swatch_DemColor_FieldSet_" + style + "\">";
                         //List<string> colorIdLst = (List<string>)home._styleColorSize.GetAll(s => s.StyleID == style).OrderBy(s => s.ColourID).Select(s => s.ColourID).Distinct().ToList();
                         //foreach (string data in colorIdLst)
                         //{
@@ -632,23 +633,23 @@
                         {
                             var orgStyle = (DataBinder.Eval(col.DataItem, "OriginalStyleid")).ToString();
                             string style1 = style.Split(',')[0];
-                            List<Maximus.Data.Models.ObsoleteColor> lstC = hc.getColors(orgStyle);
-                            var ucodeColor = home._ucodes.GetAll(uc => uc.UCodeID == selUcode & uc.StyleID == orgStyle).Select(uc => uc.ColourID).ToList();
+                            List<Maximus.Data.Models.ObsoleteColor> lstC = hc.getColors(style1);
+                            ////var ucodeColor = home._ucodes.GetAll(uc => uc.UCodeID == selUcode & uc.StyleID == orgStyle).Select(uc => uc.ColourID).ToList();
                             //List<string> lstC = (List<string>)home._styleColorSize.GetAll(s => s.StyleID == style1).OrderBy(s => s.ColourID).Select(s => s.ColourID).Distinct().ToList();
                             if (lstC != null)
                             {
-                                if (ucodeColor.Count > 1)
+                                if (lstC.Count > 1)
                                 {
-                                    foreach (var dr in ucodeColor)
+                                    foreach (var dr in lstC.Where(dts => dts.ObsoleteCode == 0).ToList())
                                     {
-                                        if (ucodeColor.IndexOf(dr) == 0)
+                                        if (lstC.IndexOf(dr) == 0)
                                         {
                                             firstColor = dr.ToString();
                                         }
-                                        if (lstC.Where(dts => dts.ObsoleteCode == 0).Select(xs => xs.ColorId).ToList().Contains(dr))
+                                        if (lstC.Where(dts => dts.ObsoleteCode == 0).Select(xs => xs.ColorId).ToList().Contains(dr.ColorId))
                                         {
 
-                                            var color = dr.ToString();
+                                            var color = dr.ColorId.ToString();
                                             var hexcode = home._fskColor.Exists(da => da.Description.Contains(color)) ? home._fskColor.GetAll(da => da.Description.Contains(color)).First().Colour_hexcode : "";
                                             if (lstC.Count > 1)
                                             {
@@ -663,12 +664,9 @@
                                         }
                                     }
                                 }
-                                else if (ucodeColor.Count == 1)
+                                else if (lstC.Count == 1)
                                 {
-                                    if (lstC.Where(dts => dts.ObsoleteCode == 0).Select(xs => xs.ColorId).ToList().Contains(ucodeColor[0]))
-                                    {
-                                        content = content + string.Format("<label class='swatchLabel'><input type='radio'  onchange=\"GetClrDemImg('{0}-{1}')\"  id='radio' name=\"swatch_DemandColor_" + style + "\" class='' value='{1}' checked=\"checked\"/><span class='spanner1'><center><bold>{1}</bold></center></span></label>", style, ucodeColor[0]);
-                                    }
+                                    content = content + string.Format("<label class='swatchLabel'><input type='radio'  onchange=\"GetClrDemImg('{0}-{1}')\"  id='radio' name=\"swatch_DemandColor_" + style + "\" class='' value='{1}' checked=\"checked\"/><span class='spanner1'><center><bold>{1}</bold></center></span></label>", style, lstC[0].ColorId);
                                 }
                                 content = content + "</fieldset><br/>";
                                 ViewContext.Writer.Write(content);
@@ -677,21 +675,22 @@
                         else
                         {
                             var orgStyle = (DataBinder.Eval(col.DataItem, "OriginalStyleid")).ToString();
-                            List<Maximus.Data.Models.ObsoleteColor> lstC = hc.getColors(style); var ucodeColor = home._ucodes.GetAll(uc => uc.UCodeID == selUcode & uc.StyleID == orgStyle).Select(uc => uc.ColourID).ToList();
+                            List<Maximus.Data.Models.ObsoleteColor> lstC = hc.getColors(style);
+                            //var ucodeColor = home._ucodes.GetAll(uc => uc.UCodeID == selUcode & uc.StyleID == orgStyle).Select(uc => uc.ColourID).ToList();
 
                             if (lstC != null)
                             {
-                                if (ucodeColor.Count > 1)
+                                if (lstC.Where(dts => dts.ObsoleteCode == 0).Count() > 1)
                                 {
-                                    foreach (var dr in ucodeColor)
+                                    foreach (var dr in lstC.Where(dts => dts.ObsoleteCode == 0).ToList() )
                                     {
-                                        if (ucodeColor.IndexOf(dr) == 0)
+                                        if (lstC.IndexOf(dr) == 0)
                                         {
-                                            firstColor = dr.ToString();
+                                            firstColor = dr.ColorId.ToString();
                                         }
-                                        if (lstC.Where(dts => dts.ObsoleteCode == 0).Select(xs => xs.ColorId).ToList().Contains(dr))
+                                        if (lstC.Where(dts => dts.ObsoleteCode == 0).Select(xs => xs.ColorId).ToList().Contains(dr.ColorId))
                                         {
-                                            var color = dr.ToString();
+                                            var color = dr.ColorId.ToString();
                                             var hexcode = home._fskColor.Exists(da => da.Description.Contains(color)) ? home._fskColor.GetAll(da => da.Description.Contains(color)).First().Colour_hexcode : "";
                                             if (lstC.Count > 1)
                                             {
@@ -706,9 +705,9 @@
                                         }
                                         else
                                         {
-                                            var color = dr.ToString();
+                                            var color = dr.ColorId.ToString();
                                             var hexcode = home._fskColor.Exists(da => da.Description.Contains(color)) ? home._fskColor.GetAll(da => da.Description.Contains(color)).First().Colour_hexcode : "";
-                                            if (lstC.Count > 1)
+                                            if (lstC.Where(dts => dts.ObsoleteCode == 0).Count() > 1)
                                             {
                                                 content = content + string.Format("<label class='swatchLabel'><input type='radio'  onchange=\"GetClrDemImg('{0}-{1}')\"  id='radio' name=\"swatch_DemandColor_" + style + "\" class='' value='{1}'/><span class='spanner1'><center><bold>{1}</bold></center></span></label>", style, color);
                                             }
@@ -721,16 +720,19 @@
                                         }
                                     }
                                 }
-                                else if (ucodeColor.Count == 1)
+                                else if (lstC.Count == 1 && lstC.Any(dts => dts.ObsoleteCode == 0))
                                 {
-                                    if (lstC.Where(dts => dts.ObsoleteCode == 0).Select(xs => xs.ColorId).ToList().Contains(ucodeColor[0]))
-                                    {
-                                        content = content + string.Format("<label class='swatchLabel'><input type='radio'  onchange=\"GetClrDemImg('{0}-{1}')\"  id='radio' name=\"swatch_DemandColor_" + style + "\" class='' value='{1}' checked=\"checked\"/><span class='spanner1'><center><bold>{1}</bold></center></span></label>", style, ucodeColor[0]);
-                                    }
-                                    else
-                                    {
-                                        content = content + string.Format("<label class='swatchLabel'><input type='radio'  onchange=\"GetClrDemImg('{0}-{1}')\"  id='radio' name=\"swatch_DemandColor_" + style + "\" class='' value='{1}' checked=\"checked\"/><span class='spanner1'><center><bold>{1}</bold></center></span></label>", style, ucodeColor[0]);
-                                    }
+
+                                    content = content + string.Format("<label class='swatchLabel'><input type='radio'  onchange=\"GetClrDemImg('{0}-{1}')\"  id='radio' name=\"swatch_DemandColor_" + style + "\" class='' value='{1}' checked=\"checked\"/><span class='spanner1'><center><bold>{1}</bold></center></span></label>", style, lstC[0].ColorId);
+                                    //}
+                                    //else
+                                    //{
+                                    //    content = content + string.Format("<label class='swatchLabel'><input type='radio'  onchange=\"GetClrDemImg('{0}-{1}')\"  id='radio' name=\"swatch_DemandColor_" + style + "\" class='' value='{1}' checked=\"checked\"/><span class='spanner1'><center><bold>{1}</bold></center></span></label>", style, ucodeColor[0]);
+                                    //}
+                                }
+                                else if(lstC.Where(dts => dts.ObsoleteCode == 0).Count()==1)
+                                {
+                                    content = content + string.Format("<label class='swatchLabel'><input type='radio'  onchange=\"GetClrDemImg('{0}-{1}')\"  id='radio' name=\"swatch_DemandColor_" + style + "\" class='' value='{1}' checked=\"checked\"/><span class='spanner1'><center><bold>{1}</bold></center></span></label>", style, lstC[0].ColorId);
                                 }
 
                                 content = content + "</fieldset><br/>";
@@ -941,15 +943,15 @@
                                     {
                                         if (Session["Price"].ToString() == "hide")
                                         {
-                                            content = content + "<div class='col-md-4 BulkOrder1_Demand_" + style + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-6'><center>" + data + "</center></div> <div class='col-md-6'><center><input type =\"number\" placeholder='Quantity'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
+                                            content = content + "<div class='col-md-4 BulkOrder1_Demand_" + style + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-6'><center>" + data + "</center></div> <div class='col-md-6'><center><input type =\"number\" placeholder='Quantity'  min=\"0\" id='" + style + "_demand_" + data + "'   class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
                                         }
                                         else if (Session["Price"].ToString() == "readonly")
                                         {
-                                            content = content + "<div class='col-md-4 BulkOrder1_Demand_" + style + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-4'><center>" + data + "</center></div><div class='col-md-4'><center>" + Session["CurrencySymbol"].ToString() + " " + hc.GetPrice(style, data, Session["BuisnessId"].ToString()) + "</center></div><div class='col-md-4'><center><input type =\"number\" placeholder='Quantity'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
+                                            content = content + "<div class='col-md-4 BulkOrder1_Demand_" + style + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-4'><center>" + data + "</center></div><div class='col-md-4'><center>" + Session["CurrencySymbol"].ToString() + " " + hc.GetPrice(style, data, Session["BuisnessId"].ToString()) + "</center></div><div class='col-md-4'><center><input type =\"number\" placeholder='Quantity'  min=\"0\" id='" + style + "_demand_" + data + "'   class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
                                         }
                                         else if (Session["Price"].ToString() == "readwrite")
                                         {
-                                            content = content + "<div class='col-md-4 BulkOrder1_Demand_" + style + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-3'><center>" + data + "</center></div><div class='col-md-5'><div class='row'><div class='col-md-3'><center>" + Session["CurrencySymbol"].ToString() + "</center></div><div class='col-md-9'><center><input type='number' class='form-control' id='BulkOrder1_price_Demand_" + style + "' style='text-align:right;' value='" + hc.GetPrice(style, data, Session["BuisnessId"].ToString()) + "'/></center></div></div></div><div class='col-md-4'><center><input type =\"number\" placeholder='Quantity'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
+                                            content = content + "<div class='col-md-4 BulkOrder1_Demand_" + style + "' style=\"margin-bottom:10px;\"><div class='row'><div class='col-md-3'><center>" + data + "</center></div><div class='col-md-5'><div class='row'><div class='col-md-3'><center>" + Session["CurrencySymbol"].ToString() + "</center></div><div class='col-md-9'><center><input type='number' class='form-control' id='BulkOrder1_price_Demand_" + style + "' style='text-align:right;' value='" + hc.GetPrice(style, data, Session["BuisnessId"].ToString()) + "'/></center></div></div></div><div class='col-md-4'><center><input type =\"number\" placeholder='Quantity'  min=\"0\" id='" + style + "_demand_" + data + "'   class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
                                         }
                                     }
                                     else
