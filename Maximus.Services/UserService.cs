@@ -19,7 +19,8 @@ namespace Maximus.Services
         private readonly CUstomerOrderTemplateCostcenters _costcenters;
         private readonly UcodeEmployees _ucodeEmployees;
         private readonly OnlineUserIdEmployee _onlineUserIdEmployee;
-
+        private readonly ContentLanguage _cntLanguage;
+        private readonly tbluser _users;
         public UserService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
@@ -29,7 +30,9 @@ namespace Maximus.Services
             CUstomerOrderTemplateCostcenters costcenters = new CUstomerOrderTemplateCostcenters(_unitOfWork);
             BusAddress busAddress = new BusAddress(_unitOfWork);
             OnlineUserIdEmployee onlineUserIdEmployee = new OnlineUserIdEmployee(_unitOfWork);
+            ContentLanguage cntLanguage = new ContentLanguage(_unitOfWork);
             _busAddress = busAddress;
+            _cntLanguage = cntLanguage;
             _onlineUserIdEmployee = onlineUserIdEmployee;
             _ucodeEmployees = ucodeEmployees;
             _costcenters = costcenters;
@@ -79,7 +82,7 @@ namespace Maximus.Services
                 if (UserAddress.Description != "")
                 {
                     busAdd = UserAddress;
-                     
+
                 }
             }
             return busAdd;
@@ -88,5 +91,61 @@ namespace Maximus.Services
         {
             return _dp.GetUserCount(userName);
         }
+
+        public string GetWelcome(string busId)
+        {
+
+            var val = Convert.ToSByte(true);
+            var content = _cntLanguage.Exists(s => s.BusinessID == busId && s.Enable == val) ? _cntLanguage.GetAll(s => s.BusinessID == busId && s.Enable == val).First().content : "";
+            return content;
+
+        }
+
+        public bool SetWelcomeText(string htmlTxt, string busId)
+        {
+            var result = false;
+            if (_cntLanguage.Exists(s => s.BusinessID == busId))
+            {
+                try
+                {
+                    var exiSCont = _cntLanguage.GetAll(s => s.BusinessID == busId).First();
+                    exiSCont.content = htmlTxt;
+                    _cntLanguage.Update(exiSCont);
+                    result = true;
+                }
+                catch (Exception e)
+                {
+                    result = false;
+                }
+            }
+            else
+            {
+                try
+                {
+                    var newCont = new tblcontent_lang();
+                    newCont.content = htmlTxt;
+                    newCont.BusinessID = busId;
+                    newCont.Enable = Convert.ToSByte(true);
+                    newCont.LangID = "en-GB";
+                    _cntLanguage.Insert(newCont);
+                    result = true;
+                }
+                catch (Exception e)
+                {
+                    result = false;
+                }
+            }
+            return result;
+        }
+        public void ResetPassword(tbluser user, string adminMail, string mailUsername, string mailPassword, string mailPort, string mailServer)
+        {
+            if (user.Email_ID != "" && user.Email_ID != null)
+            {
+                var mailTemplate = _dp.GetForgetPasswordMailTemplate(user);
+                _dp.sendSmtpMail("Password reset", adminMail, mailUsername, mailPassword, mailPort, mailServer, mailTemplate, user.Email_ID, "", "");
+            }                             
+        }
+
+        
     }
 }

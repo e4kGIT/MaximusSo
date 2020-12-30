@@ -10,14 +10,16 @@ namespace Maximus.Services.Interface
 {
     public interface IBasket
     {
-        bool DeleteOrder(int orderNO, string empId, string onlineUserId, bool pointsReq, string busId, string adminMail, string mailUsername, string mailPassword, string mailPort, string mailServer);
+        OrderConfirmation GetEmailMessage(SalesOrderHeaderViewModel salesHead, string rolloutname, long manpackNo, string pricePermission, string ONLCUSREFLBL, string cmpLogo, string custLogo, long orderNo, bool isedit = false, UpdateMailModel updModel = null);
+        bool DeleteOrder(int orderNO, string empId, string onlineUserId, bool pointsReq, string busId, string adminMail, string mailUsername, string mailPassword, string mailPort, string mailServer,bool isEmergency,string reason="");
         SalesOrderLineViewModel GetCarrStyleLine(string styleId, string busId,double CurrencyExchangeRate,int lineNo);
         PointsModel GetPointsModel(string uCode, string busId);
-        AcceptResultSet AcceptOrder(string cmpId, bool IsManPack, string busId, List<SalesOrderHeaderViewModel> salesHeaderLst, string addDesc, bool isRollOutOrder, string OverrideEnt, bool CusRefMan, string POINTSREQ, List<BusAddress1> busAddress, string DIFF_MANPACK_INFO, string NOMCODEMAN, string ONLNEREQNOM1, string ONLNEREQNOM2, string ONLNEREQNOM3, string ONLNEREQNOM4, string ONLNEREQNOM5, string RolloutName, string selectedcar, string UserName, string DELADDR_USER_CREATE, double CARRPERCENT, double CARRREQAMT, string FITALLOC, string DIMALLOC, string BUDGETREQ, string Browser,  string REMOTE_ADDR,string  ONLCUSREFLBL, string cmpLogo, string custLogo, string adminMail, string mailUsername, string mailPassword, string mailPort, string mailServer, string HTTP_X_FORWARDED_FOR="", bool isedit = false, bool boolDeleteConfirm=false,string pnlCarriageReason = "",bool booPtsReq=false,int empResetMnths=0,string permissionPrice="");
+        AcceptResultSet AcceptOrder(string cmpId, bool IsManPack, string busId, List<SalesOrderHeaderViewModel> salesHeaderLst, string addDesc, bool isRollOutOrder,bool isRollOutOrderEst, string OverrideEnt, bool CusRefMan, string POINTSREQ, List<BusAddress1> busAddress, string DIFF_MANPACK_INFO, string NOMCODEMAN, string ONLNEREQNOM1, string ONLNEREQNOM2, string ONLNEREQNOM3, string ONLNEREQNOM4, string ONLNEREQNOM5, string RolloutName, string selectedcar, string UserName, string DELADDR_USER_CREATE, double CARRPERCENT, double CARRREQAMT, string FITALLOC, string DIMALLOC, string BUDGETREQ, string Browser, string REMOTE_ADDR, string ONLCUSREFLBL, string cmpLogo, string custLogo, string adminMail, string mailUsername, string mailPassword, string mailPort, string mailServer, string ueMailEMail, string HTTP_X_FORWARDED_FOR = "", bool isedit = false, bool boolDeleteConfirm = false, string pnlCarriageReason = "", bool booPtsReq = false, int empResetMnths = 0, string permissionPrice = "", UpdateMailModel updModel=null,bool cnf=false);
 
         bool CheckCarriage(TotalModel tot, bool IsManPack, double CARRPERCENT, List<SalesOrderHeaderViewModel> SalesOrderHeader, double CARRREQAMT,string busId);
 
         List<BusAddress1> FillCombo_CustomerDelivery(string busId, string access, string orderPermit, string UserName, bool IsManpack = false, string selEmp = "");
+        string GetOlderOrderInfoMail(SalesOrderHeaderViewModel salesHead, string pricePermission);
         //List<SalesOrderLineViewModel> DeleteCartviewDetailGridView(SalesOrderLineViewModel item, SalesOrderHeaderViewModel result);
         //List<SalesOrderHeaderViewModel> DeleteCarView(SalesOrderHeaderViewModel item, string empId = "", List<SalesOrderHeaderViewModel> model = null);
         //List<string> FillCarrierDropdown();

@@ -40,7 +40,9 @@ namespace Maximus.Data.Models
     public class EmployeeViewModel
     {
         public string role { get; set; }
-
+        public string NextOrderDate { get; set; }
+        public string LastOrderDate1 { get; set; }
+        public bool Hasorder { get; set; }
         
         public string BuisnessId { get; set; }
         public string CompanyId { get; set; }
@@ -69,6 +71,7 @@ namespace Maximus.Data.Models
         public bool chkMapAddr { get; set; }
         public List<string> DepartmentLst { get; set; }
         public List<BusAddress1> AddressLst { get; set; }
+        public bool UserActive { get; set; }
         public List<string> Ucodes { get; set; }
         public List<string> ucodeLst { get; set; }
         public List<string> Roles { get; set; }

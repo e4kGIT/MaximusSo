@@ -1,0 +1,62 @@
+@{
+    var grid = Html.DevExpress().GridView(settings => {
+        settings.Name = "ReturnOrderGridview";
+        settings.CallbackRouteValues = new { Controller = "Employee", Action = "ReturnOrderGridviewPartial" };
+
+        settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "Employee", Action = "_ReturnOrderGridviewPartialAddNew" };
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "Employee", Action = "_ReturnOrderGridviewPartialUpdate" };
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "Employee", Action = "_ReturnOrderGridviewPartialDelete" };
+        settings.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
+        settings.SettingsBehavior.ConfirmDelete = true;
+
+        settings.CommandColumn.Visible = false;
+        settings.CommandColumn.ShowNewButton = true;
+        settings.CommandColumn.ShowDeleteButton = true;
+        settings.CommandColumn.ShowEditButton = true;
+
+        settings.KeyFieldName = "EmployeeId";
+
+        settings.SettingsPager.Visible = true;
+        settings.Settings.ShowGroupPanel = true;
+        settings.Settings.ShowFilterRow = true;
+        settings.SettingsBehavior.AllowSelectByRowClick = true;
+        settings.Settings.ShowFilterRowMenu = true;
+        settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.Off;
+        settings.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Right;
+        settings.SettingsAdaptivity.AdaptiveDetailColumnCount = 1;
+        settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = false;
+        settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
+        settings.HtmlRowPrepared = (s, e) =>
+        {
+            if (e.GetValue("Hasorder") != null)
+            {
+                if (Convert.ToBoolean(e.GetValue("Hasorder"))==false)
+                {
+                    e.Row.BackColor = System.Drawing.Color.Beige;
+                }
+            }
+        };
+        settings.Columns.Add("EmployeeId");
+        // settings.Columns.Add("Department");
+        settings.Columns.Add("EmpFirstName");
+        settings.Columns.Add("EmpLastName");
+        settings.Columns.Add("TotalPoints");
+        settings.Columns.Add("PointsUsed");
+        settings.Columns.Add("LastOrderDate").Caption="Last Return Order";
+        settings.Columns.Add(set=> {
+            set.FieldName = "";
+            set.SetDataItemTemplateContent(x => {
+                var empId = DataBinder.Eval(x.DataItem, "EmployeeId");
+                var lastOrderNo = DataBinder.Eval(x.DataItem, "LastOrderNo");
+                var hasOrder=(bool)DataBinder.Eval(x.DataItem, "Hasorder");
+                string content = hasOrder? "<a href=\"/Return/GetAllOrders?employeeId=" + empId + "\"><button style='background-color:#009885;'  class='btn btn-primary'>Create Return Order</button></a>":"";
+                ViewContext.Writer.Write(content);
+            });
+        });
+    });
+    if (ViewData["EditError"] != null){
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()
+

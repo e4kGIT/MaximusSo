@@ -1,0 +1,75 @@
+﻿@model Maximus.Data.models.RtnCollectionModel
+
+ 
+
+<div class="row">
+    <div class="col-md-1">
+
+    </div>
+    <div class="col-md-10">
+        <h3>Do you need collection for return orders?</h3>
+    </div>
+</div>
+
+ <br />
+    <div class="row">
+        <div class="col-md-1">
+
+        </div>
+        <div class="col-md-10">
+            <div class="row">
+                <br />
+                <div class="col-md-5">
+                    @Html.DevExpress().LabelFor(txtBx => txtBx.ContactName).GetHtml()
+                </div>
+                <div class="col-md-1"><b>:</b></div>
+                <div class="col-md-6">@Html.DevExpress().TextBoxFor(txtBx => txtBx.ContactName, s =>
+                                 {
+                                     s.Name = "rtnCollContNam";
+                                     //s.Properties.Caption = "Contact name";
+                                     s.Properties.ValidationSettings.RequiredField.ErrorText = "This field is required";
+                                     s.Properties.ValidationSettings.RequiredField.IsRequired = true;
+                                 }).GetHtml()</div><br /><br /><br />
+<br />
+                <div class="col-md-5">@Html.DevExpress().LabelFor(txtBx => txtBx.ContactNo).GetHtml()</div>
+                <div class="col-md-1"><b>:</b></div>
+                <div class="col-md-6">@Html.DevExpress().TextBoxFor(txtBx => txtBx.ContactNo, s =>
+                                 {
+                                     s.Name = "rtnCollContNo";
+                                     //s.Properties.Caption = "Contact no";  
+                                     s.Properties.MaskSettings.Mask = "9990000000";
+                                     s.Properties.MaskSettings.IncludeLiterals = MaskIncludeLiteralsMode.None;
+                                     s.Properties.ValidationSettings.RequiredField.ErrorText = "This field is required";
+                                     s.Properties.ValidationSettings.RequiredField.IsRequired = true;
+                                     s.Properties.ValidationSettings.RegularExpression.ErrorText = "Please enter a valid phone number";
+
+                                 }).GetHtml()</div><br /><br /><br />
+<br />
+                <div class="col-md-5">@Html.DevExpress().LabelFor(txtBx => txtBx.EmailId).GetHtml()</div>
+                <div class="col-md-1"><b>:</b></div>
+                <div class="col-md-6">@Html.DevExpress().TextBoxFor(txtBx => txtBx.EmailId, s =>
+                                 {
+
+                                     //s.Properties.Caption = "Email";
+                                     s.Name = "rtnCollEmail";
+                                     s.Properties.ValidationSettings.RequiredField.ErrorText = "This field is required";
+                                     s.Properties.ValidationSettings.RequiredField.IsRequired = true;
+                                     s.Properties.ValidationSettings.RegularExpression.ErrorText = "Please enter a valid email";
+                                     s.Properties.ValidationSettings.RegularExpression.ValidationExpression = @"\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*";
+                                 }).GetHtml()</div>
+                <br />
+                <br />
+                <center>
+                   
+                    <br /><br />
+                    @Html.DevExpress().Button(btn => { btn.Name = "btnRTNcollectionYes"; btn.Text = "yes"; btn.UseSubmitBehavior = false;btn.ClientSideEvents.Click = "SettleReturnCollectionInfo"; }).GetHtml()
+                    @Html.DevExpress().Button(btn => { btn.Name = "btnRTNcollectionNo"; btn.Text = "No"; btn.UseSubmitBehavior = false; btn.ClientSideEvents.Click = "SettleReturnCollectionInfo"; }).GetHtml()
+                </center>
+                <br />
+            </div>
+        </div>
+        <div class="col-md-1">
+
+        </div>
+    </div>
+ 

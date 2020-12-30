@@ -72,6 +72,19 @@
                 ViewContext.Writer.Write(string.Format(content, editBtn));
             });
         });
+        settings.HtmlRowPrepared = (s, e) =>
+        {
+            if (e.GetValue("EmpIsActive") != null && e.GetValue("UserActive") != null)
+            {
+
+
+                if (Convert.ToBoolean(e.GetValue("EmpIsActive").ToString()) == false || Convert.ToBoolean(e.GetValue("UserActive").ToString()) == false)
+                {
+                    e.Row.BackColor = System.Drawing.Color.Beige;
+                    e.Row.ForeColor = System.Drawing.Color.Red;
+                }
+            }
+        };
         settings.Columns.Add("EmployeeId");
         settings.Columns.Add("Department");
         //settings.Columns.Add("EmpFirstName").Caption = "First name";
@@ -239,71 +252,90 @@
                     }
                     else
                     {
+
                         Html.DevExpress().ComboBox(cmb =>
                         {
                             cmb.Name = "checkComboBox_" + EmployeeId + Ucodes;
-                            cmb.Properties.Items.Add(Ucodes);
+                            if (Convert.ToBoolean(Session["IsEmergency"]))
+                            {
+                                if (Emp._pointsByUcode.Exists(s => s.UcodeID == Ucodes) == false)
+                                {
+                                    cmb.Properties.Items.Add(Ucodes);
+                                }
+                            }
+                            else
+                            {
+                                if (Emp._pointsByUcode.Exists(s => s.UcodeID == Ucodes))
+                                {
+                                    cmb.Properties.Items.Add(Ucodes);
+                                }
+                            }
                             cmb.SelectedIndex = 0;
                         }).GetHtml();
                     }
                 });
             });
         }
-        if (Convert.ToBoolean(Session["POINTSREQ"]))
+        var finUcode = "";
+        if (Convert.ToBoolean(Session["POINTSREQ"]) && Convert.ToBoolean(Session["IsEmergency"]) == false)
         {
             settings.Columns.Add(col =>
             {
                 col.FieldName = "TotalPoints";
                 col.Caption = "Total points";
-                col.SetDataItemTemplateContent(x =>
-                {
-                    string ucodeId = DataBinder.Eval(x.DataItem, "EmpUcodes").ToString();
-                    string empId = DataBinder.Eval(x.DataItem, "EmployeeId").ToString();
-                    string busID = Session["BuisnessId"].ToString();
-                    var finUcode = "";
-                    foreach (var ucode in ucodeId.Split(','))
-                    {
-                        if (Emp._pointsByUcode.Exists(s => s.UcodeID == ucode) == false)
-                        {
-                            finUcode = ucodeId.Replace(ucode, "");
-                            finUcode = finUcode.TrimEnd(',');
-                        }
+                //col.SetDataItemTemplateContent(x =>
+                //{
+                //    string ucodeId = DataBinder.Eval(x.DataItem, "EmpUcodes").ToString();
+                //    string empId = DataBinder.Eval(x.DataItem, "EmployeeId").ToString();
+                //    string busID = Session["BuisnessId"].ToString();
+                //    finUcode = ucodeId;
+                //    foreach (var ucode in ucodeId.Split(','))
+                //    {
+                //        if (Emp._pointsByUcode.Exists(s => s.UcodeID == ucode) == false)
+                //        {
+                //            if (finUcode != "")
+                //            {
+                //                finUcode = finUcode.Replace(ucode, "");
+                //                finUcode = finUcode.TrimEnd(',');
+                //            }
+                //        }
 
-                    }
-                    if (finUcode == "")
-                    {
-                        ViewContext.Writer.Write("0");
-                    }
-                    else if (finUcode.Contains(","))
-                    {
-                        ViewContext.Writer.Write("0");
-                    }
-                    else
-                    {
-                        var pts = Emp._pointsByUcode.GetAll(s => s.UcodeID == finUcode && s.BusinessID == busID).First().TotalPoints.ToString();
-                        ViewContext.Writer.Write(pts);
-                    }
-                });
+                //    }
+                //    if (finUcode == "")
+                //    {
+                //        ViewContext.Writer.Write("0");
+                //    }
+                //    else if (finUcode.Contains(","))
+                //    {
+                //        ViewContext.Writer.Write("0");
+                //    }
+                //    else
+                //    {
+                //        var pts = Emp._pointsByUcode.Exists(s => s.UcodeID == finUcode && s.BusinessID == busID) ? Emp._pointsByUcode.GetAll(s => s.UcodeID == finUcode && s.BusinessID == busID).First().TotalPoints.ToString():"0";
+                //        ViewContext.Writer.Write(pts);
+                //    }
+                //});
             });
             settings.Columns.Add(col =>
             {
                 col.FieldName = "PointsUsed";
                 col.Caption = "Points used";
-                col.SetDataItemTemplateContent(x =>
-                {
-                    string ucodeId = DataBinder.Eval(x.DataItem, "EmpUcodes").ToString();
-                    string empId = DataBinder.Eval(x.DataItem, "EmployeeId").ToString();
-                    string busID = Session["BuisnessId"].ToString();
-                    if (ucodeId.Contains(","))
-                    {
-                        ViewContext.Writer.Write("0");
-                    }
-                    else
-                    {
-                        var pts = Emp._dp.GetTotalSoPoints(busID, empId, 0).ToString();
-                        ViewContext.Writer.Write(pts);
-                    }
-                });
+                //col.SetDataItemTemplateContent(x =>
+                //{
+                //    string ucodeId = DataBinder.Eval(x.DataItem, "EmpUcodes").ToString();
+                //    string empId = DataBinder.Eval(x.DataItem, "EmployeeId").ToString();
+                //    string busID = Session["BuisnessId"].ToString();
+
+                //    if (finUcode.Contains(","))
+                //    {
+                //        ViewContext.Writer.Write("0");
+                //    }
+                //    else
+                //    {
+                //        var pts = Emp._dp.GetTotalSoPoints(busID, empId, 0).ToString();
+                //        ViewContext.Writer.Write(pts);
+                //    }
+                //});
             });
         }
 
@@ -311,7 +343,7 @@
         {
             //Maximus.Data.Models.e4kmaximusdbEntities enty = new Maximus.Data.Models.e4kmaximusdbEntities();
             col.FieldName = "Entitlement";
-            col.Caption = "Last order";
+            col.Caption = "Last order info";
             col.SetDataItemTemplateContent(x =>
             {
                 var s = DataBinder.Eval(x.DataItem, "LastOrderDate") != null ? (DataBinder.Eval(x.DataItem, "LastOrderDate")).ToString() : "";
@@ -341,20 +373,36 @@
         settings.Columns.Add(col =>
         {
             //Maximus.Data.Models.e4kmaximusdbEntities enty = new Maximus.Data.Models.e4kmaximusdbEntities();
-            col.FieldName = "";
-            col.Caption = "Next order date";
+            col.FieldName = "LastOrderDate1";
+            col.Caption = "Last order date";
 
-            col.SetDataItemTemplateContent(x =>
-            {
-                //empRollout
-                string empId = DataBinder.Eval(x.DataItem, "EmployeeId").ToString();
-                string busID = Session["BuisnessId"].ToString();
-                string nextDate = Emp._empRollout.Exists(s => s.BusinessID == busID && s.EmployeeID == empId) ? Emp._empRollout.GetAll(s => s.BusinessID == busID && s.EmployeeID == empId).First().NextOrder.Value.ToString("dd-MM-yyyy") : "";
-                ViewContext.Writer.Write(nextDate);
-            });
+            ////col.SetDataItemTemplateContent(x =>
+            ////{
+            ////    //empRollout
+            ////    string empId = DataBinder.Eval(x.DataItem, "EmployeeId").ToString();
+            ////    string busID = Session["BuisnessId"].ToString();
+            ////    string nextDate = Emp._empRollout.Exists(s => s.BusinessID == busID && s.EmployeeID == empId) ? Emp._empRollout.GetAll(s => s.BusinessID == busID && s.EmployeeID == empId).First().LastOrder.Value.ToString("dd-MM-yyyy") : "";
+            ////    ViewContext.Writer.Write(nextDate);
+            ////});
         });
         settings.Columns.Add(col =>
         {
+            //Maximus.Data.Models.e4kmaximusdbEntities enty = new Maximus.Data.Models.e4kmaximusdbEntities();
+            col.FieldName = "NextOrderDate";
+            col.Caption = "Next order date";
+
+            //col.SetDataItemTemplateContent(x =>
+            //{
+            //    //empRollout
+            //    string empId = DataBinder.Eval(x.DataItem, "EmployeeId").ToString();
+            //    string busID = Session["BuisnessId"].ToString();
+            //    string nextDate = Emp._empRollout.Exists(s => s.BusinessID == busID && s.EmployeeID == empId) ? Emp._empRollout.GetAll(s => s.BusinessID == busID && s.EmployeeID == empId).First().NextOrder.Value.ToString("dd-MM-yyyy") : "";
+            //    ViewContext.Writer.Write(nextDate);
+            //});
+        });
+        settings.Columns.Add(col =>
+        {
+
             col.Caption = " ";
             col.SetHeaderTemplateContent(s =>
             {
@@ -376,10 +424,17 @@
             {
                 col.SetDataItemTemplateContent(x =>
                 {
-                    string UcodesName = (DataBinder.Eval(x.DataItem, "EmpUcodes")).ToString();
-                    string EmployeeName = (DataBinder.Eval(x.DataItem, "EmpFirstName")).ToString() + " " + (DataBinder.Eval(x.DataItem, "EmpLastName")).ToString();
-                    string EmployeeId = (DataBinder.Eval(x.DataItem, "EmployeeId")).ToString();
-                    string Content = Convert.ToBoolean(Session["OnStop"].ToString()) ? string.Format("<button style='background-color:#009885;' disabled onclick=\"CreateOrder('{0}','{1}','{2}')\" class=\"btn btn-primary\">Create Order</button>", EmployeeId, "CmbUcode_" + EmployeeId + UcodesName, EmployeeName) : string.Format("<button style='background-color:#009885;' onclick=\"CreateOrder('{0}','{1}','{2}')\" class=\"btn btn-primary\">Create Order</button>", EmployeeId, "CmbUcode_" + EmployeeId + UcodesName, EmployeeName);
+
+                    bool empActive = (bool)(DataBinder.Eval(x.DataItem, "EmpIsActive"));
+                    bool userActive = (bool)(DataBinder.Eval(x.DataItem, "UserActive"));
+                    string Content = "";
+                    if (empActive && userActive)
+                    {
+                        string UcodesName = (DataBinder.Eval(x.DataItem, "EmpUcodes")).ToString();
+                        string EmployeeName = (DataBinder.Eval(x.DataItem, "EmpFirstName")).ToString() + " " + (DataBinder.Eval(x.DataItem, "EmpLastName")).ToString();
+                        string EmployeeId = (DataBinder.Eval(x.DataItem, "EmployeeId")).ToString();
+                        Content = Convert.ToBoolean(Session["OnStop"].ToString()) ? string.Format("<button style='background-color:#009885;' disabled onclick=\"CreateOrder('{0}','{1}','{2}')\" class=\"btn btn-primary\">Create Order</button>", EmployeeId, "CmbUcode_" + EmployeeId + UcodesName, EmployeeName) : string.Format("<button style='background-color:#009885;' onclick=\"CreateOrder('{0}','{1}','{2}')\" class=\"btn btn-primary\">Create Order</button>", EmployeeId, "CmbUcode_" + EmployeeId + UcodesName, EmployeeName);
+                    }
                     ViewContext.Writer.Write(Content);
                 });
             }

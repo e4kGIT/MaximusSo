@@ -1,0 +1,16 @@
+@using Maximus.Controllers;
+
+@Html.DevExpress().HtmlEditor(settings => {
+    settings.Name = "HtmlEditor";
+    settings.CallbackRouteValues = new { Controller = "Settings", Action = "HtmlEditorPartial" };
+    settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+    settings.ToolbarMode = HtmlEditorToolbarMode.Menu;
+    settings.Html = Session["welcomeContent"]!=null? Session["welcomeContent"].ToString().Replace("~", ""):"";
+
+    settings.SettingsDialogs.InsertImageDialog.SettingsImageUpload.UploadCallbackRouteValues = new { Controller = "Settings", Action = "HtmlEditorPartialImageUpload" };
+    settings.SettingsDialogs.InsertImageDialog.SettingsImageUpload.UploadFolder = SettingsControllerHtmlEditorSettings.ImageUploadDirectory;
+    settings.SettingsDialogs.InsertImageDialog.SettingsImageUpload.ValidationSettings.Assign(SettingsControllerHtmlEditorSettings.ImageUploadValidationSettings);
+
+
+    settings.SettingsDialogs.InsertImageDialog.SettingsImageSelector.Assign(SettingsControllerHtmlEditorSettings.ImageSelectorSettings);
+}).GetHtml()

@@ -54,10 +54,10 @@
             <div class="col-md-12 col-xs-12 col-sm-12 col-lg-12 divpadder">
                 <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4"></div>
                 <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
-                    @Html.DevExpress().Button(x => { x.Name = "btnFilterSubmit"; x.Text = "Submit"; x.ControlStyle.CssClass = "btn btn-primary"; x.ClientSideEvents.Click = "GetEmpGrid"; }).GetHtml()
+                    @Html.DevExpress().Button(x => { x.Name = "btnFilterSubmit"; x.Text = "Submit";  x.ClientSideEvents.Click = "GetEmpGrid"; }).GetHtml()
                 </div>
                 <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4">
-                    @Html.DevExpress().Button(x => { x.Name = "btnGetAll"; x.Text = "Get all"; x.ControlStyle.CssClass = "btn btn-primary"; x.ClientSideEvents.Click = "GetAllEmps"; }).GetHtml()
+                    @Html.DevExpress().Button(x => { x.Name = "btnGetAll"; x.Text = "Get all"; x.ClientSideEvents.Click = "GetAllEmps"; }).GetHtml()
                 </div>
             </div>
             <br />

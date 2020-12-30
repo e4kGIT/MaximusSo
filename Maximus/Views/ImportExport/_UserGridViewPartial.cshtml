@@ -1,0 +1,246 @@
+@{
+    var grid = Html.DevExpress().GridView(settings =>
+    {
+        settings.Name = "UserGridView";
+        settings.CallbackRouteValues = new { Controller = "ImportExport", Action = "UserGridViewPartial" };
+
+        settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "ImportExport", Action = "UserGridViewPartialAddNew" };
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "ImportExport", Action = "UserGridViewPartialUpdate" };
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "ImportExport", Action = "UserGridViewPartialDelete" };
+        settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
+        settings.SettingsBehavior.ConfirmDelete = true;
+
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.ShowNewButton = true;
+        settings.CommandColumn.ShowDeleteButton = true;
+        settings.CommandColumn.ShowEditButton = true;
+        settings.SettingsCommandButton.EditButton.Image.IconID = IconID.EditEdit16x16;
+        settings.SettingsCommandButton.EditButton.RenderMode = GridCommandButtonRenderMode.Image;
+        settings.SettingsCommandButton.NewButton.Image.IconID = IconID.ActionsNew16x16;
+        settings.SettingsCommandButton.NewButton.RenderMode = GridCommandButtonRenderMode.Image;
+
+        settings.SettingsCommandButton.DeleteButton.Image.IconID = IconID.EditDelete16x16;
+        settings.SettingsCommandButton.DeleteButton.RenderMode = GridCommandButtonRenderMode.Image;
+
+        settings.SettingsCommandButton.CancelButton.Image.IconID = IconID.ActionsCancel16x16;
+        settings.SettingsCommandButton.CancelButton.RenderMode = GridCommandButtonRenderMode.Image;
+
+        settings.SettingsCommandButton.UpdateButton.Image.IconID = IconID.OtherUpdatetable16x16gray;
+        settings.SettingsCommandButton.UpdateButton.RenderMode = GridCommandButtonRenderMode.Image;
+        settings.KeyFieldName = "UserName";
+
+        settings.SettingsPager.Visible = true;
+        settings.Settings.ShowGroupPanel = false;
+        settings.Settings.ShowFilterRow = true;
+        settings.SettingsBehavior.AllowSelectByRowClick = false;
+
+        settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.Off;
+        settings.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Right;
+        settings.SettingsAdaptivity.AdaptiveDetailColumnCount = 1;
+        settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = false;
+        settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
+        settings.HtmlRowPrepared = (s, e) =>
+        {
+            if (e.GetValue("Active") != null)
+            {
+                if (Convert.ToBoolean(e.GetValue("Active"))==false)
+                {
+                    e.Row.ForeColor = System.Drawing.Color.Red;
+                }
+            }
+        };
+
+
+        settings.Columns.Add("UserName");
+        settings.Columns.Add("ForeName");
+        settings.Columns.Add("SurName");
+        settings.Columns.Add("Email");
+
+        settings.Columns.Add(s =>
+        {
+            s.FieldName = "AccessRole";
+            s.Caption = "Role";
+            s.SetEditItemTemplateContent(set =>
+            {
+                string role =  DataBinder.Eval(set.DataItem, "AccessRole").ToString();
+                Html.DevExpress().ComboBox(chk =>
+                {
+                    chk.Name = "Roleedit" + Guid.NewGuid().ToString();
+                    //foreach (var item in ViewBag.RoleNames)
+                    //{
+                    //    if(item.tolo)
+                    //}
+                }).GetHtml();
+            });
+        });
+        settings.Columns.Add(s =>
+        {
+            s.FieldName = "Active";
+            s.Caption = "Active";
+            s.SetDataItemTemplateContent(set=>{
+                bool ischk = (bool)DataBinder.Eval(set.DataItem, "Active");
+                Html.DevExpress().CheckBox(chk => {
+
+                    chk.Name = "ActiveChk" + Guid.NewGuid().ToString();
+                    chk.Checked = ischk;
+                    chk.ReadOnly = true;
+                }).GetHtml();
+            });
+            s.SetEditItemTemplateContent(set =>
+            {
+                Html.DevExpress().CheckBox(chk =>
+                {
+                    bool ischk = (bool)DataBinder.Eval(set.DataItem, "Active");
+                    chk.Name = "ActiveEditChk" + Guid.NewGuid().ToString();
+                    chk.Checked = ischk;
+                    chk.ReadOnly = true;
+                }).GetHtml();
+            });
+        });
+        settings.Columns.Add("MapTo");
+        //settings.Columns.Add(s=> {
+        //    s.FieldName = "MapTo";
+        //    s.SetDataItemTemplateContent(set => {
+
+        //        string mapTo = DataBinder.Eval(set.DataItem, "MapTo").ToString();
+        //        if (mapTo.Contains(","))
+        //        {
+        //            List<string> mapLst = mapTo.Split(',').ToList();
+        //            Html.DevExpress().DropDownEdit(text =>
+        //            {
+        //                text.Name = "MapToComboEdit"+Guid.NewGuid().ToString();
+        //                text.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+        //                text.Properties.Caption = "MapTo";
+        //                text.Properties.DropDownWindowStyle.BackColor = System.Drawing.Color.FromArgb(0xEDEDED);
+        //                text.ControlStyle.CssClass = "pull-left";
+        //                if (Session["Access"].ToString().Trim().ToLower() != "user")
+        //                {
+        //                    text.SetDropDownWindowTemplateContent(c =>
+        //                    {
+
+        //                        Html.DevExpress().ListBox(listBoxSettings =>
+        //                        {
+
+        //                            listBoxSettings.Name = "MapToComboEdit_" + Guid.NewGuid().ToString();
+        //                            listBoxSettings.ControlStyle.Border.BorderWidth = 0;
+        //                            listBoxSettings.ControlStyle.BorderBottom.BorderWidth = 1;
+        //                            listBoxSettings.ControlStyle.BorderBottom.BorderColor = System.Drawing.Color.FromArgb(0xDCDCDC);
+        //                            listBoxSettings.Height = System.Web.UI.WebControls.Unit.Pixel(200);
+        //                            listBoxSettings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+        //                            listBoxSettings.Properties.SelectionMode = ListEditSelectionMode.Multiple;
+        //                            //listBoxSettings.Properties.EnableSelectAll = true;
+        //                            //listBoxSettings.Properties.FilteringSettings.ShowSearchUI = true;
+        //                            listBoxSettings.Properties.SelectionMode = ListEditSelectionMode.CheckColumn;
+        //                            //listBoxSettings.Properties.ClientSideEvents.SelectedIndexChanged = "updateTextEdit";
+        //                            //listBoxSettings.Properties.ClientSideEvents.Init = "updateTextEdit";
+        //                            if (ViewBag.userlst != null)
+        //                            {
+        //                                listBoxSettings.PreRender = (sender, e) =>
+        //                                {
+        //                                    MVCxListBox cbl = (MVCxListBox)sender;
+        //                                    foreach (ListEditItem item in cbl.Items)
+        //                                    {
+        //                                        if (ViewBag.userlst != null)
+        //                                        {
+        //                                            if (ViewBag.userlst.Contains(item.Text.Trim()))
+        //                                            {
+        //                                                item.Selected = true;
+        //                                            }
+        //                                        }
+        //                                    }
+        //                                };
+        //                            }
+        //                        }).BindList(ViewBag.userlst).Render();
+        //                        ViewContext.Writer.Write("<div style=\"margin: 6px; overflow hidden;\">");
+
+        //                        Html.DevExpress().Button(buttonSettings =>
+        //                        {
+        //                            buttonSettings.Name = "buttonClose_";
+        //                            buttonSettings.Text = "Close";
+        //                            buttonSettings.Style.Add("float", "right");
+        //                            buttonSettings.ClientSideEvents.Click = "HideCmbEdit";
+        //                            buttonSettings.Height = 26;
+        //                        }).Render();
+
+        //                    });
+        //                }
+        //            }).GetHtml();
+        //        }
+        //        else
+        //        {
+        //            ViewContext.Writer.Write(mapTo);
+        //        }
+        //    });
+        //});
+        settings.Columns.Add("RolloutName");
+    });
+    if (ViewData["EditError"] != null){
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+    }
+    @grid.Bind(Model).GetHtml()
+
+
+@*@Html.DevExpress().DropDownEditFor(x => x.EmpUcodes, text =>
+    {
+        text.Name = "checkComboEdit";
+        text.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+        text.Properties.Caption = "Ucodes";
+        if (Session["Access"].ToString().Trim().ToLower() == "user")
+        {
+            text.ReadOnly = true;
+        }
+        text.Properties.DropDownWindowStyle.BackColor = System.Drawing.Color.FromArgb(0xEDEDED);
+        text.ControlStyle.CssClass = "pull-left";
+        if (Session["Access"].ToString().Trim().ToLower() != "user")
+        {
+            text.SetDropDownWindowTemplateContent(c =>
+            {
+
+                Html.DevExpress().ListBox(listBoxSettings =>
+                {
+
+                    listBoxSettings.Name = "checkListBoxEmpEdit_";
+                    listBoxSettings.ControlStyle.Border.BorderWidth = 0;
+                    listBoxSettings.ControlStyle.BorderBottom.BorderWidth = 1;
+                    listBoxSettings.ControlStyle.BorderBottom.BorderColor = System.Drawing.Color.FromArgb(0xDCDCDC);
+                    listBoxSettings.Height = System.Web.UI.WebControls.Unit.Pixel(200);
+                    listBoxSettings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+                    listBoxSettings.Properties.SelectionMode = ListEditSelectionMode.Multiple;
+                    //listBoxSettings.Properties.EnableSelectAll = true;
+                    //listBoxSettings.Properties.FilteringSettings.ShowSearchUI = true;
+                    listBoxSettings.Properties.SelectionMode = ListEditSelectionMode.CheckColumn;
+                    listBoxSettings.Properties.ClientSideEvents.SelectedIndexChanged = "updateTextEdit";
+                    listBoxSettings.Properties.ClientSideEvents.Init = "updateTextEdit";
+                    if (Model.EmployeeId != null)
+                    {
+                        listBoxSettings.PreRender = (sender, e) =>
+                        {
+                            MVCxListBox cbl = (MVCxListBox)sender;
+                            foreach (ListEditItem item in cbl.Items)
+                            {
+                                if (Model.EmpUcodes != null)
+                                {
+                                    if (Model.EmpUcodes.Contains(item.Text.Trim()))
+                                    {
+                                        item.Selected = true;
+                                    }
+                                }
+                            }
+                        };
+                    }
+                }).BindList(Model.ucodeLst).Render();
+                ViewContext.Writer.Write("<div style=\"margin: 6px; overflow hidden;\">");
+
+                Html.DevExpress().Button(buttonSettings =>
+                {
+                    buttonSettings.Name = "buttonClose_";
+                    buttonSettings.Text = "Close";
+                    buttonSettings.Style.Add("float", "right");
+                    buttonSettings.ClientSideEvents.Click = "HideCmbEdit";
+                    buttonSettings.Height = 26;
+                }).Render();
+
+            });
+        }
+    }).GetHtml()*@

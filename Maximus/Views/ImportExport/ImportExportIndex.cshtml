@@ -1,0 +1,28 @@
+﻿
+@*@Html.DevExpress().PageControl(settings =>
+{
+    settings.Name = "PageControl";
+    settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+
+    settings.TabPages.Add("Users").SetContent(() =>
+    {
+
+        Html.RenderAction("UserGridViewPartial");
+    });
+    //settings.TabPages.Add("Address").SetContent(() =>
+    //{
+    //    @Html.RenderAction("AddressGridViewPartial");
+    //});
+    //settings.TabPages.Add("Employee").SetContent(() =>
+    //{
+    //    Html.RenderAction("EmployeeGrdiviewPartial");
+    //});
+}).GetHtml()*@
+
+@{Html.RenderAction("UserGridViewPartial");
+}
+
+
+
+
+

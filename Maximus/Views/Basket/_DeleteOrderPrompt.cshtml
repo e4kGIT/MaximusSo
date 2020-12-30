@@ -1,0 +1,52 @@
+﻿ 
+
+
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-3">@Html.DevExpress().Label(s=> { s.Name = "lblOrderno";s.Text = "OrderNo"; }).GetHtml()</div>
+    <div class="col-md-1">:</div>
+    <div class="col-md-6"><b>@TempData["Ordeno"].ToString()</b> </div>
+    <div class="col-md-1"><input type="hidden" id="txtOrderNoVal" value="@TempData["Ordeno"].ToString()"/></div>
+</div>
+<br /><br />
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-3">@Html.DevExpress().Label(s => { s.Name = "lblEmpId"; s.Text = "EmployeeId"; }).GetHtml()</div>
+    <div class="col-md-1">:</div>
+    <div class="col-md-6"><b>@TempData["EmployeeId"].ToString()</b></div>
+    <div class="col-md-1"><input type="hidden" id="txtEmpIdVal" value="@TempData["EmployeeId"].ToString()" /></div>
+</div><br /><br />
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-3">@Html.DevExpress().Label(s => { s.Name = "lblOrderType"; s.Text = "Order type"; }).GetHtml()</div>
+    <div class="col-md-1">:</div>
+    <div class="col-md-6"><b>@TempData["OrderType"].ToString()</b></div>
+    <div class="col-md-1"><input type="hidden" id="txtOrderTypeVal" value="@TempData["OrderType"].ToString()" /></div>
+</div><br /><br />
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-3">@Html.DevExpress().Label(s => { s.Name = "lblReason"; s.Text = "Reason"; }).GetHtml()</div>
+    <div class="col-md-1">:</div>
+    <div class="col-md-6">@Html.DevExpress().Memo(s => { s.Name = "txtReasonEmer";s.Properties.ValidationSettings.RequiredField.IsRequired = true;s.Height = System.Web.UI.WebControls.Unit.Pixel(100); s.Width = System.Web.UI.WebControls.Unit.Pixel(250); }).GetHtml()</div>
+    <div class="col-md-1"></div>
+</div>
+<br />
+<br />
+ 
+    <center>@Html.DevExpress().Button(s =>
+       {
+           s.Name = "SubmitDelete";
+           s.Text = "Delete";
+           s.UseSubmitBehavior = false;
+           s.ClientSideEvents.Click = "DeleteOrderwithreason";
+       }).GetHtml()
+    @Html.DevExpress().Button(s =>
+{
+    s.Name = "CancelDelete";
+    s.Text = "Cancel";
+    s.UseSubmitBehavior = false; 
+    s.ClientSideEvents.Click = "CloseDelReasonPOP";
+}).GetHtml()</center>
+
+ 
+ 

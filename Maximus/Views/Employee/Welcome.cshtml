@@ -1,0 +1,14 @@
+﻿<script>
+    $(document).ready(function () {
+        checkEmpEmail();
+    });
+</script> 
+@{
+    ViewBag.Title = "Welcome";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+ 
+
+@{ 
+    ViewContext.Writer.Write(Session["welcomeContent"].ToString());
+}

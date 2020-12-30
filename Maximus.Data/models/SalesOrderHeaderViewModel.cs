@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Maximus.Data.models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -7,6 +8,11 @@ namespace Maximus.Data.Models
 {
     public class SalesOrderHeaderViewModel
     {
+       
+        public long manPack { get; set; }
+        public long ReturnOrderNo { get; set; }
+        public bool Returnheader { get; set; }
+        public bool Reorderheader { get; set; }
         public string CustomerName { get; set; }
         public bool IsEditing { get; set; }
         public string EmployeeID { get; set; }
@@ -60,7 +66,7 @@ namespace Maximus.Data.Models
         public Nullable<sbyte> AllowPartShipment { get; set; }
         public Nullable<double> TotalGoods { get; set; }
         public Nullable<double> Net { get; set; }
-         
+
         public Nullable<double> OrderGoods { get; set; }
         public string UserID { get; set; }
         public Nullable<sbyte> pRINTINVOICE { get; set; }
@@ -71,7 +77,7 @@ namespace Maximus.Data.Models
         public bool IsTemplate { get; set; }
         public string ContractNo { get; set; }
         public string VatFlag { get; set; }
-       public double VATPercent { get; set; }
+        public double VATPercent { get; set; }
         public string Currency_Exchange_Code { get; set; }
         public Nullable<System.TimeSpan> TIMEOFENTRY { get; set; }
         public Nullable<long> RepID { get; set; }
@@ -94,10 +100,12 @@ namespace Maximus.Data.Models
         public Nullable<sbyte> ConfirmPrint { get; set; }
         public string OrderType { get; set; }
         public string EmailID { get; set; }
+        public bool HasContactDetail { get; set; }
         public string ContactName { get; set; }
         public string Mobile { get; set; }
         public int VatCode { get; set; }
         public int KAMid { get; set; }
         public List<SalesOrderLineViewModel> SalesOrderLine { get; set; }
+        public List<ReturnOrderModel> Returnlines { get; set; }
     }
 }

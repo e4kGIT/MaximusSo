@@ -21,14 +21,22 @@
         comboBoxSettings.Properties.ClientSideEvents.SelectedIndexChanged = "FillCustRefandDeliveryFields";
     }
     comboBoxSettings.ControlStyle.CssClass = "pull-left";
-    comboBoxSettings.Properties.DropDownWidth = System.Web.UI.WebControls.Unit.Pixel(150);
+    comboBoxSettings.Properties.DropDownWidth = System.Web.UI.WebControls.Unit.Pixel(1000);
     comboBoxSettings.Properties.DropDownStyle = DropDownStyle.DropDownList;
     comboBoxSettings.Properties.ValueField = "AddressID";
     comboBoxSettings.Properties.TextField = "AddressDescription";
     comboBoxSettings.Properties.ValueType = typeof(string);
     comboBoxSettings.Properties.TextFormatString = "{0}";
     comboBoxSettings.Properties.Columns.Add("AddressDescription", "Description", System.Web.UI.WebControls.Unit.Percentage(100));
-    if(((List<Maximus.Data.Models.BusAddress1>)Session["DeliveryAddress"]).Count>1)
+    if (Convert.ToBoolean(Session["IsBulkOrder1"]))
+    {
+        comboBoxSettings.Properties.Columns.Add("Address1", "Address1", System.Web.UI.WebControls.Unit.Percentage(100));
+        comboBoxSettings.Properties.Columns.Add("Address2", "Address2", System.Web.UI.WebControls.Unit.Percentage(100));
+        comboBoxSettings.Properties.Columns.Add("Address3", "Address3", System.Web.UI.WebControls.Unit.Percentage(100));
+        comboBoxSettings.Properties.Columns.Add("City", "City", System.Web.UI.WebControls.Unit.Percentage(100));
+        comboBoxSettings.Properties.Columns.Add("PostCode", "PostCode", System.Web.UI.WebControls.Unit.Percentage(100));
+    }
+    if (((List<Maximus.Data.Models.BusAddress1>)Session["DeliveryAddress"]).Count>1)
     {
         comboBoxSettings.SelectedIndex = ((List<Maximus.Data.Models.BusAddress1>)Session["DeliveryAddress"]).IndexOf(busAdd);
     }

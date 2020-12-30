@@ -14,20 +14,6 @@ namespace Maximus.Data.models
     
     public partial class hr_users_removed
     {
-        public string UserName { get; set; }
-        public string Password { get; set; }
-        public string ForeName { get; set; }
-        public string SurName { get; set; }
-        public string ContactNo { get; set; }
-        public string AccessID { get; set; }
-        public string Active { get; set; }
-        public string BusinessID { get; set; }
-        public Nullable<System.DateTime> CreateDate { get; set; }
-        public string LastIPAddress { get; set; }
-        public Nullable<System.DateTime> LastLoggedDate { get; set; }
-        public string Createdby { get; set; }
-        public string Email_ID { get; set; }
-        public string AspUserID { get; set; }
-        public string BusinessName { get; set; }
+        public string Username { get; set; }
     }
 }

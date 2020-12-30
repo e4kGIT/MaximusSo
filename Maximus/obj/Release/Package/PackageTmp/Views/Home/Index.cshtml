@@ -1,4 +1,9 @@
-﻿                                 
+﻿    <script>
+        $(document).ready(function () {
+            EmergencyMessagePop();
+        });
+    </script>
+                            
 <br /><br /><br />
 
 @if (Convert.ToBoolean(Session["ISEDITING"]) && ((List<Maximus.Data.Models.SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.IsEditing).First().IsTemplate)
@@ -24,7 +29,7 @@ else
         @{
             if (Session["BuisnessId"] != null)
             {
-                if (Session["SelectedEmp"] != null)
+                if (Session["SelectedEmp"] != null && Session["SelectedEmp"]!="")
                 {
                     var s = Convert.ToInt32(Session["qty"]);
                     //string content = string.Format("<div class=\"col-md-3\" style=\"padding:0px;\" ><p><b>Employee Id:</b></p>{0}</div> <div style=\"padding:0px;\" class=\"col-md-3\"> <p><b>EmployeeName:</b></p> {2}</div><div style=\"padding:0px;\" class=\"col-md-4\"> <p><b>Ucodes:</b></p> {1}</div><div class=\"col-md-2\"> <p><b>Business Id:</b></p>" + Session["BuisnessId"].ToString() + "</div>", Session["SelectedEmp"].ToString(), Session["UcodeDesc"].ToString(), Session["EmpName"].ToString());
@@ -143,6 +148,8 @@ else
 </div>
 <br />
 <div class="row" style="padding:0px">
+    @if (Session["BuisnessId"].ToString()!="BARBAN01")
+    {
     <div class="col-md-2 col-lg-2 col-xs-2 col-sm-12" style="padding-left:0px;padding-right:3px;">
         <center>
             @Html.Action("GetAllGroups")
@@ -167,6 +174,30 @@ else
         </div>
 
     </div>
+    }
+    else
+    {
+        <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12" style="padding-left:3px;padding-right:0px">
+
+            @Html.DevExpress().ButtonEdit(sett =>
+   {
+       sett.Name = "searchPanel";
+       sett.ControlStyle.BackColor = System.Drawing.Color.White;
+       sett.ReadOnly = false;
+       //sett.ControlStyle.CssClass = "input-group changethisone";
+       sett.Properties.Buttons.Add("<span disabled class=\"input-group-addon\"><span class=\"glyphicon glyphicon-search\"></span></span>");
+       sett.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+       sett.Properties.ClientSideEvents.TextChanged = "filterresults";
+       sett.EncodeHtml = false;
+   }).GetHtml()
+            <br />
+            <div id="resultArea">
+                @Html.Action("CardViewPartial")
+            </div>
+
+        </div>
+    }
+
 
 </div>
 
@@ -215,28 +246,6 @@ else
     });
 }).GetHtml()
 
-@Html.DevExpress().PopupControl(sett =>
-{
-    sett.Width = System.Web.UI.WebControls.Unit.Pixel(500);
-    sett.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
-    sett.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
-    sett.Name = "Entitlement";
-    sett.AllowResize = true;
-    sett.ShowHeader = true;
-    sett.ShowOnPageLoad = false;
-    sett.AllowDragging = false;
-    sett.CloseAction = CloseAction.OuterMouseClick;
-    sett.CloseOnEscape = false;
-    sett.PopupAnimationType = AnimationType.Auto;
-    sett.Modal = true;
-    sett.HeaderText = "Entitlement";
-    sett.SetContent(() =>
-    {
-        ViewContext.Writer.Write("<div><div id='Entitlement'></div></div>");
-    });
-}).GetHtml()
-
-
 
 @*@Html.DevExpress().PopupControl(sett =>
     {
@@ -263,7 +272,7 @@ else
 @Html.DevExpress().PopupControl(sett =>
 {
     //sett.Width = System.Web.UI.WebControls.Unit.Pixel(100);
-    sett.Height = System.Web.UI.WebControls.Unit.Pixel(920);
+    sett.Height = System.Web.UI.WebControls.Unit.Pixel(900);
     sett.PopupVerticalAlign = PopupVerticalAlign.Middle;
     sett.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
     sett.Name = "DimAllocPop";

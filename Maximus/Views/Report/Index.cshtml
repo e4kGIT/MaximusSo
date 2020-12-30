@@ -1,0 +1,37 @@
+﻿
+@{
+   
+
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Rollout reports</h2>
+
+@Html.DevExpress().RoundPanel(settings =>
+{
+    settings.Name = "RolloutFilter";
+    settings.AllowCollapsingByHeaderClick = true;
+    settings.ShowCollapseButton = true;
+    settings.ShowHeader = true;
+    settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+    //settings.View = Model.View;
+    settings.Collapsed = false;
+    settings.EnableAnimation = true;
+    settings.HeaderText = "Employee Search";
+    settings.ClientSideEvents.BeginCallback = "setCollapsed";
+    settings.ClientSideEvents.EndCallback = "setCollapsed";
+    settings.SetHeaderTemplateContent(X => { ViewContext.Writer.Write("<center><span class='glyphicon glyphicon-search'></span> Rollout report</center>"); });
+    settings.SetContent(() => Html.RenderAction("GetFilter", "Report"));
+}).GetHtml()
+
+<br />
+<br />
+<div class="row">
+    <div class="col-lg-11 col-md-11"></div>
+
+    <div class="col-lg-1 col-md-1 pull-right"><center><img src="/Content/Images/xls.png" style="cursor:pointer" title='Export' onclick="SaveEmpGrid('ShowRolloutReport', 'xls')" width="40" alt='Export'></center></div>
+</div>
+@Html.Action("RolloutGridViewPartial")
+             
+

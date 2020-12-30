@@ -3,28 +3,30 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>@ViewBag.Title - My ASP.NET Application</title>
+
+    <meta http-equiv="X-UA-Compatible" content="IE=11" />
+    <title>Sales order processing</title>
     <link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
     <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
     <link href="~/Content/css/CustomCss.css" rel="stylesheet" />
     <link href="~/Content/css/Media.css" rel="stylesheet" />
     <link href="~/Content/bootstrap.css" rel="stylesheet" />
     <link href="~/Content/css/menu.css" rel="stylesheet" />
-    @*<link href="~/Content/jquery.jgrowl.css" rel="stylesheet" /*@>
+    @*<link href="~/Content/jquery.jgrowl.css" rel="stylesheet" />*@
     <script src="~/scripts/jquery-1.12.4.min.js"></script>
+
     <link href="~/Content/snackbar.css" rel="stylesheet" />
     @*  <script src="~/scripts/jquery.jgrowl.js"></script>*@
     <script src="~/scripts/jquery.growl.js"></script>
     <link href="~/Content/jquery.growl.css" rel="stylesheet" />
     <script src="~/scripts/jquery.unobtrusive-ajax.min.js"></script>
     <script src="~/Scripts/modernizr-2.6.2.js"></script>
-    <script src="~/scripts/3deye.min.js"></script>
     <script src="~/scripts/myScript.js"></script>
-
     @Html.DevExpress().GetStyleSheets(
         new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
         new StyleSheet { ExtensionSuite = ExtensionSuite.Editors }, new StyleSheet { ExtensionType = ExtensionType.DateEdit },
-          new StyleSheet { ExtensionSuite = ExtensionSuite.CardView }
+          new StyleSheet { ExtensionSuite = ExtensionSuite.CardView },
+          new StyleSheet { ExtensionSuite = ExtensionSuite.HtmlEditor }
     )
     @Html.DevExpress().GetScripts(
 
@@ -32,7 +34,8 @@
         new Script { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
         new Script { ExtensionSuite = ExtensionSuite.Editors },
         new Script { ExtensionType = ExtensionType.DateEdit },
-         new Script { ExtensionSuite = ExtensionSuite.CardView }
+         new Script { ExtensionSuite = ExtensionSuite.CardView },
+           new Script { ExtensionSuite = ExtensionSuite.HtmlEditor }
     )
 
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
@@ -43,7 +46,9 @@
         body {
             font: 16px Arial;
         }
-
+        .col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12{
+            position:inherit !important;
+        }
         .hideElement {
             visibility: hidden;
         }
@@ -60,6 +65,24 @@
             left: 50%;
             margin-left: -3px;
             top: 0;
+        }
+
+        #txtNewPwd_EC {
+            white-space: normal !important;
+        }
+
+        #txtNewPwd1_EC {
+            white-space: normal !important;
+        }
+
+        #txtCnfNewPwd1_EC {
+            white-space: normal !important;
+        }
+        .gridBorder{
+            overflow:scroll;border:solid #009885 .5px;
+        }
+        #txtCnfNewPwd_EC {
+            white-space: normal !important;
         }
 
         .changethisone span {
@@ -165,6 +188,9 @@
             color: #ffffff;
         }
 
+        #start:focus {
+            border: 1px solid #009688 !important;
+        }
 
         .center {
             width: 150px;
@@ -287,6 +313,7 @@
 
         .padder {
             padding: 0px;
+            height: 0px;
         }
 
         .divpadder {
@@ -493,7 +520,7 @@
         var selectedImgFil = false;
         var selectedDimFil = false;
         var onDemandflag = false;
-
+        var SelectedOrdersArr = [];
         //function openNav() {
         //    document.getElementById("mySidebar").style.width = "600px";
         //    //document.getElementById("main").style.marginLeft = "500px";
@@ -503,9 +530,7 @@
         //    document.getElementById("mySidebar").style.width = "0";
         //    //document.getElementById("main").style.marginLeft = "0";
         //}
-        $(function () {
-            openNav();
-        });
+
 
         function GetData(s, e) {
             selectedItems = s.GetSelectedValues();
@@ -526,7 +551,7 @@
             var colordrop = "Color_" + "Drop_" + style;
             var colorValue = document.getElementsByName(colordrop);
             var selectedcolor = colorValue[0].defaultValue == "" & colorValue[0].value == "" ? "" : colorValue[0].defaultValue != "" ? colorValue[0].defaultValue : colorValue[0].value;
-            if (style.includes(',')) {
+            if (style.indexOf(',') > -1) {
                 var stylerop = "styleDrp_" + style + "_" + orgStyl;
                 var styleValue = document.getElementsByName(stylerop);
                 var selectedStyle = styleValue[0].defaultValue == "" & styleValue[0].value == "" ? "" : styleValue[0].defaultValue != "" & styleValue[0].value != "" ? styleValue[0].value : styleValue[0].defaultValue != "" & styleValue[0].value == "" ? styleValue[0].defaultValue : "";
@@ -614,7 +639,7 @@
         function getSelectedColor(s, e) {
             var data = s.name.split("_");
             var sizDrp = ASPxClientControl.GetControlCollection().GetByName("Size_" + "Drop_" + data[2]);
-            if (data[2].includes(',')) {
+            if (data[2].indexOf(',') > -1) {
                 var cmb = ASPxClientControl.GetControlCollection().GetByName("styleDrp_" + data[2]);
                 data[2] = cmb.lastSuccessText;
             }
@@ -656,24 +681,23 @@
                         $.ajax({
                             url: "/Home/GetOrderEnforcementStatus/",
                             type: "post",
-                            success: function (respo ) {
+                            success: function (respo) {
                                 if (respo == "") {
                                     var url = "/Basket/ShowBasket";
                                     window.location = url;
                                 }
                                 else {
                                     respo = respo + "\n\nPlease click Ok to proceed to cart or Cancel to continue shopping";
-                                    if (confirm(respo)) 
-                                    {
+                                    if (confirm(respo)) {
                                         var url = "/Basket/ShowBasket";
                                         window.location = url;
                                     }
                                 }
                             }
                         });
-                        
+
                     }
-                    else if (response.includes("///")) {
+                    else if (response.indexOf("///") > -1) {
                         var capCatagory = response.replace("///", "");
                         capCatagory = capCatagory + "\n\nPlease click Ok to proceed to cart or Cancel to continue shopping";
                         if (confirm(capCatagory)) {
@@ -696,7 +720,7 @@
                             });
                         }
                     }
-                    else if (response.includes("/--/")) {
+                    else if (response.indexOf("/--/") > -1) {
                         var capCatagory = response.replace("/--/", "");
                         capCatagory = capCatagory + "\n\nPlease click Ok to proceed to cart or Cancel to continue shopping";
                         if (confirm(capCatagory)) {
@@ -742,14 +766,14 @@
             var data1 = s.name.split("_");
             selectedSize = { 'size': s.GetSelectedItem().value, 'name': data1[1] + "_" + data1[2] };
             var split = "";
-            if (data1[2].includes(",")) {
+            if (data1[2].indexOf(",") > -1) {
                 var data2 = data1[2].split(',');
                 split = data2[0];
             }
             else {
                 split = data1[2];
             }
-            var styleId_Val = data1[2].includes(",") ? GetStyleId(data1[2], data1[3]) : data1[2];
+            var styleId_Val = data1[2].indexOf(",") > -1 ? GetStyleId(data1[2], data1[3]) : data1[2];
 
             if (selectedSize.size != "") {
 
@@ -758,7 +782,7 @@
                     url: "@Url.Content("~/Home/GetPrice/")",
                     data: { 'StyleID': styleId_Val, 'SizeId': selectedSize.size },
                     success: function (response) {
-                        if (!response.includes("Login")) {
+                        if (!response.indexOf("Login") > -1) {
                             var priceId = "LbPrice" + data1[2];
                             var price = document.getElementById(priceId);
                             price.innerHTML = "";
@@ -784,14 +808,14 @@
             var data1 = s.name.split("_");
             selectedSize = { 'size': s.GetSelectedItem().value, 'name': data1[1] + "_" + data1[2] };
             var split = "";
-            if (data1[2].includes(",")) {
+            if (data1[2].indexOf(",") > -1) {
                 var data2 = data1[2].split(',');
                 split = data2[0];
             }
             else {
                 split = data1[2];
             }
-            var styleId_Val = data1[2].includes(",") ? GetStyleId1(data1[2]) : data1[2];
+            var styleId_Val = data1[2].indexOf(",") > -1 ? GetStyleId1(data1[2]) : data1[2];
 
             if (selectedSize.size != "") {
 
@@ -801,7 +825,7 @@
                     data: { 'StyleID': styleId_Val, 'SizeId': selectedSize.size },
                     success: function (response) {
                         ;
-                        if (!response.includes("Login")) {
+                        if (!response.indexOf("Login") > -1) {
                             var priceId = "LbPrice1" + data1[2];
                             var price = document.getElementById(priceId);
                             price.innerHTML = "";
@@ -828,14 +852,14 @@
             var data1 = s.name.split("_");
             selectedSize = { 'size': s.GetSelectedItem().value, 'name': data1[1] + "_" + data1[2] };
             var split = "";
-            if (data1[2].includes(",")) {
+            if (data1[2].indexOf(",") > -1) {
                 var data2 = data1[2].split(',');
                 split = data2[0];
             }
             else {
                 split = data1[2];
             }
-            var styleId_Val = data1[2].includes(",") ? GetStyleId2(data1[2]) : data1[2];
+            var styleId_Val = data1[2].indexOf(",") > -1 ? GetStyleId2(data1[2]) : data1[2];
             if (selectedSize.size != "") {
 
                 $.ajax({
@@ -844,7 +868,7 @@
                     data: { 'StyleID': styleId_Val, 'SizeId': selectedSize.size },
                     success: function (response) {
                         ;
-                        if (!response.includes("Login")) {
+                        if (!response.indexOf("Login") > -1) {
                             var priceId = "DimviewPrice" + data1[2];
                             var price = document.getElementById(priceId);
                             price.innerHTML = "";
@@ -915,7 +939,7 @@
         }
 
         function getAssembly(style) {
-            if (style.includes(",")) {
+            if (style.indexOf(",") > -1) {
                 var stylDrp = ASPxClientControl.GetControlCollection().GetByName("styleDrp_" + style);
 
                 var StyleId = stylDrp.lastSuccessText;
@@ -1004,7 +1028,7 @@
             var qty = "";
             var sStyle = "";
             var descStyle;
-            if (stylearr[1].includes(',')) {
+            if (stylearr[1].indexOf(',') > -1) {
                 var data = ASPxClientControl.GetControlCollection().GetByName("styleDrp_" + stylearr[1] + "_" + stylearr[3]);
                 sStyle = data.lastSuccessText;
                 descStyle = stylearr[1].split(',');
@@ -1151,7 +1175,7 @@
             var qty = "";
             var sStyle = "";
             var descStyle;
-            if (stylearr[1].includes(',')) {
+            if (stylearr[1].indexOf(',') > -1) {
                 var data = ASPxClientControl.GetControlCollection().GetByName("styleDimviewDrp_" + stylearr[1]);
                 sStyle = data.lastSuccessText;
                 descStyle = stylearr[1].split(',');
@@ -1275,7 +1299,7 @@
             var qty = "";
             var sStyle = "";
             var descStyle;
-            if (stylearr[1].includes(',')) {
+            if (stylearr[1].indexOf(',') > -1) {
                 var data = ASPxClientControl.GetControlCollection().GetByName("styleDimDrp_" + stylearr[1]);
                 sStyle = data.lastSuccessText;
                 descStyle = stylearr[1].split(',');
@@ -1395,14 +1419,57 @@
             selectedDescFil = s.lastChangedValue;
         }
 
-        function Getimage(img) {
+        function Getimage(img, Style) {
             if (img != "") {
-                var popup = ASPxClientControl.GetControlCollection().GetByName("ImagePop");
-                var response = "<img style='height:100%;width:100%;' src='" + img + "'/> "
-                $("#ImageDive").html("");
-                $("#ImageDive").html(response);
-                popup.Show();
+                $.ajax({
+                    url: "/Home/GetStyleImages/",
+                    type: "get",
+                    data: { 'style': Style },
+                    success: function (responser) {
+                        if (responser.length == 0) {
+                            var popup = ASPxClientControl.GetControlCollection().GetByName("ImagePop");
+                            var response = "<img style='height:60%;width:60%;' src='" + img + "'/> "
+                            $("#ImageDive").html("");
+                            $("#MultipleImages").html("");
+                            $("#ImageDive").html(response);
+                            popup.Show();
+                        }
+                        else {
+                            var popup = ASPxClientControl.GetControlCollection().GetByName("ImagePop");
+                            var response = "<img style='height:60%;width:60%;' src='" + img + "'/> "
+                            var response1 = "";
+                            for (var k = 0; k < responser.length; k++) {
+
+                                response1 = response1 + "<br/><br/><center></center><div class='row'><center><span><img style='height:100px;width:100px;cursor:pointer' id='" + responser[k] + "'  class='ImageTypesDiv_" + Style + "' src='" + responser[k] + "' onclick=\"ChangeStyleImage('" + responser[k] + "','" + Style + "')\"/> </span></center></div>";
+                            }
+                            $("#ImageDive").html("");
+                            $("#MultipleImages").html("");
+                            $("#MultipleImages").html(response1);
+                            $("#ImageDive").html(response);
+                            popup.Show();
+                        }
+                    }
+                });
+
             }
+        }
+        function ChangeStyleImage(img, style) {
+
+            var styls = document.getElementsByClassName("ImageTypesDiv_" + style);
+            for (var k = 0; k < styls.length; k++)
+            {
+                if (img == styls[k].id) {
+                     
+                    document.getElementById(img).style.border = "2px solid black";
+                }
+                else
+                {
+                    document.getElementById(styls[k].id).style.border = "0px";
+                }
+            }
+            var response = "<img style='height:60%;width:60%;' src='" + img + "'/> ";
+            $("#ImageDive").html("");
+            $("#ImageDive").html(response);
         }
 
         function getSelectedDimensionsFilter(s, e) {
@@ -1462,7 +1529,8 @@
                     url: url1,
                     data: { 'StyleID': StyleID, 'orgStyle': orgStyle, 'caption': caption },
                     success: function (response) {
-                        if (response != "" && !response.includes("Login")) {
+                        var sss = response.indexOf("Login") > -1;
+                        if (response != "" && !response.indexOf("Login") > -1) {
                             var dim = document.getElementById("DimId");
                             dim.innerHTML = "";
                             dim.innerHTML = response;
@@ -1495,7 +1563,7 @@
                     url: url1,
                     data: { 'StyleID': StyleID },
                     success: function (response) {
-                        if (response != "" && !response.includes("Login")) {
+                        if (response != "" && !response.indexOf("Login") > -1) {
                             loadPopup.Hide();
                             $("#CardViewDiv").html("");
                             $("#CardViewDiv").html(response);
@@ -1600,7 +1668,7 @@
                     url: "@Url.Content("~/Home/GetDimAlloc")",
                     data: { 'freeText': freeText },
                     success: function (response) {
-                        if (response != "" && !response.includes("Login")) {
+                        if (response != "" && !response.indexOf("Login") > -1) {
                             var dim = document.getElementById("DimId");
                             dim.innerHTML = "";
                             dim.innerHTML = response;
@@ -1963,8 +2031,8 @@
    }).GetHtml()
     @Html.DevExpress().PopupControl(sett =>
 {
-    sett.Width = System.Web.UI.WebControls.Unit.Pixel(500);
-    sett.Height = System.Web.UI.WebControls.Unit.Pixel(250);
+    sett.Width = System.Web.UI.WebControls.Unit.Pixel(800);
+    sett.Height = System.Web.UI.WebControls.Unit.Pixel(650);
     sett.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
     sett.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
     sett.Name = "ImagePop";
@@ -1976,16 +2044,84 @@
     sett.CloseOnEscape = false;
     sett.PopupAnimationType = AnimationType.Auto;
     sett.Modal = true;
+    sett.ControlStyle.BackColor = System.Drawing.Color.LightGray;
     sett.HeaderText = "Style Image";
     sett.SetContent(() =>
     {
-        ViewContext.Writer.Write("<div><div class='row'><div class='col-md-3'></div><div clss='col-md-9'><div id='ImageDive'></div></div></div></div>");
+        ViewContext.Writer.Write("<div><div class='row'><div class='col-md-12'><div class='row'><br/><br/><div class='col-md-3'><div id='MultipleImages'></div></div><div clss='col-md-9'><div id='ImageDive'></div></div></div></div></div></div>");
     });
 
 }).GetHtml()
     @Html.DevExpress().PopupControl(sett =>
 {
-    sett.Width = System.Web.UI.WebControls.Unit.Pixel(1000);
+    sett.Width = System.Web.UI.WebControls.Unit.Pixel(500);
+    sett.Height = System.Web.UI.WebControls.Unit.Pixel(400);
+    sett.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+    sett.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    sett.Name = "EmerOrderDeletePopup";
+    sett.AllowResize = false;
+    sett.ShowHeader = true;
+    sett.ShowOnPageLoad = false;
+    sett.AllowDragging = false;
+    sett.CloseAction = CloseAction.OuterMouseClick;
+    sett.CloseOnEscape = false;
+    sett.PopupAnimationType = AnimationType.Auto;
+    sett.Modal = true; 
+    sett.HeaderText = "Please enter a reason to delete";
+    sett.SetContent(() =>
+    {
+        ViewContext.Writer.Write("<div><div class='row'><div id='deletereason'></div></div></div>");
+    });
+
+}).GetHtml()
+    @Html.DevExpress().PopupControl(sett =>
+{
+    sett.Width = System.Web.UI.WebControls.Unit.Pixel(500);
+    sett.Height = System.Web.UI.WebControls.Unit.Pixel(250);
+    sett.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+    sett.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    sett.Name = "ImagePop1";
+    sett.AllowResize = false;
+    sett.ShowHeader = true;
+    sett.ShowOnPageLoad = false;
+    sett.AllowDragging = true;
+    sett.CloseAction = CloseAction.OuterMouseClick;
+    sett.CloseOnEscape = false;
+    sett.PopupAnimationType = AnimationType.Auto;
+    sett.Modal = true;
+    sett.HeaderText = "Style Image";
+    sett.SetContent(() =>
+    {
+        ViewContext.Writer.Write("<div><div class='row'><div class='col-md-3'></div><div clss='col-md-9'><div id='ImageDive1'></div></div></div></div>");
+    });
+
+}).GetHtml()
+    @Html.DevExpress().PopupControl(sett =>
+{
+    sett.Width = System.Web.UI.WebControls.Unit.Pixel(1300);
+    sett.Height = System.Web.UI.WebControls.Unit.Pixel(800);
+    sett.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+    sett.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    sett.Name = "ProrderConfirmation";
+    sett.AllowResize = false;
+    sett.ShowHeader = true;
+    sett.ShowOnPageLoad = false;
+    sett.AllowDragging = true;
+    sett.CloseAction = CloseAction.OuterMouseClick;
+    sett.CloseOnEscape = false;
+    sett.PopupAnimationType = AnimationType.Auto;
+    sett.Modal = true;
+    sett.HeaderText = "";
+   // sett.ClientSideEvents.Closing = "redirect";
+    sett.ScrollBars = System.Web.UI.WebControls.ScrollBars.Vertical;
+    sett.SetContent(() =>
+    {
+        ViewContext.Writer.Write("<div><div class='row'><div class='col-md-1'></div><div clss='col-md-10'><center><div id='prordeConfirm'></div></center></div><div class='col-md-1'></div></div></div><br/><br/><br/><div><center><button type='button' class='btn btn-primary' onclick=\"print('prordeConfirm')\">Print</button></center></div>");
+    });
+}).GetHtml()
+    @Html.DevExpress().PopupControl(sett =>
+{
+    sett.Width = System.Web.UI.WebControls.Unit.Pixel(1300);
     sett.Height = System.Web.UI.WebControls.Unit.Pixel(800);
     sett.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
     sett.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
@@ -2006,7 +2142,52 @@
         ViewContext.Writer.Write("<div><div class='row'><div class='col-md-1'></div><div clss='col-md-10'><center><div id='ordeConfirm'></div></center></div><div class='col-md-1'></div></div></div><br/><br/><br/><div><center><button type='button' class='btn btn-primary' onclick=\"print('ordeConfirm')\">Print</button></center></div>");
     });
 }).GetHtml()
-    
+    @Html.DevExpress().PopupControl(sett =>
+{
+    sett.Width = System.Web.UI.WebControls.Unit.Pixel(1300);
+    sett.Height = System.Web.UI.WebControls.Unit.Pixel(800);
+    sett.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+    sett.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    sett.Name = "rtnOrderConfirmation";
+    sett.AllowResize = false;
+    sett.ShowHeader = true;
+    sett.ShowOnPageLoad = false;
+    sett.AllowDragging = true;
+    sett.CloseAction = CloseAction.OuterMouseClick;
+    sett.CloseOnEscape = false;
+    sett.PopupAnimationType = AnimationType.Auto;
+    sett.Modal = true;
+    sett.HeaderText = "";
+    sett.ClientSideEvents.Closing = "redirect";
+    sett.ScrollBars = System.Web.UI.WebControls.ScrollBars.Vertical;
+    sett.SetContent(() =>
+    {
+        ViewContext.Writer.Write("<div><div class='row'><div class='col-md-1'></div><div clss='col-md-10'><center><div id='rtnOrdeConfirm'></div></center></div><div class='col-md-1'></div></div></div><br/><br/><br/><div><center><button type='button' class='btn btn-primary' onclick=\"print('rtnOrdeConfirm')\">Print</button></center></div>");
+    });
+}).GetHtml()
+    @Html.DevExpress().PopupControl(sett =>
+{
+    sett.Width = System.Web.UI.WebControls.Unit.Pixel(1200);
+    sett.Height = System.Web.UI.WebControls.Unit.Pixel(800);
+    sett.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+    sett.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    sett.Name = "PrintOrderConfirmation";
+    sett.AllowResize = false;
+    sett.ShowHeader = true;
+    sett.ShowOnPageLoad = false;
+    sett.AllowDragging = true;
+    sett.CloseAction = CloseAction.OuterMouseClick;
+    sett.CloseOnEscape = false;
+    sett.PopupAnimationType = AnimationType.Auto;
+    sett.Modal = true;
+    sett.HeaderText = "";
+    sett.ScrollBars = System.Web.UI.WebControls.ScrollBars.Vertical;
+    sett.SetContent(() =>
+    {
+        ViewContext.Writer.Write("<div><div class='row'><div class='col-md-1'></div><div clss='col-md-10'><center><div id='ordeConfirm1'></div></center></div><div class='col-md-1'></div></div></div><br/><br/><br/><div><center><button type='button' class='btn btn-primary' onclick=\"print('ordeConfirm1')\">Print</button></center></div>");
+    });
+}).GetHtml()
+
     @Html.DevExpress().PopupControl(sett =>
 {
     sett.Width = System.Web.UI.WebControls.Unit.Percentage(100);
@@ -2050,6 +2231,93 @@
 }).GetHtml()
     @Html.DevExpress().PopupControl(sett =>
 {
+    sett.Width = System.Web.UI.WebControls.Unit.Pixel(700);
+    sett.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+    sett.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    sett.Name = "EmergencyMessage";
+    sett.AllowResize = true;
+    sett.ShowHeader = true;
+    sett.ShowOnPageLoad = false;
+    sett.AllowDragging = false;
+    sett.CloseAction = CloseAction.CloseButton;
+    sett.CloseOnEscape = true;
+    sett.PopupAnimationType = AnimationType.Auto;
+    sett.Modal = true; 
+   sett.HeaderText = "";
+    sett.ShowHeader = true;
+    sett.SetContent(() =>
+    {
+        ViewContext.Writer.Write("<div><div id='EmergencyMessageContent'></div></div>");
+    });
+}).GetHtml()
+    @Html.DevExpress().PopupControl(sett =>
+{
+    sett.Width = System.Web.UI.WebControls.Unit.Pixel(500);
+    sett.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+    sett.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    sett.Name = "ResetPwdpop";
+    sett.AllowResize = true;
+    sett.ShowHeader = true;
+    sett.ShowOnPageLoad = false;
+    sett.AllowDragging = false;
+    sett.CloseAction = CloseAction.CloseButton;
+    sett.CloseOnEscape = true;
+    sett.PopupAnimationType = AnimationType.Auto;
+    sett.Modal = true;
+    sett.HeaderText = "";
+    sett.SetContent(() =>
+    {
+        ViewContext.Writer.Write("<div><div id='forgetpwdContent'></div></div>");
+    });
+}).GetHtml()
+    @Html.DevExpress().PopupControl(sett =>
+{
+    sett.Width = System.Web.UI.WebControls.Unit.Pixel(1400);
+    sett.Height = System.Web.UI.WebControls.Unit.Pixel(800);
+    sett.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+    sett.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    sett.Name = "RetReorderPop";
+    sett.AllowResize = true;
+    sett.ShowHeader = true;
+    sett.ShowOnPageLoad = false;
+    sett.AllowDragging = true;
+    sett.CloseAction = CloseAction.OuterMouseClick;
+    sett.CloseOnEscape = true;
+    sett.PopupAnimationType = AnimationType.Auto;
+    sett.ScrollBars = System.Web.UI.WebControls.ScrollBars.Vertical;
+    sett.Modal = true;
+    sett.HeaderText = "Reorder";
+    sett.SetContent(() =>
+    {
+        ViewContext.Writer.Write("<div><div id='ReOrderPop' style='width=100%;height=700px;'></div></div>");
+    });
+}).GetHtml()
+
+    @Html.DevExpress().PopupControl(sett =>
+{
+    sett.Width = System.Web.UI.WebControls.Unit.Pixel(500);
+    sett.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+    sett.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    sett.Name = "Entitlement";
+    sett.AllowResize = true;
+    sett.ShowHeader = true;
+    sett.ShowOnPageLoad = false;
+    sett.AllowDragging = false;
+    sett.CloseAction = CloseAction.OuterMouseClick;
+    sett.CloseOnEscape = false;
+    sett.PopupAnimationType = AnimationType.Auto;
+    sett.Modal = true;
+    sett.HeaderText = "Entitlement";
+    sett.SetContent(() =>
+    {
+        ViewContext.Writer.Write("<div><div id='Entitlement'></div></div>");
+    });
+}).GetHtml()
+
+
+
+    @Html.DevExpress().PopupControl(sett =>
+{
     sett.Width = System.Web.UI.WebControls.Unit.Pixel(500);
     sett.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
     sett.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
@@ -2068,10 +2336,32 @@
         ViewContext.Writer.Write("<div><div id='RolloutPromptContent'></div></div>");
     });
 }).GetHtml()
+
+    @Html.DevExpress().PopupControl(sett =>
+{
+    sett.Width = System.Web.UI.WebControls.Unit.Pixel(600);
+    sett.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+    sett.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    sett.Name = "ReturnCollection";
+    sett.AllowResize = true;
+    sett.ShowHeader = true;
+    sett.ShowOnPageLoad = false;
+    sett.AllowDragging = true;
+    sett.CloseAction = CloseAction.OuterMouseClick;
+    sett.CloseOnEscape = false;
+    sett.PopupAnimationType = AnimationType.Auto;
+    sett.Modal = true;
+    sett.HeaderText = "Collection";
+    sett.SetContent(() =>
+    {
+        ViewContext.Writer.Write("<div><div id='ReturnCollectionPop'></div></div>");
+    });
+}).GetHtml()
+
     @Html.DevExpress().PopupControl(sett =>
 {
     sett.Width = System.Web.UI.WebControls.Unit.Pixel(1000);
-    sett.Height = System.Web.UI.WebControls.Unit.Percentage(100);
+    sett.Height = System.Web.UI.WebControls.Unit.Pixel(700);
     sett.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
     sett.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
     sett.Name = "CreateEditPop";
@@ -2084,10 +2374,34 @@
     sett.PopupAnimationType = AnimationType.Auto;
     sett.Modal = true;
     sett.HeaderText = "Edit";
+    sett.ScrollBars = System.Web.UI.WebControls.ScrollBars.Vertical;
+    sett.ClientSideEvents.Closing = "SetAddressChange";
     //sett.ControlStyle.BackColor = System.Drawing.ColorTranslator.FromHtml("#5e6d82"); ;
     sett.SetContent(() =>
     {
         ViewContext.Writer.Write("<div><div id='EditLayout'></div></div>");
+    });
+}).GetHtml()
+    @Html.DevExpress().PopupControl(sett =>
+{
+    sett.Width = System.Web.UI.WebControls.Unit.Pixel(600);
+    sett.Height = System.Web.UI.WebControls.Unit.Percentage(500);
+    sett.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+    sett.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    sett.Name = "ChangePwd";
+    sett.AllowResize = true;
+    sett.ShowHeader = true;
+    sett.ShowOnPageLoad = false;
+    sett.AllowDragging = true;
+    sett.CloseAction = CloseAction.OuterMouseClick;
+    sett.CloseOnEscape = false;
+    sett.PopupAnimationType = AnimationType.Auto;
+    sett.Modal = true;
+    sett.HeaderText = "Change password";
+    //sett.ControlStyle.BackColor = System.Drawing.ColorTranslator.FromHtml("#5e6d82"); ;
+    sett.SetContent(() =>
+    {
+        ViewContext.Writer.Write("<div><div class='row'><div class='col-md-1'></div><div class='col-md-10'><div id='ChangePwdDiv'></div></div><div class='col-md-1'></div></div></div>");
     });
 }).GetHtml()
     <div id="wrapper">
@@ -2123,10 +2437,25 @@
                         <div class="navbar-collapse collapse pull-right">
                             <ul class="nav navbar-nav">
 
-                                <li style="color:white" class="navbar-light">
-                                    <a class="navbar-light"><b><span class="glyphicon glyphicon-user" title="User"></span></b> @Session["UserName"].ToString().Trim()</a>
-                                    @*   @Html.ActionLink("Settings", "Index", "Settings", new { area = "" }, new { @class = "navbar-light" })*@
-                                </li>
+                                @if (Session["Access"].ToString().Trim().ToLower() == "user")
+                                {
+                                    <li style="color:white;" class="navbar-light">
+                                        <a style="padding-bottom:0px;padding-top:5px" class="navbar-light"><b><span class="glyphicon glyphicon-user" title="User"></span></b> @Session["UserName"].ToString().Trim()</a>
+                                        <a class="navbar-light pull-right glyphicon glyphicon glyphicon-edit" style="padding-top:0px;padding-right:37px;" title="Edit" onclick="EditEmployee('@Session["UserName"].ToString()');"></a>
+                                        <a class="navbar-light pull-right glyphicon glyphicon glyphicon-lock" style="padding:0px;" title="Change password" onclick="ChangePassword('@Session["UserName"].ToString()');"></a>
+
+                                    </li>
+                                }
+                                else
+                                {
+                                    <li style="color:white" class="navbar-light">
+                                        <a style="padding-bottom:0px;padding-top:5px" class="navbar-light"><b><span class="glyphicon glyphicon-user" title="User"></span></b> @Session["UserName"].ToString().Trim()</a>
+                                        <a class="navbar-light pull-right glyphicon glyphicon glyphicon-lock" style="padding-top: 0px;padding-right: 50px;" title="Change password" onclick="ChangePassword('@Session["UserName"].ToString()');"></a>
+                                        @*   @Html.ActionLink("Settings", "Index", "Settings", new { area = "" }, new { @class = "navbar-light" })*@
+                                        <a class="navbar-light pull-right glyphicon glyphicon-wrench" style="padding:0px;" title="Settings" href="/Settings/Index/"></a>
+                                    </li>
+                                   
+                                }
                                 <li style="color:white" class="navbar-light">
                                     <a class="navbar-light"><b>Role: </b>@Session["Access"].ToString().Trim()</a>
                                     @*   @Html.ActionLink("Settings", "Index", "Settings", new { area = "" }, new { @class = "navbar-light" })*@
@@ -2136,10 +2465,10 @@
                                     <a class="navbar-light"><b>Customer: </b>@Session["Buisness"].ToString().Trim()</a>
                                     @*   @Html.ActionLink("Settings", "Index", "Settings", new { area = "" }, new { @class = "navbar-light" })*@
                                 </li>
-                                <li style="color:white" class="navbar-light">
+                                @*<li style="color:white" class="navbar-light">
                                     <a class="navbar-light pull-right glyphicon glyphicon-cog" title="Settings" href="/Settings/Index"></a>
                                     @*   @Html.ActionLink("Settings", "Index", "Settings", new { area = "" }, new { @class = "navbar-light" })*@
-                                </li>
+
                                 <li style="color:white" class="navbar-light">
                                     @*<a class="navbar-light  pull-right glyphicon glyphicon-log-out" title="Logout" href="/User/Logoff"></a>*@
                                     @* @Html.ActionLink("Logout", "Logoff", "User", new { area = "" }, new { @class = "navbar-light" })*@
@@ -2165,7 +2494,7 @@
         @if (User.Identity.IsAuthenticated)
         { <div id="sidebar-wrapper">
             <nav id="spy">
-                <ul class="sidebar-nav nav">
+                <ul class="sidebar-nav nav" style="padding:25px;">
                     @{
                         foreach (var mainMenu in ((Maximus.Data.models.MenuLayoutModel)Session["MenuItems"]).ParentMenuItms)
                         {
@@ -2176,7 +2505,7 @@
                                     <li class="sidebar-brand collapsed sidebar-nav-li" data-toggle="collapse" data-target="#@mainMenu.ParentID">
                                         <a style="padding:0px;" href="@mainMenu.URL"><i class="fa fa-gift fa-lg"></i><b>@mainMenu.Description</b><span class="arrow"></span></a>
                                     </li>
-                                    <ul style="height:auto;padding:23px 0px 0px 54px;" class="sub-menu  collapse" id="@mainMenu.ParentID">
+                                    <ul style="height:auto;padding:11px 0px 0px 46px;" class="sub-menu  collapse" id="@mainMenu.ParentID">
                                         @foreach (var childMenu in ((Maximus.Data.models.MenuLayoutModel)Session["MenuItems"]).ChildMenuItms.Where(x => x.ParentID == mainMenu.ParentID))
                                         {
                                             if (((List<Maximus.Data.Models.PermissionList>)Session["PermissionLst"]).Any(x => x.ControlId.ToLower() == childMenu.ChildID.ToLower() & x.Permission.ToLower() == "show"))
@@ -2327,19 +2656,38 @@
         </div>
     </div>
     <div id="snackbar"> </div>
-
+    <div id="demo1" style="visibility:hidden">
+        <script src="~/scripts/3deye.min.js"></script>
+        <div id="demo"></div>
+    </div>
 
     <script type="text/javascript">
-        $(document).ready(function () {
-            $("#wrapper").toggleClass("active");
+        $(function () {
+
+            openNav();
 
         });
+        //$(document).ready(function () {
+        //    $("#wrapper").toggleClass("active");
+
+        //});
         $("#menu-toggle").click(function (e) {
             e.preventDefault();
             $("#wrapper").toggleClass("active");
 
         });
+        function open360(url) {
 
+            $("#ImageDive1").vc3dEye({
+                imagePath: "/StyleImages/360images/",// the location where you’ve put the images.
+                totalImages: 43,// the number of images you have.
+                imageExtension: "png" // the extension of the images. Make sure all the images have same extension.
+            });
+            var popup = ASPxClientControl.GetControlCollection().GetByName("ImagePop1");
+            var response = document.getElementById("demo1");
+            popup.Show();
+            MVCxClientUtils.FinalizeCallback();
+        }
     </script>
 </body>
 </html>

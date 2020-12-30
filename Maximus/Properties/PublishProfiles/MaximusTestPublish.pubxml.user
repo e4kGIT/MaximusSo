@@ -6,7 +6,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <TimeStampOfAssociatedLegacyPublishXmlFile />
-    <_PublishTargetUrl>C:\Users\admin\Desktop\maximuspublis1</_PublishTargetUrl>
+    <_PublishTargetUrl>G:\Sasidharan\maximuspublishing</_PublishTargetUrl>
   </PropertyGroup>
   <ItemGroup>
     <File Include="ApplicationInsights.config">
@@ -334,13 +334,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>07/11/2020 21:39:02</publishTime>
     </File>
     <File Include="bin/Maximus.Data.dll">
-      <publishTime>07/18/2020 11:51:05</publishTime>
+      <publishTime>12/30/2020 12:35:46</publishTime>
     </File>
     <File Include="bin/Maximus.dll">
-      <publishTime>07/18/2020 11:51:11</publishTime>
+      <publishTime>12/30/2020 12:35:52</publishTime>
     </File>
     <File Include="bin/Maximus.Services.dll">
-      <publishTime>07/18/2020 11:51:06</publishTime>
+      <publishTime>12/30/2020 12:35:47</publishTime>
     </File>
     <File Include="bin/Microsoft.AI.Agent.Intercept.dll">
       <publishTime>07/11/2020 21:39:02</publishTime>
@@ -386,6 +386,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     </File>
     <File Include="bin/MySql.Data.EntityFramework.dll">
       <publishTime>07/11/2020 21:38:28</publishTime>
+    </File>
+    <File Include="bin/MySql.Web.dll">
+      <publishTime>09/07/2019 18:51:18</publishTime>
     </File>
     <File Include="bin/Newtonsoft.Json.dll">
       <publishTime>07/11/2020 21:38:28</publishTime>
@@ -532,7 +535,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>07/11/2020 21:39:06</publishTime>
     </File>
     <File Include="Content/bootstrap.css">
-      <publishTime>07/11/2020 21:38:30</publishTime>
+      <publishTime>12/15/2020 17:14:44</publishTime>
     </File>
     <File Include="Content/bootstrap.min.css">
       <publishTime>07/11/2020 21:38:30</publishTime>
@@ -544,7 +547,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>07/11/2020 21:38:30</publishTime>
     </File>
     <File Include="Content/css/menu.css">
-      <publishTime>07/11/2020 21:38:30</publishTime>
+      <publishTime>12/15/2020 16:09:55</publishTime>
+    </File>
+    <File Include="Content/Images/360.png">
+      <publishTime>07/23/2020 17:59:36</publishTime>
+    </File>
+    <File Include="Content/Images/changepwd.png">
+      <publishTime>08/04/2020 19:03:16</publishTime>
     </File>
     <File Include="Content/Images/dimensions.jpg">
       <publishTime>07/11/2020 21:38:30</publishTime>
@@ -557,6 +566,9 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     </File>
     <File Include="Content/Images/empHistory.png">
       <publishTime>07/11/2020 21:38:30</publishTime>
+    </File>
+    <File Include="Content/Images/multi.png">
+      <publishTime>09/01/2020 10:39:54</publishTime>
     </File>
     <File Include="Content/Images/saleLogo.png">
       <publishTime>07/11/2020 21:38:30</publishTime>
@@ -750,20 +762,38 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="Global.asax">
       <publishTime>07/11/2020 21:38:24</publishTime>
     </File>
+    <File Include="MailTemplates/ConfirmOrderTemplate.html">
+      <publishTime>09/11/2020 14:27:24</publishTime>
+    </File>
+    <File Include="MailTemplates/EditOrderTemplate.html">
+      <publishTime>08/14/2020 17:52:52</publishTime>
+    </File>
     <File Include="MailTemplates/EmergencyEmail.html">
-      <publishTime>07/17/2020 18:26:41</publishTime>
+      <publishTime>12/09/2020 09:41:27</publishTime>
+    </File>
+    <File Include="MailTemplates/EmergencyMessage.html">
+      <publishTime>12/14/2020 17:16:53</publishTime>
+    </File>
+    <File Include="MailTemplates/ForgetPassword.html">
+      <publishTime>09/23/2020 12:45:54</publishTime>
     </File>
     <File Include="MailTemplates/OrderDetail_Template.html">
-      <publishTime>07/17/2020 18:52:04</publishTime>
+      <publishTime>12/10/2020 11:06:01</publishTime>
     </File>
     <File Include="MailTemplates/OrderHeader_Template.html">
-      <publishTime>07/17/2020 19:33:59</publishTime>
+      <publishTime>12/10/2020 10:13:49</publishTime>
     </File>
     <File Include="MailTemplates/OrderLines_email.html">
       <publishTime>01/25/2012 10:50:10</publishTime>
     </File>
     <File Include="MailTemplates/OrderLines_Template.html">
-      <publishTime>07/18/2020 11:21:39</publishTime>
+      <publishTime>12/19/2020 17:37:46</publishTime>
+    </File>
+    <File Include="MailTemplates/OrderRejection.html">
+      <publishTime>12/23/2020 10:52:50</publishTime>
+    </File>
+    <File Include="MailTemplates/ReturnOrderTemplate.html">
+      <publishTime>10/15/2020 18:28:25</publishTime>
     </File>
     <File Include="MailTemplates/testtemplate.html">
       <publishTime>07/16/2020 17:12:53</publishTime>
@@ -775,7 +805,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>09/30/2019 19:21:58</publishTime>
     </File>
     <File Include="packages.config">
-      <publishTime>07/11/2020 21:38:24</publishTime>
+      <publishTime>08/18/2020 15:31:02</publishTime>
     </File>
     <File Include="scripts/3deye.min.js">
       <publishTime>07/11/2020 21:38:40</publishTime>
@@ -844,7 +874,142 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>07/11/2020 21:38:40</publishTime>
     </File>
     <File Include="scripts/myScript.js">
-      <publishTime>07/17/2020 19:22:50</publishTime>
+      <publishTime>12/22/2020 14:45:29</publishTime>
+    </File>
+    <File Include="StyleImages/360images/10.png">
+      <publishTime>07/23/2020 12:25:22</publishTime>
+    </File>
+    <File Include="StyleImages/360images/11.png">
+      <publishTime>07/23/2020 12:25:22</publishTime>
+    </File>
+    <File Include="StyleImages/360images/12.png">
+      <publishTime>07/23/2020 12:25:22</publishTime>
+    </File>
+    <File Include="StyleImages/360images/13.png">
+      <publishTime>07/23/2020 12:25:22</publishTime>
+    </File>
+    <File Include="StyleImages/360images/14.png">
+      <publishTime>07/23/2020 12:25:22</publishTime>
+    </File>
+    <File Include="StyleImages/360images/15.png">
+      <publishTime>07/23/2020 12:25:22</publishTime>
+    </File>
+    <File Include="StyleImages/360images/16.png">
+      <publishTime>07/23/2020 12:25:22</publishTime>
+    </File>
+    <File Include="StyleImages/360images/17.png">
+      <publishTime>07/23/2020 12:25:22</publishTime>
+    </File>
+    <File Include="StyleImages/360images/18.png">
+      <publishTime>07/23/2020 12:25:22</publishTime>
+    </File>
+    <File Include="StyleImages/360images/19.png">
+      <publishTime>07/23/2020 12:25:22</publishTime>
+    </File>
+    <File Include="StyleImages/360images/20.png">
+      <publishTime>07/23/2020 12:25:22</publishTime>
+    </File>
+    <File Include="StyleImages/360images/21.png">
+      <publishTime>07/23/2020 12:25:22</publishTime>
+    </File>
+    <File Include="StyleImages/360images/22.png">
+      <publishTime>07/23/2020 12:25:22</publishTime>
+    </File>
+    <File Include="StyleImages/360images/23.png">
+      <publishTime>07/23/2020 12:25:22</publishTime>
+    </File>
+    <File Include="StyleImages/360images/24.png">
+      <publishTime>07/23/2020 12:25:22</publishTime>
+    </File>
+    <File Include="StyleImages/360images/25.png">
+      <publishTime>07/23/2020 12:25:22</publishTime>
+    </File>
+    <File Include="StyleImages/360images/26.png">
+      <publishTime>07/23/2020 12:25:22</publishTime>
+    </File>
+    <File Include="StyleImages/360images/27.png">
+      <publishTime>07/23/2020 12:25:22</publishTime>
+    </File>
+    <File Include="StyleImages/360images/28.png">
+      <publishTime>07/23/2020 12:25:22</publishTime>
+    </File>
+    <File Include="StyleImages/360images/29.png">
+      <publishTime>07/23/2020 12:25:22</publishTime>
+    </File>
+    <File Include="StyleImages/360images/3.png">
+      <publishTime>07/23/2020 12:25:22</publishTime>
+    </File>
+    <File Include="StyleImages/360images/30.png">
+      <publishTime>07/23/2020 12:25:22</publishTime>
+    </File>
+    <File Include="StyleImages/360images/31.png">
+      <publishTime>07/23/2020 12:25:22</publishTime>
+    </File>
+    <File Include="StyleImages/360images/32.png">
+      <publishTime>07/23/2020 12:25:22</publishTime>
+    </File>
+    <File Include="StyleImages/360images/33.png">
+      <publishTime>07/23/2020 12:25:22</publishTime>
+    </File>
+    <File Include="StyleImages/360images/34.png">
+      <publishTime>07/23/2020 12:25:22</publishTime>
+    </File>
+    <File Include="StyleImages/360images/35.png">
+      <publishTime>07/23/2020 12:25:22</publishTime>
+    </File>
+    <File Include="StyleImages/360images/36.png">
+      <publishTime>07/23/2020 12:25:22</publishTime>
+    </File>
+    <File Include="StyleImages/360images/37.png">
+      <publishTime>07/23/2020 12:25:22</publishTime>
+    </File>
+    <File Include="StyleImages/360images/38.png">
+      <publishTime>07/23/2020 12:25:22</publishTime>
+    </File>
+    <File Include="StyleImages/360images/39.png">
+      <publishTime>07/23/2020 12:25:22</publishTime>
+    </File>
+    <File Include="StyleImages/360images/4.png">
+      <publishTime>07/23/2020 12:25:22</publishTime>
+    </File>
+    <File Include="StyleImages/360images/40.png">
+      <publishTime>07/23/2020 12:25:22</publishTime>
+    </File>
+    <File Include="StyleImages/360images/41.png">
+      <publishTime>07/23/2020 12:25:22</publishTime>
+    </File>
+    <File Include="StyleImages/360images/43.png">
+      <publishTime>07/23/2020 12:25:22</publishTime>
+    </File>
+    <File Include="StyleImages/360images/44.png">
+      <publishTime>07/23/2020 12:25:22</publishTime>
+    </File>
+    <File Include="StyleImages/360images/45.png">
+      <publishTime>07/23/2020 12:25:22</publishTime>
+    </File>
+    <File Include="StyleImages/360images/46.png">
+      <publishTime>07/23/2020 12:25:22</publishTime>
+    </File>
+    <File Include="StyleImages/360images/47.png">
+      <publishTime>07/23/2020 12:25:22</publishTime>
+    </File>
+    <File Include="StyleImages/360images/48.png">
+      <publishTime>07/23/2020 12:25:22</publishTime>
+    </File>
+    <File Include="StyleImages/360images/5.png">
+      <publishTime>07/23/2020 12:25:22</publishTime>
+    </File>
+    <File Include="StyleImages/360images/6.png">
+      <publishTime>07/23/2020 12:25:22</publishTime>
+    </File>
+    <File Include="StyleImages/360images/7.png">
+      <publishTime>07/23/2020 12:25:22</publishTime>
+    </File>
+    <File Include="StyleImages/360images/8.png">
+      <publishTime>07/23/2020 12:25:22</publishTime>
+    </File>
+    <File Include="StyleImages/360images/9.png">
+      <publishTime>07/23/2020 12:25:22</publishTime>
     </File>
     <File Include="StyleImages/3MOB FLEECE2.jpg">
       <publishTime>07/11/2020 21:38:40</publishTime>
@@ -2692,10 +2857,10 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>07/11/2020 21:38:58</publishTime>
     </File>
     <File Include="Views/Basket/model/_EmployeeView.cshtml">
-      <publishTime>07/11/2020 21:38:58</publishTime>
+      <publishTime>07/20/2020 16:31:06</publishTime>
     </File>
     <File Include="Views/Basket/ShowBasket.cshtml">
-      <publishTime>07/15/2020 18:32:15</publishTime>
+      <publishTime>12/18/2020 11:24:34</publishTime>
     </File>
     <File Include="Views/Basket/_CardDetailAssembly.cshtml">
       <publishTime>07/11/2020 21:38:58</publishTime>
@@ -2704,28 +2869,43 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>07/11/2020 21:38:58</publishTime>
     </File>
     <File Include="Views/Basket/_CartView.cshtml">
-      <publishTime>07/11/2020 21:38:58</publishTime>
+      <publishTime>08/11/2020 16:22:38</publishTime>
     </File>
     <File Include="Views/Basket/_CartviewDetailGridViewGridViewPartial.cshtml">
-      <publishTime>07/11/2020 21:38:58</publishTime>
+      <publishTime>11/25/2020 18:49:04</publishTime>
+    </File>
+    <File Include="Views/Basket/_DeleteOrderPrompt.cshtml">
+      <publishTime>12/19/2020 18:53:48</publishTime>
     </File>
     <File Include="Views/Basket/_Deliveryaddress.cshtml">
-      <publishTime>07/14/2020 13:18:32</publishTime>
+      <publishTime>10/28/2020 12:50:03</publishTime>
     </File>
     <File Include="Views/Employee/Employee.cshtml">
-      <publishTime>07/15/2020 16:00:49</publishTime>
+      <publishTime>12/30/2020 10:34:28</publishTime>
+    </File>
+    <File Include="Views/Employee/ReturnOrder.cshtml">
+      <publishTime>09/18/2020 16:27:43</publishTime>
+    </File>
+    <File Include="Views/Employee/UserModule.cshtml">
+      <publishTime>09/22/2020 11:34:03</publishTime>
+    </File>
+    <File Include="Views/Employee/Welcome.cshtml">
+      <publishTime>12/17/2020 12:07:02</publishTime>
     </File>
     <File Include="Views/Employee/_bulkOrderPartial.cshtml">
       <publishTime>07/11/2020 21:38:58</publishTime>
     </File>
+    <File Include="Views/Employee/_changePassword.cshtml">
+      <publishTime>08/24/2020 12:00:18</publishTime>
+    </File>
     <File Include="Views/Employee/_EmpFilter.cshtml">
-      <publishTime>07/11/2020 21:38:58</publishTime>
+      <publishTime>08/11/2020 15:53:36</publishTime>
     </File>
     <File Include="Views/Employee/_EmployeeEdit.cshtml">
-      <publishTime>07/13/2020 16:23:48</publishTime>
+      <publishTime>12/18/2020 17:48:50</publishTime>
     </File>
     <File Include="Views/Employee/_EmployeeGridViewPartial.cshtml">
-      <publishTime>07/15/2020 17:08:43</publishTime>
+      <publishTime>12/15/2020 12:32:50</publishTime>
     </File>
     <File Include="Views/Employee/_GridViewPartial.cshtml">
       <publishTime>07/11/2020 21:38:58</publishTime>
@@ -2733,14 +2913,26 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="Views/Employee/_multiselectCmb.cshtml">
       <publishTime>07/11/2020 21:38:58</publishTime>
     </File>
+    <File Include="Views/Employee/_ReturnOrderGridviewPartial.cshtml">
+      <publishTime>11/27/2020 11:10:49</publishTime>
+    </File>
+    <File Include="Views/Employee/_usercreatePartial.cshtml">
+      <publishTime>08/14/2020 16:35:36</publishTime>
+    </File>
+    <File Include="Views/Employee/_UserGridviewPartial.cshtml">
+      <publishTime>09/22/2020 14:24:22</publishTime>
+    </File>
     <File Include="Views/Home/CheckEmpEmail.cshtml">
       <publishTime>07/13/2020 19:23:42</publishTime>
+    </File>
+    <File Include="Views/Home/EditReturnOrder.cshtml">
+      <publishTime>09/30/2020 18:56:03</publishTime>
     </File>
     <File Include="Views/Home/GetRolloutCheck.cshtml">
       <publishTime>07/12/2020 15:00:18</publishTime>
     </File>
     <File Include="Views/Home/Index.cshtml">
-      <publishTime>07/11/2020 21:38:58</publishTime>
+      <publishTime>12/15/2020 16:05:46</publishTime>
     </File>
     <File Include="Views/Home/Model/_CardviewByStyle.cshtml">
       <publishTime>07/11/2020 21:38:58</publishTime>
@@ -2760,6 +2952,12 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="Views/Home/Model/_StyleDrop.cshtml">
       <publishTime>07/11/2020 21:38:58</publishTime>
     </File>
+    <File Include="Views/Home/ReturnOrders.cshtml">
+      <publishTime>09/17/2020 16:56:44</publishTime>
+    </File>
+    <File Include="Views/Home/ReturnReorder.cshtml">
+      <publishTime>10/03/2020 13:22:08</publishTime>
+    </File>
     <File Include="Views/Home/View.cshtml">
       <publishTime>07/11/2020 21:38:58</publishTime>
     </File>
@@ -2767,10 +2965,13 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>07/11/2020 21:38:58</publishTime>
     </File>
     <File Include="Views/Home/_CardViewPartial.cshtml">
-      <publishTime>07/11/2020 21:38:58</publishTime>
+      <publishTime>12/10/2020 18:45:07</publishTime>
     </File>
     <File Include="Views/Home/_CardViewPartialnew.cshtml">
       <publishTime>09/03/2019 10:19:48</publishTime>
+    </File>
+    <File Include="Views/Home/_Deliveryaddress.cshtml">
+      <publishTime>10/01/2020 12:37:31</publishTime>
     </File>
     <File Include="Views/Home/_DimAllocCardview.cshtml">
       <publishTime>03/29/2019 13:45:44</publishTime>
@@ -2781,8 +2982,11 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="Views/Home/_DimAllocPartial.cshtml">
       <publishTime>07/11/2020 21:38:58</publishTime>
     </File>
+    <File Include="Views/Home/_EditReturnOrderGridviewPartial.cshtml">
+      <publishTime>10/03/2020 12:57:42</publishTime>
+    </File>
     <File Include="Views/Home/_FilterModel.cshtml">
-      <publishTime>07/11/2020 21:38:58</publishTime>
+      <publishTime>08/11/2020 15:52:46</publishTime>
     </File>
     <File Include="Views/Home/_getAllGroups.cshtml">
       <publishTime>07/11/2020 21:38:58</publishTime>
@@ -2793,14 +2997,44 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="Views/Home/_PopCardview.cshtml">
       <publishTime>05/16/2019 14:20:24</publishTime>
     </File>
+    <File Include="Views/Home/_PopReorderPartial.cshtml">
+      <publishTime>09/28/2020 11:50:21</publishTime>
+    </File>
+    <File Include="Views/Home/_ReorderGridviewPartial.cshtml">
+      <publishTime>10/03/2020 12:07:47</publishTime>
+    </File>
+    <File Include="Views/Home/_ReturnReorderGridviewPartial.cshtml">
+      <publishTime>10/01/2020 15:42:41</publishTime>
+    </File>
     <File Include="Views/Home/_StyleByCardPop.cshtml">
-      <publishTime>07/11/2020 21:38:58</publishTime>
+      <publishTime>12/15/2020 17:19:24</publishTime>
+    </File>
+    <File Include="Views/ImportExport/ImportExportIndex.cshtml">
+      <publishTime>08/08/2020 12:51:42</publishTime>
+    </File>
+    <File Include="Views/ImportExport/_AddressGridViewPartial.cshtml">
+      <publishTime>08/06/2020 12:51:00</publishTime>
+    </File>
+    <File Include="Views/ImportExport/_EmployeeGrdiviewPartial.cshtml">
+      <publishTime>08/06/2020 12:50:52</publishTime>
+    </File>
+    <File Include="Views/ImportExport/_UserGridViewPartial.cshtml">
+      <publishTime>08/08/2020 18:20:40</publishTime>
     </File>
     <File Include="Views/OrderDisplay/ConfrimOrder.cshtml">
-      <publishTime>07/17/2020 22:19:48</publishTime>
+      <publishTime>07/25/2020 16:58:08</publishTime>
+    </File>
+    <File Include="Views/OrderDisplay/PrintOrders.cshtml">
+      <publishTime>07/31/2020 14:37:12</publishTime>
     </File>
     <File Include="Views/OrderDisplay/ShowOrder.cshtml">
-      <publishTime>07/13/2020 15:30:28</publishTime>
+      <publishTime>12/16/2020 12:09:33</publishTime>
+    </File>
+    <File Include="Views/OrderDisplay/_employeePrintEmpFilter.cshtml">
+      <publishTime>07/29/2020 18:19:30</publishTime>
+    </File>
+    <File Include="Views/OrderDisplay/_employeePrintOrderSearch.cshtml">
+      <publishTime>07/29/2020 17:19:58</publishTime>
     </File>
     <File Include="Views/OrderDisplay/_EmployeeSearchShowOrders.cshtml">
       <publishTime>07/11/2020 21:38:58</publishTime>
@@ -2809,40 +3043,88 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>07/12/2020 13:14:40</publishTime>
     </File>
     <File Include="Views/OrderDisplay/_OrderDetailGridView1Partial.cshtml">
-      <publishTime>07/12/2020 13:35:10</publishTime>
+      <publishTime>12/15/2020 18:35:14</publishTime>
     </File>
     <File Include="Views/OrderDisplay/_OrderDetailGridViewPartial.cshtml">
-      <publishTime>07/15/2020 12:15:49</publishTime>
+      <publishTime>12/15/2020 18:33:03</publishTime>
     </File>
     <File Include="Views/OrderDisplay/_OrdFilter.cshtml">
-      <publishTime>07/11/2020 21:38:58</publishTime>
+      <publishTime>12/16/2020 11:01:35</publishTime>
+    </File>
+    <File Include="Views/OrderDisplay/_PrintFilters.cshtml">
+      <publishTime>07/27/2020 12:25:10</publishTime>
     </File>
     <File Include="Views/OrderDisplay/_SearchOrderShowOrders.cshtml">
-      <publishTime>07/11/2020 21:38:58</publishTime>
+      <publishTime>12/16/2020 11:11:45</publishTime>
+    </File>
+    <File Include="Views/OrderDisplay/_SearchPanelPrint.cshtml">
+      <publishTime>07/29/2020 18:19:38</publishTime>
     </File>
     <File Include="Views/OrderDisplay/_ShowOrderGridViewPartial.cshtml">
-      <publishTime>07/12/2020 13:46:34</publishTime>
+      <publishTime>12/29/2020 12:11:35</publishTime>
+    </File>
+    <File Include="Views/Report/Index.cshtml">
+      <publishTime>09/09/2020 17:24:40</publishTime>
+    </File>
+    <File Include="Views/Report/_RolloutGridViewPartial.cshtml">
+      <publishTime>10/03/2020 11:01:56</publishTime>
+    </File>
+    <File Include="Views/Report/_rolloutReport.cshtml">
+      <publishTime>09/07/2020 14:09:32</publishTime>
+    </File>
+    <File Include="Views/Return/EditReturnOrder.cshtml">
+      <publishTime>11/06/2020 16:07:47</publishTime>
+    </File>
+    <File Include="Views/Return/ReturnReorder.cshtml">
+      <publishTime>10/14/2020 15:33:47</publishTime>
+    </File>
+    <File Include="Views/Return/_Deliveryaddress.cshtml">
+      <publishTime>10/05/2020 19:00:43</publishTime>
+    </File>
+    <File Include="Views/Return/_EditReturnOrderGridviewPartial.cshtml">
+      <publishTime>12/29/2020 15:03:09</publishTime>
+    </File>
+    <File Include="Views/Return/_PopReorderPartial.cshtml">
+      <publishTime>10/06/2020 10:18:48</publishTime>
+    </File>
+    <File Include="Views/Return/_ReorderGridviewPartial.cshtml">
+      <publishTime>11/13/2020 13:46:12</publishTime>
+    </File>
+    <File Include="Views/Return/_ReturnCollectionPop.cshtml">
+      <publishTime>10/13/2020 11:33:14</publishTime>
+    </File>
+    <File Include="Views/Return/_ReturnReorderGridviewPartial.cshtml">
+      <publishTime>11/27/2020 10:06:57</publishTime>
     </File>
     <File Include="Views/Settings/Index.cshtml">
       <publishTime>07/11/2020 21:38:58</publishTime>
     </File>
+    <File Include="Views/Settings/Settings.cshtml">
+      <publishTime>09/03/2020 13:34:09</publishTime>
+    </File>
+    <File Include="Views/Settings/_HtmlEditorPartial.cshtml">
+      <publishTime>09/10/2020 12:09:51</publishTime>
+    </File>
     <File Include="Views/Shared/_Layout.cshtml">
-      <publishTime>07/17/2020 19:11:31</publishTime>
+      <publishTime>12/19/2020 18:51:49</publishTime>
     </File>
     <File Include="Views/Shared/_Layout1.cshtml">
       <publishTime>04/27/2020 18:26:32</publishTime>
     </File>
     <File Include="Views/User/Login.cshtml">
-      <publishTime>07/11/2020 21:38:58</publishTime>
+      <publishTime>09/24/2020 11:09:28</publishTime>
+    </File>
+    <File Include="Views/User/_forgetPassword.cshtml">
+      <publishTime>09/23/2020 12:03:31</publishTime>
     </File>
     <File Include="Views/web.config">
-      <publishTime>07/11/2020 21:38:58</publishTime>
+      <publishTime>12/19/2020 11:35:18</publishTime>
     </File>
     <File Include="Views/_ViewStart.cshtml">
       <publishTime>07/11/2020 21:38:58</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>07/18/2020 11:51:12</publishTime>
+      <publishTime>12/22/2020 11:40:03</publishTime>
     </File>
   </ItemGroup>
 </Project>

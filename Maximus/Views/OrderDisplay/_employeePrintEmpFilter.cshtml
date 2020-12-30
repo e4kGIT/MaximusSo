@@ -1,0 +1,24 @@
+﻿
+
+<div class="row">
+    <center><h3>Employee filter</h3></center>
+    <br />
+    
+    <div class="col-md-12">
+        
+        <div class="row">
+            <div class="col-md-6">@Html.DevExpress().TextBox(s => { s.Name = "Employeeid";s.Properties.NullText = "Employee Id";s.ControlStyle.ForeColor = System.Drawing.Color.Black; }).GetHtml()</div>
+            <div class="col-md-6">@Html.DevExpress().TextBox(s => { s.Name = "Employeename"; s.Properties.NullText = "Employee name"; s.ControlStyle.ForeColor = System.Drawing.Color.Black; }).GetHtml()</div>
+            <br /><br /><br />
+            <div class="col-md-6">@Html.DevExpress().TextBox(s => { s.Name = "Uniformcode"; s.Properties.NullText = "Uniform Code"; s.ControlStyle.ForeColor = System.Drawing.Color.Black; }).GetHtml()</div>
+            <div class="col-md-6">@Html.DevExpress().TextBox(s => { s.Name = "Ucodedesc"; s.Properties.NullText = "Ucode desc"; s.ControlStyle.ForeColor = System.Drawing.Color.Black; }).GetHtml()</div><br /><br /><br />
+            <div class="col-md-6">@Html.DevExpress().TextBox(s => { s.Name = "Empaddress"; s.Properties.NullText = "Address"; s.ControlStyle.ForeColor = System.Drawing.Color.Black; }).GetHtml()</div>
+            <div class="col-md-6">@Html.DevExpress().DateEdit(s =>  { s.Name = "EmpStartDate"; s.Properties.NullText = "Start date"; s.ControlStyle.ForeColor = System.Drawing.Color.Black; }).GetHtml()</div>
+            <br /><br /><br />
+            <div class="col-md-4"></div>  <div class="col-md-4">@Html.DevExpress().Button(s => { s.Name = "btnSearch";s.Text = "Search"; }).GetHtml()</div><div class="col-md-4"></div>
+        </div>
+    </div>
+    
+   
+   
+</div>

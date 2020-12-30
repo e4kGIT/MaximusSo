@@ -35,7 +35,7 @@ namespace Maximus.Services.Interface
         bool GetBooValue(string sSqry);
         void displayOrderListGrid(bool booShowManpack = false);
 
-        TotalModel GetAlltotals(List<SalesOrderHeaderViewModel> mod, double carriage,bool isEdit=false);
+        TotalModel GetAlltotals(List<SalesOrderHeaderViewModel> mod, double carriage,bool isEdit=false,List<ReturnOrderModel>  retMOdel=null);
         bool GetCustRefVisiblity(string busId);
         int GetDeliveryAddressId(string emp, string busId, string onlineUserId);
 

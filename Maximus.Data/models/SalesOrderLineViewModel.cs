@@ -8,6 +8,7 @@ namespace Maximus.Data.Models
     public class SalesOrderLineViewModel
     {
         public int IssueUOM1 { get; set; }
+        public bool IsDleted { get; set; }
 
         public bool isCarrline { get; set; }
         public string CompanyID { get; set; }
@@ -44,6 +45,7 @@ namespace Maximus.Data.Models
         public double Cost1 { get; set; }
         public long OrdQty { get; set; }
         public double VAT { get; set; }
+        public string InvFlag { get; set; }
         public double Total { get; set; }
         public long AllQty { get; set; }
         public long InvQty { get; set; }

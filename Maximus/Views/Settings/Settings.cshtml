@@ -1,0 +1,17 @@
+﻿
+@{
+    ViewBag.Title = "Settings";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Settings</h2>
+        @using (Html.BeginForm())
+        {
+            @Html.Action("HtmlEditorPartial")
+            Html.DevExpress().Button(s =>
+            {
+                s.Name = "btnSaveWelcomeText";
+                s.Text = "Save";
+                s.ClientSideEvents.Click = "SaveWelcomeText";
+            }).GetHtml();
+        }

@@ -7,6 +7,8 @@
  
 <h2>Login</h2>
 
+
+
 @using(Html.BeginForm()) {
 @Html.AntiForgeryToken()
     if(ViewBag.error!=null)
@@ -43,3 +45,8 @@
     b.UseSubmitBehavior = true;
 }).GetHtml()
 }
+ <br />
+<a style="color:white;" onclick="GetForgetPassword()">Click here to reset password</a>
+<br />
+<br />
+<div class="pull-left" style="color:red">@Html.ValidationSummary(true)</div>

@@ -11,6 +11,8 @@ namespace Maximus.Data.models
     {
         public long OrderNo { get; set; }
         public DateTime OrderDate { get; set; }
+        public int RtnOrdNo { get; set; }
+        public string OrderType { get; set; }
         public string CustomerRef { get; set; }
         public string NominalCode { get; set; }
         public string Address1 { get; set; }
@@ -25,10 +27,13 @@ namespace Maximus.Data.models
         public string IsProcessed { get; set; }
         public long PersonPackNo { get; set; }
         public string CourrierRef { get; set; }
-        public Nullable<DateTime> FirstDespatch { get; set; }
+        public string FirstDespatch { get; set; }
         public int PointsSpent { get; set; }
         public int TotalPoints { get; set; }
         public int Points { get; set; }
+        public int DeliveryWeek { get; set; }
+        public string DeliveryDay { get; set; }
+        public string EmergencyReason { get; set; }
         public List<SalesOrderLineViewModel> saleDetail{ get; set; }
 }
 }

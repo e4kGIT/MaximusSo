@@ -1,4 +1,9 @@
 @{
+    Maximus.Data.Interface.Concrete.IUnitOfWork _unitOfWork = new Maximus.Data.InterFace.UnitOfWork();
+    Maximus.Controllers.OrderDisplayController odc = new Maximus.Controllers.OrderDisplayController(_unitOfWork);
+}
+
+@{
     var grid = Html.DevExpress().GridView(settings =>
     {
         settings.Name = "ShowOrderGridView";
@@ -10,20 +15,27 @@
         settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "OrderDisplay", Action = "ShowOrderGridViewPartialUpdate" };
         settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "OrderDisplay", Action = "ShowOrderGridViewPartialDelete" };
         settings.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
-
         settings.SettingsDetail.ShowDetailButtons = true;
-        settings.CommandColumn.Visible = false;
-        settings.CommandColumn.ShowNewButton = true;
-        settings.CommandColumn.ShowDeleteButton = true;
-        settings.CommandColumn.ShowEditButton = true;
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.ShowNewButton = false;
+        settings.CommandColumn.ShowDeleteButton = false;
+        settings.CommandColumn.ShowEditButton = false;
         settings.SettingsBehavior.AllowSelectByRowClick = true;
         settings.KeyFieldName = "OrderNo";
-        //settings.ClientSideEvents.RowDblClick = "ShowDetailOrder";
+        settings.Settings.ShowFilterRowMenu = true;
+        if (Convert.ToBoolean(Session["ConfirmOrders"]))
+        {
+            settings.CommandColumn.ShowSelectCheckbox = true;
+            settings.CommandColumn.Width = 50;
+            settings.CommandColumn.SelectAllCheckboxMode = GridViewSelectAllCheckBoxMode.AllPages;
+        }//settings.ClientSideEvents.RowDblClick = "ShowDetailOrder";
         settings.SettingsPager.Visible = true;
         settings.Settings.ShowGroupPanel = true;
         settings.Settings.ShowFilterRow = true;
         // settings.Settings.ShowFilterRowMenu = true;
         settings.SettingsBehavior.AllowSelectByRowClick = true;
+
+        settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Disabled;
         //settings.SettingsDetail.ShowDetailRow = true;
         settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCellsWindowLimit;
         settings.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Right;
@@ -34,6 +46,7 @@
         settings.SettingsDetail.AllowOnlyOneMasterRowExpanded = true;
         settings.SettingsCommandButton.EditButton.Image.IconID = IconID.EditEdit16x16;
         settings.SettingsCommandButton.EditButton.RenderMode = GridCommandButtonRenderMode.Image;
+        settings.ClientSideEvents.BeginCallback = "ItsCallBack";
         settings.HtmlRowPrepared = (s, e) =>
         {
             if (e.GetValue("IsConfirmed") != null)
@@ -43,26 +56,74 @@
                     e.Row.BackColor = System.Drawing.Color.Beige;
                 }
             }
+            var ss = Convert.ToInt32(e.GetValue("RtnOrdNo"));
+            if (Convert.ToInt32(e.GetValue("RtnOrdNo"))>0)
+            {
+                e.Row.BackColor = System.Drawing.Color.BurlyWood;
+                // e.Row.ForeColor = System.Drawing.Color.whi;
+                e.Row.ToolTip = "This is a Reorder line";
+            }
+        };
+        settings.CommandButtonInitialize = (s, e) =>
+        {
+            MVCxGridView gridView = (MVCxGridView)s;
+            if (e.ButtonType == ColumnCommandButtonType.SelectCheckbox)
+            {
+                int RtnOrdNo = Convert.ToInt32(gridView.GetRowValues(e.VisibleIndex, "RtnOrdNo"));
+                if(RtnOrdNo>0)
+                {
+                    e.Visible = false;
+                }
+            }
+        };
+
+        settings.CustomJSProperties = (s, e) =>
+        {
+            MVCxGridView gridView = (MVCxGridView)s;
+            e.Properties["cpUnselectedRows"] = gridView.VisibleRowCount;
+            List<int> visibleIndices = new List<int>();
+            for (int i = 0; i < gridView.VisibleRowCount; i++)
+            {
+                if (Convert.ToInt32(gridView.GetRowValues(i, "RtnOrdNo"))>0)
+                {
+                    visibleIndices.Add(Convert.ToInt32(gridView.GetRowValues(i, gridView.KeyFieldName)));
+                }
+            }
+            e.Properties["cpIndices"] = visibleIndices;
         };
         settings.SetDetailRowTemplateContent(x =>
         {
             Html.RenderAction("GetOrderDetail", new { ordno = x.KeyValue });
         });
-        settings.Columns.Add(column =>
+        if (Convert.ToBoolean(Session["ConfirmOrders"]))
         {
-            column.SetDataItemTemplateContent(c =>
-            {
-                Html.DevExpress().CheckBox(checkboxSettings =>
-                {
-                    checkboxSettings.Name = "cb_" + c.KeyValue.ToString();
-                    //checkboxSettings.Properties.ClientSideEvents.CheckedChanged = "OnCheckedChanged";
-                    
-                }).Render();
-            });
-        });
+            //settings.Columns.Add(column =>
+            //{
+            //    column.SetHeaderTemplateContent(c =>
+            //    {
+            //        Html.DevExpress().CheckBox(checkboxSettings =>
+            //        {
+            //            checkboxSettings.Name = "cb_SelectAll";
+            //            checkboxSettings.Properties.ClientSideEvents.CheckedChanged = "SelectAllordersOnGrid";
+
+            //        }).Render();
+            //    });
+            //    column.SetDataItemTemplateContent(c =>
+            //    {
+            //        Html.DevExpress().CheckBox(checkboxSettings =>
+            //        {
+            //            checkboxSettings.Name = "cb_" + c.KeyValue.ToString();
+            //            checkboxSettings.Properties.ClientSideEvents.CheckedChanged = "OnConfirmGridCheckbox";
+
+            //        }).Render();
+            //    });
+            //});
+        }
+
         settings.Columns.Add(set =>
         {
             set.FieldName = "OrderNo";
+            set.Width = 85;
 
             set.SetDataItemTemplateContent(x =>
             {
@@ -70,52 +131,170 @@
                 string isConfirmed = DataBinder.Eval(x.DataItem, "isConfirmed").ToString();
                 string isProcessed = DataBinder.Eval(x.DataItem, "isProcessed").ToString();
                 string empId = DataBinder.Eval(x.DataItem, "EmpID").ToString();
+                int totPts =Convert.ToInt32( DataBinder.Eval(x.DataItem, "TotalPoints").ToString());
                 var htmlString = "";
-                if (isConfirmed == "YES" | isProcessed == "YES")
+                if (isConfirmed.ToUpper() == "YES" | isProcessed.ToUpper() == "YES" )
                 {
                     htmlString = "<span><b>" + ordeNos + "</b></span>";
                 }
                 else
                 {
-                    htmlString = "<span class='Highlighter' onclick=\"OrderEdit("+ ordeNos + ",'"+ empId + "');\"><b>" + ordeNos + "</b></span>";
+                    if(Session["OT"].ToString().ToLower().Trim() == "rt")
+                    {
+                        //htmlString = "<span><b>" + ordeNos + "</b></span>";
+                        htmlString = "<span class='Highlighter' onclick=\"OrderEditRT(" + ordeNos + ",'" + empId + "');\"><b>" + ordeNos + "</b></span>";
+                    }
+                    else
+                    {
+                        if (totPts > 0)
+                        {
+                            htmlString = "<span class='Highlighter' onclick=\"OrderEdit(" + ordeNos + ",'" + empId + "');\"><b>" + ordeNos + "</b></span>";
+                        }
+                        else
+                        {
+                            htmlString = "<span class='Highlighter' title='No detail lines found for this order'><b>" + ordeNos + "</b></span>";
+                        }
+                    }
                     //htmlString =  "<img  title=\"Edit\" class=\"pull-left dxIcon_edit_edit_16x16 dx-vam\" src=\"/DXR.axd?r=1_57-FIfvj\"alt='Edit' id=\"ShowOrderGridView_DXCBtn0Img\" ><span>" + ordeNos + "</span>";
                 }
                 ViewContext.Writer.Write(htmlString);
             });
         });
+        settings.Columns.Add(set =>
+        {
+            set.FieldName = "OrderType";
+            set.Width = 85;
+
+        });
 
         settings.Columns.Add(set =>
         {
             set.FieldName = "OrderDate";
+            set.Width = 85;
             set.PropertiesEdit.DisplayFormatString = "dd-MM-yyyy";
         });
-        settings.Columns.Add("CustomerRef");
-        settings.Columns.Add("NominalCode");
-        settings.Columns.Add("Address1");
-        settings.Columns.Add("DelDesc");
+        settings.Columns.Add("CustomerRef").Width = 85;
+        if (Session["OT"].ToString().ToLower().Trim() != "rt")
+        {
+            settings.Columns.Add("NominalCode").Width = 85;
+        }
+        settings.Columns.Add("Address1").Width = 85;
+        settings.Columns.Add("DelDesc").Width = 85;
         if (Session["Price"].ToString().ToLower() != "hide")
         {
-            settings.Columns.Add("TotalQty");
-            settings.Columns.Add("TotalIncVat");
-            settings.Columns.Add("GoodsValue");
+            settings.Columns.Add(set =>
+            {
+                set.FieldName = "TotalQty";
+                set.Caption = "Quantity";
+                set.Width = 60;
+            });
+            settings.Columns.Add(set =>
+            {
+                set.FieldName = "TotalIncVat";
+                set.Caption = "Total";
+                set.Width = 60;
+            });
+            settings.Columns.Add(set =>
+            {
+                set.FieldName = "GoodsValue";
+                set.Caption = "Goods";
+                set.Width = 60;
+            });
+
         }
-        settings.Columns.Add("UserId");
-        settings.Columns.Add("EmpID");
-        settings.Columns.Add("EmpName");
+        settings.Columns.Add("UserId").Width = 90;
+        settings.Columns.Add(set =>
+        {
+            set.FieldName = "EmpID";
+            set.Caption = "Employee Id";
+            set.Width = 90;
+        });
+        settings.Columns.Add(set =>
+        {
+            set.FieldName = "EmpName";
+            set.Caption = "Employee Name";
+            set.Width = 85;
+        });
+
         if (Convert.ToBoolean(Session["POINTSREQ"]))
         {
-            settings.Columns.Add("PointsSpent");
-            settings.Columns.Add("TotalPoints");
+            settings.Columns.Add(set =>
+            {
+                set.FieldName = "PointsSpent";
+                set.Caption = Session["OT"].ToString().ToLower().Trim() != "rt" ? "Points Spent" : "Points Returned";
+                set.Width = 45;
+            });
+            settings.Columns.Add(set =>
+            {
+                set.FieldName = "TotalPoints";
+                set.Caption = "Total Points";
+                set.Width = 45;
+            });
+
+            //settings.Columns.Add("TotalPoints").Caption="Total Points";
         }
-        settings.Columns.Add("IsConfirmed");
-        settings.Columns.Add("IsProcessed");
-        settings.Columns.Add("PersonPackNo");
-        if (Session["OrderDelete"].ToString().ToLower() == "show")
+        settings.Columns.Add("IsConfirmed").Caption = "Confirmed";
+
+        if (Convert.ToBoolean(Session["ConfirmOrders"]) == false)
+        {
+            settings.Columns.Add("IsProcessed").Caption = "Processed";
+            if (Session["OT"].ToString().ToLower().Trim() != "rt")
+            {
+                settings.Columns.Add("PersonPackNo").Width = 100;
+            }
+        }
+        if (Convert.ToBoolean(Session["ConfirmOrders"]))
+        {
+            settings.Columns.Add("DeliveryWeek").Width = 100;
+            settings.Columns.Add("DeliveryDay").Width = 100;
+        }
+        if (Session["OT"].ToString().ToLower().Trim() != "rt")
+        {
+
+            if (Session["OrderDelete"].ToString().ToLower() == "show")
+            {
+                settings.Columns.Add(set =>
+                {
+                    set.FieldName = "";
+                    set.Caption = "";
+                    set.Width = 100;
+                    set.SetDataItemTemplateContent(x =>
+                    {
+                        string ordeNos = DataBinder.Eval(x.DataItem, "OrderNo").ToString();
+                        string isConfirmed = DataBinder.Eval(x.DataItem, "isConfirmed").ToString();
+                        string isProcessed = DataBinder.Eval(x.DataItem, "isProcessed").ToString();
+                        string empId = DataBinder.Eval(x.DataItem, "EmpID").ToString();
+                        string ordType= DataBinder.Eval(x.DataItem, "OrderType").ToString();
+                        bool isEmergency = ordType.ToLower().Contains("emergency")?true:false;
+                        var htmlString = "";
+                        if (isConfirmed.ToUpper().Trim() == "YES" | isProcessed.ToUpper().Trim() == "YES")
+                        {
+                            htmlString = "";
+                        }
+                        else
+                        {
+                            htmlString = "<button class=\"btn btn-primary\" onclick=\"DeleteOrder(" + ordeNos + ",'" + empId + "','"+ isEmergency + "')\" style=\"background-color:#009885;color:white\">Delete</button>";
+                        }
+                        ViewContext.Writer.Write(htmlString);
+                    });
+                    set.SetHeaderTemplateContent(x =>
+                    {
+
+                        string content = "<center><img src=\"/Content/Images/xls.png\" title='Export' onclick=\"SaveEmpGrid('ShowOrderGridView','xls')\" width=\"40\" alt='Export'></center>";
+                        ViewContext.Writer.Write(content);
+
+                    });
+
+                });
+            }
+        }
+        else
         {
             settings.Columns.Add(set =>
             {
                 set.FieldName = "";
                 set.Caption = "";
+                set.Width = 100;
                 set.SetDataItemTemplateContent(x =>
                 {
                     string ordeNos = DataBinder.Eval(x.DataItem, "OrderNo").ToString();
@@ -123,22 +302,15 @@
                     string isProcessed = DataBinder.Eval(x.DataItem, "isProcessed").ToString();
                     string empId = DataBinder.Eval(x.DataItem, "EmpID").ToString();
                     var htmlString = "";
-                    if (isConfirmed == "YES" | isProcessed == "YES")
-                    {
-                        htmlString = "";
-                    }
-                    else
-                    {
-                        htmlString = "<button class=\"btn btn-primary\" onclick=\"DeleteOrder(" + ordeNos + ",'" + empId + "')\" style=\"background-color:#009885;color:white\">Delete</button>";
-                    }
+                    htmlString = "<button class=\"btn btn-primary\" onclick=\"PrintReturns(" + ordeNos +")\" style=\"background-color:#009885;color:white\">Print</button>";
                     ViewContext.Writer.Write(htmlString);
                 });
-
-
             });
         }
-        settings.Columns.Add("FirstDespatch");
-        settings.Columns.Add("CourrierRef");
+
+        settings.Columns.Add("FirstDespatch").Width = 70; ;
+        settings.Columns.Add("CourrierRef").Width = 70; ;
+
 
     });
     if (ViewData["EditError"] != null)
@@ -149,6 +321,4 @@
 @grid.Bind(Model).GetHtml()
 
 
-
-
-
+ 

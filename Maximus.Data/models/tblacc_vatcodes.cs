@@ -18,6 +18,5 @@ namespace Maximus.Data.models
         public int VATCode { get; set; }
         public string Description { get; set; }
         public Nullable<double> VATPercent { get; set; }
-        public string SageCode { get; set; }
     }
 }

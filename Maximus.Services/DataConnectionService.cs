@@ -483,9 +483,9 @@ namespace Maximus.Services
         #endregion
 
         #region  GetAllTotals
-        public TotalModel GetAlltotals(List<SalesOrderHeaderViewModel> mod, double carriage,bool isEdit=false)
+        public TotalModel GetAlltotals(List<SalesOrderHeaderViewModel> mod, double carriage,bool isEdit=false,List<ReturnOrderModel> retModel= null)
         {
-            return _dp.GetAlltotals(mod, carriage, isEdit);
+            return _dp.GetAlltotals(mod, carriage, isEdit, retModel);
         }
         #endregion
 

@@ -24,8 +24,8 @@ namespace Maximus.Data.models
         public string Surname { get; set; }
         public Nullable<System.DateTime> StartDate { get; set; }
         public Nullable<System.DateTime> EndDate { get; set; }
-        public bool EmployeeClosed { get; set; }
+        public sbyte EmployeeClosed { get; set; }
         public Nullable<int> roleid { get; set; }
-        public bool IsDefault { get; set; }
+        public sbyte IsDefault { get; set; }
     }
 }

@@ -42,7 +42,9 @@ namespace Maximus.Services
         public readonly CUstomerOrderTemplateCostcenters _costcenters;
         public readonly PointsByUcode _pointsByUcode;
         public readonly PointsCard _pointsCard;
-        public readonly PointStyle _pointStyle; 
+        public readonly PointStyle _pointStyle;
+        public readonly Gallery _gallery;
+        public readonly Company _company;
         #endregion
 
         #region constructor
@@ -77,8 +79,11 @@ namespace Maximus.Services
             PointsCard pointsCard = new PointsCard(_unitOfWork);
             PointStyle pointStyle = new PointStyle(_unitOfWork);
             User user = new User(_unitOfWork);
+            Gallery gallery = new Gallery(_unitOfWork);
+            Company company = new Company(_unitOfWork);
             _dp = dp;
             _user = user;
+            _company = company;
             _pointsByUcode = pointsByUcode;
             _pointsCard = pointsCard;
             _pointStyle = pointStyle;
@@ -99,6 +104,7 @@ namespace Maximus.Services
             _styleByFreetext = styleByFreetext;
             _styleColorSizeObsolete = styleColorSizeObsolete;
             _styleGroups = styleGroups;
+            _gallery = gallery;
             _stylesView = stylesView;
             _tblFskStyle = tblFskStyle;
             _ucode_Description = ucode_Description;
@@ -119,7 +125,7 @@ namespace Maximus.Services
         #endregion
 
         #region GetPrice based on styleid and colorid
-        public decimal GetPrice(string StyleID = "", string SizeId = "", string BusiD = "",string priceId="")
+        public decimal GetPrice(string StyleID = "", string SizeId = "", string BusiD = "", string priceId = "")
         {
             return _dp.GetPrice(StyleID, SizeId, BusiD, priceId);
         }
@@ -199,13 +205,13 @@ namespace Maximus.Services
             return null;
         }
         #endregion
-        public List<SalesOrderLineViewModel> GetChargableAssembly(string intNoOfday, string mainStyle, string IncWendsDel, string CurrencyExchangeRate ,string Currency_Name, string Rep_Id, string style = "", long lineNo = 0, long qty = 0, string empId = "", string empName = "", string busId = "",string selTemplates="",string selUcode="")
+        public List<SalesOrderLineViewModel> GetChargableAssembly(string intNoOfday, string mainStyle, string IncWendsDel, string CurrencyExchangeRate, string Currency_Name, string Rep_Id, string style = "", long lineNo = 0, long qty = 0, string empId = "", string empName = "", string busId = "", string selTemplates = "", string selUcode = "")
         {
             var chargableAsm = new List<SalesOrderLineViewModel>();
             var result = new List<AssemblyModel>();
             var result1 = new List<AssemblyModel>();
             result = _customAssembly.GetAll(x => x.ParentStyleID == style & x.isChargeable == true & x.CustID == busId).Select(x => new AssemblyModel { StyleID = x.StyleID, Instruction = x.Instruction, IsChargeable = Convert.ToInt32(x.isChargeable) }).ToList();
-            result1 = _customAssembly.Exists(x => x.ParentStyleID == style & x.isChargeable == true & x.CustID.ToLower()=="all") ? _customAssembly.GetAll(x => x.ParentStyleID == style & x.isChargeable == false & x.CustID.ToLower() == "all").Select(x => new AssemblyModel { StyleID = x.StyleID, Instruction = x.Instruction, IsChargeable = Convert.ToInt32(x.isChargeable) }).ToList() : new List<AssemblyModel>();
+            result1 = _customAssembly.Exists(x => x.ParentStyleID == style & x.isChargeable == true & x.CustID.ToLower() == "all") ? _customAssembly.GetAll(x => x.ParentStyleID == style & x.isChargeable == false & x.CustID.ToLower() == "all").Select(x => new AssemblyModel { StyleID = x.StyleID, Instruction = x.Instruction, IsChargeable = Convert.ToInt32(x.isChargeable) }).ToList() : new List<AssemblyModel>();
             result.AddRange(result1);
             if (result.Count == 0)
             {
@@ -219,7 +225,7 @@ namespace Maximus.Services
                 var color = _style_Colour.Exists(x => x.StyleID == res.StyleID) ? _style_Colour.GetAll(x => x.StyleID == res.StyleID).FirstOrDefault().ColourID : "";
                 chargableAsm.Add(new SalesOrderLineViewModel
                 {
-                    ColourID = styleColorLst.Count()==0? _style_Colour.Exists(x => x.StyleID == res.StyleID) ? _style_Colour.GetAll(x => x.StyleID == res.StyleID).FirstOrDefault().ColourID : "" : _style_Colour.Exists(x => x.StyleID == res.StyleID) ? _style_Colour.Exists(x => x.StyleID == res.StyleID && styleColorLst.Contains(x.ColourID)) ? _style_Colour.GetAll(x => x.StyleID == res.StyleID && styleColorLst.Contains(x.ColourID)).First().ColourID: _style_Colour.GetAll(x => x.StyleID == res.StyleID).FirstOrDefault().ColourID : "",
+                    ColourID = styleColorLst.Count() == 0 ? _style_Colour.Exists(x => x.StyleID == res.StyleID) ? _style_Colour.GetAll(x => x.StyleID == res.StyleID).FirstOrDefault().ColourID : "" : _style_Colour.Exists(x => x.StyleID == res.StyleID) ? _style_Colour.Exists(x => x.StyleID == res.StyleID && styleColorLst.Contains(x.ColourID)) ? _style_Colour.GetAll(x => x.StyleID == res.StyleID && styleColorLst.Contains(x.ColourID)).First().ColourID : _style_Colour.GetAll(x => x.StyleID == res.StyleID).FirstOrDefault().ColourID : "",
                     OriginalLineNo = lineNo,
                     LineNo = curLine + 1,
                     Description = res.Instruction,
@@ -241,25 +247,25 @@ namespace Maximus.Services
                     StockingUOM1 = 1,
                     IssueQty1 = Convert.ToInt32(qty),
                     VatPercent = _dp.GetVatPercent(res.StyleID, size),
-                    SelectedTemplate=selTemplates,
-                    SelectedUcode=selUcode
+                    SelectedTemplate = selTemplates,
+                    SelectedUcode = selUcode
                 });
                 curLine = curLine + 1;
             }
             return chargableAsm;
         }
 
-        public List<SalesOrderLineViewModel> GetOptionalAssembly(string intNoOfday,string mainStyle, string IncWendsDel, string CurrencyExchangeRate, string Currency_Name, string Rep_Id, List<string> assemList = null, string style = "", long lineNo = 0, List<SalesOrderLineViewModel> lines = null, long qty = 0, string empId = "", string empName = "", int lastLino = 0, string busId = "", string selTemplates = "", string selUcode = "")
+        public List<SalesOrderLineViewModel> GetOptionalAssembly(string intNoOfday, string mainStyle, string IncWendsDel, string CurrencyExchangeRate, string Currency_Name, string Rep_Id, List<string> assemList = null, string style = "", long lineNo = 0, List<SalesOrderLineViewModel> lines = null, long qty = 0, string empId = "", string empName = "", int lastLino = 0, string busId = "", string selTemplates = "", string selUcode = "")
         {
             var optionalAsm = new List<SalesOrderLineViewModel>();
             long curLine = lines != null ? lines.Last().LineNo : lineNo;
             try
             {
-                var styleColorLst= _style_Colour.Exists(x => x.StyleID == mainStyle) ? _style_Colour.GetAll(x => x.StyleID == mainStyle).Select(s=>s.StyleID).ToList() :new List<string>();
+                var styleColorLst = _style_Colour.Exists(x => x.StyleID == mainStyle) ? _style_Colour.GetAll(x => x.StyleID == mainStyle).Select(s => s.StyleID).ToList() : new List<string>();
                 foreach (var res in assemList)
                 {
                     var size = _style_Sizes.Exists(x => x.StyleID == res) ? _style_Sizes.GetAll(x => x.StyleID == res).FirstOrDefault().SizeID : "";
-                    var color = styleColorLst.Count==0? _style_Colour.Exists(x => x.StyleID == res) ? _style_Colour.GetAll(x => x.StyleID == res).FirstOrDefault().ColourID : "": _style_Colour.Exists(x => x.StyleID == res)? _style_Colour.Exists(x => x.StyleID == res && styleColorLst.Contains(x.ColourID))? _style_Colour.GetAll(x => x.StyleID == res && styleColorLst.Contains(x.ColourID)).First().ColourID : _style_Colour.GetAll(x => x.StyleID == res).FirstOrDefault().ColourID : "";
+                    var color = styleColorLst.Count == 0 ? _style_Colour.Exists(x => x.StyleID == res) ? _style_Colour.GetAll(x => x.StyleID == res).FirstOrDefault().ColourID : "" : _style_Colour.Exists(x => x.StyleID == res) ? _style_Colour.Exists(x => x.StyleID == res && styleColorLst.Contains(x.ColourID)) ? _style_Colour.GetAll(x => x.StyleID == res && styleColorLst.Contains(x.ColourID)).First().ColourID : _style_Colour.GetAll(x => x.StyleID == res).FirstOrDefault().ColourID : "";
                     optionalAsm.Add(new SalesOrderLineViewModel
                     {
                         ColourID = _style_Colour.Exists(x => x.StyleID == res) ? _style_Colour.GetAll(x => x.StyleID == res).FirstOrDefault().ColourID : "",
@@ -299,13 +305,13 @@ namespace Maximus.Services
             return optionalAsm;
         }
 
-        public List<tblsop_customerorder_template_costcentre> GetCostCenterTemplate(List<string>  template, string busId)
+        public List<tblsop_customerorder_template_costcentre> GetCostCenterTemplate(List<string> template, string busId)
         {
             List<tblsop_customerorder_template_costcentre> result = new List<tblsop_customerorder_template_costcentre>();
             List<tblsop_customerorder_template_costcentre> cst = new List<tblsop_customerorder_template_costcentre>();
             foreach (var temp in template)
             {
-                cst = _costcenters.Exists(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim() && x.TemplateCode.ToLower().Trim()== temp.ToLower().Trim()) ? _costcenters.GetAll(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim() && x.TemplateCode.ToLower().Trim() == temp.ToLower().Trim()).ToList() : cst;
+                cst = _costcenters.Exists(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim() && x.TemplateCode.ToLower().Trim() == temp.ToLower().Trim()) ? _costcenters.GetAll(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim() && x.TemplateCode.ToLower().Trim() == temp.ToLower().Trim()).ToList() : cst;
                 result.AddRange(cst);
             }
             return cst;
@@ -316,13 +322,13 @@ namespace Maximus.Services
             List<tblsop_customerorder_template_costcentre> cst = new List<tblsop_customerorder_template_costcentre>();
             foreach (var ucode in ucodeLst)
             {
-                cst = _costcenters.Exists(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim() && x.Uniformcode.ToLower().Trim() == ucode.ToLower().Trim()) ? _costcenters.GetAll(x => x.BusinessID.ToLower().Trim() ==busId && x.Uniformcode.ToLower().Trim() == ucode.ToLower().Trim()).ToList() : cst;
+                cst = _costcenters.Exists(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim() && x.Uniformcode.ToLower().Trim() == ucode.ToLower().Trim()) ? _costcenters.GetAll(x => x.BusinessID.ToLower().Trim() == busId && x.Uniformcode.ToLower().Trim() == ucode.ToLower().Trim()).ToList() : cst;
                 result.AddRange(cst);
             }
             return cst;
         }
 
-        public PointsModel GetPointsModel(string uCode ,string busId)
+        public PointsModel GetPointsModel(string uCode, string busId)
         {
             PointsModel ptsModel = new PointsModel();
             var result = _pointsByUcode.GetAll(x => x.BusinessID == busId && x.UcodeID == uCode).FirstOrDefault();
@@ -336,29 +342,39 @@ namespace Maximus.Services
                 ptsModel.ToDate = result.ToDate;
                 ptsModel.LstStyles = _pointStyle.GetAll(x => x.UcodeID == uCode && x.BusinessID == busId).Select(x => new PointsStyle { Points = x.Points.Value, Style = x.StyleID }).ToList();
             }
-            
+
             return ptsModel;
         }
 
-        public bool SaveEmailData(string email,string userName,string busId)
+        public bool SaveEmailData(string email, string userName, string busId)
         {
             bool result = false;
             try
             {
-                if (_user.Exists(s => s.UserName == userName && s.BusinessID == busId && (s.Email_ID==null || s.Email_ID.Trim()=="")))
+                if (_user.Exists(s => s.UserName == userName && s.BusinessID == busId && (s.Email_ID == null || s.Email_ID.Trim() == "")))
                 {
-                result=  _dp.SaveEmailUser("Update tblusers set Email_ID='" + email + "' where BusinessID='" + busId + "' AND UserName='"+ userName + "'");
+                    result = _dp.SaveEmailUser("Update tblusers set Email_ID='" + email + "' where BusinessID='" + busId + "' AND UserName='" + userName + "'");
                 }
                 else
                 {
                     return true;
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 return result;
             }
             return result;
         }
+
+        public List<string> GetStyleImages(string style)
+        {
+            var result = _gallery.Exists(s => s.StyleID.ToLower() == style.ToLower()) ? _gallery.GetAll(s => s.StyleID.ToLower() == style.ToLower()).Select(s => s.StyleImage).ToList() : new List<string>();
+            return result;
+        }
+
+     
+
+       
     }
 }

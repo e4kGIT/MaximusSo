@@ -61,14 +61,17 @@
             </center>
         </div><div class="col-md-4"></div>
     </div><br />
+    @if (Convert.ToBoolean(Session["ConfirmOrders"]) == false)
+            {
     <div class="row">
         <div class="col-md-6">
-            @Html.DevExpress().TextBox(set =>
-                         {
-                             set.Name = "CustomerOrderno";
-                             set.Properties.Caption = "Customer order no";
-                             set.Properties.CaptionCellStyle.Width = 150;
-                         }).GetHtml()
+           
+                @Html.DevExpress().TextBox(set =>
+                {
+                    set.Name = "CustomerOrderno";
+                    set.Properties.Caption = "Customer order no";
+                    set.Properties.CaptionCellStyle.Width = 150;
+                }).GetHtml() 
         </div>
         <div class="col-md-2">
             @Html.DevExpress().Button(btn =>
@@ -87,18 +90,19 @@
        }).GetHtml()
         </div>
 
-    </div><br />
-    <div class="row">
-        <div class="col-md-6">
-            @Html.DevExpress().ComboBox(set =>
-                         {
-                             set.Name = "Orderstatus";
-                             set.Properties.Caption = "Order status";
-                             set.Properties.CaptionCellStyle.Width = 150; set.Properties.ClientSideEvents.SelectedIndexChanged = "GetallOrders"; set.Properties.Items.Add("Show all"); set.Properties.Items.Add("Confirm orders"); set.Properties.Items.Add("Unconfirm orders");
-                         }).GetHtml()
-        </div>
-        <div class="col-md-6">
-            @Html.DevExpress().ComboBox(set =>
+    </div>
+    
+        <div class="row">
+            <div class="col-md-6">
+                @Html.DevExpress().ComboBox(set =>
+       {
+           set.Name = "Orderstatus";
+           set.Properties.Caption = "Order status";
+           set.Properties.CaptionCellStyle.Width = 150; set.Properties.ClientSideEvents.SelectedIndexChanged = "GetallOrders"; set.Properties.Items.Add("Show all"); set.Properties.Items.Add("Confirm orders"); set.Properties.Items.Add("Unconfirm orders");
+       }).GetHtml()
+            </div>
+            <div class="col-md-6">
+                @*@Html.DevExpress().ComboBox(set =>
        {
            set.Name = "User";
            set.Properties.Caption = "User";
@@ -109,20 +113,60 @@
                set.Properties.Items.Add(usr);
            }
 
-       }).GetHtml()
+       }).GetHtml()*@
+            </div>
+
+        </div> 
+
+    }
+    <div class="row">
+
+        <div class="col-md-6">
+            @*@Html.DevExpress().RadioButton(
+    settings =>
+    {
+        settings.Name = "OrderTypeEmergency";
+        settings.Text = "Emergency";
+        settings.Checked = false;
+        settings.GroupName = "OrderTypesCnf";
+    }).GetHtml()
+            @Html.DevExpress().RadioButton(
+    settings =>
+    {
+        settings.Name = "OrderTypeReorder";
+        settings.Text = "Reorder";
+        settings.Checked = false;
+        settings.GroupName = "OrderTypesCnf";
+    }).GetHtml()
+            @Html.DevExpress().RadioButton(
+    settings =>
+    {
+        settings.Name = "OrderTypeRollout";
+        settings.Text = "Rollout";
+        settings.Checked = false;
+        settings.GroupName = "OrderTypesCnf";
+    }).GetHtml*@
+                        @*@Html.DevExpress().CheckBox(set =>
+                   {
+                       set.Name = "chkEmergencyOrders";
+                       set.Properties.Caption = "Emergency orders";
+                       set.Properties.CaptionCellStyle.Width = 150;
+                       set.Checked = Session["Access"].ToString().ToLower() == "manager" ? true : false;
+                       set.Properties.ClientSideEvents.CheckedChanged = "GetallOrders";
+                   }).GetHtml()*@
         </div>
 
-    </div><br />
-    <div class="row">
-        <div class="col-md-6">
-            @Html.DevExpress().ComboBox(set =>
-                         {
-                             set.Name = "recstodisplay"; set.Properties.Caption = "Records to displays"; set.Properties.CaptionCellStyle.Width = 150; set.Properties.ClientSideEvents.SelectedIndexChanged = "GetallOrders"; set.Properties.Items.Add("all");
-                             set.Properties.Items.Add("10");
-                             set.Properties.Items.Add("25");
-                             set.Properties.Items.Add("50");
-                             set.Properties.Items.Add("100");
-                         }).GetHtml()
-        </div>
-    </div>
+    </div> 
+    @*<div class="row">
+            <div class="col-md-6">
+                @Html.DevExpress().ComboBox(set =>
+                             {
+                                 set.Name = "recstodisplay"; set.Properties.Caption = "Records to displays"; set.Properties.CaptionCellStyle.Width = 150; set.Properties.ClientSideEvents.SelectedIndexChanged = "GetallOrders"; set.Properties.Items.Add("all");
+                                 set.Properties.Items.Add("10");
+                                 set.Properties.Items.Add("25");
+                                 set.Properties.Items.Add("50");
+                                 set.Properties.Items.Add("100");
+                             }).GetHtml()
+            </div>
+        </div>*@
 </div>

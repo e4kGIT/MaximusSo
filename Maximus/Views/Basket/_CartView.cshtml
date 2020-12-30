@@ -58,11 +58,15 @@
         //settings.Columns.Add(x => { x.FieldName = "LineNo"; x.Caption = "Line no"; x.ReadOnly = true; });
         settings.Columns.Add(x => { x.FieldName = "EmployeeID"; x.Caption = "Employee Id"; x.ReadOnly = true; x.EditFormSettings.Visible = DefaultBoolean.False; });
         settings.Columns.Add(x => { x.FieldName = "EmployeeName"; x.Caption = "Employee Name"; x.ReadOnly = true; x.EditFormSettings.Visible = DefaultBoolean.False; });
+        if(Convert.ToBoolean(Session["ISEDITING"]))
+        {
+            settings.Columns.Add(x => { x.FieldName = "OrderNo"; x.Caption = "Order no"; x.ReadOnly = true; x.EditFormSettings.Visible = DefaultBoolean.False; });
+        }
         settings.Columns.Add(x => { x.FieldName = "CustRef"; x.Caption = "Custromer Reference"; x.ReadOnly = false; x.Visible = true; x.EditFormSettings.Visible = DefaultBoolean.True; });
         settings.Columns.Add(x => { x.FieldName = "DelDesc"; x.Caption = "Description"; x.Visible = true; x.EditFormSettings.Visible = DefaultBoolean.True; });
         settings.Columns.Add(x => { x.FieldName = "DelAddress1"; x.Caption = "Address1"; x.Visible = true; x.EditFormSettings.Visible = DefaultBoolean.True; });
         settings.Columns.Add(x => { x.FieldName = "DelAddress2"; x.Caption = "Address2"; x.Visible = true; x.EditFormSettings.Visible = DefaultBoolean.True; });
-        settings.Columns.Add(x => { x.FieldName = "DelAddress3"; x.Caption = "Address3"; x.Visible = true; x.EditFormSettings.Visible = DefaultBoolean.True; });
+        //settings.Columns.Add(x => { x.FieldName = "DelAddress3"; x.Caption = "Address3"; x.Visible = true; x.EditFormSettings.Visible = DefaultBoolean.True; });
         settings.Columns.Add(x => { x.FieldName = "DelTown"; x.Caption = "Town"; x.Visible = true; x.EditFormSettings.Visible = DefaultBoolean.True; });
         settings.Columns.Add(x => { x.FieldName = "DelCity"; x.Caption = "City"; x.Visible = true; x.EditFormSettings.Visible = DefaultBoolean.True; });
         settings.Columns.Add(x => { x.FieldName = "DelPostCode"; x.Caption = "Post code"; x.Visible = true; x.EditFormSettings.Visible = DefaultBoolean.True; });

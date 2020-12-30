@@ -24,6 +24,7 @@ namespace Maximus.Services
         public readonly CustomAssembly _customAssembly;
         public readonly Departments _departments;
         public readonly Employee _employee;
+        public readonly EmployeeRollout _employeeRollout;
         public readonly FskStyleFreetext _fskStyleFreetext;
         public readonly FskStyle _fskStyle;
         public readonly Nextno _nextno;
@@ -47,6 +48,9 @@ namespace Maximus.Services
         public readonly tblSalesLines _tblSalesLines;
         public readonly PointsCard _pointsCard;
         public readonly PointStyle _pointsStyle;
+        public readonly User _tblUser;
+        public readonly UcodeOperationsTbl _ucodeOperationsTbl;
+        public readonly RejectReasonTbl _rejectReasonTbl;
         public BasketService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
@@ -56,6 +60,9 @@ namespace Maximus.Services
             AllAssemblies allAssemblies = new AllAssemblies(_unitOfWork);
             AssemblyDetail assemblyDetail = new AssemblyDetail(_unitOfWork);
             AssemblyHeader assemblyHeader = new AssemblyHeader(_unitOfWork);
+            UcodeOperationsTbl ucodeOperationsTbl=new UcodeOperationsTbl(_unitOfWork);
+            RejectReasonTbl rejectReasonTbl = new RejectReasonTbl(_unitOfWork);
+           
             BusAddress busAddress = new BusAddress(_unitOfWork);
             BusContact busContact = new BusContact(_unitOfWork);
             CountryCodes countryCodes = new CountryCodes(_unitOfWork);
@@ -72,6 +79,8 @@ namespace Maximus.Services
             StyleGroups styleGroups = new StyleGroups(_unitOfWork);
             StylesView stylesView = new StylesView(_unitOfWork);
             TblFskStyle tblFskStyle = new TblFskStyle(_unitOfWork);
+            EmployeeRollout employeeRollout = new EmployeeRollout(_unitOfWork);
+            User tblUser=new User(_unitOfWork);
             Ucode_Description ucode_Description = new Ucode_Description(_unitOfWork);
             UcodeByFreeTextView ucodeByFreeText = new UcodeByFreeTextView(_unitOfWork);
             UcodeEmployees ucodeEmployees = new UcodeEmployees(_unitOfWork);
@@ -83,12 +92,14 @@ namespace Maximus.Services
             PointStyle pointsStyle = new PointStyle(_unitOfWork);
             _tblSalesHeader = tblSalesHeader;
             _tblSalesLines = tblSalesLines;
+            _tblUser = tblUser;
             _pointsCard = pointsCard;
             _pointsStyle = pointsStyle;
             _fskStyle = fskStyle;
             _allAssemblies = allAssemblies;
             _assemblyDetail = assemblyDetail;
             _assemblyHeader = assemblyHeader;
+            _employeeRollout = employeeRollout;
             _busContact = busContact;
             _countryCodes = countryCodes;
             _customAssembly = customAssembly;
@@ -110,6 +121,8 @@ namespace Maximus.Services
             _ucodes = ucodes;
             _busAddress = busAddress;
             _dp = dp;
+            _ucodeOperationsTbl = ucodeOperationsTbl;
+            _rejectReasonTbl = rejectReasonTbl;
             _pointsByUcode = pointsByUcode;
             _pointStyle = pointStyle;
         }
@@ -117,10 +130,12 @@ namespace Maximus.Services
 
 
         #region  AcceptOrder 
-        public AcceptResultSet AcceptOrder(string cmpId, bool IsManPack, string busId, List<SalesOrderHeaderViewModel> salesHeaderLst, string addDesc, bool isRollOutOrder, string OverrideEnt, bool CusRefMan, string POINTSREQ, List<BusAddress1> busAddress, string DIFF_MANPACK_INFO, string NOMCODEMAN, string ONLNEREQNOM1, string ONLNEREQNOM2, string ONLNEREQNOM3, string ONLNEREQNOM4, string ONLNEREQNOM5, string RolloutName, string selectedcar, string UserName, string DELADDR_USER_CREATE, double CARRPERCENT, double CARRREQAMT, string FITALLOC, string DIMALLOC, string BUDGETREQ, string Browser, string REMOTE_ADDR, string ONLCUSREFLBL, string cmpLogo, string custLogo, string adminMail, string mailUsername, string mailPassword, string mailPort, string mailServer, string HTTP_X_FORWARDED_FOR, bool isedit, bool boolDeleteConfirm, string pnlCarriageReason, bool booPtsReq, int empResetMnths, string pricePermission)
+        public AcceptResultSet AcceptOrder(string cmpId, bool IsManPack, string busId, List<SalesOrderHeaderViewModel> salesHeaderLst, string addDesc, bool isRollOutOrder,bool isRollOutOrderEst, string OverrideEnt, bool CusRefMan, string POINTSREQ, List<BusAddress1> busAddress, string DIFF_MANPACK_INFO, string NOMCODEMAN, string ONLNEREQNOM1, string ONLNEREQNOM2, string ONLNEREQNOM3, string ONLNEREQNOM4, string ONLNEREQNOM5, string RolloutName, string selectedcar, string UserName, string DELADDR_USER_CREATE, double CARRPERCENT, double CARRREQAMT, string FITALLOC, string DIMALLOC, string BUDGETREQ, string Browser, string REMOTE_ADDR, string ONLCUSREFLBL, string cmpLogo, string custLogo, string adminMail, string mailUsername, string mailPassword, string mailPort, string mailServer,string ueMailEMail, string HTTP_X_FORWARDED_FOR, bool isedit, bool boolDeleteConfirm, string pnlCarriageReason, bool booPtsReq, int empResetMnths, string pricePermission, UpdateMailModel updModel, bool booAutoConfirm = false)
         {
             int addressId = 0;
-            bool booCheck = true; bool booAutoConfirm = false; long mStackManPack = 0;
+            bool booCheck = true;
+            //bool booAutoConfirm = false;
+            long mStackManPack = 0;
             bool optNew = false;
             long intSalesOrderNo = isedit ? salesHeaderLst.First().OrderNo : 0;
             long intnext = 0;
@@ -189,7 +204,7 @@ namespace Maximus.Services
                 {
                     foreach (var order in (salesHeaderLst))
                     {
-                        foreach (var lines in order.SalesOrderLine)
+                        foreach (var lines in order.SalesOrderLine.Where(s => s.IsDleted == false))
                         {
                             if (lines.OrdQty == 0)
                             {
@@ -235,7 +250,7 @@ namespace Maximus.Services
                         {
                             foreach (var saleshead in salesHeaderLst)
                             {
-                                if (saleshead.SalesOrderLine.Any(s => s.isCarrline) == false)
+                                if (saleshead.SalesOrderLine.Any(s => s.isCarrline && s.IsDleted == false) == false)
                                 {
                                     AcceptResultSet.results = ResultSet;
                                     AcceptResultSet.type = "Please select Carrier style for " + saleshead.EmployeeName + "";
@@ -284,9 +299,9 @@ namespace Maximus.Services
             {
                 foreach (var salesHead in salesHeaderLst)
                 {
-                    if (salesHead.SalesOrderLine.Any(s => s.isCarrline))
+                    if (salesHead.SalesOrderLine.Any(s => s.isCarrline && s.IsDleted))
                     {
-                        var carrLines = salesHead.SalesOrderLine.Where(s => s.isCarrline).First();
+                        var carrLines = salesHead.SalesOrderLine.Where(s => s.isCarrline && s.IsDleted).First();
                         salesHead.SalesOrderLine.Remove(carrLines);
                     }
                 }
@@ -302,7 +317,7 @@ namespace Maximus.Services
                 }
                 foreach (var saleshead in salesHeaderLst)
                 {
-                    if (saleshead.SalesOrderLine.Count > 0 | boolDeleteConfirm)
+                    if (saleshead.SalesOrderLine.Where(s => s.IsDleted == false).Count() > 0 | boolDeleteConfirm)
                     {
                         tblgen_nextno nextNo = new tblgen_nextno();
                         nextNo = _nextno.GetAll(x => x.CompanyID == cmpId && x.ItemName == "SALE ORDER").First();
@@ -329,18 +344,25 @@ namespace Maximus.Services
                                 saleshead.DelCountry = _countryCodes.GetAll(x => x.CountryID == myCountryID).First().Country;
                                 saleshead.DelPostCode = _busAddress.GetAll(x => x.AddressID == myAddressID).First().Postcode;
                                 saleshead.DelTown = _busAddress.GetAll(x => x.AddressID == myAddressID).First().Town;
-                                saleshead.CustRef = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.SalesOrderLine.Count > 0).Last().CustRef;
+                                saleshead.CustRef = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.SalesOrderLine.Where(s => s.IsDleted == false).Count() > 0).Last().CustRef;
                             }
                             //                ResetAssemblyLineNo(Session.Item("objCurrentOrder"))
                             //                If EditFlag Then
                             //                    Dim objorderlines As SalesOrderLine = DirectCast(Session.Item("objCurrentOrder").SalesOrderLine, SalesOrderLine)
                             //                    getNarateEditDetailMail(objorderlines)
                             //                End If
-                            if (isRollOutOrder)
+                            if (isRollOutOrderEst)
                             {
                                 if (saleshead.NomCode3.ToString().Trim() == "")
                                 {
                                     saleshead.NomCode3 = RolloutName;
+                                }
+                            }
+                            else
+                            {
+                                if (saleshead.NomCode3.ToString().Trim()!="")
+                                {
+                                    saleshead.NomCode3 = "";
                                 }
                             }
                         }
@@ -417,15 +439,15 @@ namespace Maximus.Services
                     {
                         if (salesHead.Template != "" && salesHead.Template != null)
                         {
-                            salesHead.DelDesc = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.IsTemplate && x.SalesOrderLine.Count > 0).Last().DelDesc;
-                            salesHead.DelAddress1 = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.IsTemplate && x.SalesOrderLine.Count > 0).Last().DelAddress1;
-                            salesHead.DelAddress2 = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.IsTemplate && x.SalesOrderLine.Count > 0).Last().DelAddress2;
-                            salesHead.DelAddress3 = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.IsTemplate && x.SalesOrderLine.Count > 0).Last().DelAddress3;
-                            salesHead.DelCity = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.IsTemplate && x.SalesOrderLine.Count > 0).Last().DelCity;
-                            salesHead.DelCountry = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.IsTemplate && x.SalesOrderLine.Count > 0).Last().DelCountry;
-                            salesHead.DelPostCode = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.IsTemplate && x.SalesOrderLine.Count > 0).Last().DelPostCode;
-                            salesHead.DelTown = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.IsTemplate && x.SalesOrderLine.Count > 0).Last().DelTown;
-                            salesHead.CustRef = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.IsTemplate && x.SalesOrderLine.Count > 0).Last().CustRef;
+                            salesHead.DelDesc = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.IsTemplate && x.SalesOrderLine.Where(s => s.IsDleted == false).Count() > 0).Last().DelDesc;
+                            salesHead.DelAddress1 = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.IsTemplate && x.SalesOrderLine.Where(s => s.IsDleted == false).Count() > 0).Last().DelAddress1;
+                            salesHead.DelAddress2 = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.IsTemplate && x.SalesOrderLine.Where(s => s.IsDleted == false).Count() > 0).Last().DelAddress2;
+                            salesHead.DelAddress3 = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.IsTemplate && x.SalesOrderLine.Where(s => s.IsDleted == false).Count() > 0).Last().DelAddress3;
+                            salesHead.DelCity = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.IsTemplate && x.SalesOrderLine.Where(s => s.IsDleted == false).Count() > 0).Last().DelCity;
+                            salesHead.DelCountry = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.IsTemplate && x.SalesOrderLine.Where(s => s.IsDleted == false).Count() > 0).Last().DelCountry;
+                            salesHead.DelPostCode = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.IsTemplate && x.SalesOrderLine.Where(s => s.IsDleted == false).Count() > 0).Last().DelPostCode;
+                            salesHead.DelTown = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.IsTemplate && x.SalesOrderLine.Where(s => s.IsDleted == false).Count() > 0).Last().DelTown;
+                            salesHead.CustRef = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.IsTemplate && x.SalesOrderLine.Where(s => s.IsDleted == false).Count() > 0).Last().CustRef;
                             if (salesHead.DelDesc == "")
                             {
                                 salesHead.DelDesc = _busAddress.GetAll(x => x.AddressID == myAddressID).First().Description;
@@ -436,20 +458,20 @@ namespace Maximus.Services
                                 salesHead.DelCountry = _countryCodes.GetAll(x => x.CountryID == myCountryID).First().Country;
                                 salesHead.DelPostCode = _busAddress.GetAll(x => x.AddressID == myAddressID).First().Postcode;
                                 salesHead.DelTown = _busAddress.GetAll(x => x.AddressID == myAddressID).First().Town;
-                                salesHead.CustRef = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.SalesOrderLine.Count > 0).Last().CustRef;
+                                salesHead.CustRef = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.SalesOrderLine.Where(s => s.IsDleted == false).Count() > 0).Last().CustRef;
                             }
                         }
                         else if (salesHead.EmployeeID != "" && salesHead.EmployeeID != null)
                         {
-                            salesHead.DelDesc = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.EmployeeID == salesHead.EmployeeID && x.SalesOrderLine.Count > 0).Last().DelDesc;
-                            salesHead.DelAddress1 = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.EmployeeID == salesHead.EmployeeID && x.SalesOrderLine.Count > 0).Last().DelAddress1;
-                            salesHead.DelAddress2 = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.EmployeeID == salesHead.EmployeeID && x.SalesOrderLine.Count > 0).Last().DelAddress2;
-                            salesHead.DelAddress3 = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.EmployeeID == salesHead.EmployeeID && x.SalesOrderLine.Count > 0).Last().DelAddress3;
-                            salesHead.DelCity = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.EmployeeID == salesHead.EmployeeID && x.SalesOrderLine.Count > 0).Last().DelCity;
-                            salesHead.DelCountry = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.EmployeeID == salesHead.EmployeeID && x.SalesOrderLine.Count > 0).Last().DelCountry;
-                            salesHead.DelPostCode = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.EmployeeID == salesHead.EmployeeID && x.SalesOrderLine.Count > 0).Last().DelPostCode;
-                            salesHead.DelTown = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.EmployeeID == salesHead.EmployeeID && x.SalesOrderLine.Count > 0).Last().DelTown;
-                            salesHead.CustRef = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.EmployeeID == salesHead.EmployeeID && x.SalesOrderLine.Count > 0).Last().CustRef;
+                            salesHead.DelDesc = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.EmployeeID == salesHead.EmployeeID && x.SalesOrderLine.Where(s => s.IsDleted == false).Count() > 0).Last().DelDesc;
+                            salesHead.DelAddress1 = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.EmployeeID == salesHead.EmployeeID && x.SalesOrderLine.Where(s => s.IsDleted == false).Count() > 0).Last().DelAddress1;
+                            salesHead.DelAddress2 = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.EmployeeID == salesHead.EmployeeID && x.SalesOrderLine.Where(s => s.IsDleted == false).Count() > 0).Last().DelAddress2;
+                            salesHead.DelAddress3 = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.EmployeeID == salesHead.EmployeeID && x.SalesOrderLine.Where(s => s.IsDleted == false).Count() > 0).Last().DelAddress3;
+                            salesHead.DelCity = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.EmployeeID == salesHead.EmployeeID && x.SalesOrderLine.Where(s => s.IsDleted == false).Count() > 0).Last().DelCity;
+                            salesHead.DelCountry = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.EmployeeID == salesHead.EmployeeID && x.SalesOrderLine.Where(s => s.IsDleted == false).Count() > 0).Last().DelCountry;
+                            salesHead.DelPostCode = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.EmployeeID == salesHead.EmployeeID && x.SalesOrderLine.Where(s => s.IsDleted == false).Count() > 0).Last().DelPostCode;
+                            salesHead.DelTown = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.EmployeeID == salesHead.EmployeeID && x.SalesOrderLine.Where(s => s.IsDleted == false).Count() > 0).Last().DelTown;
+                            salesHead.CustRef = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.EmployeeID == salesHead.EmployeeID && x.SalesOrderLine.Where(s => s.IsDleted == false).Count() > 0).Last().CustRef;
                             if (salesHead.DelDesc == "")
                             {
                                 salesHead.DelDesc = _busAddress.GetAll(x => x.AddressID == myAddressID).First().Description;
@@ -460,7 +482,7 @@ namespace Maximus.Services
                                 salesHead.DelCountry = _countryCodes.GetAll(x => x.CountryID == myCountryID).First().Country;
                                 salesHead.DelPostCode = _busAddress.GetAll(x => x.AddressID == myAddressID).First().Postcode;
                                 salesHead.DelTown = _busAddress.GetAll(x => x.AddressID == myAddressID).First().Town;
-                                salesHead.CustRef = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.SalesOrderLine.Count > 0).Last().CustRef;
+                                salesHead.CustRef = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.SalesOrderLine.Where(s => s.IsDleted == false).Count() > 0).Last().CustRef;
                             }
                         }
 
@@ -469,14 +491,14 @@ namespace Maximus.Services
                     {
                         if (salesHead.Template != "")
                         {
-                            salesHead.DelDesc = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.IsTemplate && x.SalesOrderLine.Count > 0).Last().DelDesc;
-                            salesHead.DelAddress1 = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.IsTemplate && x.SalesOrderLine.Count > 0).Last().DelAddress1;
-                            salesHead.DelAddress2 = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.IsTemplate && x.SalesOrderLine.Count > 0).Last().DelAddress2;
-                            salesHead.DelAddress3 = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.IsTemplate && x.SalesOrderLine.Count > 0).Last().DelAddress3;
-                            salesHead.DelCity = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.IsTemplate && x.SalesOrderLine.Count > 0).Last().DelCity;
-                            salesHead.DelCountry = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.IsTemplate && x.SalesOrderLine.Count > 0).Last().DelCountry;
-                            salesHead.DelTown = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.IsTemplate && x.SalesOrderLine.Count > 0).Last().DelTown;
-                            salesHead.DelPostCode = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.IsTemplate && x.SalesOrderLine.Count > 0).Last().CustRef;
+                            salesHead.DelDesc = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.IsTemplate && x.SalesOrderLine.Where(s => s.IsDleted == false).Count() > 0).Last().DelDesc;
+                            salesHead.DelAddress1 = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.IsTemplate && x.SalesOrderLine.Where(s => s.IsDleted == false).Count() > 0).Last().DelAddress1;
+                            salesHead.DelAddress2 = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.IsTemplate && x.SalesOrderLine.Where(s => s.IsDleted == false).Count() > 0).Last().DelAddress2;
+                            salesHead.DelAddress3 = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.IsTemplate && x.SalesOrderLine.Where(s => s.IsDleted == false).Count() > 0).Last().DelAddress3;
+                            salesHead.DelCity = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.IsTemplate && x.SalesOrderLine.Where(s => s.IsDleted == false).Count() > 0).Last().DelCity;
+                            salesHead.DelCountry = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.IsTemplate && x.SalesOrderLine.Where(s => s.IsDleted == false).Count() > 0).Last().DelCountry;
+                            salesHead.DelTown = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.IsTemplate && x.SalesOrderLine.Where(s => s.IsDleted == false).Count() > 0).Last().DelTown;
+                            salesHead.DelPostCode = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.IsTemplate && x.SalesOrderLine.Where(s => s.IsDleted == false).Count() > 0).Last().CustRef;
                             if (salesHead.DelDesc == "")
                             {
                                 salesHead.DelDesc = _busAddress.GetAll(x => x.AddressID == myAddressID).First().Description;
@@ -487,19 +509,19 @@ namespace Maximus.Services
                                 salesHead.DelCountry = _countryCodes.GetAll(x => x.CountryID == myCountryID).First().Country;
                                 salesHead.DelPostCode = _busAddress.GetAll(x => x.AddressID == myAddressID).First().Postcode;
                                 salesHead.DelTown = _busAddress.GetAll(x => x.AddressID == myAddressID).First().Town;
-                                salesHead.CustRef = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.SalesOrderLine.Count > 0).Last().CustRef;
+                                salesHead.CustRef = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.SalesOrderLine.Where(s => s.IsDleted == false).Count() > 0).Last().CustRef;
                             }
                         }
                         else if (salesHead.EmployeeID != "")
                         {
-                            salesHead.DelDesc = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.EmployeeID == salesHead.EmployeeID && x.SalesOrderLine.Count > 0).Last().DelDesc;
-                            salesHead.DelAddress1 = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.EmployeeID == salesHead.EmployeeID && x.SalesOrderLine.Count > 0).Last().DelAddress1;
-                            salesHead.DelAddress2 = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.EmployeeID == salesHead.EmployeeID && x.SalesOrderLine.Count > 0).Last().DelAddress2;
+                            salesHead.DelDesc = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.EmployeeID == salesHead.EmployeeID && x.SalesOrderLine.Where(s => s.IsDleted == false).Count() > 0).Last().DelDesc;
+                            salesHead.DelAddress1 = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.EmployeeID == salesHead.EmployeeID && x.SalesOrderLine.Where(s => s.IsDleted == false).Count() > 0).Last().DelAddress1;
+                            salesHead.DelAddress2 = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.EmployeeID == salesHead.EmployeeID && x.SalesOrderLine.Where(s => s.IsDleted == false).Count() > 0).Last().DelAddress2;
                             salesHead.DelAddress3 = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.EmployeeID == salesHead.EmployeeID && x.SalesOrderLine.Count > 0).Last().DelAddress3;
-                            salesHead.DelCity = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.EmployeeID == salesHead.EmployeeID && x.SalesOrderLine.Count > 0).Last().DelCity;
-                            salesHead.DelCountry = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.EmployeeID == salesHead.EmployeeID && x.SalesOrderLine.Count > 0).Last().DelCountry;
-                            salesHead.DelTown = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.EmployeeID == salesHead.EmployeeID && x.SalesOrderLine.Count > 0).Last().DelTown;
-                            salesHead.DelPostCode = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.EmployeeID == salesHead.EmployeeID && x.SalesOrderLine.Count > 0).Last().CustRef;
+                            salesHead.DelCity = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.EmployeeID == salesHead.EmployeeID && x.SalesOrderLine.Where(s => s.IsDleted == false).Count() > 0).Last().DelCity;
+                            salesHead.DelCountry = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.EmployeeID == salesHead.EmployeeID && x.SalesOrderLine.Where(s => s.IsDleted == false).Count() > 0).Last().DelCountry;
+                            salesHead.DelTown = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.EmployeeID == salesHead.EmployeeID && x.SalesOrderLine.Where(s => s.IsDleted == false).Count() > 0).Last().DelTown;
+                            salesHead.DelPostCode = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.EmployeeID == salesHead.EmployeeID && x.SalesOrderLine.Where(s => s.IsDleted == false).Count() > 0).Last().CustRef;
                             if (salesHead.DelDesc == "")
                             {
                                 salesHead.DelDesc = _busAddress.GetAll(x => x.AddressID == myAddressID).First().Description;
@@ -510,7 +532,7 @@ namespace Maximus.Services
                                 salesHead.DelCountry = _countryCodes.GetAll(x => x.CountryID == myCountryID).First().Country;
                                 salesHead.DelPostCode = _busAddress.GetAll(x => x.AddressID == myAddressID).First().Postcode;
                                 salesHead.DelTown = _busAddress.GetAll(x => x.AddressID == myAddressID).First().Town;
-                                salesHead.CustRef = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.SalesOrderLine.Count > 0).Last().CustRef;
+                                salesHead.CustRef = salesHeaderLst.Where(x => x.SalesOrderLine != null && x.SalesOrderLine.Where(s => s.IsDleted == false).Count() > 0).Last().CustRef;
                             }
                         }
                     }
@@ -547,19 +569,51 @@ namespace Maximus.Services
 
                     }
                 }
-                if (salesHead.SalesOrderLine.Count > 0)
+                if (salesHead.SalesOrderLine.Where(s => s.IsDleted == false).Count() > 0)
                 {
 
-                    if (isRollOutOrder)
+                    if (isRollOutOrderEst)
                     {
                         if (salesHead.NomCode3 == null)
                         {
                             salesHead.NomCode3 = RolloutName.ToString();
                         }
+                        else if(salesHead.NomCode3 == "")
+                        {
+                            salesHead.NomCode3 = RolloutName.ToString();
+                        }
+                    }
+                    else
+                    {
+                        if (salesHead.NomCode3 != null)
+                        {
+                            salesHead.NomCode3 = "";
+                        }
+                        else if (salesHead.NomCode3 != "")
+                        {
+                            salesHead.NomCode3 = "";
+                        }
                     }
                     salesHead.Carrier = selectedcar.ToString().Trim().Substring(0, selectedcar.ToString().Trim().IndexOf('|'));
                     salesHead.CarrierCharge = carriage;
-                    salesHead.ReasonCode = 0;
+                    salesHead.ReasonCode = salesHead.ReasonCode==null? 0 : salesHead.ReasonCode;
+                    if (isRollOutOrderEst)
+                    {
+                        if (salesHead.NomCode3 == null | salesHead.NomCode3 == "")
+                        {
+                            if (_employeeRollout.Exists(s => s.EmployeeID == salesHead.EmployeeID))
+                            {
+                                salesHead.NomCode3 = _employeeRollout.GetAll(s => s.EmployeeID == salesHead.EmployeeID).First().RolloutName;
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (salesHead.NomCode3 != null | salesHead.NomCode3 != "")
+                        {
+                            salesHead.NomCode3 = "";
+                        }
+                        }
                     if (isedit)
                     {
                         if (_dp.UpdateSalesOrder(salesHead, empResetMnths, Browser, HTTP_X_FORWARDED_FOR, REMOTE_ADDR, isRollOutOrder, salesHead.OrderNo, busId, UserName.ToString(), isedit, POINTSREQ))
@@ -621,7 +675,7 @@ namespace Maximus.Services
                                     }
                                     else
                                     {
-                                        ResultSet.Add(new SaveOrderResultSet { EmployeeId = salesHead.EmployeeID, OrderNo = intSalesOrderNo, OrderConfirmation = "Order has not been confirmed" });
+                                        ResultSet.Add(new SaveOrderResultSet { EmployeeId = salesHead.EmployeeID, OrderNo = intSalesOrderNo, OrderConfirmation = "Order has not been confirmed", isedit = true });
                                     }
                                 }
                                 else
@@ -632,7 +686,7 @@ namespace Maximus.Services
                                     }
                                     else
                                     {
-                                        ResultSet.Add(new SaveOrderResultSet { EmployeeId = salesHead.EmployeeID, OrderNo = intSalesOrderNo, OrderConfirmation = "Order has not been confirmed" });
+                                        ResultSet.Add(new SaveOrderResultSet { EmployeeId = salesHead.EmployeeID, OrderNo = intSalesOrderNo, OrderConfirmation = "Order has not been confirmed", isedit = true });
                                     }
                                 }
                             }
@@ -646,22 +700,22 @@ namespace Maximus.Services
                                         int res = _dp.ExecuteQuerywidTrans(sSql);
                                         if (Convert.ToBoolean(DELADDR_USER_CREATE) == false)
                                         {
-                                            ResultSet.Add(new SaveOrderResultSet { EmployeeId = salesHead.EmployeeID, OrderNo = intSalesOrderNo, OrderConfirmation = "and also confirmed" });
+                                            ResultSet.Add(new SaveOrderResultSet { EmployeeId = salesHead.EmployeeID, OrderNo = intSalesOrderNo, OrderConfirmation = "and also confirmed", isedit = true });
                                         }
                                     }
                                     else
                                     {
-                                        ResultSet.Add(new SaveOrderResultSet { EmployeeId = salesHead.EmployeeID, OrderNo = intSalesOrderNo, OrderConfirmation = "\nOrder has not been Confirmed.\nEntitlement Exceed\n\n" });
+                                        ResultSet.Add(new SaveOrderResultSet { EmployeeId = salesHead.EmployeeID, OrderNo = intSalesOrderNo, OrderConfirmation = "\nOrder has not been Confirmed.\nEntitlement Exceed\n\n", isedit = true });
                                     }
                                 }
                                 else
                                 {
-                                    ResultSet.Add(new SaveOrderResultSet { EmployeeId = salesHead.EmployeeID, OrderNo = intSalesOrderNo, OrderConfirmation = "Order has not been confirmed" });
+                                    ResultSet.Add(new SaveOrderResultSet { EmployeeId = salesHead.EmployeeID, OrderNo = intSalesOrderNo, OrderConfirmation = "Order has not been confirmed", isedit = true });
                                 }
                             }
                             else
                             {
-                                ResultSet.Add(new SaveOrderResultSet { EmployeeId = salesHead.EmployeeID, OrderNo = intSalesOrderNo, OrderConfirmation = "Order has not been confirmed" });
+                                ResultSet.Add(new SaveOrderResultSet { EmployeeId = salesHead.EmployeeID, OrderNo = intSalesOrderNo, OrderConfirmation = "Order has not been confirmed",isedit=true });
                             }
                             if (booStackOrder)
                             {
@@ -706,7 +760,30 @@ namespace Maximus.Services
                             skip:;
                             if (!ResultSet.Any(x => x.OrderNo == intSalesOrderNo))
                             {
-                                ResultSet.Add(new SaveOrderResultSet { EmployeeId = salesHead.EmployeeID, OrderNo = intSalesOrderNo, OrderConfirmation = "" });
+                                ResultSet.Add(new SaveOrderResultSet { EmployeeId = salesHead.EmployeeID, OrderNo = intSalesOrderNo, OrderConfirmation = "", isedit = true });
+                            }
+                            try
+                            {
+                                if (_pointsByUcode.Exists(s => s.UcodeID == salesHead.UCodeId))
+                                {
+                                    var message = GetEmailMessage(salesHead, RolloutName, intManPackNext, pricePermission, ONLCUSREFLBL, cmpLogo, custLogo, intSalesOrderNo, true,updModel);
+                                   
+                                    ConfirmationMailProcedure("Order confirmation", ueMailEMail, adminMail, mailUsername, mailPassword, mailPort, mailServer, message.OrderConfirmationemail, salesHead.CustID, salesHead.OnlineUserID, salesHead.EmployeeID, "sasidharan@e4k.co", "", "");
+
+                                    ResultSet.First().OrderConfirmationPop = message.OrderConfirmationPOP;
+                                }
+                                else
+                                {
+                                    var message1 = GetEmailMessage(salesHead, RolloutName, intManPackNext, pricePermission, ONLCUSREFLBL, cmpLogo, custLogo, intSalesOrderNo, true,updModel);
+                                    var message = GetEmergencyMail(salesHead, RolloutName, intManPackNext, pricePermission, ONLCUSREFLBL, cmpLogo, custLogo, intSalesOrderNo);
+                                    ConfirmationMailProcedure("Order confirmation", ueMailEMail, adminMail, mailUsername, mailPassword, mailPort, mailServer, message1.OrderConfirmationemail, salesHead.CustID, salesHead.OnlineUserID, salesHead.EmployeeID, "sasidharan@e4k.co", "", "");
+                                    //EmergencyMailingProcedure("Emergency Order! Order (" + intSalesOrderNo + ") has not been confirmed...", ueMailEMail, adminMail, mailUsername, mailPassword, mailPort, mailServer, message, salesHead.CustID, salesHead.EmployeeID, "", "");
+                                    ResultSet.First().OrderConfirmationPop = message1.OrderConfirmationPOP;
+                                }
+                            }
+                            catch(Exception e)
+                            {
+
                             }
                         }
                     }
@@ -714,7 +791,7 @@ namespace Maximus.Services
                     {
                         if (_dp.SaveSalesOrder(salesHead, empResetMnths, Browser, HTTP_X_FORWARDED_FOR, REMOTE_ADDR, isRollOutOrder, intSalesOrderNo, busId, UserName.ToString(), isedit, POINTSREQ))
                         {
-                            
+
                             if (isedit == false)
                             {
 
@@ -735,7 +812,7 @@ namespace Maximus.Services
                             {
                                 if (booStackOrder == false)
                                 {
-                                    if (Convert.ToBoolean(_dp.BusinessParam("AUTOCONFIRM", busId)))
+                                    if (Convert.ToBoolean(_dp.BusinessParam("AUTOCONFIRM", busId)) || booAutoConfirm)
                                     {
 
                                     }
@@ -749,7 +826,7 @@ namespace Maximus.Services
                             {
                                 if (booStackOrder == false)
                                 {
-                                    if (Convert.ToBoolean(_dp.BusinessParam("AUTOCONFIRM", busId)))
+                                    if (Convert.ToBoolean(_dp.BusinessParam("AUTOCONFIRM", busId)) || booAutoConfirm)
                                     {
                                         if (booEmpPointEntitleCheck)
                                         {
@@ -762,11 +839,20 @@ namespace Maximus.Services
                                         }
                                         else
                                         {
-                                            ResultSet.Add(new SaveOrderResultSet { EmployeeId = salesHead.EmployeeID, OrderNo = intSalesOrderNo, OrderConfirmation = "Order has not been confirmed" });
-                                            if (Convert.ToBoolean(DELADDR_USER_CREATE))
+                                            if (booAutoConfirm)
                                             {
                                                 sSql = "UPDATE tblsop_salesorder_header SET OnlineConfirm=1, OnlineConfirmDate='" + salesHead.OrderDate + "', OnlineConfirmedBy='" + UserName + "' WHERE OrderNo=" + intSalesOrderNo + " AND CompanyID='" + cmpId + "'";
                                                 _dp.ExecuteQuerywidTrans(sSql);
+                                                ResultSet.Add(new SaveOrderResultSet { EmployeeId = salesHead.EmployeeID, OrderNo = intSalesOrderNo, OrderConfirmation = "Order has been confirmed" });
+                                            }
+                                            else
+                                            {
+                                                ResultSet.Add(new SaveOrderResultSet { EmployeeId = salesHead.EmployeeID, OrderNo = intSalesOrderNo, OrderConfirmation = "Order has not been confirmed" });
+                                                if (Convert.ToBoolean(DELADDR_USER_CREATE))
+                                                {
+                                                    sSql = "UPDATE tblsop_salesorder_header SET OnlineConfirm=1, OnlineConfirmDate='" + salesHead.OrderDate + "', OnlineConfirmedBy='" + UserName + "' WHERE OrderNo=" + intSalesOrderNo + " AND CompanyID='" + cmpId + "'";
+                                                    _dp.ExecuteQuerywidTrans(sSql);
+                                                }
                                             }
                                         }
                                     }
@@ -779,7 +865,12 @@ namespace Maximus.Services
                                 {
                                     if (Convert.ToBoolean(_dp.BusinessParam("AUTOCONFIRM", busId)))
                                     {
-
+                                        ResultSet.Add(new SaveOrderResultSet { EmployeeId = salesHead.EmployeeID, OrderNo = intSalesOrderNo, OrderConfirmation = "Order has not been confirmed" });
+                                        if (Convert.ToBoolean(DELADDR_USER_CREATE))
+                                        {
+                                            sSql = "UPDATE tblsop_salesorder_header SET OnlineConfirm=1, OnlineConfirmDate='" + salesHead.OrderDate + "', OnlineConfirmedBy='" + UserName + "' WHERE OrderNo=" + intSalesOrderNo + " AND CompanyID='" + cmpId + "'";
+                                            _dp.ExecuteQuerywidTrans(sSql);
+                                        }
                                     }
                                     else
                                     {
@@ -863,16 +954,17 @@ namespace Maximus.Services
                             {
                                 if (_pointsByUcode.Exists(s => s.UcodeID == salesHead.UCodeId))
                                 {
-                                    var message = GetEmailMessage(salesHead, RolloutName, intManPackNext, pricePermission, ONLCUSREFLBL, cmpLogo, custLogo, intSalesOrderNo);
-                                    _dp.sendSmtpMail("Order confirmation",adminMail,   mailUsername,   mailPassword,   mailPort,   mailServer, message.OrderConfirmationemail);
+                                    var message = GetEmailMessage(salesHead, RolloutName, intManPackNext, pricePermission, ONLCUSREFLBL, cmpLogo, custLogo, intSalesOrderNo,false);
+                                    ConfirmationMailProcedure("Order confirmation", ueMailEMail, adminMail, mailUsername, mailPassword, mailPort, mailServer, message.OrderConfirmationemail, salesHead.CustID,salesHead.UserID, salesHead.EmployeeID, "sasidharan@e4k.co", "","");
+                                    
                                     ResultSet.First().OrderConfirmationPop = message.OrderConfirmationPOP;
                                 }
                                 else
                                 {
-                                    var message1= GetEmailMessage(salesHead, RolloutName, intManPackNext, pricePermission, ONLCUSREFLBL, cmpLogo, custLogo, intSalesOrderNo);
+                                    var message1 = GetEmailMessage(salesHead, RolloutName, intManPackNext, pricePermission, ONLCUSREFLBL, cmpLogo, custLogo, intSalesOrderNo, false);
                                     var message = GetEmergencyMail(salesHead, RolloutName, intManPackNext, pricePermission, ONLCUSREFLBL, cmpLogo, custLogo, intSalesOrderNo);
-                                    _dp.sendSmtpMail("Order confirmation",   adminMail,   mailUsername,   mailPassword,   mailPort,   mailServer, message1.OrderConfirmationemail);
-                                    _dp.sendSmtpMail("Emergency order",   adminMail,   mailUsername,   mailPassword,   mailPort,   mailServer, message);
+                                    ConfirmationMailProcedure("Order confirmation", ueMailEMail, adminMail, mailUsername, mailPassword, mailPort, mailServer, message1.OrderConfirmationemail, salesHead.CustID, salesHead.UserID, salesHead.EmployeeID, "sasidharan@e4k.co", "", "");
+                                    EmergencyMailingProcedure("Emergency Order! Order (" + intSalesOrderNo + ") has not been confirmed...",   ueMailEMail, adminMail, mailUsername, mailPassword, mailPort, mailServer, message,salesHead.CustID,salesHead.EmployeeID,"","");
                                     ResultSet.First().OrderConfirmationPop = message1.OrderConfirmationPOP;
                                 }
                             }
@@ -889,17 +981,133 @@ namespace Maximus.Services
                 }
                 AcceptResultSet.results = ResultSet;
                 AcceptResultSet.type = "";
-
             }
             return AcceptResultSet;
         }
         #endregion
+        #region EmergencyMailingProcedure
+        public void EmergencyMailingProcedure(string subject,string ueMailEMail, string adminMail, string mailUsername, string mailPassword, string mailPort, string mailServer, string message,string busId,string empId,string bcc,string cc)
+        {
+            string headOfficeEmail = "";
+            if(Convert.ToBoolean(_dp.BusinessParam("REQALLOCEMAIL", busId)))
+            {
+                if(Convert.ToBoolean(_dp.BusinessParam("SEND_ENTITLE_EMAIL", busId)))
+                {
+                    //sending emergency order to the  user logged in and usedid employee
+                    string sSql = "";
+                      sSql = sSql+ "SELECT UserName, Email_ID, ForeName, SurName FROM tblusers t1 JOIN tblonline_userid_employee t2 ON t1.BusinessID=t2.BusinessID AND t1.UserName=t2.OnlineUserID  WHERE t1.Active='Y' AND t2.EmployeeID='" + empId + "' AND t2.BusinessID='" + busId + "'";
+                    DataTable dt = _dp.GetDataTable(sSql);
+                    if(dt.Rows.Count>0)
+                    {
+                        foreach(DataRow dr in dt.Rows)
+                        {
+                            _dp.sendSmtpMail(subject, adminMail, mailUsername, mailPassword, mailPort, mailServer, message, dr["Email_ID"].ToString(),bcc,cc);
+                        }
+                    }
+
+                    headOfficeEmail = _dp.BusinessParam("HeadOfficeEmail", busId);
+                    if(headOfficeEmail!="")
+                    {
+                        _dp.sendSmtpMail(subject, adminMail, mailUsername, mailPassword, mailPort, mailServer, message, headOfficeEmail, bcc,cc);
+                    }
+                }
+            }
+        }
+        #endregion
+
+        #region ConfirmationMailProcedure
+        public void ConfirmationMailProcedure(string subject,string ueMailEMail, string adminMail, string mailUsername, string mailPassword, string mailPort, string mailServer, string message,string busId, string userID, string empId,string tomail,string bcc,string cc)
+        {
+            string ueMail = _dp.BusinessParam("UsersManageEmail", busId);
+            string userMail = "";
+            string OrgOnlineUserID = "";
+            bool enableAdminMail = Convert.ToBoolean(_dp.BusinessParam("EnableAdminMail", busId));
+            ueMail = ueMail == "" ? ueMailEMail : ueMail;
+            string adminMailId = adminMail;
+            var user = _tblUser.GetAll(s => s.UserName == userID && s.BusinessID == busId).First();
+            if (user != null)
+            {
+                if (user.Email_ID != "")
+                {
+                   tomail = user.Email_ID;
+                   //tomail = "sasidharan@e4k.co";
+                }
+                if(enableAdminMail)
+                {
+                    bcc = ueMail;
+                }
+                if(OrgOnlineUserID!="")
+                {
+                     var orgUser = _tblUser.GetAll(s => s.UserName == OrgOnlineUserID && s.BusinessID == busId).Distinct().First();
+                    if(orgUser!=null)
+                    {
+                        if (orgUser.Email_ID!="")
+                        {
+                            cc = orgUser.Email_ID;
+                        }
+                    }
+                }
+                _dp.sendSmtpMail(subject, adminMail, mailUsername, mailPassword, mailPort, mailServer, message, tomail, bcc,cc);
+            }
+        //    Dim UEEmailID As String = BusinessParam("UsersManageEmail", Session("CustID"))
+        //Dim UserMailID As String = ""
+        //Dim EnableAdminMail As Boolean = CBoolstr(BusinessParam("EnableAdminMail", Session("CustID")))
+        //UEEmailID = IIf(UEEmailID = "", ConfigurationSettings.AppSettings.Item("EmailID"), UEEmailID)
+        //Dim AdminEmail As String = ConfigurationSettings.AppSettings.Item("AdminEmail")
+        //sql = "SELECT * FROM tblusers WHERE UserName='" & Session("UserID") & "' AND BusinessID='" & Session("CustID") & "'"
+        //    If Not rsEmail.EOF Then
+        //    LoginUser = " - " & rsEmail("ForeName").Value & " " & rsEmail("SurName").Value
+        //    If IsDBNull(rsEmail("Email_ID").Value) = False Then
+        //        UserMailID = rsEmail("Email_ID").Value
+        //        ObjMail1.To = rsEmail("Email_ID").Value
+        //        If EnableAdminMail Then
+        //            ObjMail1.Bcc = IIf(AdminEmail = UEEmailID, Nothing, AdminEmail)
+        //        End If
+        //        ObjMail1.From = ConfigurationSettings.AppSettings.Item("EmailID")
+        //        If Trim(Session("OrgOnlineUserID")) <> "" Then
+        //            orgUserEmail = GetDBScalarString("SELECT DISTINCT Email_ID FROM tblusers WHERE UserName='" & Trim(Session("OrgOnlineUserID")) & "' AND BusinessID='" & Session("CustID") & "'")
+        //            If orgUserEmail <> "" And UCase(orgUserEmail) <> UCase(ObjMail1.To) Then
+        //                ObjMail1.Cc = orgUserEmail
+        //            End If
+        //        End If
+        //        ObjMail1.Subject = "Online Order Confirmation..."
+        //        ObjMail1.BodyFormat = MailFormat.Html
+        //        ObjMail1.Body = "<HTML><HEAD></HEAD><BODY>"
+        //        'ObjMail1.Body &= "Dear <B>Mr/Ms. " & rsEmail("ForeName").Value & " " & rsEmail("SurName").Value & "</B><BR>"
+        //        ObjMail1.Body &= htmlstr
+        //        ObjMail1.Body &= "</BODY></HTML>"
+        //        SmtpMail.SmtpServer = ConfigurationSettings.AppSettings.Item("smtpserver")
+        //        Try
+        //            SMTPClientMethodToSendMail(ObjMail1)
+
+            //            'SmtpMail.Send(ObjMail1)
+            //            ' WriteScript("<script language='javascript'>alert('" & Convert.ToString(GetLocalResourceObject("Alert2.Text")) & "');</script>")
+            //        Catch exe As Exception
+            //            WriteScript("<script language='javascript'>alert('" & Convert.ToString(GetLocalResourceObject("Alert3.Text")) & "');</script>")
+            //        End Try
+            //        'Response.Write(ObjMail1.Body)
+            //    Else
+            //        WriteScript("<script language='javascript'>alert('" & Convert.ToString(GetLocalResourceObject("Alert4.Text")) & "');</script>")
+            //    End If
+            //End If
+            //rsEmail.Close()
+        }
+        #endregion
+
+        #region GetUpdateMailMessages
+        public string GetOlderOrderInfoMail(SalesOrderHeaderViewModel salesHead,string pricePermission)
+        {
+             
+            string message = _dp.FillExistingOrderLineMessage(salesHead, pricePermission);
+            return message;
+        }
+        #endregion
 
         #region SendEmail
-        public OrderConfirmation GetEmailMessage(SalesOrderHeaderViewModel salesHead, string rolloutname, long manpackNo, string pricePermission,string ONLCUSREFLBL,string cmpLogo,string custLogo,long orderNo)
+        public OrderConfirmation GetEmailMessage(SalesOrderHeaderViewModel salesHead, string rolloutname, long manpackNo, string pricePermission, string ONLCUSREFLBL, string cmpLogo, string custLogo, long orderNo,bool isedit=false, UpdateMailModel updModel=null)
         {
             DataTable saleOrder = new DataTable();
-            OrderConfirmation message =_dp.GetNecessaryMailTemplates(salesHead, rolloutname, custLogo, cmpLogo, manpackNo, pricePermission, ONLCUSREFLBL, orderNo);
+            OrderConfirmation message = _dp.GetNecessaryMailTemplates(salesHead, rolloutname, custLogo, cmpLogo, manpackNo, pricePermission, ONLCUSREFLBL, orderNo, isedit, updModel);
             return message;
         }
 
@@ -1083,34 +1291,47 @@ namespace Maximus.Services
             return salesVumodel;
         }
         #region DeleteOrder
-        public bool DeleteOrder(int orderNO, string empId, string onlineUserId,bool pointsReq, string busId, string adminMail, string mailUsername, string mailPassword, string mailPort, string mailServer)
+        public bool DeleteOrder(int orderNO, string empId, string onlineUserId, bool pointsReq, string busId, string adminMail, string mailUsername, string mailPassword, string mailPort, string mailServer,bool isEmergency,string reason="")
         {
             bool result = false;
             var dataCar = _dp.GetCarrierStyleCmbValue(busId);
             try
             {
-                if (_tblSalesHeader.Exists(s => s.OrderNo == orderNO && s.PinNo == empId && s.OnlineUserID == onlineUserId))
+                if (_tblSalesHeader.Exists(s => s.OrderNo == orderNO))
                 {
-                    var salesHead = _tblSalesHeader.GetAll(s => s.OrderNo == orderNO && s.PinNo == empId && s.OnlineUserID == onlineUserId).First();
+                    var salesHead = _tblSalesHeader.GetAll(s => s.OrderNo == orderNO).First();
                     var salesLines = _tblSalesLines.GetAll(s => s.OrderNo == orderNO).ToList();
                     foreach (var saleL in salesLines)
                     {
                         if (dataCar.Contains(saleL.StyleID) != true)
                         {
-                            var EmpSo = _stockCard.GetAll(s => s.BusinessID == busId && s.EmployeeID == empId && s.StyleID == saleL.StyleID).First();
-                            EmpSo.SOQty = EmpSo.SOQty - Convert.ToInt32(saleL.OrdQty.Value);
-                            _stockCard.Update(EmpSo);
-                            if (pointsReq)
+                            if (isEmergency == false)
                             {
-                                var ptsCard = _pointsCard.GetAll(s => s.BusinessID == busId && s.EmployeeID == empId && s.StyleID == saleL.StyleID).First();
-                                ptsCard.SOPoints = ptsCard.SOPoints - (Convert.ToInt32(saleL.OrdQty) * _pointsStyle.GetAll(s => s.StyleID == saleL.StyleID && s.UcodeID == salesHead.UCodeId).First().Points.Value);
-                                _pointsCard.Update(ptsCard);
+                                var EmpSo = _stockCard.GetAll(s => s.BusinessID == busId && s.EmployeeID == empId && s.StyleID == saleL.StyleID).First();
+                                EmpSo.SOQty = EmpSo.SOQty - Convert.ToInt32(saleL.OrdQty.Value);
+                                _stockCard.Update(EmpSo);
+                                if (pointsReq)
+                                {
+                                    var ptsCard = _pointsCard.GetAll(s => s.BusinessID == busId && s.EmployeeID == empId && s.StyleID == saleL.StyleID).First();
+                                    ptsCard.SOPoints = ptsCard.SOPoints - (Convert.ToInt32(saleL.OrdQty) * _pointsStyle.GetAll(s => s.StyleID == saleL.StyleID && s.UcodeID == salesHead.UCodeId).First().Points.Value);
+                                    _pointsCard.Update(ptsCard);
+                                }
                             }
                         }
                     }
                     _tblSalesLines.Delete(s => s.OrderNo == salesHead.OrderNo);
                     _tblSalesHeader.Delete(s => s.OrderNo == salesHead.OrderNo);
-                //   _dp.sendDeleteMail(orderNO,busId,salesHead.UserID,salesHead.PinNo,adminMail,mailUsername,mailPort);
+                 
+                   
+                        var rejectReason = new tblonline_rejectorder_reasons();
+                        rejectReason.BusinessId = busId;
+                        rejectReason.OrderNo = orderNO;
+                        rejectReason.EmployeeId = empId;
+                        rejectReason.RejectedBy = onlineUserId;
+                        rejectReason.RejectedDate = DateTime.Now;
+                        rejectReason.RejectedReason = reason;
+                        _rejectReasonTbl.Insert(rejectReason);
+                        _dp.sendDeleteMail(orderNO,reason, busId, onlineUserId, salesHead.PinNo, adminMail, mailUsername, mailPassword, mailPort, mailServer);
                     result = true;
                 }
             }
@@ -1125,7 +1346,7 @@ namespace Maximus.Services
         #endregion
 
 
-       
+
 
     }
 }

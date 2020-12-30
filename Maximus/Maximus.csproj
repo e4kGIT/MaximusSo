@@ -52,6 +52,7 @@
     <Reference Include="DevExpress.Printing.v16.1.Core, Version=16.1.15.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="DevExpress.RichEdit.v16.1.Core, Version=16.1.15.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="DevExpress.Utils.v16.1, Version=16.1.15.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
+    <Reference Include="DevExpress.Web.ASPxHtmlEditor.v16.1, Version=16.1.15.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="DevExpress.Web.ASPxThemes.v16.1, Version=16.1.15.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="DevExpress.Web.Mvc5.v16.1, Version=16.1.15.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
     <Reference Include="DevExpress.Web.v16.1, Version=16.1.15.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a" />
@@ -127,6 +128,10 @@
     <Reference Include="MySql.Data.EntityFramework, Version=8.0.18.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files (x86)\MySQL\MySQL Connector Net 8.0.18\Assemblies\v4.5.2\MySql.Data.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="MySql.Web, Version=8.0.18.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\MySQL\MySQL Connector Net 8.0.18\Assemblies\v4.5.2\MySql.Web.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL" />
     <Reference Include="Owin, Version=1.0.0.0, Culture=neutral, PublicKeyToken=f0ebd12fd5e55cc5, processorArchitecture=MSIL">
@@ -208,10 +213,13 @@
     <Content Include="Content\css\CustomCss.css" />
     <Content Include="Content\css\Media.css" />
     <Content Include="Content\css\menu.css" />
+    <Content Include="Content\Images\360.png" />
+    <Content Include="Content\Images\changepwd.png" />
     <Content Include="Content\Images\dimensions.jpg" />
     <Content Include="Content\Images\doc.png" />
     <Content Include="Content\Images\embroidery.png" />
     <Content Include="Content\Images\empHistory.png" />
+    <Content Include="Content\Images\multi.png" />
     <Content Include="Content\Images\saleLogo.png" />
     <Content Include="Content\Images\salesorder.netsuite.png" />
     <Content Include="Content\Images\search.png" />
@@ -273,12 +281,17 @@
     <Content Include="Content\themes\base\tooltip.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="MailTemplates\EditOrderTemplate.html" />
     <Content Include="MailTemplates\EmergencyEmail.html" />
+    <Content Include="MailTemplates\ConfirmOrderTemplate.html" />
+    <Content Include="MailTemplates\EmergencyMessage.html" />
+    <Content Include="MailTemplates\ForgetPassword.html" />
     <Content Include="MailTemplates\OrderDetail_Template.html" />
     <Content Include="MailTemplates\OrderHeader_Template.html" />
     <Content Include="MailTemplates\OrderLines_email.html" />
     <Content Include="MailTemplates\OrderLines_Template.html" />
-    <Content Include="MailTemplates\testtemplate.html" />
+    <Content Include="MailTemplates\OrderRejection.html" />
+    <Content Include="MailTemplates\ReturnOrderTemplate.html" />
     <Content Include="scripts\3deye.min.js" />
     <Content Include="scripts\ai.0.22.9-build00167.js" />
     <Content Include="scripts\ai.0.22.9-build00167.min.js" />
@@ -299,6 +312,51 @@
     <Content Include="scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="scripts\modernizr-2.6.2.js" />
     <Content Include="scripts\myScript.js" />
+    <Content Include="StyleImages\360images\10.png" />
+    <Content Include="StyleImages\360images\11.png" />
+    <Content Include="StyleImages\360images\12.png" />
+    <Content Include="StyleImages\360images\13.png" />
+    <Content Include="StyleImages\360images\14.png" />
+    <Content Include="StyleImages\360images\15.png" />
+    <Content Include="StyleImages\360images\16.png" />
+    <Content Include="StyleImages\360images\17.png" />
+    <Content Include="StyleImages\360images\18.png" />
+    <Content Include="StyleImages\360images\19.png" />
+    <Content Include="StyleImages\360images\20.png" />
+    <Content Include="StyleImages\360images\21.png" />
+    <Content Include="StyleImages\360images\22.png" />
+    <Content Include="StyleImages\360images\23.png" />
+    <Content Include="StyleImages\360images\24.png" />
+    <Content Include="StyleImages\360images\25.png" />
+    <Content Include="StyleImages\360images\26.png" />
+    <Content Include="StyleImages\360images\27.png" />
+    <Content Include="StyleImages\360images\28.png" />
+    <Content Include="StyleImages\360images\29.png" />
+    <Content Include="StyleImages\360images\3.png" />
+    <Content Include="StyleImages\360images\30.png" />
+    <Content Include="StyleImages\360images\31.png" />
+    <Content Include="StyleImages\360images\32.png" />
+    <Content Include="StyleImages\360images\33.png" />
+    <Content Include="StyleImages\360images\34.png" />
+    <Content Include="StyleImages\360images\35.png" />
+    <Content Include="StyleImages\360images\36.png" />
+    <Content Include="StyleImages\360images\37.png" />
+    <Content Include="StyleImages\360images\38.png" />
+    <Content Include="StyleImages\360images\39.png" />
+    <Content Include="StyleImages\360images\4.png" />
+    <Content Include="StyleImages\360images\40.png" />
+    <Content Include="StyleImages\360images\41.png" />
+    <Content Include="StyleImages\360images\43.png" />
+    <Content Include="StyleImages\360images\44.png" />
+    <Content Include="StyleImages\360images\45.png" />
+    <Content Include="StyleImages\360images\46.png" />
+    <Content Include="StyleImages\360images\47.png" />
+    <Content Include="StyleImages\360images\48.png" />
+    <Content Include="StyleImages\360images\5.png" />
+    <Content Include="StyleImages\360images\6.png" />
+    <Content Include="StyleImages\360images\7.png" />
+    <Content Include="StyleImages\360images\8.png" />
+    <Content Include="StyleImages\360images\9.png" />
     <Content Include="StyleImages\3MOB FLEECE2.jpg" />
     <Content Include="StyleImages\3MOB POLO1.jpg" />
     <Content Include="StyleImages\3MOB POLO2.jpg" />
@@ -923,7 +981,11 @@
     <Compile Include="Controllers\BasketController.cs" />
     <Compile Include="Controllers\EmployeeController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ImportExportController.cs" />
     <Compile Include="Controllers\OrderDisplayController.cs" />
+    <Compile Include="Controllers\PointsAdjustmentController.cs" />
+    <Compile Include="Controllers\ReportController.cs" />
+    <Compile Include="Controllers\ReturnController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Global.asax.cs">
@@ -993,6 +1055,38 @@
     <Content Include="Views\OrderDisplay\_OrdFilter.cshtml" />
     <Content Include="Views\OrderDisplay\_OrderDetail.cshtml" />
     <Content Include="Views\OrderDisplay\ConfrimOrder.cshtml" />
+    <Content Include="Views\OrderDisplay\PrintOrders.cshtml" />
+    <Content Include="Views\OrderDisplay\_PrintFilters.cshtml" />
+    <Content Include="Views\OrderDisplay\_employeePrintOrderSearch.cshtml" />
+    <Content Include="Views\OrderDisplay\_employeePrintEmpFilter.cshtml" />
+    <Content Include="Views\OrderDisplay\_SearchPanelPrint.cshtml" />
+    <Content Include="Views\Employee\_changePassword.cshtml" />
+    <Content Include="Views\ImportExport\ImportExportIndex.cshtml" />
+    <Content Include="Views\ImportExport\_UserGridViewPartial.cshtml" />
+    <Content Include="Views\ImportExport\_EmployeeGrdiviewPartial.cshtml" />
+    <Content Include="Views\ImportExport\_AddressGridViewPartial.cshtml" />
+    <Content Include="Views\Employee\_usercreatePartial.cshtml" />
+    <Content Include="Views\Employee\Welcome.cshtml" />
+    <Content Include="Views\Settings\Settings.cshtml" />
+    <Content Include="Views\Settings\_HtmlEditorPartial.cshtml" />
+    <Content Include="Views\Report\Index.cshtml" />
+    <Content Include="Views\Report\_rolloutReport.cshtml" />
+    <Content Include="Views\Report\_RolloutGridViewPartial.cshtml" />
+    <Content Include="Views\Employee\ReturnOrder.cshtml" />
+    <Content Include="Views\Employee\_ReturnOrderGridviewPartial.cshtml" />
+    <Content Include="Views\User\_forgetPassword.cshtml" />
+    <Content Include="Views\Employee\UserModule.cshtml" />
+    <Content Include="Views\Employee\_UserGridviewPartial.cshtml" />
+    <Content Include="Views\Return\EditReturnOrder.cshtml" />
+    <Content Include="Views\Return\_EditReturnOrderGridviewPartial.cshtml" />
+    <Content Include="Views\Return\ReturnReorder.cshtml" />
+    <Content Include="Views\Return\_ReturnReorderGridviewPartial.cshtml" />
+    <Content Include="Views\Return\_PopReorderPartial.cshtml" />
+    <Content Include="Views\Return\_ReorderGridviewPartial.cshtml" />
+    <Content Include="Views\Home\_Deliveryaddress.cshtml" />
+    <Content Include="Views\Return\_Deliveryaddress.cshtml" />
+    <Content Include="Views\Return\_ReturnCollectionPop.cshtml" />
+    <Content Include="Views\Basket\_DeleteOrderPrompt.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1004,6 +1098,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Content\ExternalFiles\" />
     <Folder Include="Models\" />
+    <Folder Include="Views\PointsAdjustment\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

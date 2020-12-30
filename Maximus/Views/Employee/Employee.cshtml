@@ -1,4 +1,10 @@
-﻿
+﻿<script>
+    $(document).ready(function () {
+        //checkEmpEmail();
+        //GetRolloutCheck();
+        EmergencyMessagePop();
+    });
+</script>
 
 @{
     if ((bool)Session["IsManPack"])
@@ -114,11 +120,11 @@
                 }
                 </div>*@
 
-        @if (Convert.ToBoolean(Session["OnStop"])==false)
+        @if (Convert.ToBoolean(Session["OnStop"]) == false)
         {
-            if (((List<Maximus.Data.Models.EmployeeViewModel>)Session["EmployeeViewModel"]).Count!=1)
+            if (((List<Maximus.Data.Models.EmployeeViewModel>)Session["EmployeeViewModel"]).Count != 1 && (bool)Session["IsBulkOrder1"] == false)
             {
-            @Html.DevExpress().RoundPanel(settings =>
+                @Html.DevExpress().RoundPanel(settings =>
        {
            settings.Name = "empFilter";
            settings.AllowCollapsingByHeaderClick = true;
@@ -145,44 +151,94 @@
 {
     <div class="row">
         <div id="EmployeeGridViewPartial">
-            @Html.Action("BulkOrderPartial")
+            <center>@Html.Action("BulkOrderPartial")</center>
         </div>
     </div>
 }
 
 @if ((bool)Session["IsManPack"])
 {
-    
 
 
-                                                    if (Convert.ToBoolean(Session["OnStop"]))
-                                                    {
-                                                        <br />
+
+    if (Convert.ToBoolean(Session["OnStop"]))
+    {
+        <br />
                                                         <center>
-                                                            <h3 style="color:white"> Sorry but you cannot place any orders at the moment . Please contact customer services
-</h3>
+                                                            <h3 style="color:white">
+                                                                Sorry but you cannot place any orders at the moment . Please contact customer services
+                                                            </h3>
                                                         </center>
                                                         <br />
-                                                    }
+    }
 
-                                                    if (ViewBag.HideSearch)
-                                                    {
+    if (ViewBag.HideSearch)
+    {
 
-                                                        <div class="row">
-                                                            <div id="EmployeeGridViewPartial">
-                                                            </div>
-                                                        </div>
-                                                    }
-                                                    else
-                                                    {
-                                                        <div class="row">
-                                                             
-                                                            <div class="col-md-12">
-                                                                <div id="EmployeeGridViewPartial">
-                                                                    @Html.Action("EmployeeGridViewPartial")
-                                                                </div>
-                                                            </div>
-                                                            
-                                                        </div>
-                                                        }
-                                                    }
+        <div class="row">
+            <div id="EmployeeGridViewPartial">
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="row">
+
+            <div class="col-md-12">
+                <div id="EmployeeGridViewPartial">
+                    @Html.Action("EmployeeGridViewPartial")
+                </div>
+            </div>
+
+        </div>
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        @*<div class="row">
+            <div class="col-md-1"></div>
+            <div class="col-md-10">
+                <div class="ROW">
+                    <div class="col-md-2 col-lg-2 col-xs-4 col-sm-4">
+                        <center><b>freestock: 20</b></center>
+                        <label class='swatchLabel'>
+
+                            <input type='radio' checked id='radio' />
+                            <span class='spanner1'>
+                                <center>1</center>
+                            </span>
+                        </label>
+                    </div>
+                    <div class="col-md-2 col-lg-2 col-xs-4 col-sm-4">
+                        <center><b>freestock: 20</b></center>
+                        <label class='swatchLabel'>
+                            <input type='radio' checked id='radio' />
+                            <span class='spanner1'>
+                                <center>2</center>
+                            </span>
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-1"></div>*@
+
+
+
+
+        </div>

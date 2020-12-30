@@ -1,0 +1,25 @@
+﻿
+<div class="row">
+    <center><h3>Search order</h3></center>
+    <br />
+     
+    <div class="col-md-11">
+        <div class="row" style="border:solid .5px;padding:10px;">
+            <div class="col-md-6">@Html.DevExpress().TextBox(s => { s.Name = "FrstOrderNo";s.Properties.Caption = "First order.No"; }).GetHtml()</div>
+            <div class="col-md-6">@Html.DevExpress().TextBox(s => { s.Name = "LastOrderno"; s.Properties.Caption = "Last order.No"; }).GetHtml()</div>
+            <br /><br /><br />  <div class="col-md-4"></div>
+                <div class="col-md-4"><center>@Html.DevExpress().Button(s => { s.Name = "btnByorderNO"; s.Text = "By order.No"; }).GetHtml()</center></div>
+            <div class="col-md-4"></div>
+            </div>
+        <br />
+        <div class="row" style="border:solid .5px;padding:10px;">
+            <div class="col-md-6">@Html.DevExpress().DateEdit(s => { s.Name = "FrstOrderDate";  s.Properties.Caption = "First order date"; }).GetHtml()</div>
+            <div class="col-md-6">@Html.DevExpress().DateEdit(s => { s.Name = "LastOrderDate";   s.Properties.Caption = "Last order date"; }).GetHtml()</div>
+            <br /><br /><br />
+            <div class="col-md-4"></div>
+            <div class="col-md-4"><center>@Html.DevExpress().Button(s => { s.Name = "btnByOrderDate";s.Text = "By Date";s.ClientSideEvents.Click = "FilterPrint"; }).GetHtml()</center></div> <div class="col-md-4"></div>
+        </div>
+        <br /><br /><br />
+    </div>
+               
+</div>

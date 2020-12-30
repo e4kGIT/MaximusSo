@@ -18,5 +18,6 @@ namespace Maximus.Data.models
         public string BusinessID { get; set; }
         public int ReasonCodeID { get; set; }
         public string ReasonDesc { get; set; }
+        public string UcodeId { get; set; }
     }
 }

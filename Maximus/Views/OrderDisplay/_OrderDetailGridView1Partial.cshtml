@@ -1,3 +1,4 @@
+@model IEnumerable<Maximus.Data.models.OrderDisplayDetail>
 @{
     var grid = Html.DevExpress().GridView(settings => {
         settings.Name = "OrderDetail1";
@@ -26,12 +27,20 @@
         settings.SettingsAdaptivity.AdaptiveDetailColumnCount = 1;
         settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = false;
         settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
+        if (Session["OT"].ToString().ToLower().Trim() == "rt")
+        {
+            settings.Columns.Add(s => { s.FieldName = "OrgOrderNo"; s.Caption = "Original OrderNo"; });
+        }
         settings.Columns.Add(s => { s.FieldName = "StyleID"; s.Caption = "Product"; });
         settings.Columns.Add(s => { s.FieldName = "ColourID"; s.Caption = "Colour"; });
         settings.Columns.Add(s => { s.FieldName = "SizeID"; s.Caption = "Size"; });
         settings.Columns.Add(s => { s.FieldName = "Description"; s.Caption = "Description"; });
         settings.Columns.Add(s => { s.FieldName = "OrdQty"; s.Caption = "Order Quantity"; });
         settings.Columns.Add(s => { s.FieldName = "Points"; s.Caption = "Points"; });
+        if(Model.Any(s=>s.Reason!=""))
+        {
+            settings.Columns.Add(s => { s.FieldName = "Reason"; s.Caption = "Reason"; });
+        }
 
     });
     if (ViewData["EditError"] != null){

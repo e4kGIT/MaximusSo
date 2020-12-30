@@ -462,3 +462,5 @@ G:\Sasidharan\Maximus\Maximus\bin\Maximus.Services.pdb
 G:\Sasidharan\Maximus\Maximus\bin\System.Runtime.CompilerServices.Unsafe.xml
 G:\Sasidharan\Maximus\Maximus\bin\Unity.Abstractions.pdb
 G:\Sasidharan\Maximus\Maximus\bin\Unity.Container.pdb
+G:\Sasidharan\Maximus\Maximus\bin\MySql.Web.dll
+G:\Sasidharan\Maximus\Maximus\bin\MySql.Web.xml

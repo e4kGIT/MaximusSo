@@ -1,7 +1,9 @@
 ﻿
+<h2>Show orders</h2>
 <div class="row">
-    <center>
-        @Html.DevExpress().RoundPanel(settings =>
+   
+        <center>
+            @Html.DevExpress().RoundPanel(settings =>
    {
        settings.Name = "OrderFilter";
        settings.AllowCollapsingByHeaderClick = true;
@@ -24,9 +26,10 @@
        settings.SetHeaderTemplateContent(X => { ViewContext.Writer.Write("<center><span class='glyphicon glyphicon-search'></span>  Order search</center>"); });
        settings.SetContent(() => Html.RenderPartial("_OrdFilter"));
    }).GetHtml()
-         
 
-    </center>
+
+        </center>
+    
 </div>
 
 
@@ -49,5 +52,5 @@
 
  <div id="ShowOrders" style="overflow:scroll">
     
-    @Html.Action("ShowOrderGridViewPartial")
+    @Html.Action("ShowOrderGridViewPartial",new { OrderType=TempData["OrderType"] })
 </div>

@@ -14,10 +14,11 @@ namespace Maximus.Data.models
     
     public partial class view_totalpointsused
     {
+        public string CompanyID { get; set; }
         public string BusinessID { get; set; }
         public string EmployeeID { get; set; }
         public string StyleID { get; set; }
         public string ColourID { get; set; }
-        public Nullable<int> TOTSOPOINTS { get; set; }
+        public Nullable<decimal> TOTSOPOINTS { get; set; }
     }
 }

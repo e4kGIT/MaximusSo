@@ -31,6 +31,8 @@ namespace Maximus.Data.models
         public Nullable<int> MinPts { get; set; }
         public Nullable<int> MaxPts { get; set; }
         public List<PointsStyle> LstStyles { get; set; }
+        public int ReturnPoints { get; set; }
+        public int ReorderPoints { get; set; }
     }
     public class PointsStyle
     {

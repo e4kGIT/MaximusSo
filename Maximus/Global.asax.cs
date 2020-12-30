@@ -69,5 +69,9 @@ namespace Maximus
                 }
             }
         }
+        protected void Application_BeginRequest(Object sender, EventArgs e)
+        {
+            DevExpress.Web.ASPxWebControl.SetIECompatibilityMode(11);
+        }
     }
 }

@@ -1,0 +1,153 @@
+﻿
+<center><h4 style="padding:0px;">User</h4></center>
+<div class="row">
+    <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4" style="margin-left:-26px;">
+        @Html.DevExpress().TextBox(txt =>
+   {
+       txt.Name = "txtUsrEmail";
+       txt.Properties.Caption = "Email";
+       txt.Properties.ValidationSettings.RegularExpression.ValidationExpression = @"\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*";
+       txt.Properties.ValidationSettings.RegularExpression.ErrorText = "Please enter a valid email";
+       txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.Text;
+       txt.Properties.ValidationSettings.ErrorTextPosition = ErrorTextPosition.Bottom;
+       txt.ControlStyle.CssClass = "";
+       if (ViewBag.Create == null)
+       {
+           if (ViewData["creatUsr"] != null)
+           {
+               txt.Text = ((Maximus.Data.models.EmpUserCreate)ViewData["creatUsr"]).Email == "" ? "" : ((Maximus.Data.models.EmpUserCreate)ViewData["creatUsr"]).Email;
+           }
+       }
+   }).GetHtml()
+    </div>
+
+    <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4" style="margin-left:11px;">
+        @Html.DevExpress().TextBox(txt =>
+   {
+       txt.Name = "cmbUsrRole";
+       txt.Properties.Caption = "Role";
+       txt.Properties.ValidationSettings.RequiredField.IsRequired = true;
+       txt.Properties.ValidationSettings.RequiredField.ErrorText = "This field is required";
+       txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.Text;
+       txt.Properties.ValidationSettings.ErrorTextPosition = ErrorTextPosition.Bottom;
+       txt.Properties.ValidationSettings.RequiredField.ErrorText = "This field is required";
+       ////foreach (var items in (List<string>)Session["Roles"])
+       ////{
+       ////    txt.Properties.Items.Add(items);
+       ////}
+       if (ViewBag.Create == null)
+       {
+           if (ViewData["creatUsr"] != null)
+           {
+               txt.Text = ((Maximus.Data.models.EmpUserCreate)ViewData["creatUsr"]).role;
+           }
+       }
+       else
+       {
+           txt.Text = "User";
+       }
+       txt.ReadOnly = true;
+   }).GetHtml()
+    </div>
+
+    <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4" style="margin-left:14px;">
+        @Html.DevExpress().ComboBox(txt =>
+   {
+       txt.Name = "cmbRollout";
+       txt.Properties.Caption = "Re Issue";
+       txt.Properties.ValidationSettings.RequiredField.IsRequired = true;
+       txt.Properties.ValidationSettings.RequiredField.ErrorText = "This field is required";
+       txt.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.Text;
+       txt.Properties.ValidationSettings.ErrorTextPosition = ErrorTextPosition.Bottom;
+
+       foreach (var items in ((List<string>)Session["Emprolloutnames"]).OrderBy(s => s).ToList())
+       {
+           txt.Properties.Items.Add(items);
+       }
+       if (ViewBag.Create == null)
+       {
+           if (ViewData["creatUsr"] != null)
+           {
+               txt.SelectedIndex = ((List<string>)Session["Emprolloutnames"]).OrderBy(s => s).ToList().IndexOf(((Maximus.Data.models.EmpUserCreate)ViewData["creatUsr"]).rollout);
+           }
+       }
+   }).GetHtml()
+    </div>
+</div>
+<br />
+<div class="row">
+    @if (Session["chkCreateEmpUsr"].ToString().ToLower() == "show")
+    {
+
+        <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4" style="margin-left: -38px;">
+            @Html.DevExpress().CheckBox(txt =>
+       {
+           txt.Name = "empMapUsr";
+           txt.Text = "Map user to this employee";
+           txt.Checked = true;
+           if (ViewBag.Create == null)
+           {
+               txt.ReadOnly = true;
+           }
+
+       }).GetHtml()
+        </div>
+
+    }
+    <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4" style="margin-left: -27px;">
+        <div class="col-md-6"><label class="dxeCaption_Material" style="color: #333;margin-left: 0px;margin-top: 5px;">Last order date:</label></div>
+        <div class="col-md-6">
+            @if (ViewBag.Create == null)
+            {
+                if (ViewData["creatUsr"] != null)
+                {
+                    //
+                    <input class="dxeTextBoxSys dxeTextBox_Material"  style="line-height:26px;width:172px;margin-left: -19px;" type="date" id="empUsrLastOrdDate" name="trip-start" value="@(((Maximus.Data.models.EmpUserCreate)ViewData["creatUsr"]).lastOrdDate.Value.ToString("dd-MM-yyyy"))">
+                }
+            }
+            else
+            {
+                <input class="dxeTextBoxSys dxeTextBox_Material" style="line-height:26px;width:172px;margin-left: -19px;" type="date" id="empUsrLastOrdDate" name="trip-start" value="@DateTime.Now.ToString("dd-MM-yyyy")">
+            }
+        </div>
+        @*@Html.DevExpress().DateEdit(txt =>
+            {
+                txt.Name = "empUsrLastOrdDate";
+                txt.Properties.Caption = "Last order date";
+                txt.Properties.EditFormat = EditFormat.Custom;
+                txt.Properties.DisplayFormatString = "dd.MM.yyyy";
+                txt.Properties.EditFormatString = "dd.MM.yyyy";
+
+            }).GetHtml()*@
+    </div>
+    <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4" style="margin-left: 27px;">
+
+        <div class="col-md-6"><label class="dxeCaption_Material" style="color: #333;margin-left: 0px;margin-top: 5px;">Next order date:</label></div>
+        <div class="col-md-6">
+            @if (ViewBag.Create == null)
+            {
+                if (ViewData["creatUsr"] != null)
+                {
+                    <input class="dxeTextBoxSys dxeTextBox_Material" style="line-height:26px;width:172px;margin-left: -19px;" type="date" id="empUsrNextOrdDate" name="trip-start" value="@(((Maximus.Data.models.EmpUserCreate)ViewData["creatUsr"]).nextOrdDate.Value.ToString("dd-MM-yyyy"))">
+                }
+            }
+            else
+            {
+                <input class="dxeTextBoxSys dxeTextBox_Material" style="line-height:26px;width:172px;margin-left: -19px;" type="date" id="empUsrNextOrdDate" name="trip-start" value="@DateTime.Now.ToString("dd-MM-yyyy")">
+            }
+        </div>
+
+
+        @*@Html.DevExpress().DateEdit(txt =>
+            {
+                txt.Name = "empUsrNextOrdDate";
+                txt.Properties.Caption = "Next order date";
+                txt.Properties.EditFormat = EditFormat.Custom;
+                txt.Properties.DisplayFormatString = "dd.MM.yyyy";
+                txt.Properties.EditFormatString = "dd.MM.yyyy";
+
+            }).GetHtml()*@
+
+    </div>
+    </div>
+

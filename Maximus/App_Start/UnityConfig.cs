@@ -25,6 +25,9 @@ namespace Maximus
             container.RegisterType<ISettings, SettingsService>();
             container.RegisterType<IEmployee, EmployeeService>();
             container.RegisterType<IOrderDisplay, OrderDisplayService>();
+            container.RegisterType<IReturn, ReturnService>();
+            container.RegisterType<IImportExport, ImportExportService>();
+            container.RegisterType<IPointsAdjustment, PointsAdjustmentService>();
             container.RegisterType<IUnitOfWork, UnitOfWork>();
             DependencyResolver.SetResolver(new UnityDependencyResolver(container));
         }

@@ -1,0 +1,285 @@
+﻿@{
+    Maximus.Data.Interface.Concrete.IUnitOfWork _unitOfWork = new Maximus.Data.InterFace.UnitOfWork();
+    Maximus.Controllers.HomeController home = new Maximus.Controllers.HomeController(_unitOfWork);
+    Maximus.Data.Models.DataProcessing hc = new Maximus.Data.Models.DataProcessing(_unitOfWork);
+    Maximus.Services.Interface.IDataConnection _dataConnection = new Maximus.Services.DataConnectionService(_unitOfWork);
+}
+
+@{
+
+    var cardView = Html.DevExpress().CardView(settings =>
+    {
+
+        settings.Name = "CardViewPopUP";
+        settings.CallbackRouteValues = new { Controller = "Return", Action = "CardViewPartial" };
+        settings.SettingsPager.SettingsTableLayout.ColumnCount = 1;
+        settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+        settings.SettingsPager.Mode = GridViewPagerMode.ShowPager;
+        settings.SettingsPager.Visible = true;
+        settings.Settings.ShowHeaderPanel = false;
+        settings.Settings.ShowHeaderFilterButton = true;
+        settings.Settings.EnableFilterControlPopupMenuScrolling = false;
+        settings.SettingsBehavior.AllowSelectByCardClick = true;
+        //settings.Settings.ShowHeaderPanel = true;
+        settings.Columns.Add(c =>
+        {
+            c.FieldName = "Dimensions";
+            c.Settings.AllowHeaderFilter = DefaultBoolean.False;
+            c.Settings.AllowSort = DefaultBoolean.False;
+        });
+        var pointsCardtbl = Session["PointsCard"] != null ? (List<Maximus.Data.models.view_totalpointsused>)Session["PointsCard"] : new List<Maximus.Data.models.view_totalpointsused>();
+        var pointsStyletbl = Session["PointsStyle"] != null ? (List<Maximus.Data.models.tblaccemp_stylepoints>)Session["PointsStyle"] : new List<Maximus.Data.models.tblaccemp_stylepoints>();
+        var pointsUcodetbl = Session["PointsUcode"] != null ? (List<Maximus.Data.models.tblaccemp_ucodepoints>)Session["PointsUcode"] : new List<Maximus.Data.models.tblaccemp_ucodepoints>();
+        var pointsAdjustmenttbl = Session["PointsAdjustment"] != null ? (List<Maximus.Data.models.tblaccemp_pointsadjustment>)Session["PointsAdjustment"] : new List<Maximus.Data.models.tblaccemp_pointsadjustment>();
+        var businessId = "";
+        var selUcode = "";
+        settings.CardLayoutProperties.Items.Add(x =>
+        {
+            x.ColumnName = "Dimensions";
+            x.ShowCaption = DefaultBoolean.False;
+            x.SetTemplateContent(col =>
+            {
+                var freeText = (string)(DataBinder.Eval(col.DataItem, "Dimensions"));
+                var style = (DataBinder.Eval(col.DataItem, "StyleID")).ToString();
+                string appPath = System.Web.HttpContext.Current.Request.MapPath(@"~\");
+                var orgStyle = (DataBinder.Eval(col.DataItem, "OriginalStyleid")).ToString();
+                if (freeText != null && freeText != "")
+                {
+                    var svmLst = home._dimension1.GetAll(s => s.FreeText.ToLower() == freeText.ToLower() && s.freetexttype.ToLower().Contains("dim")).Select(s => new Maximus.Data.Models.styleViewmodel { StyleID = s.StyleId, Description = s.Description, StyleImage = s.StyleImage }).ToList();
+                    //var svm=entity.styleby_freetextview.Where(s=>s.FreeText==f)
+                    var data1 = home._fskSetValues.Exists(sas => sas.SettingID.ToUpper().Trim() == "FITDIM_STYLE_DESC" && sas.StyleID.ToLower().Trim() == orgStyle.ToLower().Trim()) ? home._fskSetValues.GetAll(sas => sas.SettingID.ToUpper().Trim() == "FITDIM_STYLE_DESC" && sas.StyleID.ToLower().Trim() == orgStyle.ToLower().Trim()).First().Value : "";
+                    string selecetedUcode = Session["SelectedUcode"].ToString();
+                    string selEMP = Session["SelectedEmp"].ToString();
+                    int styPointss = pointsStyletbl.Any(sq => sq.UcodeID == selecetedUcode && sq.StyleID == orgStyle && sq.BusinessID == businessId) ? pointsStyletbl.Where(sq => sq.UcodeID == selecetedUcode && sq.StyleID == orgStyle && sq.BusinessID == businessId).First().MinPts.Value : 0;
+                    var content = "<div class='row'><div class='col-md-11'><div class='row mandatoryStylecart'><center><b>" + data1 + "</b></center><hr/>";
+                    var contentPts = "";
+                    var contentpts1 = "";
+                    var svmStyLst = svmLst.Select(s => s.StyleID).ToList();
+
+                    string busId = Session["BuisnessId"].ToString();
+                    string ucodeId = Session["selectedUcodes"].ToString();
+                    var lstAdj = pointsAdjustmenttbl.Any(s => s.StyleID != "" && s.BusinessID == busId && s.UcodeID == ucodeId) ? pointsAdjustmenttbl.Where(s => s.BusinessID == busId && s.UcodeID == ucodeId).Select(s => s.StyleID).Distinct().ToList() : new List<string>();
+                    var mapStyleID = pointsAdjustmenttbl.Any(s => s.MapStyleID != "" && s.BusinessID == busId && s.UcodeID == ucodeId) ? pointsAdjustmenttbl.Where(s => s.BusinessID == busId && s.UcodeID == ucodeId).Select(s => s.MapStyleID).Distinct().ToList() : new List<string>();
+                    var svmLst1 = new List<Maximus.Data.models.StyleViewModelPts>();
+                    var fskSty = (List<Maximus.Data.models.tblfsk_style_freetext>)Session["StyleFreeText"];
+                    var styByFree = (List<Maximus.Data.models.styleby_freetextview>)Session["StyleByFreetext"];
+                    foreach (var svmStyl in svmLst)
+                    {
+                        svmLst1.Add(new Maximus.Data.models.StyleViewModelPts { OrgStyle = svmStyl.StyleID, styl = svmStyl.StyleID });
+                    }
+                    foreach (var fitStyl in svmStyLst)
+                    {
+                        var hasFit = fskSty.Where(ss => ss.StyleId == fitStyl).Any(ss => ss.FreeTextType == "FITALLOC") ? fskSty.Where(ss => ss.StyleId == fitStyl & ss.FreeTextType == "FITALLOC").First().FreeText : "";
+                        if (hasFit != "")
+                        {
+                            var newStyl = styByFree.Any(ss => ss.FreeText == hasFit) ? styByFree.Where(ss => ss.FreeText == hasFit).First().StyleID : "";
+                            if (newStyl != "")
+                            {
+                                if (newStyl.Contains(","))
+                                {
+                                    foreach (var thisTy in newStyl.Split(','))
+                                    {
+                                        if (svmLst1.Any(s => s.styl.Contains(thisTy)) == false)
+                                        {
+                                            svmLst1.Add(new Maximus.Data.models.StyleViewModelPts { OrgStyle = fitStyl, styl = thisTy });
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    foreach (var svm in svmLst)
+                    {
+                        if (svm.StyleImage != null)
+                        {
+                            if (svm.StyleImage.Contains(":"))
+                            {
+                                if (System.IO.File.Exists(appPath + svm.StyleImage.Substring(svm.StyleImage.IndexOf(":") + 1, svm.StyleImage.Length - svm.StyleImage.IndexOf(":") - 1)) != true)
+                                {
+                                    svm.StyleImage = "/StyleImages/notfound.png";
+                                }
+                                else
+                                {
+                                    var data = svm.StyleImage.Substring(svm.StyleImage.IndexOf(":") + 1, svm.StyleImage.Length - svm.StyleImage.IndexOf(":") - 1);
+                                    svm.StyleImage = data.Replace("\\", "/");
+                                }
+                            }
+                            else
+                            {
+                                if (System.IO.File.Exists(appPath + svm.StyleImage) != true)
+                                {
+                                    svm.StyleImage = "/StyleImages/notfound.png";
+                                }
+                                else
+                                {
+                                    svm.StyleImage = svm.StyleImage;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            svm.StyleImage = "/StyleImages/notfound.png";
+                        }
+                        long cartPoints = 0;
+                        long cartDelPoints = 0;
+                        int soPoints = 0, mapPoints = 0;
+
+                        if (Convert.ToBoolean(Session["POINTSREQ"]))
+                        {
+                            if (((Maximus.Data.models.PointsModel)Session["Pointsmodel"]).LstStyles != null)
+                            {
+
+                                if (pointsCardtbl.Any(s => svmLst1.Distinct().Any(sa => sa.styl.Contains(s.StyleID) && s.EmployeeID == selEMP)))
+                                {
+                                    foreach (var styl in pointsCardtbl.Where(s => svmLst1.Distinct().Any(sa => sa.styl.Contains(s.StyleID) && s.EmployeeID == selEMP)).ToList())
+                                    {
+                                        if ((pointsStyletbl.Any(s => s.UcodeID == selUcode && s.StyleID == styl.StyleID && s.Points > 0)))
+                                        {
+                                            soPoints = soPoints + Convert.ToInt32((pointsCardtbl.Where(s => s.StyleID == styl.StyleID && s.EmployeeID == selEMP).Sum(s => s.TOTSOPOINTS).Value)) / (pointsStyletbl.Where(s => s.UcodeID == selUcode && s.StyleID == styl.StyleID).First().Points.Value);
+
+                                        }
+                                        else if ((pointsStyletbl.Any(s => s.UcodeID == selUcode && s.StyleID == styl.StyleID && s.Points == 0)))
+                                        {
+                                            if (home._stockCard.Exists(s => svmLst1.Distinct().Any(sa => sa.styl.Contains(s.StyleID) && s.EmployeeID == selEMP)))
+                                            {
+                                                soPoints = soPoints + home._stockCard.GetAll(s => s.StyleID == styl.StyleID && s.EmployeeID == selEMP).Sum(s => s.SOQty).Value + home._stockCard.GetAll(s => s.StyleID == styl.StyleID && s.EmployeeID == selEMP).Sum(s => s.PickQty).Value + home._stockCard.GetAll(s => s.StyleID == styl.StyleID && s.EmployeeID == selEMP).Sum(s => s.InvQty).Value;
+                                            }
+                                        }
+                                    }
+                                }
+                                //if (lstAdj.Contains(orgStyle))
+                                //{
+                                //    if (Convert.ToBoolean(Session["IsEditing"]))
+                                //    {
+                                //        mapPoints = mapPoints + Convert.ToInt32(((List<Maximus.Data.Models.SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(s => s.UCodeId == ucodeId && s.EmployeeID == selEMP).First().SalesOrderLine.Any(s => mapStyleID.Contains(s.StyleID) && s.IsDleted == false) ? ((List<Maximus.Data.Models.SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(s => s.UCodeId == ucodeId && s.EmployeeID == selEMP).First().SalesOrderLine.Where(s => mapStyleID.Contains(s.StyleID) && s.IsDleted == false).Sum(s => s.OrdQty) : 0);
+                                //    }
+                                //    else
+                                //    {
+
+                                //        mapPoints = mapPoints + (pointsCardtbl.Any(s => mapStyleID.Contains(s.StyleID) && s.EmployeeID == selEMP) ?
+                                //           Convert.ToInt32((pointsCardtbl.Where(s => mapStyleID.Contains(s.StyleID) && s.EmployeeID == selEMP).Sum(s => s.TOTSOPOINTS).Value)) / (pointsStyletbl.Where(s => s.UcodeID == selUcode && mapStyleID.Contains(s.StyleID)).First().Points.Value) : 0);
+                                //        mapPoints = mapPoints + Convert.ToInt32(((List<Maximus.Data.Models.SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(s => s.UCodeId == ucodeId && s.EmployeeID == selEMP).First().SalesOrderLine.Any(s => mapStyleID.Contains(s.StyleID) && s.IsDleted == false) ? ((List<Maximus.Data.Models.SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(s => s.UCodeId == ucodeId && s.EmployeeID == selEMP).First().SalesOrderLine.Where(s => mapStyleID.Contains(s.StyleID) && s.IsDleted == false).Sum(s => s.OrdQty) : 0);
+                                //    }
+                                //}
+
+                                int minPoints = 0;
+                                if (Convert.ToBoolean(Session["IsEditing"]))
+                                {
+                                    soPoints = soPoints - Convert.ToInt32(cartDelPoints);
+                                }
+                                foreach (var item in ((Maximus.Data.models.PointsModel)Session["Pointsmodel"]).LstStyles)
+                                {
+                                    if (item.Style == svm.StyleID)
+                                    {
+                                        if (styPointss > 0)
+                                        {
+                                            minPoints = styPointss > soPoints ? (styPointss - mapPoints) - soPoints : 0;
+                                            minPoints = Convert.ToBoolean(Session["IsEditing"]) ? styPointss < minPoints + Convert.ToInt32(cartPoints) ? styPointss : minPoints + Convert.ToInt32(cartPoints) : styPointss == Convert.ToInt32(cartPoints) ? styPointss : minPoints + Convert.ToInt32(cartPoints);
+                                            minPoints = minPoints < 0 ? 0 : minPoints;
+                                        }
+                                        else
+                                        {
+                                            minPoints = 0;
+                                        }
+                                        var lsts = (List<Maximus.Data.models.StyleAndMinPoints>)Session["StyleMinPoints"];
+                                        contentpts1 = contentpts1 + string.Format("<div class='col-md-2'><br/><center><span>Points: " + item.Points + "</span></center><br/><div class='dimAllocdiv'><a style=\"cursor:pointer;\" onclick=\"getRtnCard1('{1}','{3}','" + data1 + "')\"><center><img src='{0}'  style=\"margin:3px;\" height=\"150\" width=\"100\" /><br/>{2}</center></a></div></div>", svm.StyleImage, svm.StyleID, svm.Description, orgStyle);
+
+                                        if (minPoints >= 0)
+                                        {
+                                            var sssssssss = ((List<Maximus.Data.models.StyleAndMinPoints>)Session["StyleMinPoints"]);
+                                            if (((List<Maximus.Data.models.StyleAndMinPoints>)Session["StyleMinPoints"]).Count == 0)
+                                            {
+
+                                                ((List<Maximus.Data.models.StyleAndMinPoints>)Session["StyleMinPoints"]).Add(new Maximus.Data.models.StyleAndMinPoints { OrgStyle = orgStyle, MinPoints = minPoints, OrgMinPoints = minPoints, TruePoints = styPointss, Points = item.Points, Style = svm.StyleID, CatCaption = data1 });
+                                            }
+                                            else if (((List<Maximus.Data.models.StyleAndMinPoints>)Session["StyleMinPoints"]).Any(ss => ss.Style == item.Style))
+                                            {
+                                                ((List<Maximus.Data.models.StyleAndMinPoints>)Session["StyleMinPoints"]).Remove(((List<Maximus.Data.models.StyleAndMinPoints>)Session["StyleMinPoints"]).Where(ss => ss.Style == item.Style).First());
+                                                ((List<Maximus.Data.models.StyleAndMinPoints>)Session["StyleMinPoints"]).Add(new Maximus.Data.models.StyleAndMinPoints { OrgStyle = orgStyle, MinPoints = minPoints, OrgMinPoints = minPoints, TruePoints = styPointss, Points = item.Points, Style = svm.StyleID, CatCaption = data1 });
+                                            }
+                                            else
+                                            {
+                                                ((List<Maximus.Data.models.StyleAndMinPoints>)Session["StyleMinPoints"]).Add(new Maximus.Data.models.StyleAndMinPoints { OrgStyle = orgStyle, MinPoints = minPoints, OrgMinPoints = minPoints, TruePoints = styPointss, Points = item.Points, Style = svm.StyleID, CatCaption = data1 });
+                                            }
+                                            foreach (var styleFit in svmLst1)
+                                            {
+                                                if (((List<Maximus.Data.models.StyleAndMinPoints>)Session["StyleMinPoints"]).Count == 0)
+                                                {
+
+                                                    ((List<Maximus.Data.models.StyleAndMinPoints>)Session["StyleMinPoints"]).Add(new Maximus.Data.models.StyleAndMinPoints { OrgStyle = orgStyle, MinPoints = minPoints, OrgMinPoints = minPoints, TruePoints = styPointss, Points = item.Points, Style = styleFit.styl, CatCaption = data1 });
+                                                }
+                                                else if (((List<Maximus.Data.models.StyleAndMinPoints>)Session["StyleMinPoints"]).Any(ss => ss.Style == styleFit.styl))
+                                                {
+                                                    ((List<Maximus.Data.models.StyleAndMinPoints>)Session["StyleMinPoints"]).Remove(((List<Maximus.Data.models.StyleAndMinPoints>)Session["StyleMinPoints"]).Where(ss => ss.Style == styleFit.styl).First());
+                                                    ((List<Maximus.Data.models.StyleAndMinPoints>)Session["StyleMinPoints"]).Add(new Maximus.Data.models.StyleAndMinPoints { OrgStyle = orgStyle, MinPoints = minPoints, OrgMinPoints = minPoints, TruePoints = styPointss, Points = item.Points, Style = styleFit.styl, CatCaption = data1 });
+                                                }
+                                                else
+                                                {
+                                                    ((List<Maximus.Data.models.StyleAndMinPoints>)Session["StyleMinPoints"]).Add(new Maximus.Data.models.StyleAndMinPoints { OrgStyle = orgStyle, MinPoints = minPoints, OrgMinPoints = minPoints, TruePoints = styPointss, Points = item.Points, Style = styleFit.styl, CatCaption = data1 });
+                                                }
+                                            }
+
+                                        }
+
+                                    }
+                                }
+
+                            }
+                            else
+                            {
+                                content = content + string.Format("<div class='col-md-2'><div class='dimAllocdiv'><a style=\"cursor:pointer;\" onclick=\"getRtnCard1('{1}','{3}')\"><center><img src='{0}'  style=\"margin:3px;\" height=\"150\" width=\"100\" /><br/>{2}</center></a></div></div>", svm.StyleImage, svm.StyleID, svm.Description, orgStyle);
+                            }
+                        }
+                        else
+                        {
+                            content = content + string.Format("<div class='col-md-2'><div class='dimAllocdiv'><a style=\"cursor:pointer;\" onclick=\"getRtnCard1('{1}','{3}')\"><center><img src='{0}'  style=\"margin:3px;\" height=\"150\" width=\"100\" /><br/>{2}</center></a></div></div>", svm.StyleImage, svm.StyleID, svm.Description, orgStyle);
+                        }
+
+                    }
+
+                    int minPts1 = ((List<Maximus.Data.models.StyleAndMinPoints>)Session["StyleMinPoints"]).Any(t => t.OrgStyle == orgStyle) ? ((List<Maximus.Data.models.StyleAndMinPoints>)Session["StyleMinPoints"]).Where(t => t.OrgStyle == orgStyle).Min(t => t.MinPoints) : 0;
+                    int truMinpTs = ((List<Maximus.Data.models.StyleAndMinPoints>)Session["StyleMinPoints"]).Any(t => t.OrgStyle == orgStyle) ? ((List<Maximus.Data.models.StyleAndMinPoints>)Session["StyleMinPoints"]).Where(t => t.OrgStyle == orgStyle).Min(t => t.TruePoints) : 0;
+
+                    if (minPts1 > 0 && Convert.ToBoolean(Session["POINTSREQ"].ToString()))
+                    {
+                        contentPts = contentPts + "<div class='row minPtsDiv_" + orgStyle + "'><center class='mandatoryStylecart'><span class='mandatoryStyle'>The mandatory quantity is :" + minPts1 + "</span></center></div>";
+                    }
+                    else if (minPts1 == 0 && truMinpTs > 0)
+                    {
+                        contentPts = contentPts + "<div class='row minPtsDiv_" + orgStyle + "' style='visibility:hidden;'><center class='mandatoryStylecart'><span class='mandatoryStyle'>The mandatory quantity is :<b>" + minPts1 + "</center></div>";
+
+                    }
+                    content = content + contentPts + contentpts1 + "</div></div><div class='col-md-1'>" + string.Format("<div style='margin-top: 14px;'><center> <img src='/Content/Images/empHistory.png' title='Entitlement and previous history' height='40' width='40' onclick=\"getEntitlementDIMENSION('{0}','{1}');\"/></center></div>", style, orgStyle) + "</div></div>";
+                    //Maximus.Data.Models.DataProcessing data = new Maximus.Data.Models.DataProcessing();
+
+                    //var svmLst = entity.ucodeby_freetextview.Where(ss => ss.DimFreeText == freeText).Select(ss => new Maximus.Data.Models.styleViewmodel { StyleID = ss.StyleID, OriginalStyleid = ss.StyleID, StyleImage = ss.StyleImage, Freetext = freeText, ProductGroup = ss.Product_Group.Value }).Distinct().ToList(); /*data.getFreeTextStyles(freeText, Session["SelectedEmp"].ToString(), Session["BuisnessId"].ToString());*/
+                    //var content = "<div class='row'>";
+                    //var orgStyle = (DataBinder.Eval(col.DataItem, "OriginalStyleid")).ToString();
+                    //foreach (var svm in svmLst)
+                    //{
+                    //    var dex =   home._tblFskStyle.Exists(sa => sa.StyleID == svm.StyleID) ?   home._tblFskStyle.GetAll(sa => sa.StyleID == svm.StyleID).First().Description : svm.StyleID;
+                    //    content = content + string.Format("<div class='col-md-2'><div class='dimAllocdiv'><a style=\"cursor:pointer;\" onclick=\"getRtnCard1('{1}','{3}')\"><center><img src='{0}'  style=\"margin:3px;\" height=\"150\" width=\"100\" /><br/>{2}</center></a></div></div>", "/"+svm.StyleImage, svm.StyleID, dex,orgStyle);
+                    //}
+                    //content = content + "</div>";
+                    //var style = entity.ucodeby_freetextview.Where(ss => ss.DimFreeText == freeText).First().StyleID;
+                    //var dex =   home._tblFskStyle.GetAll(xsa => xsa.StyleID.Trim().ToLower() == style.Trim().ToLower()).First().Description;
+                    //string content = "";
+                    ////content = "<center>" + dex + "</center>";
+                    //var content1 = string.Format("<a onclick='getDimAlloc(\"{0}\");'>" + dex+"</a>", freeText);
+                    //ViewContext.Writer.Write(string.Format("<center>{0}</center>", content1));
+                    ViewContext.Writer.Write(content);
+                    //var content = string.Format("<a onclick='getDimAlloc(\"{0}\");'>Click here to see Products</a>", freeText);
+                    //ViewContext.Writer.Write(string.Format("<center>{0}</center>", content));
+                    //settings.ClientSideEvents.CardClick = "function getDim(){getDimAlloc('" + freeText + "')}";
+                }
+            });
+        });
+
+    });
+    if (ViewData["EditError"] != null)
+    {
+        cardView.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@cardView.Bind(Model).GetHtml()

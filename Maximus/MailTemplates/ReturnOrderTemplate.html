@@ -1,0 +1,99 @@
+﻿
+<center>
+    <table style="width:30%;font-family: arial, sans-serif;border-collapse: collapse;">
+        <tr>
+
+            <th style="border: 1px solid #dddddd;text-align: left;padding: 15px;font-size:18px;background-color:#009885;color:white;"><center>Delivery Address</center></th>
+        </tr>
+        <tr>
+
+            <td style="border: 1px solid #dddddd;text-align: left;padding: 8px;"><strong>%delivery_name%</strong></td>
+        </tr>
+        <tr>
+
+            <td style="border: 1px solid #dddddd;text-align: left;padding: 8px;">%delivery_address1% </td>
+        </tr>
+        <tr>
+
+            <td style="border: 1px solid #dddddd;text-align: left;padding: 8px;">%delivery_address2%</td>
+        </tr>
+        <tr>
+
+            <td style="border: 1px solid #dddddd;text-align: left;padding: 8px;">%delivery_address3%</td>
+        </tr>
+        <tr>
+
+            <td style="border: 1px solid #dddddd;text-align: left;padding: 8px;">%delivery_town%</td>
+        </tr>
+        <tr>
+
+            <td style="border: 1px solid #dddddd;text-align: left;padding: 8px;">%delivery_city% </td>
+        </tr>
+        <tr>
+
+            <td style="border: 1px solid #dddddd;text-align: left;padding: 8px;">%delivery_postcode%</td>
+        </tr>
+        <tr>
+
+            <td style="border: 1px solid #dddddd;text-align: left;padding: 8px;">%delivery_country%</td>
+        </tr>
+    </table>
+    <br />
+    <br />
+</center>
+<center>
+    <br />
+    <br />
+    <table style="width:100%;font-family: arial, sans-serif;border-collapse: collapse;">
+        <tr>
+            <th style="border: 1px solid #dddddd;text-align: left;padding: 8px;background-color:#009885;color:white;" "><strong>Return Order No</strong></th>
+            <td style="border: 1px solid #dddddd;text-align: left;padding: 8px;">%OrderNo%</td>
+            <th style="border: 1px solid #dddddd;text-align: left;padding: 8px;background-color:#009885;color:white;" "><strong>Order Date</strong></th>
+            <td style="border: 1px solid #dddddd;text-align: left;padding: 8px;">%OrderDate%</td>
+            <th style="border: 1px solid #dddddd;text-align: left;padding: 8px;background-color:#009885;color:white;" "><strong>Cust Ref</strong></th>
+            <td style="border: 1px solid #dddddd;text-align: left;padding: 8px;">%CustRef%</td>
+            <th style="border: 1px solid #dddddd;text-align: left;padding: 8px;background-color:#009885;color:white;" "><strong>Account No</strong></th>
+            <td style="border: 1px solid #dddddd;text-align: left;padding: 8px;">%AccountNo%</td>
+            <th style="border: 1px solid #dddddd;text-align: left;padding: 8px;background-color:#009885;color:white;" "><strong>Employee</strong></th>
+            <td style="border: 1px solid #dddddd;text-align: left;padding: 8px;">%Employee%</td>
+        </tr>
+    </table>
+    <br /><br />
+    <table width="100%">
+        <tr>
+            %orginalorderno%
+            <th style="border: 1px solid #dddddd;text-align: left;padding: 8px;background-color:#009885;color:white;">Style</th>
+            <th style="border: 1px solid #dddddd;text-align: left;padding: 8px;background-color:#009885;color:white;">Description</th>
+            <th style="border: 1px solid #dddddd;text-align: left;padding: 8px;background-color:#009885;color:white;">Colour</th>
+            <th style="border: 1px solid #dddddd;text-align: left;padding: 8px;background-color:#009885;color:white;">Size</th>
+            <th style="border: 1px solid #dddddd;text-align: left;padding: 8px;background-color:#009885;color:white;">Qty</th>
+            <th style="border: 1px solid #dddddd;text-align: left;padding: 8px;background-color:#009885;color:white;" align='right'>Price</th>
+            <th style="border: 1px solid #dddddd;text-align: left;padding: 8px;background-color:#009885;color:white;" align='right'>Net Value</th>
+            <th style="border: 1px solid #dddddd;text-align: left;padding: 8px;background-color:#009885;color:white;" align='right'>VAT</th>
+            <th style="border: 1px solid #dddddd;text-align: left;padding: 8px;background-color:#009885;color:white;">Reason</th>
+        </tr>
+        %OrderLines%
+        <tr>
+            <th colspan="3" align='left'>Comments</th>
+            <th colspan="3" align='right'>Total Goods</th>
+            <td align='right'><strong>%totalgoods%</strong></td>
+        </tr>
+        <tr>
+            <td colspan="3" rowspan="4" align='left' valign='top'>%comments%</td>
+            <th colspan="3" align='right'>Carrier Charges</th>
+            <td align='right'><strong>%carriercharges%</strong></td>
+        </tr>
+        <tr>
+            <th colspan="3" align='right'>Order Total</th>
+            <td align='right'><strong>%ordertotal%</strong></td>
+        </tr>
+        <tr>
+            <th colspan="3" align='right'>VAT</th>
+            <td align='right'><strong>%vattotal%</strong></td>
+        </tr>
+        <tr>
+            <th colspan="3" align='right'><font color='blue'>Grand Total</font></th>
+            <td align='right'><strong><font color='blue'>%grandtotal%</font></strong></td>
+        </tr>
+    </table>
+</center>

@@ -1,0 +1,74 @@
+﻿
+@{
+    ViewBag.Title = "PrintOrders";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Print Order Confirm</h2>
+
+<div class="row">
+    <center>
+        @Html.DevExpress().RoundPanel(settings =>
+   {
+       settings.Name = "OrderFilter";
+       settings.AllowCollapsingByHeaderClick = true;
+       settings.ShowCollapseButton = true;
+       settings.ShowHeader = true;
+       if (Session["Access"].ToString().ToLower() != "user")
+       {
+           settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+       }
+       else
+       {
+           settings.Width = System.Web.UI.WebControls.Unit.Pixel(800);
+       }
+       //settings.View = Model.View;
+       settings.EnableAnimation = true;
+       settings.Collapsed = true;
+       settings.HeaderText = "Order Search";
+       // settings.ClientSideEvents.BeginCallback = "setCollapsedOrderFilter";
+       // settings.ClientSideEvents.EndCallback = "setCollapsedOrderFilter";
+       settings.SetHeaderTemplateContent(X => { ViewContext.Writer.Write("<center><span class='glyphicon glyphicon-search'></span>  Order search</center>"); });
+       settings.SetContent(() => Html.RenderPartial("_SearchPanelPrint"));
+   }).GetHtml()
+
+
+    </center>
+</div>
+
+
+<br />
+<br />
+<div class="row">
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-4">
+                @Html.DevExpress().ComboBox(s =>
+           {
+               s.Name = "FromOrderNo";
+               foreach(var orders in(List<Maximus.Data.models.OrderDisplayModel>) Session["OrderDisplayModel"])
+               {
+                   s.Properties.Items.Add(orders.OrderNo.ToString());
+               }
+               s.SelectedIndex = 0;
+           }).GetHtml()
+            </div>
+            <div class="col-md-4">
+                @Html.DevExpress().ComboBox(s =>
+           {
+               s.Name = "ToOrderNo";
+               foreach (var orders in (List<Maximus.Data.models.OrderDisplayModel>)Session["OrderDisplayModel"])
+               {
+                   s.Properties.Items.Add(orders.OrderNo.ToString());
+               }
+               s.SelectedIndex = ((List<Maximus.Data.models.OrderDisplayModel>)Session["OrderDisplayModel"]).Count() - 1;
+           }).GetHtml()
+        </div>
+        <div class="col-md-2"> @Html.DevExpress().Button(s => { s.Name = "btnPreview";s.Text = "Preview";s.ClientSideEvents.Click = "ShowConfirmOrdersPopup"; }).GetHtml()</div>
+        <div class="col-md-2"> @Html.DevExpress().Button(s => { s.Name = "btnDownload"; s.Text = "Download"; s.ClientSideEvents.Click = ""; }).GetHtml()</div>
+    </div>
+
+    </div>
+    <div class="col-md-4"></div>
+</div>
+

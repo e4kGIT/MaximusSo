@@ -6,8 +6,8 @@
     Maximus.Services.Interface.IDataConnection _dataConnection = new Maximus.Services.DataConnectionService(_unitOfWork);
 }
 @{
-    var cardView = Html.DevExpress().CardView(settings =>
-    {
+        var cardView = Html.DevExpress().CardView(settings =>
+        {
         #region settings
         settings.Name = "CardView";
         settings.CallbackRouteValues = new { Controller = "Home", Action = "CardViewPartial" };
@@ -110,6 +110,9 @@
             }
         };
         #endregion
+        string selEMP1 = Session["SelectedEmp"].ToString();
+        var salesOrderLinesCart = ((List<Maximus.Data.Models.SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(a => a.EmployeeID == selEMP1).First().SalesOrderLine.Where(s => s.IsDleted == false).Count() > 0 ? ((List<Maximus.Data.Models.SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(a => a.EmployeeID == selEMP1).First().SalesOrderLine.Where(s => s.IsDleted == false).ToList() : new List<Maximus.Data.Models.SalesOrderLineViewModel>();
+
 
         settings.CardLayoutCreated = (sender, e) =>
         {
@@ -235,10 +238,10 @@
 
         #region styleimage
 
-        var pointsCardtbl = Session["PointsCard"]!=null?(List<Maximus.Data.models.view_totalpointsused>)Session["PointsCard"]:new List<Maximus.Data.models.view_totalpointsused>();
-        var pointsStyletbl = Session["PointsStyle"]!=null?(List<Maximus.Data.models.tblaccemp_stylepoints>)Session["PointsStyle"] : new List<Maximus.Data.models.tblaccemp_stylepoints>();
-        var pointsUcodetbl = Session["PointsUcode"]!=null?(List<Maximus.Data.models.tblaccemp_ucodepoints>)Session["PointsUcode"]:new List<Maximus.Data.models.tblaccemp_ucodepoints>();
-        var pointsAdjustmenttbl = Session["PointsAdjustment"]!=null?(List<Maximus.Data.models.tblaccemp_pointsadjustment>)Session["PointsAdjustment"]:new List<Maximus.Data.models.tblaccemp_pointsadjustment>();
+        var pointsCardtbl = Session["PointsCard"] != null ? (List<Maximus.Data.models.view_totalpointsused>)Session["PointsCard"] : new List<Maximus.Data.models.view_totalpointsused>();
+        var pointsStyletbl = Session["PointsStyle"] != null ? (List<Maximus.Data.models.tblaccemp_stylepoints>)Session["PointsStyle"] : new List<Maximus.Data.models.tblaccemp_stylepoints>();
+        var pointsUcodetbl = Session["PointsUcode"] != null ? (List<Maximus.Data.models.tblaccemp_ucodepoints>)Session["PointsUcode"] : new List<Maximus.Data.models.tblaccemp_ucodepoints>();
+        var pointsAdjustmenttbl = Session["PointsAdjustment"] != null ? (List<Maximus.Data.models.tblaccemp_pointsadjustment>)Session["PointsAdjustment"] : new List<Maximus.Data.models.tblaccemp_pointsadjustment>();
 
         settings.CardLayoutProperties.Items.Add(i =>
         {
@@ -259,14 +262,14 @@
                     if (((Maximus.Data.models.PointsModel)Session["Pointsmodel"]).LstStyles != null)
                     {
                         var data1 = home._fskSetValues.Exists(sas => sas.SettingID.ToUpper().Trim() == "FITDIM_STYLE_DESC" && sas.StyleID.ToLower().Trim() == style.ToLower().Trim()) ? home._fskSetValues.GetAll(sas => sas.SettingID.ToUpper().Trim() == "FITDIM_STYLE_DESC" && sas.StyleID.ToLower().Trim() == style.ToLower().Trim()).First().Value : "";
-                        int styPointss =  pointsStyletbl.Exists(sq => sq.UcodeID == selecetedUcode && sq.StyleID == style && sq.BusinessID == businessId) ?  pointsStyletbl.Where(sq => sq.UcodeID == selecetedUcode && sq.StyleID == style && sq.BusinessID == businessId).First().MinPts.Value : 0;
-                        int soPoints =  pointsCardtbl.Exists(s => s.StyleID == style && s.EmployeeID == selEMP) ?  Convert.ToInt32 (pointsCardtbl.Where(s => s.StyleID == style && s.EmployeeID == selEMP).Sum(s => s.TOTSOPOINTS).Value) : 0;
+                        int styPointss = pointsStyletbl.Exists(sq => sq.UcodeID == selecetedUcode && sq.StyleID == style && sq.BusinessID == businessId) ? pointsStyletbl.Where(sq => sq.UcodeID == selecetedUcode && sq.StyleID == style && sq.BusinessID == businessId).First().MinPts.Value : 0;
+                        int soPoints = pointsCardtbl.Exists(s => s.StyleID == style && s.EmployeeID == selEMP) ? Convert.ToInt32(pointsCardtbl.Where(s => s.StyleID == style && s.EmployeeID == selEMP).Sum(s => s.TOTSOPOINTS).Value) : 0;
                         int minPoints = styPointss > soPoints ? styPointss - soPoints : 0;
-                        int orgMinPoints =  pointsStyletbl.Exists(sq => sq.UcodeID == selecetedUcode && sq.StyleID == style && sq.BusinessID == businessId) ?  pointsStyletbl.Where(sq => sq.UcodeID == selecetedUcode && sq.StyleID == style && sq.BusinessID == businessId).First().MinPts.Value : 0;
+                        int orgMinPoints = pointsStyletbl.Exists(sq => sq.UcodeID == selecetedUcode && sq.StyleID == style && sq.BusinessID == businessId) ? pointsStyletbl.Where(sq => sq.UcodeID == selecetedUcode && sq.StyleID == style && sq.BusinessID == businessId).First().MinPts.Value : 0;
                         long ptsTaken = 0;
-                        if (((List<Maximus.Data.Models.SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(a => a.EmployeeID == selEMP).First().SalesOrderLine.Count > 0)
+                        if (((List<Maximus.Data.Models.SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(a => a.EmployeeID == selEMP).First().SalesOrderLine.Where(s => s.IsDleted == false).Count() > 0)
                         {
-                            ptsTaken = ((List<Maximus.Data.Models.SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(a => a.EmployeeID == selEMP).First().SalesOrderLine.Any(a => a.orgStyleId == style) ? ((List<Maximus.Data.Models.SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(a => a.EmployeeID == selEMP).First().SalesOrderLine.Where(a => a.orgStyleId == style).Sum(a => a.OrdQty) : 0;
+                            ptsTaken = ((List<Maximus.Data.Models.SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(a => a.EmployeeID == selEMP).First().SalesOrderLine.Any(a => a.orgStyleId == style && a.IsDleted == false) ? ((List<Maximus.Data.Models.SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(a => a.EmployeeID == selEMP).First().SalesOrderLine.Where(a => a.orgStyleId == style && a.IsDleted == false).Sum(a => a.OrdQty) : 0;
                         }
                         contentPts = minPoints > 0 && Convert.ToBoolean(Session["POINTSREQ"].ToString()) ? contentPts + "<div class='row minPtsDiv_" + style + "'><center class='mandatoryStylecart'><span class='mandatoryStyle'>The mandatory quantity is :<b>" + minPoints + "</b></span>&nbsp;&nbsp;&nbsp;The quantity in cart is :<b>" + ptsTaken + "</b></center></div>" : contentPts + "";
                         content = contentPts + content;
@@ -578,20 +581,23 @@
                         var data1 = home._fskSetValues.Exists(sas => sas.SettingID.ToUpper().Trim() == "FITDIM_STYLE_DESC" && sas.StyleID.ToLower().Trim() == orgStyle.ToLower().Trim()) ? home._fskSetValues.GetAll(sas => sas.SettingID.ToUpper().Trim() == "FITDIM_STYLE_DESC" && sas.StyleID.ToLower().Trim() == orgStyle.ToLower().Trim()).First().Value : "";
                         string selecetedUcode = Session["SelectedUcode"].ToString();
                         string selEMP = Session["SelectedEmp"].ToString();
-                        int styPointss =  pointsStyletbl.Any(sq => sq.UcodeID == selecetedUcode && sq.StyleID == orgStyle && sq.BusinessID == businessId) ?  pointsStyletbl.Where(sq => sq.UcodeID == selecetedUcode && sq.StyleID == orgStyle && sq.BusinessID == businessId).First().MinPts.Value : 0;
-                        var content = "<div class='row'><div class='col-md-11'><div class='row'><center>" + data1 + "</center><hr/>";
+                        int styPointss = pointsStyletbl.Any(sq => sq.UcodeID == selecetedUcode && sq.StyleID == orgStyle && sq.BusinessID == businessId) ? pointsStyletbl.Where(sq => sq.UcodeID == selecetedUcode && sq.StyleID == orgStyle && sq.BusinessID == businessId).First().MinPts.Value : 0;
+                        var content = "<div class='row'><div class='col-md-11'><div class='row mandatoryStylecart'><center><b>" + data1 + "</b></center><hr/>";
                         var contentPts = "";
                         var contentpts1 = "";
                         var svmStyLst = svmLst.Select(s => s.StyleID).ToList();
 
                         string busId = Session["BuisnessId"].ToString();
                         string ucodeId = Session["selectedUcodes"].ToString();
-                        var lstAdj =  pointsAdjustmenttbl.Any(s => s.StyleID != "" && s.BusinessID == busId && s.UcodeID == ucodeId) ?  pointsAdjustmenttbl.Where(s => s.BusinessID == busId && s.UcodeID == ucodeId).Select(s => s.StyleID).Distinct().ToList() : new List<string>();
-                        var mapStyleID =  pointsAdjustmenttbl.Any(s => s.MapStyleID != "" && s.BusinessID == busId && s.UcodeID == ucodeId) ?  pointsAdjustmenttbl.Where(s => s.BusinessID == busId && s.UcodeID == ucodeId).Select(s => s.MapStyleID).Distinct().ToList() : new List<string>();
-                        var svmLst1 = new List<string>();
+                        var lstAdj = pointsAdjustmenttbl.Any(s => s.StyleID != "" && s.BusinessID == busId && s.UcodeID == ucodeId) ? pointsAdjustmenttbl.Where(s => s.BusinessID == busId && s.UcodeID == ucodeId).Select(s => s.StyleID).Distinct().ToList() : new List<string>();
+                        var mapStyleID = pointsAdjustmenttbl.Any(s => s.MapStyleID != "" && s.BusinessID == busId && s.UcodeID == ucodeId) ? pointsAdjustmenttbl.Where(s => s.BusinessID == busId && s.UcodeID == ucodeId).Select(s => s.MapStyleID).Distinct().ToList() : new List<string>();
+                        var svmLst1 = new List<Maximus.Data.models.StyleViewModelPts>();
                         var fskSty = (List<Maximus.Data.models.tblfsk_style_freetext>)Session["StyleFreeText"];
                         var styByFree = (List<Maximus.Data.models.styleby_freetextview>)Session["StyleByFreetext"];
-                        svmLst1.AddRange(svmStyLst);
+                        foreach (var svmStyl in svmLst)
+                        {
+                            svmLst1.Add(new Maximus.Data.models.StyleViewModelPts { OrgStyle = svmStyl.StyleID, styl = svmStyl.StyleID });
+                        }
                         foreach (var fitStyl in svmStyLst)
                         {
                             var hasFit = fskSty.Where(ss => ss.StyleId == fitStyl).Any(ss => ss.FreeTextType == "FITALLOC") ? fskSty.Where(ss => ss.StyleId == fitStyl & ss.FreeTextType == "FITALLOC").First().FreeText : "";
@@ -604,9 +610,9 @@
                                     {
                                         foreach (var thisTy in newStyl.Split(','))
                                         {
-                                            if (svmLst1.Contains(thisTy) == false)
+                                            if (svmLst1.Any(s => s.styl.Contains(thisTy)) == false)
                                             {
-                                                svmLst1.Add(thisTy);
+                                                svmLst1.Add(new Maximus.Data.models.StyleViewModelPts { OrgStyle = fitStyl, styl = thisTy });
                                             }
                                         }
                                     }
@@ -660,28 +666,31 @@
                                 svm.StyleImage = "/StyleImages/notfound.png";
                             }
                             long cartPoints = 0;
+                            long cartDelPoints = 0;
                             int soPoints = 0, mapPoints = 0;
                             if (Convert.ToBoolean(Session["ISEDITING"]))
                             {
-                                cartPoints = ((List<Maximus.Data.Models.SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(s => s.IsEditing).First().SalesOrderLine.Any(s => s.orgStyleId == orgStyle) ? ((List<Maximus.Data.Models.SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(s => s.IsEditing).First().SalesOrderLine.Where(s => s.orgStyleId == orgStyle).Sum(s => s.OrdQty) : 0;
+                                var sssss = ((List<Maximus.Data.Models.SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(s => s.IsEditing).First().SalesOrderLine;
+                                cartPoints = ((List<Maximus.Data.Models.SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(s => s.IsEditing).First().SalesOrderLine.Any(s => s.orgStyleId == orgStyle && s.IsDleted == false) ? ((List<Maximus.Data.Models.SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(s => s.IsEditing).First().SalesOrderLine.Where(s => s.orgStyleId == orgStyle && s.IsDleted == false).Sum(s => s.OrdQty) : 0;
+                                cartDelPoints = ((List<Maximus.Data.Models.SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(s => s.IsEditing).First().SalesOrderLine.Any(s => s.orgStyleId == orgStyle && s.IsDleted == true) ? ((List<Maximus.Data.Models.SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(s => s.IsEditing).First().SalesOrderLine.Where(s => s.orgStyleId == orgStyle && s.IsDleted == true).Sum(s => s.OrdQty) : 0;
                             }
                             if (Convert.ToBoolean(Session["POINTSREQ"]))
                             {
                                 if (((Maximus.Data.models.PointsModel)Session["Pointsmodel"]).LstStyles != null)
                                 {
 
-                                    if ( pointsCardtbl.Any(s => svmLst1.Distinct().Contains(s.StyleID) && s.EmployeeID == selEMP))
+                                    if (pointsCardtbl.Any(s => svmLst1.Distinct().Any(sa => sa.styl.Contains(s.StyleID) && s.EmployeeID == selEMP)))
                                     {
-                                        foreach (var styl in  pointsCardtbl.Where(s => svmLst1.Distinct().Contains(s.StyleID) && s.EmployeeID == selEMP).ToList())
+                                        foreach (var styl in pointsCardtbl.Where(s => svmLst1.Distinct().Any(sa => sa.styl.Contains(s.StyleID) && s.EmployeeID == selEMP)).ToList())
                                         {
-                                            if (( pointsStyletbl.Any(s => s.UcodeID == selUcode && s.StyleID == styl.StyleID && s.Points>0)))
+                                            if ((pointsStyletbl.Any(s => s.UcodeID == selUcode && s.StyleID == styl.StyleID && s.Points > 0)))
                                             {
-                                                soPoints = soPoints +Convert.ToInt32 ( (pointsCardtbl.Where(s => s.StyleID == styl.StyleID && s.EmployeeID == selEMP).Sum(s =>s.TOTSOPOINTS).Value)) / ( pointsStyletbl.Where(s => s.UcodeID == selUcode && s.StyleID == styl.StyleID).First().Points.Value);
+                                                soPoints = soPoints + Convert.ToInt32((pointsCardtbl.Where(s => s.StyleID == styl.StyleID && s.EmployeeID == selEMP).Sum(s => s.TOTSOPOINTS).Value)) / (pointsStyletbl.Where(s => s.UcodeID == selUcode && s.StyleID == styl.StyleID).First().Points.Value);
 
                                             }
-                                            else if((pointsStyletbl.Any(s => s.UcodeID == selUcode && s.StyleID == styl.StyleID && s.Points == 0)))
+                                            else if ((pointsStyletbl.Any(s => s.UcodeID == selUcode && s.StyleID == styl.StyleID && s.Points == 0)))
                                             {
-                                                if (home._stockCard.Exists(s => svmLst1.Distinct().Contains(s.StyleID) && s.EmployeeID == selEMP))
+                                                if (home._stockCard.Exists(s => svmLst1.Distinct().Any(sa => sa.styl.Contains(s.StyleID) && s.EmployeeID == selEMP)))
                                                 {
                                                     soPoints = soPoints + home._stockCard.GetAll(s => s.StyleID == styl.StyleID && s.EmployeeID == selEMP).Sum(s => s.SOQty).Value + home._stockCard.GetAll(s => s.StyleID == styl.StyleID && s.EmployeeID == selEMP).Sum(s => s.PickQty).Value + home._stockCard.GetAll(s => s.StyleID == styl.StyleID && s.EmployeeID == selEMP).Sum(s => s.InvQty).Value;
                                                 }
@@ -692,25 +701,36 @@
                                     {
                                         if (Convert.ToBoolean(Session["IsEditing"]))
                                         {
-                                            mapPoints = mapPoints + Convert.ToInt32(((List<Maximus.Data.Models.SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(s => s.UCodeId == ucodeId && s.EmployeeID == selEMP).First().SalesOrderLine.Any(s => mapStyleID.Contains(s.StyleID)) ? ((List<Maximus.Data.Models.SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(s => s.UCodeId == ucodeId && s.EmployeeID == selEMP).First().SalesOrderLine.Where(s => mapStyleID.Contains(s.StyleID)).Sum(s => s.OrdQty) : 0);
+                                            mapPoints = mapPoints + Convert.ToInt32(((List<Maximus.Data.Models.SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(s => s.UCodeId == ucodeId && s.EmployeeID == selEMP).First().SalesOrderLine.Any(s => mapStyleID.Contains(s.StyleID) && s.IsDleted == false) ? ((List<Maximus.Data.Models.SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(s => s.UCodeId == ucodeId && s.EmployeeID == selEMP).First().SalesOrderLine.Where(s => mapStyleID.Contains(s.StyleID) && s.IsDleted == false).Sum(s => s.OrdQty) : 0);
                                         }
                                         else
                                         {
 
-                                            mapPoints = mapPoints + ( pointsCardtbl.Any(s => mapStyleID.Contains(s.StyleID) && s.EmployeeID == selEMP) ?
-                                               Convert.ToInt32(( pointsCardtbl.Where(s => mapStyleID.Contains(s.StyleID) && s.EmployeeID == selEMP).Sum(s => s.TOTSOPOINTS).Value)) / ( pointsStyletbl.Where(s => s.UcodeID == selUcode && mapStyleID.Contains(s.StyleID)).First().Points.Value) : 0);
-                                            mapPoints = mapPoints + Convert.ToInt32(((List<Maximus.Data.Models.SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(s => s.UCodeId == ucodeId && s.EmployeeID == selEMP).First().SalesOrderLine.Any(s => mapStyleID.Contains(s.StyleID)) ? ((List<Maximus.Data.Models.SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(s => s.UCodeId == ucodeId && s.EmployeeID == selEMP).First().SalesOrderLine.Where(s => mapStyleID.Contains(s.StyleID)).Sum(s => s.OrdQty) : 0);
+                                            mapPoints = mapPoints + (pointsCardtbl.Any(s => mapStyleID.Contains(s.StyleID) && s.EmployeeID == selEMP) ?
+                                               Convert.ToInt32((pointsCardtbl.Where(s => mapStyleID.Contains(s.StyleID) && s.EmployeeID == selEMP).Sum(s => s.TOTSOPOINTS).Value)) / (pointsStyletbl.Where(s => s.UcodeID == selUcode && mapStyleID.Contains(s.StyleID)).First().Points.Value) : 0);
+                                            mapPoints = mapPoints + Convert.ToInt32(((List<Maximus.Data.Models.SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(s => s.UCodeId == ucodeId && s.EmployeeID == selEMP).First().SalesOrderLine.Any(s => mapStyleID.Contains(s.StyleID) && s.IsDleted == false) ? ((List<Maximus.Data.Models.SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(s => s.UCodeId == ucodeId && s.EmployeeID == selEMP).First().SalesOrderLine.Where(s => mapStyleID.Contains(s.StyleID) && s.IsDleted == false).Sum(s => s.OrdQty) : 0);
                                         }
                                     }
 
+                                    int minPoints = 0;
+                                    if (Convert.ToBoolean(Session["IsEditing"]))
+                                    {
+                                        soPoints = soPoints - Convert.ToInt32(cartDelPoints);
+                                    }
                                     foreach (var item in ((Maximus.Data.models.PointsModel)Session["Pointsmodel"]).LstStyles)
                                     {
                                         if (item.Style == svm.StyleID)
                                         {
-
-                                            int minPoints = styPointss > soPoints ? (styPointss - mapPoints) - soPoints : 0;
-                                            minPoints = styPointss== Convert.ToInt32(cartPoints)? styPointss :  minPoints + Convert.ToInt32(cartPoints);
-                                            minPoints = minPoints < 0 ? 0 : minPoints;
+                                            if (styPointss > 0)
+                                            {
+                                                minPoints = styPointss > soPoints ? (styPointss - mapPoints) - soPoints : 0;
+                                                minPoints = Convert.ToBoolean(Session["IsEditing"]) ? styPointss < minPoints + Convert.ToInt32(cartPoints) ? styPointss : minPoints + Convert.ToInt32(cartPoints) : styPointss == Convert.ToInt32(cartPoints) ? styPointss : minPoints + Convert.ToInt32(cartPoints);
+                                                minPoints = minPoints < 0 ? 0 : minPoints;
+                                            }
+                                            else
+                                            {
+                                                minPoints = 0;
+                                            }
                                             var lsts = (List<Maximus.Data.models.StyleAndMinPoints>)Session["StyleMinPoints"];
                                             contentpts1 = contentpts1 + string.Format("<div class='col-md-2'><br/><center><span>Points: " + item.Points + "</span></center><br/><div class='dimAllocdiv'><a style=\"cursor:pointer;\" onclick=\"getCard1('{1}','{3}','" + data1 + "')\"><center><img src='{0}'  style=\"margin:3px;\" height=\"150\" width=\"100\" /><br/>{2}</center></a></div></div>", svm.StyleImage, svm.StyleID, svm.Description, orgStyle);
 
@@ -719,6 +739,7 @@
                                                 var sssssssss = ((List<Maximus.Data.models.StyleAndMinPoints>)Session["StyleMinPoints"]);
                                                 if (((List<Maximus.Data.models.StyleAndMinPoints>)Session["StyleMinPoints"]).Count == 0)
                                                 {
+
                                                     ((List<Maximus.Data.models.StyleAndMinPoints>)Session["StyleMinPoints"]).Add(new Maximus.Data.models.StyleAndMinPoints { OrgStyle = orgStyle, MinPoints = minPoints, OrgMinPoints = minPoints, TruePoints = styPointss, Points = item.Points, Style = svm.StyleID, CatCaption = data1 });
                                                 }
                                                 else if (((List<Maximus.Data.models.StyleAndMinPoints>)Session["StyleMinPoints"]).Any(ss => ss.Style == item.Style))
@@ -729,6 +750,23 @@
                                                 else
                                                 {
                                                     ((List<Maximus.Data.models.StyleAndMinPoints>)Session["StyleMinPoints"]).Add(new Maximus.Data.models.StyleAndMinPoints { OrgStyle = orgStyle, MinPoints = minPoints, OrgMinPoints = minPoints, TruePoints = styPointss, Points = item.Points, Style = svm.StyleID, CatCaption = data1 });
+                                                }
+                                                foreach (var styleFit in svmLst1)
+                                                {
+                                                    if (((List<Maximus.Data.models.StyleAndMinPoints>)Session["StyleMinPoints"]).Count == 0)
+                                                    {
+
+                                                        ((List<Maximus.Data.models.StyleAndMinPoints>)Session["StyleMinPoints"]).Add(new Maximus.Data.models.StyleAndMinPoints { OrgStyle = orgStyle, MinPoints = minPoints, OrgMinPoints = minPoints, TruePoints = styPointss, Points = item.Points, Style = styleFit.styl, CatCaption = data1 });
+                                                    }
+                                                    else if (((List<Maximus.Data.models.StyleAndMinPoints>)Session["StyleMinPoints"]).Any(ss => ss.Style == styleFit.styl))
+                                                    {
+                                                        ((List<Maximus.Data.models.StyleAndMinPoints>)Session["StyleMinPoints"]).Remove(((List<Maximus.Data.models.StyleAndMinPoints>)Session["StyleMinPoints"]).Where(ss => ss.Style == styleFit.styl).First());
+                                                        ((List<Maximus.Data.models.StyleAndMinPoints>)Session["StyleMinPoints"]).Add(new Maximus.Data.models.StyleAndMinPoints { OrgStyle = orgStyle, MinPoints = minPoints, OrgMinPoints = minPoints, TruePoints = styPointss, Points = item.Points, Style = styleFit.styl, CatCaption = data1 });
+                                                    }
+                                                    else
+                                                    {
+                                                        ((List<Maximus.Data.models.StyleAndMinPoints>)Session["StyleMinPoints"]).Add(new Maximus.Data.models.StyleAndMinPoints { OrgStyle = orgStyle, MinPoints = minPoints, OrgMinPoints = minPoints, TruePoints = styPointss, Points = item.Points, Style = styleFit.styl, CatCaption = data1 });
+                                                    }
                                                 }
 
                                             }
@@ -752,9 +790,10 @@
                         int minPts1 = ((List<Maximus.Data.models.StyleAndMinPoints>)Session["StyleMinPoints"]).Any(t => t.OrgStyle == orgStyle) ? ((List<Maximus.Data.models.StyleAndMinPoints>)Session["StyleMinPoints"]).Where(t => t.OrgStyle == orgStyle).Min(t => t.MinPoints) : 0;
                         int truMinpTs = ((List<Maximus.Data.models.StyleAndMinPoints>)Session["StyleMinPoints"]).Any(t => t.OrgStyle == orgStyle) ? ((List<Maximus.Data.models.StyleAndMinPoints>)Session["StyleMinPoints"]).Where(t => t.OrgStyle == orgStyle).Min(t => t.TruePoints) : 0;
                         long ptsTaken = 0;
-                        if (((List<Maximus.Data.Models.SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(a => a.EmployeeID == selEMP).First().SalesOrderLine.Count > 0)
+                        var test = ((List<Maximus.Data.Models.SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]);
+                        if (((List<Maximus.Data.Models.SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(a => a.EmployeeID == selEMP).First().SalesOrderLine.Where(s => s.IsDleted == false).Count() > 0)
                         {
-                            ptsTaken = ((List<Maximus.Data.Models.SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(a => a.EmployeeID == selEMP).First().SalesOrderLine.Any(a => a.orgStyleId == orgStyle) ? ((List<Maximus.Data.Models.SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(a => a.EmployeeID == selEMP).First().SalesOrderLine.Where(a => a.orgStyleId == orgStyle).Sum(a => a.OrdQty) : 0;
+                            ptsTaken = ((List<Maximus.Data.Models.SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(a => a.EmployeeID == selEMP).First().SalesOrderLine.Any(a => a.orgStyleId == orgStyle && a.IsDleted == false) ? ((List<Maximus.Data.Models.SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(a => a.EmployeeID == selEMP).First().SalesOrderLine.Where(a => a.orgStyleId == orgStyle && a.IsDleted == false).Sum(a => a.OrdQty) : 0;
                         }
                         if (minPts1 > 0 && Convert.ToBoolean(Session["POINTSREQ"].ToString()))
                         {
@@ -795,6 +834,7 @@
 
         #region color
         var firstColor = "";
+        var EmergencyStockColor = "";
         var ucodeColorcnt = 0;
         settings.CardLayoutProperties.Items.Add(x =>
         {
@@ -960,7 +1000,7 @@
                             {
                                 if (lstC.Where(dts => dts.ObsoleteCode == 0).Count() > 1)
                                 {
-                                    foreach (var dr in lstC.Where(s=>s.ObsoleteCode==0).ToList())
+                                    foreach (var dr in lstC.Where(s => s.ObsoleteCode == 0).ToList())
                                     {
                                         //if (ucodeColor1.IndexOf(dr) == 0)
                                         //{
@@ -975,10 +1015,19 @@
                                             if (color.ToLower().Contains("whit") | color.ToLower().Contains("yell"))
                                             {
                                                 content = content + string.Format("<label class='swatchLabel'><input type='radio' onchange=\"GetClrImg('{0}-{1}')\"  id='radio' name=\"swatch_Color_" + style + "\" value='blue'/><span class='spanner1'><center >{1}</center></span></label>", style, color);
+                                                if (Convert.ToBoolean(Session["IsEmergency"]))
+                                                {
+                                                    EmergencyStockColor = color;
+                                                }
+
                                             }
                                             else
                                             {
                                                 content = content + string.Format("<label class='swatchLabel'><input type='radio'  onchange=\"GetClrImg('{0}-{1}')\"   id='radio' name=\"swatch_Color_" + style + "\" value='blue'/><span class='spanner1'><center >{1}</center></span></label>", style, color);
+                                                if (Convert.ToBoolean(Session["IsEmergency"]))
+                                                {
+                                                    EmergencyStockColor = color;
+                                                }
 
                                             }
 
@@ -989,17 +1038,26 @@
                                 }
                                 else if (lstC.Count == 1)
                                 {
-                                    if (lstC.Where(dts => dts.ObsoleteCode == 0).Count()==1)
+                                    if (lstC.Where(dts => dts.ObsoleteCode == 0).Count() == 1)
                                     {
                                         content = content + string.Format("<label class='swatchLabel'><input type='radio' checked onchange=\"GetClrImg('{0}-{1}')\" id='radio'  name=\"swatch_Color_" + style + "\" value='blue'  /><span class='spanner1'><center >{1}</center></span></label>", style, lstC[0].ColorId);
                                     }
                                     firstColor = lstC[0].ColorId;
+                                    if (Convert.ToBoolean(Session["IsEmergency"]))
+                                    {
+                                        EmergencyStockColor = lstC[0].ColorId;
+                                    }
 
                                 }
                                 else if (lstC.Where(dts => dts.ObsoleteCode == 0).Count() == 1)
                                 {
                                     content = content + string.Format("<label class='swatchLabel'><input type='radio' checked onchange=\"GetClrImg('{0}-{1}')\" id='radio'  name=\"swatch_Color_" + style + "\" value='blue'  /><span class='spanner1'><center >{1}</center></span></label>", style, lstC[0].ColorId);
                                     firstColor = lstC[0].ColorId;
+                                    if (Convert.ToBoolean(Session["IsEmergency"]))
+                                    {
+                                        EmergencyStockColor = lstC[0].ColorId;
+                                    }
+
                                 }
                             }
                             content = content + "</fieldset><br/>";
@@ -1013,9 +1071,9 @@
                             ucodeColorcnt = ucodeColor1.Count();
                             if (lstC != null)
                             {
-                                if (lstC.Where(dts => dts.ObsoleteCode == 0).Count() > 1 )
+                                if (lstC.Where(dts => dts.ObsoleteCode == 0).Count() > 1)
                                 {
-                                    foreach (var dr in lstC.Where(ss=>ss.ObsoleteCode==0).ToList())
+                                    foreach (var dr in lstC.Where(ss => ss.ObsoleteCode == 0).ToList())
                                     {
 
                                         if (lstC.Where(dts => dts.ObsoleteCode == 0).Select(xs => xs.ColorId).ToList().Contains(dr.ColorId))
@@ -1026,10 +1084,20 @@
                                             if (dr.ToString().ToLower().Contains("yell") | dr.ToString().ToLower().Contains("whit"))
                                             {
                                                 content = content + string.Format("<label class='swatchLabel'><input type='radio' onchange=\"GetClrImg('{0}-{1}')\" id='radio' style='color:red'  name=\"swatch_Color_" + style + "\" value='blue'  /><span class='spanner1'><center >{1}</center></span></label>", style, dr.ToString());
+                                                if (Convert.ToBoolean(Session["IsEmergency"]))
+                                                {
+                                                    EmergencyStockColor = dr.ToString();
+                                                }
+
                                             }
                                             else
                                             {
                                                 content = content + string.Format("<label class='swatchLabel'><input type='radio' onchange=\"GetClrImg('{0}-{1}')\" id='radio'  name=\"swatch_Color_" + style + "\" value='blue'  /><span class='spanner1'><center >{1}</center></span></label>", style, dr.ToString());
+                                                if (Convert.ToBoolean(Session["IsEmergency"]))
+                                                {
+                                                    EmergencyStockColor = dr.ToString();
+                                                }
+
 
                                             }
 
@@ -1040,15 +1108,26 @@
                                 }
                                 else if (lstC.Count == 1)
                                 {
-                                    if (lstC.Where(dts => dts.ObsoleteCode == 0).ToList().Count()==1)
+                                    if (lstC.Where(dts => dts.ObsoleteCode == 0).ToList().Count() == 1)
                                     {
                                         content = content + string.Format("<label class='swatchLabel'><input type='radio' checked onchange=\"GetClrImg('{0}-{1}')\" id='radio'  name=\"swatch_Color_" + style + "\" value='blue'  /><span class='spanner1'><center >{1}</center></span></label>", style, lstC[0].ColorId);
+                                        if (Convert.ToBoolean(Session["IsEmergency"]))
+                                        {
+                                            EmergencyStockColor = lstC[0].ColorId;
+
+                                        }
+
                                     }
                                     firstColor = lstC[0].ColorId;
                                 }
                                 else if (lstC.Where(dts => dts.ObsoleteCode == 0).Count() == 1)
                                 {
                                     content = content + string.Format("<label class='swatchLabel'><input type='radio' checked onchange=\"GetClrImg('{0}-{1}')\" id='radio'  name=\"swatch_Color_" + style + "\" value='blue'  /><span class='spanner1'><center >{1}</center></span></label>", style, lstC[0].ColorId);
+                                    if (Convert.ToBoolean(Session["IsEmergency"]))
+                                    {
+                                        EmergencyStockColor = lstC[0].ColorId;
+                                    }
+
                                     firstColor = lstC[0].ColorId;
                                 }
 
@@ -1591,16 +1670,28 @@
                                                         if (prevHistory.Size.Trim() == dr.ItemArray[3].ToString().Trim())
                                                         {
                                                             content = content + string.Format("<label class='swatchLabel'><input type='radio' checked id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString(), orgStyle);
+                                                            if (Convert.ToBoolean(Session["IsEmergency"]) && Convert.ToBoolean(Session["REQSTKLEVEL"]))
+                                                            {
+                                                                content = content + "<span id='FreeStcoker_"+ style+"_"+ dr.ItemArray[3].ToString() + "' title='Free stock'>(" + dp.GetFreeStock(style, EmergencyStockColor, dr.ItemArray[3].ToString(), Session["WareHouseID"].ToString(),salesOrderLinesCart) + ")</span>";
+                                                            }
                                                         }
                                                         else
                                                         {
                                                             if (ucodeColorcnt > 1)
                                                             {
                                                                 content = content + string.Format("<label class='swatchLabel'><input  type='radio' id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString(), orgStyle);
+                                                                if (Convert.ToBoolean(Session["IsEmergency"]) && Convert.ToBoolean(Session["REQSTKLEVEL"]))
+                                                                {
+                                                                    content = content + "<span id='FreeStcoker_" + style + "_" + dr.ItemArray[3].ToString() + "' title='Free stock'>(" + dp.GetFreeStock(style, EmergencyStockColor, dr.ItemArray[3].ToString(), Session["WareHouseID"].ToString(),salesOrderLinesCart) + ")</span>";
+                                                                }
                                                             }
                                                             else
                                                             {
                                                                 content = content + string.Format("<label class='swatchLabel'><input checked type='radio' id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString(), orgStyle);
+                                                                if (Convert.ToBoolean(Session["IsEmergency"]) && Convert.ToBoolean(Session["REQSTKLEVEL"]))
+                                                                {
+                                                                    content = content + "<span id='FreeStcoker_" + style + "_" + dr.ItemArray[3].ToString() + "' title='Free stock'>(" + dp.GetFreeStock(style, EmergencyStockColor, dr.ItemArray[3].ToString(), Session["WareHouseID"].ToString(),salesOrderLinesCart) + ")</span>";
+                                                                }
                                                             }
                                                         }
                                                     }
@@ -1613,16 +1704,28 @@
                                                     if (prevHistory.Size.Trim() == dr.ItemArray[3].ToString().Trim())
                                                     {
                                                         content = content + string.Format("<label class='swatchLabel'><input type='radio' checked id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[2].ToString(), orgStyle);
+                                                        if (Convert.ToBoolean(Session["IsEmergency"]) && Convert.ToBoolean(Session["REQSTKLEVEL"]))
+                                                        {
+                                                            content = content + "<span id='FreeStcoker_" + style + "_" + dr.ItemArray[2].ToString() + "' title='Free stock'>(" + dp.GetFreeStock(style, EmergencyStockColor, dr.ItemArray[2].ToString(), Session["WareHouseID"].ToString(),salesOrderLinesCart) + ")</span>";
+                                                        }
                                                     }
                                                     else
                                                     {
                                                         if (ucodeColorcnt > 1)
                                                         {
                                                             content = content + string.Format("<label class='swatchLabel'><input  type='radio' id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center>{1}</center></span></label>", style, dr.ItemArray[2].ToString(), orgStyle);
+                                                            if (Convert.ToBoolean(Session["IsEmergency"]) && Convert.ToBoolean(Session["REQSTKLEVEL"]))
+                                                            {
+                                                                content = content + "<span id='FreeStcoker_" + style + "_" + dr.ItemArray[2].ToString() + "' title='Free stock'>(" + dp.GetFreeStock(style, EmergencyStockColor, dr.ItemArray[2].ToString(), Session["WareHouseID"].ToString(),salesOrderLinesCart) + ")</span>";
+                                                            }
                                                         }
                                                         else
                                                         {
                                                             content = content + string.Format("<label class='swatchLabel'><input checked type='radio' id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[2].ToString(), orgStyle);
+                                                            if (Convert.ToBoolean(Session["IsEmergency"]) && Convert.ToBoolean(Session["REQSTKLEVEL"]))
+                                                            {
+                                                                content = content + "<span id='FreeStcoker_" + style + "_" + dr.ItemArray[2].ToString() + "' title='Free stock'>(" + dp.GetFreeStock(style, EmergencyStockColor, dr.ItemArray[2].ToString(), Session["WareHouseID"].ToString(),salesOrderLinesCart) + ")</span>";
+                                                            }
                                                         }
                                                     }
                                                 }
@@ -1720,16 +1823,28 @@
                                                         if (prevHistory.Size.Trim() == dr.ItemArray[3].ToString().Trim())
                                                         {
                                                             content = content + string.Format("<label class='swatchLabel'><input type='radio' checked id='radio' name=\"swatch_Size_" + style + "\" value='blue'  checked/><span class='spanner1'  onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString());
+                                                            if (Convert.ToBoolean(Session["IsEmergency"]) && Convert.ToBoolean(Session["REQSTKLEVEL"]))
+                                                            {
+                                                                content = content + "<span  id='FreeStcoker_" + style + "_" + dr.ItemArray[3].ToString() + "' title='Free stock'>(" + dp.GetFreeStock(style, EmergencyStockColor, dr.ItemArray[3].ToString(), Session["WareHouseID"].ToString(),salesOrderLinesCart) + ")</span>";
+                                                            }
                                                         }
                                                         else
                                                         {
                                                             if (ucodeColorcnt > 1)
                                                             {
                                                                 content = content + string.Format("<label class='swatchLabel'><input type='radio' id='radio' name=\"swatch_Size_" + style + "\" value='blue'/><span class='spanner1'  onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString());
+                                                                if (Convert.ToBoolean(Session["IsEmergency"]) && Convert.ToBoolean(Session["REQSTKLEVEL"]))
+                                                                {
+                                                                    content = content + "<span id='FreeStcoker_" + style + "_" + dr.ItemArray[3].ToString() + "' title='Free stock'>(" + dp.GetFreeStock(style, EmergencyStockColor, dr.ItemArray[3].ToString(), Session["WareHouseID"].ToString(),salesOrderLinesCart) + ")</span>";
+                                                                }
                                                             }
                                                             else
                                                             {
                                                                 content = content + string.Format("<label class='swatchLabel'><input type='radio' id='radio' name=\"swatch_Size_" + style + "\" value='blue'  checked/><span class='spanner1'  onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString());
+                                                                if (Convert.ToBoolean(Session["IsEmergency"]) && Convert.ToBoolean(Session["REQSTKLEVEL"]))
+                                                                {
+                                                                    content = content + "<span id='FreeStcoker_" + style + "_" + dr.ItemArray[3].ToString() + "' title='Free stock'>(" + dp.GetFreeStock(style, EmergencyStockColor, dr.ItemArray[3].ToString(), Session["WareHouseID"].ToString(),salesOrderLinesCart) + ")</span>";
+                                                                }
                                                             }
 
                                                         }
@@ -1744,16 +1859,28 @@
                                                     if (prevHistory.Size.Trim() == dr.ItemArray[3].ToString().Trim())
                                                     {
                                                         content = content + string.Format("<label class='swatchLabel'><input type='radio' checked id='radio' name=\"swatch_Size_" + style + "\" value='blue'  checked/><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[2].ToString());
+                                                        if (Convert.ToBoolean(Session["IsEmergency"]) && Convert.ToBoolean(Session["REQSTKLEVEL"]))
+                                                        {
+                                                            content = content + "<span id='FreeStcoker_" + style + "_" + dr.ItemArray[2].ToString() + "' title='Free stock'>(" + dp.GetFreeStock(style, EmergencyStockColor, dr.ItemArray[2].ToString(), Session["WareHouseID"].ToString(),salesOrderLinesCart) + ")</span>";
+                                                        }
                                                     }
                                                     else
                                                     {
                                                         if (ucodeColorcnt > 1)
                                                         {
                                                             content = content + string.Format("<label class='swatchLabel'><input type='radio'   id='radio' name=\"swatch_Size_" + style + "\" value='blue'  /><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[2].ToString());
+                                                            if (Convert.ToBoolean(Session["IsEmergency"]) && Convert.ToBoolean(Session["REQSTKLEVEL"]))
+                                                            {
+                                                                content = content + "<span id='FreeStcoker_" + style + "_" + dr.ItemArray[2].ToString() + "' title='Free stock'>(" + dp.GetFreeStock(style, EmergencyStockColor, dr.ItemArray[2].ToString(), Session["WareHouseID"].ToString(),salesOrderLinesCart) + ")</span>";
+                                                            }
                                                         }
                                                         else
                                                         {
                                                             content = content + string.Format("<label class='swatchLabel'><input type='radio'   id='radio' name=\"swatch_Size_" + style + "\" value='blue'  checked/><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[2].ToString());
+                                                            if (Convert.ToBoolean(Session["IsEmergency"]) && Convert.ToBoolean(Session["REQSTKLEVEL"]))
+                                                            {
+                                                                content = content + "<span id='FreeStcoker_" + style + "_" + dr.ItemArray[2].ToString() + "' title='Free stock'>(" + dp.GetFreeStock(style, EmergencyStockColor, dr.ItemArray[2].ToString(), Session["WareHouseID"].ToString(),salesOrderLinesCart) + ")</span>";
+                                                            }
                                                         }
 
                                                     }
@@ -2009,6 +2136,10 @@
                                                         {
 
                                                             content = content + string.Format("<label class='swatchLabel'><input type='radio'  checked id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1'  onclick=\"getSelectedSizeSwatch('{0}','{1}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString());
+                                                            if (Convert.ToBoolean(Session["IsEmergency"]) && Convert.ToBoolean(Session["REQSTKLEVEL"]))
+                                                            {
+                                                                content = content + "<span id='FreeStcoker_" + style + "_" + dr.ItemArray[3].ToString() + "' title='Free stock'>(" + dp.GetFreeStock(style, EmergencyStockColor, dr.ItemArray[3].ToString(), Session["WareHouseID"].ToString(),salesOrderLinesCart) + ")</span>";
+                                                            }
                                                         }
                                                         else
                                                         {
@@ -2017,16 +2148,28 @@
                                                             if (ucodeColorcnt > 1)
                                                             {
                                                                 content = content + string.Format("<label class='swatchLabel'><input type='radio'  id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1'  onclick=\"getSelectedSizeSwatch('{0}','{1}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString());
+                                                                if (Convert.ToBoolean(Session["IsEmergency"]) && Convert.ToBoolean(Session["REQSTKLEVEL"]))
+                                                                {
+                                                                    content = content + "<span id='FreeStcoker_" + style + "_" + dr.ItemArray[3].ToString() + "' title='Free stock'>(" + dp.GetFreeStock(style, EmergencyStockColor, dr.ItemArray[3].ToString(), Session["WareHouseID"].ToString(),salesOrderLinesCart) + ")</span>";
+                                                                }
                                                             }
                                                             else
                                                             {
                                                                 if (sizelste.Count > 1)
                                                                 {
                                                                     content = content + string.Format("<label class='swatchLabel'><input type='radio' id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1'  onclick=\"getSelectedSizeSwatch('{0}','{1}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString());
+                                                                    if (Convert.ToBoolean(Session["IsEmergency"]) && Convert.ToBoolean(Session["REQSTKLEVEL"]))
+                                                                    {
+                                                                        content = content + "<span id='FreeStcoker_" + style + "_" + dr.ItemArray[3].ToString() + "' title='Free stock'>(" + dp.GetFreeStock(style, EmergencyStockColor, dr.ItemArray[3].ToString(), Session["WareHouseID"].ToString(),salesOrderLinesCart) + ")</span>";
+                                                                    }
                                                                 }
                                                                 else
                                                                 {
                                                                     content = content + string.Format("<label class='swatchLabel'><input type='radio' checked id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1'  onclick=\"getSelectedSizeSwatch('{0}','{1}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString());
+                                                                    if (Convert.ToBoolean(Session["IsEmergency"]) && Convert.ToBoolean(Session["REQSTKLEVEL"]))
+                                                                    {
+                                                                        content = content + "<span id='FreeStcoker_" + style + "_" + dr.ItemArray[3].ToString() + "' title='Free stock'>(" + dp.GetFreeStock(style, EmergencyStockColor, dr.ItemArray[3].ToString(), Session["WareHouseID"].ToString(),salesOrderLinesCart) + ")</span>";
+                                                                    }
                                                                 }
                                                             }
 
@@ -2041,10 +2184,18 @@
                                                     if (prevHistory.Size.Trim() == dr.ItemArray[2].ToString())
                                                     {
                                                         content = content + string.Format("<label class='swatchLabel'><input type='radio' checked  id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1'   onclick=\"getSelectedSizeSwatch('{0}','{1}')\"><center >{1}</center></span></label>", style, dr.ItemArray[2].ToString());
+                                                        if (Convert.ToBoolean(Session["IsEmergency"]) && Convert.ToBoolean(Session["REQSTKLEVEL"]))
+                                                        {
+                                                            content = content + "<span id='FreeStcoker_" + style + "_" + dr.ItemArray[2].ToString() + "' title='Free stock'>(" + dp.GetFreeStock(style, EmergencyStockColor, dr.ItemArray[2].ToString(), Session["WareHouseID"].ToString(),salesOrderLinesCart) + ")</span>";
+                                                        }
                                                     }
                                                     else
                                                     {
                                                         content = content + string.Format("<label class='swatchLabel'><input type='radio' id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1'  onclick=\"getSelectedSizeSwatch('{0}','{1}')\"><center >{1}</center></span></label>", style, dr.ItemArray[2].ToString());
+                                                        if (Convert.ToBoolean(Session["IsEmergency"]) && Convert.ToBoolean(Session["REQSTKLEVEL"]))
+                                                        {
+                                                            content = content + "<span id='FreeStcoker_" + style + "_" + dr.ItemArray[2].ToString() + "' title='Free stock'>(" + dp.GetFreeStock(style, EmergencyStockColor, dr.ItemArray[2].ToString(), Session["WareHouseID"].ToString(),salesOrderLinesCart) + ")</span>";
+                                                        }
                                                     }
                                                 }
                                             }
@@ -2171,16 +2322,28 @@
                                                         if (prevHistory.Size.Trim() == dr.ItemArray[3].ToString().Trim())
                                                         {
                                                             content = content + string.Format("<label class='swatchLabel'><input type='radio' checked id='radio' name=\"swatch_Size_" + style + "\" value='blue' checked/><span class='spanner1'  onclick=\"getSelectedSizeSwatch('{0}','{1}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString());
+                                                            if (Convert.ToBoolean(Session["IsEmergency"]) && Convert.ToBoolean(Session["REQSTKLEVEL"]))
+                                                            {
+                                                                content = content + "<span id='FreeStcoker_" + style + "_" + dr.ItemArray[3].ToString() + "' title='Free stock'>(" + dp.GetFreeStock(style, EmergencyStockColor, dr.ItemArray[3].ToString(), Session["WareHouseID"].ToString(),salesOrderLinesCart) + ")</span>";
+                                                            }
                                                         }
                                                         else
                                                         {
                                                             if (ucodeColorcnt > 1)
                                                             {
                                                                 content = content + string.Format("<label class='swatchLabel'><input type='radio'   id='radio' name=\"swatch_Size_" + style + "\" value='blue'/><span class='spanner1'  onclick=\"getSelectedSizeSwatch('{0}','{1}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString());
+                                                                if (Convert.ToBoolean(Session["IsEmergency"]) && Convert.ToBoolean(Session["REQSTKLEVEL"]))
+                                                                {
+                                                                    content = content + "<span id='FreeStcoker_" + style + "_" + dr.ItemArray[3].ToString() + "' title='Free stock'>(" + dp.GetFreeStock(style, EmergencyStockColor, dr.ItemArray[3].ToString(), Session["WareHouseID"].ToString(),salesOrderLinesCart) + ")</span>";
+                                                                }
                                                             }
                                                             else
                                                             {
                                                                 content = content + string.Format("<label class='swatchLabel'><input type='radio'   id='radio' name=\"swatch_Size_" + style + "\" value='blue' checked/><span class='spanner1'  onclick=\"getSelectedSizeSwatch('{0}','{1}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString());
+                                                                if (Convert.ToBoolean(Session["IsEmergency"]) && Convert.ToBoolean(Session["REQSTKLEVEL"]))
+                                                                {
+                                                                    content = content + "<span id='FreeStcoker_" + style + "_" + dr.ItemArray[3].ToString() + "' title='Free stock'>(" + dp.GetFreeStock(style, EmergencyStockColor, dr.ItemArray[3].ToString(), Session["WareHouseID"].ToString(),salesOrderLinesCart) + ")</span>";
+                                                                }
                                                             }
 
                                                         }
@@ -2195,16 +2358,29 @@
                                                     if (prevHistory.Size.Trim() == dr.ItemArray[3].ToString().Trim())
                                                     {
                                                         content = content + string.Format("<label class='swatchLabel'><input type='radio' checked id='radio' name=\"swatch_Size_" + style + "\" value='blue' checked/><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}')\"><center >{1}</center></span></label>", style, dr.ItemArray[2].ToString());
+                                                        if (Convert.ToBoolean(Session["IsEmergency"]) && Convert.ToBoolean(Session["REQSTKLEVEL"]))
+                                                        {
+                                                            content = content + "<span id='FreeStcoker_" + style + "_" + dr.ItemArray[2].ToString() + "' title='Free stock'>(" + dp.GetFreeStock(style, EmergencyStockColor, dr.ItemArray[2].ToString(), Session["WareHouseID"].ToString(),salesOrderLinesCart) + ")</span>";
+                                                        }
                                                     }
                                                     else
                                                     {
                                                         if (ucodeColorcnt > 1)
                                                         {
                                                             content = content + string.Format("<label class='swatchLabel'><input type='radio' id='radio' name=\"swatch_Size_" + style + "\" value='blue'/><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}')\"><center >{1}</center></span></label>", style, dr.ItemArray[2].ToString());
+                                                            if (Convert.ToBoolean(Session["IsEmergency"]) && Convert.ToBoolean(Session["REQSTKLEVEL"]))
+                                                            {
+                                                                content = content + "<span id='FreeStcoker_" + style + "_" + dr.ItemArray[3].ToString() + "' title='Free stock'>(" + dp.GetFreeStock(style, EmergencyStockColor, dr.ItemArray[2].ToString(), Session["WareHouseID"].ToString(),salesOrderLinesCart) + ")</span>";
+                                                            }
                                                         }
                                                         else
                                                         {
                                                             content = content + string.Format("<label class='swatchLabel'><input type='radio' id='radio' name=\"swatch_Size_" + style + "\" value='blue' checked/><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}')\"><center >{1}</center></span></label>", style, dr.ItemArray[2].ToString());
+                                                            if (Convert.ToBoolean(Session["IsEmergency"]) && Convert.ToBoolean(Session["REQSTKLEVEL"]))
+                                                            {
+
+                                                                content = content + "<span id='FreeStcoker_" + style + "_" + dr.ItemArray[3].ToString() + "' title='Free stock'>(" + dp.GetFreeStock(style, EmergencyStockColor, dr.ItemArray[2].ToString(), Session["WareHouseID"].ToString(),salesOrderLinesCart) + ")</span>";
+                                                            }
                                                         }
 
                                                     }
@@ -2544,7 +2720,14 @@
 
                                 if ((bool)Session["IsManPack"] == true)
                                 {
-                                    btn.ClientSideEvents.Click = "addTocartSwatch";
+                                    if(Convert.ToBoolean(Session["IsEmergency"]))
+                                    {
+                                        btn.ClientSideEvents.Click = "addTocartSwatchEmergency";
+                                    }
+                                    else
+                                    {
+                                        btn.ClientSideEvents.Click = "addTocartSwatch";
+                                    }
                                 }
                                 else if ((bool)Session["IsBulkOrder1"] == true)
                                 {
@@ -2726,7 +2909,14 @@
 
                                 if ((bool)Session["IsManPack"] == true)
                                 {
-                                    btn.ClientSideEvents.Click = "addTocartSwatch";
+                                    if (Convert.ToBoolean(Session["IsEmergency"]))
+                                    {
+                                        btn.ClientSideEvents.Click = "addTocartSwatchEmergency";
+                                    }
+                                    else
+                                    {
+                                        btn.ClientSideEvents.Click = "addTocartSwatch";
+                                    }
                                 }
                                 else if ((bool)Session["IsBulkOrder1"] == true)
                                 {

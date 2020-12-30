@@ -45,8 +45,9 @@
     }
 
 .submenuside {
-    text-indent: 4px;
+    text-indent: 0px;
     height:40px;
+    margin-top:5px;
 }
 
 .sidebar-nav ul .sub-menu li.active,

@@ -1,0 +1,353 @@
+@{
+    Maximus.Data.Interface.Concrete.IUnitOfWork _unitOfWork = new Maximus.Data.InterFace.UnitOfWork();
+    Maximus.Controllers.HomeController home = new Maximus.Controllers.HomeController(_unitOfWork);
+    Maximus.Data.Models.DataProcessing hc = new Maximus.Data.Models.DataProcessing(_unitOfWork);
+    Maximus.Services.Interface.IDataConnection _dataConnection = new Maximus.Services.DataConnectionService(_unitOfWork);
+}
+
+@{
+    var grid = Html.DevExpress().GridView(settings =>
+    {
+        settings.Name = "EditReturnOrderGridview";
+        settings.CallbackRouteValues = new { Controller = "Return", Action = "EditReturnOrderGridviewPartial" };
+
+        settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "Return", Action = "EditReturnOrderGridviewPartialAddNew" };
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "Return", Action = "EditReturnOrderGridviewPartialUpdate" };
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "Return", Action = "EditReturnOrderGridviewPartialDelete" };
+        settings.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
+        settings.SettingsBehavior.ConfirmDelete = true;
+
+        settings.SettingsPager.PageSize = ViewData["gridPageSize"] != null ? (int)(ViewData["gridPageSize"]) : 10;
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.ShowNewButton = false;
+        settings.CommandColumn.ShowDeleteButton = false;
+        settings.CommandColumn.ShowEditButton = false;
+        settings.CommandColumn.ShowSelectCheckbox = true;
+        settings.CommandColumn.SelectAllCheckboxMode = GridViewSelectAllCheckBoxMode.AllPages;
+        settings.KeyFieldName = "OrderNo;LineNo;StyleId;ColourId;SizeId";
+        //var ReturnCC = new MVCxGridViewCommandColumn();
+        //ReturnCC.Name = "Return";
+        //ReturnCC.ShowEditButton = false;
+        //ReturnCC.ShowDeleteButton = false;
+        //ReturnCC.VisibleIndex = 0;
+        //ReturnCC.ShowSelectCheckbox = true;
+        //ReturnCC.SelectAllCheckboxMode = GridViewSelectAllCheckBoxMode.AllPages;
+        //// var ReOrdCC = new MVCxGridViewCommandColumn();
+        //////ReOrdCC.Name = "Reorder";
+        //////ReOrdCC.ShowEditButton = false;
+        //////ReOrdCC.ShowDeleteButton = false;
+        //////ReOrdCC.VisibleIndex = 11;
+        //////ReOrdCC.ShowSelectCheckbox = true;
+        //////ReOrdCC.SelectAllCheckboxMode = GridViewSelectAllCheckBoxMode.AllPages;
+        ////settings.Columns.Add(ReOrdCC);
+        //settings.Columns.Add(ReturnCC);
+        settings.SettingsPager.Visible = true;
+        settings.Settings.ShowGroupPanel = true;
+        settings.Settings.ShowFilterRow = true;
+        settings.Settings.ShowFilterRowMenu = true;
+        settings.SettingsBehavior.AllowSelectByRowClick = false;
+        settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.Off;
+        settings.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Right;
+        settings.SettingsAdaptivity.AdaptiveDetailColumnCount = 1;
+        settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = false;
+        settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
+        settings.ClientSideEvents.BeginCallback = "ItsCallBack";
+
+        settings.HtmlRowPrepared = (s, e) =>
+        {
+            if (e.GetValue("IsSelect") != null)
+            {
+                int isDel = (int)e.GetValue("IsDleted");
+
+                bool isretedit = (bool)e.GetValue("IsRetEdit");
+                int ordQty = Convert.ToInt32(e.GetValue("OrgOrdQty"));
+                int OrgRetOrdQty = isDel == 1 ? 0 : Convert.ToInt32(e.GetValue("OrgRetOrdQty"));
+                int remainingQty = ordQty - OrgRetOrdQty;
+                int ReturnLineNo = Convert.ToInt32(e.GetValue("LineNo"));
+                int OrderNo = Convert.ToInt32(e.GetValue("OrderNo"));
+                string style = e.GetValue("StyleId").ToString();
+                if (Session["rtnLines"] != null)
+                {
+                    if (isretedit== false)
+                    {
+                        if (((List<Maximus.Data.models.ReturnOrderModel>)Session["rtnLines"]).Where(sss => sss.IsDleted == 0).Count() > 0)
+                        {
+                            int retOrdqty = ((List<Maximus.Data.models.ReturnOrderModel>)Session["rtnLines"]).Any(sss => sss.StyleId == style && sss.LineNo == ReturnLineNo && sss.OrderNo == OrderNo && sss.IsDleted == 0) ? ((List<Maximus.Data.models.ReturnOrderModel>)Session["rtnLines"]).Where(sss => sss.StyleId == style && sss.LineNo == ReturnLineNo && sss.OrderNo == OrderNo && sss.IsDleted == 0).Sum(sss => sss.OrdQty) : 0;
+                            if (remainingQty - retOrdqty == 0)
+                            {
+                                remainingQty = 0;
+                            }
+                        }
+                    }
+                }
+                var ss = Convert.ToBoolean(e.GetValue("IsSelect"));
+                if (Convert.ToBoolean(e.GetValue("IsSelect")) && remainingQty == 0)
+                {
+                    e.Row.BackColor = System.Drawing.Color.Beige;
+                    e.Row.ToolTip = "This line has already been added to returns";
+                }
+            }
+        };
+        settings.CommandButtonInitialize = (s, e) =>
+        {
+            MVCxGridView gridView = (MVCxGridView)s;
+            if (e.ButtonType == ColumnCommandButtonType.SelectCheckbox)
+            {
+                int isDel = (int)gridView.GetRowValues(e.VisibleIndex, "IsDleted");
+
+                bool isretedit = (bool)gridView.GetRowValues(e.VisibleIndex, "IsRetEdit");
+                var value = Convert.ToBoolean(gridView.GetRowValues(e.VisibleIndex, "IsSelect"));
+                int ordQty = Convert.ToInt32(gridView.GetRowValues(e.VisibleIndex, "OrgOrdQty"));
+                int OrgRetOrdQty = isDel == 1 ? 0 : Convert.ToInt32(gridView.GetRowValues(e.VisibleIndex, "OrgRetOrdQty"));
+                int remainingQty = ordQty - OrgRetOrdQty;
+                int ReturnLineNo = Convert.ToInt32(gridView.GetRowValues(e.VisibleIndex, "LineNo"));
+                int OrderNo = Convert.ToInt32(gridView.GetRowValues(e.VisibleIndex, "OrderNo"));
+                string style = gridView.GetRowValues(e.VisibleIndex, "StyleId").ToString();
+                if (Session["rtnLines"] != null)
+                {
+                    if (isretedit== false)
+                    {
+                        if (((List<Maximus.Data.models.ReturnOrderModel>)Session["rtnLines"]).Where(aas => aas.IsDleted == 0).Count() > 0)
+                        {
+                            int retOrdqty = ((List<Maximus.Data.models.ReturnOrderModel>)Session["rtnLines"]).Any(sss => sss.StyleId == style && sss.LineNo == ReturnLineNo && sss.OrderNo == OrderNo && sss.IsDleted == 0) ? ((List<Maximus.Data.models.ReturnOrderModel>)Session["rtnLines"]).Where(sss => sss.StyleId == style && sss.LineNo == ReturnLineNo && sss.OrderNo == OrderNo && sss.IsDleted == 0).Sum(sss => sss.OrdQty) : 0;
+                            if (remainingQty - retOrdqty == 0)
+                            {
+                                remainingQty = 0;
+                            }
+                        }
+                    }
+                }
+                if (value && remainingQty == 0)
+                {
+                    e.Visible = false;
+                }
+            }
+        };
+        settings.Columns.Add("OrderNo").Width = 50; settings.Columns.Add("OrderDate").Width = 50;
+        settings.Columns.Add("LineNo").Visible = false;
+        settings.Columns.Add("Emp").Visible = false;
+        settings.Columns.Add(x =>
+        {
+            x.FieldName = "StyleImage"; x.Caption = " "; x.ReadOnly = true; x.EditFormSettings.Visible = DefaultBoolean.False;
+            x.Settings.AllowAutoFilter = DefaultBoolean.False;
+            x.SetDataItemTemplateContent(s =>
+            {
+                var styleimg = DataBinder.Eval(s.DataItem, "StyleImage");
+                //ViewContext.Writer.Write(string.Format("<img src=\"{0}\" height=\"30\" width=\"35\" />", styleimg));
+                if (styleimg != null)
+                {
+                    Html.DevExpress().ImageZoom(zoom =>
+                    {
+                        zoom.Name = "StyleImage" + Guid.NewGuid().ToString();
+                        zoom.ImageUrl = styleimg.ToString();
+                        zoom.Height = System.Web.UI.WebControls.Unit.Pixel(30);
+                        zoom.Width = System.Web.UI.WebControls.Unit.Pixel(35);
+                        zoom.LargeImageUrl = styleimg.ToString();
+                        zoom.EnableExpandMode = true;
+                        zoom.SettingsZoomMode.ZoomWindowHeight = System.Web.UI.WebControls.Unit.Pixel(600);
+                        zoom.SettingsZoomMode.ZoomWindowWidth = System.Web.UI.WebControls.Unit.Pixel(700);
+                        //zoom.ShowHint = Model.ShowHint;
+                        //zoom.LargeImageLoadMode = Model.LargeImageLoadMode;
+                        zoom.SettingsZoomMode.ZoomWindowPosition = ZoomWindowPosition.Right;
+                        zoom.SettingsZoomMode.MouseBoxOpacityMode = MouseBoxOpacityMode.Inside;
+                    }).GetHtml();
+                }
+            });
+            x.SetEditItemTemplateContent(c =>
+            {
+                GridViewEditItemTemplateContainer templateContainer = c as GridViewEditItemTemplateContainer;
+
+
+                Html.DevExpress().Image(lblsettings =>
+                {
+                    lblsettings.Name = "StyleImage";
+                    lblsettings.Height = System.Web.UI.WebControls.Unit.Pixel(30);
+                    lblsettings.Width = System.Web.UI.WebControls.Unit.Pixel(35);
+                    //lblsettings.ControlStyle.CssClass = "align-middle";
+                    //lblsettings.ClientVisible = visible;
+                }).Bind(templateContainer.Text).Render();
+
+            });
+        });
+
+        settings.Columns.Add(col => { col.FieldName = "StyleId"; col.Caption = "Style"; col.Width = 100; });
+        settings.Columns.Add(col => { col.FieldName = "Description"; });
+        settings.Columns.Add(col => { col.FieldName = "ColourId"; col.Caption = "Colour"; col.Width = 80; });
+        settings.Columns.Add(col => { col.FieldName = "SizeId"; col.Caption = "Size"; col.Width = 70; });
+
+        settings.Columns.Add(col => { col.FieldName = "OrgOrdQty"; col.Caption = "Order Qty"; col.Width = 70; });
+        if ((bool)Session["ISRTNEDITING"])
+        {
+            settings.Columns.Add(col => { col.FieldName = "OrgRetOrdQtyDel"; col.Caption = "Previous Returns"; col.Width = 20; });
+        }
+        else
+        {
+            settings.Columns.Add(col => { col.FieldName = "OrgRetOrdQty"; col.Caption = "Previous Returns"; col.Width = 20; });
+        }
+
+        settings.Columns.Add(set =>
+        {
+            set.FieldName = "RtnQty";
+            set.Caption = "Return Qty";
+            set.Width = 70;
+            set.SetDataItemTemplateContent(dat =>
+            {
+                var rtnLst = Session["rtnLines"] != null ? ((List<Maximus.Data.models.ReturnOrderModel>)Session["rtnLines"]).Where(s => s.IsReturn).ToList() : new List<Maximus.Data.models.ReturnOrderModel>();
+                var ordQty = (int)DataBinder.Eval(dat.DataItem, "OrgOrdQty");
+                var style = DataBinder.Eval(dat.DataItem, "StyleId").ToString();
+                var size = DataBinder.Eval(dat.DataItem, "SizeId").ToString();
+                var lineNO = Convert.ToInt32(DataBinder.Eval(dat.DataItem, "LineNo"));
+                var reasons = home._returnReasonCodes.GetAll().Distinct().ToList();
+                int OrderNO = (int)DataBinder.Eval(dat.DataItem, "OrderNo");
+                bool IsSelect = (bool)DataBinder.Eval(dat.DataItem, "IsSelect");
+                int OrderNo = (int)DataBinder.Eval(dat.DataItem, "OrderNo");
+                int isDel = (int)DataBinder.Eval(dat.DataItem, "IsDleted");
+                bool isretedit = (bool)DataBinder.Eval(dat.DataItem, "IsRetEdit");
+                int OrgRetOrdQty = (int)DataBinder.Eval(dat.DataItem, "OrgRetOrdQty");
+                int OrgRetOrdQtyDel = (int)DataBinder.Eval(dat.DataItem, "OrgRetOrdQtyDel");
+                int remainingQty =ordQty - OrgRetOrdQty;
+                //int otherReturnQty = isretedit ? 0 : (int)DataBinder.Eval(dat.DataItem, "OtherReturnQty");
+
+                //ViewContext.Writer.Write("<center><span><b>" + ordQty.ToString() + "</b></span></center><br/>");
+                if (Session["rtnLines"] != null)
+                {
+                    if (((List<Maximus.Data.models.ReturnOrderModel>)Session["rtnLines"]).Count() > 0)
+                    {
+                        if (isretedit== false)
+                        {
+                            int retOrdqty =  ((List<Maximus.Data.models.ReturnOrderModel>)Session["rtnLines"]).Any(sss => sss.StyleId == style && sss.LineNo == lineNO && sss.OrderNo == OrderNo && sss.SizeId == size && sss.IsDleted == 0) ? ((List<Maximus.Data.models.ReturnOrderModel>)Session["rtnLines"]).Where(sss => sss.StyleId == style && sss.LineNo == lineNO && sss.OrderNo == OrderNo && sss.SizeId == size && sss.IsDleted == 0).Sum(sss => sss.OrdQty) : 0;
+
+                            //if (remainingQty > 0)
+                            //{
+                            if (remainingQty - retOrdqty == 0)
+                            {
+                                remainingQty = 0;
+                            }
+                            else
+                            {
+                                remainingQty = remainingQty - retOrdqty;
+                            }
+                            //}
+                            //else
+                            //{
+
+                            //}
+                        }
+                    }
+                }
+                if (IsSelect == false || remainingQty > 0)
+                {
+                    Html.DevExpress().SpinEdit(cmb =>
+                    {
+                        cmb.Name = "txtBoxOrdQty_" + OrderNO + "_" + lineNO + "";
+                        cmb.Properties.MinValue = 1;
+                        cmb.Properties.MaxValue = remainingQty;
+                        cmb.Properties.ShowOutOfRangeWarning = false;
+                        cmb.Width = System.Web.UI.WebControls.Unit.Pixel(100);
+                        cmb.ControlStyle.ForeColor = System.Drawing.Color.Red;
+                        cmb.Number = remainingQty;
+                        cmb.Properties.AllowMouseWheel = false;
+                    }).GetHtml();
+                }
+                else
+                {
+
+                    int RtnQty = isretedit ? 0 : Session["rtnLines"] != null ? ((List<Maximus.Data.models.ReturnOrderModel>)Session["rtnLines"]).Count > 0 ? ((List<Maximus.Data.models.ReturnOrderModel>)Session["rtnLines"]).Any(ss => ss.LineNo == lineNO && ss.OrderNo == OrderNo && ss.StyleId == style && ss.SizeId == size) ? ((List<Maximus.Data.models.ReturnOrderModel>)Session["rtnLines"]).Where(ss => ss.LineNo == lineNO && ss.OrderNo == OrderNo && ss.StyleId == style && ss.SizeId == size).Sum(s => s.OrdQty) : (int)DataBinder.Eval(dat.DataItem, "RtnQty") : (int)DataBinder.Eval(dat.DataItem, "RtnQty") : (int)DataBinder.Eval(dat.DataItem, "RtnQty");
+                    RtnQty = RtnQty + OrgRetOrdQtyDel;
+                    ViewContext.Writer.Write("<center>Ordered Qty: " + ordQty + " Return Qty: " + RtnQty + "</center>");
+
+                }
+
+            });
+        });
+        settings.Columns.Add(col => { col.FieldName = "Points"; col.Width = 70; });
+        settings.Columns.Add(col => { col.FieldName = "TotalPoints"; col.Width = 70; });
+        if (Session["Price"].ToString().ToLower() != "hide")
+        {
+            settings.Columns.Add(col => { col.FieldName = "Price"; col.Width = 70; });
+        }
+        ///settings.Columns.Add("");}
+        //settings.Columns.Add(set => { set.FieldName = "Price"; });
+
+        settings.Columns.Add(set =>
+        {
+            set.FieldName = "Reason";
+            set.Settings.AllowSort = DefaultBoolean.False;
+            set.Width = System.Web.UI.WebControls.Unit.Pixel(250);
+            set.SetHeaderTemplateContent(dat =>
+            {
+                ViewContext.Writer.Write("Reason &nbsp;&nbsp;");
+                Html.DevExpress().CheckBox(chk =>
+                {
+                    chk.Name = "Applyreasontoalllines";
+                    chk.ToolTip = "Apply selected reason to all selected lines";
+                    chk.Properties.ClientSideEvents.CheckedChanged = "ChangeReasonSelLines";
+                }).GetHtml();
+            });
+            set.SetDataItemTemplateContent(dat =>
+            {
+                bool isretedit = (bool)DataBinder.Eval(dat.DataItem, "IsRetEdit");
+                int isDel = (int)DataBinder.Eval(dat.DataItem, "IsDleted");
+                var ordQty = (int)DataBinder.Eval(dat.DataItem, "OrgOrdQty");
+                var style = DataBinder.Eval(dat.DataItem, "StyleId").ToString();
+                var lineNO = Convert.ToInt32(DataBinder.Eval(dat.DataItem, "LineNo"));
+                var size = DataBinder.Eval(dat.DataItem, "SizeId").ToString();
+                var reasons = home._returnReasonCodes.GetAll().Distinct().ToList();
+                int OrderNO = (int)DataBinder.Eval(dat.DataItem, "OrderNo");
+                bool IsSelect = (bool)DataBinder.Eval(dat.DataItem, "IsSelect");
+                int OrgRetOrdQty = isDel == 1 ? 0 : (int)DataBinder.Eval(dat.DataItem, "OrgRetOrdQty");
+                int remainingQty = ordQty - OrgRetOrdQty;
+                if (Session["rtnLines"] != null)
+                {
+                    if (isretedit== false)
+                    {
+                        if (((List<Maximus.Data.models.ReturnOrderModel>)Session["rtnLines"]).Count() > 0)
+                        {
+
+                            var stts = ((List<Maximus.Data.models.ReturnOrderModel>)Session["rtnLines"]).ToList();
+
+                            int retOrdqty = ((List<Maximus.Data.models.ReturnOrderModel>)Session["rtnLines"]).Any(sss => sss.StyleId == style && sss.LineNo == lineNO && sss.OrderNo == OrderNO && sss.SizeId == size && sss.IsDleted == 0) ? ((List<Maximus.Data.models.ReturnOrderModel>)Session["rtnLines"]).Where(sss => sss.StyleId == style && sss.LineNo == lineNO && sss.OrderNo == OrderNO && sss.SizeId == size && sss.IsDleted == 0).Sum(sss => sss.OrdQty) : 0;
+                            if (remainingQty - retOrdqty == 0)
+                            {
+                                remainingQty = 0;
+                            }
+                        }
+                    }
+                }
+                if (IsSelect == false || remainingQty > 0)
+                {
+                    Html.DevExpress().ComboBox(cmb =>
+                    {
+                        cmb.Width = System.Web.UI.WebControls.Unit.Pixel(250);
+                        cmb.Name = "cmbRtnReason_" + OrderNO + "_" + lineNO + "";
+                        foreach (var itns in reasons)
+                        {
+                            cmb.Properties.Items.Add(itns.Description);
+                            cmb.Properties.TextField = "Description";
+                            cmb.Properties.ValueField = "ReasonCode";
+                        }
+                    }).GetHtml();
+                    //Html.DevExpress().Button(btn =>
+                    //{
+                    //    btn.Width = System.Web.UI.WebControls.Unit.Pixel(250);
+                    //    btn.Name = "BtnretunApplyAll_" + OrderNO + "_" + lineNO + "";
+                    //    btn.Text="Apply to all lines";
+                    //}).GetHtml();
+                }
+                else
+                {
+                    string reason = DataBinder.Eval(dat.DataItem, "Reason").ToString();
+                    ViewContext.Writer.Write("<center><span>" + reason + "</span></center>");
+                }
+
+            });
+        });
+
+
+    });
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()

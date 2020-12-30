@@ -1,0 +1,48 @@
+﻿
+@{
+    ViewBag.Title = "EditReturnOrder";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="row" style="background-color:white;color:gray">
+    <br />
+    <div class="col-md-1"></div>
+    <div class="col-md-5">
+        <div class="row">
+            <div class="col-md-5">
+                Employee name:
+                <br />
+                Employee Id:
+            </div>
+            <div class="col-md-7">
+               <b>@Session["rtnempname"].ToString()</b>
+                <br />
+                <b> @Session["rtnempid"].ToString()</b>
+            </div>
+           
+        </div>
+    </div>
+    <div class="col-md-5">@{ViewContext.Writer.Write(ViewData["pointsDiv"].ToString());}</div>
+    <div class="col-md-1"></div>
+    <br /><br /><br /> 
+</div>
+<br />
+<br />
+<div class="row" style="background-color:white;">
+
+    @Html.Action("EditReturnOrderGridviewPartial", new { empid = Session["rtnempid"].ToString() })
+
+    <br />
+    <br />
+
+    @Html.DevExpress().Button(btn => { btn.Name = "Btn_AcceptReturnLines"; btn.Text = "Accept lines"; btn.UseSubmitBehavior = false; btn.ClientSideEvents.Click = "AcceptReturnLines"; }).GetHtml()
+    @{if (Session["rtnLines"] != null)
+        {
+            if (((List<Maximus.Data.models.ReturnOrderModel>)Session["rtnLines"]).Where(s=>s.IsDleted==0).Count() > 0)
+            {
+                Html.DevExpress().Button(btn => { btn.Name = "Btn_Continue"; btn.Text = "Continue"; btn.UseSubmitBehavior = false; btn.ClientSideEvents.Click = "function(s,e){ window.location='/Return/ReturnReorder/'}"; }).GetHtml();
+            }
+        }
+    }
+    <br />
+    <br />
+</div>

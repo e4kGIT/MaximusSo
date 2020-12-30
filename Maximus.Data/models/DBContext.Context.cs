@@ -27,15 +27,47 @@ namespace Maximus.Data.models
             throw new UnintentionalCodeFirstException();
         }
     
+        public virtual DbSet<copy_my_aspnet_membership> copy_my_aspnet_membership { get; set; }
+        public virtual DbSet<copy_tblusers> copy_tblusers { get; set; }
         public virtual DbSet<cxml_salesorder_detail> cxml_salesorder_detail { get; set; }
         public virtual DbSet<cxml_salesorder_header> cxml_salesorder_header { get; set; }
+        public virtual DbSet<hr_address_duplicate_min> hr_address_duplicate_min { get; set; }
         public virtual DbSet<hr_business_removed> hr_business_removed { get; set; }
+        public virtual DbSet<hr_cargo_sizes> hr_cargo_sizes { get; set; }
+        public virtual DbSet<hr_change_business> hr_change_business { get; set; }
+        public virtual DbSet<hr_cordant_address> hr_cordant_address { get; set; }
+        public virtual DbSet<hr_cordant_assembly> hr_cordant_assembly { get; set; }
+        public virtual DbSet<hr_cordant_managers> hr_cordant_managers { get; set; }
+        public virtual DbSet<hr_cordant_onl_emp> hr_cordant_onl_emp { get; set; }
+        public virtual DbSet<hr_cordant_user> hr_cordant_user { get; set; }
+        public virtual DbSet<hr_cordant_user_copy> hr_cordant_user_copy { get; set; }
+        public virtual DbSet<hr_emplo_ve> hr_emplo_ve { get; set; }
+        public virtual DbSet<hr_emplo_ve_copy> hr_emplo_ve_copy { get; set; }
+        public virtual DbSet<hr_emplo_ve_copy_duplicate> hr_emplo_ve_copy_duplicate { get; set; }
+        public virtual DbSet<hr_emplo_ve_ma> hr_emplo_ve_ma { get; set; }
+        public virtual DbSet<hr_employee_to_branch> hr_employee_to_branch { get; set; }
+        public virtual DbSet<hr_morders> hr_morders { get; set; }
+        public virtual DbSet<hr_onlineorder_deleted> hr_onlineorder_deleted { get; set; }
+        public virtual DbSet<hr_price_update> hr_price_update { get; set; }
         public virtual DbSet<hr_pwc> hr_pwc { get; set; }
         public virtual DbSet<hr_pwc_locations> hr_pwc_locations { get; set; }
         public virtual DbSet<hr_pwc_size> hr_pwc_size { get; set; }
+        public virtual DbSet<hr_rollout_styles> hr_rollout_styles { get; set; }
+        public virtual DbSet<hr_rollout_styles_copy> hr_rollout_styles_copy { get; set; }
+        public virtual DbSet<hr_s27_name> hr_s27_name { get; set; }
+        public virtual DbSet<hr_salesorder_deleted> hr_salesorder_deleted { get; set; }
+        public virtual DbSet<hr_sohead> hr_sohead { get; set; }
+        public virtual DbSet<hr_style_prices> hr_style_prices { get; set; }
+        public virtual DbSet<hr_tremot02> hr_tremot02 { get; set; }
+        public virtual DbSet<hr_tsb_2020_custref_change> hr_tsb_2020_custref_change { get; set; }
         public virtual DbSet<hr_tsb_delivery_day> hr_tsb_delivery_day { get; set; }
+        public virtual DbSet<hr_tsb_delivery_schedule> hr_tsb_delivery_schedule { get; set; }
         public virtual DbSet<hr_tsb_leavers> hr_tsb_leavers { get; set; }
+        public virtual DbSet<hr_tsb_leavers_2019> hr_tsb_leavers_2019 { get; set; }
         public virtual DbSet<hr_tsb_leavers_2019_final> hr_tsb_leavers_2019_final { get; set; }
+        public virtual DbSet<hr_tsb_reldates> hr_tsb_reldates { get; set; }
+        public virtual DbSet<hr_tsb_release> hr_tsb_release { get; set; }
+        public virtual DbSet<hr_tsb_ucodes> hr_tsb_ucodes { get; set; }
         public virtual DbSet<ht_kbus> ht_kbus { get; set; }
         public virtual DbSet<ht_tsb_2020_custref_change> ht_tsb_2020_custref_change { get; set; }
         public virtual DbSet<my_aspnet_applications> my_aspnet_applications { get; set; }
@@ -50,14 +82,17 @@ namespace Maximus.Data.models
         public virtual DbSet<my_aspnet_sitemap> my_aspnet_sitemap { get; set; }
         public virtual DbSet<my_aspnet_users> my_aspnet_users { get; set; }
         public virtual DbSet<my_aspnet_usersinroles> my_aspnet_usersinroles { get; set; }
+        public virtual DbSet<tbl_employee_s27_hr> tbl_employee_s27_hr { get; set; }
         public virtual DbSet<tblacc_vatcodes> tblacc_vatcodes { get; set; }
         public virtual DbSet<tblaccemp_budget> tblaccemp_budget { get; set; }
         public virtual DbSet<tblaccemp_budgetcard> tblaccemp_budgetcard { get; set; }
         public virtual DbSet<tblaccemp_departments> tblaccemp_departments { get; set; }
         public virtual DbSet<tblaccemp_employee> tblaccemp_employee { get; set; }
         public virtual DbSet<tblaccemp_employee_atlasfm> tblaccemp_employee_atlasfm { get; set; }
+        public virtual DbSet<tblaccemp_employee_copy> tblaccemp_employee_copy { get; set; }
         public virtual DbSet<tblaccemp_employee_rollout> tblaccemp_employee_rollout { get; set; }
         public virtual DbSet<tblaccemp_employee_rollout_atlasfm> tblaccemp_employee_rollout_atlasfm { get; set; }
+        public virtual DbSet<tblaccemp_employee_rollout_copy> tblaccemp_employee_rollout_copy { get; set; }
         public virtual DbSet<tblaccemp_points> tblaccemp_points { get; set; }
         public virtual DbSet<tblaccemp_pointsadjustment> tblaccemp_pointsadjustment { get; set; }
         public virtual DbSet<tblaccemp_pointscard> tblaccemp_pointscard { get; set; }
@@ -91,6 +126,7 @@ namespace Maximus.Data.models
         public virtual DbSet<tblbus_countrycodes> tblbus_countrycodes { get; set; }
         public virtual DbSet<tblbus_groups_ref> tblbus_groups_ref { get; set; }
         public virtual DbSet<tblbus_online_orderref_nominal> tblbus_online_orderref_nominal { get; set; }
+        public virtual DbSet<tblbus_settings> tblbus_settings { get; set; }
         public virtual DbSet<tblbus_setvalues> tblbus_setvalues { get; set; }
         public virtual DbSet<tblbus_styles> tblbus_styles { get; set; }
         public virtual DbSet<tblchildmenu> tblchildmenus { get; set; }
@@ -114,6 +150,7 @@ namespace Maximus.Data.models
         public virtual DbSet<tblfsk_style_commoditycode> tblfsk_style_commoditycode { get; set; }
         public virtual DbSet<tblfsk_style_customers> tblfsk_style_customers { get; set; }
         public virtual DbSet<tblfsk_style_freetext> tblfsk_style_freetext { get; set; }
+        public virtual DbSet<tblfsk_style_gallery> tblfsk_style_gallery { get; set; }
         public virtual DbSet<tblfsk_style_groups> tblfsk_style_groups { get; set; }
         public virtual DbSet<tblfsk_style_groups_sub> tblfsk_style_groups_sub { get; set; }
         public virtual DbSet<tblfsk_style_locations> tblfsk_style_locations { get; set; }
@@ -137,6 +174,7 @@ namespace Maximus.Data.models
         public virtual DbSet<tblgen_parameters> tblgen_parameters { get; set; }
         public virtual DbSet<tblgen_user_defaults> tblgen_user_defaults { get; set; }
         public virtual DbSet<tblgen_user_parameters> tblgen_user_parameters { get; set; }
+        public virtual DbSet<tblgen_user_parameters_copy> tblgen_user_parameters_copy { get; set; }
         public virtual DbSet<tblgen_users> tblgen_users { get; set; }
         public virtual DbSet<tbllanguage> tbllanguages { get; set; }
         public virtual DbSet<tblonline_holidays> tblonline_holidays { get; set; }
@@ -199,7 +237,6 @@ namespace Maximus.Data.models
         public virtual DbSet<xml_salesorder_detail> xml_salesorder_detail { get; set; }
         public virtual DbSet<xml_salesorder_header> xml_salesorder_header { get; set; }
         public virtual DbSet<bak_tblaccemp_employee_tsb> bak_tblaccemp_employee_tsb { get; set; }
-        public virtual DbSet<copy_tblusers> copy_tblusers { get; set; }
         public virtual DbSet<hr_demo_address> hr_demo_address { get; set; }
         public virtual DbSet<hr_demo_employee> hr_demo_employee { get; set; }
         public virtual DbSet<hr_demo_invoices> hr_demo_invoices { get; set; }
@@ -207,10 +244,27 @@ namespace Maximus.Data.models
         public virtual DbSet<hr_demo_pickslips> hr_demo_pickslips { get; set; }
         public virtual DbSet<hr_demo_style> hr_demo_style { get; set; }
         public virtual DbSet<hr_demo_ucode> hr_demo_ucode { get; set; }
+        public virtual DbSet<hr_s27_adcpvt_lines> hr_s27_adcpvt_lines { get; set; }
+        public virtual DbSet<hr_s27_empucode> hr_s27_empucode { get; set; }
+        public virtual DbSet<hr_s27_order_adjust> hr_s27_order_adjust { get; set; }
+        public virtual DbSet<hr_s27_pwt_lines> hr_s27_pwt_lines { get; set; }
+        public virtual DbSet<hr_s27_rollout_order_delete> hr_s27_rollout_order_delete { get; set; }
+        public virtual DbSet<hr_s7_pwt_assmblylines> hr_s7_pwt_assmblylines { get; set; }
+        public virtual DbSet<hr_sohead_copy> hr_sohead_copy { get; set; }
+        public virtual DbSet<hr_tsb_min_orderdate> hr_tsb_min_orderdate { get; set; }
         public virtual DbSet<hr_tsb_new_delday> hr_tsb_new_delday { get; set; }
+        public virtual DbSet<hr_tsb_tblaccemp_ucodesemployees> hr_tsb_tblaccemp_ucodesemployees { get; set; }
+        public virtual DbSet<hr_tsbban01_partner_convert> hr_tsbban01_partner_convert { get; set; }
         public virtual DbSet<hr_users_removed> hr_users_removed { get; set; }
+        public virtual DbSet<hr_visexp01_dimfit_style> hr_visexp01_dimfit_style { get; set; }
+        public virtual DbSet<rollout_order_detail_tsb> rollout_order_detail_tsb { get; set; }
+        public virtual DbSet<rollout_order_header_address_tsb> rollout_order_header_address_tsb { get; set; }
+        public virtual DbSet<rollout_order_header_tsb> rollout_order_header_tsb { get; set; }
+        public virtual DbSet<stockcard_tsb_rollout> stockcard_tsb_rollout { get; set; }
+        public virtual DbSet<tblaccemp_employee_hr> tblaccemp_employee_hr { get; set; }
+        public virtual DbSet<tblaccemp_employee_hr_level1> tblaccemp_employee_hr_level1 { get; set; }
+        public virtual DbSet<tblaccemp_employee_hr_level2> tblaccemp_employee_hr_level2 { get; set; }
         public virtual DbSet<tblaccemp_style_staticqty> tblaccemp_style_staticqty { get; set; }
-        public virtual DbSet<tblbus_settings> tblbus_settings { get; set; }
         public virtual DbSet<tblonlinesop_backorders> tblonlinesop_backorders { get; set; }
         public virtual DbSet<tblsop_salesorder_detail_console> tblsop_salesorder_detail_console { get; set; }
         public virtual DbSet<tblsop_salesorder_header_console> tblsop_salesorder_header_console { get; set; }
@@ -229,6 +283,7 @@ namespace Maximus.Data.models
         public virtual DbSet<productlist> productlists { get; set; }
         public virtual DbSet<style_dimfitalloc_caption> style_dimfitalloc_caption { get; set; }
         public virtual DbSet<styleby_freetextview> styleby_freetextview { get; set; }
+        public virtual DbSet<styleby_freetextview_ucode> styleby_freetextview_ucode { get; set; }
         public virtual DbSet<stylebytemplateview> stylebytemplateviews { get; set; }
         public virtual DbSet<tblfskstyle_dimension1> tblfskstyle_dimension1 { get; set; }
         public virtual DbSet<ucodeby_freetextview> ucodeby_freetextview { get; set; }
@@ -240,11 +295,13 @@ namespace Maximus.Data.models
         public virtual DbSet<view_privateorder_pendings> view_privateorder_pendings { get; set; }
         public virtual DbSet<view_privateorders> view_privateorders { get; set; }
         public virtual DbSet<view_reissueorderwithnormalucode> view_reissueorderwithnormalucode { get; set; }
+        public virtual DbSet<view_totalpointsused> view_totalpointsused { get; set; }
         public virtual DbSet<view_ucode_freetext_tsb_rollout> view_ucode_freetext_tsb_rollout { get; set; }
         public virtual DbSet<view_unmatchedcolourwithorgcolour> view_unmatchedcolourwithorgcolour { get; set; }
         public virtual DbSet<view_unmatchedordercolourid> view_unmatchedordercolourid { get; set; }
-        public virtual DbSet<view_totalpointsused> view_totalpointsused { get; set; }
-        public virtual DbSet<styleby_freetextview_ucode> styleby_freetextview_ucode { get; set; }
+        public virtual DbSet<styleby_freetextview_emergency> styleby_freetextview_emergency { get; set; }
+        public virtual DbSet<tblonline_rejectorder_reasons> tblonline_rejectorder_reasons { get; set; }
+        public virtual DbSet<tblonline_ucode_operations> tblonline_ucode_operations { get; set; }
     
         public virtual int bk_CreateCube_OrderDetail()
         {

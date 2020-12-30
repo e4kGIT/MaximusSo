@@ -18,9 +18,12 @@ namespace Maximus.Services.Interface
         decimal GetPrice(string StyleID = "", string SizeId = "", string busId = "",string priceId="");
         decimal GetBulkPrice(int qty, string style = "", string size = "", string busId = "");
         List<string> GetAllcolours(string style);
+       
+        List<string> GetStyleImages(string style);
         bool SaveEmailData(string email, string userName, string busId);
         List<AssemblyModel> GetAssemblyInfo(string styleId, string appPath, string custId);
         List<SalesOrderLineViewModel> GetChargableAssembly(string intNoOfday, string IncWendsDel, string mainStyle, string CurrencyExchangeRate, string Currency_Name, string Rep_Id, string style = "", long lineNo = 0, long qty = 0, string empId = "", string empName = "", string busId = "", string selTemplates = "", string selUcode = "");
  List<SalesOrderLineViewModel> GetOptionalAssembly(string intNoOfday, string mainStyle, string IncWendsDel, string CurrencyExchangeRate, string Currency_Name, string Rep_Id, List<string> assemList = null, string style = "", long lineNo = 0, List<SalesOrderLineViewModel> lines = null, long qty = 0, string empId = "", string empName = "", int lastLino = 0, string busId = "", string selTemplates = "", string selUcode = "");
+       
     }
 }

@@ -6,7 +6,7 @@
     {   <div class="row">
         @if (item.SalesOrderLine != null)
         {
-            if (item.SalesOrderLine.Count > 0)
+            if (item.SalesOrderLine.Where(s => s.IsDleted == false).Count() > 0)
             {
                 if (Convert.ToBoolean(Session["ISEDITING"]) == false)
                 {

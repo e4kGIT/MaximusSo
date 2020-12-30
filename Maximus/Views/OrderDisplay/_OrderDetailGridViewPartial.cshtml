@@ -1,5 +1,8 @@
+ 
+
 @{
-    var grid = Html.DevExpress().GridView(settings => {
+    var grid = Html.DevExpress().GridView(settings =>
+    {
         settings.Name = "OrderDetail";
         settings.CallbackRouteValues = new { Controller = "OrderDisplay", Action = "OrderDetailGridViewPartial" };
 
@@ -27,12 +30,16 @@
         settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = false;
         settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
 
-        settings.Columns.Add(s=> { s.FieldName = "OrderNo";s.Caption = "Order no"; });
-        settings.Columns.Add(s => { s.FieldName = "OrderDate"; s.Caption = "Order date"; s.SetDataItemTemplateContent(k => {
-            var date =DateTime.Parse (DataBinder.Eval(k.DataItem, "OrderDate").ToString()).ToString("dd-MM-yyyy");
-            ViewContext.Writer.Write(date);
-        }); });
-        settings.Columns.Add(s => { s.FieldName = ""; s.Caption = "Customer";s.SetDataItemTemplateContent(k => { ViewContext.Writer.Write(Session["BuisnessId"].ToString()); }); });
+        settings.Columns.Add(s => { s.FieldName = "OrderNo"; s.Caption = "Order no"; });
+        settings.Columns.Add(s =>
+        {
+            s.FieldName = "OrderDate"; s.Caption = "Order date"; s.SetDataItemTemplateContent(k =>
+            {
+                var date = DateTime.Parse(DataBinder.Eval(k.DataItem, "OrderDate").ToString()).ToString("dd-MM-yyyy");
+                ViewContext.Writer.Write(date);
+            });
+        });
+        settings.Columns.Add(s => { s.FieldName = ""; s.Caption = "Customer"; s.SetDataItemTemplateContent(k => { ViewContext.Writer.Write(Session["BuisnessId"].ToString()); }); });
         settings.Columns.Add(s => { s.FieldName = "CustomerRef"; s.Caption = "Customer reference"; });
         settings.Columns.Add(s => { s.FieldName = "NominalCode"; s.Caption = "Nominal code"; });
         settings.Columns.Add(s => { s.FieldName = "DelDesc"; s.Caption = "Delivery description"; });
@@ -42,8 +49,10 @@
         settings.Columns.Add(s => { s.FieldName = "EmpName"; s.Caption = "Employee name"; });
         settings.Columns.Add(s => { s.FieldName = "IsConfirmed"; s.Caption = "Confirmed"; });
         settings.Columns.Add(s => { s.FieldName = "IsProcessed"; s.Caption = "Processed"; });
+        //settings.Columns.Add(s => { s.FieldName = "Reason"; s.Caption = "Reason"; });
     });
-    if (ViewData["EditError"] != null){
+    if (ViewData["EditError"] != null)
+    {
         grid.SetEditErrorText((string)ViewData["EditError"]);
     }
 }

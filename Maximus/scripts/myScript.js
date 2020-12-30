@@ -4,7 +4,7 @@ function getEntitlement1(style) {
     var colordrop = "ColorPop_" + "Drop_" + style;
     var colorValue = document.getElementsByName(colordrop);
     var selectedcolor = colorValue[0].defaultValue == "" & colorValue[0].value == "" ? "" : colorValue[0].defaultValue != "" ? colorValue[0].defaultValue : colorValue[0].value;
-    if (style.includes(',')) {
+    if (style.indexOf(',') > -1) {
         var stylerop = "styleDimDrp_" + style;
         var styleValue = document.getElementsByName(stylerop);
         var selectedStyle = styleValue[0].defaultValue == "" & styleValue[0].value == "" ? "" : styleValue[0].defaultValue != "" & styleValue[0].value != "" ? styleValue[0].value : styleValue[0].defaultValue != "" & styleValue[0].value == "" ? styleValue[0].defaultValue : "";
@@ -65,7 +65,7 @@ function getEntitlementonDemand(style) {
     var colordrop = "ColorDimview_" + "Drop_" + style;
     var colorValue = document.getElementsByName(colordrop);
     var selectedcolor = colorValue[0].defaultValue == "" & colorValue[0].value == "" ? "" : colorValue[0].defaultValue != "" ? colorValue[0].defaultValue : colorValue[0].value;
-    if (style.includes(',')) {
+    if (style.indexOf(',') > -1) {
         var stylerop = "styleDimviewDrp_" + style;
         var styleValue = document.getElementsByName(stylerop);
         var selectedStyle = styleValue[0].defaultValue == "" & styleValue[0].value == "" ? "" : styleValue[0].defaultValue != "" & styleValue[0].value != "" ? styleValue[0].value : styleValue[0].defaultValue != "" & styleValue[0].value == "" ? styleValue[0].defaultValue : "";
@@ -107,7 +107,7 @@ function getEntitlementDemand(style, error) {
     var colordrop = "ColorDimview_" + "Drop_" + style;
     var colorValue = document.getElementsByName(colordrop);
     var selectedcolor = colorValue[0].defaultValue == "" & colorValue[0].value == "" ? "" : colorValue[0].defaultValue != "" ? colorValue[0].defaultValue : colorValue[0].value;
-    if (style.includes(',')) {
+    if (style.indexOf(',') > -1) {
         var stylerop = "styleDimviewDrp_" + style;
         var styleValue = document.getElementsByName(stylerop);
         var selectedStyle = styleValue[0].defaultValue == "" & styleValue[0].value == "" ? "" : styleValue[0].defaultValue != "" & styleValue[0].value != "" ? styleValue[0].value : styleValue[0].defaultValue != "" & styleValue[0].value == "" ? styleValue[0].defaultValue : "";
@@ -119,7 +119,7 @@ function getEntitlementDemand(style, error) {
                 if (response != "") {
                     var errorMsg = "";
                     if (error == 1) {
-                        if (response.Result.includes('points')) {
+                        if (response.Result.indexOf('points') > -1) {
                             var data = response.Result.split("-////-");
 
                             if (response.availPts > 0) {
@@ -127,11 +127,11 @@ function getEntitlementDemand(style, error) {
                                     errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";
                                 }
                                 else {
-                                    errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.Cannot proceed.</span></div>";
+                                    errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded. Cannot proceed.</span></div>";
                                 }
                             }
                             else {
-                                errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.Cannot proceed.</span></div>";
+                                errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded. Cannot proceed.</span></div>";
                             }
 
                         }
@@ -141,7 +141,7 @@ function getEntitlementDemand(style, error) {
 
                     }
                     var data = document.getElementById("Entitlement");
-                    data.innerHTML = response.Result.includes('points') ? response.Result.split("-////-")[0] + errorMsg : response.Result + errorMsg;
+                    data.innerHTML = response.Result.indexOf('points') > -1 ? response.Result.split("-////-")[0] + errorMsg : response.Result + errorMsg;
                     Entitlement.SetHeaderText("Entitlement for " + response.EmpId);
                     Entitlement.Show();
                 }
@@ -159,17 +159,17 @@ function getEntitlementDemand(style, error) {
             success: function (response) {
                 var errorMsg = "";
                 if (error == 1) {
-                    if (response.Result.includes('points')) {
+                    if (response.Result.indexOf('points') > -1) {
                         if (response.availPts > 0) {
                             if (response.minMandatoryPts > 0) {
                                 errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";
                             }
                             else {
-                                errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.Cannot proceed.</span></div>";
+                                errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded. Cannot proceed.</span></div>";
                             }
                         }
                         else {
-                            errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.Cannot proceed.</span></div>";
+                            errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded. Cannot proceed.</span></div>";
                         }
 
                     }
@@ -178,7 +178,7 @@ function getEntitlementDemand(style, error) {
                     }
                 }
                 var data = document.getElementById("Entitlement");
-                data.innerHTML = response.Result.includes('points') ? response.Result.split("-////-")[0] + errorMsg : response.Result + errorMsg;
+                data.innerHTML = response.Result.indexOf('points') > -1 ? response.Result.split("-////-")[0] + errorMsg : response.Result + errorMsg;
                 Entitlement.SetHeaderText("Entitlement for " + response.EmpId);
                 Entitlement.Show();
             },
@@ -193,7 +193,7 @@ function getEntitlementDim(style, error) {
     var colordrop = "ColorPop_" + "Drop_" + style;
     var colorValue = document.getElementsByName(colordrop);
     var selectedcolor = colorValue[0].defaultValue == "" & colorValue[0].value == "" ? "" : colorValue[0].defaultValue != "" ? colorValue[0].defaultValue : colorValue[0].value;
-    if (style.includes(',')) {
+    if (style.indexOf(',') > -1) {
         var stylerop = "styleDimDrp_" + style;
         var styleValue = document.getElementsByName(stylerop);
         var selectedStyle = styleValue[0].defaultValue == "" & styleValue[0].value == "" ? "" : styleValue[0].defaultValue != "" & styleValue[0].value != "" ? styleValue[0].value : styleValue[0].defaultValue != "" & styleValue[0].value == "" ? styleValue[0].defaultValue : "";
@@ -205,7 +205,7 @@ function getEntitlementDim(style, error) {
                 if (response != "") {
                     var errorMsg = "";
                     if (error == 1) {
-                        if (response.Result.includes('points')) {
+                        if (response.Result.indexOf('points') > -1) {
                             if (response.availPts > 0) {
                                 if (response.minMandatoryPts > 0) {
                                     errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";
@@ -215,7 +215,7 @@ function getEntitlementDim(style, error) {
                                 }
                             }
                             else {
-                                errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.Cannot proceed.</span></div>";
+                                errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded. Cannot proceed.</span></div>";
                             }
                         }
                         else {
@@ -223,7 +223,7 @@ function getEntitlementDim(style, error) {
                         }
                     }
                     var data = document.getElementById("Entitlement");
-                    data.innerHTML = response.Result.includes('points') ? response.Result.split("-////-")[0] + errorMsg : response.Result + errorMsg;
+                    data.innerHTML = response.Result.indexOf('points') > -1 ? response.Result.split("-////-")[0] + errorMsg : response.Result + errorMsg;
                     Entitlement.SetHeaderText("Entitlement for " + response.EmpId);
                     Entitlement.Show();
                 }
@@ -241,17 +241,17 @@ function getEntitlementDim(style, error) {
             success: function (response) {
                 var errorMsg = "";
                 if (error == 1) {
-                    if (response.Result.includes('points')) {
+                    if (response.Result.indexOf('points') > -1) {
                         if (response.availPts > 0) {
                             if (response.minMandatoryPts > 0) {
                                 errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";
                             }
                             else {
-                                errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.Cannot proceed.</span></div>";
+                                errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded. Cannot proceed.</span></div>";
                             }
                         }
                         else {
-                            errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.Cannot proceed.</span></div>";
+                            errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded. Cannot proceed.</span></div>";
                         }
                     }
                     else {
@@ -259,7 +259,7 @@ function getEntitlementDim(style, error) {
                     }
                 }
                 var data = document.getElementById("Entitlement");
-                data.innerHTML = response.Result.includes('points') ? response.Result.split("-////-")[0] + errorMsg : response.Result + errorMsg;
+                data.innerHTML = response.Result.indexOf('points') > -1 ? response.Result.split("-////-")[0] + errorMsg : response.Result + errorMsg;
                 Entitlement.SetHeaderText("Entitlement for " + response.EmpId);
                 Entitlement.Show();
             },
@@ -273,7 +273,7 @@ function getEntitlementDim(style, error) {
 
 
 function getSelectedSizeSwatch(style, size, orgStyle) {
-    var styleId_Val = style.includes(",") ? GetStyleIdSwatch(style, orgStyle) : style;
+    var styleId_Val = style.indexOf(",") > -1 ? GetStyleIdSwatch(style, orgStyle) : style;
 
     if (size != "" && styleId_Val != "") {
         $.ajax({
@@ -286,7 +286,7 @@ function getSelectedSizeSwatch(style, size, orgStyle) {
                         url: '/Home/GetPrice/',
                         data: { 'StyleID': styleId_Val, 'SizeId': size },
                         success: function (response) {
-                            if (!response.includes("Login")) {
+                            if (!response.indexOf("Login") > -1) {
                                 var priceId = "LbPrice" + style;
                                 var price = document.getElementById(priceId);
                                 price.innerHTML = "";
@@ -306,7 +306,7 @@ function getSelectedSizeSwatch(style, size, orgStyle) {
                         url: '/Home/GetPrice/',
                         data: { 'StyleID': styleId_Val, 'SizeId': size },
                         success: function (response) {
-                            if (!response.includes("Login")) {
+                            if (!response.indexOf("Login") > -1) {
                                 var priceId = "LbPrice" + style;
                                 var price = document.getElementById(priceId);
                                 price.innerHTML = "";
@@ -335,7 +335,7 @@ function getSelectedSizeSwatch(style, size, orgStyle) {
 }
 
 function getSelectedSizeDimSwatch(style, size) {
-    var styleId_Val = style.includes(",") ? GetStyleId(style) : style;
+    var styleId_Val = style.indexOf(",") > -1 ? GetStyleId(style) : style;
 
     if (size != "" && styleId_Val != "") {
 
@@ -345,7 +345,7 @@ function getSelectedSizeDimSwatch(style, size) {
             data: { 'StyleID': styleId_Val, 'SizeId': size },
             success: function (response) {
                 ;
-                if (!response.includes("Login")) {
+                if (!response.indexOf("Login") > -1) {
                     var priceId = "LbPrice1" + style;
                     var price = document.getElementById(priceId);
                     price.innerHTML = "";
@@ -368,7 +368,7 @@ function getSelectedSizeDimSwatch(style, size) {
 
 function getSelectedSizeDemandSwatch(style, size, orgStyle) {
 
-    var styleId_Val = style.includes(",") ? GetStyleIdDemandSwatch(style, orgStyle) : style;
+    var styleId_Val = style.indexOf(",") > -1 ? GetStyleIdDemandSwatch(style, orgStyle) : style;
     //var sizeStyle = "swatch_DemandSize_" + style;
     //var sizeswatch = document.getElementsByName(sizeStyle);
 
@@ -394,7 +394,7 @@ function getSelectedSizeDemandSwatch(style, size, orgStyle) {
                         data: { 'StyleID': styleId_Val, 'SizeId': size },
                         success: function (response) {
                             ;
-                            if (!response.includes("Login")) {
+                            if (!response.indexOf("Login") > -1) {
                                 var priceId = "DimviewPriceinput1" + style;
                                 var price = document.getElementById(priceId);
                                 price.value = "";
@@ -416,7 +416,7 @@ function getSelectedSizeDemandSwatch(style, size, orgStyle) {
                         data: { 'StyleID': styleId_Val, 'SizeId': size },
                         success: function (response) {
                             ;
-                            if (!response.includes("Login")) {
+                            if (!response.indexOf("Login") > -1) {
                                 var priceId = "DimviewPriceinput1" + style;
                                 var price = document.getElementById(priceId);
                                 price.value = "";
@@ -443,7 +443,7 @@ function getSelectedSizeDemandSwatch(style, size, orgStyle) {
     }
 }
 
-function getEntitlementSwatch(style, orgStyl, error) {
+function getEntitlementSwatch(style, orgStyl, error, size) {
     var colorValue;
     var colorSwatchName = "swatch_Color_" + style;
     var colorSwatch = document.getElementsByName(colorSwatchName);
@@ -461,7 +461,7 @@ function getEntitlementSwatch(style, orgStyl, error) {
     }
     var selectedcolor = colorValue == undefined | colorValue == "" ? "" : colorValue;
     if (selectedcolor != "") {
-        if (style.includes(',')) {
+        if (style.indexOf(',') > -1) {
             var name = 'Swatch_Style_FieldSet_' + style;
             var fieldSet = document.getElementsByName(name);
             var selStyle;
@@ -473,22 +473,22 @@ function getEntitlementSwatch(style, orgStyl, error) {
             $.ajax({
                 url: "/Home/GetEntitlement",
                 type: "POST",
-                data: { 'StyleId': selStyle, 'ColorId': selectedcolor, 'orgStyl': orgStyl },
+                data: { 'StyleId': selStyle, 'ColorId': selectedcolor, 'orgStyl': orgStyl, 'size': size },
                 success: function (response) {
                     if (response != "") {
                         var errorMsg = "";
                         if (error == 1) {
-                            if (response.Result.includes('points')) {
+                            if (response.Result.indexOf('points') > -1) {
                                 if (response.availPts > 0) {
                                     if (response.minMandatoryPts > 0) {
                                         errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";
                                     }
                                     else {
-                                        errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.Cannot proceed.</span></div>";
+                                        errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.  Cannot proceed.</span></div>";
                                     }
                                 }
                                 else {
-                                    errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.Cannot proceed.</span></div>";
+                                    errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded. Cannot proceed.</span></div>";
                                 }
                             }
                             else {
@@ -496,7 +496,7 @@ function getEntitlementSwatch(style, orgStyl, error) {
                             }
                         }
                         var data = document.getElementById("Entitlement");
-                        data.innerHTML = response.Result.includes('points') ? response.Result.split("-////-")[0] + errorMsg : response.Result + errorMsg;
+                        data.innerHTML = response.Result.indexOf('points') > -1 ? response.Result.split("-////-")[0] + errorMsg : response.Result + errorMsg;
                         Entitlement.SetHeaderText("Entitlement for " + response.EmpId);
                         Entitlement.Show();
                     }
@@ -510,11 +510,11 @@ function getEntitlementSwatch(style, orgStyl, error) {
             $.ajax({
                 url: "/Home/GetEntitlement",
                 type: "POST",
-                data: { 'StyleId': style, 'ColorId': selectedcolor, 'orgStyl': style },
+                data: { 'StyleId': style, 'ColorId': selectedcolor, 'orgStyl': style, 'size': size },
                 success: function (response) {
                     var errorMsg = "";
                     if (error == 1) {
-                        if (response.Result.includes('points')) {
+                        if (response.Result.indexOf('points') > -1) {
                             if (response.availPts > 0) {
                                 if (response.minMandatoryPts > 0) {
                                     errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";
@@ -524,7 +524,7 @@ function getEntitlementSwatch(style, orgStyl, error) {
                                 }
                             }
                             else {
-                                errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.Cannot proceed.</span></div>";
+                                errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded. Cannot proceed.</span></div>";
                             }
                         }
                         else {
@@ -532,7 +532,7 @@ function getEntitlementSwatch(style, orgStyl, error) {
                         }
                     }
                     var data = document.getElementById("Entitlement");
-                    data.innerHTML = response.Result.includes('points') ? response.Result.split("-////-")[0] + errorMsg : response.Result + errorMsg;
+                    data.innerHTML = response.Result.indexOf('points') > -1 ? response.Result.split("-////-")[0] + errorMsg : response.Result + errorMsg;
                     Entitlement.SetHeaderText("Entitlement for " + response.EmpId);
                     Entitlement.Show();
                 },
@@ -564,7 +564,7 @@ function getEntitlementDimSwatch(style, error) {
     }
     var selectedcolor = colorValue == undefined | colorValue == "" ? "" : colorValue;
     if (selectedcolor != "") {
-        if (style.includes(',')) {
+        if (style.indexOf(',') > -1) {
             var stylerop = "styleDimDrp_" + style;
             var styleValue = document.getElementsByName(stylerop);
             var selectedStyle = styleValue[0].defaultValue == "" & styleValue[0].value == "" ? "" : styleValue[0].defaultValue != "" & styleValue[0].value != "" ? styleValue[0].value : styleValue[0].defaultValue != "" & styleValue[0].value == "" ? styleValue[0].defaultValue : "";
@@ -576,17 +576,17 @@ function getEntitlementDimSwatch(style, error) {
                     if (response != "") {
                         var errorMsg = "";
                         if (error == 1) {
-                            if (response.Result.includes('points')) {
+                            if (response.Result.indexOf('points') > -1) {
                                 if (response.availPts > 0) {
                                     if (response.minMandatoryPts > 0) {
                                         errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";
                                     }
                                     else {
-                                        errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.Cannot proceed.</span></div>";
+                                        errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded. Cannot proceed.</span></div>";
                                     }
                                 }
                                 else {
-                                    errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.Cannot proceed.</span></div>";
+                                    errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded. Cannot proceed.</span></div>";
                                 }
                             }
                             else {
@@ -594,7 +594,7 @@ function getEntitlementDimSwatch(style, error) {
                             }
                         }
                         var data = document.getElementById("Entitlement");
-                        data.innerHTML = response.Result.includes('points') ? response.Result.split("-////-")[0] + errorMsg : response.Result + errorMsg;
+                        data.innerHTML = response.Result.indexOf('points') > -1 ? response.Result.split("-////-")[0] + errorMsg : response.Result + errorMsg;
                         Entitlement.SetHeaderText("Entitlement for " + response.EmpId);
                         Entitlement.Show();
                     }
@@ -612,17 +612,17 @@ function getEntitlementDimSwatch(style, error) {
                 success: function (response) {
                     var errorMsg = "";
                     if (error == 1) {
-                        if (response.Result.includes('points')) {
+                        if (response.Result.indexOf('points') > -1) {
                             if (response.availPts > 0) {
                                 if (response.minMandatoryPts > 0) {
                                     errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";
                                 }
                                 else {
-                                    errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.Cannot proceed.</span></div>";
+                                    errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded. Cannot proceed.</span></div>";
                                 }
                             }
                             else {
-                                errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.Cannot proceed.</span></div>";
+                                errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded. Cannot proceed.</span></div>";
                             }
                         }
                         else {
@@ -630,7 +630,7 @@ function getEntitlementDimSwatch(style, error) {
                         }
                     }
                     var data = document.getElementById("Entitlement");
-                    data.innerHTML = response.Result.includes('points') ? response.Result.split("-////-")[0] + errorMsg : response.Result + errorMsg;
+                    data.innerHTML = response.Result.indexOf('points') > -1 ? response.Result.split("-////-")[0] + errorMsg : response.Result + errorMsg;
                     Entitlement.SetHeaderText("Entitlement for " + response.EmpId);
                     Entitlement.Show();
                 },
@@ -662,8 +662,8 @@ function getEntitlementDemandSwatch(style, orgStyl, error) {
     }
     var selectedcolor = colorValue == undefined | colorValue == "" ? "" : colorValue;
     if (selectedcolor != "") {
-        if (style.includes(',')) {
-            if (style.includes(',')) {
+        if (style.indexOf(',') > -1) {
+            if (style.indexOf(',') > -1) {
                 var name = 'Swatch_DemandStyle_FieldSet_' + style;
                 var fieldSet = document.getElementsByName(name);
                 var selStyle;
@@ -683,24 +683,24 @@ function getEntitlementDemandSwatch(style, orgStyl, error) {
                         var data = document.getElementById("Entitlement");
                         var errorMsg = "";
                         if (error == 1) {
-                            if (response.Result.includes('points')) {
+                            if (response.Result.indexOf('points') > -1) {
                                 if (response.availPts > 0) {
                                     if (response.minMandatoryPts > 0) {
                                         errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";
                                     }
                                     else {
-                                        errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.Cannot proceed.</span></div>";
+                                        errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.  Cannot proceed.</span></div>";
                                     }
                                 }
                                 else {
-                                    errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.Cannot proceed.</span></div>";
+                                    errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded. Cannot proceed.</span></div>";
                                 }
                             }
                             else {
                                 errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed entitlement exceeded</span></div>";
                             }
                         }
-                        data.innerHTML = response.Result.includes('points') ? response.Result.split("-////-")[0] + errorMsg : response.Result + errorMsg;
+                        data.innerHTML = response.Result.indexOf('points') > -1 ? response.Result.split("-////-")[0] + errorMsg : response.Result + errorMsg;
                         Entitlement.SetHeaderText("Entitlement for " + response.EmpId);
                         Entitlement.Show();
                     }
@@ -719,24 +719,24 @@ function getEntitlementDemandSwatch(style, orgStyl, error) {
                     var data = document.getElementById("Entitlement");
                     var errorMsg = "";
                     if (error == 1) {
-                        if (response.Result.includes('points')) {
+                        if (response.Result.indexOf('points') > -1) {
                             if (response.availPts > 0) {
                                 if (response.minMandatoryPts > 0) {
                                     errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";
                                 }
                                 else {
-                                    errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.Cannot proceed.</span></div>";
+                                    errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded. Cannot proceed.</span></div>";
                                 }
                             }
                             else {
-                                errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.Cannot proceed.</span></div>";
+                                errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded. Cannot proceed.</span></div>";
                             }
                         }
                         else {
                             errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed entitlement exceeded</span></div>";
                         }
                     }
-                    data.innerHTML = response.Result.includes('points') ? response.Result.split("-////-")[0] + errorMsg : response.Result + errorMsg;
+                    data.innerHTML = response.Result.indexOf('points') > -1 ? response.Result.split("-////-")[0] + errorMsg : response.Result + errorMsg;
                     Entitlement.SetHeaderText("Entitlement for " + response.EmpId);
                     Entitlement.Show();
                 },
@@ -788,6 +788,161 @@ function getEntitlementDemandSwatch(style, orgStyl, error) {
 //    }
 //});
 
+function addTocartSwatchEmergency(s, e) {
+    var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
+    var sitecode = ASPxClientControl.GetControlCollection().GetByName("SiteCodeCmb");
+    var selectedSitecode = sitecode != null ? sitecode.GetValue() != null ? sitecode.GetValue() : "" : "SITECODENULL";
+    var stylearr = s.name.split('_');
+    var description = "";
+    var price = "";
+    var size = "";
+    var color = "";
+    var qty = "";
+    var sStyle = "";
+    var descStyle;
+    var colorValue;
+    var sizeValue;
+    var colorSwatchName = "swatch_Color_" + stylearr[1];
+    var colorSwatch = document.getElementsByName(colorSwatchName);
+    var sizeSwatchName = "swatch_Size_" + stylearr[1];
+    var sizeSwatch = document.getElementsByName(sizeSwatchName);
+    var reasonName = "CmbReason_" + stylearr[1];
+    var reasonControl = document.getElementsByName(reasonName);
+    var reason;
+
+    if (reasonControl.length > 0) {
+        reason = reasonControl[0].value == "" | reasonControl[0].value == undefined ? reasonControl[0].defaultValue == "" | reasonControl[0].defaultValue == "" ? "" : reasonControl[0].defaultValue : reasonControl[0].value;
+    }
+    if (sizeSwatch.length > 1) {
+        for (var i = 0; i < sizeSwatch.length; i++) {
+            if (sizeSwatch[i].checked) {
+                sizeValue = sizeSwatch[i].offsetParent.innerText;
+            }
+        }
+    }
+    else {
+        if (sizeSwatch[0].checked) {
+            sizeValue = sizeSwatch[0].offsetParent.innerText;
+        }
+    }
+    if (colorSwatch.length > 1) {
+        for (var i = 0; i < colorSwatch.length; i++) {
+            if (colorSwatch[i].checked) {
+                colorValue = colorSwatch[i].offsetParent.innerText;
+            }
+        }
+    }
+    else {
+        if (colorSwatch[0].checked) {
+            colorValue = colorSwatch[0].offsetParent.innerText;
+        }
+    }
+    size = sizeValue != undefined && sizeValue != "" ? sizeValue : "";
+    color = colorValue != undefined && colorValue != "" ? colorValue : "";
+
+    if (stylearr[1].indexOf(',') > -1) {
+        var name = 'Swatch_Style_FieldSet_' + stylearr[1];
+        var fieldSet = document.getElementsByName(name);
+        var selStyle;
+        for (var i = 0; i < fieldSet[0].elements.length; i++) {
+            if (fieldSet[0].elements[i].checked) {
+                selStyle = fieldSet[0].elements[i].value;
+            }
+        }
+        sStyle = selStyle;
+        descStyle = stylearr[1].split(',');
+    }
+    else {
+        sStyle = stylearr[1];
+    }
+    var minPtsDivName = "minPtsDiv_" + sStyle;
+    var minPtsDiv = document.getElementsByClassName(minPtsDivName)
+    var desc = descStyle == undefined ? stylearr[1] : descStyle[0];
+    var Spin = document.getElementsByName("spinEdit_" + stylearr[1]);
+    var descriptionDiv = document.getElementById("LbDescription" + desc);
+    description = descriptionDiv.innerHTML;
+    var priceId = document.getElementById("LbPriceinput" + stylearr[1]);
+    price = priceId != undefined && priceId != null ? priceId.value : priceId == undefined ? "0.0" : "0";
+    qty = Spin[0].value;
+    var clsName = "reqData" + stylearr[1];
+    var reqdatatxt = "reqdatatxt" + stylearr[1];
+    var reqData = document.getElementsByClassName(clsName);
+    if (description != "" && price != "" && price != "0" && size != "" && color != "" && qty != "" && qty != "0" && (selectedSitecode != "" | selectedSitecode == "SITECODENULL")) {
+        $.ajax({
+            url: "/Home/GetBtnStatus/",
+            type: "POST",
+            data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty, 'orgStyl': stylearr[3], 'size': size },
+            success: function (response) {
+                debugger;
+                if (response == "enabled" && (reason != "" && reason != undefined)) {
+                    loadPopup.Show();
+                    selectedSitecode = selectedSitecode == "SITECODENULL" ? "" : selectedSitecode;
+                    $.ajax({
+                        url: "/Home/Addtocart/",
+                        type: "POST",
+                        data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'entQty': stylearr[2], 'reason': reason, 'selectedSitecode': selectedSitecode },
+                        success: function (response) {
+                            if (response != "") {
+                                $("#CartwidCount").html("");
+                                $("#CartwidCount").html(response);
+                                loadPopup.Hide();
+                                $.ajax({
+                                    url: "/Home/GetFreeStockValue/",
+                                    type: "POST",
+                                    data: { 'StyleId': sStyle, 'ColorId': color, 'size': size },
+                                    success: function (response) {
+                                        if (response != "") {
+                                            var Freestock = document.getElementById("FreeStcoker_" + sStyle + "_" + size + "");
+                                            if (Freestock != null) {
+                                                Freestock.innerHTML = "(" + response + ")";
+                                            }
+                                        }
+                                    }
+                                });
+                                myFunction("Added to cart..!");
+
+                                //myFunction("Added to cart..!");  ;
+                            }
+                            else {
+                                loadPopup.Hide();
+                                $.ajax({
+                                    url: "/Home/IsreasonFailed/",
+                                    type: "POST",
+                                    data: { 'reason': reason },
+                                    success: function (response) {
+                                        if (response != "") {
+                                            alert(response);
+                                        }
+                                        else {
+                                            alert("Try again..!");
+                                        }
+
+                                    }
+                                });
+                                //alert("Try again!");
+                            }
+                        },
+                        error: function () {
+                            loadPopup.Hide();
+                            myFunction("Try again..!");
+                            //alert("Try again!");
+                        }
+                    })
+                }
+                else {
+                    // document.getElementById("ErrorMessage").style.display = 'block';
+                    loadPopup.Hide();
+                    getEntitlementSwatch(stylearr[1], stylearr[3], 1, size);
+
+                }
+            },
+            error: function () {
+                loadPopup.Hide();
+                myFunction("Try again!");
+            }
+        });
+    }
+}
 
 function addTocartSwatch(s, e) {
     var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
@@ -841,7 +996,7 @@ function addTocartSwatch(s, e) {
     size = sizeValue != undefined && sizeValue != "" ? sizeValue : "";
     color = colorValue != undefined && colorValue != "" ? colorValue : "";
 
-    if (stylearr[1].includes(',')) {
+    if (stylearr[1].indexOf(',') > -1) {
         var name = 'Swatch_Style_FieldSet_' + stylearr[1];
         var fieldSet = document.getElementsByName(name);
         var selStyle;
@@ -875,7 +1030,7 @@ function addTocartSwatch(s, e) {
                 $.ajax({
                     url: "/Home/GetBtnStatus/",
                     type: "POST",
-                    data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty, 'orgStyl': stylearr[3] },
+                    data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty, 'orgStyl': stylearr[3], 'size': size },
                     success: function (response) {
                         debugger;
                         if (response == "enabled" | (reason != "" && reason != undefined)) {
@@ -917,7 +1072,7 @@ function addTocartSwatch(s, e) {
                                     else {
                                         loadPopup.Hide();
                                         $.ajax({
-                                            url: "/Home/IsEmergencyreasonFailed/",
+                                            url: "/Home/IsreasonFailed/",
                                             type: "POST",
                                             data: { 'reason': reason },
                                             success: function (response) {
@@ -943,7 +1098,7 @@ function addTocartSwatch(s, e) {
                         else {
                             // document.getElementById("ErrorMessage").style.display = 'block';
                             loadPopup.Hide();
-                            getEntitlementSwatch(stylearr[1], stylearr[3], 1);
+                            getEntitlementSwatch(stylearr[1], stylearr[3], 1, size);
 
                         }
                     },
@@ -958,7 +1113,7 @@ function addTocartSwatch(s, e) {
                 $.ajax({
                     url: "/Home/GetBtnStatus/",
                     type: "POST",
-                    data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty, 'orgStyl': stylearr[3] },
+                    data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty, 'orgStyl': stylearr[3], 'size': size },
                     success: function (response) {
                         debugger;
                         if (response == "enabled" | (reason != "" && reason != undefined)) {
@@ -998,7 +1153,7 @@ function addTocartSwatch(s, e) {
                                     else {
                                         loadPopup.Hide();
                                         $.ajax({
-                                            url: "/Home/IsEmergencyreasonFailed/",
+                                            url: "/Home/IsreasonFailed/",
                                             type: "POST",
                                             data: { 'reason': reason },
                                             success: function (response) {
@@ -1022,7 +1177,7 @@ function addTocartSwatch(s, e) {
                         else {
                             // document.getElementById("ErrorMessage").style.display = 'block';
                             loadPopup.Hide();
-                            getEntitlementSwatch(stylearr[1], stylearr[3], 1);
+                            getEntitlementSwatch(stylearr[1], stylearr[3], 1, size);
 
                         }
                     },
@@ -1061,7 +1216,7 @@ function addTocartSwatch(s, e) {
                 $.ajax({
                     url: "/Home/GetBtnStatus/",
                     type: "POST",
-                    data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty, 'orgStyl': stylearr[3] },
+                    data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty, 'orgStyl': stylearr[3], 'size': size },
                     success: function (response) {
                         debugger;
                         if (response == "enabled" | (reason != "" && reason != undefined)) {
@@ -1104,7 +1259,7 @@ function addTocartSwatch(s, e) {
                                     else {
                                         loadPopup.Hide();
                                         $.ajax({
-                                            url: "/Home/IsEmergencyreasonFailed/",
+                                            url: "/Home/IsreasonFailed/",
                                             type: "POST",
                                             data: { 'reason': reason },
                                             success: function (response) {
@@ -1130,7 +1285,7 @@ function addTocartSwatch(s, e) {
                         else {
                             // document.getElementById("ErrorMessage").style.display = 'block';
                             loadPopup.Hide();
-                            getEntitlementSwatch(stylearr[1], stylearr[3], 1);
+                            getEntitlementSwatch(stylearr[1], stylearr[3], 1, size);
 
                         }
                     },
@@ -1145,7 +1300,7 @@ function addTocartSwatch(s, e) {
                 $.ajax({
                     url: "/Home/GetBtnStatus/",
                     type: "POST",
-                    data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty, 'orgStyl': stylearr[3] },
+                    data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty, 'orgStyl': stylearr[3], 'size': size },
                     success: function (response) {
                         debugger;
                         if (response == "enabled" | (reason != "" && reason != undefined)) {
@@ -1184,7 +1339,7 @@ function addTocartSwatch(s, e) {
                                     else {
                                         loadPopup.Hide();
                                         $.ajax({
-                                            url: "/Home/IsEmergencyreasonFailed/",
+                                            url: "/Home/IsreasonFailed/",
                                             type: "POST",
                                             data: { 'reason': reason },
                                             success: function (response) {
@@ -1208,7 +1363,7 @@ function addTocartSwatch(s, e) {
                         else {
                             // document.getElementById("ErrorMessage").style.display = 'block';
                             loadPopup.Hide();
-                            getEntitlementSwatch(stylearr[1], stylearr[3], 1);
+                            getEntitlementSwatch(stylearr[1], stylearr[3], 1, size);
 
                         }
                     },
@@ -1306,7 +1461,7 @@ function addTocartDimSwatch(s, e) {
     size = sizeValue != undefined | sizeValue != "" ? sizeValue : "";
     color = colorValue != undefined | colorValue != "" ? colorValue : "";
 
-    if (stylearr[1].includes(',')) {
+    if (stylearr[1].indexOf(',') > -1) {
         var data = ASPxClientControl.GetControlCollection().GetByName("styleDimDrp_" + stylearr[1]);
         sStyle = data.lastSuccessText;
         descStyle = stylearr[1].split(',');
@@ -1324,7 +1479,7 @@ function addTocartDimSwatch(s, e) {
             $.ajax({
                 url: "/Home/GetBtnStatus/",
                 type: "POST",
-                data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty },
+                data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty, 'size': size },
                 success: function (response) {
                     debugger;
                     if (response == "enabled" | (reason != "" && reason != undefined)) {
@@ -1370,7 +1525,7 @@ function addTocartDimSwatch(s, e) {
             $.ajax({
                 url: "/Home/GetBtnStatus/",
                 type: "POST",
-                data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty },
+                data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty, 'size': size },
                 success: function (response) {
                     debugger;
                     if (response == "enabled" | (reason != "" && reason != undefined)) {
@@ -1511,7 +1666,7 @@ function addTocartDemandSwatch(s, e) {
     size = sizeValue != undefined | sizeValue != "" ? sizeValue : "";
     color = colorValue != undefined | colorValue != "" ? colorValue : "";
 
-    if (stylearr[1].includes(',')) {
+    if (stylearr[1].indexOf(',') > -1) {
         var name = 'Swatch_DemandStyle_FieldSet_' + stylearr[1];
         var fieldSet = document.getElementsByName(name);
         var selStyle;
@@ -1537,27 +1692,105 @@ function addTocartDemandSwatch(s, e) {
     var clsName = "reqDatadim" + stylearr[1];
     var reqdatatxt = "reqdatatxtdim" + stylearr[1];
     var reqData = document.getElementsByClassName(clsName);
-    if (reqData[0].style.display != "none") {
-        var reqtxt = document.getElementsByClassName(reqdatatxt);
+
+    if (s.name.indexOf("Reorder") > -1) {
         if (description != "" && price != "" && price != "0" && size != undefined && price != undefined && color != undefined && size != "" && color != "" && qty != "" && qty != "0" && reqtxt[0].value != "" && (selectedSitecode != "" | selectedSitecode == "SITECODENULL")) {
-            if (stylearr[2] != "") {
-                $.ajax({
-                    url: "/Home/GetBtnStatus/",
-                    type: "POST",
-                    data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty, 'orgStyl': stylearr[3] },
-                    success: function (response) {
-                        debugger;
-                        if (response == "enabled" | (reason != "" && reason != undefined)) {
-                            if (minPtsDiv != undefined || minPtsDiv != null) {
-                                $.ajax({
-                                    url: "/Home/UpdateMinPoints/",
-                                    type: "POST",
-                                    data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reason': reason, 'selectedSitecode': selectedSitecode },
-                                    success: function (response) {
-                                        if (response.message != "" && response.message != null) {
-                                            if (response.message.includes("__ALERT__")) {
-                                                var cnfmessage = response.message.split("__ALERT__")[1] + "\n\nPlease click Ok to proceed to cart or Cancel to continue shopping";
-                                                if (confirm(cnfmessage)) {
+        }
+
+    }
+    else {
+        if (reqData[0].style.display != "none") {
+            var reqtxt = document.getElementsByClassName(reqdatatxt);
+            if (description != "" && price != "" && price != "0" && size != undefined && price != undefined && color != undefined && size != "" && color != "" && qty != "" && qty != "0" && reqtxt[0].value != "" && (selectedSitecode != "" | selectedSitecode == "SITECODENULL")) {
+                if (stylearr[2] != "") {
+                    $.ajax({
+                        url: "/Home/GetBtnStatus/",
+                        type: "POST",
+                        data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty, 'orgStyl': stylearr[3], 'size': size },
+                        success: function (response) {
+                            debugger;
+                            if (response == "enabled" | (reason != "" && reason != undefined)) {
+                                if (minPtsDiv != undefined || minPtsDiv != null) {
+                                    $.ajax({
+                                        url: "/Home/UpdateMinPoints/",
+                                        type: "POST",
+                                        data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reason': reason, 'selectedSitecode': selectedSitecode },
+                                        success: function (response) {
+                                            if (response.message != "" && response.message != null) {
+                                                if (response.message.indexOf("__ALERT__") > -1) {
+                                                    var cnfmessage = response.message.split("__ALERT__")[1] + "\n\nPlease click Ok to proceed to cart or Cancel to continue shopping";
+                                                    if (confirm(cnfmessage)) {
+                                                        loadPopup.Show();
+                                                        selectedSitecode = selectedSitecode == "SITECODENULL" ? "" : selectedSitecode;
+                                                        $.ajax({
+                                                            url: "/Home/Addtocart/",
+                                                            type: "POST",
+                                                            data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reqData1': reqtxt[0].value, 'reason': reason, 'selectedSitecode': selectedSitecode },
+                                                            success: function (response) {
+                                                                if (response != "") {
+                                                                    $("#CartwidCount").html("");
+                                                                    $("#CartwidCount").html(response);
+                                                                    loadPopup.Hide();
+                                                                    $.ajax({
+                                                                        url: "/Home/GetPointsDiv/",
+                                                                        type: "POST",
+                                                                        data: { 'orgStyle': stylearr[3] },
+                                                                        success: function (response) {
+                                                                            if (response.PointsDiv != "") {
+                                                                                $("#PointsDiv").html("");
+                                                                                $("#PointsDiv").html(response.PointsDiv);
+                                                                                if (response.PointsTaken != "") {
+                                                                                    var division = "minPtsDiv_" + stylearr[3];
+                                                                                    var pts = document.getElementsByClassName(division);
+                                                                                    if (pts != null && pts != undefined) {
+                                                                                        for (var k = 0; k < pts.length; k++) {
+                                                                                            pts[k].innerHTML = response.PointsTaken;
+                                                                                        }
+                                                                                    }
+                                                                                }
+
+                                                                            }
+                                                                        }
+                                                                    });
+                                                                    myFunction("Added to cart..!");
+                                                                }
+                                                                else {
+                                                                    loadPopup.Hide();
+                                                                    $.ajax({
+                                                                        url: "/Home/IsreasonFailed/",
+                                                                        type: "POST",
+                                                                        data: { 'reason': reason },
+                                                                        success: function (response) {
+                                                                            if (response != "") {
+                                                                                alert(response);
+                                                                            }
+                                                                            else {
+                                                                                alert("Try again..!");
+                                                                            }
+
+                                                                        }
+                                                                    });
+                                                                }
+                                                            },
+                                                            error: function () {
+                                                                loadPopup.Hide();
+                                                                alert("Try again!");
+                                                            }
+                                                        });
+                                                    }
+                                                }
+                                                else {
+                                                    if (response.pointsStyle.length > 0) {
+                                                        for (var k = 0; k < response.pointsStyle.length; k++) {
+                                                            var idMinPts = "minPtsDiv_" + response.pointsStyle[k];
+                                                            var pointsDivReplace = document.getElementsByClassName(idMinPts);
+                                                            if (pointsDivReplace != undefined && pointsDivReplace != null && pointsDivReplace != "") {
+                                                                for (var j = 0; j < pointsDivReplace.length; j++) {
+                                                                    pointsDivReplace[j].innerHTML = response.message;
+                                                                }
+                                                            }
+                                                        }
+                                                    }
                                                     loadPopup.Show();
                                                     selectedSitecode = selectedSitecode == "SITECODENULL" ? "" : selectedSitecode;
                                                     $.ajax({
@@ -1595,7 +1828,7 @@ function addTocartDemandSwatch(s, e) {
                                                             else {
                                                                 loadPopup.Hide();
                                                                 $.ajax({
-                                                                    url: "/Home/IsEmergencyreasonFailed/",
+                                                                    url: "/Home/IsreasonFailed/",
                                                                     type: "POST",
                                                                     data: { 'reason': reason },
                                                                     success: function (response) {
@@ -1615,177 +1848,175 @@ function addTocartDemandSwatch(s, e) {
                                                             alert("Try again!");
                                                         }
                                                     });
+
                                                 }
                                             }
-                                            else {
-                                                if (response.pointsStyle.length > 0) {
-                                                    for (var k = 0; k < response.pointsStyle.length; k++) {
-                                                        var idMinPts = "minPtsDiv_" + response.pointsStyle[k];
-                                                        var pointsDivReplace = document.getElementsByClassName(idMinPts);
-                                                        if (pointsDivReplace != undefined && pointsDivReplace != null && pointsDivReplace != "") {
-                                                            for (var j = 0; j < pointsDivReplace.length; j++) {
-                                                                pointsDivReplace[j].innerHTML = response.message;
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                                loadPopup.Show();
-                                                selectedSitecode = selectedSitecode == "SITECODENULL" ? "" : selectedSitecode;
+                                        }
+                                    });
+                                }
+                                else {
+                                    loadPopup.Show();
+                                    selectedSitecode = selectedSitecode == "SITECODENULL" ? "" : selectedSitecode;
+                                    $.ajax({
+                                        url: "/Home/Addtocart/",
+                                        type: "POST",
+                                        data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reqData1': reqtxt[0].value, 'reason': reason, 'selectedSitecode': selectedSitecode },
+                                        success: function (response) {
+                                            if (response != "") {
+                                                $("#CartwidCount").html("");
+                                                $("#CartwidCount").html(response);
+                                                loadPopup.Hide();
                                                 $.ajax({
-                                                    url: "/Home/Addtocart/",
+                                                    url: "/Home/GetPointsDiv/",
                                                     type: "POST",
-                                                    data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reqData1': reqtxt[0].value, 'reason': reason, 'selectedSitecode': selectedSitecode },
+                                                    data: { 'orgStyle': stylearr[3] },
                                                     success: function (response) {
-                                                        if (response != "") {
-                                                            $("#CartwidCount").html("");
-                                                            $("#CartwidCount").html(response);
-                                                            loadPopup.Hide();
-                                                            $.ajax({
-                                                                url: "/Home/GetPointsDiv/",
-                                                                type: "POST",
-                                                                data: { 'orgStyle': stylearr[3] },
-                                                                success: function (response) {
-                                                                    if (response.PointsDiv != "") {
-                                                                        $("#PointsDiv").html("");
-                                                                        $("#PointsDiv").html(response.PointsDiv);
-                                                                        if (response.PointsTaken != "") {
-                                                                            var division = "minPtsDiv_" + stylearr[3];
-                                                                            var pts = document.getElementsByClassName(division);
-                                                                            if (pts != null && pts != undefined) {
-                                                                                for (var k = 0; k < pts.length; k++) {
-                                                                                    pts[k].innerHTML = response.PointsTaken;
-                                                                                }
-                                                                            }
-                                                                        }
-
+                                                        if (response.PointsDiv != "") {
+                                                            $("#PointsDiv").html("");
+                                                            $("#PointsDiv").html(response.PointsDiv);
+                                                            if (response.PointsTaken != "") {
+                                                                var division = "minPtsDiv_" + stylearr[3];
+                                                                var pts = document.getElementsByClassName(division);
+                                                                if (pts != null && pts != undefined) {
+                                                                    for (var k = 0; k < pts.length; k++) {
+                                                                        pts[k].innerHTML = response.PointsTaken;
                                                                     }
                                                                 }
-                                                            });
-                                                            myFunction("Added to cart..!");
-                                                        }
-                                                        else {
-                                                            loadPopup.Hide();
-                                                            $.ajax({
-                                                                url: "/Home/IsEmergencyreasonFailed/",
-                                                                type: "POST",
-                                                                data: { 'reason': reason },
-                                                                success: function (response) {
-                                                                    if (response != "") {
-                                                                        alert(response);
-                                                                    }
-                                                                    else {
-                                                                        alert("Try again..!");
-                                                                    }
+                                                            }
 
-                                                                }
-                                                            });
                                                         }
-                                                    },
-                                                    error: function () {
-                                                        loadPopup.Hide();
-                                                        alert("Try again!");
                                                     }
                                                 });
-
+                                                myFunction("Added to cart..!");
                                             }
-                                        }
-                                    }
-                                });
-                            }
-                            else {
-                                loadPopup.Show();
-                                selectedSitecode = selectedSitecode == "SITECODENULL" ? "" : selectedSitecode;
-                                $.ajax({
-                                    url: "/Home/Addtocart/",
-                                    type: "POST",
-                                    data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reqData1': reqtxt[0].value, 'reason': reason, 'selectedSitecode': selectedSitecode },
-                                    success: function (response) {
-                                        if (response != "") {
-                                            $("#CartwidCount").html("");
-                                            $("#CartwidCount").html(response);
-                                            loadPopup.Hide();
-                                            $.ajax({
-                                                url: "/Home/GetPointsDiv/",
-                                                type: "POST",
-                                                data: { 'orgStyle': stylearr[3] },
-                                                success: function (response) {
-                                                    if (response.PointsDiv != "") {
-                                                        $("#PointsDiv").html("");
-                                                        $("#PointsDiv").html(response.PointsDiv);
-                                                        if (response.PointsTaken != "") {
-                                                            var division = "minPtsDiv_" + stylearr[3];
-                                                            var pts = document.getElementsByClassName(division);
-                                                            if (pts != null && pts != undefined) {
-                                                                for (var k = 0; k < pts.length; k++) {
-                                                                    pts[k].innerHTML = response.PointsTaken;
-                                                                }
-                                                            }
+                                            else {
+                                                loadPopup.Hide();
+                                                $.ajax({
+                                                    url: "/Home/IsreasonFailed/",
+                                                    type: "POST",
+                                                    data: { 'reason': reason },
+                                                    success: function (response) {
+                                                        if (response != "") {
+                                                            alert(response);
+                                                        }
+                                                        else {
+                                                            alert("Try again..!");
                                                         }
 
                                                     }
-                                                }
-                                            });
-                                            myFunction("Added to cart..!");
-                                        }
-                                        else {
+                                                });
+                                            }
+                                        },
+                                        error: function () {
                                             loadPopup.Hide();
-                                            $.ajax({
-                                                url: "/Home/IsEmergencyreasonFailed/",
-                                                type: "POST",
-                                                data: { 'reason': reason },
-                                                success: function (response) {
-                                                    if (response != "") {
-                                                        alert(response);
-                                                    }
-                                                    else {
-                                                        alert("Try again..!");
-                                                    }
-
-                                                }
-                                            });
+                                            alert("Try again!");
                                         }
-                                    },
-                                    error: function () {
-                                        loadPopup.Hide();
-                                        alert("Try again!");
-                                    }
-                                });
+                                    });
+                                }
+
                             }
+                            else {
+                                // document.getElementById("ErrorMessage").style.display = 'block';
+                                loadPopup.Hide();
+                                getEntitlementDemandSwatch(stylearr[1], stylearr[3], 1);
 
-                        }
-                        else {
-                            // document.getElementById("ErrorMessage").style.display = 'block';
+                            }
+                        },
+                        error: function () {
                             loadPopup.Hide();
-                            getEntitlementDemandSwatch(stylearr[1], stylearr[3], 1);
-
+                            alert("Try again!");
                         }
-                    },
-                    error: function () {
-                        loadPopup.Hide();
-                        alert("Try again!");
-                    }
-                });
-            }
-            else {
-                loadPopup.Show();
+                    });
+                }
+                else {
+                    loadPopup.Show();
 
-                selectedSitecode = selectedSitecode == "SITECODENULL" ? "" : selectedSitecode;
-                $.ajax({
-                    url: "/Home/GetBtnStatus/",
-                    type: "POST",
-                    data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty, 'orgStyl': stylearr[3] },
-                    success: function (response) {
-                        if (response == "enabled" | (reason != "" && reason != undefined)) {
-                            if (minPtsDiv != undefined || minPtsDiv != null) {
-                                $.ajax({
-                                    url: "/Home/UpdateMinPoints/",
-                                    type: "POST",
-                                    data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reason': reason, 'selectedSitecode': selectedSitecode },
-                                    success: function (response) {
-                                        if (response.message != "" && response.message != null) {
-                                            if (response.message.includes("__ALERT__")) {
-                                                var cnfmessage = response.message.split("__ALERT__")[1] + "\n\nPlease click Ok to proceed to cart or Cancel to continue shopping";
-                                                if (confirm(response.message.split("__ALERT__")[1])) {
+                    selectedSitecode = selectedSitecode == "SITECODENULL" ? "" : selectedSitecode;
+                    $.ajax({
+                        url: "/Home/GetBtnStatus/",
+                        type: "POST",
+                        data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty, 'orgStyl': stylearr[3], 'size': size },
+                        success: function (response) {
+                            if (response == "enabled" | (reason != "" && reason != undefined)) {
+                                if (minPtsDiv != undefined || minPtsDiv != null) {
+                                    $.ajax({
+                                        url: "/Home/UpdateMinPoints/",
+                                        type: "POST",
+                                        data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reason': reason, 'selectedSitecode': selectedSitecode },
+                                        success: function (response) {
+                                            if (response.message != "" && response.message != null) {
+                                                if (response.message.indexOf("__ALERT__") > -1) {
+                                                    var cnfmessage = response.message.split("__ALERT__")[1] + "\n\nPlease click Ok to proceed to cart or Cancel to continue shopping";
+                                                    if (confirm(response.message.split("__ALERT__")[1])) {
+                                                        $.ajax({
+                                                            url: "/Home/Addtocart/",
+                                                            type: "POST",
+                                                            data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reason': reason, 'selectedSitecode': selectedSitecode },
+                                                            success: function (response) {
+                                                                if (response != "") {
+                                                                    $("#CartwidCount").html("");
+                                                                    $("#CartwidCount").html(response);
+                                                                    $.ajax({
+                                                                        url: "/Home/GetPointsDiv/",
+                                                                        type: "POST",
+                                                                        data: { 'orgStyle': stylearr[3] },
+                                                                        success: function (response) {
+                                                                            if (response.PointsDiv != "") {
+                                                                                $("#PointsDiv").html("");
+                                                                                $("#PointsDiv").html(response.PointsDiv);
+                                                                                if (response.PointsTaken != "") {
+                                                                                    var division = "minPtsDiv_" + stylearr[3];
+                                                                                    var pts = document.getElementsByClassName(division);
+                                                                                    if (pts != null && pts != undefined) {
+                                                                                        for (var k = 0; k < pts.length; k++) {
+                                                                                            pts[k].innerHTML = response.PointsTaken;
+                                                                                        }
+                                                                                    }
+                                                                                }
+
+                                                                            }
+                                                                        }
+                                                                    });
+                                                                    myFunction("Added to cart..!");
+
+                                                                }
+                                                                else {
+                                                                    loadPopup.Hide();
+                                                                    $.ajax({
+                                                                        url: "/Home/IsreasonFailed/",
+                                                                        type: "POST",
+                                                                        data: { 'reason': reason },
+                                                                        success: function (response) {
+                                                                            if (response != "") {
+                                                                                alert(response);
+                                                                            }
+                                                                            else {
+                                                                                alert("Try again..!");
+                                                                            }
+
+                                                                        }
+                                                                    });
+                                                                }
+                                                            },
+                                                            error: function () {
+                                                                loadPopup.Hide();
+                                                                alert("Try again!");
+                                                            }
+                                                        });
+                                                    }
+                                                }
+                                                else {
+                                                    if (response.pointsStyle.length > 0) {
+                                                        for (var k = 0; k < response.pointsStyle.length; k++) {
+                                                            var idMinPts = "minPtsDiv_" + response.pointsStyle[k];
+                                                            var pointsDivReplace = document.getElementsByClassName(idMinPts);
+                                                            if (pointsDivReplace != undefined && pointsDivReplace != null && pointsDivReplace != "") {
+                                                                for (var j = 0; j < pointsDivReplace.length; j++) {
+                                                                    pointsDivReplace[j].innerHTML = response.message;
+                                                                }
+                                                            }
+                                                        }
+                                                    }
                                                     $.ajax({
                                                         url: "/Home/Addtocart/",
                                                         type: "POST",
@@ -1821,7 +2052,7 @@ function addTocartDemandSwatch(s, e) {
                                                             else {
                                                                 loadPopup.Hide();
                                                                 $.ajax({
-                                                                    url: "/Home/IsEmergencyreasonFailed/",
+                                                                    url: "/Home/IsreasonFailed/",
                                                                     type: "POST",
                                                                     data: { 'reason': reason },
                                                                     success: function (response) {
@@ -1843,193 +2074,197 @@ function addTocartDemandSwatch(s, e) {
                                                     });
                                                 }
                                             }
-                                            else {
-                                                if (response.pointsStyle.length > 0) {
-                                                    for (var k = 0; k < response.pointsStyle.length; k++) {
-                                                        var idMinPts = "minPtsDiv_" + response.pointsStyle[k];
-                                                        var pointsDivReplace = document.getElementsByClassName(idMinPts);
-                                                        if (pointsDivReplace != undefined && pointsDivReplace != null && pointsDivReplace != "") {
-                                                            for (var j = 0; j < pointsDivReplace.length; j++) {
-                                                                pointsDivReplace[j].innerHTML = response.message;
+                                        }
+                                    });
+                                }
+                                else {
+                                    $.ajax({
+                                        url: "/Home/Addtocart/",
+                                        type: "POST",
+                                        data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reason': reason, 'selectedSitecode': selectedSitecode },
+                                        success: function (response) {
+                                            if (response != "") {
+                                                $("#CartwidCount").html("");
+                                                $("#CartwidCount").html(response);
+                                                $.ajax({
+                                                    url: "/Home/GetPointsDiv/",
+                                                    type: "POST",
+                                                    data: { 'orgStyle': stylearr[3] },
+                                                    success: function (response) {
+                                                        if (response.PointsDiv != "") {
+                                                            $("#PointsDiv").html("");
+                                                            $("#PointsDiv").html(response.PointsDiv);
+                                                            if (response.PointsTaken != "") {
+                                                                var division = "minPtsDiv_" + stylearr[3];
+                                                                var pts = document.getElementsByClassName(division);
+                                                                if (pts != null && pts != undefined) {
+                                                                    for (var k = 0; k < pts.length; k++) {
+                                                                        pts[k].innerHTML = response.PointsTaken;
+                                                                    }
+                                                                }
                                                             }
+
                                                         }
                                                     }
-                                                }
+                                                });
+                                                myFunction("Added to cart..!");
+
+                                            }
+                                            else {
+                                                loadPopup.Hide();
                                                 $.ajax({
-                                                    url: "/Home/Addtocart/",
+                                                    url: "/Home/IsreasonFailed/",
                                                     type: "POST",
-                                                    data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reason': reason, 'selectedSitecode': selectedSitecode },
+                                                    data: { 'reason': reason },
                                                     success: function (response) {
                                                         if (response != "") {
-                                                            $("#CartwidCount").html("");
-                                                            $("#CartwidCount").html(response);
-                                                            $.ajax({
-                                                                url: "/Home/GetPointsDiv/",
-                                                                type: "POST",
-                                                                data: { 'orgStyle': stylearr[3] },
-                                                                success: function (response) {
-                                                                    if (response.PointsDiv != "") {
-                                                                        $("#PointsDiv").html("");
-                                                                        $("#PointsDiv").html(response.PointsDiv);
-                                                                        if (response.PointsTaken != "") {
-                                                                            var division = "minPtsDiv_" + stylearr[3];
-                                                                            var pts = document.getElementsByClassName(division);
-                                                                            if (pts != null && pts != undefined) {
-                                                                                for (var k = 0; k < pts.length; k++) {
-                                                                                    pts[k].innerHTML = response.PointsTaken;
-                                                                                }
-                                                                            }
-                                                                        }
-
-                                                                    }
-                                                                }
-                                                            });
-                                                            myFunction("Added to cart..!");
-
+                                                            alert(response);
                                                         }
                                                         else {
-                                                            loadPopup.Hide();
-                                                            $.ajax({
-                                                                url: "/Home/IsEmergencyreasonFailed/",
-                                                                type: "POST",
-                                                                data: { 'reason': reason },
-                                                                success: function (response) {
-                                                                    if (response != "") {
-                                                                        alert(response);
-                                                                    }
-                                                                    else {
-                                                                        alert("Try again..!");
-                                                                    }
-
-                                                                }
-                                                            });
+                                                            alert("Try again..!");
                                                         }
-                                                    },
-                                                    error: function () {
-                                                        loadPopup.Hide();
-                                                        alert("Try again!");
+
                                                     }
                                                 });
                                             }
+                                        },
+                                        error: function () {
+                                            loadPopup.Hide();
+                                            alert("Try again!");
                                         }
-                                    }
-                                });
+                                    });
+                                }
+
                             }
                             else {
-                                $.ajax({
-                                    url: "/Home/Addtocart/",
-                                    type: "POST",
-                                    data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reason': reason, 'selectedSitecode': selectedSitecode },
-                                    success: function (response) {
-                                        if (response != "") {
-                                            $("#CartwidCount").html("");
-                                            $("#CartwidCount").html(response);
-                                            $.ajax({
-                                                url: "/Home/GetPointsDiv/",
-                                                type: "POST",
-                                                data: { 'orgStyle': stylearr[3] },
-                                                success: function (response) {
-                                                    if (response.PointsDiv != "") {
-                                                        $("#PointsDiv").html("");
-                                                        $("#PointsDiv").html(response.PointsDiv);
-                                                        if (response.PointsTaken != "") {
-                                                            var division = "minPtsDiv_" + stylearr[3];
-                                                            var pts = document.getElementsByClassName(division);
-                                                            if (pts != null && pts != undefined) {
-                                                                for (var k = 0; k < pts.length; k++) {
-                                                                    pts[k].innerHTML = response.PointsTaken;
+                                // document.getElementById("ErrorMessage").style.display = 'block';
+                                loadPopup.Hide();
+                                getEntitlementDemandSwatch(stylearr[1], stylearr[3], 1);
+
+                            }
+                        },
+                        error: function () {
+                            loadPopup.Hide();
+                            alert("Try again!");
+                        }
+                    });
+                }
+
+            }
+            else {
+                if (price == "" || price == null || price == undefined || price == "0") {
+                    alert("Please choose a size");
+                }
+                else if (size == "" || size == null || size == undefined) {
+                    alert("Please choose a Size");
+                }
+                else if (color == "" || color == null || color == undefined) {
+                    alert("Please choose a Colour");
+                }
+                else if (qty == "" || qty == "0" || qty == null || qty == undefined) {
+                    alert("Quantity should be greater than 0");
+                } else if (selectedSitecode == "") {
+                    alert("Please select a site code");
+                }
+                else if (reqtxt[0].value == "") {
+                    alert("Please select Required leg length");
+                }
+            }
+        }
+        else {
+            if (description != "" && price != "" && price != "0" && size != undefined && price != undefined && color != undefined && size != "" && color != "" && qty != "" && qty != "0" && (selectedSitecode != "" | selectedSitecode == "SITECODENULL")) {
+                if (stylearr[2] != "") {
+
+                    $.ajax({
+                        url: "/Home/GetBtnStatus/",
+                        type: "POST",
+                        data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty, 'orgStyl': stylearr[3], 'size': size },
+                        success: function (response) {
+                            debugger;
+                            if (response == "enabled" | (reason != "" && reason != undefined)) {
+                                if (minPtsDiv != undefined || minPtsDiv != null) {
+                                    $.ajax({
+                                        url: "/Home/UpdateMinPoints/",
+                                        type: "POST",
+                                        data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reason': reason, 'selectedSitecode': selectedSitecode },
+                                        success: function (response) {
+                                            if (response.message != "" && response.message != null) {
+                                                if (response.message.indexOf("__ALERT__") > -1) {
+                                                    var cnfmessage = response.message.split("__ALERT__")[1] + "\n\nPlease click Ok to proceed to cart or Cancel to continue shopping";
+                                                    if (confirm(cnfmessage)) {
+                                                        loadPopup.Show();
+                                                        selectedSitecode = selectedSitecode == "SITECODENULL" ? "" : selectedSitecode;
+                                                        $.ajax({
+                                                            url: "/Home/Addtocart/",
+                                                            type: "POST",
+                                                            data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reason': reason, 'selectedSitecode': selectedSitecode },
+                                                            success: function (response) {
+                                                                if (response != "") {
+                                                                    $("#CartwidCount").html("");
+                                                                    $("#CartwidCount").html(response);
+                                                                    loadPopup.Hide();
+                                                                    $.ajax({
+                                                                        url: "/Home/GetPointsDiv/",
+                                                                        type: "POST",
+                                                                        data: { 'orgStyle': stylearr[3] },
+                                                                        success: function (response) {
+                                                                            if (response.PointsDiv != "") {
+                                                                                $("#PointsDiv").html("");
+                                                                                $("#PointsDiv").html(response.PointsDiv);
+                                                                                if (response.PointsTaken != "") {
+                                                                                    var division = "minPtsDiv_" + stylearr[3];
+                                                                                    var pts = document.getElementsByClassName(division);
+                                                                                    if (pts != null && pts != undefined) {
+                                                                                        for (var k = 0; k < pts.length; k++) {
+                                                                                            pts[k].innerHTML = response.PointsTaken;
+                                                                                        }
+                                                                                    }
+                                                                                }
+
+                                                                            }
+                                                                        }
+                                                                    });
+                                                                    myFunction("Added to cart..!");
+
+                                                                }
+                                                                else {
+                                                                    loadPopup.Hide();
+                                                                    $.ajax({
+                                                                        url: "/Home/IsreasonFailed/",
+                                                                        type: "POST",
+                                                                        data: { 'reason': reason },
+                                                                        success: function (response) {
+                                                                            if (response != "") {
+                                                                                alert(response);
+                                                                            }
+                                                                            else {
+                                                                                alert("Try again..!");
+                                                                            }
+
+                                                                        }
+                                                                    });
+                                                                }
+                                                            },
+                                                            error: function () {
+                                                                loadPopup.Hide();
+                                                                alert("Try again!");
+                                                            }
+                                                        });
+                                                    }
+                                                }
+                                                else {
+
+                                                    if (response.pointsStyle.length > 0) {
+                                                        for (var k = 0; k < response.pointsStyle.length; k++) {
+                                                            var idMinPts = "minPtsDiv_" + response.pointsStyle[k];
+                                                            var pointsDivReplace = document.getElementsByClassName(idMinPts);
+                                                            if (pointsDivReplace != undefined && pointsDivReplace != null && pointsDivReplace != "") {
+                                                                for (var j = 0; j < pointsDivReplace.length; j++) {
+                                                                    pointsDivReplace[j].innerHTML = response.message;
                                                                 }
                                                             }
                                                         }
-
                                                     }
-                                                }
-                                            });
-                                            myFunction("Added to cart..!");
-
-                                        }
-                                        else {
-                                            loadPopup.Hide();
-                                            $.ajax({
-                                                url: "/Home/IsEmergencyreasonFailed/",
-                                                type: "POST",
-                                                data: { 'reason': reason },
-                                                success: function (response) {
-                                                    if (response != "") {
-                                                        alert(response);
-                                                    }
-                                                    else {
-                                                        alert("Try again..!");
-                                                    }
-
-                                                }
-                                            });
-                                        }
-                                    },
-                                    error: function () {
-                                        loadPopup.Hide();
-                                        alert("Try again!");
-                                    }
-                                });
-                            }
-
-                        }
-                        else {
-                            // document.getElementById("ErrorMessage").style.display = 'block';
-                            loadPopup.Hide();
-                            getEntitlementDemandSwatch(stylearr[1], stylearr[3], 1);
-
-                        }
-                    },
-                    error: function () {
-                        loadPopup.Hide();
-                        alert("Try again!");
-                    }
-                });
-            }
-
-        }
-        else {
-            if (price == "" || price == null || price == undefined || price == "0") {
-                alert("Please choose a size");
-            }
-            else if (size == "" || size == null || size == undefined) {
-                alert("Please choose a Size");
-            }
-            else if (color == "" || color == null || color == undefined) {
-                alert("Please choose a Colour");
-            }
-            else if (qty == "" || qty == "0" || qty == null || qty == undefined) {
-                alert("Quantity should be greater than 0");
-            } else if (selectedSitecode == "") {
-                alert("Please select a site code");
-            }
-            else if (reqtxt[0].value == "") {
-                alert("Please select Required leg length");
-            }
-        }
-    }
-    else {
-        if (description != "" && price != "" && price != "0" && size != undefined && price != undefined && color != undefined && size != "" && color != "" && qty != "" && qty != "0" && (selectedSitecode != "" | selectedSitecode == "SITECODENULL")) {
-            if (stylearr[2] != "") {
-
-                $.ajax({
-                    url: "/Home/GetBtnStatus/",
-                    type: "POST",
-                    data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty, 'orgStyl': stylearr[3] },
-                    success: function (response) {
-                        debugger;
-                        if (response == "enabled" | (reason != "" && reason != undefined)) {
-                            if (minPtsDiv != undefined || minPtsDiv != null) {
-                                $.ajax({
-                                    url: "/Home/UpdateMinPoints/",
-                                    type: "POST",
-                                    data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reason': reason, 'selectedSitecode': selectedSitecode },
-                                    success: function (response) {
-                                        if (response.message != "" && response.message != null) {
-                                            if (response.message.includes("__ALERT__")) {
-                                                var cnfmessage = response.message.split("__ALERT__")[1] + "\n\nPlease click Ok to proceed to cart or Cancel to continue shopping";
-                                                if (confirm(cnfmessage)) {
                                                     loadPopup.Show();
                                                     selectedSitecode = selectedSitecode == "SITECODENULL" ? "" : selectedSitecode;
                                                     $.ajax({
@@ -2068,7 +2303,7 @@ function addTocartDemandSwatch(s, e) {
                                                             else {
                                                                 loadPopup.Hide();
                                                                 $.ajax({
-                                                                    url: "/Home/IsEmergencyreasonFailed/",
+                                                                    url: "/Home/IsreasonFailed/",
                                                                     type: "POST",
                                                                     data: { 'reason': reason },
                                                                     success: function (response) {
@@ -2089,179 +2324,176 @@ function addTocartDemandSwatch(s, e) {
                                                         }
                                                     });
                                                 }
-                                            }
-                                            else {
 
-                                                if (response.pointsStyle.length > 0) {
-                                                    for (var k = 0; k < response.pointsStyle.length; k++) {
-                                                        var idMinPts = "minPtsDiv_" + response.pointsStyle[k];
-                                                        var pointsDivReplace = document.getElementsByClassName(idMinPts);
-                                                        if (pointsDivReplace != undefined && pointsDivReplace != null && pointsDivReplace != "") {
-                                                            for (var j = 0; j < pointsDivReplace.length; j++) {
-                                                                pointsDivReplace[j].innerHTML = response.message;
+                                            }
+                                        }
+
+                                    });
+                                }
+                                else {
+                                    loadPopup.Show();
+                                    selectedSitecode = selectedSitecode == "SITECODENULL" ? "" : selectedSitecode;
+                                    $.ajax({
+                                        url: "/Home/Addtocart/",
+                                        type: "POST",
+                                        data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reason': reason, 'selectedSitecode': selectedSitecode },
+                                        success: function (response) {
+                                            if (response != "") {
+                                                $("#CartwidCount").html("");
+                                                $("#CartwidCount").html(response);
+                                                loadPopup.Hide();
+                                                $.ajax({
+                                                    url: "/Home/GetPointsDiv/",
+                                                    type: "POST",
+                                                    data: { 'orgStyle': stylearr[3] },
+                                                    success: function (response) {
+                                                        if (response.PointsDiv != "") {
+                                                            $("#PointsDiv").html("");
+                                                            $("#PointsDiv").html(response.PointsDiv);
+                                                            if (response.PointsTaken != "") {
+                                                                var division = "minPtsDiv_" + stylearr[3];
+                                                                var pts = document.getElementsByClassName(division);
+                                                                if (pts != null && pts != undefined) {
+                                                                    for (var k = 0; k < pts.length; k++) {
+                                                                        pts[k].innerHTML = response.PointsTaken;
+                                                                    }
+                                                                }
                                                             }
+
                                                         }
                                                     }
-                                                }
-                                                loadPopup.Show();
-                                                selectedSitecode = selectedSitecode == "SITECODENULL" ? "" : selectedSitecode;
+                                                });
+                                                myFunction("Added to cart..!");
+
+                                            }
+                                            else {
+                                                loadPopup.Hide();
                                                 $.ajax({
-                                                    url: "/Home/Addtocart/",
+                                                    url: "/Home/IsreasonFailed/",
                                                     type: "POST",
-                                                    data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reason': reason, 'selectedSitecode': selectedSitecode },
+                                                    data: { 'reason': reason },
                                                     success: function (response) {
                                                         if (response != "") {
-                                                            $("#CartwidCount").html("");
-                                                            $("#CartwidCount").html(response);
-                                                            loadPopup.Hide();
-                                                            $.ajax({
-                                                                url: "/Home/GetPointsDiv/",
-                                                                type: "POST",
-                                                                data: { 'orgStyle': stylearr[3] },
-                                                                success: function (response) {
-                                                                    if (response.PointsDiv != "") {
-                                                                        $("#PointsDiv").html("");
-                                                                        $("#PointsDiv").html(response.PointsDiv);
-                                                                        if (response.PointsTaken != "") {
-                                                                            var division = "minPtsDiv_" + stylearr[3];
-                                                                            var pts = document.getElementsByClassName(division);
-                                                                            if (pts != null && pts != undefined) {
-                                                                                for (var k = 0; k < pts.length; k++) {
-                                                                                    pts[k].innerHTML = response.PointsTaken;
-                                                                                }
-                                                                            }
-                                                                        }
-
-                                                                    }
-                                                                }
-                                                            });
-                                                            myFunction("Added to cart..!");
-
+                                                            alert(response);
                                                         }
                                                         else {
-                                                            loadPopup.Hide();
-                                                            $.ajax({
-                                                                url: "/Home/IsEmergencyreasonFailed/",
-                                                                type: "POST",
-                                                                data: { 'reason': reason },
-                                                                success: function (response) {
-                                                                    if (response != "") {
-                                                                        alert(response);
-                                                                    }
-                                                                    else {
-                                                                        alert("Try again..!");
-                                                                    }
-
-                                                                }
-                                                            });
+                                                            alert("Try again..!");
                                                         }
-                                                    },
-                                                    error: function () {
-                                                        loadPopup.Hide();
-                                                        alert("Try again!");
+
                                                     }
                                                 });
                                             }
-
+                                        },
+                                        error: function () {
+                                            loadPopup.Hide();
+                                            alert("Try again!");
                                         }
-                                    }
+                                    });
+                                }
 
-                                });
                             }
                             else {
-                                loadPopup.Show();
-                                selectedSitecode = selectedSitecode == "SITECODENULL" ? "" : selectedSitecode;
-                                $.ajax({
-                                    url: "/Home/Addtocart/",
-                                    type: "POST",
-                                    data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reason': reason, 'selectedSitecode': selectedSitecode },
-                                    success: function (response) {
-                                        if (response != "") {
-                                            $("#CartwidCount").html("");
-                                            $("#CartwidCount").html(response);
-                                            loadPopup.Hide();
-                                            $.ajax({
-                                                url: "/Home/GetPointsDiv/",
-                                                type: "POST",
-                                                data: { 'orgStyle': stylearr[3] },
-                                                success: function (response) {
-                                                    if (response.PointsDiv != "") {
-                                                        $("#PointsDiv").html("");
-                                                        $("#PointsDiv").html(response.PointsDiv);
-                                                        if (response.PointsTaken != "") {
-                                                            var division = "minPtsDiv_" + stylearr[3];
-                                                            var pts = document.getElementsByClassName(division);
-                                                            if (pts != null && pts != undefined) {
-                                                                for (var k = 0; k < pts.length; k++) {
-                                                                    pts[k].innerHTML = response.PointsTaken;
+                                // document.getElementById("ErrorMessage").style.display = 'block';
+                                loadPopup.Hide();
+                                getEntitlementDemandSwatch(stylearr[1], stylearr[3], 1);
+
+                            }
+                        },
+                        error: function () {
+                            loadPopup.Hide();
+                            alert("Try again!");
+                        }
+                    });
+                }
+                else {
+                    loadPopup.Show();
+                    $.ajax({
+                        url: "/Home/GetBtnStatus/",
+                        type: "POST",
+                        data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty, 'orgStyl': stylearr[3], 'size': size },
+                        success: function (response) {
+                            debugger;
+                            if (response == "enabled" | (reason != "" && reason != undefined)) {
+                                if (minPtsDiv != undefined || minPtsDiv != null) {
+                                    $.ajax({
+                                        url: "/Home/UpdateMinPoints/",
+                                        type: "POST",
+                                        data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reason': reason, 'selectedSitecode': selectedSitecode },
+                                        success: function (response) {
+                                            if (response.message != "" && response.message != null) {
+                                                if (response.message.indexOf("__ALERT__") > -1) {
+                                                    var cnfmessage = response.message.split("__ALERT__")[1] + "\n\nPlease click Ok to proceed to cart or Cancel to continue shopping";
+                                                    if (confirm(cnfmessage)) {
+                                                        selectedSitecode = selectedSitecode == "SITECODENULL" ? "" : selectedSitecode;
+                                                        $.ajax({
+                                                            url: "/Home/Addtocart/",
+                                                            type: "POST",
+                                                            data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reason': reason, 'selectedSitecode': selectedSitecode },
+                                                            success: function (response) {
+                                                                if (response != "") {
+                                                                    $("#CartwidCount").html("");
+                                                                    $("#CartwidCount").html(response);
+                                                                    $.ajax({
+                                                                        url: "/Home/GetPointsDiv/",
+                                                                        type: "POST",
+                                                                        data: { 'orgStyle': stylearr[3] },
+                                                                        success: function (response) {
+                                                                            if (response.PointsDiv != "") {
+                                                                                $("#PointsDiv").html("");
+                                                                                $("#PointsDiv").html(response.PointsDiv);
+                                                                                if (response.PointsTaken != "") {
+                                                                                    var division = "minPtsDiv_" + stylearr[3];
+                                                                                    var pts = document.getElementsByClassName(division);
+                                                                                    if (pts != null && pts != undefined) {
+                                                                                        for (var k = 0; k < pts.length; k++) {
+                                                                                            pts[k].innerHTML = response.PointsTaken;
+                                                                                        }
+                                                                                    }
+                                                                                }
+
+                                                                            }
+                                                                        }
+                                                                    });
+                                                                    myFunction("Added to cart..!");
+
+                                                                }
+                                                                else {
+                                                                    loadPopup.Hide();
+                                                                    $.ajax({
+                                                                        url: "/Home/IsreasonFailed/",
+                                                                        type: "POST",
+                                                                        data: { 'reason': reason },
+                                                                        success: function (response) {
+                                                                            if (response != "") {
+                                                                                alert(response);
+                                                                            }
+                                                                            else {
+                                                                                alert("Try again..!");
+                                                                            }
+
+                                                                        }
+                                                                    });
+                                                                }
+                                                            },
+                                                            error: function () {
+                                                                loadPopup.Hide();
+                                                                alert("Try again!");
+                                                            }
+                                                        });
+                                                    }
+                                                }
+                                                else {
+                                                    if (response.pointsStyle.length > 0) {
+                                                        for (var k = 0; k < response.pointsStyle.length; k++) {
+                                                            var idMinPts = "minPtsDiv_" + response.pointsStyle[k];
+                                                            var pointsDivReplace = document.getElementsByClassName(idMinPts);
+                                                            if (pointsDivReplace != undefined && pointsDivReplace != null && pointsDivReplace != "") {
+                                                                for (var j = 0; j < pointsDivReplace.length; j++) {
+                                                                    pointsDivReplace[j].innerHTML = response.message;
                                                                 }
                                                             }
                                                         }
-
                                                     }
-                                                }
-                                            });
-                                            myFunction("Added to cart..!");
-
-                                        }
-                                        else {
-                                            loadPopup.Hide();
-                                            $.ajax({
-                                                url: "/Home/IsEmergencyreasonFailed/",
-                                                type: "POST",
-                                                data: { 'reason': reason },
-                                                success: function (response) {
-                                                    if (response != "") {
-                                                        alert(response);
-                                                    }
-                                                    else {
-                                                        alert("Try again..!");
-                                                    }
-
-                                                }
-                                            });
-                                        }
-                                    },
-                                    error: function () {
-                                        loadPopup.Hide();
-                                        alert("Try again!");
-                                    }
-                                });
-                            }
-
-                        }
-                        else {
-                            // document.getElementById("ErrorMessage").style.display = 'block';
-                            loadPopup.Hide();
-                            getEntitlementDemandSwatch(stylearr[1], stylearr[3], 1);
-
-                        }
-                    },
-                    error: function () {
-                        loadPopup.Hide();
-                        alert("Try again!");
-                    }
-                });
-            }
-            else {
-                loadPopup.Show();
-                $.ajax({
-                    url: "/Home/GetBtnStatus/",
-                    type: "POST",
-                    data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty, 'orgStyl': stylearr[3] },
-                    success: function (response) {
-                        debugger;
-                        if (response == "enabled" | (reason != "" && reason != undefined)) {
-                            if (minPtsDiv != undefined || minPtsDiv != null) {
-                                $.ajax({
-                                    url: "/Home/UpdateMinPoints/",
-                                    type: "POST",
-                                    data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reason': reason, 'selectedSitecode': selectedSitecode },
-                                    success: function (response) {
-                                        if (response.message != "" && response.message != null) {
-                                            if (response.message.includes("__ALERT__")) {
-                                                var cnfmessage = response.message.split("__ALERT__")[1] + "\n\nPlease click Ok to proceed to cart or Cancel to continue shopping";
-                                                if (confirm(cnfmessage)) {
                                                     selectedSitecode = selectedSitecode == "SITECODENULL" ? "" : selectedSitecode;
                                                     $.ajax({
                                                         url: "/Home/Addtocart/",
@@ -2298,7 +2530,7 @@ function addTocartDemandSwatch(s, e) {
                                                             else {
                                                                 loadPopup.Hide();
                                                                 $.ajax({
-                                                                    url: "/Home/IsEmergencyreasonFailed/",
+                                                                    url: "/Home/IsreasonFailed/",
                                                                     type: "POST",
                                                                     data: { 'reason': reason },
                                                                     success: function (response) {
@@ -2320,171 +2552,102 @@ function addTocartDemandSwatch(s, e) {
                                                     });
                                                 }
                                             }
-                                            else {
-                                                if (response.pointsStyle.length > 0) {
-                                                    for (var k = 0; k < response.pointsStyle.length; k++) {
-                                                        var idMinPts = "minPtsDiv_" + response.pointsStyle[k];
-                                                        var pointsDivReplace = document.getElementsByClassName(idMinPts);
-                                                        if (pointsDivReplace != undefined && pointsDivReplace != null && pointsDivReplace != "") {
-                                                            for (var j = 0; j < pointsDivReplace.length; j++) {
-                                                                pointsDivReplace[j].innerHTML = response.message;
+                                        }
+                                    });
+                                }
+                                else {
+                                    selectedSitecode = selectedSitecode == "SITECODENULL" ? "" : selectedSitecode;
+                                    $.ajax({
+                                        url: "/Home/Addtocart/",
+                                        type: "POST",
+                                        data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reason': reason, 'selectedSitecode': selectedSitecode },
+                                        success: function (response) {
+                                            if (response != "") {
+                                                $("#CartwidCount").html("");
+                                                $("#CartwidCount").html(response);
+                                                $.ajax({
+                                                    url: "/Home/GetPointsDiv/",
+                                                    type: "POST",
+                                                    data: { 'orgStyle': stylearr[3] },
+                                                    success: function (response) {
+                                                        if (response.PointsDiv != "") {
+                                                            $("#PointsDiv").html("");
+                                                            $("#PointsDiv").html(response.PointsDiv);
+                                                            if (response.PointsTaken != "") {
+                                                                var division = "minPtsDiv_" + stylearr[3];
+                                                                var pts = document.getElementsByClassName(division);
+                                                                if (pts != null && pts != undefined) {
+                                                                    for (var k = 0; k < pts.length; k++) {
+                                                                        pts[k].innerHTML = response.PointsTaken;
+                                                                    }
+                                                                }
                                                             }
+
                                                         }
                                                     }
-                                                }
-                                                selectedSitecode = selectedSitecode == "SITECODENULL" ? "" : selectedSitecode;
+                                                });
+                                                myFunction("Added to cart..!");
+
+                                            }
+                                            else {
+                                                loadPopup.Hide();
                                                 $.ajax({
-                                                    url: "/Home/Addtocart/",
+                                                    url: "/Home/IsreasonFailed/",
                                                     type: "POST",
-                                                    data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reason': reason, 'selectedSitecode': selectedSitecode },
+                                                    data: { 'reason': reason },
                                                     success: function (response) {
                                                         if (response != "") {
-                                                            $("#CartwidCount").html("");
-                                                            $("#CartwidCount").html(response);
-                                                            $.ajax({
-                                                                url: "/Home/GetPointsDiv/",
-                                                                type: "POST",
-                                                                data: { 'orgStyle': stylearr[3] },
-                                                                success: function (response) {
-                                                                    if (response.PointsDiv != "") {
-                                                                        $("#PointsDiv").html("");
-                                                                        $("#PointsDiv").html(response.PointsDiv);
-                                                                        if (response.PointsTaken != "") {
-                                                                            var division = "minPtsDiv_" + stylearr[3];
-                                                                            var pts = document.getElementsByClassName(division);
-                                                                            if (pts != null && pts != undefined) {
-                                                                                for (var k = 0; k < pts.length; k++) {
-                                                                                    pts[k].innerHTML = response.PointsTaken;
-                                                                                }
-                                                                            }
-                                                                        }
-
-                                                                    }
-                                                                }
-                                                            });
-                                                            myFunction("Added to cart..!");
-
+                                                            alert(response);
                                                         }
                                                         else {
-                                                            loadPopup.Hide();
-                                                            $.ajax({
-                                                                url: "/Home/IsEmergencyreasonFailed/",
-                                                                type: "POST",
-                                                                data: { 'reason': reason },
-                                                                success: function (response) {
-                                                                    if (response != "") {
-                                                                        alert(response);
-                                                                    }
-                                                                    else {
-                                                                        alert("Try again..!");
-                                                                    }
-
-                                                                }
-                                                            });
+                                                            alert("Try again..!");
                                                         }
-                                                    },
-                                                    error: function () {
-                                                        loadPopup.Hide();
-                                                        alert("Try again!");
+
                                                     }
                                                 });
                                             }
+                                        },
+                                        error: function () {
+                                            loadPopup.Hide();
+                                            alert("Try again!");
                                         }
-                                    }
-                                });
+                                    });
+                                }
+
                             }
                             else {
-                                selectedSitecode = selectedSitecode == "SITECODENULL" ? "" : selectedSitecode;
-                                $.ajax({
-                                    url: "/Home/Addtocart/",
-                                    type: "POST",
-                                    data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reason': reason, 'selectedSitecode': selectedSitecode },
-                                    success: function (response) {
-                                        if (response != "") {
-                                            $("#CartwidCount").html("");
-                                            $("#CartwidCount").html(response);
-                                            $.ajax({
-                                                url: "/Home/GetPointsDiv/",
-                                                type: "POST",
-                                                data: { 'orgStyle': stylearr[3] },
-                                                success: function (response) {
-                                                    if (response.PointsDiv != "") {
-                                                        $("#PointsDiv").html("");
-                                                        $("#PointsDiv").html(response.PointsDiv);
-                                                        if (response.PointsTaken != "") {
-                                                            var division = "minPtsDiv_" + stylearr[3];
-                                                            var pts = document.getElementsByClassName(division);
-                                                            if (pts != null && pts != undefined) {
-                                                                for (var k = 0; k < pts.length; k++) {
-                                                                    pts[k].innerHTML = response.PointsTaken;
-                                                                }
-                                                            }
-                                                        }
+                                // document.getElementById("ErrorMessage").style.display = 'block';
+                                loadPopup.Hide();
+                                getEntitlementDemandSwatch(stylearr[1], stylearr[3], 1);
 
-                                                    }
-                                                }
-                                            });
-                                            myFunction("Added to cart..!");
-
-                                        }
-                                        else {
-                                            loadPopup.Hide();
-                                            $.ajax({
-                                                url: "/Home/IsEmergencyreasonFailed/",
-                                                type: "POST",
-                                                data: { 'reason': reason },
-                                                success: function (response) {
-                                                    if (response != "") {
-                                                        alert(response);
-                                                    }
-                                                    else {
-                                                        alert("Try again..!");
-                                                    }
-
-                                                }
-                                            });
-                                        }
-                                    },
-                                    error: function () {
-                                        loadPopup.Hide();
-                                        alert("Try again!");
-                                    }
-                                });
                             }
-
-                        }
-                        else {
-                            // document.getElementById("ErrorMessage").style.display = 'block';
+                        },
+                        error: function () {
                             loadPopup.Hide();
-                            getEntitlementDemandSwatch(stylearr[1], stylearr[3], 1);
-
+                            alert("Try again!");
                         }
-                    },
-                    error: function () {
-                        loadPopup.Hide();
-                        alert("Try again!");
-                    }
-                });
-            }
+                    });
+                }
 
-        }
-        else {
-            if (price == "" || price == null || price == undefined || price == "0") {
-                alert("Please choose a size");
             }
-            else if (size == "" || size == null || size == undefined) {
-                alert("Please choose a Size");
-            }
-            else if (color == "" || color == null || color == undefined) {
-                alert("Please choose a Colour");
-            }
-            else if (qty == "" || qty == "0" || qty == null || qty == undefined) {
-                alert("Quantity should be greater than 0");
-            } else if (selectedSitecode == "") {
-                alert("Please select a site code");
-            }
-            else if (reqtxt[0].value == "") {
-                alert("Please select Required leg length");
+            else {
+                if (price == "" || price == null || price == undefined || price == "0") {
+                    alert("Please choose a size");
+                }
+                else if (size == "" || size == null || size == undefined) {
+                    alert("Please choose a Size");
+                }
+                else if (color == "" || color == null || color == undefined) {
+                    alert("Please choose a Colour");
+                }
+                else if (qty == "" || qty == "0" || qty == null || qty == undefined) {
+                    alert("Quantity should be greater than 0");
+                } else if (selectedSitecode == "") {
+                    alert("Please select a site code");
+                }
+                else if (reqtxt[0].value == "") {
+                    alert("Please select Required leg length");
+                }
             }
         }
     }
@@ -2970,10 +3133,10 @@ function GetDrpResultModelDemandSwatch(stle, selStyle, orgStyle) {
                                         }
                                         else {
                                             if (response.HasReqData) {
-                                                sizContent = sizContent + "<div class='col-md-4 BulkOrder1_Demand_" + stle + "' style=\"margin-bottom:10px;border: solid 1px;padding: 15px;\"><div class='row'><div class='col-md-3'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-3'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-3'><center><input type =\"number\" placeholder='Quantity'   min=\"0\" id='" + stle + "_" + response.PriceList[i].Size + "'   class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div><div class='col-md-3'><center><input type =\"text\" id='ReqData_" + stle + "_" + response.PriceList[i].Size + "' placeholder='" + response.ReqData + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
+                                                sizContent = sizContent + "<div class='col-md-4 BulkOrder1_Demand_" + stle + "' style=\"margin-bottom:10px;border: solid 1px;padding: 15px;\"><div class='row'><div class='col-md-3'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-3'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-3'><center><input type =\"number\" placeholder='Quantity'   min=\"0\" id='" + stle + "_demand_" + response.PriceList[i].Size + "'   class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div><div class='col-md-3'><center><input type =\"text\" id='ReqData_" + stle + "_" + response.PriceList[i].Size + "' placeholder='" + response.ReqData + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
                                             }
                                             else {
-                                                sizContent = sizContent + "<div class='col-md-4 BulkOrder1_Demand_" + stle + "' style=\"margin-bottom:10px;border: solid 1px;padding: 15px;\"><div class='row'><div class='col-md-4'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-4'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-4'><center><input type =\"number\" placeholder='Quantity'  id='" + stle + "_" + response.PriceList[i].Size + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
+                                                sizContent = sizContent + "<div class='col-md-4 BulkOrder1_Demand_" + stle + "' style=\"margin-bottom:10px;border: solid 1px;padding: 15px;\"><div class='row'><div class='col-md-4'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-4'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-4'><center><input type =\"number\" placeholder='Quantity'  id='" + stle + "_demand_" + response.PriceList[i].Size + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
                                             }
                                         }
 
@@ -2996,10 +3159,10 @@ function GetDrpResultModelDemandSwatch(stle, selStyle, orgStyle) {
 
                                         } else {
                                             if (response.HasReqData) {
-                                                sizContent = sizContent + "<div class='col-md-4 BulkOrder1_Demand_" + stle + "' style=\"margin-bottom:10px;border: solid 1px;padding: 15px;\"><div class='row'><div class='col-md-3'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-3'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-3'><center><input type =\"number\" placeholder='Quantity'   min=\"0\" id='" + stle + "_" + response.PriceList[i].Size + "'   class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div><div class='col-md-3'><center><input type =\"text\" id='ReqData_" + stle + "_" + response.PriceList[i].Size + "' placeholder='" + response.ReqData + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
+                                                sizContent = sizContent + "<div class='col-md-4 BulkOrder1_Demand_" + stle + "' style=\"margin-bottom:10px;border: solid 1px;padding: 15px;\"><div class='row'><div class='col-md-3'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-3'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-3'><center><input type =\"number\" placeholder='Quantity'   min=\"0\" id='" + stle + "_demand_" + response.PriceList[i].Size + "'   class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div><div class='col-md-3'><center><input type =\"text\" id='ReqData_" + stle + "_" + response.PriceList[i].Size + "' placeholder='" + response.ReqData + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
                                             }
                                             else {
-                                                sizContent = sizContent + "<div class='col-md-4  BulkOrder1_Demand_" + stle + "' style=\"margin-bottom:10px;border: solid 1px;padding: 15px;\"><div class='row'><div class='col-md-4'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-4'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-4'><center><input type =\"number\" id='" + stle + "_" + response.PriceList[i].Size + "'  placeholder='Quantity'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
+                                                sizContent = sizContent + "<div class='col-md-4  BulkOrder1_Demand_" + stle + "' style=\"margin-bottom:10px;border: solid 1px;padding: 15px;\"><div class='row'><div class='col-md-4'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-4'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-4'><center><input type =\"number\" id='" + stle + "_demand_" + response.PriceList[i].Size + "'  placeholder='Quantity'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
                                             }
                                         }
                                     }
@@ -3070,7 +3233,7 @@ function GetDrpResultModelDemandSwatch(stle, selStyle, orgStyle) {
                                         }
                                         else {
                                             if (response.HasReqData) {
-                                                sizContent = sizContent + "<div class='col-md-4 BulkOrder1_Demand_" + stle + "' style=\"margin-bottom:10px;border: solid 1px;padding: 15px;\"><div class='row'><div class='col-md-3'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-3'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-3'><center><input type =\"number\" placeholder='Quantity'   min=\"0\" id='" + stle + "_" + response.PriceList[i].Size + "'   class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div><div class='col-md-3'><center><input type =\"text\" id='ReqData_" + stle + "_" + response.PriceList[i].Size + "' placeholder='" + response.ReqData + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
+                                                sizContent = sizContent + "<div class='col-md-4 BulkOrder1_Demand_" + stle + "' style=\"margin-bottom:10px;border: solid 1px;padding: 15px;\"><div class='row'><div class='col-md-3'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-3'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-3'><center><input type =\"number\" placeholder='Quantity'   min=\"0\" id='" + stle + "_demand_" + response.PriceList[i].Size + "'   class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div><div class='col-md-3'><center><input type =\"text\" id='ReqData_" + stle + "_" + response.PriceList[i].Size + "' placeholder='" + response.ReqData + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
                                             }
                                             else {
                                                 sizContent = sizContent + "<div class='col-md-4  BulkOrder1_Demand_" + stle + "' style=\"margin-bottom:10px;border: solid 1px;padding: 15px;\"><div class='row'><div class='col-md-4'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-4'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-4'><center><input type =\"number\" placeholder='Quantity'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
@@ -3089,7 +3252,7 @@ function GetDrpResultModelDemandSwatch(stle, selStyle, orgStyle) {
                                         }
                                         else {
                                             if (response.HasReqData) {
-                                                sizContent = sizContent + "<div class='col-md-4 BulkOrder1_Demand_" + stle + "' style=\"margin-bottom:10px;border: solid 1px;padding: 15px;\"><div class='row'><div class='col-md-3'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-3'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-3'><center><input type =\"number\" placeholder='Quantity'   min=\"0\" id='" + stle + "_" + response.PriceList[i].Size + "'   class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div><div class='col-md-3'><center><input type =\"text\" id='ReqData_" + stle + "_" + response.PriceList[i].Size + "' placeholder='" + response.ReqData + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
+                                                sizContent = sizContent + "<div class='col-md-4 BulkOrder1_Demand_" + stle + "' style=\"margin-bottom:10px;border: solid 1px;padding: 15px;\"><div class='row'><div class='col-md-3'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-3'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-3'><center><input type =\"number\" placeholder='Quantity'   min=\"0\" id='" + stle + "_demand_" + response.PriceList[i].Size + "'   class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div><div class='col-md-3'><center><input type =\"text\" id='ReqData_" + stle + "_" + response.PriceList[i].Size + "' placeholder='" + response.ReqData + "'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
                                             }
                                             else {
                                                 sizContent = sizContent + "<div class='col-md-4  BulkOrder1_Demand_" + stle + "' style=\"margin-bottom:10px;border: solid 1px;padding: 15px;\"><div class='row'><div class='col-md-4'><center>" + response.PriceList[i].Size + "</center></div><div class='col-md-4'><center>" + response.PriceList[i].Currency + " " + response.PriceList[i].Price + "</center></div><div class='col-md-4'><center><input type =\"number\" placeholder='Quantity'  min=\"0\"  class=\"form-control\" style=\"width:100%; text-align: center; \"/></center></div></div></div>";
@@ -3144,7 +3307,7 @@ function GetDrpResultModelDemandSwatch(stle, selStyle, orgStyle) {
 
 
 function GetDimDrpResultModelSwatch(s, e) {
-    var style_nam = s.name.includes("styleDimDrp_") ? s.name.replace("styleDimDrp_", "") : s.name;
+    var style_nam = s.name.indexOf("styleDimDrp_") > -1 ? s.name.replace("styleDimDrp_", "") : s.name;
     var selStyle = s.GetSelectedItem(style_nam).value;
     var colorFieldsetName = "Swatch_DimColor_FieldSet_" + style_nam;
     var sizeFieldsetName = "Swatch_DimSize_FieldSet_" + style_nam;
@@ -3236,7 +3399,7 @@ function GetDimDrpResultModelSwatch(s, e) {
 }
 
 function GetDemandDrpResultModelSwatch(s, e) {
-    var style_nam = s.name.includes("styleDimviewDrp_") ? s.name.replace("styleDimviewDrp_", "") : s.name;
+    var style_nam = s.name.indexOf("styleDimviewDrp_") > -1 ? s.name.replace("styleDimviewDrp_", "") : s.name;
     var selStyle = s.GetSelectedItem(style_nam).value;
     var colorFieldsetName = "Swatch_DemColor_FieldSet_" + style_nam;
     var sizeFieldsetName = "Swatch_DemSize_FieldSet_" + style_nam;
@@ -3388,7 +3551,7 @@ function getSelectedTemplateSize(s, e) {
             url: "/Home/GetPrice/",
             data: { 'StyleID': data1[2], 'SizeId': selectedSize },
             success: function (response) {
-                if (!response.includes("Login")) {
+                if (!response.indexOf("Login") > -1) {
                     var priceId = "LbTemplatePrice" + data1[2];
                     var price = document.getElementById(priceId);
                     price.innerHTML = "";
@@ -3413,7 +3576,7 @@ function getSelectedSizeTemplateSwatch(style, size) {
     var selectedSize = size; var selectedStyl = "";
     var styleNames = "Swatch_Style_" + style;
     var styles = document.getElementsByName(styleNames);
-    if (style.includes(",")) {
+    if (style.indexOf(",") > -1) {
         for (var i = 0; i < styles.length ; i++) {
             if (styles[i].checked) {
                 selectedStyl = styles[i].value;
@@ -3430,7 +3593,7 @@ function getSelectedSizeTemplateSwatch(style, size) {
             url: "/Home/GetPrice/",
             data: { 'StyleID': selectedStyl, 'SizeId': selectedSize },
             success: function (response) {
-                if (!response.includes("Login")) {
+                if (!response.indexOf("Login") > -1) {
                     var priceId = "LbTemplatePrice" + style;
                     var price = document.getElementById(priceId);
                     price.innerHTML = "";
@@ -3495,7 +3658,7 @@ function addTocartTemplateSwatch(s, e) {
 
     size = sizeValue != undefined & sizeValue != "" ? sizeValue : "";
     color = colorValue != undefined & colorValue != "" ? colorValue : "";
-    if (stylearr[1].includes(',')) {
+    if (stylearr[1].indexOf(',') > -1) {
         var name = 'Swatch_Style_FieldSet_' + stylearr[1];
         var fieldSet = document.getElementsByName(name);
         var selStyle;
@@ -3649,7 +3812,7 @@ function CreateNewEmployee() {
         type: "GET",
         success: function (response) {
             if (response != "") {
-                if (!response.includes("Login")) {
+                if (!response.indexOf("Login") > -1) {
                     var EditPop = ASPxClientControl.GetControlCollection().GetByName("CreateEditPop");
                     EditPop.SetHeaderText("Create");
                     $("#EditLayout").html("");
@@ -3671,23 +3834,187 @@ function CreateNewEmployee() {
 
     });
 }
-
-function DeleteOrder(orderNo, empId) {
+function DeleteOrderwithreason() {
+    var ordernoInp = document.getElementById("txtOrderNoVal");
+    var isEmergencyInp = document.getElementById("txtOrderTypeVal");
+    var empIdInp = document.getElementById("txtEmpIdVal");
+    var orderno = ordernoInp.value == null | ordernoInp.value == "" ? 0 : parseInt(ordernoInp.value);
+    var empId = empIdInp.value == null | empIdInp.value == "" ? "" : empIdInp.value;
+    var emerReason = ASPxClientControl.GetControlCollection().GetByName("txtReasonEmer");
+    var reason = emerReason.GetValue() == null | emerReason.GetValue() == "" ? "" : emerReason.GetValue();
+    if (reason != "") {
+        if (orderno > 0 && empId != "") {
+            DeleteOrder(orderno, empId, false, reason);
+        }
+    }
+    else {
+        alert("Please enter a valid reason to delete the order");
+    }
+}
+function DeleteOrder(orderNo, empId, isEmergency, reason) {
     if (orderNo > 0 && empId != "" && empId != null) {
         if (confirm("Are you sure you want to delete this order?")) {
+            // var model = { 'Ordeno': orderNo, 'EmployeeId': empId, 'isEmergency': isEmergency };
+            var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
+            loadPopup.Show();
             $.ajax({
                 type: "post",
                 url: "/Basket/DeleteOrder/",
-                data: { 'orderNo': orderNo, 'empId': empId },
+                data: { 'orderNo': orderNo, 'empId': empId, 'isEmergency': isEmergency, 'reason': reason },
                 success: function (response) {
-                    if (response != "") {
+                    if (response == "Success") {
+                        loadPopup.Hide();
                         alert("Order deleted successfully");
                         window.location.reload();
+                    }
+                    else if (response == "prompt") {
+                        $.ajax({
+                            type: "post",
+                            url: "/Basket/DeleteOrderPrompt/",
+                            data: { 'orderNo': orderNo },
+                            success: function (response) {
+                                var popup = ASPxClientControl.GetControlCollection().GetByName("EmerOrderDeletePopup");
+                                var docValue = document.getElementById("deletereason");
+                                docValue.innerHTML = response;
+                                loadPopup.Hide();
+                                popup.Show();
+                                MVCxClientUtils.FinalizeCallback();
+                            }
+                        }
+                            );
+                    }
+                    else {
+                        loadPopup.Hide();
                     }
                 }
             });
         }
     }
+}
+
+function CloseDelReasonPOP() {
+    var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
+
+    var popup = ASPxClientControl.GetControlCollection().GetByName("EmerOrderDeletePopup");
+    loadPopup.Hide();
+    popup.Hide()
+}
+function SetAddressChange() {
+    $.ajax(
+        {
+            url: "/Employee/SetAddressChange/",
+            type: "post",
+            success: function () {
+            }
+        }
+        )
+}
+function matchPwd() {
+    var newPwd = "";
+    var cnfPwd = "";
+    var newPwdCtrl = ASPxClientControl.GetControlCollection().GetByName("txtNewPwd");
+    var newPwdCtrl1 = ASPxClientControl.GetControlCollection().GetByName("txtNewPwd1");
+    var cnfPwdCtrl = ASPxClientControl.GetControlCollection().GetByName("txtCnfNewPwd");
+    var cnfPwdCtrl1 = ASPxClientControl.GetControlCollection().GetByName("txtCnfNewPwd1");
+    if (newPwdCtrl.GetVisible()) {
+        newPwd = newPwdCtrl == null ? "" : newPwdCtrl.GetValue();
+    }
+    else if (newPwdCtrl1.GetVisible()) {
+        newPwd = newPwdCtrl1 == null ? "" : newPwdCtrl1.GetValue();
+    }
+    if (cnfPwdCtrl.GetVisible()) {
+        cnfPwd = cnfPwdCtrl == null ? "" : cnfPwdCtrl.GetValue();
+    }
+    else if (cnfPwdCtrl1.GetVisible()) {
+        cnfPwd = cnfPwdCtrl1 == null ? "" : cnfPwdCtrl1.GetValue();
+    }
+    if (newPwd != cnfPwd) {
+        document.getElementById('message').style.color = 'red';
+        document.getElementById('message').innerHTML = 'Confirm password does not match';
+    }
+    else {
+        document.getElementById('message').style.color = 'red';
+        document.getElementById('message').innerHTML = '';
+    }
+}
+
+function showpwd(field) {
+    var field1 = field + "1";
+    var pwd = ASPxClientControl.GetControlCollection().GetByName(field);
+    var pwd1 = ASPxClientControl.GetControlCollection().GetByName(field1);
+    var value = "";
+    var error1 = field + "1_EC";
+    var error = field + "_EC";
+    value = value == null ? "" : value;
+    if (pwd1.GetVisible()) {
+        value = pwd1 == null ? "" : pwd1.GetValue();
+        document.getElementById(error1).style.visibility = "hidden";
+        document.getElementById(error).style.visibility = "visible";
+        pwd.SetVisible(true);
+        pwd1.SetVisible(false);
+        pwd1.SetValue(value);
+        pwd.SetValue(value);
+    }
+    else {
+        value = pwd == null ? "" : pwd.GetValue();
+        document.getElementById(error).style.visibility = "hidden";
+        document.getElementById(error1).style.visibility = "visible";
+        pwd.SetVisible(false);
+        pwd1.SetVisible(true);
+        pwd1.SetValue(value);
+        pwd.SetValue(value);
+    }
+}
+
+
+function ChangePassWord1() {
+    var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
+
+    var changepwdctrl = ASPxClientControl.GetControlCollection().GetByName("ChangePwd");
+    var existPwdCtrl = ASPxClientControl.GetControlCollection().GetByName("txtexstPwd");
+    var newPwdCtrl = ASPxClientControl.GetControlCollection().GetByName("txtNewPwd");
+    var confPwdCtrl = ASPxClientControl.GetControlCollection().GetByName("txtCnfNewPwd");
+    var newPwdCtrl1 = ASPxClientControl.GetControlCollection().GetByName("txtNewPwd1");
+    var confPwdCtrl1 = ASPxClientControl.GetControlCollection().GetByName("txtCnfNewPwd1");
+    var extPwd = existPwdCtrl == null ? "" : existPwdCtrl.GetValue();
+    var newPwd = "";
+    var ConfPwd = "";
+    if (newPwdCtrl.GetVisible()) {
+        newPwd = newPwdCtrl == null ? "" : newPwdCtrl.GetValue();
+
+    }
+    else if (newPwdCtrl1.GetVisible()) {
+        newPwd = newPwdCtrl1 == null ? "" : newPwdCtrl1.GetValue();
+    }
+    if (confPwdCtrl.GetVisible()) {
+        ConfPwd = confPwdCtrl == null ? "" : confPwdCtrl.GetValue();
+
+    }
+    else if (confPwdCtrl1.GetVisible()) {
+        ConfPwd = confPwdCtrl1 == null ? "" : confPwdCtrl1.GetValue();
+    }
+    extPwd = extPwd == null ? "" : extPwd;
+    if (extPwd != "" && newPwd != "" && ConfPwd != "") {
+        loadPopup.Show();
+        $.ajax({
+            type: "post",
+            url: "/Employee/ChangePassWord1/",
+            data: { 'extPwd': extPwd, 'newPwd': newPwd, 'ConfPwd': ConfPwd },
+            success: function (resp) {
+                if (resp == "success") {
+                    alert("Password changed successfully");
+                    loadPopup.Hide();
+                    changepwdctrl.Hide();
+                }
+                else {
+                    alert(resp);
+                    loadPopup.Hide();
+                }
+            }
+
+        });
+    }
+
 }
 function UpdateEmployee(s, e) {
     var EditPop = ASPxClientControl.GetControlCollection().GetByName("CreateEditPop");
@@ -3709,52 +4036,182 @@ function UpdateEmployee(s, e) {
     var isAct = ASPxClientControl.GetControlCollection().GetByName("editEmpIsActive");
     var address = ASPxClientControl.GetControlCollection().GetByName("CmbAddress");
     var addressVal = address != null ? address.GetValue() : "";
+
+    var hasPrevOrder = false;
+    var mapUserEmpCtrl = ASPxClientControl.GetControlCollection().GetByName("empMapUsr");
+    var emailUsrCtrl = ASPxClientControl.GetControlCollection().GetByName("txtUsrEmail");
+    var roleUsrCtrl = ASPxClientControl.GetControlCollection().GetByName("cmbUsrRole");
+    var reissueUsrCtrl = ASPxClientControl.GetControlCollection().GetByName("cmbRollout");
+    var lstOrddatCtrl = document.getElementById("empUsrLastOrdDate");
+    var nextOrddatCtrl = document.getElementById("empUsrNextOrdDate");
+    var chkMapAddrCtrl = ASPxClientControl.GetControlCollection().GetByName("chkMapAddr");
+    var emailUsr = emailUsrCtrl != null ? emailUsrCtrl.GetValue() : "";
+    var chkMapAddr = chkMapAddrCtrl != null ? chkMapAddrCtrl.GetValue() : false;
+    var mapUserEmp = mapUserEmpCtrl != null ? mapUserEmpCtrl.GetValue() : false;
+    var roleUsr = roleUsrCtrl != null ? roleUsrCtrl.GetValue() : "";
+    var reissueUsr = reissueUsrCtrl != null ? reissueUsrCtrl.GetValue() : "";
+    var lstOrddat = lstOrddatCtrl != null ? lstOrddatCtrl.value : "";
+    var nextOrddat = nextOrddatCtrl != null ? nextOrddatCtrl.value : "";
+    var userActiveCtrl = ASPxClientControl.GetControlCollection().GetByName("UsrActive");
+    var userActive = userActiveCtrl != null ? userActiveCtrl.GetValue() : false;
+    var OrderAddrMess = "You have unconfirmed orders would you like to change the address on these orders ? \n\n Click ok to change the address on these orders or cancel to change your delivery address for future orders";
     if (s.name != "UpdateBtn_Template") {
         if ((hoursCmb == undefined || hoursCmb == null) && (hoursDept == undefined || hoursDept == null)) {
             if (empID.lastChangedValue != null & frstName.lastChangedValue != null & lstName.lastChangedValue != null & dept.lastSuccessText != null & selUcode.lastChangedValue != null) {
                 if (deptCnt > 0) {
                     if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & dept.lastSuccessText.trim() != "" & selUcode.lastChangedValue.trim() != "") {
-                        var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue, 'Address': addressVal };
                         $.ajax({
                             type: "POST",
-                            url: "/Employee/EditEmployee1/",
-                            data: data1,
-                            success: function (response) {
-                                if (response == "success") {
-                                    alert("Successfully updated!");
-                                    EditPop.Hide();
-                                    window.location.reload();
+                            url: "/Employee/HasPreviousOrders/",
+                            data: { 'empId': empID.lastChangedValue.trim() },
+                            success: function (PrevOrder) {
+                                if (PrevOrder.PrevOrder && PrevOrder.AddressChanged) {
+                                    if (confirm(OrderAddrMess)) {
+                                        var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue, 'Address': addressVal, 'updOrder': true, 'emailUsr': emailUsr, 'mapUserEmp': mapUserEmp, 'roleUsr': roleUsr, 'reissueUsr': reissueUsr, 'chkMapAddr': chkMapAddr, 'lstOrddat': lstOrddat, 'nextOrddat': nextOrddat, 'usrActive': userActive };
+                                        $.ajax({
+                                            type: "POST",
+                                            url: "/Employee/EditEmployee1/",
+                                            data: data1,
+                                            success: function (response) {
+                                                if (response == "success") {
+                                                    alert("Successfully updated!");
+                                                    EditPop.Hide();
+                                                    window.location.reload();
+                                                }
+                                                else if (response == "Validation") {
+                                                    alert("Please fill all the mandatory fields");
+                                                }
+                                                else {
+                                                    alert(response);
+                                                }
+                                            }
+                                        });
+                                    }
+                                    else {
+                                        var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue, 'Address': addressVal, 'emailUsr': emailUsr, 'mapUserEmp': mapUserEmp, 'roleUsr': roleUsr, 'reissueUsr': reissueUsr, 'chkMapAddr': chkMapAddr, 'lstOrddat': lstOrddat, 'nextOrddat': nextOrddat, 'usrActive': userActive };
+                                        $.ajax({
+                                            type: "POST",
+                                            url: "/Employee/EditEmployee1/",
+                                            data: data1,
+                                            success: function (response) {
+                                                if (response == "success") {
+                                                    alert("Successfully updated!");
+                                                    EditPop.Hide();
+                                                    window.location.reload();
+                                                }
+                                                else if (response == "Validation") {
+                                                    alert("Please fill all the mandatory fields");
+                                                } else {
+                                                    alert(response);
+                                                }
+                                            }
+                                        });
+                                    }
                                 }
-                                else if (response == "Validation") {
-                                    alert("Please fill all data");
+                                else {
+                                    var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue, 'Address': addressVal, 'emailUsr': emailUsr, 'mapUserEmp': mapUserEmp, 'roleUsr': roleUsr, 'reissueUsr': reissueUsr, 'chkMapAddr': chkMapAddr, 'lstOrddat': lstOrddat, 'nextOrddat': nextOrddat, 'usrActive': userActive };
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "/Employee/EditEmployee1/",
+                                        data: data1,
+                                        success: function (response) {
+                                            if (response == "success") {
+                                                alert("Successfully updated!");
+                                                EditPop.Hide();
+                                                window.location.reload();
+                                            }
+                                            else if (response == "Validation") {
+                                                alert("Please fill all the mandatory fields");
+                                            } else {
+                                                alert(response);
+                                            }
+                                        }
+                                    });
                                 }
                             }
                         });
+
+
                     }
                 }
                 else {
                     if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & selUcode.lastChangedValue.trim() != "") {
-                        var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue, 'Address': addressVal };
                         $.ajax({
                             type: "POST",
-                            url: "/Employee/EditEmployee1/",
-                            data: data1,
-                            success: function (response) {
-                                if (response == "success") {
-                                    alert("Successfully updated!");
-                                    EditPop.Hide();
-                                    window.location.reload();
+                            url: "/Employee/HasPreviousOrders/",
+                            data: { 'empId': empID.lastChangedValue.trim() },
+                            success: function (PrevOrder) {
+                                if (PrevOrder.PrevOrder && PrevOrder.AddressChanged) {
+                                    if (confirm(OrderAddrMess)) {
+                                        var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue, 'Address': addressVal, 'updOrder': true, 'emailUsr': emailUsr, 'mapUserEmp': mapUserEmp, 'roleUsr': roleUsr, 'reissueUsr': reissueUsr, 'chkMapAddr': chkMapAddr, 'lstOrddat': lstOrddat, 'nextOrddat': nextOrddat, 'usrActive': userActive };
+                                        $.ajax({
+                                            type: "POST",
+                                            url: "/Employee/EditEmployee1/",
+                                            data: data1,
+                                            success: function (response) {
+                                                if (response == "success") {
+                                                    alert("Successfully updated!");
+                                                    EditPop.Hide();
+                                                    window.location.reload();
+                                                }
+                                                else if (response == "Validation") {
+                                                    alert("Please fill all the mandatory fields");
+                                                } else {
+                                                    alert(response);
+                                                }
+                                            }
+                                        });
+                                    }
+                                    else {
+                                        var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue, 'Address': addressVal, 'emailUsr': emailUsr, 'mapUserEmp': mapUserEmp, 'roleUsr': roleUsr, 'reissueUsr': reissueUsr, 'chkMapAddr': chkMapAddr, 'lstOrddat': lstOrddat, 'nextOrddat': nextOrddat, 'usrActive': userActive };
+                                        $.ajax({
+                                            type: "POST",
+                                            url: "/Employee/EditEmployee1/",
+                                            data: data1,
+                                            success: function (response) {
+                                                if (response == "success") {
+                                                    alert("Successfully updated!");
+                                                    EditPop.Hide();
+                                                    window.location.reload();
+                                                }
+                                                else if (response == "Validation") {
+                                                    alert("Please fill all the mandatory fields");
+                                                } else {
+                                                    alert(response);
+                                                }
+                                            }
+                                        });
+                                    }
                                 }
-                                else if (response == "Validation") {
-                                    alert("Please fill all data");
+                                else {
+                                    var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue, 'Address': addressVal, 'emailUsr': emailUsr, 'mapUserEmp': mapUserEmp, 'roleUsr': roleUsr, 'reissueUsr': reissueUsr, 'chkMapAddr': chkMapAddr, 'lstOrddat': lstOrddat, 'nextOrddat': nextOrddat, 'usrActive': userActive };
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "/Employee/EditEmployee1/",
+                                        data: data1,
+                                        success: function (response) {
+                                            if (response == "success") {
+                                                alert("Successfully updated!");
+                                                EditPop.Hide();
+                                                window.location.reload();
+                                            }
+                                            else if (response == "Validation") {
+                                                alert("Please fill all the mandatory fields");
+                                            } else {
+                                                alert(response);
+                                            }
+                                        }
+                                    });
                                 }
                             }
                         });
+
+
                     }
                 }
             }
             else {
-                alert("Please fill all details");
+                alert("Please fill all the mandatory fields");
             }
         }
         else if ((hoursCmb == undefined || hoursCmb == null) || (hoursDept != undefined || hoursDept != null)) {
@@ -3763,98 +4220,327 @@ function UpdateEmployee(s, e) {
             if (empID.lastChangedValue != null & frstName.lastChangedValue != null & lstName.lastChangedValue != null & dept.lastSuccessText != null & hrsDept != null) {
                 if (deptCnt > 0) {
                     if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & dept.lastSuccessText.trim() != "" & hrsDept.trim() != "") {
-                        var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursDept': hrsDept.trim(), 'hoursNo': hrsNo.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue, 'Address': addressVal };
                         $.ajax({
                             type: "POST",
-                            url: "/Employee/EditEmployee1/",
-                            data: data1,
-                            success: function (response) {
-                                if (response == "success") {
-                                    alert("Successfully updated!");
-                                    EditPop.Hide();
-                                    window.location.reload();
-                                }
-                                else if (response == "Validation") {
-                                    alert("Please fill all data");
-                                }
+                            url: "/Employee/HasPreviousOrders/",
+                            data: { 'empId': empID.lastChangedValue.trim() },
+                            success: function (PrevOrder) {
+                                if (PrevOrder.PrevOrder && PrevOrder.AddressChanged) {
+                                    if (confirm(OrderAddrMess)) {
+                                        var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursDept': hrsDept.trim(), 'hoursNo': hrsNo.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue, 'Address': addressVal, 'updOrder': true, 'emailUsr': emailUsr, 'mapUserEmp': mapUserEmp, 'roleUsr': roleUsr, 'reissueUsr': reissueUsr, 'chkMapAddr': chkMapAddr, 'lstOrddat': lstOrddat, 'nextOrddat': nextOrddat, 'usrActive': userActive };
+                                        $.ajax({
+                                            type: "POST",
+                                            url: "/Employee/EditEmployee1/",
+                                            data: data1,
+                                            success: function (response) {
+                                                if (response == "success") {
+                                                    alert("Successfully updated!");
+                                                    EditPop.Hide();
+                                                    window.location.reload();
+                                                }
+                                                else if (response == "Validation") {
+                                                    alert("Please fill all the mandatory fields");
+                                                }
+                                                else {
+                                                    alert(response);
+                                                }
+                                            }
+                                        });
 
+                                    }
+                                    else {
+                                        var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursDept': hrsDept.trim(), 'hoursNo': hrsNo.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue, 'Address': addressVal, 'emailUsr': emailUsr, 'mapUserEmp': mapUserEmp, 'roleUsr': roleUsr, 'reissueUsr': reissueUsr, 'chkMapAddr': chkMapAddr, 'lstOrddat': lstOrddat, 'nextOrddat': nextOrddat, 'usrActive': userActive };
+                                        $.ajax({
+                                            type: "POST",
+                                            url: "/Employee/EditEmployee1/",
+                                            data: data1,
+                                            success: function (response) {
+                                                if (response == "success") {
+                                                    alert("Successfully updated!");
+                                                    EditPop.Hide();
+                                                    window.location.reload();
+                                                }
+                                                else if (response == "Validation") {
+                                                    alert("Please fill all the mandatory fields");
+                                                }
+                                                else {
+                                                    alert(response);
+                                                }
+                                            }
+                                        });
+
+                                    }
+                                }
+                                else {
+                                    var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursDept': hrsDept.trim(), 'hoursNo': hrsNo.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue, 'Address': addressVal, 'emailUsr': emailUsr, 'mapUserEmp': mapUserEmp, 'roleUsr': roleUsr, 'reissueUsr': reissueUsr, 'chkMapAddr': chkMapAddr, 'lstOrddat': lstOrddat, 'nextOrddat': nextOrddat, 'usrActive': userActive };
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "/Employee/EditEmployee1/",
+                                        data: data1,
+                                        success: function (response) {
+                                            if (response == "success") {
+                                                alert("Successfully updated!");
+                                                EditPop.Hide();
+                                                window.location.reload();
+                                            }
+                                            else if (response == "Validation") {
+                                                alert("Please fill all the mandatory fields");
+                                            }
+                                            else {
+                                                alert(response);
+                                            }
+                                        }
+                                    });
+                                }
                             }
-                        });
+                        }
+                        );
+
                     }
                 }
                 else {
                     if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & hrsDept.trim() != "") {
-                        var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursDept': hrsDept.trim(), 'hoursNo': hrsNo.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue, 'Address': addressVal };
+
                         $.ajax({
                             type: "POST",
-                            url: "/Employee/EditEmployee1/",
-                            data: data1,
-                            success: function (response) {
-                                if (response == "success") {
-                                    alert("Successfully updated!");
-                                    EditPop.Hide();
-                                    window.location.reload();
+                            url: "/Employee/HasPreviousOrders/",
+                            data: { 'empId': empID.lastChangedValue.trim() },
+                            success: function (PrevOrder) {
+                                if (PrevOrder.PrevOrder && PrevOrder.AddressChanged) {
+                                    if (confirm(OrderAddrMess)) {
+                                        var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursDept': hrsDept.trim(), 'hoursNo': hrsNo.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue, 'Address': addressVal, 'updOrder': true, 'emailUsr': emailUsr, 'mapUserEmp': mapUserEmp, 'roleUsr': roleUsr, 'reissueUsr': reissueUsr, 'chkMapAddr': chkMapAddr, 'lstOrddat': lstOrddat, 'nextOrddat': nextOrddat, 'usrActive': userActive };
+                                        $.ajax({
+                                            type: "POST",
+                                            url: "/Employee/EditEmployee1/",
+                                            data: data1,
+                                            success: function (response) {
+                                                if (response == "success") {
+                                                    alert("Successfully updated!");
+                                                    EditPop.Hide();
+                                                    window.location.reload();
+                                                }
+                                                else if (response == "Validation") {
+                                                    alert("Please fill all the mandatory fields");
+                                                }
+                                                else {
+                                                    alert(response);
+                                                }
+                                            }
+                                        });
+                                    }
+                                    else {
+                                        var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursDept': hrsDept.trim(), 'hoursNo': hrsNo.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue, 'Address': addressVal, 'emailUsr': emailUsr, 'mapUserEmp': mapUserEmp, 'roleUsr': roleUsr, 'reissueUsr': reissueUsr, 'chkMapAddr': chkMapAddr, 'lstOrddat': lstOrddat, 'nextOrddat': nextOrddat, 'usrActive': userActive };
+                                        $.ajax({
+                                            type: "POST",
+                                            url: "/Employee/EditEmployee1/",
+                                            data: data1,
+                                            success: function (response) {
+                                                if (response == "success") {
+                                                    alert("Successfully updated!");
+                                                    EditPop.Hide();
+                                                    window.location.reload();
+                                                }
+                                                else if (response == "Validation") {
+                                                    alert("Please fill all the mandatory fields");
+                                                }
+                                                else {
+                                                    alert(response);
+                                                }
+                                            }
+                                        });
+                                    }
                                 }
-                                else if (response == "Validation") {
-                                    alert("Please fill all data");
+                                else {
+                                    var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursDept': hrsDept.trim(), 'hoursNo': hrsNo.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue, 'Address': addressVal, 'emailUsr': emailUsr, 'mapUserEmp': mapUserEmp, 'roleUsr': roleUsr, 'reissueUsr': reissueUsr, 'chkMapAddr': chkMapAddr, 'lstOrddat': lstOrddat, 'nextOrddat': nextOrddat, 'usrActive': userActive };
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "/Employee/EditEmployee1/",
+                                        data: data1,
+                                        success: function (response) {
+                                            if (response == "success") {
+                                                alert("Successfully updated!");
+                                                EditPop.Hide();
+                                                window.location.reload();
+                                            }
+                                            else if (response == "Validation") {
+                                                alert("Please fill all the mandatory fields");
+                                            }
+                                            else {
+                                                alert(response);
+                                            }
+                                        }
+                                    });
                                 }
-
                             }
-                        });
+                        }
+                        );
+
                     }
                 }
             }
             else {
-                alert("Please fill all details");
+                alert("Please fill all the mandatory fields");
             }
         }
         else {
             if (empID.lastChangedValue != null & frstName.lastChangedValue != null & lstName.lastChangedValue != null & dept.lastSuccessText != null & hoursCmb.lastChangedValue != null) {
                 if (deptCnt > 0) {
                     if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & dept.lastSuccessText.trim() != "" & hoursCmb.lastChangedValue.trim() != "") {
-                        var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hrsCmb': hoursCmb.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue, 'Address': addressVal };
                         $.ajax({
                             type: "POST",
-                            url: "/Employee/EditEmployee1/",
-                            data: data1,
-                            success: function (response) {
-                                if (response == "success") {
-                                    alert("Successfully updated!");
-                                    EditPop.Hide();
-                                    window.location.reload();
+                            url: "/Employee/HasPreviousOrders/",
+                            data: { 'empId': empID.lastChangedValue.trim() },
+                            success: function (PrevOrder) {
+                                if (PrevOrder.PrevOrder && PrevOrder.AddressChanged) {
+                                    if (confirm(OrderAddrMess)) {
+                                        var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hrsCmb': hoursCmb.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue, 'Address': addressVal, 'updOrder': true, 'emailUsr': emailUsr, 'mapUserEmp': mapUserEmp, 'roleUsr': roleUsr, 'reissueUsr': reissueUsr, 'chkMapAddr': chkMapAddr, 'lstOrddat': lstOrddat, 'nextOrddat': nextOrddat, 'usrActive': userActive };
+                                        $.ajax({
+                                            type: "POST",
+                                            url: "/Employee/EditEmployee1/",
+                                            data: data1,
+                                            success: function (response) {
+                                                if (response == "success") {
+                                                    alert("Successfully updated!");
+                                                    EditPop.Hide();
+                                                    window.location.reload();
+                                                }
+                                                else if (response == "Validation") {
+                                                    alert("Please fill all the mandatory fields");
+                                                }
+                                                else {
+                                                    alert(response);
+                                                }
+                                            }
+                                        });
+                                    }
+                                    else {
+                                        var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hrsCmb': hoursCmb.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue, 'Address': addressVal, 'emailUsr': emailUsr, 'mapUserEmp': mapUserEmp, 'roleUsr': roleUsr, 'reissueUsr': reissueUsr, 'chkMapAddr': chkMapAddr, 'lstOrddat': lstOrddat, 'nextOrddat': nextOrddat, 'usrActive': userActive };
+                                        $.ajax({
+                                            type: "POST",
+                                            url: "/Employee/EditEmployee1/",
+                                            data: data1,
+                                            success: function (response) {
+                                                if (response == "success") {
+                                                    alert("Successfully updated!");
+                                                    EditPop.Hide();
+                                                    window.location.reload();
+                                                }
+                                                else if (response == "Validation") {
+                                                    alert("Please fill all the mandatory fields");
+                                                }
+                                                else {
+                                                    alert(response);
+                                                }
+                                            }
+                                        });
+                                    }
                                 }
-                                else if (response == "Validation") {
-                                    alert("Please fill all data");
+                                else {
+                                    var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hrsCmb': hoursCmb.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue, 'Address': addressVal, 'emailUsr': emailUsr, 'mapUserEmp': mapUserEmp, 'roleUsr': roleUsr, 'reissueUsr': reissueUsr, 'chkMapAddr': chkMapAddr, 'lstOrddat': lstOrddat, 'nextOrddat': nextOrddat, 'usrActive': userActive };
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "/Employee/EditEmployee1/",
+                                        data: data1,
+                                        success: function (response) {
+                                            if (response == "success") {
+                                                alert("Successfully updated!");
+                                                EditPop.Hide();
+                                                window.location.reload();
+                                            }
+                                            else if (response == "Validation") {
+                                                alert("Please fill all the mandatory fields");
+                                            }
+                                            else {
+                                                alert(response);
+                                            }
+                                        }
+                                    });
                                 }
-
                             }
                         });
+
+
                     }
                 }
                 else {
                     if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & hoursCmb.lastChangedValue.trim() != "") {
-                        var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hrsCmb': hoursCmb.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue, 'Address': addressVal };
                         $.ajax({
                             type: "POST",
-                            url: "/Employee/EditEmployee1/",
-                            data: data1,
-                            success: function (response) {
-                                if (response == "success") {
-                                    alert("Successfully updated!");
-                                    EditPop.Hide();
-                                    window.location.reload();
+                            url: "/Employee/HasPreviousOrders/",
+                            data: { 'empId': empID.lastChangedValue.trim() },
+                            success: function (PrevOrder) {
+                                if (PrevOrder.PrevOrder && PrevOrder.AddressChanged) {
+                                    if (confirm(OrderAddrMess)) {
+                                        var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hrsCmb': hoursCmb.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue, 'Address': addressVal, 'updOrder': true, 'emailUsr': emailUsr, 'mapUserEmp': mapUserEmp, 'roleUsr': roleUsr, 'reissueUsr': reissueUsr, 'chkMapAddr': chkMapAddr, 'lstOrddat': lstOrddat, 'nextOrddat': nextOrddat, 'usrActive': userActive };
+                                        $.ajax({
+                                            type: "POST",
+                                            url: "/Employee/EditEmployee1/",
+                                            data: data1,
+                                            success: function (response) {
+                                                if (response == "success") {
+                                                    alert("Successfully updated!");
+                                                    EditPop.Hide();
+                                                    window.location.reload();
+                                                }
+                                                else if (response == "Validation") {
+                                                    alert("Please fill all the mandatory fields");
+                                                }
+                                                else {
+                                                    alert(response);
+                                                }
+                                            }
+                                        });
+                                    }
+                                    else {
+                                        var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hrsCmb': hoursCmb.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue, 'Address': addressVal, 'emailUsr': emailUsr, 'mapUserEmp': mapUserEmp, 'roleUsr': roleUsr, 'reissueUsr': reissueUsr, 'chkMapAddr': chkMapAddr, 'lstOrddat': lstOrddat, 'nextOrddat': nextOrddat, 'usrActive': userActive };
+                                        $.ajax({
+                                            type: "POST",
+                                            url: "/Employee/EditEmployee1/",
+                                            data: data1,
+                                            success: function (response) {
+                                                if (response == "success") {
+                                                    alert("Successfully updated!");
+                                                    EditPop.Hide();
+                                                    window.location.reload();
+                                                }
+                                                else if (response == "Validation") {
+                                                    alert("Please fill all the mandatory fields");
+                                                }
+                                                else {
+                                                    alert(response);
+                                                }
+                                            }
+                                        });
+                                    }
                                 }
-                                else if (response == "Validation") {
-                                    alert("Please fill all data");
+                                else {
+                                    var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hrsCmb': hoursCmb.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue, 'Address': addressVal, 'emailUsr': emailUsr, 'mapUserEmp': mapUserEmp, 'roleUsr': roleUsr, 'reissueUsr': reissueUsr, 'chkMapAddr': chkMapAddr, 'lstOrddat': lstOrddat, 'nextOrddat': nextOrddat, 'usrActive': userActive };
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "/Employee/EditEmployee1/",
+                                        data: data1,
+                                        success: function (response) {
+                                            if (response == "success") {
+                                                alert("Successfully updated!");
+                                                EditPop.Hide();
+                                                window.location.reload();
+                                            }
+                                            else if (response == "Validation") {
+                                                alert("Please fill all the mandatory fields");
+                                            }
+                                            else {
+                                                alert(response);
+                                            }
+                                        }
+                                    });
                                 }
-
                             }
                         });
                     }
                 }
             }
             else {
-                alert("Please fill all details");
+                alert("Please fill all the mandatory fields");
             }
         }
     }
@@ -3862,19 +4548,72 @@ function UpdateEmployee(s, e) {
         if (empID.lastChangedValue != null & frstName.lastChangedValue != null & lstName.lastChangedValue != null & dept.lastSuccessText != null) {
             if (deptCnt > 0) {
                 if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "" & dept.lastSuccessText.trim() != "") {
-                    var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue, 'Address': addressVal };
                     $.ajax({
                         type: "POST",
-                        url: "/Employee/EditEmployee1/",
-                        data: data1,
-                        success: function (response) {
-                            if (response == "success") {
-                                alert("Successfully updated!");
-                                EditPop.Hide();
-                                window.location.reload();
+                        url: "/Employee/HasPreviousOrders/",
+                        data: { 'empId': empID.lastChangedValue.trim() },
+                        success: function (PrevOrder) {
+                            if (PrevOrder.PrevOrder && PrevOrder.AddressChanged) {
+                                if (confirm(OrderAddrMess)) {
+                                    var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue, 'Address': addressVal, 'updOrder': true, 'emailUsr': emailUsr, 'mapUserEmp': mapUserEmp, 'roleUsr': roleUsr, 'reissueUsr': reissueUsr, 'chkMapAddr': chkMapAddr, 'lstOrddat': lstOrddat, 'nextOrddat': nextOrddat, 'usrActive': userActive };
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "/Employee/EditEmployee1/",
+                                        data: data1,
+                                        success: function (response) {
+                                            if (response == "success") {
+                                                alert("Successfully updated!");
+                                                EditPop.Hide();
+                                                window.location.reload();
+                                            }
+                                            else if (response == "Validation") {
+                                                alert("Please fill all the mandatory fields");
+                                            } else {
+                                                alert(response);
+                                            }
+                                        }
+                                    });
+                                }
+                                else {
+                                    var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue, 'Address': addressVal, 'emailUsr': emailUsr, 'mapUserEmp': mapUserEmp, 'roleUsr': roleUsr, 'reissueUsr': reissueUsr, 'chkMapAddr': chkMapAddr, 'lstOrddat': lstOrddat, 'nextOrddat': nextOrddat, 'usrActive': userActive };
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "/Employee/EditEmployee1/",
+                                        data: data1,
+                                        success: function (response) {
+                                            if (response == "success") {
+                                                alert("Successfully updated!");
+                                                EditPop.Hide();
+                                                window.location.reload();
+                                            }
+                                            else if (response == "Validation") {
+                                                alert("Please fill all the mandatory fields");
+                                            } else {
+                                                alert(response);
+                                            }
+                                        }
+                                    });
+                                }
                             }
-                            else if (response == "Validation") {
-                                alert("Please fill all data");
+                            else {
+                                var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue, 'Address': addressVal, 'emailUsr': emailUsr, 'mapUserEmp': mapUserEmp, 'roleUsr': roleUsr, 'reissueUsr': reissueUsr, 'chkMapAddr': chkMapAddr, 'lstOrddat': lstOrddat, 'nextOrddat': nextOrddat, 'usrActive': userActive };
+                                $.ajax({
+                                    type: "POST",
+                                    url: "/Employee/EditEmployee1/",
+                                    data: data1,
+                                    success: function (response) {
+                                        if (response == "success") {
+                                            alert("Successfully updated!");
+                                            EditPop.Hide();
+                                            window.location.reload();
+                                        }
+                                        else if (response == "Validation") {
+                                            alert("Please fill all the mandatory fields");
+                                        } else {
+                                            alert(response);
+                                        }
+                                    }
+                                });
                             }
                         }
                     });
@@ -3882,31 +4621,86 @@ function UpdateEmployee(s, e) {
             }
             else {
                 if (empID.lastChangedValue.trim() != "" & frstName.lastChangedValue.trim() != "" & lstName.lastChangedValue.trim() != "") {
-                    var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue, 'Address': addressVal };
                     $.ajax({
                         type: "POST",
-                        url: "/Employee/EditEmployee1/",
-                        data: data1,
-                        success: function (response) {
-                            if (response == "success") {
-                                alert("Successfully updated!");
-                                EditPop.Hide();
-                                window.location.reload();
+                        url: "/Employee/HasPreviousOrders/",
+                        data: { 'empId': empID.lastChangedValue.trim() },
+                        success: function (PrevOrder) {
+                            if (PrevOrder.PrevOrder && PrevOrder.AddressChanged) {
+                                if (confirm(OrderAddrMess)) {
+                                    var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue, 'Address': addressVal, 'updOrder': true, 'emailUsr': emailUsr, 'mapUserEmp': mapUserEmp, 'roleUsr': roleUsr, 'reissueUsr': reissueUsr, 'chkMapAddr': chkMapAddr, 'lstOrddat': lstOrddat, 'nextOrddat': nextOrddat, 'usrActive': userActive };
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "/Employee/EditEmployee1/",
+                                        data: data1,
+                                        success: function (response) {
+                                            if (response == "success") {
+                                                alert("Successfully updated!");
+                                                EditPop.Hide();
+                                                window.location.reload();
+                                            }
+                                            else if (response == "Validation") {
+                                                alert("Please fill all the mandatory fields");
+                                            } else {
+                                                alert(response);
+                                            }
+                                        }
+                                    });
+                                }
+                                else {
+                                    var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue, 'Address': addressVal, 'emailUsr': emailUsr, 'mapUserEmp': mapUserEmp, 'roleUsr': roleUsr, 'reissueUsr': reissueUsr, 'chkMapAddr': chkMapAddr, 'lstOrddat': lstOrddat, 'nextOrddat': nextOrddat, 'usrActive': userActive };
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "/Employee/EditEmployee1/",
+                                        data: data1,
+                                        success: function (response) {
+                                            if (response == "success") {
+                                                alert("Successfully updated!");
+                                                EditPop.Hide();
+                                                window.location.reload();
+                                            }
+                                            else if (response == "Validation") {
+                                                alert("Please fill all the mandatory fields");
+                                            }
+                                        }
+                                    });
+                                }
                             }
-                            else if (response == "Validation") {
-                                alert("Please fill all data");
+                            else {
+                                var data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'isActive': isAct.previousValue, 'Address': addressVal, 'emailUsr': emailUsr, 'mapUserEmp': mapUserEmp, 'roleUsr': roleUsr, 'reissueUsr': reissueUsr, 'chkMapAddr': chkMapAddr, 'lstOrddat': lstOrddat, 'nextOrddat': nextOrddat, 'usrActive': userActive };
+                                $.ajax({
+                                    type: "POST",
+                                    url: "/Employee/EditEmployee1/",
+                                    data: data1,
+                                    success: function (response) {
+                                        if (response == "success") {
+                                            alert("Successfully updated!");
+                                            EditPop.Hide();
+                                            window.location.reload();
+                                        }
+                                        else if (response == "Validation") {
+                                            alert("Please fill all the mandatory fields");
+                                        } else {
+                                            alert(response);
+                                        }
+                                    }
+                                });
                             }
                         }
                     });
+
                 }
             }
         }
         else {
-            alert("Please fill all details");
+            alert("Please fill all the mandatory fields");
         }
     }
 
 }
+
+
+
 
 function CreateEmployee(s, e) {
     var EditPop = ASPxClientControl.GetControlCollection().GetByName("CreateEditPop");
@@ -3927,7 +4721,23 @@ function CreateEmployee(s, e) {
     var isAct = ASPxClientControl.GetControlCollection().GetByName("editEmpIsActive");
     var address = ASPxClientControl.GetControlCollection().GetByName("CmbAddress");
     var empMapper = ASPxClientControl.GetControlCollection().GetByName("empMapper");
+    var createUsrCtrl = ASPxClientControl.GetControlCollection().GetByName("UserCreationrequest");
+    var createUsr = createUsrCtrl != null ? createUsrCtrl.GetValue() : false;
+    var mapUserEmpCtrl = ASPxClientControl.GetControlCollection().GetByName("empMapUsr");
+    var emailUsrCtrl = ASPxClientControl.GetControlCollection().GetByName("txtUsrEmail");
+    var roleUsrCtrl = ASPxClientControl.GetControlCollection().GetByName("cmbUsrRole");
+    var reissueUsrCtrl = ASPxClientControl.GetControlCollection().GetByName("cmbRollout");
+    var lstOrddatCtrl = document.getElementById("empUsrLastOrdDate");
+    var nextOrddatCtrl = document.getElementById("empUsrNextOrdDate");
+    var chkMapAddrCtrl = ASPxClientControl.GetControlCollection().GetByName("chkMapAddr");
+    var emailUsr = emailUsrCtrl != null ? emailUsrCtrl.GetValue() : "";
+    var chkMapAddr = chkMapAddrCtrl != null ? chkMapAddrCtrl.GetValue() : false;
+    var mapUserEmp = mapUserEmpCtrl != null ? mapUserEmpCtrl.GetValue() : false;
+    var roleUsr = roleUsrCtrl != null ? roleUsrCtrl.GetValue() : "";
+    var reissueUsr = reissueUsrCtrl != null ? reissueUsrCtrl.GetValue() : "";
     var isMapped = empMapper == null | empMapper == undefined ? false : empMapper.GetValue();
+    var lstOrddat = lstOrddatCtrl != null ? lstOrddatCtrl.value : "";
+    var nextOrddat = nextOrddatCtrl != null ? nextOrddatCtrl.value : "";
     if (s.name != "CreateBtn_Template") {
         if ((hoursCmb == undefined || hoursCmb == null) && (hoursDept == undefined || hoursDept == null)) {
             if (empID.lastChangedValue != null & frstName.lastChangedValue != null & lstName.lastChangedValue != null & dept.lastSuccessText != null & selUcode.lastChangedValue != null) {
@@ -3943,8 +4753,9 @@ function CreateEmployee(s, e) {
                             success: function (response) {
                                 if (response == "Success") {
                                     if (isAct.previousValue == false) {
-                                        if (confirm("Do you want to set the employee Active")) {
-                                            data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': true, 'isMapped': isMapped };
+                                        if (confirm("Do you want to activate the employee?")) {
+                                            data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': true, 'isMapped': isMapped, 'createUsr': createUsr, 'emailUsr': emailUsr, 'mapUserEmp': mapUserEmp, 'roleUsr': roleUsr, 'reissueUsr': reissueUsr, 'chkMapAddr': chkMapAddr, 'lstOrddat': lstOrddat, 'nextOrddat': nextOrddat };
+
                                             $.ajax({
                                                 type: "POST",
                                                 url: "/Employee/CreateNewEmployee/",
@@ -3964,7 +4775,7 @@ function CreateEmployee(s, e) {
                                             });
                                         }
                                         else {
-                                            data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
+                                            data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': true, 'isMapped': isMapped, 'createUsr': createUsr, 'emailUsr': emailUsr, 'mapUserEmp': mapUserEmp, 'roleUsr': roleUsr, 'reissueUsr': reissueUsr, 'chkMapAddr': chkMapAddr, 'lstOrddat': lstOrddat, 'nextOrddat': nextOrddat };
                                             $.ajax({
                                                 type: "POST",
                                                 url: "/Employee/CreateNewEmployee/",
@@ -3986,7 +4797,7 @@ function CreateEmployee(s, e) {
 
                                     }
                                     else {
-                                        data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
+                                        data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': true, 'isMapped': isMapped, 'createUsr': createUsr, 'emailUsr': emailUsr, 'mapUserEmp': mapUserEmp, 'roleUsr': roleUsr, 'reissueUsr': reissueUsr, 'chkMapAddr': chkMapAddr, 'lstOrddat': lstOrddat, 'nextOrddat': nextOrddat };
                                         $.ajax({
                                             type: "POST",
                                             url: "/Employee/CreateNewEmployee/",
@@ -4024,7 +4835,7 @@ function CreateEmployee(s, e) {
                         //            EditPop.Hide();
                         //        }
                         //        else if (response == "Validation") {
-                        //            alert("Please fill all data");
+                        //            alert("Please fill all the mandatory fields");
                         //        }
                         //    }
                         //});
@@ -4044,8 +4855,8 @@ function CreateEmployee(s, e) {
                             success: function (response) {
                                 if (response == "Success") {
                                     if (isAct.previousValue == false) {
-                                        if (confirm("Do you want to set the employee Active")) {
-                                            data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': true, 'isMapped': isMapped };
+                                        if (confirm("Do you want to activate the employee?")) {
+                                            data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': true, 'isMapped': isMapped, 'createUsr': createUsr, 'emailUsr': emailUsr, 'mapUserEmp': mapUserEmp, 'roleUsr': roleUsr, 'reissueUsr': reissueUsr, 'chkMapAddr': chkMapAddr, 'lstOrddat': lstOrddat, 'nextOrddat': nextOrddat };
                                             $.ajax({
                                                 type: "POST",
                                                 url: "/Employee/CreateNewEmployee/",
@@ -4065,7 +4876,7 @@ function CreateEmployee(s, e) {
                                             });
                                         }
                                         else {
-                                            data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
+                                            data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': true, 'isMapped': isMapped, 'createUsr': createUsr, 'emailUsr': emailUsr, 'mapUserEmp': mapUserEmp, 'roleUsr': roleUsr, 'reissueUsr': reissueUsr, 'chkMapAddr': chkMapAddr, 'lstOrddat': lstOrddat, 'nextOrddat': nextOrddat };
                                             $.ajax({
                                                 type: "POST",
                                                 url: "/Employee/CreateNewEmployee/",
@@ -4087,7 +4898,7 @@ function CreateEmployee(s, e) {
 
                                     }
                                     else {
-                                        data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
+                                        data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': true, 'isMapped': isMapped, 'createUsr': createUsr, 'emailUsr': emailUsr, 'mapUserEmp': mapUserEmp, 'roleUsr': roleUsr, 'reissueUsr': reissueUsr, 'chkMapAddr': chkMapAddr, 'lstOrddat': lstOrddat, 'nextOrddat': nextOrddat };
                                         $.ajax({
                                             type: "POST",
                                             url: "/Employee/CreateNewEmployee/",
@@ -4125,7 +4936,7 @@ function CreateEmployee(s, e) {
                         //            EditPop.Hide();
                         //        }
                         //        else if (response == "Validation") {
-                        //            alert("Please fill all data");
+                        //            alert("Please fill all the mandatory fields");
                         //        }
                         //    }
                         //});
@@ -4136,7 +4947,7 @@ function CreateEmployee(s, e) {
 
             }
             else {
-                alert("Please fill all details");
+                alert("Please fill all the mandatory fields");
             }
         }
         else if ((hoursCmb == undefined || hoursCmb == null) && (hoursDept != undefined || hoursDept != null)) {
@@ -4155,8 +4966,8 @@ function CreateEmployee(s, e) {
                             success: function (response) {
                                 if (response == "Success") {
                                     if (isAct.previousValue == false) {
-                                        if (confirm("Do you want to set the employee Active")) {
-                                            data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursDept': hrsDept.trim(), 'hoursNo': hrsNo.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': true, 'isMapped': isMapped };
+                                        if (confirm("Do you want to activate the employee?")) {
+                                            data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursDept': hrsDept.trim(), 'hoursNo': hrsNo.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': true, 'isMapped': isMapped, 'createUsr': createUsr, 'emailUsr': emailUsr, 'mapUserEmp': mapUserEmp, 'roleUsr': roleUsr, 'reissueUsr': reissueUsr, 'chkMapAddr': chkMapAddr, 'lstOrddat': lstOrddat, 'nextOrddat': nextOrddat };
                                             $.ajax({
                                                 type: "POST",
                                                 url: "/Employee/CreateNewEmployee/",
@@ -4176,7 +4987,7 @@ function CreateEmployee(s, e) {
                                             });
                                         }
                                         else {
-                                            data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursDept': hrsDept.trim(), 'hoursNo': hrsNo.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
+                                            data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursDept': hrsDept.trim(), 'hoursNo': hrsNo.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue, 'createUsr': createUsr, 'emailUsr': emailUsr, 'mapUserEmp': mapUserEmp, 'roleUsr': roleUsr, 'reissueUsr': reissueUsr, 'chkMapAddr': chkMapAddr, 'lstOrddat': lstOrddat, 'nextOrddat': nextOrddat };
                                             $.ajax({
                                                 type: "POST",
                                                 url: "/Employee/CreateNewEmployee/",
@@ -4198,7 +5009,7 @@ function CreateEmployee(s, e) {
 
                                     }
                                     else {
-                                        data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursDept': hrsDept.trim(), 'hoursNo': hrsNo.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
+                                        data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursDept': hrsDept.trim(), 'hoursNo': hrsNo.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue, 'createUsr': createUsr, 'emailUsr': emailUsr, 'mapUserEmp': mapUserEmp, 'roleUsr': roleUsr, 'reissueUsr': reissueUsr, 'chkMapAddr': chkMapAddr, 'lstOrddat': lstOrddat, 'nextOrddat': nextOrddat };
                                         $.ajax({
                                             type: "POST",
                                             url: "/Employee/CreateNewEmployee/",
@@ -4240,8 +5051,8 @@ function CreateEmployee(s, e) {
                             success: function (response) {
                                 if (response == "Success") {
                                     if (isAct.previousValue == false) {
-                                        if (confirm("Do you want to set the employee Active")) {
-                                            data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursDept': hrsDept.trim(), 'hoursNo': hrsNo.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': true, 'isMapped': isMapped };
+                                        if (confirm("Do you want to activate the employee?")) {
+                                            data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursDept': hrsDept.trim(), 'hoursNo': hrsNo.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': true, 'isMapped': isMapped, 'createUsr': createUsr, 'emailUsr': emailUsr, 'mapUserEmp': mapUserEmp, 'roleUsr': roleUsr, 'reissueUsr': reissueUsr, 'chkMapAddr': chkMapAddr, 'lstOrddat': lstOrddat, 'nextOrddat': nextOrddat };
                                             $.ajax({
                                                 type: "POST",
                                                 url: "/Employee/CreateNewEmployee/",
@@ -4261,7 +5072,7 @@ function CreateEmployee(s, e) {
                                             });
                                         }
                                         else {
-                                            data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursDept': hrsDept.trim(), 'hoursNo': hrsNo.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
+                                            data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursDept': hrsDept.trim(), 'hoursNo': hrsNo.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue, 'createUsr': createUsr, 'emailUsr': emailUsr, 'mapUserEmp': mapUserEmp, 'roleUsr': roleUsr, 'reissueUsr': reissueUsr, 'chkMapAddr': chkMapAddr, 'lstOrddat': lstOrddat, 'nextOrddat': nextOrddat };
                                             $.ajax({
                                                 type: "POST",
                                                 url: "/Employee/CreateNewEmployee/",
@@ -4283,7 +5094,7 @@ function CreateEmployee(s, e) {
 
                                     }
                                     else {
-                                        data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursDept': hrsDept.trim(), 'hoursNo': hrsNo.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
+                                        data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursDept': hrsDept.trim(), 'hoursNo': hrsNo.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue, 'createUsr': createUsr, 'emailUsr': emailUsr, 'mapUserEmp': mapUserEmp, 'roleUsr': roleUsr, 'reissueUsr': reissueUsr, 'chkMapAddr': chkMapAddr, 'lstOrddat': lstOrddat, 'nextOrddat': nextOrddat };
                                         $.ajax({
                                             type: "POST",
                                             url: "/Employee/CreateNewEmployee/",
@@ -4316,7 +5127,7 @@ function CreateEmployee(s, e) {
 
             }
             else {
-                alert("Please fill all details");
+                alert("Please fill all the mandatory fields");
             }
         }
         else {
@@ -4333,8 +5144,8 @@ function CreateEmployee(s, e) {
                             success: function (response) {
                                 if (response == "Success") {
                                     if (isAct.previousValue == false) {
-                                        if (confirm("Do you want to set the employee Active")) {
-                                            data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursCmb': hoursCmb.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': true, 'isMapped': isMapped };
+                                        if (confirm("Do you want to activate the employee?")) {
+                                            data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursCmb': hoursCmb.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': true, 'isMapped': isMapped, 'createUsr': createUsr, 'emailUsr': emailUsr, 'mapUserEmp': mapUserEmp, 'roleUsr': roleUsr, 'reissueUsr': reissueUsr, 'chkMapAddr': chkMapAddr, 'lstOrddat': lstOrddat, 'nextOrddat': nextOrddat };
                                             $.ajax({
                                                 type: "POST",
                                                 url: "/Employee/CreateNewEmployee/",
@@ -4354,7 +5165,7 @@ function CreateEmployee(s, e) {
                                             });
                                         }
                                         else {
-                                            data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursCmb': hoursCmb.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
+                                            data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursCmb': hoursCmb.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue, 'createUsr': createUsr, 'emailUsr': emailUsr, 'mapUserEmp': mapUserEmp, 'roleUsr': roleUsr, 'reissueUsr': reissueUsr, 'chkMapAddr': chkMapAddr, 'lstOrddat': lstOrddat, 'nextOrddat': nextOrddat };
                                             $.ajax({
                                                 type: "POST",
                                                 url: "/Employee/CreateNewEmployee/",
@@ -4376,7 +5187,7 @@ function CreateEmployee(s, e) {
 
                                     }
                                     else {
-                                        data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursCmb': hoursCmb.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
+                                        data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursCmb': hoursCmb.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue, 'createUsr': createUsr, 'emailUsr': emailUsr, 'mapUserEmp': mapUserEmp, 'roleUsr': roleUsr, 'reissueUsr': reissueUsr, 'chkMapAddr': chkMapAddr, 'lstOrddat': lstOrddat, 'nextOrddat': nextOrddat };
                                         $.ajax({
                                             type: "POST",
                                             url: "/Employee/CreateNewEmployee/",
@@ -4414,7 +5225,7 @@ function CreateEmployee(s, e) {
                         //            EditPop.Hide();
                         //        }
                         //        else if (response == "Validation") {
-                        //            alert("Please fill all data");
+                        //            alert("Please fill all the mandatory fields");
                         //        }
                         //    }
                         //});
@@ -4434,8 +5245,8 @@ function CreateEmployee(s, e) {
                             success: function (response) {
                                 if (response == "Success") {
                                     if (isAct.previousValue == false) {
-                                        if (confirm("Do you want to set the employee Active")) {
-                                            data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursCmb': hoursCmb.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': true, 'isMapped': isMapped };
+                                        if (confirm("Do you want to activate the employee?")) {
+                                            data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursCmb': hoursCmb.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': true, 'isMapped': isMapped, 'createUsr': createUsr, 'emailUsr': emailUsr, 'mapUserEmp': mapUserEmp, 'roleUsr': roleUsr, 'reissueUsr': reissueUsr, 'chkMapAddr': chkMapAddr, 'lstOrddat': lstOrddat, 'nextOrddat': nextOrddat };
                                             $.ajax({
                                                 type: "POST",
                                                 url: "/Employee/CreateNewEmployee/",
@@ -4455,7 +5266,7 @@ function CreateEmployee(s, e) {
                                             });
                                         }
                                         else {
-                                            data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursCmb': hoursCmb.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
+                                            data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursCmb': hoursCmb.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue, 'createUsr': createUsr, 'emailUsr': emailUsr, 'mapUserEmp': mapUserEmp, 'roleUsr': roleUsr, 'reissueUsr': reissueUsr, 'chkMapAddr': chkMapAddr, 'lstOrddat': lstOrddat, 'nextOrddat': nextOrddat };
                                             $.ajax({
                                                 type: "POST",
                                                 url: "/Employee/CreateNewEmployee/",
@@ -4477,7 +5288,7 @@ function CreateEmployee(s, e) {
 
                                     }
                                     else {
-                                        data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursCmb': hoursCmb.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
+                                        data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'hoursCmb': hoursCmb.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue, 'createUsr': createUsr, 'emailUsr': emailUsr, 'mapUserEmp': mapUserEmp, 'roleUsr': roleUsr, 'reissueUsr': reissueUsr, 'chkMapAddr': chkMapAddr, 'lstOrddat': lstOrddat, 'nextOrddat': nextOrddat };
                                         $.ajax({
                                             type: "POST",
                                             url: "/Employee/CreateNewEmployee/",
@@ -4515,7 +5326,7 @@ function CreateEmployee(s, e) {
                         //            EditPop.Hide();
                         //        }
                         //        else if (response == "Validation") {
-                        //            alert("Please fill all data");
+                        //            alert("Please fill all the mandatory fields");
                         //        }
                         //    }
                         //});
@@ -4526,7 +5337,7 @@ function CreateEmployee(s, e) {
 
             }
             else {
-                alert("Please fill all details");
+                alert("Please fill all the mandatory fields");
             }
         }
     }
@@ -4544,8 +5355,8 @@ function CreateEmployee(s, e) {
                         success: function (response) {
                             if (response == "Success") {
                                 if (isAct.previousValue == false) {
-                                    if (confirm("Do you want to set the employee Active")) {
-                                        data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': true };
+                                    if (confirm("Do you want to activate the employee?")) {
+                                        data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': true, 'createUsr': createUsr, 'emailUsr': emailUsr, 'mapUserEmp': mapUserEmp, 'roleUsr': roleUsr, 'reissueUsr': reissueUsr, 'chkMapAddr': chkMapAddr, 'lstOrddat': lstOrddat, 'nextOrddat': nextOrddat };
                                         $.ajax({
                                             type: "POST",
                                             url: "/Employee/CreateNewEmployee/",
@@ -4565,7 +5376,7 @@ function CreateEmployee(s, e) {
                                         });
                                     }
                                     else {
-                                        data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
+                                        data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue, 'createUsr': createUsr, 'emailUsr': emailUsr, 'mapUserEmp': mapUserEmp, 'roleUsr': roleUsr, 'reissueUsr': reissueUsr, 'chkMapAddr': chkMapAddr, 'lstOrddat': lstOrddat, 'nextOrddat': nextOrddat };
                                         $.ajax({
                                             type: "POST",
                                             url: "/Employee/CreateNewEmployee/",
@@ -4587,7 +5398,7 @@ function CreateEmployee(s, e) {
 
                                 }
                                 else {
-                                    data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
+                                    data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue, 'isMapped': isMapped, 'createUsr': createUsr, 'emailUsr': emailUsr, 'mapUserEmp': mapUserEmp, 'roleUsr': roleUsr, 'reissueUsr': reissueUsr, 'chkMapAddr': chkMapAddr, 'lstOrddat': lstOrddat, 'nextOrddat': nextOrddat, 'lstOrddat': lstOrddat, 'nextOrddat': nextOrddat };
                                     $.ajax({
                                         type: "POST",
                                         url: "/Employee/CreateNewEmployee/",
@@ -4625,7 +5436,7 @@ function CreateEmployee(s, e) {
                     //            EditPop.Hide();
                     //        }
                     //        else if (response == "Validation") {
-                    //            alert("Please fill all data");
+                    //            alert("Please fill all the mandatory fields");
                     //        }
                     //    }
                     //});
@@ -4643,8 +5454,8 @@ function CreateEmployee(s, e) {
                         success: function (response) {
                             if (response == "Success") {
                                 if (isAct.previousValue == false) {
-                                    if (confirm("Do you want to set the employee Active")) {
-                                        data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': true };
+                                    if (confirm("Do you want to activate the employee?")) {
+                                        data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': true, 'createUsr': createUsr, 'emailUsr': emailUsr, 'mapUserEmp': mapUserEmp, 'roleUsr': roleUsr, 'reissueUsr': reissueUsr, 'chkMapAddr': chkMapAddr, 'lstOrddat': lstOrddat, 'nextOrddat': nextOrddat };
                                         $.ajax({
                                             type: "POST",
                                             url: "/Employee/CreateNewEmployee/",
@@ -4664,7 +5475,7 @@ function CreateEmployee(s, e) {
                                         });
                                     }
                                     else {
-                                        data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
+                                        data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue, 'createUsr': createUsr, 'emailUsr': emailUsr, 'mapUserEmp': mapUserEmp, 'roleUsr': roleUsr, 'reissueUsr': reissueUsr, 'chkMapAddr': chkMapAddr, 'lstOrddat': lstOrddat, 'nextOrddat': nextOrddat };
                                         $.ajax({
                                             type: "POST",
                                             url: "/Employee/CreateNewEmployee/",
@@ -4686,7 +5497,7 @@ function CreateEmployee(s, e) {
 
                                 }
                                 else {
-                                    data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': isAct.previousValue };
+                                    data1 = { 'StartDate': strtDate != undefined ? strtDate.date.toJSON() : date, 'EndDate': endDate != undefined ? endDate.date.toJSON() : date, 'EmpFirstName': frstName.lastChangedValue.trim(), 'EmpLastName': lstName.lastChangedValue.trim(), 'EmployeeId': empID.lastChangedValue.trim(), 'EmpUcodes': selUcode.lastChangedValue.trim(), 'Department': dept.lastSuccessText.trim(), 'Address': address != null && address != undefined ? address.lastSuccessText.trim() : "", 'isActive': true, 'isMapped': isMapped, 'createUsr': createUsr, 'emailUsr': emailUsr, 'mapUserEmp': mapUserEmp, 'roleUsr': roleUsr, 'reissueUsr': reissueUsr, 'chkMapAddr': chkMapAddr, 'lstOrddat': lstOrddat, 'nextOrddat': nextOrddat, 'lstOrddat': lstOrddat, 'nextOrddat': nextOrddat };
                                     $.ajax({
                                         type: "POST",
                                         url: "/Employee/CreateNewEmployee/",
@@ -4724,7 +5535,7 @@ function CreateEmployee(s, e) {
                     //            EditPop.Hide();
                     //        }
                     //        else if (response == "Validation") {
-                    //            alert("Please fill all data");
+                    //            alert("Please fill all the mandatory fields");
                     //        }
                     //    }
                     //});
@@ -4734,7 +5545,7 @@ function CreateEmployee(s, e) {
 
         }
         else {
-            alert("Please fill all details");
+            alert("Please fill all the mandatory fields");
         }
     }
 
@@ -4750,7 +5561,7 @@ function EditEmployee(empId) {
             data: { 'empId': empId },
             success: function (response) {
                 if (response != "") {
-                    if (!response.includes("Login")) {
+                    if (!response.indexOf("Login") > -1) {
                         var EditPop = ASPxClientControl.GetControlCollection().GetByName("CreateEditPop");
                         EditPop.SetHeaderText("Edit");
                         $("#EditLayout").html("");
@@ -5026,6 +5837,7 @@ function GetEmpGrid() {
                     MVCxClientUtils.FinalizeCallback();
                     setCollapsed();
                     checkEmpEmail();
+                    EmergencyMessagePop();
                 }
             }
         });
@@ -5042,7 +5854,7 @@ function GetAllEmps() {
         url: "/Employee/EmployeeGridViewPartial/",
         type: "POST",
         success: function (response) {
-            if (response != "" && !response.includes("Login")) {
+            if (response != "" && !response.indexOf("Login") > -1) {
                 var empId = ASPxClientControl.GetControlCollection().GetByName("FilterEmployeeId");
                 var firstName = ASPxClientControl.GetControlCollection().GetByName("FilterEmpFirstName");
                 var roles = ASPxClientControl.GetControlCollection().GetByName("FilterRoles");
@@ -5065,6 +5877,7 @@ function GetAllEmps() {
                 MVCxClientUtils.FinalizeCallback();
                 setCollapsed();
                 checkEmpEmail();
+                // EmergencyMessagePop();
             }
             else {
                 window.location = "/User/Login";
@@ -5167,6 +5980,25 @@ function FillAllFields(s, e) {
     });
 }
 
+function ChangePassword() {
+    var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
+    loadPopup.Show();
+    var changepwdctrl = ASPxClientControl.GetControlCollection().GetByName("ChangePwd");
+    $.ajax({
+        url: "/Employee/ChangePassword/",
+        type: "post",
+        success: function (response) {
+            if (response != null && response != "") {
+                var pwdDiv = document.getElementById("ChangePwdDiv");
+                pwdDiv.innerHTML = response;
+                loadPopup.Hide();
+                changepwdctrl.Show();
+                MVCxClientUtils.FinalizeCallback();
+            }
+        }
+    });
+}
+
 function FillCustRefandDeliveryFields(s, e) {
     var addDescription = ASPxClientControl.GetControlCollection().GetByName("CmbAddress");
     var address1 = ASPxClientControl.GetControlCollection().GetByName("Address1");
@@ -5212,6 +6044,8 @@ function FillCustRefandDeliveryFields(s, e) {
 }
 
 function AcceptOrder(s, e) {
+    var AcceptBtnctrl = ASPxClientControl.GetControlCollection().GetByName(s.name);
+    var cnf = s.name.indexOf("cnf") > -1 ? true : false;
     var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
     loadPopup.Show();
     var addDescription = ASPxClientControl.GetControlCollection().GetByName("CmbAddress");
@@ -5220,12 +6054,16 @@ function AcceptOrder(s, e) {
     var custRef = ref.GetValue(); var commentBox = ASPxClientControl.GetControlCollection().GetByName("txtCommentsExternal");
     comment = commentBox != null ? commentBox.GetValue() : "";
 
+
+    //var win = document.referrer;
+   // alert(win);
     //$.ajax({
     //    url: "Basket/GetCarriageStatus",
     //    type: "POST",
     //    success: function (result) {
     //        if (result) {
     if (addDesc != null && addDesc != "") {
+        AcceptBtnctrl.SetEnabled(false);
         $.ajax({
             url: "/Home/GetBasketStatus/",
             type: "post",
@@ -5237,47 +6075,75 @@ function AcceptOrder(s, e) {
                         type: "post",
                         success: function (response) {
                             if (response == "") {
+
                                 $.ajax({
                                     url: "/Basket/AcceptOrder/",
                                     type: "POST",
-                                    data: { 'addDesc': addDesc },
+                                    data: { 'addDesc': addDesc, 'CNF': cnf },
                                     success: function (resp) {
                                         if (resp.type != "" && resp.type != null) {
-                                            if (resp.type.includes("Carrier")) {
+                                            if (resp.type.indexOf("Carrier") > -1) {
                                                 alert(resp.type);
+                                                AcceptBtnctrl.SetEnabled(true);
                                             }
                                             else {
                                                 alert(resp.type);
+                                                AcceptBtnctrl.SetEnabled(true);
                                             }
 
                                             loadPopup.Hide();
                                         }
                                         else {
                                             var message = "";
-                                            for (var k = 0; k < resp.results.length; k++) {
-                                                message = message + "Your uniform order has been successfully placed,order reference:" + resp.results[k].OrderNo + " (" + resp.results[k].EmployeeId + ")." + resp.results[k].OrderConfirmation + ". \n";
-                                            }
-                                            if (resp.results[0].OrderConfirmationPop != "" && resp.results[0].OrderConfirmationPop != null) {
-                                                message = message + " \n\n\n Do you wanr to print confirmation? \n (Click ok to print,Cancel to not print)";
-                                                if (confirm(message)) {
-                                                    var orderConfirmationPopup = ASPxClientControl.GetControlCollection().GetByName("orderConfirmation");
-                                                    loadPopup.Hide()
-                                                    var ordConfim = document.getElementById("ordeConfirm");
-                                                    ordConfim.innerHTML = "";
-                                                    ordConfim.innerHTML = resp.results[0].OrderConfirmationPop;
-                                                    orderConfirmationPopup.Show();
+                                            if (resp.results.length > 0) {
+                                                for (var k = 0; k < resp.results.length; k++) {
+                                                    if (resp.results[k].isedit) {
+                                                        message = message + "Your uniform order has been updated successfully,order reference:" + resp.results[k].OrderNo + " (" + resp.results[k].EmployeeId + ")." + resp.results[k].OrderConfirmation + ". \n";
+                                                    }
+                                                    else {
+                                                        message = message + "Your uniform order has been successfully placed,order reference:" + resp.results[k].OrderNo + " (" + resp.results[k].EmployeeId + ")." + resp.results[k].OrderConfirmation + ". \n";
+                                                    }
+                                                }
+                                                if (resp.results[0].OrderConfirmationPop != "" && resp.results[0].OrderConfirmationPop != null && resp.results[0].OrderConfirmationPop != undefined) {
+                                                    message = message + " \n\n\n Do you want to print confirmation? \n (Click ok to print,Cancel to not print)";
+                                                    if (confirm(message)) {
+                                                        var orderConfirmationPopup = ASPxClientControl.GetControlCollection().GetByName("orderConfirmation");
+                                                        loadPopup.Hide()
+                                                        var ordConfim = document.getElementById("ordeConfirm");
+                                                        ordConfim.innerHTML = "";
+                                                        ordConfim.innerHTML = resp.results[0].OrderConfirmationPop;
+                                                        orderConfirmationPopup.Show();
+                                                    }
+                                                    else {
+                                                        loadPopup.Hide();
+                                                        ////window.history.back();
+                                                        if (document.referrer.indexOf("Home") > -1) {
+                                                            window.location = "/Employee/Index/";
+                                                        }
+                                                        else {
+                                                            window.location = document.referrer;
+                                                        }
+                                                    }
+                                                    AcceptBtnctrl.SetEnabled(true);
                                                 }
                                                 else {
+                                                    alert(message);
                                                     loadPopup.Hide();
-                                                    window.location = "/Employee/Index/";
+                                                    ////window.history.back();
+                                                    if (document.referrer.indexOf("Home") > -1) {
+                                                        window.location = "/Employee/Index/";
+                                                    }
+                                                    else {
+                                                        window.location = document.referrer;
+                                                    }
+                                                    AcceptBtnctrl.SetEnabled(true);
                                                 }
-
                                             }
                                             else {
-                                                alert(message);
                                                 loadPopup.Hide();
-                                                window.location = "/Employee/Index/";
+                                                AcceptBtnctrl.SetEnabled(true);
                                             }
+
                                         }
                                     }
                                 });
@@ -5285,6 +6151,8 @@ function AcceptOrder(s, e) {
                             else {
                                 alert(response);
                                 loadPopup.Hide()
+
+                                AcceptBtnctrl.SetEnabled(true);
                             }
                         }
                     });
@@ -5293,7 +6161,7 @@ function AcceptOrder(s, e) {
                 else {
                     if (response == "fail") {
                         alert("There are no items in the cart please continue shopping.");
-                        window.location="/Employee/Index/"
+                        window.location = "/Home/Index/"
                     }
                     else {
                         response = response.replace("///", "");
@@ -5303,46 +6171,76 @@ function AcceptOrder(s, e) {
                                 type: "post",
                                 success: function (response) {
                                     if (response == "") {
+
                                         $.ajax({
                                             url: "/Basket/AcceptOrder/",
                                             type: "POST",
-                                            data: { 'addDesc': addDesc },
+                                            data: { 'addDesc': addDesc, 'CNF': cnf },
                                             success: function (resp) {
                                                 if (resp.type != "" && resp.type != null) {
-                                                    if (resp.type.includes("Carrier")) {
+                                                    if (resp.type.indexOf("Carrier") > -1) {
                                                         alert(resp.type);
+                                                        AcceptBtnctrl.SetEnabled(true);
                                                     }
                                                     else {
                                                         alert(resp.type);
+                                                        AcceptBtnctrl.SetEnabled(true);
                                                     }
                                                     loadPopup.Hide();
                                                 }
                                                 else {
                                                     var message = "";
-                                                    for (var k = 0; k < resp.results.length; k++) {
-                                                        message = message + "Your uniform order has been successfully placed,order reference:" + resp.results[k].OrderNo + " (" + resp.results[k].EmployeeId + ")." + resp.results[k].OrderConfirmation + ". \n";
-                                                    }
-                                                    if (resp.results[0].OrderConfirmationPop != "" && resp.results[0].OrderConfirmationPop != null) {
-                                                        message = message + " \n\n\n Do you wanr to print confirmation? \n (Click ok to print,Cancel to not print)";
-                                                        if (confirm(message)) {
-                                                            var orderConfirmationPopup = ASPxClientControl.GetControlCollection().GetByName("orderConfirmation");
-                                                            loadPopup.Hide()
-                                                            var ordConfim = document.getElementById("ordeConfirm");
-                                                            ordConfim.innerHTML = "";
-                                                            ordConfim.innerHTML = resp.results[0].OrderConfirmationPop;
-                                                            orderConfirmationPopup.Show();
+                                                    if (resp.results.length > 0) {
+                                                        for (var k = 0; k < resp.results.length; k++) {
+                                                            if (resp.results[k].isedit) {
+                                                                message = message + "Your uniform order has been updated successfully,order reference:" + resp.results[k].OrderNo + " (" + resp.results[k].EmployeeId + ")." + resp.results[k].OrderConfirmation + ". \n";
+                                                            }
+                                                            else {
+                                                                message = message + "Your uniform order has been successfully placed,order reference:" + resp.results[k].OrderNo + " (" + resp.results[k].EmployeeId + ")." + resp.results[k].OrderConfirmation + ". \n";
+                                                            }
+                                                        }
+                                                        if (resp.results[0].OrderConfirmationPop != "" && resp.results[0].OrderConfirmationPop != null && resp.results[0].OrderConfirmationPop != undefined) {
+                                                            message = message + " \n\n\n Do you want to print confirmation? \n (Click ok to print,Cancel to not print)";
+                                                            if (confirm(message)) {
+                                                                var orderConfirmationPopup = ASPxClientControl.GetControlCollection().GetByName("orderConfirmation");
+                                                                loadPopup.Hide()
+                                                                var ordConfim = document.getElementById("ordeConfirm");
+                                                                ordConfim.innerHTML = "";
+                                                                ordConfim.innerHTML = resp.results[0].OrderConfirmationPop;
+                                                                orderConfirmationPopup.Show();
+                                                                AcceptBtnctrl.SetEnabled(true);
+                                                            }
+                                                            else {
+                                                                AcceptBtnctrl.SetEnabled(true);
+                                                                loadPopup.Hide();
+                                                                //window.history.back();
+                                                                if (document.referrer.indexOf("Home") > -1) {
+                                                                    window.location = "/Employee/Index/";
+                                                                }
+                                                                else {
+                                                                    window.location = document.referrer;
+                                                                }
+                                                            }
+
                                                         }
                                                         else {
+                                                            AcceptBtnctrl.SetEnabled(true);
+                                                            alert(message);
                                                             loadPopup.Hide();
-                                                            window.location = "/Employee/Index/";
+                                                            //window.history.back();
+                                                            if (document.referrer.indexOf("Home") > -1) {
+                                                                window.location = "/Employee/Index/";
+                                                            }
+                                                            else {
+                                                                window.location = document.referrer;
+                                                            }
                                                         }
-
                                                     }
                                                     else {
-                                                        alert(message);
+                                                        AcceptBtnctrl.SetEnabled(true);
                                                         loadPopup.Hide();
-                                                        window.location = "/Employee/Index/";
                                                     }
+
                                                 }
                                             }
                                         });
@@ -5350,6 +6248,7 @@ function AcceptOrder(s, e) {
                                     else {
                                         alert(response);
                                         loadPopup.Hide();
+                                        AcceptBtnctrl.SetEnabled(true);
                                     }
                                 }
                             });
@@ -5357,6 +6256,7 @@ function AcceptOrder(s, e) {
                         }
                         else {
                             loadPopup.Hide();
+                            AcceptBtnctrl.SetEnabled(true);
                         }
                     }
                 }
@@ -5367,6 +6267,7 @@ function AcceptOrder(s, e) {
     else {
         alert("Please fill address and customer reference");
         loadPopup.Hide();
+        AcceptBtnctrl.SetEnabled(true);
     }
     //        }
     //        else {
@@ -5598,7 +6499,7 @@ function RemoveSelecetedEmp(empId, busId) {
             success: function (resp) {
                 if (resp != null) {
                     alert("Successfully deleted")
-                    if (resp.includes("HEADERVALUENOTZERO")) {
+                    if (resp.indexOf("HEADERVALUENOTZERO") > -1) {
                         window.location.reload();
                     }
                     else {
@@ -5785,7 +6686,7 @@ function OnBeginCallback(s, e) {
 }
 
 function GetBulkPrice(size, style, orgStyle) {
-    var styleId_Val = style.includes(",") ? GetStyleIdSwatch(style, orgStyle) : style;
+    var styleId_Val = style.indexOf(",") > -1 ? GetStyleIdSwatch(style, orgStyle) : style;
     var name = "BulkSizeBox_" + size + "_" + style;
     //var socNams = $("." + name);
     var docName = document.getElementById(name);
@@ -5863,7 +6764,7 @@ function addToCartBulkOrder1(s, e) {
         if (bulkSizes[i].innerText != "") {
             var ssss = bulkSizes[i].innerText.replace(/\n/ig, '');
             var index = 0;
-            if (ssss.includes('£')) {
+            if (ssss.indexOf('£') > -1) {
                 for (var j = 0; j < ssss.length; j++) {
                     if (ssss[j] == '£') {
                         SizePriceArray.push({ 'Size': ssss.substring(0, j), 'Price': ssss.substring(j + 1, ssss.length), 'Id': stylearr[1] + "_" + ssss.substring(0, j) });
@@ -5909,7 +6810,7 @@ function addToCartBulkOrder1(s, e) {
         }
     }
 
-    if (stylearr[1].includes(',')) {
+    if (stylearr[1].indexOf(',') > -1) {
         var name = 'Swatch_Style_FieldSet_' + stylearr[1];
         var fieldSet = document.getElementsByName(name);
         var selStyle;
@@ -6018,7 +6919,7 @@ function addTocartTemplateBulkOrder1(s, e) {
         if (bulkSizes[i].innerText != "") {
             var ssss = bulkSizes[i].innerText.replace(/\n/ig, '');
             var index = 0;
-            if (ssss.includes('£')) {
+            if (ssss.indexOf('£') > -1) {
                 for (var j = 0; j < ssss.length; j++) {
                     if (ssss[j] == '£') {
                         SizePriceArray.push({ 'Size': ssss.substring(0, j), 'Price': ssss.substring(j + 1, ssss.length), 'Id': stylearr[1] + "_" + ssss.substring(0, j) });
@@ -6064,7 +6965,7 @@ function addTocartTemplateBulkOrder1(s, e) {
         }
     }
 
-    if (stylearr[1].includes(',')) {
+    if (stylearr[1].indexOf(',') > -1) {
         var name = 'Swatch_Style_FieldSet_' + stylearr[1];
         var fieldSet = document.getElementsByName(name);
         var selStyle;
@@ -6181,7 +7082,7 @@ function addToCartDemandBulkOrder1(s, e) {
         if (bulkSizes[i].innerText != "") {
             var ssss = bulkSizes[i].innerText.replace(/\n/ig, '');
             var index = 0;
-            if (ssss.includes('£')) {
+            if (ssss.indexOf('£') > -1) {
                 for (var j = 0; j < ssss.length; j++) {
                     if (ssss[j] == '£') {
                         SizePriceArray.push({ 'Size': ssss.substring(0, j), 'Price': ssss.substring(j + 1, ssss.length), 'Id': stylearr[1] + "_demand_" + ssss.substring(0, j) });
@@ -6245,7 +7146,7 @@ function addToCartDemandBulkOrder1(s, e) {
     }
     color = colorValue != undefined | colorValue != "" ? colorValue : "";
 
-    if (stylearr[1].includes(',')) {
+    if (stylearr[1].indexOf(',') > -1) {
         var name = 'Swatch_DemandStyle_FieldSet_' + stylearr[1];
         var fieldSet = document.getElementsByName(name);
         var selStyle;
@@ -6374,7 +7275,7 @@ function SetValue111(ucode, type) {
         $.ajax({
             url: "/Employee/GotoCard/",
             type: "post",
-            data: { 'EmployeeId': "", 'EmpName': "", 'Ucodes': ucode },
+            data: { 'EmployeeId': "", 'EmpName': "", 'Ucodes1': ucode },
             success: function (resp) {
                 if (resp != "") {
                     window.location = resp;
@@ -6422,11 +7323,12 @@ function Adjustment(s, e) {
 }
 
 function CarriageStyleCmbboxchange(s, e) {
-    var carrierStylecmb = ASPxClientControl.GetControlCollection().GetByName("CarriageStyleCmbbox");
+    var carrierStylecmb = ASPxClientControl.GetControlCollection().GetByName(s.name);
     var selStyle = carrierStylecmb.GetValue();
+    var URL = s.name.indexOf("Rtn") > -1 ? "/Return/InsertCarriageLine/" : "/Basket/InsertCarriageLine/";
     if (selStyle != null && selStyle != "") {
         $.ajax({
-            url: "/Basket/InsertCarriageLine/",
+            url: URL,
             type: "POST",
             data: { 'carrStyle': selStyle },
             success: function (response) {
@@ -6453,7 +7355,7 @@ function OrderEdit(orderNo, empId) {
         type: "post",
         data: { 'empId': empId },
         success: function (resp) {
-            if (resp.toLowerCase().includes("emp") == false) {
+            if (resp.toLowerCase().indexOf("emp") > -1 == false) {
                 window.location = "/Basket/ShowBasket?ordeNo=" + orderNo;
             }
             else {
@@ -6465,7 +7367,10 @@ function OrderEdit(orderNo, empId) {
 }
 
 function GetallOrders(s, e) {
+    var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
+
     var controlName = s.name;
+    var emergencyOrderCtrl = ASPxClientControl.GetControlCollection().GetByName("chkEmergencyOrders");
     var Empidsear = ASPxClientControl.GetControlCollection().GetByName("Empidsear");
     var Empid = Empidsear == null ? "" : Empidsear.GetValue();
     var Empnamesear = ASPxClientControl.GetControlCollection().GetByName("Empnamesear");
@@ -6480,46 +7385,73 @@ function GetallOrders(s, e) {
     var toOrderDate = ASPxClientControl.GetControlCollection().GetByName("ToOrderdate");
     var toODate = toOrderDate.GetValue();
     var custRef = ASPxClientControl.GetControlCollection().GetByName("CustomerOrderno");
-    var cref = custRef.GetValue();
+    var cref = custRef != null ? custRef.GetValue() : "";
     var ordStat = ASPxClientControl.GetControlCollection().GetByName("Orderstatus");
-    var orsTat = ordStat.GetValue();
-    var noOfrecs = ASPxClientControl.GetControlCollection().GetByName("recstodisplay");
-    var noOfrec = noOfrecs.GetValue();
+    var orsTat = ordStat != null ? ordStat.GetValue() : "";
+    var emergencyOrder = emergencyOrderCtrl != null ? emergencyOrderCtrl.GetValue() == true ? 1 : 0 : 0;
+
+    //var noOfrecs = ASPxClientControl.GetControlCollection().GetByName("recstodisplay");
+    //var noOfrec = noOfrecs.GetValue();
     var usr = ASPxClientControl.GetControlCollection().GetByName("User");
-    var usrVal = usr.GetValue();
+    var usrVal = usr != null ? usr.GetValue() : "";
     if (controlName != null && controlName != "") {
-        if ((frmOno == null | frmOno == "") && (toOno == null | toOno == "") && (frmODate == null | frmODate == "") && (toODate == null | toODate == "") && (cref == null | cref == "") && (orsTat == null | orsTat == "") && (usrVal == null | usrVal == "") && (noOfrec == null | noOfrec == "")) {
+        if ((frmOno == null | frmOno == "") && (toOno == null | toOno == "") && (frmODate == null | frmODate == "") && (toODate == null | toODate == "") && (cref == null | cref == "") && (orsTat == null | orsTat == "") && (usrVal == null | usrVal == "")) {
         }
         else if (controlName == "btnordno") {
 
             if (frmOno != null | toOno != null) {
+
+                loadPopup.Show();
                 $.ajax({
                     url: "/OrderDisplay/ShowOrderGridViewPartial/",
                     type: "post",
-                    data: { 'frmOrderno': frmOno, 'toOrderNo': toOno, 'frmOrderdate': frmODate.toJSON(), 'toOrderDate': toODate.toJSON(), 'custRef': cref, 'ordStatus': orsTat, 'users': usrVal, 'recsToDisplay': noOfrec, 'like': false, 'exact': false },
+                    //data: { 'emergency': emergencyOrder, 'frmOrderno': frmOno, 'toOrderNo': toOno, 'frmOrderdate': frmODate.toJSON(), 'toOrderDate': toODate.toJSON(), 'custRef': cref, 'ordStatus': orsTat, 'users': usrVal, 'like': false, 'exact': false },
+                    data: { 'emergency': emergencyOrder, 'frmOrderno': frmOno, 'toOrderNo': toOno },
                     success: function (response) {
                         if (response != null && response != "") {
                             var gridDiv = document.getElementById("ShowOrders");
                             gridDiv.innerHTML = "";
                             gridDiv.innerHTML = response;
+                            loadPopup.Hide();
                         }
                     }
 
                 });
             }
         }
+        else if (controlName == "chkEmergencyOrders") {
+            loadPopup.Show();
+            $.ajax({
+                url: "/OrderDisplay/ShowOrderGridViewPartial/",
+                type: "post",
+                data: { 'emergency': emergencyOrder, 'frmOrderno': frmOno, 'toOrderNo': toOno, 'frmOrderdate': frmODate.toJSON(), 'toOrderDate': toODate.toJSON(), 'custRef': cref, 'ordStatus': orsTat, 'users': usrVal, 'like': false, 'exact': false },
+                success: function (response) {
+                    if (response != null && response != "") {
+                        var gridDiv = document.getElementById("ShowOrders");
+                        gridDiv.innerHTML = "";
+                        gridDiv.innerHTML = response;
+                        loadPopup.Hide();
+                    }
+                }
+
+            });
+
+        }
         else if (controlName == "btnorddate") {
 
             if (frmODate != null || toODate != null) {
+                loadPopup.Show();
                 $.ajax({
                     url: "/OrderDisplay/ShowOrderGridViewPartial/",
                     type: "post",
-                    data: { 'frmOrderno': frmOno, 'toOrderNo': toOno, 'frmOrderdate': frmODate.toJSON(), 'toOrderDate': toODate.toJSON(), 'custRef': cref, 'ordStatus': orsTat, 'users': usrVal, 'recsToDisplay': noOfrec, 'like': false, 'exact': false },
+                    //data: { 'emergency': emergencyOrder, 'frmOrderno': frmOno, 'toOrderNo': toOno, 'frmOrderdate': frmODate.toJSON(), 'toOrderDate': toODate.toJSON(), 'custRef': cref, 'ordStatus': orsTat, 'users': usrVal, 'like': false, 'exact': false },
+                    data: { 'emergency': emergencyOrder, 'frmOrderdate': frmODate.toJSON(), 'toOrderDate': toODate.toJSON() },
                     success: function (response) {
                         if (response != null && response != "") {
                             var gridDiv = document.getElementById("ShowOrders");
                             gridDiv.innerHTML = "";
                             gridDiv.innerHTML = response;
+                            loadPopup.Hide();
                         }
                     }
                 });
@@ -6527,15 +7459,18 @@ function GetallOrders(s, e) {
         }
         else if (controlName == "btnsearch") {
             if ((Empid != null && Empid != "") || (Empname != null && Empname != "") || (StrtDate != null)) {
+                loadPopup.Show();
                 $.ajax({
                     url: "/OrderDisplay/ShowOrderGridViewPartial/",
                     type: "post",
-                    data: { 'frmOrderno': frmOno, 'toOrderNo': toOno, 'frmOrderdate': frmODate.toJSON(), 'toOrderDate': toODate.toJSON(), 'custRef': cref, 'ordStatus': orsTat, 'users': usrVal, 'recsToDisplay': noOfrec, 'like': false, 'exact': false, 'Empid': Empid, 'Empname': Empname, 'StrtDate': StrtDate != null ? StrtDate.toJSON() : null },
+                    //data: { 'emergency': emergencyOrder, 'frmOrderno': frmOno, 'toOrderNo': toOno, 'frmOrderdate': frmODate.toJSON(), 'toOrderDate': toODate.toJSON(), 'custRef': cref, 'ordStatus': orsTat, 'users': usrVal, 'like': false, 'exact': false, 'Empid': Empid, 'Empname': Empname, 'StrtDate': StrtDate != null ? StrtDate.toJSON() : null },
+                    data: { 'emergency': emergencyOrder, 'users': usrVal, 'Empid': Empid, 'Empname': Empname, 'StrtDate': StrtDate != null ? StrtDate.toJSON() : null },
                     success: function (response) {
                         if (response != null && response != "") {
                             var gridDiv = document.getElementById("ShowOrders");
                             gridDiv.innerHTML = "";
                             gridDiv.innerHTML = response;
+                            loadPopup.Hide();
                         }
                     }
                 });
@@ -6545,15 +7480,18 @@ function GetallOrders(s, e) {
         else if (controlName == "btnShwlike") {
 
             if (cref != null && cref != "") {
+                loadPopup.Show();
                 $.ajax({
                     url: "/OrderDisplay/ShowOrderGridViewPartial/",
                     type: "post",
-                    data: { 'frmOrderno': frmOno, 'toOrderNo': toOno, 'frmOrderdate': frmODate.toJSON(), 'toOrderDate': toODate.toJSON(), 'custRef': cref, 'ordStatus': orsTat, 'users': usrVal, 'recsToDisplay': noOfrec, 'like': true, 'exact': false },
+                    //data: { 'emergency': emergencyOrder, 'frmOrderno': frmOno, 'toOrderNo': toOno, 'frmOrderdate': frmODate.toJSON(), 'toOrderDate': toODate.toJSON(), 'custRef': cref, 'ordStatus': orsTat, 'users': usrVal, 'like': true, 'exact': false },
+                    data: { 'emergency': emergencyOrder, 'custRef': cref, 'like': true, 'exact': false },
                     success: function (response) {
                         if (response != null && response != "") {
                             var gridDiv = document.getElementById("ShowOrders");
                             gridDiv.innerHTML = "";
                             gridDiv.innerHTML = response;
+                            loadPopup.Hide();
                         }
                     }
                 });
@@ -6562,15 +7500,18 @@ function GetallOrders(s, e) {
         else if (controlName == "btnShwexac") {
 
             if (cref != null && cref != "") {
+                loadPopup.Show();
                 $.ajax({
                     url: "/OrderDisplay/ShowOrderGridViewPartial/",
                     type: "post",
-                    data: { 'frmOrderno': frmOno, 'toOrderNo': toOno, 'frmOrderdate': frmODate.toJSON(), 'toOrderDate': toODate.toJSON(), 'custRef': cref, 'ordStatus': orsTat, 'users': usrVal, 'recsToDisplay': noOfrec, 'like': false, 'exact': true },
+                    //data: { 'emergency': emergencyOrder, 'frmOrderno': frmOno, 'toOrderNo': toOno, 'frmOrderdate': frmODate.toJSON(), 'toOrderDate': toODate.toJSON(), 'custRef': cref, 'ordStatus': orsTat, 'users': usrVal, 'like': false, 'exact': true },
+                    data: { 'emergency': emergencyOrder, 'custRef': cref, 'like': false, 'exact': true },
                     success: function (response) {
                         if (response != null && response != "") {
                             var gridDiv = document.getElementById("ShowOrders");
                             gridDiv.innerHTML = "";
                             gridDiv.innerHTML = response;
+                            loadPopup.Hide();
                         }
                     }
                 });
@@ -6579,15 +7520,18 @@ function GetallOrders(s, e) {
         else if (controlName == "Orderstatus") {
 
             if (orsTat != null && orsTat != "") {
+                loadPopup.Show();
                 $.ajax({
                     url: "/OrderDisplay/ShowOrderGridViewPartial/",
                     type: "post",
-                    data: { 'frmOrderno': frmOno, 'toOrderNo': toOno, 'frmOrderdate': frmODate.toJSON(), 'toOrderDate': toODate.toJSON(), 'custRef': cref, 'ordStatus': orsTat, 'users': usrVal, 'recsToDisplay': noOfrec, 'like': false, 'exact': false },
+                    //data: { 'emergency': emergencyOrder, 'frmOrderno': frmOno, 'toOrderNo': toOno, 'frmOrderdate': frmODate.toJSON(), 'toOrderDate': toODate.toJSON(), 'custRef': cref, 'ordStatus': orsTat, 'users': usrVal, 'like': false, 'exact': false },
+                    data: { 'emergency': emergencyOrder, 'ordStatus': orsTat },
                     success: function (response) {
                         if (response != null && response != "") {
                             var gridDiv = document.getElementById("ShowOrders");
                             gridDiv.innerHTML = "";
                             gridDiv.innerHTML = response;
+                            loadPopup.Hide();
                         }
                     }
                 });
@@ -6596,15 +7540,18 @@ function GetallOrders(s, e) {
         else if (controlName == "User") {
 
             if (usrVal != null && usrVal != "") {
+                loadPopup.Show();
                 $.ajax({
                     url: "/OrderDisplay/ShowOrderGridViewPartial/",
                     type: "post",
-                    data: { 'frmOrderno': frmOno, 'toOrderNo': toOno, 'frmOrderdate': frmODate.toJSON(), 'toOrderDate': toODate.toJSON(), 'custRef': cref, 'ordStatus': orsTat, 'users': usrVal, 'recsToDisplay': noOfrec, 'like': false, 'exact': false },
+                    //data: { 'emergency': emergencyOrder, 'frmOrderno': frmOno, 'toOrderNo': toOno, 'frmOrderdate': frmODate.toJSON(), 'toOrderDate': toODate.toJSON(), 'custRef': cref, 'ordStatus': orsTat, 'users': usrVal, 'like': false, 'exact': false },
+                    data: { 'emergency': emergencyOrder, 'users': usrVal },
                     success: function (response) {
                         if (response != null && response != "") {
                             var gridDiv = document.getElementById("ShowOrders");
                             gridDiv.innerHTML = "";
                             gridDiv.innerHTML = response;
+                            loadPopup.Hide();
                         }
                     }
                 });
@@ -6612,20 +7559,56 @@ function GetallOrders(s, e) {
         }
         else if (controlName == "recstodisplay") {
 
-            if (noOfrec != null && noOfrec != "") {
-                $.ajax({
-                    url: "/OrderDisplay/ShowOrderGridViewPartial/",
-                    type: "post",
-                    data: { 'frmOrderno': frmOno, 'toOrderNo': toOno, 'frmOrderdate': frmODate.toJSON(), 'toOrderDate': toODate.toJSON(), 'custRef': cref, 'ordStatus': orsTat, 'users': usrVal, 'recsToDisplay': noOfrec, 'like': false, 'exact': false },
-                    success: function (response) {
-                        if (response != null && response != "") {
-                            var gridDiv = document.getElementById("ShowOrders");
-                            gridDiv.innerHTML = "";
-                            gridDiv.innerHTML = response;
+            //if (noOfrec != null && noOfrec != "") {
+            //    loadPopup.Show();
+            //    $.ajax({
+            //        url: "/OrderDisplay/ShowOrderGridViewPartial/",
+            //        type: "post",
+            //        data: { 'frmOrderno': frmOno, 'toOrderNo': toOno, 'frmOrderdate': frmODate.toJSON(), 'toOrderDate': toODate.toJSON(), 'custRef': cref, 'ordStatus': orsTat, 'users': usrVal, 'recsToDisplay': noOfrec, 'like': false, 'exact': false },
+            //        success: function (response) {
+            //            if (response != null && response != "") {
+            //                var gridDiv = document.getElementById("ShowOrders");
+            //                gridDiv.innerHTML = "";
+            //                gridDiv.innerHTML = response;
+            //                loadPopup.Hide();
+            //            }
+            //        }
+            //    });
+            //}
+        }
+        else if (controlName == "resetBtn") {
+            loadPopup.Show();
+            $.ajax({
+                url: "/OrderDisplay/ShowOrderGridViewPartial/",
+                type: "post",
+                success: function (response) {
+                    if (response != null && response != "") {
+                        if (Empidsear != null) {
+                            Empidsear.SetValue("");
                         }
+                        if (Empnamesear != null) {
+                            Empnamesear.SetValue("");
+                        }
+                        if (frmOrderno != null) {
+                            frmOrderno.SetValue("");
+                        }
+                        if (toOrderno != null) {
+                            toOrderno.SetValue("");
+                        }
+
+                        if (custRef != null) {
+                            custRef.SetValue("");
+                        }
+                        if (emergencyOrderCtrl != null) {
+                            emergencyOrderCtrl.SetValue(false);
+                        }
+                        var gridDiv = document.getElementById("ShowOrders");
+                        gridDiv.innerHTML = "";
+                        gridDiv.innerHTML = response;
+                        loadPopup.Hide();
                     }
-                });
-            }
+                }
+            });
         }
     }
 }
@@ -6674,7 +7657,7 @@ function checkEmpEmail() {
         type: "POST",
         url: "/Home/CheckEmpEmail",
         success: function (response) {
-            if (response != "") {
+            if (response != "" && response != null) {
                 var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
                 loadPopup.Hide();
                 var pop = ASPxClientControl.GetControlCollection().GetByName("EmailPrompt");
@@ -6690,6 +7673,29 @@ function checkEmpEmail() {
         }
     });
 }
+
+function EmergencyMessagePop() {
+    $.ajax({
+        type: "POST",
+        url: "/Employee/EmergencyMessagePop",
+        success: function (response) {
+            if (response != "" && response != null) {
+                var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
+                loadPopup.Hide();
+                var pop = ASPxClientControl.GetControlCollection().GetByName("EmergencyMessage");
+                var content = document.getElementById("EmergencyMessageContent");
+                content.innerHTML = "";
+                content.innerHTML = response;
+                pop.Show();
+                MVCxClientUtils.FinalizeCallback();
+            }
+        },
+        error: function () {
+
+        }
+    });
+}
+
 function GetRolloutCheck() {
     $.ajax({
         type: "POST",
@@ -6769,15 +7775,21 @@ function gotoindex() {
 function CheckConditions() {
     checkEmpEmail();
     GetRolloutCheck();
+    EmergencyMessagePop();
 }
 function SaveEmpGrid(chart) {
-    window.open('/Employee/exporter/', '_blank');
+    if (chart == "EmployeeGridView") {
+        window.open('/Employee/exporter/', '_blank');
+    }
+    else if (chart == "ShowOrderGridView") {
+        window.open('/OrderDisplay/exporter/', '_blank');
+    }
+    else if (chart == "ShowRolloutReport") {
+        window.open('/Report/exporter/', '_blank');
+    }
 }
 
 
-function redirect() {
-    window.location = "/Employee/Index/";
-}
 
 function print(divName) {
     var winPrint = window.open('', '', 'left=0,top=0,width=800,height=600,toolbar=0,scrollbars=0,status=0');
@@ -6786,7 +7798,7 @@ function print(divName) {
     winPrint.document.close();
     winPrint.focus();
     winPrint.print();
-    winPrint.close();
+    // winPrint.close();
 
     //var originalContents = document.body.innerHTML;
 
@@ -6795,4 +7807,1070 @@ function print(divName) {
     //window.print();
 
     //document.body.innerHTML = originalContents;
+}
+
+
+//function OnConfirmGridCheckbox(s, e) {
+//    var ordersGrid = ASPxClientControl.GetControlCollection().GetByName("ShowOrderGridView");
+//    var chkBox = ASPxClientControl.GetControlCollection().GetByName(s.name);
+//    if (chkBox != undefined && chkBox != null) {
+//        var ordeNo = s.name.split('cb_');
+//        if (chkBox.GetValue()) {
+//            SelectedOrdersArr.push(ordeNo[1]);
+//        }
+//        else if (SelectedOrdersArr.indexOf(ordeNo[1])) {
+//            SelectedOrdersArr.pop(ordeNo[1]);
+//        }
+//    }
+//}
+
+//function SelectAllordersOnGrid(s,e)
+//{
+//    var ordersGrid = ASPxClientControl.GetControlCollection().GetByName("ShowOrderGridView");
+//    ordersGrid.SelectAll();
+//    var result = ordersGrid.GetVisibleRowsOnPage();
+//}
+
+function ConfirmOrders() {
+    var ordersGrid = ASPxClientControl.GetControlCollection().GetByName("ShowOrderGridView");
+    var index = ordersGrid.GetFocusedRowIndex();
+    ordersGrid.GetSelectedFieldValues('OrderNo;PersonPackNo', OnGetSelectedFieldValuess);
+    //alert(index);
+}
+function OnGetSelectedFieldValuess(selectedValues) {
+
+    var selArr = [];
+    var Grid = ASPxClientControl.GetControlCollection().GetByName("ShowOrderGridView");
+    var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
+    var indexs = -1;
+    loadPopup.Show();
+    if (selectedValues != null && selectedValues != "") {
+        for (var i = 0; i < selectedValues.length; i++) {
+            for (var j = 0; j < selectedValues.length; j++) {
+                if (selectedValues[i][0] == Grid.cpIndices[j]) {
+                    indexs = selectedValues[i][0];
+                }
+            }
+            if (selectedValues[i][0] != indexs) {
+                var obj = { 'ManPackNo': selectedValues[i][1], 'SalesOrderNo': selectedValues[i][0] };
+                selArr.push(obj);
+
+            }
+        }
+        if (selArr.length > 0) {
+            $.ajax({
+                url: "/OrderDisplay/ConfrimOrders/",
+                type: "post",
+                data: { 'orderLst': selArr },
+                success: function (response) {
+                    if (response == "") {
+                        alert("Confirmed succssfully");
+                        loadPopup.Hide();
+                        window.location.reload();
+                    }
+                }
+            });
+        }
+        else {
+            loadPopup.Hide();
+            alert("Please select atleast one order to continue");
+        }
+    }
+}
+
+function ShowConfirmOrdersPopup() {
+    var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
+    loadPopup.Show();
+    var frmOrdNoControl = ASPxClientControl.GetControlCollection().GetByName("FromOrderNo");
+    var toOrdNoControl = ASPxClientControl.GetControlCollection().GetByName("ToOrderNo");
+    var frmOrdno = frmOrdNoControl.GetValue();
+    var toOrdno = toOrdNoControl.GetValue();
+    if (frmOrdno != null && frmOrdno != "" && toOrdno != null && toOrdno != "") {
+        $.ajax({
+            url: "/OrderDisplay/GetPrintTemplates/",
+            type: "post",
+            data: { 'frmOrdno': frmOrdno, 'toOrdno': toOrdno },
+            success: function (response) {
+                var orderConfirmationPopup = ASPxClientControl.GetControlCollection().GetByName("PrintOrderConfirmation");
+                if (response != null) {
+                    loadPopup.Hide();
+                    var ordConfim = document.getElementById("ordeConfirm1");
+                    ordConfim.innerHTML = "";
+                    ordConfim.innerHTML = response;
+                    orderConfirmationPopup.Show();
+                }
+            }
+        });
+    }
+}
+
+function FilterPrint(s, e) {
+    var empId = "";
+    var empName = "";
+    var ucode = "";
+    var ucodeDesc = "";
+    var ucodeAdd = "";
+    var startDate = "";
+    var frstordno = "";
+    var lstordno = "";
+    var frstOdate = "";
+    var lastOdate = "";
+    if (s.name == "btnByOrderDate") {
+        var firstOrderDate = ASPxClientControl.GetControlCollection().GetByName("FrstOrderDate");
+        var lasttOrderDate = ASPxClientControl.GetControlCollection().GetByName("LastOrderDate");
+        frstOdate = firstOrderDate.GetValue();
+        lastOdate = lasttOrderDate.GetValue();
+    } else if (s.name == "btnByorderNO") {
+        var firstOrderNO = ASPxClientControl.GetControlCollection().GetByName("FrstOrderNo");
+        var lasttOrderDate = ASPxClientControl.GetControlCollection().GetByName("LastOrderno");
+        frstordno = firstOrderDate.GetValue();
+        lstordno = lasttOrderDate.GetValue();
+
+    } else if (s.name == "btnSearch") {
+        var empIdctrl = ASPxClientControl.GetControlCollection().GetByName("Employeeid");
+        var empNamectrl = ASPxClientControl.GetControlCollection().GetByName("Employeename");
+        var ucodectrl = ASPxClientControl.GetControlCollection().GetByName("Uniformcode");
+        var ucodeDescctrl = ASPxClientControl.GetControlCollection().GetByName("Ucodedesc");
+        var empAddctrl = ASPxClientControl.GetControlCollection().GetByName("Empaddress");
+        var startDatectrl = ASPxClientControl.GetControlCollection().GetByName("EmpStartDate");
+        var empId = empIdctrl.GetValue();
+        var empName = empAddctrl.GetValue();
+        var ucode = ucodectrl.GetValue();
+        var ucodeDesc = ucodeDescctrl.GetValue();
+        var ucodeAdd = ucodeAddctrl.GetValue();
+        var startDate = startDatectrl.GetValue();
+    }
+}
+
+function showUserCreate(s, e) {
+    var isenabledCtrl = ASPxClientControl.GetControlCollection().GetByName(s.name);
+    var userActiveCtrl = ASPxClientControl.GetControlCollection().GetByName("UsrActive");
+
+    isenabled = isenabledCtrl != null ? isenabledCtrl.GetValue() : false;
+    var userRender = document.getElementById("UserctrlRender");
+    if (isenabled) {
+        userActiveCtrl.SetVisible(true);
+        $.ajax({
+            url: "/Employee/getUserCreate/",
+            type: "post",
+            success: function (response) {
+                if (response != null) {
+
+                    userRender.innerHTML = "";
+                    userRender.innerHTML = response;
+                    MVCxClientUtils.FinalizeCallback();
+                }
+            }
+        });
+    }
+    else {
+        userActiveCtrl.SetVisible(false);
+        userRender.innerHTML = "";
+    }
+}
+
+function SaveWelcomeText(s, e) {
+    var htmlEdit = ASPxClientControl.GetControlCollection().GetByName("HtmlEditor");
+    var htmlTxt = htmlEdit.GetHtml();
+    if (htmlTxt != "") {
+        $.ajax({
+            url: "/Settings/SaveWelcomeText/",
+            type: "post",
+            data: { 'htmlText': htmlTxt },
+            success: function (resp) {
+                if (resp != "") {
+                    window.location.reload();
+                }
+            }
+        });
+    }
+}
+
+function GetReport(s, e) {
+    var rndPanel = ASPxClientControl.GetControlCollection().GetByName("RolloutFilter");
+    if (rndPanel != null) {
+        rndPanel.SetCollapsed(true);
+    }
+    var chkLstReportCtrl = ASPxClientControl.GetControlCollection().GetByName("checkListReport");
+    var reportNameCtrl = ASPxClientControl.GetControlCollection().GetByName("cmbReportNames");
+    var reportTypesCtrl = ASPxClientControl.GetControlCollection().GetByName("cmbReportTypes");
+    var embroCtrl = ASPxClientControl.GetControlCollection().GetByName("chkIncEmbroidory");
+    var uncnfCtrl = ASPxClientControl.GetControlCollection().GetByName("chkShowUnconfirm");
+    var items = [];
+    var selItems = [];
+    if (chkLstReportCtrl != null) {
+        for (var i = 0; i < chkLstReportCtrl.GetItemCount() ; i++) {
+            items.push(chkLstReportCtrl.GetItem(i));
+        }
+    }
+    if (items.length > 0) {
+        for (var i = 0; i < items.length ; i++) {
+            if (items[i].selected) {
+                selItems.push(items[i].text);
+            }
+        }
+    }
+    //   var chkLstReport = chkLstReportCtrl != null?chkLstReportCtrl.GetValue():"";
+    var reportName = reportNameCtrl != null ? reportNameCtrl.GetValue() != null ? reportNameCtrl.GetValue() : "" : "";
+    var reportTypes = reportTypesCtrl != null ? reportTypesCtrl.GetVisible() ? reportTypesCtrl.GetValue() != null ? reportTypesCtrl.GetValue() : "0" : "" : "0";
+    var embro = embro != null ? embro.GetValue() : false;
+    var uncnf = uncnf != null ? uncnf.GetValue() : false;
+    var gridview = ASPxClientControl.GetControlCollection().GetByName("RolloutGridView");
+    gridview.PerformCallback({ selRollout: selItems, reportName: reportName, reportTypes: reportTypes, embro: embro, uncnf: uncnf, iscallback: false });
+
+    //List<string> selRollout = null, string reportName = "", string reportTypes = "", bool embro = false, bool uncnf = false
+
+    //$.ajax({
+    //    url: "/Report/RolloutGridViewPartial/",
+    //    type: "POST",
+    //    data: { 'selRollout': selItems, 'reportName': reportName, 'reportTypes': reportTypes, 'embro': embro, 'uncnf': uncnf },
+    //    success:function(response)
+    //    {
+
+    //    }
+    //});
+
+
+}
+function toggleReportType(s, e) {
+    var reportNameCtrl = ASPxClientControl.GetControlCollection().GetByName("cmbReportNames");
+    var chkReportTypeCtrl = ASPxClientControl.GetControlCollection().GetByName("cmbReportTypes");
+    if (chkReportTypeCtrl != null) {
+        var value = reportNameCtrl.GetValue();
+        if (value != "1") {
+
+            chkReportTypeCtrl.SetVisible(false);
+        }
+        else {
+            chkReportTypeCtrl.SetVisible(true);
+        }
+    }
+}
+
+
+
+function GetForgetPassword() {
+    var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
+    loadPopup.Show();
+    var popUp = ASPxClientControl.GetControlCollection().GetByName("ResetPwdpop");
+    $.ajax({
+
+        url: "/User/ResetPassword1/",
+        type: "get",
+        success: function (response) {
+            loadPopup.Hide();
+
+            if (response != "" && response != null) {
+                var popUpDiv = document.getElementById("forgetpwdContent");
+                popUpDiv.innerHTML = "";
+                popUpDiv.innerHTML = response;
+                popUp.Show();
+                MVCxClientUtils.FinalizeCallback();
+            }
+            else {
+                loadPopup.Hide();
+            }
+        },
+        error: function () {
+            loadPopup.Hide();
+        }
+    });
+}
+
+function ResetPassword(s, e) {
+    var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
+    loadPopup.Show();
+    var popUp = ASPxClientControl.GetControlCollection().GetByName("ResetPwdpop");
+    var userIdCtrl = ASPxClientControl.GetControlCollection().GetByName("fpwdUserId");
+    var surNameCtrl = ASPxClientControl.GetControlCollection().GetByName("fpwdSurName");
+    var foreNameCtrl = ASPxClientControl.GetControlCollection().GetByName("fpwdFrstName");
+
+    var userId = userIdCtrl != null ? userIdCtrl.GetValue() != null && userIdCtrl.GetValue() != "" ? userIdCtrl.GetValue() : "" : "";
+    var foreName = foreNameCtrl != null ? foreNameCtrl.GetValue() != null && foreNameCtrl.GetValue() != "" ? foreNameCtrl.GetValue() : "" : "";
+    var surName = surNameCtrl != null ? surNameCtrl.GetValue() != null && surNameCtrl.GetValue() != "" ? surNameCtrl.GetValue() : "" : "";
+    if (userId != "" && foreName != "" && surName != "") {
+        $.ajax({
+            url: "/User/ResetPassword/",
+            type: "POST",
+            data: { 'userId': userId, 'foreName': foreName, 'surName': surName },
+            success: function (response) {
+                if (response != "success") {
+                    if (response == "") {
+                        alert("Please enter a valid username");
+                    }
+                    else {
+                        alert(response);
+                    }
+                    loadPopup.Hide();
+                }
+                else {
+                    alert("your new password has been sent to your registered email address");
+                    popUp.Hide();
+                    loadPopup.Hide();
+                }
+            },
+            error: function () {
+                loadPopup.Hide();
+            }
+        });
+    }
+    else {
+        //if (userId == "") {
+        //    alert("Please enter a valid username");
+        //} else if (foreName == "") {
+        //    alert("Please enter a valid firstname");
+        //}
+        //else if (surName == "") {
+        //    alert("Please enter a valid surname");
+        //}
+        loadPopup.Hide();
+    }
+}
+
+
+function ResetToGeneric(user, active) {
+    var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
+    loadPopup.Show();
+    if (active == 'N') {
+        if (confirm("The selected user is inactive would you like to continue?")) {
+            if (user != null && user != "") {
+                $.ajax({
+                    url: "/Employee/ResetToGeneric/",
+                    type: "post",
+                    data: { 'user': user },
+                    success: function (response) {
+                        if (response == "success") {
+                            alert("The password has been successfully reset");
+                        }
+                        loadPopup.Hide();
+                    }
+
+                });
+            }
+        }
+        else {
+            loadPopup.Hide();
+        }
+    }
+    else {
+        if (user != null && user != "") {
+            $.ajax({
+                url: "/Employee/ResetToGeneric/",
+                type: "post",
+                data: { 'user': user },
+                success: function (response) {
+                    if (response == "success") {
+                        alert("The password has been successfully reset to the generic password");
+                    }
+                    loadPopup.Hide();
+                }
+            });
+
+        }
+    }
+}
+
+
+function GetReOrdProducts(s, e) {
+    var styleNameArr = s.name.split("_");
+    var style = styleNameArr[3];
+    var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
+    loadPopup.Show();
+    if (style != "") {
+        var reorderPop = ASPxClientControl.GetControlCollection().GetByName("RetReorderPop");
+        $.ajax({
+            url: "/Return/GetReOrderProducts/",
+            type: "post",
+            data: { 'Style': style, 'styleNameArr': styleNameArr },
+            success: function (response) {
+                if (response != null && response != "") {
+                    $.ajax({
+                        url: "/Return/GetReOrderProductsDesc/",
+                        type: "post",
+                        data: { 'Style': style, },
+                        success: function (StyleResp) {
+                            var Retundiv = document.getElementById("ReOrderPop");
+                            Retundiv.innerHTML = "";
+                            Retundiv.innerHTML = response;
+                            reorderPop.SetHeaderText("Reorder for Orderno: <b>" + styleNameArr[1] + "</b> &nbsp; &nbsp; &nbsp; Product: <b>" + StyleResp + "</b>&nbsp; &nbsp; &nbsp; Colour: <b>" + styleNameArr[4] + "</b>&nbsp; &nbsp; &nbsp; Size: <b>" + styleNameArr[6] + "</b>&nbsp; &nbsp; &nbsp; Qty: <b>" + styleNameArr[5] + "</b>");
+                            loadPopup.Hide();
+                            reorderPop.Show();
+                            MVCxClientUtils.FinalizeCallback();
+                        }
+                    });
+
+                }
+            }
+        });
+
+    }
+
+}
+
+
+function getRtnCard1(StyleID, orgStyle, caption) {
+    if (StyleID != "" && StyleID != undefined) {
+        var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
+        loadPopup.Show();
+        //var popup = ASPxClientControl.GetControlCollection().GetByName("DimAllocPop");
+        var url1 = "/Home/GetCard/";
+        $.ajax({
+            type: "POST",
+            url: url1,
+            data: { 'StyleID': StyleID, 'orgStyle': orgStyle, 'caption': caption },
+            success: function (response) {
+                var sss = response.indexOf("Login") > -1;
+                if (response != "" && !response.indexOf("Login") > -1) {
+                    var dim = document.getElementById("ReOrderPop");
+                    dim.innerHTML = "";
+                    dim.innerHTML = response;
+                    loadPopup.Hide();
+                    // popup.Initialize();
+                    //popup.Show();
+                    MVCxClientUtils.FinalizeCallback();
+                }
+                else {
+                    window.location = "/User/Login/";
+                }
+            },
+            error: function () {
+
+            }
+        });
+    }
+    else {
+        alert("try again!");
+    }
+}
+
+
+function addTocartReturnOrder(s, e) {
+    var ReorderGridview = ASPxClientControl.GetControlCollection().GetByName("ReorderGridview");
+    var reorderPop = ASPxClientControl.GetControlCollection().GetByName("RetReorderPop");
+    var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
+    var sitecode = ASPxClientControl.GetControlCollection().GetByName("SiteCodeCmbgroupedProducts");
+    var selectedSitecode = sitecode != null ? sitecode.GetValue() != null ? sitecode.GetValue() : "" : "SITECODENULL";
+    var stylearr = s.name.split('_');
+    var description = "";
+    var price = "";
+    var size = "";
+    var color = "";
+    var qty = "";
+    var sStyle = "";
+    var descStyle;
+    var colorValue;
+    var sizeValue;
+    var colorSwatchName = "swatch_DemandColor_" + stylearr[1];
+    var colorSwatch = document.getElementsByName(colorSwatchName);
+    var sizeSwatchName = "swatch_DemandSize_" + stylearr[1];
+    var sizeSwatch = document.getElementsByName(sizeSwatchName);
+    var reasonName = "CmbDemandReason_" + stylearr[1];
+    var reasonControl = document.getElementsByName(reasonName);
+    var reason;
+    if (reasonControl.length > 0) {
+        reason = reasonControl[0].value == "" | reasonControl[0].value == undefined ? reasonControl[0].defaultValue == "" | reasonControl[0].defaultValue == "" ? "" : reasonControl[0].defaultValue : reasonControl[0].value;
+    }
+    if (sizeSwatch.length > 1) {
+        for (var i = 0; i < sizeSwatch.length; i++) {
+            if (sizeSwatch[i].checked) {
+                sizeValue = sizeSwatch[i].offsetParent.innerText;
+            }
+        }
+    }
+    else {
+        if (sizeSwatch[0].checked) {
+            sizeValue = sizeSwatch[0].offsetParent.innerText;
+        }
+    }
+    if (colorSwatch.length > 1) {
+        for (var i = 0; i < colorSwatch.length; i++) {
+            if (colorSwatch[i].checked) {
+                colorValue = colorSwatch[i].offsetParent.innerText;
+            }
+        }
+    }
+    else {
+        if (colorSwatch[0].checked) {
+            colorValue = colorSwatch[0].offsetParent.innerText;
+        }
+    }
+    size = sizeValue != undefined | sizeValue != "" ? sizeValue : "";
+    color = colorValue != undefined | colorValue != "" ? colorValue : "";
+
+    if (stylearr[1].indexOf(',') > -1) {
+        var name = 'Swatch_DemandStyle_FieldSet_' + stylearr[1];
+        var fieldSet = document.getElementsByName(name);
+        var selStyle;
+        for (var i = 0; i < fieldSet[0].elements.length; i++) {
+            if (fieldSet[0].elements[i].checked) {
+                selStyle = fieldSet[0].elements[i].value;
+            }
+        }
+        sStyle = selStyle;
+        descStyle = stylearr[1].split(',');
+    }
+    else {
+        sStyle = stylearr[1];
+    }
+    var minPtsDivName = "minPtsDiv_" + stylearr[3];
+    var minPtsDiv = document.getElementsByClassName(minPtsDivName)
+    var desc = descStyle == undefined ? stylearr[1] : descStyle[0];
+    var Spin = document.getElementsByName("spinDemandEdit_" + stylearr[1]);
+    var priceId = document.getElementById("DimviewPriceinput1" + stylearr[1]);
+    description = document.getElementById("LbdemandDescription" + desc).innerHTML;
+    price = priceId != undefined && priceId != null ? priceId.value : priceId == undefined ? "0.0" : "0"; "0";
+    qty = Spin[0].value;
+    var clsName = "reqDatadim" + stylearr[1];
+    var reqdatatxt = "reqdatatxtdim" + stylearr[1];
+    var reqData = document.getElementsByClassName(clsName);
+
+    if (description != "" && price != "" && price != "0" && size != undefined && price != undefined && color != undefined && size != "" && color != "" && qty != "" && qty != "0" && (selectedSitecode != "" | selectedSitecode == "SITECODENULL")) {
+        selectedSitecode = selectedSitecode == "SITECODENULL" ? "" : selectedSitecode;
+        $.ajax({
+            url: "/Return/GetBtnStatusReturns/",
+            type: "POST",
+            data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty, 'orgStyl': stylearr[3] },
+            success: function (response) {
+                if (response == "enabled") {
+                    $.ajax({
+                        url: "/Return/AddToCardReturnLines/",
+                        type: "POST",
+                        data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reason': reason, 'selectedSitecode': selectedSitecode },
+                        success: function (response) {
+                            if (response != "") {
+                                loadPopup.Hide();
+                                reorderPop.Hide();
+                                myFunction("Reorder lines successfully added");
+                                MVCxClientUtils.FinalizeCallback();
+                                ReorderGridview.PerformCallback();
+                                CalculateTotals();
+                                Refreshpointsdiv();
+
+                            }
+                            else {
+                                loadPopup.Hide();
+                                //$.ajax({
+                                //    url: "/Home/AddToCardReturnLines/",
+                                //    type: "POST",
+                                //    data: { 'reason': reason },
+                                //    success: function (response) {
+                                //        if (response != "") {
+                                //            alert(response);
+                                //        }
+                                //        else {
+                                //            alert("Try again..!");
+                                //        }
+
+                                //    }
+                                //});
+                            }
+                        },
+                        error: function () {
+                            loadPopup.Hide();
+                            alert("Try again!");
+                        }
+                    });
+                }
+                else {
+                    // document.getElementById("ErrorMessage").style.display = 'block';
+                    loadPopup.Hide();
+                    getEntitlementDemandSwatch(stylearr[1], stylearr[3], 1);
+                }
+            }
+        });
+
+    } else {
+        if (price == "" || price == null || price == undefined || price == "0") {
+            alert("Please choose a size");
+        }
+        else if (size == "" || size == null || size == undefined) {
+            alert("Please choose a Size");
+        }
+        else if (color == "" || color == null || color == undefined) {
+            alert("Please choose a Colour");
+        }
+        else if (qty == "" || qty == "0" || qty == null || qty == undefined) {
+            alert("Quantity should be greater than 0");
+        } else if (selectedSitecode == "") {
+            alert("Please select a site code");
+        }
+        else if (reqtxt[0].value == "") {
+            alert("Please select Required leg length");
+        }
+    }
+}
+
+function RefreshReorderGrid(s, e) {
+    var ReorderGridview = ASPxClientControl.GetControlCollection().GetByName("ReorderGridview");
+    ReorderGridview.PerformCallback();
+    CalculateTotals();
+    Refreshpointsdiv();
+}
+
+function CalculateTotals() {
+    var totGoodsCtrl = ASPxClientControl.GetControlCollection().GetByName("txtTotGoods");
+    var carrierChargesCtrl = ASPxClientControl.GetControlCollection().GetByName("txtCarrierCharges");
+    var ordTotalCtrl = ASPxClientControl.GetControlCollection().GetByName("txtOrdTotal");
+    var VATCtrl = ASPxClientControl.GetControlCollection().GetByName("txtVAT");
+    var vatspanCtrl = document.getElementById("vatspan");
+    var grndTotCtrl = ASPxClientControl.GetControlCollection().GetByName("txtGrndTot");
+    var totGoodsReOrdCtrl = ASPxClientControl.GetControlCollection().GetByName("txtTotGoodsReord");
+    var carrierChargesReOrdCtrl = ASPxClientControl.GetControlCollection().GetByName("txtCarrierChargesReord");
+    var ordTotalReOrdCtrl = ASPxClientControl.GetControlCollection().GetByName("txtOrdTotalReord");
+    var vatspanReOrdCtrl = document.getElementById("vatspanReord");
+    var VATReOrdCtrl = ASPxClientControl.GetControlCollection().GetByName("txtVATReord");
+    var grndTotReOrdCtrl = ASPxClientControl.GetControlCollection().GetByName("txtGrndTotReord");
+    $.ajax({
+        url: "/Return/GetRetReordTotals/",
+        type: "post",
+        success: function (response) {
+            if (response != null) {
+                if (response.length > 0) {
+                    if (totGoodsCtrl != null) {
+                        for (var j = 0; j < response.length; j++) {
+                            if (response[j].isreturn) {
+                                totGoodsCtrl.SetValue(response[j].Total);
+                                carrierChargesCtrl.SetValue(response[j].carriage);
+                                ordTotalCtrl.SetValue(response[j].ordeTotal);
+                                vatspanCtrl.innerHTML = response[j].vatSpan;
+                                VATCtrl.SetValue(response[j].totalVat);
+                                grndTotCtrl.SetValue(response[j].gross);
+
+                            }
+                            if (response[j].isreord) {
+                                totGoodsReOrdCtrl.SetValue(response[j].Total);
+                                carrierChargesReOrdCtrl.SetValue(response[j].carriage);
+                                ordTotalReOrdCtrl.SetValue(response[j].ordeTotal);
+                                vatspanReOrdCtrl.innerHTML = response[j].vatSpan;
+                                VATReOrdCtrl.SetValue(response[j].totalVat);
+                                grndTotReOrdCtrl.SetValue(response[j].gross);
+
+                            }
+                        }
+                    }
+                    Refreshpointsdiv();
+                }
+            }
+        }
+    })
+}
+//
+function Refreshpointsdiv() {
+    var pointsDiv = document.getElementById("pointsDivReturns");
+    $.ajax({
+        url: "/Return/GetPointsDivReturns/",
+        type: "POST",
+        success: function (response) {
+            if (response != "") {
+                pointsDiv.innerHTML = response;
+            }
+        }
+    });
+}
+
+function GetAllReturnHeader(s, e) {
+    var acceptBtn = ASPxClientControl.GetControlCollection().GetByName(s.name);
+    var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
+    acceptBtn.SetEnabled(false);
+    loadPopup.Show();
+    $.ajax({
+        type: "POST",
+        url: "/Return/AcceptReturn/",
+        success: function (response) {
+            if (response.results != null) {
+                if (response.type = "success" && response.results.length > 0) {
+                    var message = "";
+                    for (var k = 0; k < response.results.length; k++) {
+                        if (response.results[k].IsReturn) {
+                            if (response.results[k].isedit) {
+                                message = message + "Your uniform return order has been successfully updated,order reference:" + response.results[k].OrderNo + " (" + response.results[k].EmployeeId + ")." + response.results[k].OrderConfirmation + ". \n\n\n";
+                            }
+                            else {
+                                message = message + "Your uniform return order has been successfully placed,order reference:" + response.results[k].OrderNo + " (" + response.results[k].EmployeeId + ")." + response.results[k].OrderConfirmation + ". \n\n\n";
+                            }
+
+                        }
+                        else {
+                            if (response.results[k].isedit) {
+                                message = message + "Your uniform order has been successfully updated,order reference:" + response.results[k].OrderNo + " (" + response.results[k].EmployeeId + ")." + response.results[k].OrderConfirmation + ". \n\n";
+                            }
+                            else {
+                                message = message + "Your uniform order has been successfully placed,order reference:" + response.results[k].OrderNo + " (" + response.results[k].EmployeeId + ")." + response.results[k].OrderConfirmation + ". \n\n";
+                            }
+
+
+                        }
+                    }
+
+
+                    message = message + "\n\n\n Would you like to print order confirmation? \n\n click Ok to print , click Cancel to not print";
+                    if (confirm(message)) {
+                        for (var i = 0; i < response.results.length; i++) {
+
+                            if ((response.results[i].OrderConfirmationPop != "" && response.results[i].OrderConfirmationPop != null && response.results[i].OrderConfirmationPop != undefined)) {
+                                if (response.results[i].IsReturn) {
+
+                                    var rtnOrderConfirmation = ASPxClientControl.GetControlCollection().GetByName("rtnOrderConfirmation");
+                                    loadPopup.Hide()
+                                    var ordConfim = document.getElementById("rtnOrdeConfirm");
+                                    ordConfim.innerHTML = "";
+                                    ordConfim.innerHTML = response.results[i].OrderConfirmationPop;
+                                    rtnOrderConfirmation.Show();
+                                }
+                                else {
+                                    var orderConfirmationPopup = ASPxClientControl.GetControlCollection().GetByName("orderConfirmation");
+                                    loadPopup.Hide()
+                                    var ordConfim = document.getElementById("ordeConfirm");
+                                    ordConfim.innerHTML = "";
+                                    ordConfim.innerHTML = response.results[i].OrderConfirmationPop;
+                                    orderConfirmationPopup.Show();
+                                }
+                            }
+                        }
+                    }
+                    else {
+                        window.location = "/Employee/ChangeOrdertype?orderType=return";
+                    }
+
+                    // window.location = "/Employee/ChangeOrdertype?orderType=return";
+                    // acceptBtn.SetEnabled(true);
+                    //loadPopup.Hide();
+                }
+                else if (response.type == "CarrierPrompt") {
+
+                }
+                else if (response.type == "CollectPrompt") {
+                    var ReturnCollection = ASPxClientControl.GetControlCollection().GetByName("ReturnCollection");
+                    if (ReturnCollection != null) {
+                        $.ajax({
+                            type: "POST",
+                            url: "/Return/GetCollectionPop/",
+                            success: function (response) {
+                                if (response != null) {
+                                    var doc = document.getElementById("ReturnCollectionPop");
+                                    doc.innerHTML = "";
+                                    doc.innerHTML = response;
+                                    ReturnCollection.Show();
+                                    MVCxClientUtils.FinalizeCallback();
+                                }
+                            }
+                        });
+                        //ReturnCollectionPop
+
+                    }
+                }
+
+            }
+            else if (response.type == "CarrierPrompt") {
+                alert("Please select a carrier style");
+                window.location.reload();
+            }
+            else if (response.type == "noelements") {
+                alert("Please select  atleast one line to proceed");
+                acceptBtn.SetEnabled(true);
+            }
+            else if (response.type == "CollectPrompt") {
+                acceptBtn.SetEnabled(true);
+                loadPopup.Hide();
+                var ReturnCollection = ASPxClientControl.GetControlCollection().GetByName("ReturnCollection");
+                if (ReturnCollection != null) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/Return/GetCollectionPop/",
+                        success: function (response) {
+                            if (response != null) {
+                                var doc = document.getElementById("ReturnCollectionPop");
+                                doc.innerHTML = "";
+                                doc.innerHTML = response;
+                                ReturnCollection.Show();
+                                loadPopup.Hide();
+                                MVCxClientUtils.FinalizeCallback();
+                            }
+                        }
+                    });
+                    //ReturnCollectionPop
+
+                }
+            }
+            else {
+                acceptBtn.SetEnabled(true);
+                loadPopup.Hide();
+            }
+        },
+        error: function (response) {
+            acceptBtn.SetEnabled(true);
+            loadPopup.Hide();
+        }
+    });
+}
+
+function redirect(s, e) {
+    if (s.name == "orderConfirmation") {
+        var rtnCnfPop = ASPxClientControl.GetControlCollection().GetByName("rtnOrderConfirmation");
+        if (rtnCnfPop != null) {
+            if (rtnCnfPop.IsVisible()) {
+
+            }
+            else {
+                /// sasi(14-12-20)
+                //window.history.back();
+                //window.location = "/Employee/Index/";
+                window.location = document.referrer;
+            }
+        }
+        else {
+            /// sasi(14-12-20)
+            //window.history.back();
+            // window.location = "/Employee/Index/";
+            window.location = document.referrer;
+        }
+    }
+    else {
+        var rtnCnfPop = ASPxClientControl.GetControlCollection().GetByName("orderConfirmation");
+
+        if (rtnCnfPop != null) {
+            if (rtnCnfPop.IsVisible()) {
+
+            }
+            else {
+                /// sasi(14-12-20)
+                //window.history.back();
+                //  window.location = "/Employee/ChangeOrdertype?orderType=return";
+                window.location = document.referrer;
+            }
+        }
+        else {
+            /// sasi(14-12-20)
+            //window.history.back();
+            // window.location = "/Employee/ChangeOrdertype?orderType=return";
+            window.location = document.referrer;
+        }
+    }
+}
+
+function SettleReturnCollectionInfo(s, e) {
+    var sts = s.name != null ? s.name.indexOf('Yes') > -1 ? true : false : false;
+    var ReturnCollection = ASPxClientControl.GetControlCollection().GetByName("ReturnCollection");
+    var cntNameCtrl = ASPxClientControl.GetControlCollection().GetByName("rtnCollContNam");
+    var cntNoCtrl = ASPxClientControl.GetControlCollection().GetByName("rtnCollContNo");
+    var cntEmailCtrl = ASPxClientControl.GetControlCollection().GetByName("rtnCollEmail");
+    var cntName = cntNameCtrl != null ? cntNameCtrl.GetValue() != null ? cntNameCtrl.GetValue() : "" : "";
+    var cntNo = cntNoCtrl != null ? cntNoCtrl.GetValue() != null ? cntNoCtrl.GetValue() : "" : "";
+    var cntEmail = cntEmailCtrl != null ? cntEmailCtrl.GetValue() != null ? cntEmailCtrl.GetValue() : "" : "";
+    if (sts) {
+        if (cntName != "" && cntNo != "" && cntEmail != "") {
+            if (validateEmail(cntEmail)) {
+                $.ajax({
+                    url: "/Return/SaveCntInfo/",
+                    type: "POST",
+                    data: { 'cntName': cntName, 'cntNo': cntNo, 'cntEmail': cntEmail },
+                    success: function (response) {
+                        if (response != "") {
+                            ReturnCollection.Hide();
+                        }
+                    }
+                });
+            }
+            else {
+                alert("Please enter a valid emailid");
+            }
+        }
+        else {
+            if (cntName == "") {
+                alert("Please enter a contact name");
+            } else if (cntNo == "") {
+                alert("Please enter a contact number");
+            }
+            else {
+                alert("Please enter a contact email");
+            }
+        }
+    }
+    else {
+        $.ajax({
+            url: "/Return/ChangeCollectionSts/",
+            type: "POST",
+            success: function (response) {
+                if (response) {
+                    ReturnCollection.Hide();
+                }
+            }
+        });
+
+    }
+
+}
+
+
+function ChangeReasonSelLines(s, e) {
+    var chkbox = ASPxClientControl.GetControlCollection().GetByName(s.name);
+    var grid = ASPxClientControl.GetControlCollection().GetByName("EditReturnOrderGridview");
+    if (chkbox.GetValue()) {
+        var count = grid.GetSelectedRowCount();
+        if (count > 0) {
+            grid.GetSelectedFieldValues('OrderNo;LineNo;StyleId;ColourId;SizeId;IsSelect', GetReasonValues);
+        }
+        else {
+            chkbox.SetValue(false);
+            alert("Please select a line");
+        }
+    }
+}
+function AcceptReturnLines(s, e) {
+    var ReturnGrid = ASPxClientControl.GetControlCollection().GetByName("EditReturnOrderGridview");
+    var index = ReturnGrid.GetFocusedRowIndex();
+    ReturnGrid.GetSelectedFieldValues('OrderNo;LineNo;StyleId;ColourId;SizeId;IsSelect', GetSelectedRtnLines);
+}
+function GetSelectedRtnLines(selectedValues) {
+    var noReason = [];
+    var allReason = "";
+    var noQty = [];
+    var selArr = [];
+    var chkbox = ASPxClientControl.GetControlCollection().GetByName("Applyreasontoalllines");
+    var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
+    loadPopup.Show();
+    if (selectedValues != null && selectedValues != "") {
+
+        for (var i = 0; i < selectedValues.length; i++) {
+            if (selectedValues[i][5] == false) {
+                var name = "cmbRtnReason_" + selectedValues[i][0] + "_" + selectedValues[i][1];
+                var name2 = "txtBoxOrdQty_" + selectedValues[i][0] + "_" + selectedValues[i][1];
+                var cmbReasonCtrl = ASPxClientControl.GetControlCollection().GetByName(name);
+                var chkBxVal = chkbox.GetValue() == null ? false : chkbox.GetValue();
+                var cmbReason = cmbReasonCtrl != null ? cmbReasonCtrl.GetValue() != null ? cmbReasonCtrl.GetValue() : "" : "";
+                var retQtyCtrl = ASPxClientControl.GetControlCollection().GetByName(name2);
+                var retQty = retQtyCtrl != null ? retQtyCtrl.GetValue() != null ? retQtyCtrl.GetValue() : 0 : 0;
+                if (cmbReason == "" && chkBxVal == false && selectedValues[i][5] == false) {
+                    var obj = { 'name': name };
+                    noReason.push(obj);
+                }
+                if (retQty == 0 && selectedValues[i][5] == false) {
+                    var obj = { 'name': name2 };
+                    noQty.push(obj);
+                }
+                if (chkBxVal) {
+                    allReason = cmbReason == "" ? allReason : cmbReason;
+                    var obj = { 'OrderNo': selectedValues[i][0], 'StyleId': selectedValues[i][2], 'LineNo': selectedValues[i][1], 'ColourId': selectedValues[i][3], 'SizeId': selectedValues[i][4], 'Reason': allReason, 'RtnQty': retQty };
+                    selArr.push(obj);
+                }
+                else {
+                    var obj = { 'OrderNo': selectedValues[i][0], 'StyleId': selectedValues[i][2], 'LineNo': selectedValues[i][1], 'ColourId': selectedValues[i][3], 'SizeId': selectedValues[i][4], 'Reason': cmbReason, 'RtnQty': retQty };
+                    selArr.push(obj);
+                }
+            }
+
+        }
+        if (noReason.length == 0 && noQty.length == 0) {
+            $.ajax({
+                url: "/Return/SelectedReturnOrderLines/",
+                type: "post",
+                data: { 'rtnLines': selArr },
+                success: function (response) {
+                    if (response == "") {
+
+                        loadPopup.Hide();
+                    }
+                    else {
+                        window.location = response;
+                    }
+                }
+            });
+        }
+        else {
+            if (noReason.length > 0) {
+                var reasonct = ASPxClientControl.GetControlCollection().GetByName(noReason[0].name);
+                alert("Please enter a valid reason for selected lines");
+                if (reasonct != null) {
+                    reasonct.Focus();
+                }
+            }
+            else if (noQty.length > 0) {
+                var Qtyct = ASPxClientControl.GetControlCollection().GetByName(noQty[0].name);
+                alert("Please enter a return quantity for selected lines");
+                if (Qtyct != null) {
+                    Qtyct.Focus();
+                }
+            }
+            loadPopup.Hide();
+        }
+    }
+    else {
+        loadPopup.Hide();
+        alert("Please select a line to continue");
+    }
+}
+
+function GetReasonValues(selectedValues) {
+    var reason = "";
+    var chkbox = ASPxClientControl.GetControlCollection().GetByName("Applyreasontoalllines");
+    if (selectedValues != null) {
+        if (selectedValues.length > 0) {
+            for (var i = 0; i < selectedValues.length; i++) {
+                if (selectedValues[i][5] == false) {
+                    var name = "cmbRtnReason_" + selectedValues[i][0] + "_" + selectedValues[i][1];
+                    var cmbReasonCtrl = ASPxClientControl.GetControlCollection().GetByName(name);
+                    var cmbReason = cmbReasonCtrl != null ? cmbReasonCtrl.GetValue() != null ? cmbReasonCtrl.GetValue() : "" : "";
+                    if (cmbReason != "") {
+                        reason = cmbReason;
+                    }
+                }
+            }
+            if (reason != "") {
+                for (var i = 0; i < selectedValues.length; i++) {
+                    if (selectedValues[i][5] == false) {
+                        var name = "cmbRtnReason_" + selectedValues[i][0] + "_" + selectedValues[i][1];
+                        var cmbReasonCtrl = ASPxClientControl.GetControlCollection().GetByName(name);
+                        cmbReasonCtrl.SetValue(reason);
+                    }
+                }
+            } else {
+                chkbox.SetValue(false);
+                alert("Please select reason for atleast one line");
+            }
+        }
+    }
+
+}
+function PrintReturns(orderNo) {
+
+    var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
+
+    loadPopup.Show();
+    $.ajax({
+        type: "POST",
+        url: "/OrderDisplay/PrintReturns/",
+        data: { 'OrderNo': orderNo },
+        success: function (response) {
+            if (response != "") {
+                var rtnOrderConfirmation = ASPxClientControl.GetControlCollection().GetByName("ProrderConfirmation");
+                loadPopup.Hide()
+                var ordConfim = document.getElementById("prordeConfirm");
+                ordConfim.innerHTML = "";
+                ordConfim.innerHTML = response;
+                rtnOrderConfirmation.Show();
+            }
+        }
+    });
+}
+function ItsCallBack(s, e) {
+    e.customArgs["iscallback"] = true;
+
+}
+
+
+function OrderEditRT(orderNo, empId) {
+    $.ajax({
+        url: "/OrderDisplay/SetEmployee/",
+        type: "post",
+        data: { 'empId': empId },
+        success: function (resp) {
+            if (resp.toLowerCase().indexOf("emp") > -1 == false) {
+                window.location = "/Return/ReturnReorder?ordeNo=" + orderNo;
+            }
+            else {
+                alert(resp);
+            }
+        }
+    });
+
 }

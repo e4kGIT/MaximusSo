@@ -10,6 +10,17 @@
             </div>
         </div>
         <div class="col-md-1" style="padding:0px;"></div>
+       
+       
+        <center>
+            @Html.DevExpress().Button(s =>
+       {
+           s.Name = "resetBtn";
+           s.UseSubmitBehavior = false;
+           s.Text = "Reset";
+           s.ClientSideEvents.Click = "GetallOrders";
+       }).GetHtml()
+        </center><br />
     </div>
                     }
                     else
@@ -28,6 +39,20 @@
                                 </div>
                             </div>
                             <div class="col-md-1" style="padding:0px;"></div>
+                             
+                            
+                        </div>
+                        <div class="row" style="padding-top:0px;">
+                            <hr />
+                            <center>
+                                @Html.DevExpress().Button(s =>
+       {
+           s.Name = "resetBtn";
+           s.UseSubmitBehavior = false;
+           s.Text = "Reset";
+           s.ClientSideEvents.Click = "GetallOrders";
+       }).GetHtml()
+                            </center>
                         </div>
                                             }
 

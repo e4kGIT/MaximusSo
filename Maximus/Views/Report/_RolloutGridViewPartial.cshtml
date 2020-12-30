@@ -1,0 +1,199 @@
+@{
+    var grid = Html.DevExpress().GridView(settings =>
+    {
+        settings.Name = "RolloutGridView";
+        settings.CallbackRouteValues = new { Controller = "Report", Action = "RolloutGridViewPartial" };
+
+        settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "Report", Action = "RolloutGridViewPartialAddNew" };
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "Report", Action = "RolloutGridViewPartialUpdate" };
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "Report", Action = "RolloutGridViewPartialDelete" };
+        settings.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
+        settings.SettingsBehavior.ConfirmDelete = true;
+
+        settings.CommandColumn.Visible = false;
+        settings.CommandColumn.ShowNewButton = true;
+        settings.CommandColumn.ShowDeleteButton = true;
+        settings.CommandColumn.ShowEditButton = true;
+
+        //
+
+        settings.SettingsPager.Visible = true;
+        settings.Settings.ShowGroupPanel = true;
+        settings.Settings.ShowFilterRow = true;
+        settings.SettingsBehavior.AllowSelectByRowClick = true;
+
+        settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.Off;
+        settings.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Right;
+        settings.SettingsAdaptivity.AdaptiveDetailColumnCount = 1;
+        settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = false;
+        settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
+        settings.ClientSideEvents.BeginCallback = "ItsCallBack";
+
+        if (Session["reportTypes"].ToString().ToLower() != "nan")
+        {
+            if (Session["reportName"].ToString() != "2")
+            {
+                if (Session["reportTypes"].ToString() == "1")
+                {
+                    if (Convert.ToBoolean(Session["includerollout"]))
+                    {
+                        settings.Columns.Add("RolloutName").Caption = "Rollout";
+                    }
+                    settings.KeyFieldName = "Styleid";
+                    settings.Columns.Add("Styleid").Caption="Style";
+                    settings.Columns.Add("Description").Caption = "Description";
+                    settings.Columns.Add("BaseStyle").Caption = "Base Style";
+                    settings.Columns.Add("BaseStyleDesc").Caption = "Base Style Description";
+                    settings.Columns.Add("Color").Caption = "Color";
+                    settings.Columns.Add("Size").Caption = "Size";
+                    settings.Columns.Add("Freetext").Caption = "Freetext";
+                    settings.Columns.Add("TotQty").Caption = "Total Qty";
+                    //settings.Columns.Add("TotPts").Caption="Style";
+                    settings.Columns.Add("TotValue").Caption = "Total Value";
+                    settings.Columns.Add("OrdPoints").Caption = "Order Points";
+                }
+                else
+            if (Session["reportTypes"].ToString() == "2")
+                {
+                    if (Convert.ToBoolean(Session["includerollout"]))
+                    {
+                        settings.Columns.Add("RolloutName").Caption = "Rollout";
+                    }
+                    settings.KeyFieldName = "Styleid";
+                    settings.Columns.Add("Styleid").Caption = "Style";
+                    settings.Columns.Add("Description");
+                    settings.Columns.Add("BaseStyle").Caption = "Base Style";
+                    settings.Columns.Add("BaseStyleDesc").Caption = "Base Style Description";
+                    settings.Columns.Add("Color").Caption = "Color";
+                    settings.Columns.Add("Size").Caption = "Size";
+                    settings.Columns.Add("TotQty").Caption = "Total Qty";
+                    //settings.Columns.Add("TotPts");
+                    settings.Columns.Add("TotValue").Caption = "Total Value";
+                    settings.Columns.Add("OrdPoints").Caption = "Order Points";
+                }
+                else
+            if (Session["reportTypes"].ToString() == "3")
+                {
+                    if (Convert.ToBoolean(Session["includerollout"]))
+                    {
+                        settings.Columns.Add("RolloutName").Caption = "Rollout";
+                    }
+
+                    settings.KeyFieldName = "Custref";
+                    settings.Columns.Add("Custref").Caption = "Customerref";
+                    settings.Columns.Add("Styleid").Caption = "Style";
+                    settings.Columns.Add("Description").Caption = "Description";
+                    settings.Columns.Add("BaseStyle").Caption = "Base Style";
+                    settings.Columns.Add("BaseStyleDesc").Caption = "Base Style Description";
+                    settings.Columns.Add("Color").Caption = "Color";
+                    settings.Columns.Add("Size").Caption = "Size";
+                    settings.Columns.Add("TotQty").Caption = "Total Qty";
+                    //settings.Columns.Add("TotPts");
+                    settings.Columns.Add("TotValue").Caption = "Total Value";
+                    settings.Columns.Add("OrdPoints").Caption = "Order Points";
+                }
+                else
+            if (Session["reportTypes"].ToString() == "4")
+                {
+                    if (Convert.ToBoolean(Session["includerollout"]))
+                    {
+                        settings.Columns.Add("RolloutName").Caption = "Rollout";
+                    }
+                    settings.KeyFieldName = "OrderNo";
+                    settings.Columns.Add("OrderNo").Caption = "Order No";
+                    settings.Columns.Add("OrderDate").Caption = "Order date";
+                    settings.Columns.Add("Employeeid").Caption = "Employee Id";
+                    settings.Columns.Add("EmployeeName").Caption = "Employee Name";
+                    settings.Columns.Add("Custref").Caption = "Customer ref";
+                    settings.Columns.Add("Styleid").Caption = "Style";
+                    settings.Columns.Add("Description");
+                    settings.Columns.Add("BaseStyle").Caption = "Base Style";
+                    settings.Columns.Add("BaseStyleDesc").Caption = "Base Style Description";
+                    settings.Columns.Add("Color");
+                    settings.Columns.Add("Size");
+                    settings.Columns.Add("Freetext");
+                    settings.Columns.Add("TotQty").Caption = "Total Qty";
+                    // settings.Columns.Add("TotPts");
+                    settings.Columns.Add("TotValue").Caption = "Total Value";
+                    settings.Columns.Add("OrdPoints").Caption = "Order Points";
+                }
+                else
+            if (Session["reportTypes"].ToString() == "5")
+                {
+                    if (Convert.ToBoolean(Session["includerollout"]))
+                    {
+                        settings.Columns.Add("RolloutName").Caption = "Rollout";
+                    }
+                    settings.KeyFieldName = "Employeeid";
+                    settings.Columns.Add("Employeeid").Caption = "Employee Id";
+                    settings.Columns.Add("EmployeeName").Caption = "Employee Name";
+
+                    settings.Columns.Add("Custref").Caption = "Customer ref";
+
+                    settings.Columns.Add("TotQty").Caption = "Total Qty";
+
+                    settings.Columns.Add("TotValue").Caption = "Total Value";
+                    settings.Columns.Add("TotPts").Caption = "Total Points";
+                    settings.Columns.Add("OrdPoints").Caption = "Order Points";
+                }
+                else
+            if (Session["reportTypes"].ToString() == "0")
+                {
+                    if (Convert.ToBoolean(Session["includerollout"]))
+                    {
+                        settings.Columns.Add("RolloutName").Caption = "Rollout";
+                    }
+                    settings.KeyFieldName = "Custref";
+                    settings.Columns.Add("Custref").Caption = "Customer Ref";
+                    settings.Columns.Add("Styleid").Caption = "Style";
+                    settings.Columns.Add("Description").Caption = "Description";
+                    settings.Columns.Add("BaseStyle").Caption = "Base Style";
+                    settings.Columns.Add("BaseStyleDesc").Caption = "Base Style Description";
+                    settings.Columns.Add("Color").Caption = "Color";
+
+                    settings.Columns.Add("Size").Caption = "Size";
+                    settings.Columns.Add("Freetext").Caption = "Freetext";
+                    settings.Columns.Add("TotQty").Caption = "Total Qty";
+                    //settings.Columns.Add("TotPts");
+                    settings.Columns.Add("TotValue").Caption = "Total Value";
+                    settings.Columns.Add("OrdPoints").Caption = "Order Points";
+                }
+                else
+                {
+                    settings.KeyFieldName = "Custref";
+                    settings.Columns.Add("Custref").Caption = "Customer ref";
+                    settings.Columns.Add("Styleid").Caption = "Style";
+                    settings.Columns.Add("Description").Caption = "Description";
+                    settings.Columns.Add("BaseStyle").Caption = "Base Style";
+                    settings.Columns.Add("BaseStyleDesc").Caption = "Base Style Description";
+                    settings.Columns.Add("Color").Caption = "Color";
+                    settings.Columns.Add("Size").Caption = "Size";
+                    settings.Columns.Add("Freetext").Caption = "Freetext";
+                    settings.Columns.Add("TotQty").Caption = "Total Qty";
+                    //settings.Columns.Add("TotPts");
+                    settings.Columns.Add("TotValue").Caption = "Total Value";
+                    settings.Columns.Add("OrdPoints").Caption = "Order Points";
+                }
+
+            }
+            else if(Session["reportName"].ToString() != "1")
+            {
+                settings.KeyFieldName = "Employeeid";
+                settings.Columns.Add("Employeeid").Caption = "Employee id";
+                settings.Columns.Add("EmployeeName").Caption = "Employee Name";
+                settings.Columns.Add("RolloutName").Caption = "Rollout";
+                settings.Columns.Add("IsActive").Caption = "Active";
+                settings.Columns.Add("TotPts").Caption = "Total Points";
+                settings.Columns.Add("UsedPoints").Caption = "Used Points";
+                settings.Columns.Add("OnlineUserId").Caption = "Online User Id";
+                settings.Columns.Add("Access").Caption = "Access";
+            }
+        }
+
+    });
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()

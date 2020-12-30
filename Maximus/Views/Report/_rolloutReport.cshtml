@@ -1,0 +1,80 @@
+﻿
+
+<div class="row" style="background-color:lightgray;">
+    <br /><br /><br />
+    
+    <div class="col-md-4">
+        @Html.DevExpress().ListBox(listBoxSettings =>
+          {
+              listBoxSettings.Name = "checkListReport";
+              listBoxSettings.ControlStyle.Border.BorderWidth = 0;
+              listBoxSettings.ControlStyle.BorderBottom.BorderWidth = 1;
+              listBoxSettings.ControlStyle.BorderBottom.BorderColor = System.Drawing.Color.FromArgb(0xDCDCDC);
+              listBoxSettings.Height = System.Web.UI.WebControls.Unit.Pixel(200);
+              listBoxSettings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+              listBoxSettings.Properties.SelectionMode = ListEditSelectionMode.Multiple;
+              listBoxSettings.Properties.SelectionMode = ListEditSelectionMode.CheckColumn;
+              if (ViewBag.Rolloutnames != null)
+              {
+                  foreach (var items in (List<string>)ViewBag.Rolloutnames)
+                  {
+                      listBoxSettings.Properties.Items.Add(items);
+                  }
+              }
+          }).GetHtml()
+        <br />
+        <br />
+
+
+    </div>
+    <div class="col-md-4">
+        @Html.DevExpress().ComboBox(s =>
+   {
+       s.Name = "cmbReportNames";
+       s.Properties.Caption = "Report Names";
+       s.Properties.Items.Add("RolledOut Employees", "1");
+       s.Properties.Items.Add("UnrolledOut Employees", "2");
+       s.Properties.ClientSideEvents.SelectedIndexChanged = "toggleReportType";
+   }).GetHtml()
+        <br /><br />
+        @Html.DevExpress().CheckBox(s =>
+       {
+           s.Name = "chkIncEmbroidory";
+           s.Text = "Include Embroidery";
+
+       }).GetHtml()
+
+        <br /><br /><br /><br /><br /> 
+        <center>
+            @Html.DevExpress().Button(s =>
+       {
+           s.Name = "btnShow";
+           s.Text = "Show";
+           s.UseSubmitBehavior = false;
+           s.ClientSideEvents.Click = "GetReport";
+       }).GetHtml()
+        </center>
+    </div>
+    <div class="col-md-4">
+        @Html.DevExpress().ComboBox(s =>
+   {
+       s.Name = "cmbReportTypes";
+       s.Properties.Caption = "Report types";
+      
+       s.Properties.Items.Add("Summary With FreeText", "1");
+       s.Properties.Items.Add("Summary With Style", "2");
+       s.Properties.Items.Add("Summary With CustRef", "3");
+       s.Properties.Items.Add("Detail", "4");
+       s.Properties.Items.Add("Summary Of Points Exceed", "5");
+   }).GetHtml()
+        <br /><br />
+        @Html.DevExpress().CheckBox(s =>
+       {
+           s.Name = "chkShowUnconfirm";
+           s.Text = "Show Unconfirm Order(s)";
+       }).GetHtml()
+
+
+    </div>
+   
+</div>

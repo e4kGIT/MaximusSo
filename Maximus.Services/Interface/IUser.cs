@@ -15,5 +15,9 @@ namespace Maximus.Services.Interface
         tblbus_address GetUserAddress(string userName, string busId);
         bool HasCostCenter(string busId);
         int GetUserCount(string userName);
+        string GetWelcome(string busId);
+        bool SetWelcomeText(string htmlTxt, string busId);
+        void ResetPassword(tbluser user, string adminMail, string mailUsername, string mailPassword, string mailPort, string mailServer);
+
     }
 }
