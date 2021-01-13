@@ -19,5 +19,7 @@ namespace Maximus.Data.models
         public string UcodeId { get; set; }
         public bool IsRejectReq { get; set; }
         public bool IsAutoCnf { get; set; }
+        public bool FreeStkChk { get; set; }
+        public bool IsEmergency { get; set; }
     }
 }

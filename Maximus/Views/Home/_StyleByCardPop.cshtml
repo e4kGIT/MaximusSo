@@ -1385,7 +1385,7 @@
 
                     content = content + "</div>";
                     ViewContext.Writer.Write(content);
-                    if (Session["OVERRIDE_ENT_WITH_REASON"].ToString().ToLower() == "show" && reason)
+                    if (Session["OVERRIDE_ENT_WITH_REASON"].ToString().ToLower() == "show" && reason && home._pointStyle.Exists(s=>s.UcodeID==selUcode && s.BusinessID==businessId)==false)
                     {
                         ViewContext.Writer.Write("<div class='col-md-4 col-xs-4 col-sm-4 col-lg-4'><b>Reason</b><hr style='margin:0px'/><br>");
                         if (template.Count > 0)

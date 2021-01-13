@@ -614,19 +614,29 @@ namespace Maximus.Services
             }
             if (ResultSet.Count > 0)
             {
-                if (salesHead.Where(s => s.Reorderheader).First().SalesOrderLine!=null)
+                if (salesHead.Any(s => s.Reorderheader))
                 {
-                    if (salesHead.Where(s => s.Reorderheader).First().SalesOrderLine.Count > 0)
+                    if (salesHead.Where(s => s.Reorderheader).First().SalesOrderLine != null)
                     {
-                        if (ResultSet.Where(s => s.IsReturn == false).First().OrderNo > 0)
+                        if (salesHead.Where(s => s.Reorderheader).First().SalesOrderLine.Count > 0)
                         {
-                            result.results = ResultSet;
-                            result.type = "success";
+                            if (ResultSet.Where(s => s.IsReturn == false).First().OrderNo > 0)
+                            {
+                                result.results = ResultSet;
+                                result.type = "success";
+                            }
+                            else
+                            {
+                                result.type = "failure";
+                            }
                         }
                         else
                         {
-                            result.type = "failure";
+                            ResultSet.Remove(ResultSet.Where(s => s.IsReturn == false).First());
+                            result.results = ResultSet;
+                            result.type = "success";
                         }
+
                     }
                     else
                     {
@@ -634,7 +644,6 @@ namespace Maximus.Services
                         result.results = ResultSet;
                         result.type = "success";
                     }
-
                 }
                 else
                 {
@@ -766,10 +775,13 @@ namespace Maximus.Services
             return salesVumodel;
         }
 
+        #region DeleteReturnOrders
+        public bool DeleteReturnOrders(int orderno,string user)
+        {
+          return _dp.DeleteReturnOrder(orderno,user);
 
-
-
-
+        }
+        #endregion
         #endregion
 
     }

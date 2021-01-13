@@ -1958,7 +1958,7 @@
         function CreateOrder(EmployeeId, UcodesName, EmployeeName) {
             var popup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
             var ctrlName = UcodesName.split('_');
-            var ucodeCmb = ASPxClientControl.GetControlCollection().GetByName("checkComboBox_" + ctrlName[1]);
+            var ucodeCmb = ASPxClientControl.GetControlCollection().GetByName("checkComboBox_" + ctrlName[1] + "_" + ctrlName[2]);
             if (ucodeCmb.lastSuccessText != "" && ucodeCmb.lastSuccessText != undefined && ucodeCmb.lastSuccessText != null) {
                 if (EmployeeId != "") {
                     popup.Show();
@@ -1985,12 +1985,12 @@
             var thisChk = ASPxClientControl.GetControlCollection().GetByName(s.name);
             var selectedItems = thisChk.GetSelectedItems();
             var split = s.name.split('_');
-            var thisCmb = ASPxClientControl.GetControlCollection().GetByName("checkComboBox_" + split[1]);
+            var thisCmb = ASPxClientControl.GetControlCollection().GetByName("checkComboBox_" + split[1]+"_"+split[2]);
             thisCmb.SetText(getSelectedItemsText(selectedItems));
         }
         function HideCmb(s, e) {
             var split = s.name.split('_');
-            var thisCmb = ASPxClientControl.GetControlCollection().GetByName("checkComboBox_" + split[1]);
+            var thisCmb = ASPxClientControl.GetControlCollection().GetByName("checkComboBox_" + split[1] + "_" + split[2]);
             // thisCmb.SetText(getSelectedItemsText(selectedItems));
             thisCmb.HideDropDown();
         }

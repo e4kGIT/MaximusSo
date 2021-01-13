@@ -3851,6 +3851,31 @@ function DeleteOrderwithreason() {
         alert("Please enter a valid reason to delete the order");
     }
 }
+
+function DeleteReturnOrders(orderNo) {
+    if (orderNo > 0) {
+        if (confirm("Are you sure you want to delete this order?")) {
+            var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
+            loadPopup.Show();
+            $.ajax({
+                type: "post",
+                url: "/Return/DeleteReturnOrders/",
+                data: { 'orderNo': orderNo },
+                success: function (response) {
+                    if (response == "Success") {
+                        loadPopup.Hide();
+                        alert("Order deleted successfully");
+                        window.location.reload();
+                    }
+                    else {
+                        loadPopup.Hide();
+                        alert("Please try again ");
+                    }
+                }
+            });
+        }
+    }
+}
 function DeleteOrder(orderNo, empId, isEmergency, reason) {
     if (orderNo > 0 && empId != "" && empId != null) {
         if (confirm("Are you sure you want to delete this order?")) {
@@ -4042,18 +4067,19 @@ function UpdateEmployee(s, e) {
     var emailUsrCtrl = ASPxClientControl.GetControlCollection().GetByName("txtUsrEmail");
     var roleUsrCtrl = ASPxClientControl.GetControlCollection().GetByName("cmbUsrRole");
     var reissueUsrCtrl = ASPxClientControl.GetControlCollection().GetByName("cmbRollout");
-    var lstOrddatCtrl = document.getElementById("empUsrLastOrdDate");
-    var nextOrddatCtrl = document.getElementById("empUsrNextOrdDate");
+    var lstOrddatCtrl = ASPxClientControl.GetControlCollection().GetByName("empUsrLastOrdDate");
+    var nextOrddatCtrl = ASPxClientControl.GetControlCollection().GetByName("empUsrNextOrdDate");
     var chkMapAddrCtrl = ASPxClientControl.GetControlCollection().GetByName("chkMapAddr");
     var emailUsr = emailUsrCtrl != null ? emailUsrCtrl.GetValue() : "";
     var chkMapAddr = chkMapAddrCtrl != null ? chkMapAddrCtrl.GetValue() : false;
     var mapUserEmp = mapUserEmpCtrl != null ? mapUserEmpCtrl.GetValue() : false;
     var roleUsr = roleUsrCtrl != null ? roleUsrCtrl.GetValue() : "";
     var reissueUsr = reissueUsrCtrl != null ? reissueUsrCtrl.GetValue() : "";
-    var lstOrddat = lstOrddatCtrl != null ? lstOrddatCtrl.value : "";
-    var nextOrddat = nextOrddatCtrl != null ? nextOrddatCtrl.value : "";
+    var lstOrddat = lstOrddatCtrl != null ? lstOrddatCtrl.GetValue() != null ? lstOrddatCtrl.GetValue().toISOString() : "" : "";
+    var nextOrddat = nextOrddatCtrl != null ? nextOrddatCtrl.GetValue() != null ? nextOrddatCtrl.GetValue().toISOString() : "" : "";
     var userActiveCtrl = ASPxClientControl.GetControlCollection().GetByName("UsrActive");
     var userActive = userActiveCtrl != null ? userActiveCtrl.GetValue() : false;
+    //lstOrddat = lstOrddat.toISOString();
     var OrderAddrMess = "You have unconfirmed orders would you like to change the address on these orders ? \n\n Click ok to change the address on these orders or cancel to change your delivery address for future orders";
     if (s.name != "UpdateBtn_Template") {
         if ((hoursCmb == undefined || hoursCmb == null) && (hoursDept == undefined || hoursDept == null)) {
@@ -4727,8 +4753,8 @@ function CreateEmployee(s, e) {
     var emailUsrCtrl = ASPxClientControl.GetControlCollection().GetByName("txtUsrEmail");
     var roleUsrCtrl = ASPxClientControl.GetControlCollection().GetByName("cmbUsrRole");
     var reissueUsrCtrl = ASPxClientControl.GetControlCollection().GetByName("cmbRollout");
-    var lstOrddatCtrl = document.getElementById("empUsrLastOrdDate");
-    var nextOrddatCtrl = document.getElementById("empUsrNextOrdDate");
+    var lstOrddatCtrl = ASPxClientControl.GetControlCollection().GetByName("empUsrLastOrdDate");
+    var nextOrddatCtrl = ASPxClientControl.GetControlCollection().GetByName("empUsrNextOrdDate");
     var chkMapAddrCtrl = ASPxClientControl.GetControlCollection().GetByName("chkMapAddr");
     var emailUsr = emailUsrCtrl != null ? emailUsrCtrl.GetValue() : "";
     var chkMapAddr = chkMapAddrCtrl != null ? chkMapAddrCtrl.GetValue() : false;
@@ -4736,8 +4762,8 @@ function CreateEmployee(s, e) {
     var roleUsr = roleUsrCtrl != null ? roleUsrCtrl.GetValue() : "";
     var reissueUsr = reissueUsrCtrl != null ? reissueUsrCtrl.GetValue() : "";
     var isMapped = empMapper == null | empMapper == undefined ? false : empMapper.GetValue();
-    var lstOrddat = lstOrddatCtrl != null ? lstOrddatCtrl.value : "";
-    var nextOrddat = nextOrddatCtrl != null ? nextOrddatCtrl.value : "";
+    var lstOrddat = lstOrddatCtrl != null ? lstOrddatCtrl.GetValue() != null ? lstOrddatCtrl.GetValue().toISOString() : "" : "";
+    var nextOrddat = nextOrddatCtrl != null ? nextOrddatCtrl.GetValue() != null ? nextOrddatCtrl.GetValue().toISOString() : "" : "";
     if (s.name != "CreateBtn_Template") {
         if ((hoursCmb == undefined || hoursCmb == null) && (hoursDept == undefined || hoursDept == null)) {
             if (empID.lastChangedValue != null & frstName.lastChangedValue != null & lstName.lastChangedValue != null & dept.lastSuccessText != null & selUcode.lastChangedValue != null) {
@@ -8337,7 +8363,7 @@ function addTocartReturnOrder(s, e) {
                         type: "POST",
                         data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'reason': reason, 'selectedSitecode': selectedSitecode },
                         success: function (response) {
-                            if (response != "") {
+                            if (response == "Success") {
                                 loadPopup.Hide();
                                 reorderPop.Hide();
                                 myFunction("Reorder lines successfully added");
@@ -8346,6 +8372,9 @@ function addTocartReturnOrder(s, e) {
                                 CalculateTotals();
                                 Refreshpointsdiv();
 
+                            } else if (response == "size validation") {
+                                loadPopup.Hide();
+                                alert("You cannot reorder the same uniform");
                             }
                             else {
                                 loadPopup.Hide();
@@ -8604,6 +8633,37 @@ function GetAllReturnHeader(s, e) {
     });
 }
 
+function ChangeUcodePointsEmployeeGrid(s,e)
+{
+    var allInfo = s.name.split('_');
+   // var ucode = allInfo.length > 0 ? allInfo[2] : "";
+    var employeeId =  allInfo.length > 0 ? allInfo[1]:"";
+    var totalPointsspan = "TotalPointsSpan_" + employeeId;
+    var pointsUsedSpan = "PointsUsedSpan_" + employeeId;
+    var selectedUcodeCtrl = ASPxClientControl.GetControlCollection().GetByName(s.name);
+    var selectedUcode = selectedUcodeCtrl != null ? selectedUcodeCtrl.GetValue() != null ? selectedUcodeCtrl.GetValue() : "" : "";
+    if(selectedUcode!="")
+    {
+        $.ajax({
+            url: "/Employee/ChangePointsByEmp/",
+            data: { 'emp': employeeId, 'ucode': selectedUcode },
+            type: "post",
+            success:function(response)
+            {
+                if(response!=null)
+                {
+                        var totalPts = document.getElementById(totalPointsspan);
+                        var usedPts = document.getElementById(pointsUsedSpan);
+                        totalPts.innerHTML = "";
+                        usedPts.innerHTML = "";
+                        totalPts.innerHTML=response.TotalPoints;
+                        usedPts.innerHTML = response.UsedPoints;
+                } 
+            }
+        });
+    }
+}
+
 function redirect(s, e) {
     if (s.name == "orderConfirmation") {
         var rtnCnfPop = ASPxClientControl.GetControlCollection().GetByName("rtnOrderConfirmation");
@@ -8615,14 +8675,24 @@ function redirect(s, e) {
                 /// sasi(14-12-20)
                 //window.history.back();
                 //window.location = "/Employee/Index/";
-                window.location = document.referrer;
+                if (document.referrer.indexOf("Home") > -1) {
+                    window.location = "/Employee/Index/";
+                }
+                else {
+                    window.location = document.referrer;
+                }
             }
         }
         else {
             /// sasi(14-12-20)
             //window.history.back();
             // window.location = "/Employee/Index/";
-            window.location = document.referrer;
+            if (document.referrer.indexOf("Home") > -1) {
+                window.location = "/Employee/Index/";
+            }
+            else {
+                window.location = document.referrer;
+            }
         }
     }
     else {
@@ -8636,17 +8706,29 @@ function redirect(s, e) {
                 /// sasi(14-12-20)
                 //window.history.back();
                 //  window.location = "/Employee/ChangeOrdertype?orderType=return";
-                window.location = document.referrer;
+                if (document.referrer.indexOf("Home") > -1) {
+                    window.location = "/Employee/Index/";
+                }
+                else {
+                    window.location = document.referrer;
+                }
             }
         }
         else {
             /// sasi(14-12-20)
             //window.history.back();
             // window.location = "/Employee/ChangeOrdertype?orderType=return";
-            window.location = document.referrer;
+            if (document.referrer.indexOf("Home") > -1) {
+                window.location = "/Employee/Index/";
+            }
+            else {
+                window.location = document.referrer;
+            }
         }
     }
 }
+
+//function 
 
 function SettleReturnCollectionInfo(s, e) {
     var sts = s.name != null ? s.name.indexOf('Yes') > -1 ? true : false : false;

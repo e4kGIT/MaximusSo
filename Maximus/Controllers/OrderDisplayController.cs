@@ -306,6 +306,8 @@ namespace Maximus.Controllers
 
         public string SetEmployee(string empId)
         {
+            string busId = Session["BuisnessId"].ToString();
+            Session["POINTSREQ"] = _dp.BusinessParam("POINTSREQ", busId);
             if (empId != "")
             {
                 Session["SelectedEmp"] = empId;

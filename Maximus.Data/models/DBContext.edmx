@@ -2724,6 +2724,8 @@ warning 6002: The table/view 'def.e4kmaximusdb.tblaccemp_style_staticqty' does n
           <Property Name="UcodeId" Type="varchar" MaxLength="15" Nullable="false" />
           <Property Name="IsRejectReq" Type="bit" Nullable="false" />
           <Property Name="IsAutoCnf" Type="bit" Nullable="false" />
+          <Property Name="FreeStkChk" Type="bit" Nullable="false" />
+          <Property Name="IsEmergency" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="tblonline_userid_employee">
           <Key>
@@ -11605,6 +11607,8 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
           <Property Name="UcodeId" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
           <Property Name="IsRejectReq" Type="Boolean" Nullable="false" />
           <Property Name="IsAutoCnf" Type="Boolean" Nullable="false" />
+          <Property Name="FreeStkChk" Type="Boolean" Nullable="false" />
+          <Property Name="IsEmergency" Type="Boolean" Nullable="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -16274,6 +16278,8 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
           <EntitySetMapping Name="tblonline_ucode_operations">
             <EntityTypeMapping TypeName="e4kmaximusdbModel.tblonline_ucode_operations">
               <MappingFragment StoreEntitySet="tblonline_ucode_operations">
+                <ScalarProperty Name="IsEmergency" ColumnName="IsEmergency" />
+                <ScalarProperty Name="FreeStkChk" ColumnName="FreeStkChk" />
                 <ScalarProperty Name="IsAutoCnf" ColumnName="IsAutoCnf" />
                 <ScalarProperty Name="IsRejectReq" ColumnName="IsRejectReq" />
                 <ScalarProperty Name="UcodeId" ColumnName="UcodeId" />

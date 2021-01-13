@@ -272,7 +272,7 @@ namespace Maximus.Controllers
                     Session["Pointsmodel"] = _home.GetPointsModel(Session["selectedUcodes"].ToString(), busId);
                     totPoints = ((Maximus.Data.models.PointsModel)Session["Pointsmodel"]).TotalPoints;
                     inCartPoints = salesLine.Count > 0 ? salesLine.Sum(x => x.TotalPoints) : 0;
-                    totCardPts = _dp.GetTotalSoPoints(busId, empId);
+                    totCardPts = _dp.GetTotalSoPoints(busId, empId, 0, (List<string>)_dp.UcodeStyles(ucode, busId));
                     availabelPoints = totPoints - inCartPoints - totCardPts;
                     usedPoints = totPoints - availabelPoints;
                 }
@@ -316,7 +316,7 @@ namespace Maximus.Controllers
                     Session["SelectedUcode"] = salesHead.UCodeId;
                     totPoints = ((Maximus.Data.models.PointsModel)Session["Pointsmodel"]).TotalPoints;
                     inCartPoints = salesLine.Count > 0 ? salesLine.Sum(x => x.TotalPoints) : 0;
-                    totCardPts = _dp.GetTotalSoPoints(busId, empId);
+                    totCardPts = _dp.GetTotalSoPoints(busId, empId, 0, (List<string>)_dp.UcodeStyles(ucode, busId));
                     foreach (var otherOrders in _salesOrderHeader.GetAll(s => s.UCodeId == ucode && s.PinNo == empId && s.OrderNo != salesHead.OrderNo && s.OrderType.ToLower() == "so").ToList())
                     {
                         foreach (var lien in _salesOrderLines.GetAll(s => s.OrderNo == otherOrders.OrderNo).ToList())
@@ -326,12 +326,12 @@ namespace Maximus.Controllers
                     }
                     totPoints = ((Maximus.Data.models.PointsModel)Session["Pointsmodel"]).TotalPoints;
                     inCartPoints = salesLine.Count() > 0 ? salesLine.Sum(x => x.TotalPoints) : 0;
-                    totCardPts = _dp.GetTotalSoPoints(busId, empId);
+                    totCardPts = _dp.GetTotalSoPoints(busId, empId, 0, (List<string>)_dp.UcodeStyles(ucode, busId));
                     totDelPts = salesLineDelted.Count > 0 ? salesLineDelted.Sum(x => x.TotalPoints) : 0;
                     ptsNanCard = totPoints - totCardPts;
                     usedPoints = inCartPoints + totalOtherPoints;
                     previousPoints = totCardPts - usedPoints;
-                    availabelPoints = (totPoints - usedPoints) - previousPoints;
+                    availabelPoints = ((totPoints - usedPoints) - previousPoints)+totDelPts;
                 }
 
                 ViewBag.TotalPoints = totPoints;
@@ -339,8 +339,10 @@ namespace Maximus.Controllers
                 ViewBag.availabelPoints = availabelPoints;
                 ViewBag.usedPoints = totPoints - availabelPoints;
             }
-            else if(Convert.ToBoolean(Session["IsEmergency"]) && Convert.ToBoolean(Session["ISEDITING"]))
-            { Session["requireemergencyreason"] = true;
+            else if (Convert.ToBoolean(Session["IsEmergency"]) && Convert.ToBoolean(Session["ISEDITING"]))
+            {
+                Session["requireemergencyreason"] = true;
+                Session["OVERRIDE_ENT_WITH_REASON"] = "show";
                 List<string> lst = new List<string>();
                 var salesHead = new SalesOrderHeaderViewModel();
                 var salesLine = new List<SalesOrderLineViewModel>();
@@ -377,11 +379,13 @@ namespace Maximus.Controllers
             Session["StyleFreeText"] = _fskStyleFreetext.GetAll().ToList();
 
             Session["StyleByFreetext"] = _styleByFreetext.GetAll().ToList();
+
+            var ucodStylesLst = _dp.UcodeStyles(ucode, busId) == null ? _dp.UcodeStyles( ucode, busId) : (List<string>)_dp.UcodeStyles(ucode, busId);
             if (((List<string>)Session["SelectedTemplates"]).Count == 0)
             {
 
                 Session["PointsAdjustment"] = _pointsAdjustment.GetAll(s => s.BusinessID == busId && s.UcodeID == ucode).ToList();
-                Session["PointsCard"] = _vuPointsCard.GetAll(s => s.EmployeeID == empId).ToList();
+                Session["PointsCard"] = _vuPointsCard.GetAll(s => s.EmployeeID == empId && ucodStylesLst.Contains(s.StyleID)).ToList();
                 Session["PointsStyle"] = _pointStyle.GetAll(s => s.BusinessID == busId && s.UcodeID == ucode).ToList();
                 Session["PointsUcode"] = _pointsByUcode.GetAll(s => s.BusinessID == busId && s.UcodeID == ucode).ToList();
             }
@@ -1241,7 +1245,9 @@ namespace Maximus.Controllers
         public JsonResult AddToCart(string description = "", string price = "", string size = "", string color = "", string qty = "", string style = "", string orgStyl = "", string entQty = "", string reqData1 = "", string reason = "", string QtySizePriceArr = "", string selectedSitecode = "")
         {
             string result = "";
-            if (Convert.ToBoolean(Session["requireemergencyreason"]) && Convert.ToBoolean(Session["IsEmergency"]))
+            string busId = Session["BuisnessId"].ToString();
+            string selUcode = Session["SelectedUcode"] == null ? "" : Session["SelectedUcode"].ToString();
+            if (Convert.ToBoolean(Session["requireemergencyreason"]) && Convert.ToBoolean(Session["IsEmergency"]) && _pointStyle.Exists(s => s.UcodeID == selUcode && s.BusinessID == busId) == false)
             {
                 if (reason == "")
                 {
@@ -1249,12 +1255,12 @@ namespace Maximus.Controllers
                     return Json(result, JsonRequestBehavior.AllowGet);
                 }
             }
-            string selUcode = Session["SelectedUcode"] == null ? "" : Session["SelectedUcode"].ToString();
+
             string selTemplate = Session["SelectedTemplate"] == null ? "" : Session["SelectedTemplate"].ToString();
             var appPath = System.Web.HttpContext.Current.Request.MapPath(@"~\");
             var salesOrderLines = new List<SalesOrderLineViewModel>();
             var salesOrderHeader = Convert.ToBoolean(Session["ISEDITING"]) ? ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(s => s.IsEditing).ToList() : (List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"];
-            long lineNo = 0; string busId = Session["BuisnessId"].ToString();
+            long lineNo = 0;
 
             var points = _pointStyle.Exists(x => x.BusinessID == busId && x.StyleID == style && x.UcodeID == selUcode) ? _pointStyle.GetAll(x => x.BusinessID == busId && x.StyleID == style && x.UcodeID == selUcode).First().Points : 0;
 
@@ -1689,7 +1695,7 @@ namespace Maximus.Controllers
                         var salesHead = ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]);
                         var salesLine = salesHead.Any(s => s.SalesOrderLine.Count > 0 && s.UCodeId == ucode) ? salesHead.Where(s => s.SalesOrderLine.Count > 0 && s.UCodeId == ucode).First().SalesOrderLine : new List<SalesOrderLineViewModel>();
                         int totCardPts = 0, totalPoints = 0, availablePoints = 0;
-                        totCardPts = _dp.GetTotalSoPoints(busId, thisEmp);
+                        totCardPts = _dp.GetTotalSoPoints(busId, thisEmp, 0, (List<string>)_dp.UcodeStyles(ucode, busId));
                         totalPoints = ((PointsModel)Session["Pointsmodel"]).TotalPoints;
                         availablePoints = totalPoints - salesLine.Sum(x => x.TotalPoints) - totCardPts;
                         ((PointsModel)Session["Pointsmodel"]).AvailablePoints = availablePoints;
@@ -1745,7 +1751,7 @@ namespace Maximus.Controllers
         #endregion
 
         #region GetFreeStockValue
-        public int GetFreeStockValue(string StyleId,string ColorId,string size)
+        public int GetFreeStockValue(string StyleId, string ColorId, string size)
         {
             int value = 0;
             var emp = Session["SelectedEmp"].ToString();
@@ -1757,7 +1763,7 @@ namespace Maximus.Controllers
                 cartValue = salesOrderLines.Any(s => s.StyleID == StyleId && s.ColourID == ColorId && s.SizeID == size && s.IsDleted == false) ? salesOrderLines.Where(s => s.StyleID == StyleId && s.ColourID == ColorId && s.SizeID == size && s.IsDleted == false).Sum(s => s.OrdQty) : 0;
             }
             int freestock = _dp.GetFreeStock(StyleId, ColorId, size, Session["WareHouseID"].ToString());
-            value = freestock -Convert.ToInt32(cartValue);
+            value = freestock - Convert.ToInt32(cartValue);
             value = value > 0 ? value : 0;
             return value;
         }
@@ -1767,11 +1773,13 @@ namespace Maximus.Controllers
 
         public JsonResult GetEntitlement(string StyleId = "", string ColorId = "", string orgStyl = "", string size = "")
         {
+            string Ucodes = Session["SelectedUcode"] == null ? "" : Session["SelectedUcode"].ToString();
+            var ucodStylesLst =   _dp.UcodeStyles(Ucodes, Session["BuisnessId"].ToString())  ;
             EntitlementModel em = new EntitlementModel();
             //if(orgStyl.Contains(','))
             //{
             var emp = Session["SelectedEmp"].ToString();
-            string Ucodes = Session["SelectedUcode"] == null ? "" : Session["SelectedUcode"].ToString();
+            
             var saleHead = (List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"];
             var salesLine = saleHead.Any(x => x.EmployeeID == emp && x.UCodeId == Ucodes) ? saleHead.Where(x => x.EmployeeID == emp && x.UCodeId == Ucodes).First().SalesOrderLine.Where(s => s.IsDleted == false) : new List<SalesOrderLineViewModel>();
             var salesLineDelted = saleHead.Any(x => x.EmployeeID == emp && x.UCodeId == Ucodes) ? saleHead.Where(x => x.EmployeeID == emp && x.UCodeId == Ucodes).First().SalesOrderLine.Where(s => s.IsDleted == true) : new List<SalesOrderLineViewModel>();
@@ -1821,11 +1829,19 @@ namespace Maximus.Controllers
                     if (Convert.ToBoolean(Session["returnorder"]))
                     {
                         int totalPts = _pointsByUcode.Exists(s => s.BusinessID == busId && s.UcodeID == ucode) ? _pointsByUcode.GetAll(s => s.BusinessID == busId && s.UcodeID == ucode).First().TotalPoints.Value : 0;
-                        int cardPts = _vuPointsCard.Exists(s => s.BusinessID == busId && s.EmployeeID == emp) ? Convert.ToInt32(_vuPointsCard.GetAll(s => s.BusinessID == busId && s.EmployeeID == emp).Sum(s => s.TOTSOPOINTS).Value) : 0;
+                        int cardPts = _vuPointsCard.Exists(s => s.BusinessID == busId && s.EmployeeID == emp && ucodStylesLst.Contains(s.StyleID)) ? Convert.ToInt32(_vuPointsCard.GetAll(s => s.BusinessID == busId && s.EmployeeID == emp && ucodStylesLst.Contains(s.StyleID)).Sum(s => s.TOTSOPOINTS).Value) : 0;
                         int thisPts = _pointStyle.Exists(s => s.BusinessID == busId && s.UcodeID == ucode.Trim() && s.StyleID.Trim() == StyleId.Trim()) ? _pointStyle.GetAll(s => s.BusinessID == busId && s.UcodeID == ucode.Trim() && s.StyleID.Trim() == StyleId.Trim()).First().Points.Value : 0;
                         int rtnPts = (((List<ReturnOrderModel>)Session["rtnLines"])).Where(s => s.IsReturn && s.IsDleted == 0).Sum(s => s.TotalPoints);
                         int reOrdPts = (((List<ReturnOrderModel>)Session["rtnLines"])).Where(s => s.IsReorder && s.IsDleted == 0).Sum(s => s.TotalPoints);
-                        int availPts = totalPts - ((cardPts + reOrdPts) - rtnPts);
+                        int availPts = 0;
+                        if (Convert.ToBoolean(Session["ISRTNEDITING"]))
+                        {
+                            availPts = totalPts - (cardPts + reOrdPts);
+                        }
+                        else
+                        {
+                            availPts = totalPts - ((cardPts + reOrdPts) - rtnPts);
+                        }
                         result = "<table class=\"table\"><tr><td>Total points: " + totalPts + "</td></tr><tr><td>Used points: " + cardPts + "</td></tr><tr><td>Return points: " + rtnPts + "</td></tr><tr><td>Reordered points: " + reOrdPts + "</td></tr><tr><td>Available points: " + availPts + "</td></tr></table>";
                         em.Result = result;
                         em.minMandatoryPts = minMandatoryPts;
@@ -1838,7 +1854,7 @@ namespace Maximus.Controllers
                             Session["Pointsmodel"] = Convert.ToBoolean(Session["ISEDITING"]) ? _home.GetPointsModel(salesHead.UCodeId, busId) : _home.GetPointsModel(Session["selectedUcodes"].ToString(), busId);
                             totPoints = ((Maximus.Data.models.PointsModel)Session["Pointsmodel"]).TotalPoints;
                             inCartPoints = salesLine.Count() > 0 ? salesLine.Sum(x => x.TotalPoints) : 0;
-                            totCardPts = _dp.GetTotalSoPoints(busId, empId);
+                            totCardPts = _dp.GetTotalSoPoints(busId, empId, 0, (List<string>)_dp.UcodeStyles(ucode, busId));
                             //commented by sasi(21-12-20)
                             //usedPoints = totCardPts == totPoints ? totPoints - inCartPoints : totPoints - totCardPts - inCartPoints;
                             usedPoints = totCardPts + inCartPoints;
@@ -1855,7 +1871,7 @@ namespace Maximus.Controllers
                             }
                             totPoints = ((Maximus.Data.models.PointsModel)Session["Pointsmodel"]).TotalPoints;
                             inCartPoints = salesLine.Count() > 0 ? salesLine.Sum(x => x.TotalPoints) : 0;
-                            totCardPts = _dp.GetTotalSoPoints(busId, empId);
+                            totCardPts = _dp.GetTotalSoPoints(busId, empId, 0, (List<string>)_dp.UcodeStyles(ucode, busId));
                             totDelPts = salesLineDelted.Count() > 0 ? salesLineDelted.Sum(x => x.TotalPoints) : 0;
                             ptsNanCard = totPoints - totCardPts;
                             usedPoints = inCartPoints + totalOtherPoints;
@@ -1982,7 +1998,7 @@ namespace Maximus.Controllers
             long qtny = 0;
             string ucode = Session["SelectedUcode"].ToString();
             // var sassas = Session["OverrideEnt"].ToString().ToLower().Trim();
-            int totPtsSo = _dp.GetTotalSoPoints(busId, empId);
+            int totPtsSo = _dp.GetTotalSoPoints(busId, empId, 0, (List<string>)_dp.UcodeStyles(ucode, busId));
             int ucodePts = _pointStyle.Exists(x => x.BusinessID == busId & x.UcodeID == Ucodes & x.StyleID == style) ? _pointStyle.GetAll(x => x.BusinessID == busId & x.UcodeID == Ucodes & x.StyleID == style).First().Points.Value : 0;
             minOrdQty = _pointStyle.Exists(x => x.StyleID == orgStyl && x.UcodeID == ucode && x.BusinessID == busId) ? _pointStyle.GetAll(x => x.StyleID == orgStyl && x.UcodeID == ucode && x.BusinessID == busId).First().MinPts.Value : 0;
             bool minPtsSatsfd = (ucodePts * minOrdQty) >= totPtsSo ? false : true;
@@ -2119,7 +2135,7 @@ namespace Maximus.Controllers
             var salesLines = salesHeader.Where(s => s.EmployeeID == empId && s.UCodeId == ucode).First().SalesOrderLine.Where(s => s.IsDleted == false).ToList();
             var salesLineDelted = salesHeader.Where(s => s.EmployeeID == empId && s.UCodeId == ucode).First().SalesOrderLine.Where(s => s.IsDleted == true).ToList();
             var inCartPoints = salesLines.Count > 0 ? salesLines.Sum(x => x.TotalPoints) : 0;
-            var totCardPts = _dp.GetTotalSoPoints(busId, empId);
+            var totCardPts = _dp.GetTotalSoPoints(busId, empId, 0, (List<string>)_dp.UcodeStyles(ucode, busId));
             int availabelPoints = 0;
             int totPoints = pointsModel.TotalPoints;
             int totalOtherPoints = 0, totDelPts = 0, ptsNanCard = 0, usedPoints = 0, previousPoints = 0;
@@ -2142,12 +2158,12 @@ namespace Maximus.Controllers
                     }
                     totPoints = ((Maximus.Data.models.PointsModel)Session["Pointsmodel"]).TotalPoints;
                     inCartPoints = salesLines.Count() > 0 ? salesLines.Sum(x => x.TotalPoints) : 0;
-                    totCardPts = _dp.GetTotalSoPoints(busId, empId);
+                    totCardPts = _dp.GetTotalSoPoints(busId, empId, 0, (List<string>)_dp.UcodeStyles(ucode, busId));
                     totDelPts = salesLineDelted.Count > 0 ? salesLineDelted.Sum(x => x.TotalPoints) : 0;
                     ptsNanCard = totPoints - totCardPts;
                     usedPoints = inCartPoints + totalOtherPoints;
                     previousPoints = totCardPts - usedPoints;
-                    availabelPoints = (totPoints - usedPoints) - previousPoints;
+                    availabelPoints = ((totPoints - usedPoints) - previousPoints)+totDelPts;
                 }
                 //foreach (var otherOrders in _salesOrderHeader.GetAll(s => s.UCodeId == ucode && s.PinNo == empId && s.OrderNo != oNO && s.OrderType.ToLower() == "so").ToList())
                 //{
@@ -2604,8 +2620,10 @@ namespace Maximus.Controllers
         #region GetValuesData
         public bool GetValuesData(string orgStyl)
         {
+          
             var orgStyleNPoints = ((List<Maximus.Data.models.StyleAndMinPoints>)Session["StyleMinPoints"]);
             string Ucodes = Session["SelectedUcode"] != null ? Session["SelectedUcode"].ToString() : "";
+            var ucodStylesLst =   _dp.UcodeStyles(Ucodes, Session["BuisnessId"].ToString()) ;
             string busId = Session["BuisnessId"].ToString();
             string empId = (Session["SelectedEmp"].ToString());
             var salesHeader = ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]);
@@ -2616,7 +2634,7 @@ namespace Maximus.Controllers
             int minOrdQty = 0;
             List<int> values = new List<int>();
             minOrdQty = _pointStyle.Exists(x => x.StyleID == orgStyl && x.UcodeID == ucode && x.BusinessID == busId) ? _pointStyle.GetAll(x => x.StyleID == orgStyl && x.UcodeID == ucode && x.BusinessID == busId).First().MinPts.Value : 0;
-            if (_vuPointsCard.Exists(x => x.EmployeeID == empId))
+            if (_vuPointsCard.Exists(x => x.EmployeeID == empId && ucodStylesLst.Contains(x.StyleID)))
             {
                 var orgStyleIdLst = thisHeader.SalesOrderLine.Where(x => x.orgStyleId != null && x.IsDleted == false).Select(s => s.orgStyleId).ToList();
 
@@ -2626,7 +2644,7 @@ namespace Maximus.Controllers
                 {
                     var sss = orgStyleNPoints.Where(x => orgStyleIdLst.Contains(x.OrgStyle)).Select(x => x.Style).ToList();
 
-                    foreach (var styl in _vuPointsCard.GetAll(s => s.BusinessID == busId && s.EmployeeID == empId && sss.Contains(s.StyleID)).Select(s => s.StyleID).ToList())
+                    foreach (var styl in _vuPointsCard.GetAll(s => s.BusinessID == busId && s.EmployeeID == empId && sss.Contains(s.StyleID) && ucodStylesLst.Contains(s.StyleID)).Select(s => s.StyleID).ToList())
                     {
                         int soPts = _dp.GetTotalSOPointsByStyle(busId, empId, 0, styl);
                         int thisPt = _pointStyle.GetAll(x => x.StyleID == styl && x.BusinessID == busId && x.UcodeID == ucode).First().Points.Value;
@@ -2690,7 +2708,7 @@ namespace Maximus.Controllers
                         List<ResultChk> values = new List<ResultChk>();
                         if (salesHeader.Any(x => x.SalesOrderLine != null) && salesHeader.Any(x => x.SalesOrderLine.Where(s => s.IsDleted == false).Count() > 0))
                         {
-                            if (Convert.ToBoolean(Session["POINTSREQ"]) && Convert.ToBoolean(Session["IsEmergency"]) == false)
+                            if (Convert.ToBoolean(Session["POINTSREQ"]) && Convert.ToBoolean(Session["IsEmergency"]) == false && _dp.CheckEmergency(busId, ucode) == false)
                             {
                                 if (((Maximus.Data.models.PointsModel)Session["Pointsmodel"]).LstStyles != null)
                                 {
@@ -2957,15 +2975,17 @@ namespace Maximus.Controllers
             string result = "";
             if (Convert.ToBoolean(Session["POINTSREQ"]))
             {
-                string busId = Session["BuisnessId"].ToString();
                 string ucode = Session["SelectedUcode"].ToString();
+                var ucodStylesLst = _dp.UcodeStyles(ucode, Session["BuisnessId"].ToString())  ;
+                string busId = Session["BuisnessId"].ToString();
+               
                 string empId = Session["SelectedEmp"].ToString();
                 int enforcemntvalue = Session["RO_PER_FIRSTORDER"] != null ? Convert.ToInt32(Session["RO_PER_FIRSTORDER"]) : 0;
                 var salesHead = ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Any(s => s.UCodeId == s.UCodeId && s.EmployeeID == empId) ?
                     ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(s => s.UCodeId == s.UCodeId && s.EmployeeID == empId).First() : new SalesOrderHeaderViewModel();
-                if (enforcemntvalue > 0)
+                if (enforcemntvalue > 0 && _pointsByUcode.Exists(s => s.BusinessID == busId && s.UcodeID == ucode) && _dp.CheckEmergency(busId, ucode) == false)
                 {
-                    if (_pointsCard.Exists(s => s.EmployeeID == empId && s.BusinessID == busId))
+                    if (_pointsCard.Exists(s => s.EmployeeID == empId && s.BusinessID == busId && ucodStylesLst.Contains(s.StyleID)))
                     {
 
                     }
@@ -2977,7 +2997,7 @@ namespace Maximus.Controllers
                         long cartQty = salesHead.SalesOrderLine.Where(s => s.IsDleted == false).Count() > 0 ? salesHead.SalesOrderLine.Where(s => s.IsDleted == false).Sum(s => s.OrdQty) : 0;
                         if (Convert.ToBoolean(Session["ISEDITING"]) == false)
                         {
-                            cardPoints = _vuPointsCard.Exists(s => s.BusinessID == busId && s.EmployeeID == empId) ? Convert.ToInt32(_vuPointsCard.GetAll(s => s.BusinessID == busId && s.EmployeeID == empId).Sum(s => s.TOTSOPOINTS).Value) : 0;
+                            cardPoints = _vuPointsCard.Exists(s => s.BusinessID == busId && s.EmployeeID == empId && ucodStylesLst.Contains(s.StyleID)) ? Convert.ToInt32(_vuPointsCard.GetAll(s => s.BusinessID == busId && s.EmployeeID == empId && ucodStylesLst.Contains(s.StyleID)).Sum(s => s.TOTSOPOINTS).Value) : 0;
                         }
                         if (cartPoints > 0 || cartQty > 0)
                         {
@@ -3046,7 +3066,7 @@ namespace Maximus.Controllers
                     }
                     totPoints = ((Maximus.Data.models.PointsModel)Session["Pointsmodel"]).TotalPoints;
                     inCartPoints = salesLine.Count() > 0 ? salesLine.Sum(x => x.TotalPoints) : 0;
-                    totCardPts = _dp.GetTotalSoPoints(busId, empId);
+                    totCardPts = _dp.GetTotalSoPoints(busId, empId, 0, (List<string>)_dp.UcodeStyles(ucode, busId));
                     totDelPts = salesLineDelted.Count() > 0 ? salesLineDelted.Sum(x => x.TotalPoints) : 0;
                     ptsNanCard = totPoints - totCardPts;
                     usedPoints = inCartPoints + totalOtherPoints;
@@ -3084,7 +3104,7 @@ namespace Maximus.Controllers
                 }
                 else
                 {
-                    totCardPts = _dp.GetTotalSoPoints(busId, empId);
+                    totCardPts = _dp.GetTotalSoPoints(busId, empId, 0, (List<string>)_dp.UcodeStyles(ucode, busId));
                     totPoints = ((Maximus.Data.models.PointsModel)Session["Pointsmodel"]).TotalPoints;
                     inCartPoints = salesLine.Count() > 0 ? salesLine.Sum(x => x.TotalPoints) : 0;
                     availabelPoints = totPoints - inCartPoints - totCardPts;

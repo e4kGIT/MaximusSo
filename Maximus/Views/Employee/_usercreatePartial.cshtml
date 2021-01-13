@@ -95,47 +95,83 @@
 
     }
     <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4" style="margin-left: -27px;">
-        <div class="col-md-6"><label class="dxeCaption_Material" style="color: #333;margin-left: 0px;margin-top: 5px;">Last order date:</label></div>
-        <div class="col-md-6">
+        @*<div class="col-md-6"><label class="dxeCaption_Material" style="color: #333;margin-left: 0px;margin-top: 5px;">Last order date:</label></div>
+        <div class="col-md-6">*@
             @if (ViewBag.Create == null)
             {
                 if (ViewData["creatUsr"] != null)
                 {
                     //
-                    <input class="dxeTextBoxSys dxeTextBox_Material"  style="line-height:26px;width:172px;margin-left: -19px;" type="date" id="empUsrLastOrdDate" name="trip-start" value="@(((Maximus.Data.models.EmpUserCreate)ViewData["creatUsr"]).lastOrdDate.Value.ToString("dd-MM-yyyy"))">
+                    @Html.DevExpress().DateEdit(txt =>
+               {
+                   txt.Name = "empUsrLastOrdDate";
+                   txt.Properties.Caption = "Last order date";
+                   txt.Properties.EditFormat = EditFormat.Custom;
+                   txt.Properties.DisplayFormatString = "dd.MM.yyyy";
+                   txt.Properties.EditFormatString = "dd.MM.yyyy";
+                   
+                   txt.Date = DateTime.Parse(((Maximus.Data.models.EmpUserCreate)ViewData["creatUsr"]).lastOrdDate.Value.ToString("dd-MM-yyyy"));
+               }).GetHtml()
+                    @*<input class="dxeTextBoxSys dxeTextBox_Material" style="line-height:26px;width:172px;margin-left: -19px;" type="date" id="empUsrLastOrdDate" name="trip-start" value="@(((Maximus.Data.models.EmpUserCreate)ViewData["creatUsr"]).lastOrdDate.Value.ToString("dd-MM-yyyy"))">*@
                 }
             }
             else
             {
-                <input class="dxeTextBoxSys dxeTextBox_Material" style="line-height:26px;width:172px;margin-left: -19px;" type="date" id="empUsrLastOrdDate" name="trip-start" value="@DateTime.Now.ToString("dd-MM-yyyy")">
+                @Html.DevExpress().DateEdit(txt =>
+           {
+               txt.Name = "empUsrLastOrdDate";
+               txt.Properties.Caption = "Last order date";
+               txt.Properties.EditFormat = EditFormat.Custom;
+               txt.Properties.DisplayFormatString = "dd.MM.yyyy";
+               txt.Properties.EditFormatString = "dd.MM.yyyy";
+               txt.Date = DateTime.Now ;
+           }).GetHtml()
+                @*<input class="dxeTextBoxSys dxeTextBox_Material" style="line-height:26px;width:172px;margin-left: -19px;" type="date" id="empUsrLastOrdDate" name="trip-start" value="@DateTime.Now.ToString("dd-MM-yyyy")">*@
             }
-        </div>
+        @*</div>*@
         @*@Html.DevExpress().DateEdit(txt =>
-            {
-                txt.Name = "empUsrLastOrdDate";
-                txt.Properties.Caption = "Last order date";
-                txt.Properties.EditFormat = EditFormat.Custom;
-                txt.Properties.DisplayFormatString = "dd.MM.yyyy";
-                txt.Properties.EditFormatString = "dd.MM.yyyy";
+    {
+        txt.Name = "empUsrNextOrdDate";
+        txt.Properties.Caption = "Last order date";
+        txt.Properties.EditFormat = EditFormat.Custom;
+        txt.Properties.DisplayFormatString = "dd.MM.yyyy";
+        txt.Properties.EditFormatString = "dd.MM.yyyy";
 
-            }).GetHtml()*@
+    }).GetHtml()*@
     </div>
     <div class="col-md-4 col-xs-4 col-sm-4 col-lg-4" style="margin-left: 27px;">
 
-        <div class="col-md-6"><label class="dxeCaption_Material" style="color: #333;margin-left: 0px;margin-top: 5px;">Next order date:</label></div>
-        <div class="col-md-6">
+        @*<div class="col-md-6"><label class="dxeCaption_Material" style="color: #333;margin-left: 0px;margin-top: 5px;">Next order date:</label></div>
+        <div class="col-md-6">*@
             @if (ViewBag.Create == null)
             {
                 if (ViewData["creatUsr"] != null)
-                {
-                    <input class="dxeTextBoxSys dxeTextBox_Material" style="line-height:26px;width:172px;margin-left: -19px;" type="date" id="empUsrNextOrdDate" name="trip-start" value="@(((Maximus.Data.models.EmpUserCreate)ViewData["creatUsr"]).nextOrdDate.Value.ToString("dd-MM-yyyy"))">
+                {@Html.DevExpress().DateEdit(txt =>
+            {
+                txt.Name = "empUsrNextOrdDate";
+                txt.Properties.Caption = "Next order date";
+                txt.Properties.EditFormat = EditFormat.Custom;
+                txt.Properties.DisplayFormatString = "dd.MM.yyyy";
+                txt.Properties.EditFormatString = "dd.MM.yyyy"; txt.Date = DateTime.Parse(((Maximus.Data.models.EmpUserCreate)ViewData["creatUsr"]).nextOrdDate.Value.ToString("dd-MM-yyyy"));
+
+            }).GetHtml()
+                    @*<input class="dxeTextBoxSys dxeTextBox_Material" style="line-height:26px;width:172px;margin-left: -19px;" type="date" id="empUsrNextOrdDate" name="trip-start" value="@(((Maximus.Data.models.EmpUserCreate)ViewData["creatUsr"]).nextOrdDate.Value.ToString("dd-MM-yyyy"))">*@
                 }
             }
             else
             {
-                <input class="dxeTextBoxSys dxeTextBox_Material" style="line-height:26px;width:172px;margin-left: -19px;" type="date" id="empUsrNextOrdDate" name="trip-start" value="@DateTime.Now.ToString("dd-MM-yyyy")">
+                 @Html.DevExpress().DateEdit(txt =>
+            {
+                txt.Name = "empUsrNextOrdDate";
+                txt.Properties.Caption = "Next order date";
+                txt.Properties.EditFormat = EditFormat.Custom;
+                txt.Properties.DisplayFormatString = "dd.MM.yyyy";
+                txt.Properties.EditFormatString = "dd.MM.yyyy";
+                txt.Date  = DateTime.Now;
+            }).GetHtml()
+                @*<input class="dxeTextBoxSys dxeTextBox_Material" style="line-height:26px;width:172px;margin-left: -19px;" type="date" id="empUsrNextOrdDate" name="trip-start" value="@DateTime.Now.ToString("dd-MM-yyyy")">*@
             }
-        </div>
+        @*</div>*@
 
 
         @*@Html.DevExpress().DateEdit(txt =>
@@ -149,5 +185,5 @@
             }).GetHtml()*@
 
     </div>
-    </div>
+</div>
 

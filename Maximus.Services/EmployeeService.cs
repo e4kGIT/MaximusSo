@@ -298,9 +298,9 @@ namespace Maximus.Services
                             var address = _busAddress.GetAll(x => x.AddressID == busAddsId).First();
                             if (address.Description != null)
                             {
-                                if (_salesOrdHead.Exists(s => s.PinNo == EmployeeId))
+                                if (_salesOrdHead.Exists(s => s.PinNo == EmployeeId && s.OrderType.ToLower() == "so" && s.OnlineConfirm == 0))
                                 {
-                                    foreach (var salesHeader in _salesOrdHead.GetAll(s => s.PinNo == EmployeeId).ToList())
+                                    foreach (var salesHeader in _salesOrdHead.GetAll(s => s.PinNo == EmployeeId && s.OrderType.ToLower()=="so" && s.OnlineConfirm == 0).ToList())
                                     {
                                         if (address.Description.Trim() != salesHeader.DelDesc.Trim())
                                         {
@@ -447,9 +447,9 @@ namespace Maximus.Services
                             var address = _busAddress.GetAll(x => x.AddressID == busAddsId).First();
                             if (address.Description != null)
                             {
-                                if (_salesOrdHead.Exists(s => s.PinNo == EmployeeId))
+                                if (_salesOrdHead.Exists(s => s.PinNo == EmployeeId && s.OrderType.ToLower() == "so" && s.OnlineConfirm==0))
                                 {
-                                    foreach (var salesHeader in _salesOrdHead.GetAll(s => s.PinNo == EmployeeId).ToList())
+                                    foreach (var salesHeader in _salesOrdHead.GetAll(s => s.PinNo == EmployeeId && s.OrderType.ToLower() == "so" && s.OnlineConfirm == 0).ToList())
                                     {
                                         if (address.Description.Trim() != salesHeader.DelDesc.Trim())
                                         {

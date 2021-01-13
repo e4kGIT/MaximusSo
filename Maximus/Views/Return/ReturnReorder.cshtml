@@ -8,6 +8,10 @@
     Maximus.Data.Interface.Concrete.IUnitOfWork _unitOfWork = new Maximus.Data.InterFace.UnitOfWork();
     Maximus.Data.Models.DataProcessing dp = new Maximus.Data.Models.DataProcessing(_unitOfWork);
 }
+@Html.DevExpress().Button(btn => { btn.Name = "BackToRtn"; btn.Text = "Back"; btn.UseSubmitBehavior = false; btn.ClientSideEvents.Click = "redirect"; }).GetHtml()
+<br />
+<br />
+
 <div class="row" style="background-color:darkgray;">
 
     <div class="col-md-2">

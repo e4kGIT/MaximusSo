@@ -189,10 +189,13 @@ namespace Maximus.Controllers
                     var model1 = ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.IsEditing).ToList();
                     Session["DeliveryAddress"] = _basket.FillCombo_CustomerDelivery(busId, access, orderPermit, userName, true, model1.First().PinNo);
                     TotalModel tot = new TotalModel();
-                    if (Convert.ToBoolean(Session["POINTSREQ"]) && model1.First().OrderType == "SO" && model1.First().ReasonCode == 0)
+                    string ucode = model1.First().UCodeId;
+                    var ss = Convert.ToBoolean(Session["POINTSREQ"]);
+                    if (Convert.ToBoolean(Session["POINTSREQ"]) && model1.First().OrderType == "SO" && (model1.First().ReasonCode == 0 | _pointsByUcode.Exists(s => s.BusinessID == busId && s.UcodeID == ucode)))
                     {
-
+                      //  _dp.UcodeStyles(ucode, busId) = _dp.UcodeStyles(ucode, busId);
                         Session["Pointsmodel"] = _basket.GetPointsModel(model1.First().UCodeId, busId);
+                        Session["IsEmergency"] = false;
                     }
                     else
                     {
@@ -410,7 +413,7 @@ namespace Maximus.Controllers
                     var salesHead = ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Any(x => x.EmployeeID == empId) ? ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.EmployeeID == empId).First() : new SalesOrderHeaderViewModel();
                     var salesLine = salesHead.SalesOrderLine.Where(s => s.IsDleted == false);
                     Session["Pointsmodel"] = _basket.GetPointsModel(Session["selectedUcodes"].ToString(), busId);
-                    int totCardPts = _dp.GetTotalSoPoints(busId, empId, 0);
+                    int totCardPts = _dp.GetTotalSoPoints(busId, empId, 0,(List<string>)_dp.UcodeStyles(ucode, busId));
                     int totPoints = ((Maximus.Data.models.PointsModel)Session["Pointsmodel"]).TotalPoints;
                     int inCartPoints = salesLine.Count() > 0 ? salesLine.Sum(x => x.TotalPoints) : 0;
                     int availabelPoints = totPoints - inCartPoints - totCardPts;
@@ -588,7 +591,7 @@ namespace Maximus.Controllers
                 {
 
                     Session["Pointsmodel"] = _basket.GetPointsModel(Session["selectedUcodes"].ToString(), busId);
-                    totCardPts = _dp.GetTotalSoPoints(busId, empId, 0);
+                    totCardPts = _dp.GetTotalSoPoints(busId, empId, 0, (List<string>)_dp.UcodeStyles(ucode, busId));
                     totPoints = ((Maximus.Data.models.PointsModel)Session["Pointsmodel"]).TotalPoints;
                     inCartPoints = salesLine.Count() > 0 ? salesLine.Sum(x => x.TotalPoints) : 0;
                     availabelPoints = totPoints - inCartPoints - totCardPts;
@@ -608,7 +611,7 @@ namespace Maximus.Controllers
                     }
                     totPoints = ((Maximus.Data.models.PointsModel)Session["Pointsmodel"]).TotalPoints;
                     inCartPoints = salesLine.Count() > 0 ? salesLine.Sum(x => x.TotalPoints) : 0;
-                    totCardPts = _dp.GetTotalSoPoints(busId, empId);
+                    totCardPts = _dp.GetTotalSoPoints(busId, empId,0, (List<string>)_dp.UcodeStyles(ucode, busId));
                     totDelPts = salesLineDelted.Count > 0 ? salesLineDelted.Sum(x => x.TotalPoints) : 0;
                     ptsNanCard = totPoints - totCardPts;
                     usedPoints = inCartPoints + totalOtherPoints;
@@ -740,7 +743,8 @@ namespace Maximus.Controllers
                             var svmLst = _dimension1.GetAll(s => s.FreeText.ToLower() == dat.Dimensions && s.freetexttype.ToLower().Contains("dim")).Select(s => new Maximus.Data.Models.styleViewmodel { StyleID = s.StyleId, Description = s.Description, StyleImage = s.StyleImage }).ToList();
                             var svmStyLst = svmLst.Select(s => s.StyleID).ToList();
                             int soPoints = 0;
-                            if (_vuPointsCard.Exists(s => svmStyLst.Distinct().Contains(s.StyleID) && s.EmployeeID == selEMP))
+                            var ucodStylesLst =   _dp.UcodeStyles(shs.UCodeId, busId) ;
+                            if (_vuPointsCard.Exists(s => svmStyLst.Distinct().Contains(s.StyleID) && s.EmployeeID == selEMP && ucodStylesLst.Contains(s.StyleID)))
                             {
                                 foreach (var styl in vuPoints.Where(s => svmStyLst.Distinct().Contains(s.StyleID) && s.EmployeeID == selEMP))
                                 {
@@ -1260,7 +1264,7 @@ namespace Maximus.Controllers
                             var thisPt = _pointStyle.Exists(x => x.StyleID == styl && x.BusinessID == busId && x.UcodeID == ucode) ? _pointStyle.GetAll(x => x.StyleID == styl && x.BusinessID == busId && x.UcodeID == ucode).First().Points : 0;
                             long updatPts = (thisPt.Value * item.OrdQty) + otherPts;
                             var thisEmp = Session["thisEmp"].ToString();
-                            int totCardPts = _dp.GetTotalSoPoints(busId, thisEmp, 0);
+                            int totCardPts = _dp.GetTotalSoPoints(busId, thisEmp, 0, (List<string>)_dp.UcodeStyles(ucode, busId));
                             int inCartPoints = model.Where(s => s.IsDleted == false).Sum(s => s.TotalPoints);
                             if (Convert.ToBoolean(Session["ISEDITING"]))
                             {
@@ -1284,14 +1288,14 @@ namespace Maximus.Controllers
                                 }
                                 totPoints = ((Maximus.Data.models.PointsModel)Session["Pointsmodel"]).TotalPoints;
                                 inCartPoints = result.Count() > 0 ? result.Sum(x => x.TotalPoints) : 0;
-                                totCardPts = _dp.GetTotalSoPoints(busId, thisEmp);
+                                totCardPts = _dp.GetTotalSoPoints(busId, thisEmp,0, (List<string>)_dp.UcodeStyles(ucode, busId));
                                 int totDelPts = salesLineDelted.Count > 0 ? salesLineDelted.Sum(x => x.TotalPoints) : 0;
                                 int ptsNanCard = totPoints - totCardPts;
                                 int usedPoints = inCartPoints + totalOtherPoints;
-
-                                int previousPoints = totCardPts - usedPoints;
-                                int availabelPoints = (totPoints - usedPoints) - previousPoints;
-
+                                //commented by sasi(02-01-20)
+                                //int previousPoints = totCardPts - usedPoints;
+                                //int availabelPoints = (totPoints - usedPoints) - previousPoints;
+                                int availabelPoints = (totPoints - usedPoints);
                                 int totPointsTouse = inCartPoints + availabelPoints;
                                 //if (totalOtherPoints == 0)
                                 //{

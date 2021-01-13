@@ -3,6 +3,9 @@
     ViewBag.Title = "EditReturnOrder";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+@Html.DevExpress().Button(btn => { btn.Name = "BackToRtn"; btn.Text = "Back"; btn.UseSubmitBehavior = false; btn.ClientSideEvents.Click = "redirect"; }).GetHtml()
+<br />
+<br />
 <div class="row" style="background-color:white;color:gray">
     <br />
     <div class="col-md-1"></div>

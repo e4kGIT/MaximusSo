@@ -14,7 +14,7 @@
         settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "Employee", Action = "EmployeeGridViewPartialDelete" };
         settings.SettingsEditing.Mode = GridViewEditingMode.PopupEditForm;
         settings.SettingsBehavior.ConfirmDelete = true;
-
+        settings.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
         //settings.CommandColumn.Visible = true;
         //settings.CommandColumn.ShowNewButton = true;
         //// settings.CommandColumn.ShowDeleteButton = true;
@@ -196,7 +196,8 @@
                         var ucodesArr = Ucodes.Split(',');
                         Html.DevExpress().ComboBox(cmb =>
                         {
-                            cmb.Name = "checkComboBox_" + EmployeeId + Ucodes;
+                            cmb.Name = "checkComboBox_" + EmployeeId +"_"+ Ucodes;
+                            cmb.Properties.ClientSideEvents.SelectedIndexChanged = "ChangeUcodePointsEmployeeGrid";
                             cmb.Width = 285;
                             if (Convert.ToBoolean(Session["POINTSREQ"]))
                             {
@@ -255,7 +256,8 @@
 
                         Html.DevExpress().ComboBox(cmb =>
                         {
-                            cmb.Name = "checkComboBox_" + EmployeeId + Ucodes;
+                            cmb.Name = "checkComboBox_" + EmployeeId + "_" + Ucodes;
+                            cmb.Properties.ClientSideEvents.SelectedIndexChanged = "ChangeUcodePointsEmployeeGrid";
                             if (Convert.ToBoolean(Session["IsEmergency"]))
                             {
                                 if (Emp._pointsByUcode.Exists(s => s.UcodeID == Ucodes) == false)
@@ -283,6 +285,21 @@
             {
                 col.FieldName = "TotalPoints";
                 col.Caption = "Total points";
+                col.SetDataItemTemplateContent(x =>
+                {
+                    string empId = DataBinder.Eval(x.DataItem, "EmployeeId").ToString();
+                    string busID = Session["BuisnessId"].ToString();
+                    string Ucodes = (string)(DataBinder.Eval(x.DataItem, "EmpUcodes"));
+                    string totalpoints =  (DataBinder.Eval(x.DataItem, "TotalPoints")).ToString(); 
+                    if (Ucodes.Contains(","))
+                    {
+                        ViewContext.Writer.Write("<span id='TotalPointsSpan_" + empId + "'></span>");
+                    }
+                    else
+                    {
+                        ViewContext.Writer.Write("<span id='TotalPointsSpan_" + empId + "'>"+ totalpoints + "</span>");
+                    }
+                });
                 //col.SetDataItemTemplateContent(x =>
                 //{
                 //    string ucodeId = DataBinder.Eval(x.DataItem, "EmpUcodes").ToString();
@@ -320,6 +337,21 @@
             {
                 col.FieldName = "PointsUsed";
                 col.Caption = "Points used";
+                col.SetDataItemTemplateContent(x =>
+                {
+                    string empId = DataBinder.Eval(x.DataItem, "EmployeeId").ToString();
+                    string busID = Session["BuisnessId"].ToString();
+                    string Ucodes = (string)(DataBinder.Eval(x.DataItem, "EmpUcodes"));
+                    string PointsUsed = (DataBinder.Eval(x.DataItem, "PointsUsed")).ToString();
+                    if (Ucodes.Contains(","))
+                    {
+                        ViewContext.Writer.Write("<span id='PointsUsedSpan_" + empId + "'></span>");
+                    }
+                    else
+                    {
+                        ViewContext.Writer.Write("<span id='PointsUsedSpan_" + empId + "'>"+ PointsUsed + "</span>");
+                    }
+                });
                 //col.SetDataItemTemplateContent(x =>
                 //{
                 //    string ucodeId = DataBinder.Eval(x.DataItem, "EmpUcodes").ToString();
@@ -332,7 +364,7 @@
                 //    }
                 //    else
                 //    {
-                //        var pts = Emp._dp.GetTotalSoPoints(busID, empId, 0).ToString();
+                //        var pts = Emp._dp.GetTotalSoPoints(busId, empId, 0).ToString();
                 //        ViewContext.Writer.Write(pts);
                 //    }
                 //});
@@ -433,7 +465,7 @@
                         string UcodesName = (DataBinder.Eval(x.DataItem, "EmpUcodes")).ToString();
                         string EmployeeName = (DataBinder.Eval(x.DataItem, "EmpFirstName")).ToString() + " " + (DataBinder.Eval(x.DataItem, "EmpLastName")).ToString();
                         string EmployeeId = (DataBinder.Eval(x.DataItem, "EmployeeId")).ToString();
-                        Content = Convert.ToBoolean(Session["OnStop"].ToString()) ? string.Format("<button style='background-color:#009885;' disabled onclick=\"CreateOrder('{0}','{1}','{2}')\" class=\"btn btn-primary\">Create Order</button>", EmployeeId, "CmbUcode_" + EmployeeId + UcodesName, EmployeeName) : string.Format("<button style='background-color:#009885;' onclick=\"CreateOrder('{0}','{1}','{2}')\" class=\"btn btn-primary\">Create Order</button>", EmployeeId, "CmbUcode_" + EmployeeId + UcodesName, EmployeeName);
+                        Content = Convert.ToBoolean(Session["OnStop"].ToString()) ? string.Format("<button style='background-color:#009885;' disabled onclick=\"CreateOrder('{0}','{1}','{2}')\" class=\"btn btn-primary\">Create Order</button>", EmployeeId, "CmbUcode_" + EmployeeId+"_" + UcodesName, EmployeeName) : string.Format("<button style='background-color:#009885;' onclick=\"CreateOrder('{0}','{1}','{2}')\" class=\"btn btn-primary\">Create Order</button>", EmployeeId, "CmbUcode_" + EmployeeId + "_" + UcodesName, EmployeeName);
                     }
                     ViewContext.Writer.Write(Content);
                 });

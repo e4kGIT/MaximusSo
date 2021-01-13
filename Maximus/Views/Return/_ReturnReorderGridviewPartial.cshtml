@@ -218,9 +218,15 @@
                 var OredrQty = (int)DataBinder.Eval(c.DataItem, "OrgOrdQty");
                 int OrgRetOrdQty = (int)DataBinder.Eval(c.DataItem, "OrgRetOrdQty");
                 int remainingQty = 0;
-
-                remainingQty = OredrQty - OrgRetOrdQty;
-
+                if (!(bool)Session["ISRTNEDITING"])
+                {
+                    remainingQty = OredrQty - OrgRetOrdQty == 0 ? OrgRetOrdQty : OredrQty - OrgRetOrdQty;
+                }
+                else
+                {
+                    int OtherReturnQty = (int)DataBinder.Eval(c.DataItem, "OtherReturnQty");
+                    remainingQty = OredrQty - OtherReturnQty;
+                }
                 Html.DevExpress().SpinEdit(lblsettings =>
                 {
                     lblsettings.Name = "OrdQty";

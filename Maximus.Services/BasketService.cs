@@ -60,9 +60,9 @@ namespace Maximus.Services
             AllAssemblies allAssemblies = new AllAssemblies(_unitOfWork);
             AssemblyDetail assemblyDetail = new AssemblyDetail(_unitOfWork);
             AssemblyHeader assemblyHeader = new AssemblyHeader(_unitOfWork);
-            UcodeOperationsTbl ucodeOperationsTbl=new UcodeOperationsTbl(_unitOfWork);
+            UcodeOperationsTbl ucodeOperationsTbl = new UcodeOperationsTbl(_unitOfWork);
             RejectReasonTbl rejectReasonTbl = new RejectReasonTbl(_unitOfWork);
-           
+
             BusAddress busAddress = new BusAddress(_unitOfWork);
             BusContact busContact = new BusContact(_unitOfWork);
             CountryCodes countryCodes = new CountryCodes(_unitOfWork);
@@ -80,7 +80,7 @@ namespace Maximus.Services
             StylesView stylesView = new StylesView(_unitOfWork);
             TblFskStyle tblFskStyle = new TblFskStyle(_unitOfWork);
             EmployeeRollout employeeRollout = new EmployeeRollout(_unitOfWork);
-            User tblUser=new User(_unitOfWork);
+            User tblUser = new User(_unitOfWork);
             Ucode_Description ucode_Description = new Ucode_Description(_unitOfWork);
             UcodeByFreeTextView ucodeByFreeText = new UcodeByFreeTextView(_unitOfWork);
             UcodeEmployees ucodeEmployees = new UcodeEmployees(_unitOfWork);
@@ -130,7 +130,7 @@ namespace Maximus.Services
 
 
         #region  AcceptOrder 
-        public AcceptResultSet AcceptOrder(string cmpId, bool IsManPack, string busId, List<SalesOrderHeaderViewModel> salesHeaderLst, string addDesc, bool isRollOutOrder,bool isRollOutOrderEst, string OverrideEnt, bool CusRefMan, string POINTSREQ, List<BusAddress1> busAddress, string DIFF_MANPACK_INFO, string NOMCODEMAN, string ONLNEREQNOM1, string ONLNEREQNOM2, string ONLNEREQNOM3, string ONLNEREQNOM4, string ONLNEREQNOM5, string RolloutName, string selectedcar, string UserName, string DELADDR_USER_CREATE, double CARRPERCENT, double CARRREQAMT, string FITALLOC, string DIMALLOC, string BUDGETREQ, string Browser, string REMOTE_ADDR, string ONLCUSREFLBL, string cmpLogo, string custLogo, string adminMail, string mailUsername, string mailPassword, string mailPort, string mailServer,string ueMailEMail, string HTTP_X_FORWARDED_FOR, bool isedit, bool boolDeleteConfirm, string pnlCarriageReason, bool booPtsReq, int empResetMnths, string pricePermission, UpdateMailModel updModel, bool booAutoConfirm = false)
+        public AcceptResultSet AcceptOrder(string cmpId, bool IsManPack, string busId, List<SalesOrderHeaderViewModel> salesHeaderLst, string addDesc, bool isRollOutOrder, bool isRollOutOrderEst, string OverrideEnt, bool CusRefMan, string POINTSREQ, List<BusAddress1> busAddress, string DIFF_MANPACK_INFO, string NOMCODEMAN, string ONLNEREQNOM1, string ONLNEREQNOM2, string ONLNEREQNOM3, string ONLNEREQNOM4, string ONLNEREQNOM5, string RolloutName, string selectedcar, string UserName, string DELADDR_USER_CREATE, double CARRPERCENT, double CARRREQAMT, string FITALLOC, string DIMALLOC, string BUDGETREQ, string Browser, string REMOTE_ADDR, string ONLCUSREFLBL, string cmpLogo, string custLogo, string adminMail, string mailUsername, string mailPassword, string mailPort, string mailServer, string ueMailEMail, string HTTP_X_FORWARDED_FOR, bool isedit, bool boolDeleteConfirm, string pnlCarriageReason, bool booPtsReq, int empResetMnths, string pricePermission, UpdateMailModel updModel, bool booAutoConfirm = false)
         {
             int addressId = 0;
             bool booCheck = true;
@@ -360,7 +360,7 @@ namespace Maximus.Services
                             }
                             else
                             {
-                                if (saleshead.NomCode3.ToString().Trim()!="")
+                                if (saleshead.NomCode3.ToString().Trim() != "")
                                 {
                                     saleshead.NomCode3 = "";
                                 }
@@ -553,8 +553,35 @@ namespace Maximus.Services
                     }
                 }
             }
+
             foreach (var salesHead in salesHeaderLst)
             {
+                try
+                {
+                    if (checkForAddressChange(salesHead, UserName))
+                    {
+                        int res = _dp.GetDeliveryAddressId(salesHead.EmployeeID, salesHead.CustID, UserName);
+                        if(res>0)
+                        {
+                            var address = _busAddress.Exists(s => s.AddressID == res) ? _busAddress.GetAll(s => s.AddressID == res).First() : new tblbus_address();
+                            salesHead.AddressId = address.AddressID;
+                            salesHead.DelDesc = address.Description;
+                            salesHead.DelAddress1 = address.Address1;
+                            salesHead.DelAddress2 = address.Address2;
+                            salesHead.DelAddress3 = address.Address3;
+                            salesHead.DelCity = address.City;
+                            salesHead.DelPostCode = address.Postcode;
+                            salesHead.DelTown = address.Town;
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+
+                }
+                /// added by sasi(maternity orders needed autocnf so added this bit(02-01-2021)) 
+                bool ucodeCnf = _ucodeOperationsTbl.Exists(s => s.BusinessID == busId && s.UcodeId == salesHead.UCodeId) ? _ucodeOperationsTbl.GetAll(s => s.BusinessID == busId && s.UcodeId == salesHead.UCodeId).First().IsAutoCnf : false;
+                ///
                 string sSql = "";
                 booEmpPointEntitleCheck = booPtsReq ? true : overrideEntitlement ? overrideEntitlement : _dp.EmpEntilementCheck(RolloutName, OverrideEnt, FITALLOC, DIMALLOC, salesHead, busId, 0, IsManPack, false);
                 if (isedit == false)
@@ -578,7 +605,7 @@ namespace Maximus.Services
                         {
                             salesHead.NomCode3 = RolloutName.ToString();
                         }
-                        else if(salesHead.NomCode3 == "")
+                        else if (salesHead.NomCode3 == "")
                         {
                             salesHead.NomCode3 = RolloutName.ToString();
                         }
@@ -596,7 +623,7 @@ namespace Maximus.Services
                     }
                     salesHead.Carrier = selectedcar.ToString().Trim().Substring(0, selectedcar.ToString().Trim().IndexOf('|'));
                     salesHead.CarrierCharge = carriage;
-                    salesHead.ReasonCode = salesHead.ReasonCode==null? 0 : salesHead.ReasonCode;
+                    salesHead.ReasonCode = salesHead.ReasonCode == null ? 0 : salesHead.ReasonCode;
                     if (isRollOutOrderEst)
                     {
                         if (salesHead.NomCode3 == null | salesHead.NomCode3 == "")
@@ -613,7 +640,7 @@ namespace Maximus.Services
                         {
                             salesHead.NomCode3 = "";
                         }
-                        }
+                    }
                     if (isedit)
                     {
                         if (_dp.UpdateSalesOrder(salesHead, empResetMnths, Browser, HTTP_X_FORWARDED_FOR, REMOTE_ADDR, isRollOutOrder, salesHead.OrderNo, busId, UserName.ToString(), isedit, POINTSREQ))
@@ -652,7 +679,7 @@ namespace Maximus.Services
                             {
                                 if (booStackOrder == false)
                                 {
-                                    if (Convert.ToBoolean(_dp.BusinessParam("AUTOCONFIRM", busId)))
+                                    if (Convert.ToBoolean(_dp.BusinessParam("AUTOCONFIRM", busId)) | ucodeCnf)
                                     {
                                         if (booEmpPointEntitleCheck)
                                         {
@@ -690,7 +717,7 @@ namespace Maximus.Services
                                     }
                                 }
                             }
-                            else if (Convert.ToBoolean(_dp.BusinessParam("AUTOCONFIRM", busId)) || booAutoConfirm)
+                            else if (Convert.ToBoolean(_dp.BusinessParam("AUTOCONFIRM", busId)) || booAutoConfirm || ucodeCnf)
                             {
                                 if (booStackOrder == false)
                                 {
@@ -715,7 +742,7 @@ namespace Maximus.Services
                             }
                             else
                             {
-                                ResultSet.Add(new SaveOrderResultSet { EmployeeId = salesHead.EmployeeID, OrderNo = intSalesOrderNo, OrderConfirmation = "Order has not been confirmed",isedit=true });
+                                ResultSet.Add(new SaveOrderResultSet { EmployeeId = salesHead.EmployeeID, OrderNo = intSalesOrderNo, OrderConfirmation = "Order has not been confirmed", isedit = true });
                             }
                             if (booStackOrder)
                             {
@@ -741,7 +768,7 @@ namespace Maximus.Services
                                 }
                             }
                             string sql = "";
-                            if (Convert.ToBoolean(_dp.BusinessParam("AUTOCONFIRM", busId)) || booAutoConfirm)
+                            if (Convert.ToBoolean(_dp.BusinessParam("AUTOCONFIRM", busId)) || booAutoConfirm || ucodeCnf)
                             {
                                 if (booStackOrder == false)
                                 {
@@ -766,22 +793,22 @@ namespace Maximus.Services
                             {
                                 if (_pointsByUcode.Exists(s => s.UcodeID == salesHead.UCodeId))
                                 {
-                                    var message = GetEmailMessage(salesHead, RolloutName, intManPackNext, pricePermission, ONLCUSREFLBL, cmpLogo, custLogo, intSalesOrderNo, true,updModel);
-                                   
+                                    var message = GetEmailMessage(salesHead, RolloutName, intManPackNext, pricePermission, ONLCUSREFLBL, cmpLogo, custLogo, intSalesOrderNo, true, updModel);
+
                                     ConfirmationMailProcedure("Order confirmation", ueMailEMail, adminMail, mailUsername, mailPassword, mailPort, mailServer, message.OrderConfirmationemail, salesHead.CustID, salesHead.OnlineUserID, salesHead.EmployeeID, "sasidharan@e4k.co", "", "");
 
                                     ResultSet.First().OrderConfirmationPop = message.OrderConfirmationPOP;
                                 }
                                 else
                                 {
-                                    var message1 = GetEmailMessage(salesHead, RolloutName, intManPackNext, pricePermission, ONLCUSREFLBL, cmpLogo, custLogo, intSalesOrderNo, true,updModel);
+                                    var message1 = GetEmailMessage(salesHead, RolloutName, intManPackNext, pricePermission, ONLCUSREFLBL, cmpLogo, custLogo, intSalesOrderNo, true, updModel);
                                     var message = GetEmergencyMail(salesHead, RolloutName, intManPackNext, pricePermission, ONLCUSREFLBL, cmpLogo, custLogo, intSalesOrderNo);
                                     ConfirmationMailProcedure("Order confirmation", ueMailEMail, adminMail, mailUsername, mailPassword, mailPort, mailServer, message1.OrderConfirmationemail, salesHead.CustID, salesHead.OnlineUserID, salesHead.EmployeeID, "sasidharan@e4k.co", "", "");
                                     //EmergencyMailingProcedure("Emergency Order! Order (" + intSalesOrderNo + ") has not been confirmed...", ueMailEMail, adminMail, mailUsername, mailPassword, mailPort, mailServer, message, salesHead.CustID, salesHead.EmployeeID, "", "");
                                     ResultSet.First().OrderConfirmationPop = message1.OrderConfirmationPOP;
                                 }
                             }
-                            catch(Exception e)
+                            catch (Exception e)
                             {
 
                             }
@@ -812,7 +839,7 @@ namespace Maximus.Services
                             {
                                 if (booStackOrder == false)
                                 {
-                                    if (Convert.ToBoolean(_dp.BusinessParam("AUTOCONFIRM", busId)) || booAutoConfirm)
+                                    if (Convert.ToBoolean(_dp.BusinessParam("AUTOCONFIRM", busId)) || booAutoConfirm || ucodeCnf)
                                     {
 
                                     }
@@ -826,7 +853,7 @@ namespace Maximus.Services
                             {
                                 if (booStackOrder == false)
                                 {
-                                    if (Convert.ToBoolean(_dp.BusinessParam("AUTOCONFIRM", busId)) || booAutoConfirm)
+                                    if (Convert.ToBoolean(_dp.BusinessParam("AUTOCONFIRM", busId)) || booAutoConfirm || ucodeCnf)
                                     {
                                         if (booEmpPointEntitleCheck)
                                         {
@@ -836,6 +863,7 @@ namespace Maximus.Services
                                             {
 
                                             }
+                                            ResultSet.Add(new SaveOrderResultSet { EmployeeId = salesHead.EmployeeID, OrderNo = intSalesOrderNo, OrderConfirmation = "Order has been confirmed" });
                                         }
                                         else
                                         {
@@ -863,7 +891,7 @@ namespace Maximus.Services
                                 }
                                 else
                                 {
-                                    if (Convert.ToBoolean(_dp.BusinessParam("AUTOCONFIRM", busId)))
+                                    if (Convert.ToBoolean(_dp.BusinessParam("AUTOCONFIRM", busId)) || ucodeCnf)
                                     {
                                         ResultSet.Add(new SaveOrderResultSet { EmployeeId = salesHead.EmployeeID, OrderNo = intSalesOrderNo, OrderConfirmation = "Order has not been confirmed" });
                                         if (Convert.ToBoolean(DELADDR_USER_CREATE))
@@ -878,7 +906,7 @@ namespace Maximus.Services
                                     }
                                 }
                             }
-                            else if (Convert.ToBoolean(_dp.BusinessParam("AUTOCONFIRM", busId)) || booAutoConfirm)
+                            else if (Convert.ToBoolean(_dp.BusinessParam("AUTOCONFIRM", busId)) || booAutoConfirm || ucodeCnf)
                             {
                                 if (booStackOrder == false)
                                 {
@@ -929,7 +957,7 @@ namespace Maximus.Services
                                 }
                             }
                             string sql = "";
-                            if (Convert.ToBoolean(_dp.BusinessParam("AUTOCONFIRM", busId)) || booAutoConfirm)
+                            if (Convert.ToBoolean(_dp.BusinessParam("AUTOCONFIRM", busId)) || booAutoConfirm || ucodeCnf)
                             {
                                 if (booStackOrder == false)
                                 {
@@ -954,9 +982,9 @@ namespace Maximus.Services
                             {
                                 if (_pointsByUcode.Exists(s => s.UcodeID == salesHead.UCodeId))
                                 {
-                                    var message = GetEmailMessage(salesHead, RolloutName, intManPackNext, pricePermission, ONLCUSREFLBL, cmpLogo, custLogo, intSalesOrderNo,false);
-                                    ConfirmationMailProcedure("Order confirmation", ueMailEMail, adminMail, mailUsername, mailPassword, mailPort, mailServer, message.OrderConfirmationemail, salesHead.CustID,salesHead.UserID, salesHead.EmployeeID, "sasidharan@e4k.co", "","");
-                                    
+                                    var message = GetEmailMessage(salesHead, RolloutName, intManPackNext, pricePermission, ONLCUSREFLBL, cmpLogo, custLogo, intSalesOrderNo, false);
+                                    ConfirmationMailProcedure("Order confirmation", ueMailEMail, adminMail, mailUsername, mailPassword, mailPort, mailServer, message.OrderConfirmationemail, salesHead.CustID, salesHead.UserID, salesHead.EmployeeID, "sasidharan@e4k.co", "", "");
+
                                     ResultSet.First().OrderConfirmationPop = message.OrderConfirmationPOP;
                                 }
                                 else
@@ -964,7 +992,7 @@ namespace Maximus.Services
                                     var message1 = GetEmailMessage(salesHead, RolloutName, intManPackNext, pricePermission, ONLCUSREFLBL, cmpLogo, custLogo, intSalesOrderNo, false);
                                     var message = GetEmergencyMail(salesHead, RolloutName, intManPackNext, pricePermission, ONLCUSREFLBL, cmpLogo, custLogo, intSalesOrderNo);
                                     ConfirmationMailProcedure("Order confirmation", ueMailEMail, adminMail, mailUsername, mailPassword, mailPort, mailServer, message1.OrderConfirmationemail, salesHead.CustID, salesHead.UserID, salesHead.EmployeeID, "sasidharan@e4k.co", "", "");
-                                    EmergencyMailingProcedure("Emergency Order! Order (" + intSalesOrderNo + ") has not been confirmed...",   ueMailEMail, adminMail, mailUsername, mailPassword, mailPort, mailServer, message,salesHead.CustID,salesHead.EmployeeID,"","");
+                                    EmergencyMailingProcedure("Emergency Order! Order (" + intSalesOrderNo + ") has not been confirmed...", ueMailEMail, adminMail, mailUsername, mailPassword, mailPort, mailServer, message, salesHead.CustID, salesHead.EmployeeID, "", "");
                                     ResultSet.First().OrderConfirmationPop = message1.OrderConfirmationPOP;
                                 }
                             }
@@ -984,31 +1012,39 @@ namespace Maximus.Services
             }
             return AcceptResultSet;
         }
+
+        private bool checkForAddressChange(SalesOrderHeaderViewModel salesHead, string usr = "")
+        {
+            var result = false;
+            int res = _dp.GetDeliveryAddressId(salesHead.EmployeeID, salesHead.CustID, usr);
+            result = res > 0 ? res == salesHead.AddressId ? false : true : false;
+            return result;
+        }
         #endregion
         #region EmergencyMailingProcedure
-        public void EmergencyMailingProcedure(string subject,string ueMailEMail, string adminMail, string mailUsername, string mailPassword, string mailPort, string mailServer, string message,string busId,string empId,string bcc,string cc)
+        public void EmergencyMailingProcedure(string subject, string ueMailEMail, string adminMail, string mailUsername, string mailPassword, string mailPort, string mailServer, string message, string busId, string empId, string bcc, string cc)
         {
             string headOfficeEmail = "";
-            if(Convert.ToBoolean(_dp.BusinessParam("REQALLOCEMAIL", busId)))
+            if (Convert.ToBoolean(_dp.BusinessParam("REQALLOCEMAIL", busId)))
             {
-                if(Convert.ToBoolean(_dp.BusinessParam("SEND_ENTITLE_EMAIL", busId)))
+                if (Convert.ToBoolean(_dp.BusinessParam("SEND_ENTITLE_EMAIL", busId)))
                 {
                     //sending emergency order to the  user logged in and usedid employee
                     string sSql = "";
-                      sSql = sSql+ "SELECT UserName, Email_ID, ForeName, SurName FROM tblusers t1 JOIN tblonline_userid_employee t2 ON t1.BusinessID=t2.BusinessID AND t1.UserName=t2.OnlineUserID  WHERE t1.Active='Y' AND t2.EmployeeID='" + empId + "' AND t2.BusinessID='" + busId + "'";
+                    sSql = sSql + "SELECT UserName, Email_ID, ForeName, SurName FROM tblusers t1 JOIN tblonline_userid_employee t2 ON t1.BusinessID=t2.BusinessID AND t1.UserName=t2.OnlineUserID  WHERE t1.Active='Y' AND t2.EmployeeID='" + empId + "' AND t2.BusinessID='" + busId + "'";
                     DataTable dt = _dp.GetDataTable(sSql);
-                    if(dt.Rows.Count>0)
+                    if (dt.Rows.Count > 0)
                     {
-                        foreach(DataRow dr in dt.Rows)
+                        foreach (DataRow dr in dt.Rows)
                         {
-                            _dp.sendSmtpMail(subject, adminMail, mailUsername, mailPassword, mailPort, mailServer, message, dr["Email_ID"].ToString(),bcc,cc);
+                            _dp.sendSmtpMail(subject, adminMail, mailUsername, mailPassword, mailPort, mailServer, message, dr["Email_ID"].ToString(), bcc, cc);
                         }
                     }
 
                     headOfficeEmail = _dp.BusinessParam("HeadOfficeEmail", busId);
-                    if(headOfficeEmail!="")
+                    if (headOfficeEmail != "")
                     {
-                        _dp.sendSmtpMail(subject, adminMail, mailUsername, mailPassword, mailPort, mailServer, message, headOfficeEmail, bcc,cc);
+                        _dp.sendSmtpMail(subject, adminMail, mailUsername, mailPassword, mailPort, mailServer, message, headOfficeEmail, bcc, cc);
                     }
                 }
             }
@@ -1016,7 +1052,7 @@ namespace Maximus.Services
         #endregion
 
         #region ConfirmationMailProcedure
-        public void ConfirmationMailProcedure(string subject,string ueMailEMail, string adminMail, string mailUsername, string mailPassword, string mailPort, string mailServer, string message,string busId, string userID, string empId,string tomail,string bcc,string cc)
+        public void ConfirmationMailProcedure(string subject, string ueMailEMail, string adminMail, string mailUsername, string mailPassword, string mailPort, string mailServer, string message, string busId, string userID, string empId, string tomail, string bcc, string cc)
         {
             string ueMail = _dp.BusinessParam("UsersManageEmail", busId);
             string userMail = "";
@@ -1029,56 +1065,56 @@ namespace Maximus.Services
             {
                 if (user.Email_ID != "")
                 {
-                   tomail = user.Email_ID;
-                   //tomail = "sasidharan@e4k.co";
+                    tomail = user.Email_ID;
+                    //tomail = "sasidharan@e4k.co";
                 }
-                if(enableAdminMail)
+                if (enableAdminMail)
                 {
                     bcc = ueMail;
                 }
-                if(OrgOnlineUserID!="")
+                if (OrgOnlineUserID != "")
                 {
-                     var orgUser = _tblUser.GetAll(s => s.UserName == OrgOnlineUserID && s.BusinessID == busId).Distinct().First();
-                    if(orgUser!=null)
+                    var orgUser = _tblUser.GetAll(s => s.UserName == OrgOnlineUserID && s.BusinessID == busId).Distinct().First();
+                    if (orgUser != null)
                     {
-                        if (orgUser.Email_ID!="")
+                        if (orgUser.Email_ID != "")
                         {
                             cc = orgUser.Email_ID;
                         }
                     }
                 }
-                _dp.sendSmtpMail(subject, adminMail, mailUsername, mailPassword, mailPort, mailServer, message, tomail, bcc,cc);
+                _dp.sendSmtpMail(subject, adminMail, mailUsername, mailPassword, mailPort, mailServer, message, tomail, bcc, cc);
             }
-        //    Dim UEEmailID As String = BusinessParam("UsersManageEmail", Session("CustID"))
-        //Dim UserMailID As String = ""
-        //Dim EnableAdminMail As Boolean = CBoolstr(BusinessParam("EnableAdminMail", Session("CustID")))
-        //UEEmailID = IIf(UEEmailID = "", ConfigurationSettings.AppSettings.Item("EmailID"), UEEmailID)
-        //Dim AdminEmail As String = ConfigurationSettings.AppSettings.Item("AdminEmail")
-        //sql = "SELECT * FROM tblusers WHERE UserName='" & Session("UserID") & "' AND BusinessID='" & Session("CustID") & "'"
-        //    If Not rsEmail.EOF Then
-        //    LoginUser = " - " & rsEmail("ForeName").Value & " " & rsEmail("SurName").Value
-        //    If IsDBNull(rsEmail("Email_ID").Value) = False Then
-        //        UserMailID = rsEmail("Email_ID").Value
-        //        ObjMail1.To = rsEmail("Email_ID").Value
-        //        If EnableAdminMail Then
-        //            ObjMail1.Bcc = IIf(AdminEmail = UEEmailID, Nothing, AdminEmail)
-        //        End If
-        //        ObjMail1.From = ConfigurationSettings.AppSettings.Item("EmailID")
-        //        If Trim(Session("OrgOnlineUserID")) <> "" Then
-        //            orgUserEmail = GetDBScalarString("SELECT DISTINCT Email_ID FROM tblusers WHERE UserName='" & Trim(Session("OrgOnlineUserID")) & "' AND BusinessID='" & Session("CustID") & "'")
-        //            If orgUserEmail <> "" And UCase(orgUserEmail) <> UCase(ObjMail1.To) Then
-        //                ObjMail1.Cc = orgUserEmail
-        //            End If
-        //        End If
-        //        ObjMail1.Subject = "Online Order Confirmation..."
-        //        ObjMail1.BodyFormat = MailFormat.Html
-        //        ObjMail1.Body = "<HTML><HEAD></HEAD><BODY>"
-        //        'ObjMail1.Body &= "Dear <B>Mr/Ms. " & rsEmail("ForeName").Value & " " & rsEmail("SurName").Value & "</B><BR>"
-        //        ObjMail1.Body &= htmlstr
-        //        ObjMail1.Body &= "</BODY></HTML>"
-        //        SmtpMail.SmtpServer = ConfigurationSettings.AppSettings.Item("smtpserver")
-        //        Try
-        //            SMTPClientMethodToSendMail(ObjMail1)
+            //    Dim UEEmailID As String = BusinessParam("UsersManageEmail", Session("CustID"))
+            //Dim UserMailID As String = ""
+            //Dim EnableAdminMail As Boolean = CBoolstr(BusinessParam("EnableAdminMail", Session("CustID")))
+            //UEEmailID = IIf(UEEmailID = "", ConfigurationSettings.AppSettings.Item("EmailID"), UEEmailID)
+            //Dim AdminEmail As String = ConfigurationSettings.AppSettings.Item("AdminEmail")
+            //sql = "SELECT * FROM tblusers WHERE UserName='" & Session("UserID") & "' AND BusinessID='" & Session("CustID") & "'"
+            //    If Not rsEmail.EOF Then
+            //    LoginUser = " - " & rsEmail("ForeName").Value & " " & rsEmail("SurName").Value
+            //    If IsDBNull(rsEmail("Email_ID").Value) = False Then
+            //        UserMailID = rsEmail("Email_ID").Value
+            //        ObjMail1.To = rsEmail("Email_ID").Value
+            //        If EnableAdminMail Then
+            //            ObjMail1.Bcc = IIf(AdminEmail = UEEmailID, Nothing, AdminEmail)
+            //        End If
+            //        ObjMail1.From = ConfigurationSettings.AppSettings.Item("EmailID")
+            //        If Trim(Session("OrgOnlineUserID")) <> "" Then
+            //            orgUserEmail = GetDBScalarString("SELECT DISTINCT Email_ID FROM tblusers WHERE UserName='" & Trim(Session("OrgOnlineUserID")) & "' AND BusinessID='" & Session("CustID") & "'")
+            //            If orgUserEmail <> "" And UCase(orgUserEmail) <> UCase(ObjMail1.To) Then
+            //                ObjMail1.Cc = orgUserEmail
+            //            End If
+            //        End If
+            //        ObjMail1.Subject = "Online Order Confirmation..."
+            //        ObjMail1.BodyFormat = MailFormat.Html
+            //        ObjMail1.Body = "<HTML><HEAD></HEAD><BODY>"
+            //        'ObjMail1.Body &= "Dear <B>Mr/Ms. " & rsEmail("ForeName").Value & " " & rsEmail("SurName").Value & "</B><BR>"
+            //        ObjMail1.Body &= htmlstr
+            //        ObjMail1.Body &= "</BODY></HTML>"
+            //        SmtpMail.SmtpServer = ConfigurationSettings.AppSettings.Item("smtpserver")
+            //        Try
+            //            SMTPClientMethodToSendMail(ObjMail1)
 
             //            'SmtpMail.Send(ObjMail1)
             //            ' WriteScript("<script language='javascript'>alert('" & Convert.ToString(GetLocalResourceObject("Alert2.Text")) & "');</script>")
@@ -1095,16 +1131,16 @@ namespace Maximus.Services
         #endregion
 
         #region GetUpdateMailMessages
-        public string GetOlderOrderInfoMail(SalesOrderHeaderViewModel salesHead,string pricePermission)
+        public string GetOlderOrderInfoMail(SalesOrderHeaderViewModel salesHead, string pricePermission)
         {
-             
+
             string message = _dp.FillExistingOrderLineMessage(salesHead, pricePermission);
             return message;
         }
         #endregion
 
         #region SendEmail
-        public OrderConfirmation GetEmailMessage(SalesOrderHeaderViewModel salesHead, string rolloutname, long manpackNo, string pricePermission, string ONLCUSREFLBL, string cmpLogo, string custLogo, long orderNo,bool isedit=false, UpdateMailModel updModel=null)
+        public OrderConfirmation GetEmailMessage(SalesOrderHeaderViewModel salesHead, string rolloutname, long manpackNo, string pricePermission, string ONLCUSREFLBL, string cmpLogo, string custLogo, long orderNo, bool isedit = false, UpdateMailModel updModel = null)
         {
             DataTable saleOrder = new DataTable();
             OrderConfirmation message = _dp.GetNecessaryMailTemplates(salesHead, rolloutname, custLogo, cmpLogo, manpackNo, pricePermission, ONLCUSREFLBL, orderNo, isedit, updModel);
@@ -1291,7 +1327,7 @@ namespace Maximus.Services
             return salesVumodel;
         }
         #region DeleteOrder
-        public bool DeleteOrder(int orderNO, string empId, string onlineUserId, bool pointsReq, string busId, string adminMail, string mailUsername, string mailPassword, string mailPort, string mailServer,bool isEmergency,string reason="")
+        public bool DeleteOrder(int orderNO, string empId, string onlineUserId, bool pointsReq, string busId, string adminMail, string mailUsername, string mailPassword, string mailPort, string mailServer, bool isEmergency, string reason = "")
         {
             bool result = false;
             var dataCar = _dp.GetCarrierStyleCmbValue(busId);
@@ -1321,17 +1357,17 @@ namespace Maximus.Services
                     }
                     _tblSalesLines.Delete(s => s.OrderNo == salesHead.OrderNo);
                     _tblSalesHeader.Delete(s => s.OrderNo == salesHead.OrderNo);
-                 
-                   
-                        var rejectReason = new tblonline_rejectorder_reasons();
-                        rejectReason.BusinessId = busId;
-                        rejectReason.OrderNo = orderNO;
-                        rejectReason.EmployeeId = empId;
-                        rejectReason.RejectedBy = onlineUserId;
-                        rejectReason.RejectedDate = DateTime.Now;
-                        rejectReason.RejectedReason = reason;
-                        _rejectReasonTbl.Insert(rejectReason);
-                        _dp.sendDeleteMail(orderNO,reason, busId, onlineUserId, salesHead.PinNo, adminMail, mailUsername, mailPassword, mailPort, mailServer);
+
+
+                    var rejectReason = new tblonline_rejectorder_reasons();
+                    rejectReason.BusinessId = busId;
+                    rejectReason.OrderNo = orderNO;
+                    rejectReason.EmployeeId = empId;
+                    rejectReason.RejectedBy = onlineUserId;
+                    rejectReason.RejectedDate = DateTime.Now;
+                    rejectReason.RejectedReason = reason;
+                    _rejectReasonTbl.Insert(rejectReason);
+                    _dp.sendDeleteMail(orderNO, reason, busId, onlineUserId, salesHead.PinNo, adminMail, mailUsername, mailPassword, mailPort, mailServer);
                     result = true;
                 }
             }

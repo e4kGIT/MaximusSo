@@ -9,7 +9,7 @@
         settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "Employee", Action = "UserGridviewPartialDelete" };
         settings.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
         settings.SettingsBehavior.ConfirmDelete = true;
-
+        settings.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
         settings.CommandColumn.Visible = false;
         settings.CommandColumn.ShowNewButton = true;
         settings.CommandColumn.ShowDeleteButton = true;
