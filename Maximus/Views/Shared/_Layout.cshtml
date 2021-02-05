@@ -46,9 +46,11 @@
         body {
             font: 16px Arial;
         }
-        .col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12{
-            position:inherit !important;
+
+        .col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 {
+            position: inherit !important;
         }
+
         .hideElement {
             visibility: hidden;
         }
@@ -67,6 +69,12 @@
             top: 0;
         }
 
+        .frestkpad {
+            padding-top: 15px;
+            padding-left: 0px;
+            padding-right: 0px;
+        }
+
         #txtNewPwd_EC {
             white-space: normal !important;
         }
@@ -78,9 +86,12 @@
         #txtCnfNewPwd1_EC {
             white-space: normal !important;
         }
-        .gridBorder{
-            overflow:scroll;border:solid #009885 .5px;
+
+        .gridBorder {
+            overflow: scroll;
+            border: solid #009885 .5px;
         }
+
         #txtCnfNewPwd_EC {
             white-space: normal !important;
         }
@@ -309,6 +320,7 @@
             -webkit-appearance: none;
             background-color: white;
             color: white;
+            display:flex;
         }
 
         .padder {
@@ -696,6 +708,15 @@
                             }
                         });
 
+                    }
+                    else if (response.indexOf("{%FREESTOCKERROR%}") > -1) {
+                        response = response.replace("{%FREESTOCKERROR%}", "The Freestock has changed whilst you have been placing the order \n\n");
+                        response = response + "\n\nPlease click Ok to proceed to cart or Cancel to continue shopping";
+                        if(confirm(response))
+                        {
+                            var url = "/Basket/ShowBasket";
+                            window.location = url;
+                        }
                     }
                     else if (response.indexOf("///") > -1) {
                         var capCatagory = response.replace("///", "");
@@ -1456,14 +1477,12 @@
         function ChangeStyleImage(img, style) {
 
             var styls = document.getElementsByClassName("ImageTypesDiv_" + style);
-            for (var k = 0; k < styls.length; k++)
-            {
+            for (var k = 0; k < styls.length; k++) {
                 if (img == styls[k].id) {
-                     
+
                     document.getElementById(img).style.border = "2px solid black";
                 }
-                else
-                {
+                else {
                     document.getElementById(styls[k].id).style.border = "0px";
                 }
             }
@@ -1985,7 +2004,7 @@
             var thisChk = ASPxClientControl.GetControlCollection().GetByName(s.name);
             var selectedItems = thisChk.GetSelectedItems();
             var split = s.name.split('_');
-            var thisCmb = ASPxClientControl.GetControlCollection().GetByName("checkComboBox_" + split[1]+"_"+split[2]);
+            var thisCmb = ASPxClientControl.GetControlCollection().GetByName("checkComboBox_" + split[1] + "_" + split[2]);
             thisCmb.SetText(getSelectedItemsText(selectedItems));
         }
         function HideCmb(s, e) {
@@ -2066,7 +2085,7 @@
     sett.CloseAction = CloseAction.OuterMouseClick;
     sett.CloseOnEscape = false;
     sett.PopupAnimationType = AnimationType.Auto;
-    sett.Modal = true; 
+    sett.Modal = true;
     sett.HeaderText = "Please enter a reason to delete";
     sett.SetContent(() =>
     {
@@ -2112,7 +2131,7 @@
     sett.PopupAnimationType = AnimationType.Auto;
     sett.Modal = true;
     sett.HeaderText = "";
-   // sett.ClientSideEvents.Closing = "redirect";
+    // sett.ClientSideEvents.Closing = "redirect";
     sett.ScrollBars = System.Web.UI.WebControls.ScrollBars.Vertical;
     sett.SetContent(() =>
     {
@@ -2242,8 +2261,8 @@
     sett.CloseAction = CloseAction.CloseButton;
     sett.CloseOnEscape = true;
     sett.PopupAnimationType = AnimationType.Auto;
-    sett.Modal = true; 
-   sett.HeaderText = "";
+    sett.Modal = true;
+    sett.HeaderText = "";
     sett.ShowHeader = true;
     sett.SetContent(() =>
     {
@@ -2454,7 +2473,7 @@
                                         @*   @Html.ActionLink("Settings", "Index", "Settings", new { area = "" }, new { @class = "navbar-light" })*@
                                         <a class="navbar-light pull-right glyphicon glyphicon-wrench" style="padding:0px;" title="Settings" href="/Settings/Index/"></a>
                                     </li>
-                                   
+
                                 }
                                 <li style="color:white" class="navbar-light">
                                     <a class="navbar-light"><b>Role: </b>@Session["Access"].ToString().Trim()</a>
@@ -2475,6 +2494,9 @@
                                 </li>
                                 <li id="CartwidCount">
                                     <button class="btn" style="background-color:#009885;color:white" onclick="GetCart()"><b>View Basket &nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-shopping-cart" style="color:white;font-size:25px"></span><sup class="badge" id="lblCartCount">@Convert.ToInt32(Session["qty"])</sup></b></button>
+                                </li>
+                                <li>
+                                    <a style="text-decoration:none;" class="glyphicon glyphicon-log-out" title="Logout" href="/User/LogOff/"></a>
                                 </li>
                             </ul>
                             <br />

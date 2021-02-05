@@ -17,9 +17,9 @@ namespace Maximus.Data.models
         public int Id { get; set; }
         public int OrderNo { get; set; }
         public string BusinessId { get; set; }
+        public string EmployeeId { get; set; }
         public string RejectedBy { get; set; }
         public System.DateTime RejectedDate { get; set; }
         public string RejectedReason { get; set; }
-        public string EmployeeId { get; set; }
     }
 }

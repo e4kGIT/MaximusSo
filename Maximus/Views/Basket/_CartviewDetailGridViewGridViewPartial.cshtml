@@ -465,7 +465,7 @@
         }
         settings.Columns.Add(x =>
         {
-            x.FieldName = "OrdQty"; x.Caption = "Order Quanty"; x.Visible = true;
+            x.FieldName = "OrdQty"; x.Caption = "Order Quantity"; x.Visible = true;
             x.EditFormSettings.Visible = DefaultBoolean.True;
             x.SetEditItemTemplateContent(c =>
             {
@@ -546,6 +546,24 @@
                 //        //lblsettings.ClientVisible = visible;
                 //    }).Bind(tot).Render();
                 //});
+            });
+        }
+        if( Convert.ToBoolean(Session["REQSTKLEVEL"]))
+        {
+            settings.Columns.Add(x =>
+            {
+                x.FieldName = "TotalFreeStock"; x.Caption = "Total Freestock"; x.Visible = true;
+                x.EditFormSettings.Visible = DefaultBoolean.True;
+                x.SetEditItemTemplateContent(c =>
+                {
+                    GridViewEditItemTemplateContainer templateContainer = c as GridViewEditItemTemplateContainer;
+                 
+                    Html.DevExpress().Label(lblsettings =>
+                    {
+                        lblsettings.Name = "TotalFreeStock";
+                    }).Bind(templateContainer.Text).Render();
+
+                });
             });
         }
         if (Convert.ToBoolean(Session["POINTSREQ"]))

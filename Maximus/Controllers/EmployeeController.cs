@@ -252,6 +252,7 @@ namespace Maximus.Controllers
         #region Index and EmpGrid
         public ActionResult Index(string BusinessID)
         {
+
             ViewBag.HideSearch = true;
             Session["SelectedTemplates"] = new List<string>();
             if (Session["StyleMinPoints"] == null)
@@ -402,6 +403,7 @@ namespace Maximus.Controllers
             return result;
         }
         #endregion
+
         #region GetEmergencyMessage
         public string EmergencyMessagePop()
         {
@@ -639,11 +641,13 @@ namespace Maximus.Controllers
             }
             Session["EmpName"] = EmpName;
             Session["SelectedEmp"] = EmployeeId;
-            Session["selectedUcodes"] = Ucodes; var busine = Session["BuisnessId"].ToString();
+            Session["selectedUcodes"] = Ucodes;
+            var busine = Session["BuisnessId"].ToString();
             //var UCODESTYLES = _stylePoints.Exists(s => s.UcodeID.ToLower().Trim() == Ucodes.ToLower().Trim() && s.BusinessID.ToLower().Trim() == busine.ToLower().Trim()) ? _stylePoints.GetAll(s => s.UcodeID.ToLower().Trim() == Ucodes.ToLower().Trim() && s.BusinessID.ToLower().Trim() == busine.ToLower().Trim()).Select(s => s.StyleID).ToList() : new List<string>();
             ///added by sasi(30-12-20) barclays wanted points for maternity too 
-           // _dp.UcodeStyles(ucode, busId) = _stylePoints.Exists(s => s.UcodeID.ToLower().Trim() == Ucodes.ToLower().Trim() && s.BusinessID.ToLower().Trim() == busine.ToLower().Trim()) ? _stylePoints.GetAll(s => s.UcodeID.ToLower().Trim() == Ucodes.ToLower().Trim() && s.BusinessID.ToLower().Trim() == busine.ToLower().Trim()).Select(s => s.StyleID).ToList() : new List<string>();
+            // _dp.UcodeStyles(ucode, busId) = _stylePoints.Exists(s => s.UcodeID.ToLower().Trim() == Ucodes.ToLower().Trim() && s.BusinessID.ToLower().Trim() == busine.ToLower().Trim()) ? _stylePoints.GetAll(s => s.UcodeID.ToLower().Trim() == Ucodes.ToLower().Trim() && s.BusinessID.ToLower().Trim() == busine.ToLower().Trim()).Select(s => s.StyleID).ToList() : new List<string>();
             ///
+            Session["REQSTKLEVEL"] = _dp.GetRestockValue(Ucodes,busine);
             if ((bool)Session["IsBulkOrder1"] == false && (bool)Session["IsManPack"] == true)
             {
                 Session["EmpName"] = EmpName;
@@ -949,6 +953,7 @@ namespace Maximus.Controllers
             return cntRef;
         }
         #endregion
+
         #region TemplateRedirection
         public string GotoCardTemplate(string EmployeeId, string EmpName, string Template)
         {
@@ -1301,6 +1306,7 @@ namespace Maximus.Controllers
             return Json(result, JsonRequestBehavior.AllowGet);
         }
         #endregion
+
         #region createEmployee
         public ActionResult CreateNewEmployee()
         {
@@ -1419,7 +1425,7 @@ namespace Maximus.Controllers
         }
         #endregion
 
-        #region 
+        #region IsValid
         public bool IsValid(string emailaddress)
         {
             try
@@ -1458,10 +1464,13 @@ namespace Maximus.Controllers
         #region ChangeOrderType
         public ActionResult ChangeOrderType(string orderType = "")
         {
-            //bool success = false;
+            Session["qty"] = 0;
+            Session["REQSTKLEVEL"] = false;
             string busId = Session["BuisnessId"].ToString();
             if (orderType.ToLower().Contains("bulk"))
             {
+
+                Session["isrtntype"] = "";
                 Session["requireemergencyreason"] = false;
                 Session["IsManPack"] = false;
                 Session["returnorder"] = false;
@@ -1469,6 +1478,7 @@ namespace Maximus.Controllers
                 if (Convert.ToBoolean(Session["ISEDITING"]) || Convert.ToBoolean(Session["IsBulkOrder1"]) == false)
                 {
                     Session["SalesOrderHeader"] = null;
+                    Session["ReturnOrderHeader"] = null;
                 }
                 Session["IsBulkOrder1"] = true;
                 Session["POINTSREQ"] = false;
@@ -1477,13 +1487,16 @@ namespace Maximus.Controllers
             }
             else if (orderType.ToLower().Contains("manpack"))
             {
+                Session["isrtntype"] = "";
                 Session["SalesOrderHeader"] = new List<SalesOrderHeaderViewModel>();
+                Session["ReturnOrderHeader"] = new List<SalesOrderHeaderViewModel>();
                 Session["StyleMinPoints"] = new List<StyleAndMinPoints>();
                 Session["OrderType"] = "SO";
                 var sss = Convert.ToBoolean(Session["IsManPack"]);
                 if (Convert.ToBoolean(Session["ISEDITING"]) || Convert.ToBoolean(Session["IsManPack"]) == false || Convert.ToBoolean(Session["IsEmergency"]) == true)
                 {
                     Session["SalesOrderHeader"] = null;
+                    Session["ReturnOrderHeader"] = null;
                 }
                 Session["requireemergencyreason"] = false;
                 Session["OVERRIDE_ENT_WITH_REASON"] = ((List<PermissionList>)Session["permissionLst"]).Any(x => x.ControlId.Trim() == "OVERRIDE_ENT_WITH_REASON") ? ((List<PermissionList>)Session["permissionLst"]).Where(x => x.ControlId.Trim() == "OVERRIDE_ENT_WITH_REASON").First().Permission.ToLower() : "hide";
@@ -1500,10 +1513,10 @@ namespace Maximus.Controllers
             {
                 Session["OrderType"] = "SO";
                 Session["EmergencyMsg"] = false;
-                if (Convert.ToBoolean(Session["ISEDITING"]) || Convert.ToBoolean(Session["IsEmergency"]) == false)
-                {
-                    Session["SalesOrderHeader"] = new List<SalesOrderHeaderViewModel>();
-                }
+                Session["isrtntype"] = "";
+                Session["SalesOrderHeader"] = new List<SalesOrderHeaderViewModel>();
+                Session["ReturnOrderHeader"] = new List<SalesOrderHeaderViewModel>();
+
                 if (Session["emergencyUcode"] != null)
                 {
 
@@ -1572,6 +1585,45 @@ namespace Maximus.Controllers
                 Session["requireemergencyreason"] = false;
                 Session["EmployeeViewModel"] = null;
                 Session["OrderType"] = "RT";
+                Session["OVERRIDE_ENT_WITH_REASON"] = "hide";
+                Session["IsManPack"] = true;
+                Session["rtnempid"] = ""; Session["rtnempname"] = "";
+                Session["rtnLines"] = new List<ReturnOrderModel>();
+                Session["returnModellst"] = new List<ReturnOrderModel>();
+                Session["ReturnOrderHeader"] = new List<SalesOrderHeaderViewModel>();
+                Session["POINTSREQ"] = true;
+                Session["isrtntype"] = ReturnTypes.RETURNS.ToString();
+                Session["RolloutOrderEst"] = false;
+                Session["IsEmergency"] = false;
+                Session["IsBulkOrder1"] = false;
+                Session["returnorder"] = true;
+                return RedirectToAction("GetReturnOrderGrid");
+            }
+            else if (orderType.ToLower().Contains("retemer"))
+            {
+                Session["requireemergencyreason"] = false;
+                Session["EmployeeViewModel"] = null;
+                Session["OVERRIDE_ENT_WITH_REASON"] = "hide";
+                Session["OrderType"] = "RT";
+                Session["IsManPack"] = true;
+                Session["rtnempid"] = ""; Session["rtnempname"] = "";
+                Session["rtnLines"] = new List<ReturnOrderModel>();
+                Session["returnModellst"] = new List<ReturnOrderModel>();
+                Session["ReturnOrderHeader"] = new List<SalesOrderHeaderViewModel>();
+                Session["POINTSREQ"] = false;
+                Session["RolloutOrderEst"] = false;
+                Session["isrtntype"] = ReturnTypes.EMERGENCY.ToString();
+                Session["IsEmergency"] = true;
+                Session["IsBulkOrder1"] = false;
+                Session["returnorder"] = true;
+                return RedirectToAction("GetReturnOrderGrid");
+            }
+            else if (orderType.ToLower().Contains("retmat"))
+            {
+                Session["requireemergencyreason"] = false;
+                Session["EmployeeViewModel"] = null;
+                Session["OrderType"] = "RT";
+                Session["OVERRIDE_ENT_WITH_REASON"] = "hide";
                 Session["IsManPack"] = true;
                 Session["rtnempid"] = ""; Session["rtnempname"] = "";
                 Session["rtnLines"] = new List<ReturnOrderModel>();
@@ -1580,6 +1632,8 @@ namespace Maximus.Controllers
                 Session["POINTSREQ"] = true;
                 Session["RolloutOrderEst"] = false;
                 Session["IsEmergency"] = false;
+
+                Session["isrtntype"] = ReturnTypes.MATERNITY.ToString();
                 Session["IsBulkOrder1"] = false;
                 Session["returnorder"] = true;
                 return RedirectToAction("GetReturnOrderGrid");
@@ -1679,7 +1733,7 @@ namespace Maximus.Controllers
             foreach (var values in data)
             {
                 var nexDate = _empRollout.Exists(s => s.BusinessID == businessId && s.EmployeeID == values.EmployeeId) ? _empRollout.GetAll(s => s.BusinessID == businessId && s.EmployeeID == values.EmployeeId).First().NextOrder.Value.ToString("dd-MM-yyyy") : "";
-                
+
                 string finUcode = "", totPts = "";
                 foreach (var ucode in values.EmpUcodes.Split(','))
                 {
@@ -1886,6 +1940,7 @@ namespace Maximus.Controllers
         #region GetReturnOrderGrid
         public ActionResult GetReturnOrderGrid()
         {
+
             Session["ISRTNEDITING"] = false;
             string busId = Session["BuisnessId"].ToString();
             var result = Welcome(busId);
@@ -1903,8 +1958,8 @@ namespace Maximus.Controllers
         [ValidateInput(false)]
         public ActionResult ReturnOrderGridviewPartial()
         {
-
-            var model = _employee.GetReturnOrders(Convert.ToBoolean(Session["POINTSREQ"].ToString()), Session["Access"].ToString(), Session["BuisnessId"].ToString(), Session["UserName"].ToString(), Session["OrderPermit"].ToString());
+            var rtnType = Session["isrtntype"] != null ? Session["isrtntype"].ToString() : "";
+            var model = _employee.GetReturnOrders(Convert.ToBoolean(Session["POINTSREQ"].ToString()), Session["Access"].ToString(), Session["BuisnessId"].ToString(), Session["UserName"].ToString(), Session["OrderPermit"].ToString(), Convert.ToBoolean(Session["IsEmergency"].ToString()), rtnType);
             return PartialView("_ReturnOrderGridviewPartial", model);
         }
 
@@ -1947,11 +2002,11 @@ namespace Maximus.Controllers
         }
 
         #region ChangePointsByEmp
-        public JsonResult ChangePointsByEmp(string emp="", string ucode = "")
+        public JsonResult ChangePointsByEmp(string emp = "", string ucode = "")
         {
             PointsModel pm = new PointsModel();
-           
-           if(emp!="" && ucode!="")
+
+            if (emp != "" && ucode != "")
             {
                 string busid = Session["BuisnessId"].ToString();
                 var pointsStyle = _stylePoints.Exists(s => s.UcodeID == ucode && s.BusinessID == busid) ? _stylePoints.GetAll(s => s.UcodeID == ucode && s.BusinessID == busid).Select(s => s.StyleID).ToList() : new List<string>();

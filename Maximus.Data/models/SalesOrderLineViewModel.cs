@@ -94,7 +94,8 @@ namespace Maximus.Data.Models
         public bool? Ischargable { get; set; }
         public bool Assembly { get; set; }
         public string StyleImage { get; set; }
-
+        public int TotalFreeStock { get; set; }
         public string orgStyleId { get; set; }
+        public int orgFreeStock { get; set; }
     }
 }

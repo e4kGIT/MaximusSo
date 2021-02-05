@@ -42,7 +42,7 @@
            }).GetHtml()
         </div>
         <div class="col-md-10" style="color:black;">
-            @if (Convert.ToBoolean(Session["POINTSREQ"]))
+            @if (Convert.ToBoolean(Session["POINTSREQ"]) && Convert.ToBoolean(Session["IsEmergency"].ToString()) == false)
             {
                 <div id="pointsDivReturns">
                     @{

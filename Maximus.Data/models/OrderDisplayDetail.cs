@@ -17,5 +17,7 @@ namespace Maximus.Data.models
         public int Points { get; set; }
         public long linno { get; set; }
         public string  Reason { get; set; }
+        public int ReturnOrderNo { get; set; }
+        public int ReOrderNo { get; set; }
     }
 }

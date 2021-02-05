@@ -5,13 +5,19 @@ using System.Web;
 
 namespace Maximus.Data.Models
 {
-   public enum Allocation
+    public enum Allocation
     {
         DIMALLOC = 1
     }
     public enum SizesENUM
     {
         NOSIZESFOUND = 1
+    }
+    public enum ReturnTypes
+    {
+        RETURNS = 1,
+        EMERGENCY = 2,
+        MATERNITY = 3
     }
     public enum controls
     {
@@ -33,6 +39,6 @@ namespace Maximus.Data.Models
     }
     public class AllEnums
     {
-     
+
     }
 }

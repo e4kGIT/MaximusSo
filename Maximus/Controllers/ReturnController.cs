@@ -77,6 +77,7 @@ namespace Maximus.Controllers
         public readonly PickingSlipHeader _pickHeader;
         public readonly EmployeeRollout _empRollout;
         public readonly ReturnReasonCodes _returnReasonCodes;
+        public readonly UcodeReasons _ucodeReason;
         public string ordCnferr = "This line is already confirmed.";
         public ReturnController(IUnitOfWork unitOfWork = null)
         {
@@ -90,6 +91,7 @@ namespace Maximus.Controllers
             _basket = basket;
             _returns = returns;
             _home = home;
+            UcodeReasons ucodeReason = new UcodeReasons(_unitOfWork);
             StyleColorSize styleColorSize = new StyleColorSize(_unitOfWork);
             tblManPackOrders manPckOrders = new tblManPackOrders(_unitOfWork);
             tblManpackReturns manPckRtnOrders = new tblManpackReturns(_unitOfWork); ;
@@ -151,6 +153,7 @@ namespace Maximus.Controllers
             _dimFitCap = dimFitCap;
             _dimension1 = dimension;
             _salesOrderHeader = salesOrderHeader;
+            _ucodeReason = ucodeReason;
             _customerOrderTemplate = customerOrderTemplate;
             _allAssemblies = allAssemblies;
             _assemblyDetail = assemblyDetail;
@@ -196,6 +199,7 @@ namespace Maximus.Controllers
 
         public ActionResult GetAllOrders(string employeeId = "")
         {
+
             if (Session["PermissionLst"] != null)
             {
                 var prmsn = (List<PermissionList>)Session["PermissionLst"];
@@ -222,9 +226,6 @@ namespace Maximus.Controllers
                             }
 
                             SetSalesOrderHeader(employeeId, busId);
-
-
-
                         }
                     }
                     else if (((List<SalesOrderHeaderViewModel>)Session["ReturnOrderHeader"]).Count() == 0)
@@ -238,75 +239,253 @@ namespace Maximus.Controllers
         }
 
         #region SetReturnOrderHeader
-        public void SetSalesOrderHeader(string employeeId, string busId)
+        public void SetSalesOrderHeader(string employeeId, string busId,string ucodeid="")
         {
             var salesHeadLst = new List<SalesOrderHeaderViewModel>();
-            if (_salesOrderHeader.Exists(s => s.PinNo == employeeId))
+            var rtnHead = new SalesOrderHeaderViewModel();
+            var reOrdHead = new SalesOrderHeaderViewModel();
+            var rtnType = Convert.ToBoolean(Session["ISRTNEDITING"]) ? IsMatUcodeId(ucodeid, busId) ? "MATERNITY" : _dp.CheckEmergency(busId, ucodeid) ? "EMERGENCY" : "RETURNS" : Session["isrtntype"] != null ? Session["isrtntype"].ToString() : "";
+            if (_salesOrderHeader.Exists(s => s.PinNo == employeeId && s.OrderType == "SO"))
             {
-                var rtnHead = _salesOrderHeader.GetAll(s => s.PinNo == employeeId && s.OrderType == "SO" && s.ReasonCode==0).ToList().Select(ss => new SalesOrderHeaderViewModel
+                if (Convert.ToBoolean(Session["IsEmergency"].ToString()) == false)
                 {
-                    CompanyID = ss.CompanyID,
-                    CustomerName = _busBusiness.Exists(s => s.BusinessID == busId) ? _busBusiness.GetAll(s => s.BusinessID == busId).First().Name : "",
-                    AddressId = _busAddress.Exists(s => s.Description == ss.DelDesc) ? _busAddress.GetAll(s => s.Description == ss.DelDesc).First().AddressID : 0,
-                    DelDesc = ss.DelDesc,
-                    OrderNo = ss.OrderNo,
-                    DelAddress1 = ss.DelAddress1,
-                    DelAddress2 = ss.DelAddress2,
-                    DelAddress3 = ss.DelAddress3,
-                    DelTown = ss.DelTown,
-                    DelCity = ss.DelCity,
-                    DelPostCode = ss.DelPostCode,
-                    DelCountry = ss.DelCountry,
-                    CustRef = ss.CustRef,
-                    EmployeeID = ss.PinNo,
-                    UCodeId = ss.UCodeId,
-                    CustID = busId,
-                    IsEditing = Session["ISRTNEDITING"] != null ? Convert.ToBoolean(Session["ISRTNEDITING"]) : false,
-                    IsUcode = true,
-                    IsTemplate = false,
-                    NomCode3 = "",
-                    UserID = Session["UserName"].ToString(),
-                    WarehouseID = Session["WareHouseID"].ToString(),
-                    Currency_Exchange_Rate = Convert.ToDouble(Session["CurrencyExchangeRate"]),
-                    Currency_Exchange_Code = Session["Currency_Name"].ToString(),
-                    RepID = Convert.ToInt32(Session["Rep_Id"]),
-                    OrderType = Session["OrderType"].ToString(),
-                    OrderDate = DateTime.Now.ToString("yyyy-MM-dd"),
-                    Returnlines = new List<ReturnOrderModel>(),
-                    Returnheader = true
-                }).First();
-                var reOrdHead = _salesOrderHeader.GetAll(s => s.PinNo == employeeId && s.OrderType == "SO").ToList().Select(ss => new SalesOrderHeaderViewModel
+                    if (rtnType == "RETURNS")
+                    {
+                        if (_salesOrderHeader.Exists(s => s.PinNo == employeeId && s.OrderType == "SO" && s.ReasonCode == 0))
+                        {
+                            rtnHead = _salesOrderHeader.GetAll(s => s.PinNo == employeeId && s.OrderType == "SO" && s.ReasonCode == 0).ToList().Select(ss => new SalesOrderHeaderViewModel
+                            {
+                                CompanyID = ss.CompanyID,
+                                CustomerName = _busBusiness.Exists(s => s.BusinessID == busId) ? _busBusiness.GetAll(s => s.BusinessID == busId).First().Name : "",
+                                AddressId = _busAddress.Exists(s => s.Description == ss.DelDesc) ? _busAddress.GetAll(s => s.Description == ss.DelDesc).First().AddressID : 0,
+                                DelDesc = ss.DelDesc,
+                                OrderNo = ss.OrderNo,
+                                DelAddress1 = ss.DelAddress1,
+                                DelAddress2 = ss.DelAddress2,
+                                DelAddress3 = ss.DelAddress3,
+                                DelTown = ss.DelTown,
+                                DelCity = ss.DelCity,
+                                DelPostCode = ss.DelPostCode,
+                                DelCountry = ss.DelCountry,
+                                CustRef = ss.CustRef,
+                                EmployeeID = ss.PinNo,
+                                UCodeId = ss.UCodeId,
+                                CustID = busId,
+                                IsEditing = Session["ISRTNEDITING"] != null ? Convert.ToBoolean(Session["ISRTNEDITING"]) : false,
+                                IsUcode = true,
+                                IsTemplate = false,
+                                NomCode3 = "",
+                                UserID = Session["UserName"].ToString(),
+                                WarehouseID = Session["WareHouseID"].ToString(),
+                                Currency_Exchange_Rate = Convert.ToDouble(Session["CurrencyExchangeRate"]),
+                                Currency_Exchange_Code = Session["Currency_Name"].ToString(),
+                                RepID = Convert.ToInt32(Session["Rep_Id"]),
+                                OrderType = Session["OrderType"].ToString(),
+                                OrderDate = DateTime.Now.ToString("yyyy-MM-dd"),
+                                Returnlines = new List<ReturnOrderModel>(),
+                                Returnheader = true,
+
+                            }).First();
+                        }
+                    }
+                    else if (rtnType == "MATERNITY")
+                    {
+                        List<int> reasoncode = _ucodeReason.Exists(s => s.UcodeId == "BAR MATERNITY P" | s.UcodeId == "BAR MATERNITY F" | s.UcodeId == "BAR MATERNITY") ? _ucodeReason.GetAll(s => s.UcodeId == "BAR MATERNITY P" | s.UcodeId == "BAR MATERNITY F" | s.UcodeId == "BAR MATERNITY").Select(s => s.ReasonCodeID).ToList() : new List<int>();
+                        if (_salesOrderHeader.Exists(s => s.PinNo == employeeId && s.OrderType == "SO" && reasoncode.Contains(s.ReasonCode.Value)))
+                        {
+                            rtnHead = _salesOrderHeader.GetAll(s => s.PinNo == employeeId && s.OrderType == "SO" && reasoncode.Contains(s.ReasonCode.Value)).ToList().Select(ss => new SalesOrderHeaderViewModel
+                            {
+                                CompanyID = ss.CompanyID,
+                                CustomerName = _busBusiness.Exists(s => s.BusinessID == busId) ? _busBusiness.GetAll(s => s.BusinessID == busId).First().Name : "",
+                                AddressId = _busAddress.Exists(s => s.Description == ss.DelDesc) ? _busAddress.GetAll(s => s.Description == ss.DelDesc).First().AddressID : 0,
+                                DelDesc = ss.DelDesc,
+                                OrderNo = ss.OrderNo,
+                                DelAddress1 = ss.DelAddress1,
+                                DelAddress2 = ss.DelAddress2,
+                                DelAddress3 = ss.DelAddress3,
+                                DelTown = ss.DelTown,
+                                DelCity = ss.DelCity,
+                                DelPostCode = ss.DelPostCode,
+                                DelCountry = ss.DelCountry,
+                                CustRef = ss.CustRef,
+                                EmployeeID = ss.PinNo,
+                                UCodeId = ss.UCodeId,
+                                CustID = busId,
+                                IsEditing = Session["ISRTNEDITING"] != null ? Convert.ToBoolean(Session["ISRTNEDITING"]) : false,
+                                IsUcode = true,
+                                IsTemplate = false,
+                                NomCode3 = "",
+                                UserID = Session["UserName"].ToString(),
+                                WarehouseID = Session["WareHouseID"].ToString(),
+                                Currency_Exchange_Rate = Convert.ToDouble(Session["CurrencyExchangeRate"]),
+                                Currency_Exchange_Code = Session["Currency_Name"].ToString(),
+                                RepID = Convert.ToInt32(Session["Rep_Id"]),
+                                OrderType = Session["OrderType"].ToString(),
+                                OrderDate = DateTime.Now.ToString("yyyy-MM-dd"),
+                                Returnlines = new List<ReturnOrderModel>(),
+                                Returnheader = true
+                            }).First();
+                        }
+                    }
+                }
+                else
                 {
-                    CustomerName = _busBusiness.Exists(s => s.BusinessID == busId) ? _busBusiness.GetAll(s => s.BusinessID == busId).First().Name : "",
-                    AddressId = _busAddress.Exists(s => s.Description == ss.DelDesc) ? _busAddress.GetAll(s => s.Description == ss.DelDesc).First().AddressID : 0,
-                    DelDesc = ss.DelDesc,
-                    OrderNo = ss.OrderNo,
-                    CompanyID = ss.CompanyID,
-                    DelAddress1 = ss.DelAddress1,
-                    DelAddress2 = ss.DelAddress2,
-                    DelAddress3 = ss.DelAddress3,
-                    DelTown = ss.DelTown,
-                    DelCity = ss.DelCity,
-                    DelPostCode = ss.DelPostCode,
-                    DelCountry = ss.DelCountry,
-                    CustRef = ss.CustRef,
-                    EmployeeID = ss.PinNo,
-                    IsEditing = Session["ISRTNEDITING"] != null ? Convert.ToBoolean(Session["ISRTNEDITING"]) : false,
-                    UCodeId = ss.UCodeId,
-                    CustID = busId,
-                    IsUcode = true,
-                    IsTemplate = false,
-                    NomCode3 = "",
-                    UserID = Session["UserName"].ToString(),
-                    WarehouseID = Session["WareHouseID"].ToString(),
-                    Currency_Exchange_Rate = Convert.ToDouble(Session["CurrencyExchangeRate"]),
-                    Currency_Exchange_Code = Session["Currency_Name"].ToString(),
-                    RepID = Convert.ToInt32(Session["Rep_Id"]),
-                    OrderType = Session["OrderType"].ToString(),
-                    OrderDate = DateTime.Now.ToString("yyyy-MM-dd"),
-                    Returnlines = new List<ReturnOrderModel>(),
-                    Reorderheader = true
-                }).First();
+                    if (_salesOrderHeader.Exists(s => s.PinNo == employeeId && s.OrderType == "SO" && s.ReasonCode > 0))
+                    {
+                        rtnHead = _salesOrderHeader.GetAll(s => s.PinNo == employeeId && s.OrderType == "SO" && s.ReasonCode > 0).ToList().Select(ss => new SalesOrderHeaderViewModel
+                        {
+                            CompanyID = ss.CompanyID,
+                            CustomerName = _busBusiness.Exists(s => s.BusinessID == busId) ? _busBusiness.GetAll(s => s.BusinessID == busId).First().Name : "",
+                            AddressId = _busAddress.Exists(s => s.Description == ss.DelDesc) ? _busAddress.GetAll(s => s.Description == ss.DelDesc).First().AddressID : 0,
+                            DelDesc = ss.DelDesc,
+                            OrderNo = ss.OrderNo,
+                            DelAddress1 = ss.DelAddress1,
+                            DelAddress2 = ss.DelAddress2,
+                            DelAddress3 = ss.DelAddress3,
+                            DelTown = ss.DelTown,
+                            DelCity = ss.DelCity,
+                            DelPostCode = ss.DelPostCode,
+                            DelCountry = ss.DelCountry,
+                            CustRef = ss.CustRef,
+                            EmployeeID = ss.PinNo,
+                            UCodeId = ss.UCodeId,
+                            CustID = busId,
+                            IsEditing = Session["ISRTNEDITING"] != null ? Convert.ToBoolean(Session["ISRTNEDITING"]) : false,
+                            IsUcode = true,
+                            IsTemplate = false,
+                            NomCode3 = "",
+                            UserID = Session["UserName"].ToString(),
+                            WarehouseID = Session["WareHouseID"].ToString(),
+                            Currency_Exchange_Rate = Convert.ToDouble(Session["CurrencyExchangeRate"]),
+                            Currency_Exchange_Code = Session["Currency_Name"].ToString(),
+                            RepID = Convert.ToInt32(Session["Rep_Id"]),
+                            OrderType = Session["OrderType"].ToString(),
+                            OrderDate = DateTime.Now.ToString("yyyy-MM-dd"),
+                            Returnlines = new List<ReturnOrderModel>(),
+                            Returnheader = true,
+
+                        }).First();
+                    }
+                }
+                if (Convert.ToBoolean(Session["IsEmergency"].ToString()) == false)
+                {
+                    if (rtnType == "RETURNS")
+                    {
+                        reOrdHead = _salesOrderHeader.GetAll(s => s.PinNo == employeeId && s.OrderType == "SO").ToList().Select(ss => new SalesOrderHeaderViewModel
+                        {
+                            CustomerName = _busBusiness.Exists(s => s.BusinessID == busId) ? _busBusiness.GetAll(s => s.BusinessID == busId).First().Name : "",
+                            AddressId = _busAddress.Exists(s => s.Description == ss.DelDesc) ? _busAddress.GetAll(s => s.Description == ss.DelDesc).First().AddressID : 0,
+                            DelDesc = ss.DelDesc,
+                            OrderNo = ss.OrderNo,
+                            CompanyID = ss.CompanyID,
+                            DelAddress1 = ss.DelAddress1,
+                            DelAddress2 = ss.DelAddress2,
+                            DelAddress3 = ss.DelAddress3,
+                            DelTown = ss.DelTown,
+                            DelCity = ss.DelCity,
+                            DelPostCode = ss.DelPostCode,
+                            DelCountry = ss.DelCountry,
+                            CustRef = ss.CustRef,
+                            EmployeeID = ss.PinNo,
+                            IsEditing = Session["ISRTNEDITING"] != null ? Convert.ToBoolean(Session["ISRTNEDITING"]) : false,
+                            UCodeId = ss.UCodeId,
+                            CustID = busId,
+                            IsUcode = true,
+                            IsTemplate = false,
+                            NomCode3 = "",
+                            UserID = Session["UserName"].ToString(),
+                            WarehouseID = Session["WareHouseID"].ToString(),
+                            Currency_Exchange_Rate = Convert.ToDouble(Session["CurrencyExchangeRate"]),
+                            Currency_Exchange_Code = Session["Currency_Name"].ToString(),
+                            RepID = Convert.ToInt32(Session["Rep_Id"]),
+                            OrderType = Session["OrderType"].ToString(),
+                            OrderDate = DateTime.Now.ToString("yyyy-MM-dd"),
+                            Returnlines = new List<ReturnOrderModel>(),
+                            Reorderheader = true,
+                            ReasonCode = ss.ReasonCode
+                        }).First();
+                    }
+                    else if(rtnType== "MATERNITY")
+                    {
+                        List<int> reasoncode = _ucodeReason.Exists(s => s.UcodeId == "BAR MATERNITY P" | s.UcodeId == "BAR MATERNITY F" | s.UcodeId == "BAR MATERNITY") ? _ucodeReason.GetAll(s => s.UcodeId == "BAR MATERNITY P" | s.UcodeId == "BAR MATERNITY F" | s.UcodeId == "BAR MATERNITY").Select(s => s.ReasonCodeID).ToList() : new List<int>();
+                        if (_salesOrderHeader.Exists(s => s.PinNo == employeeId && s.OrderType == "SO" && reasoncode.Contains(s.ReasonCode.Value)))
+                        {
+                            reOrdHead = _salesOrderHeader.GetAll(s => s.PinNo == employeeId && s.OrderType == "SO" && reasoncode.Contains(s.ReasonCode.Value)).ToList().Select(ss => new SalesOrderHeaderViewModel
+                            {
+                                CustomerName = _busBusiness.Exists(s => s.BusinessID == busId) ? _busBusiness.GetAll(s => s.BusinessID == busId).First().Name : "",
+                                AddressId = _busAddress.Exists(s => s.Description == ss.DelDesc) ? _busAddress.GetAll(s => s.Description == ss.DelDesc).First().AddressID : 0,
+                                DelDesc = ss.DelDesc,
+                                OrderNo = ss.OrderNo,
+                                CompanyID = ss.CompanyID,
+                                DelAddress1 = ss.DelAddress1,
+                                DelAddress2 = ss.DelAddress2,
+                                DelAddress3 = ss.DelAddress3,
+                                DelTown = ss.DelTown,
+                                DelCity = ss.DelCity,
+                                DelPostCode = ss.DelPostCode,
+                                DelCountry = ss.DelCountry,
+                                CustRef = ss.CustRef,
+                                EmployeeID = ss.PinNo,
+                                IsEditing = Session["ISRTNEDITING"] != null ? Convert.ToBoolean(Session["ISRTNEDITING"]) : false,
+                                UCodeId = ss.UCodeId,
+                                CustID = busId,
+                                IsUcode = true,
+                                IsTemplate = false,
+                                NomCode3 = "",
+                                UserID = Session["UserName"].ToString(),
+                                WarehouseID = Session["WareHouseID"].ToString(),
+                                Currency_Exchange_Rate = Convert.ToDouble(Session["CurrencyExchangeRate"]),
+                                Currency_Exchange_Code = Session["Currency_Name"].ToString(),
+                                RepID = Convert.ToInt32(Session["Rep_Id"]),
+                                OrderType = Session["OrderType"].ToString(),
+                                OrderDate = DateTime.Now.ToString("yyyy-MM-dd"),
+                                Returnlines = new List<ReturnOrderModel>(),
+                                Reorderheader = true,
+                                ReasonCode = ss.ReasonCode
+                            }).First();
+                        }
+                    }
+                }
+                else
+                {
+                    if (_salesOrderHeader.Exists(s => s.PinNo == employeeId && s.OrderType == "SO" && s.ReasonCode > 0))
+                    {
+                        reOrdHead = _salesOrderHeader.GetAll(s => s.PinNo == employeeId && s.OrderType == "SO" && s.ReasonCode > 0).ToList().Select(ss => new SalesOrderHeaderViewModel
+                        {
+                            CustomerName = _busBusiness.Exists(s => s.BusinessID == busId) ? _busBusiness.GetAll(s => s.BusinessID == busId).First().Name : "",
+                            AddressId = _busAddress.Exists(s => s.Description == ss.DelDesc) ? _busAddress.GetAll(s => s.Description == ss.DelDesc).First().AddressID : 0,
+                            DelDesc = ss.DelDesc,
+                            OrderNo = ss.OrderNo,
+                            CompanyID = ss.CompanyID,
+                            DelAddress1 = ss.DelAddress1,
+                            DelAddress2 = ss.DelAddress2,
+                            DelAddress3 = ss.DelAddress3,
+                            DelTown = ss.DelTown,
+                            DelCity = ss.DelCity,
+                            DelPostCode = ss.DelPostCode,
+                            DelCountry = ss.DelCountry,
+                            CustRef = ss.CustRef,
+                            EmployeeID = ss.PinNo,
+                            IsEditing = Session["ISRTNEDITING"] != null ? Convert.ToBoolean(Session["ISRTNEDITING"]) : false,
+                            UCodeId = ss.UCodeId,
+                            CustID = busId,
+                            IsUcode = true,
+                            IsTemplate = false,
+                            NomCode3 = "",
+                            UserID = Session["UserName"].ToString(),
+                            WarehouseID = Session["WareHouseID"].ToString(),
+                            Currency_Exchange_Rate = Convert.ToDouble(Session["CurrencyExchangeRate"]),
+                            Currency_Exchange_Code = Session["Currency_Name"].ToString(),
+                            RepID = Convert.ToInt32(Session["Rep_Id"]),
+                            OrderType = Session["OrderType"].ToString(),
+                            OrderDate = DateTime.Now.ToString("yyyy-MM-dd"),
+                            Returnlines = new List<ReturnOrderModel>(),
+                            Reorderheader = true,
+                            ReasonCode = ss.ReasonCode
+                        }).First();
+                    }
+                }
+
 
                 var custref = _salesOrderHeader.Exists(s => s.PinNo == employeeId) ? _salesOrderHeader.GetAll(s => s.PinNo == employeeId).First().CustRef : "";
                 var empName = _employee.Exists(s => s.EmployeeID == employeeId) ? _employee.GetAll(s => s.EmployeeID == employeeId).First().Forename + "  " + _employee.GetAll(s => s.EmployeeID == employeeId).First().Surname : "";
@@ -317,38 +496,126 @@ namespace Maximus.Controllers
                 salesHeadLst.Add(reOrdHead);
                 if (Convert.ToBoolean(Session["ISRTNEDITING"]))
                 {
-                    var frshReord = _salesOrderHeader.GetAll(s => s.PinNo == employeeId && s.OrderType == "SO").ToList().Select(ss => new SalesOrderHeaderViewModel
+                  var  frshReord=new SalesOrderHeaderViewModel();
+                    if (Convert.ToBoolean(Session["IsEmergency"].ToString()) == false)
                     {
-                        CustomerName = _busBusiness.Exists(s => s.BusinessID == busId) ? _busBusiness.GetAll(s => s.BusinessID == busId).First().Name : "",
-                        AddressId = _busAddress.Exists(s => s.Description == ss.DelDesc) ? _busAddress.GetAll(s => s.Description == ss.DelDesc).First().AddressID : 0,
-                        DelDesc = ss.DelDesc,
-                        OrderNo = ss.OrderNo,
-                        CompanyID = ss.CompanyID,
-                        DelAddress1 = ss.DelAddress1,
-                        DelAddress2 = ss.DelAddress2,
-                        DelAddress3 = ss.DelAddress3,
-                        DelTown = ss.DelTown,
-                        DelCity = ss.DelCity,
-                        DelPostCode = ss.DelPostCode,
-                        DelCountry = ss.DelCountry,
-                        CustRef = ss.CustRef,
-                        EmployeeID = ss.PinNo,
-                        IsEditing = false,
-                        UCodeId = ss.UCodeId,
-                        CustID = busId,
-                        IsUcode = true,
-                        IsTemplate = false,
-                        NomCode3 = "",
-                        UserID = Session["UserName"].ToString(),
-                        WarehouseID = Session["WareHouseID"].ToString(),
-                        Currency_Exchange_Rate = Convert.ToDouble(Session["CurrencyExchangeRate"]),
-                        Currency_Exchange_Code = Session["Currency_Name"].ToString(),
-                        RepID = Convert.ToInt32(Session["Rep_Id"]),
-                        OrderType = Session["OrderType"].ToString(),
-                        OrderDate = DateTime.Now.ToString("yyyy-MM-dd"),
-                        Returnlines = new List<ReturnOrderModel>(),
-                        Reorderheader = true
-                    }).First();
+                        if (rtnType == "RETURNS")
+                        {
+                            frshReord = _salesOrderHeader.GetAll(s => s.PinNo == employeeId && s.OrderType == "SO").ToList().Select(ss => new SalesOrderHeaderViewModel
+                            {
+                                CustomerName = _busBusiness.Exists(s => s.BusinessID == busId) ? _busBusiness.GetAll(s => s.BusinessID == busId).First().Name : "",
+                                AddressId = _busAddress.Exists(s => s.Description == ss.DelDesc) ? _busAddress.GetAll(s => s.Description == ss.DelDesc).First().AddressID : 0,
+                                DelDesc = ss.DelDesc,
+                                OrderNo = ss.OrderNo,
+                                CompanyID = ss.CompanyID,
+                                DelAddress1 = ss.DelAddress1,
+                                DelAddress2 = ss.DelAddress2,
+                                DelAddress3 = ss.DelAddress3,
+                                DelTown = ss.DelTown,
+                                DelCity = ss.DelCity,
+                                DelPostCode = ss.DelPostCode,
+                                DelCountry = ss.DelCountry,
+                                CustRef = ss.CustRef,
+                                EmployeeID = ss.PinNo,
+                                IsEditing = false,
+                                UCodeId = ss.UCodeId,
+                                CustID = busId,
+                                IsUcode = true,
+                                IsTemplate = false,
+                                NomCode3 = "",
+                                UserID = Session["UserName"].ToString(),
+                                WarehouseID = Session["WareHouseID"].ToString(),
+                                Currency_Exchange_Rate = Convert.ToDouble(Session["CurrencyExchangeRate"]),
+                                Currency_Exchange_Code = Session["Currency_Name"].ToString(),
+                                RepID = Convert.ToInt32(Session["Rep_Id"]),
+                                OrderType = Session["OrderType"].ToString(),
+                                OrderDate = DateTime.Now.ToString("yyyy-MM-dd"),
+                                Returnlines = new List<ReturnOrderModel>(),
+                                Reorderheader = true,
+                                ReasonCode = ss.ReasonCode
+                            }).First();
+                        }
+                        else if (rtnType == "MATERNITY")
+                        {
+                            List<int> reasoncode = _ucodeReason.Exists(s => s.UcodeId == "BAR MATERNITY P" | s.UcodeId == "BAR MATERNITY F" | s.UcodeId == "BAR MATERNITY") ? _ucodeReason.GetAll(s => s.UcodeId == "BAR MATERNITY P" | s.UcodeId == "BAR MATERNITY F" | s.UcodeId == "BAR MATERNITY").Select(s => s.ReasonCodeID).ToList() : new List<int>();
+                            if (_salesOrderHeader.Exists(s => s.PinNo == employeeId && s.OrderType == "SO" && reasoncode.Contains(s.ReasonCode.Value)))
+                            {
+                                frshReord = _salesOrderHeader.GetAll(s => s.PinNo == employeeId && s.OrderType == "SO" && reasoncode.Contains(s.ReasonCode.Value)).ToList().Select(ss => new SalesOrderHeaderViewModel
+                                {
+                                    CustomerName = _busBusiness.Exists(s => s.BusinessID == busId) ? _busBusiness.GetAll(s => s.BusinessID == busId).First().Name : "",
+                                    AddressId = _busAddress.Exists(s => s.Description == ss.DelDesc) ? _busAddress.GetAll(s => s.Description == ss.DelDesc).First().AddressID : 0,
+                                    DelDesc = ss.DelDesc,
+                                    OrderNo = ss.OrderNo,
+                                    CompanyID = ss.CompanyID,
+                                    DelAddress1 = ss.DelAddress1,
+                                    DelAddress2 = ss.DelAddress2,
+                                    DelAddress3 = ss.DelAddress3,
+                                    DelTown = ss.DelTown,
+                                    DelCity = ss.DelCity,
+                                    DelPostCode = ss.DelPostCode,
+                                    DelCountry = ss.DelCountry,
+                                    CustRef = ss.CustRef,
+                                    EmployeeID = ss.PinNo,
+                                    IsEditing = false,
+                                    UCodeId = ss.UCodeId,
+                                    CustID = busId,
+                                    IsUcode = true,
+                                    IsTemplate = false,
+                                    NomCode3 = "",
+                                    UserID = Session["UserName"].ToString(),
+                                    WarehouseID = Session["WareHouseID"].ToString(),
+                                    Currency_Exchange_Rate = Convert.ToDouble(Session["CurrencyExchangeRate"]),
+                                    Currency_Exchange_Code = Session["Currency_Name"].ToString(),
+                                    RepID = Convert.ToInt32(Session["Rep_Id"]),
+                                    OrderType = Session["OrderType"].ToString(),
+                                    OrderDate = DateTime.Now.ToString("yyyy-MM-dd"),
+                                    Returnlines = new List<ReturnOrderModel>(),
+                                    Reorderheader = true,
+                                    ReasonCode = ss.ReasonCode
+                                }).First();
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (_salesOrderHeader.Exists(s => s.PinNo == employeeId && s.OrderType == "SO" && s.ReasonCode > 0))
+                        {
+                            frshReord= _salesOrderHeader.GetAll(s => s.PinNo == employeeId && s.OrderType == "SO" && s.ReasonCode > 0).ToList().Select(ss => new SalesOrderHeaderViewModel
+                            {
+                                CustomerName = _busBusiness.Exists(s => s.BusinessID == busId) ? _busBusiness.GetAll(s => s.BusinessID == busId).First().Name : "",
+                                AddressId = _busAddress.Exists(s => s.Description == ss.DelDesc) ? _busAddress.GetAll(s => s.Description == ss.DelDesc).First().AddressID : 0,
+                                DelDesc = ss.DelDesc,
+                                OrderNo = ss.OrderNo,
+                                CompanyID = ss.CompanyID,
+                                DelAddress1 = ss.DelAddress1,
+                                DelAddress2 = ss.DelAddress2,
+                                DelAddress3 = ss.DelAddress3,
+                                DelTown = ss.DelTown,
+                                DelCity = ss.DelCity,
+                                DelPostCode = ss.DelPostCode,
+                                DelCountry = ss.DelCountry,
+                                CustRef = ss.CustRef,
+                                EmployeeID = ss.PinNo,
+                                IsEditing = false,
+                                UCodeId = ss.UCodeId,
+                                CustID = busId,
+                                IsUcode = true,
+                                IsTemplate = false,
+                                NomCode3 = "",
+                                UserID = Session["UserName"].ToString(),
+                                WarehouseID = Session["WareHouseID"].ToString(),
+                                Currency_Exchange_Rate = Convert.ToDouble(Session["CurrencyExchangeRate"]),
+                                Currency_Exchange_Code = Session["Currency_Name"].ToString(),
+                                RepID = Convert.ToInt32(Session["Rep_Id"]),
+                                OrderType = Session["OrderType"].ToString(),
+                                OrderDate = DateTime.Now.ToString("yyyy-MM-dd"),
+                                Returnlines = new List<ReturnOrderModel>(),
+                                Reorderheader = true,
+                                ReasonCode = ss.ReasonCode
+                            }).First();
+                        }
+                    }
+                      
                     salesHeadLst.Add(frshReord);
                 }
                 salesHeadLst.ForEach(s => s.EmployeeName = empName);
@@ -509,12 +776,14 @@ namespace Maximus.Controllers
 
         #region getreturnordermodel
 
-        public List<ReturnOrderModel> getreturnordermodel(string empid, List<string> catogry, int orderno, string custRef, string courierRef, int pickingSlipNo, string empName)
+        public List<ReturnOrderModel> getreturnordermodel(string empid, List<string> catogry, int orderno, string custRef, string courierRef, int pickingSlipNo, string empName, string ucodeid = "", string busid = "")
         {
             var result = new List<ReturnOrderModel>();
-            result = _returns.GetOrderToReturn(empid, Session["BuisnessId"].ToString(), Session["UserName"].ToString(), Session["OrderPermit"].ToString(), Session["Access"].ToString(), Convert.ToBoolean(Session["POINTSREQ"]), catogry, orderno, custRef, courierRef, pickingSlipNo);
-            result.ForEach(s => s.Employeename = empName);
 
+            //var model = ((List<SalesOrderHeaderViewModel>)Session["ReturnOrderHeader"]).Exists(s=>s.Returnheader)?((List<SalesOrderHeaderViewModel>)Session["ReturnOrderHeader"]).Where(s => s.Returnheader).First() :new SalesOrderHeaderViewModel();
+            var rtnType = Convert.ToBoolean(Session["ISRTNEDITING"]) ? IsMatUcodeId(ucodeid, busid) ? "MATERNITY" : _dp.CheckEmergency(busid, ucodeid) ? "EMERGENCY" : "RETURNS" : Session["isrtntype"] != null ? Session["isrtntype"].ToString() : "";
+            result = _returns.GetOrderToReturn(empid, Session["BuisnessId"].ToString(), Session["UserName"].ToString(), Session["OrderPermit"].ToString(), Session["Access"].ToString(), Convert.ToBoolean(Session["POINTSREQ"]), catogry, orderno, custRef, courierRef, pickingSlipNo, Convert.ToBoolean(Session["IsEmergency"].ToString()), rtnType);
+            result.ForEach(s => s.Employeename = empName);
             result.ForEach(s => s.VAT = _dataConnection.GetlineVat(s.OrdQty, s.Price, _dataConnection.GetVatPercent(s.StyleId, s.SizeId)));
             result.ForEach(s => s.StyleImage = _tblFskStyle.Exists(x => x.StyleID.Contains(s.StyleId)) ? _tblFskStyle.GetAll(x => x.StyleID.Contains(s.StyleId)).FirstOrDefault().StyleImage : Url.Content("~/StyleImages/notfound.png"));
             return result;
@@ -649,6 +918,7 @@ namespace Maximus.Controllers
                     line.Ucode = thisReturn.Any(s => s.LineNo == line.LineNo && s.OrderNo == line.OrderNo && s.StyleId == line.StyleId && s.ColourId == line.ColourId && s.SizeId == line.SizeId) ? thisReturn.Where(s => s.LineNo == line.LineNo && s.OrderNo == line.OrderNo && s.StyleId == line.StyleId && s.ColourId == line.ColourId && s.SizeId == line.SizeId).First().Ucode : "";
                     line.StyleImage = _tblFskStyle.Exists(x => x.StyleID.Contains(line.StyleId)) ? _tblFskStyle.GetAll(x => x.StyleID.Contains(line.StyleId)).FirstOrDefault().StyleImage : Url.Content("~/StyleImages/notfound.png");
                     lineno = lineno + 1;
+                    line.SOPDetail4 = thisReturn.Any(s => s.LineNo == line.LineNo && s.OrderNo == line.OrderNo && s.StyleId == line.StyleId && s.ColourId == line.ColourId && s.SizeId == line.SizeId) ? thisReturn.Where(s => s.LineNo == line.LineNo && s.OrderNo == line.OrderNo && s.StyleId == line.StyleId && s.ColourId == line.ColourId && s.SizeId == line.SizeId).First().SOPDetail4 : "";
                 }
                 if (Session["rtnLines"] == null)
                 {
@@ -683,11 +953,20 @@ namespace Maximus.Controllers
             return result;
         }
         #endregion
+        #region ReturnReorderEdit
+        public ActionResult ReturnReorderEdit(int ordeNo = 0)
+        {
+            Session["ReturnOrderHeader"] = new List<SalesOrderHeaderViewModel>();
+            return RedirectToAction("ReturnReorder", new { ordeNo = ordeNo });
+        }
+        #endregion
+
 
         #region ReturnReorder
         public ActionResult ReturnReorder(int ordeNo = 0)
         {
             Session["returnorder"] = true;
+
             var userName = System.Web.HttpContext.Current.Session["UserName"].ToString();
             var busId = System.Web.HttpContext.Current.Session["BuisnessId"].ToString();
             var budgetReq = System.Web.HttpContext.Current.Session["BUDGETREQ"].ToString();
@@ -764,7 +1043,7 @@ namespace Maximus.Controllers
 
         public ActionResult GetReOrderProducts(string style, string[] styleNameArr)
         {
-           
+
             int orderNO = styleNameArr[1] != "" ? Convert.ToInt32(styleNameArr[1]) : 0;
             int LineNo = styleNameArr[2] != "" ? Convert.ToInt32(styleNameArr[2]) : 0;
             var model = Session["rtnLines"] != null ? ((List<ReturnOrderModel>)Session["rtnLines"]) : new List<ReturnOrderModel>();
@@ -773,7 +1052,7 @@ namespace Maximus.Controllers
             Session["SelectedUcode"] = model.First().Ucode;
             Session["selectedUcodes"] = model.First().Ucode;
             Session["selectedRetLine"] = ((List<ReturnOrderModel>)Session["rtnLines"]).Where(s => s.OrderNo == orderNO && s.LineNo == LineNo).First();
-            var ucodStylesLst =   _dp.UcodeStyles(model.First().Ucode, Session["BuisnessId"].ToString())  ;
+            var ucodStylesLst = _dp.UcodeStyles(model.First().Ucode, Session["BuisnessId"].ToString());
             string ucode = model.First().Ucode;
             string emp = model.First().Emp;
             if (((List<string>)Session["SelectedTemplates"]).Count == 0)
@@ -810,11 +1089,18 @@ namespace Maximus.Controllers
                 Freetext = x.FreeText,
                 OriginalStyleid = x.StyleID
             }).ToList();
-            return PartialView("_PopReorderPartial", model1.Distinct());
+            if (Convert.ToBoolean(Session["isemergency"]) | IsMatUcodeId(model.First().Ucode, busId))
+            {
+                return RedirectToAction("GetCard", "Home", new { StyleID = style, Orgstyle = model1.First().OriginalStyleid });
+            }
+            else
+            {
+                return PartialView("_PopReorderPartial", model1.Distinct());
+            }
         }
-        #region 
+        #region checksizeexists
 
-        public bool checksizeexists(string style,string size)
+        public bool checksizeexists(string style, string size)
         {
             if (Session["rtnLines"] != null)
             {
@@ -822,9 +1108,9 @@ namespace Maximus.Controllers
                 {
                     var sss = ((List<ReturnOrderModel>)Session["rtnLines"]);
                     var lineNo = ((ReturnOrderModel)Session["selectedRetLine"]).ReturnLineNo;
-                    if (((List<ReturnOrderModel>)Session["rtnLines"]).Any(s => s.StyleId == style && s.SizeId == size && s.IsReturn))
+                    if (((List<ReturnOrderModel>)Session["rtnLines"]).Any(s => s.StyleId == style && s.SizeId == size && s.IsReturn && s.IsDleted == 0))
                     {
-                        if (((List<ReturnOrderModel>)Session["rtnLines"]).Where(s => s.StyleId == style && s.SizeId == size && s.IsReturn).First().LineNo == lineNo)
+                        if (((List<ReturnOrderModel>)Session["rtnLines"]).Where(s => s.StyleId == style && s.SizeId == size && s.IsReturn && s.IsDleted == 0).First().ReturnLineNo == lineNo)
                         {
                             return true;
                         }
@@ -851,78 +1137,133 @@ namespace Maximus.Controllers
         }
         #endregion
 
+        #region checkforemergencyqty
+
+        public bool checkforemergencyqty(string style, string size, int qty)
+        {
+            if (Session["rtnLines"] != null)
+            {
+                if (((List<ReturnOrderModel>)Session["rtnLines"]).Count() > 0)
+                {
+                    var sss = ((List<ReturnOrderModel>)Session["rtnLines"]);
+                    var lineNo = ((ReturnOrderModel)Session["selectedRetLine"]).ReturnLineNo;
+                    var allQty = ((List<ReturnOrderModel>)Session["rtnLines"]).Any(s => s.ReturnLineNo == lineNo && s.IsReorder && s.IsDleted == 0) ? ((List<ReturnOrderModel>)Session["rtnLines"]).Where(s => s.ReturnLineNo == lineNo && s.IsReorder && s.IsDleted == 0).Sum(s => s.OrdQty) : 0;
+                    allQty = allQty + qty;
+                    if (((List<ReturnOrderModel>)Session["rtnLines"]).Where(s => s.ReturnLineNo == lineNo && s.IsReturn && s.IsDleted == 0).Sum(s => s.OrdQty) < allQty)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+
+
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+        #endregion
+
+        #region AddToCartMethod()
+        public string AddToCartMethod(string description = "", string price = "", string size = "", string color = "", string qty = "", string style = "", string orgStyl = "", string entQty = "", string reqData1 = "", string reason = "", string QtySizePriceArr = "", string selectedSitecode = "")
+        {
+
+            string result = "";
+            string busId = Session["BuisnessId"].ToString();
+            var lineNo = ((ReturnOrderModel)Session["selectedRetLine"]).LineNo;
+
+            var emp = ((ReturnOrderModel)Session["selectedRetLine"]).Emp;
+            var empName = ((ReturnOrderModel)Session["selectedRetLine"]).Employeename;
+            var ucode = ((ReturnOrderModel)Session["selectedRetLine"]).Ucode;
+            var stylPoints = _pointStyle.Exists(s => s.StyleID.Trim().ToLower() == style.Trim().ToLower() && s.UcodeID.Trim() == ucode.Trim()) ? _pointStyle.GetAll(s => s.StyleID.Trim().ToLower() == style.Trim().ToLower() && s.UcodeID.Trim() == ucode.Trim()).First().Points.Value : 0;
+            var totalPts = (stylPoints) * Convert.ToInt32(qty);
+            int reLineNo = ((List<ReturnOrderModel>)Session["rtnLines"]).Any(s => s.IsReorder) ? ((List<ReturnOrderModel>)Session["rtnLines"]).Where(s => s.IsReorder).Max(s => s.ReOrderLineNo) + 1 : 1;
+            var returnOrderLines = new ReturnOrderModel();
+
+            try
+            {
+                returnOrderLines.ReOrderLineNo = reLineNo;
+                returnOrderLines.Employeename = empName;
+                returnOrderLines.OrderNo = ((ReturnOrderModel)Session["selectedRetLine"]).OrderNo;
+                //if ((bool)Session["ISRTNEDITING"])
+                //{
+                //    returnOrderLines.ReOrderno = ((List<ReturnOrderModel>)Session["rtnLines"]).Any(s => s.IsReorder) ? ((List<ReturnOrderModel>)Session["rtnLines"]).Where(s => s.IsReorder).First().ReOrderno : 0;
+                //}
+                returnOrderLines.IsReorder = true;
+                returnOrderLines.ColourId = color;
+                returnOrderLines.Points = stylPoints;
+                returnOrderLines.LineNo = lineNo;
+                returnOrderLines.ReturnLineNo = ((ReturnOrderModel)Session["selectedRetLine"]).ReturnLineNo;
+                returnOrderLines.Description = description.Trim();
+                returnOrderLines.OrdQty = Convert.ToInt32(qty);
+                returnOrderLines.Price = Convert.ToDouble(price) == 0 ? Convert.ToDouble(GetPrice(style, size)) : Convert.ToDouble(price);
+                returnOrderLines.SizeId = size;
+                returnOrderLines.StyleId = style;
+                returnOrderLines.Emp = emp;
+                returnOrderLines.CustRef = Session["CustRef"].ToString();
+                returnOrderLines.VAT = _dataConnection.GetlineVat(Convert.ToInt32(qty), Convert.ToDouble(price), _dataConnection.GetVatPercent(style, size));
+                returnOrderLines.TotalPoints = totalPts;
+                returnOrderLines.RepId = Convert.ToInt32(Session["Rep_Id"].ToString());
+                returnOrderLines.StockingUOM1 = 1;
+                returnOrderLines.Currency_Exchange_Rate = Convert.ToDouble(Session["CurrencyExchangeRate"]);
+                returnOrderLines.IssueQty1 = Convert.ToInt32(qty);
+                returnOrderLines.StyleImage = _tblFskStyle.Exists(x => x.StyleID.Contains(style)) ? _tblFskStyle.GetAll(x => x.StyleID.Contains(style)).FirstOrDefault().StyleImage : Url.Content("~/StyleImages/notfound.png");
+                returnOrderLines.OrgStyle = orgStyl;
+                returnOrderLines.VatPercent = _dataConnection.GetVatPercent(style, size);
+                returnOrderLines.Total = _dataConnection.GetlineTotals(Convert.ToDouble(qty), Convert.ToDouble(price), _dataConnection.GetVatPercent(style, size));
+                returnOrderLines.FreeText1 = reqData1;
+                returnOrderLines.DeliveryDate = _dataConnection.GetDeliveryDate(Convert.ToInt32(Session["intNoOfday"]) - 1, Convert.ToBoolean(Session["IncWendsDel"]));
+                returnOrderLines.VatCode1 = _dataConnection.GetVatCode();
+                returnOrderLines.RepId = Convert.ToInt32(Session["Rep_Id"].ToString());
+                returnOrderLines.Currency_Exchange_Rate = Convert.ToDouble(Session["CurrencyExchangeRate"]);
+                returnOrderLines.Cost1 = _dataConnection.GetCostPrice(style, size, color, Session["Currency_Name"].ToString(), 1, 0);
+                returnOrderLines.DeliveryDate = _dataConnection.GetDeliveryDate(Convert.ToInt32(Session["intNoOfday"]), Convert.ToBoolean(Session["IncWendsDel"]));
+                returnOrderLines.IssueUOM1 = 1;
+                returnOrderLines.IssueQty1 = Convert.ToInt32(qty);
+                returnOrderLines.StockingUOM1 = 1;
+                returnOrderLines.SOPDetail4 = reason;
+                returnOrderLines.SOPDetail5 = selectedSitecode != "" ? selectedSitecode.Split('|')[0].Trim() : "";
+                returnOrderLines.ReasonCode = 0;
+                returnOrderLines.SOPDetail4 = ((ReturnOrderModel)Session["selectedRetLine"]).SOPDetail4;
+                ((List<ReturnOrderModel>)Session["rtnLines"]).Add(returnOrderLines);
+                result = "Success";
+            }
+            catch (Exception e)
+            {
+                result = "Fail";
+            }
+            return result;
+        }
+        #endregion
+
         public JsonResult AddToCardReturnLines(string description = "", string price = "", string size = "", string color = "", string qty = "", string style = "", string orgStyl = "", string entQty = "", string reqData1 = "", string reason = "", string QtySizePriceArr = "", string selectedSitecode = "")
         {
             var result = "";
             if (description != "" && price != "" && size != "" && color != "" && qty != "" && style != "" && orgStyl != "")
             {
-                if (checksizeexists(style,size))
+                if (checksizeexists(style, size))
                 {
                     result = "size validation";
                 }
                 else
                 {
-                    string busId = Session["BuisnessId"].ToString();
-                    var lineNo = ((ReturnOrderModel)Session["selectedRetLine"]).LineNo;
-
-                    var emp = ((ReturnOrderModel)Session["selectedRetLine"]).Emp;
-                    var empName = ((ReturnOrderModel)Session["selectedRetLine"]).Employeename;
-                    var ucode = ((ReturnOrderModel)Session["selectedRetLine"]).Ucode;
-                    var stylPoints = _pointStyle.Exists(s => s.StyleID.Trim().ToLower() == style.Trim().ToLower() && s.UcodeID.Trim() == ucode.Trim()) ? _pointStyle.GetAll(s => s.StyleID.Trim().ToLower() == style.Trim().ToLower() && s.UcodeID.Trim() == ucode.Trim()).First().Points.Value : 0;
-                    var totalPts = (stylPoints) * Convert.ToInt32(qty);
-                    int reLineNo = ((List<ReturnOrderModel>)Session["rtnLines"]).Any(s => s.IsReorder) ? ((List<ReturnOrderModel>)Session["rtnLines"]).Where(s => s.IsReorder).Max(s => s.ReOrderLineNo) + 1 : 1;
-                    var returnOrderLines = new ReturnOrderModel();
-                    try
+                    if ((Convert.ToBoolean(Session["IsEmergency"].ToString())|| IsMatUcodeId(Session["SelectedUcode"].ToString(),Session["BuisnessId"].ToString()))&& checkforemergencyqty(style, size, Convert.ToInt32(qty)))
                     {
-                        returnOrderLines.ReOrderLineNo = reLineNo;
-                        returnOrderLines.Employeename = empName;
-                        returnOrderLines.OrderNo = ((ReturnOrderModel)Session["selectedRetLine"]).OrderNo;
-                        //if ((bool)Session["ISRTNEDITING"])
-                        //{
-                        //    returnOrderLines.ReOrderno = ((List<ReturnOrderModel>)Session["rtnLines"]).Any(s => s.IsReorder) ? ((List<ReturnOrderModel>)Session["rtnLines"]).Where(s => s.IsReorder).First().ReOrderno : 0;
-                        //}
-                        returnOrderLines.IsReorder = true;
-                        returnOrderLines.ColourId = color;
-                        returnOrderLines.Points = stylPoints;
-                        returnOrderLines.LineNo = lineNo;
-                        returnOrderLines.ReturnLineNo = ((ReturnOrderModel)Session["selectedRetLine"]).ReturnLineNo;
-                        returnOrderLines.Description = description.Trim();
-                        returnOrderLines.OrdQty = Convert.ToInt32(qty);
-                        returnOrderLines.Price = Convert.ToDouble(price) == 0 ? Convert.ToDouble(GetPrice(style, size)) : Convert.ToDouble(price);
-                        returnOrderLines.SizeId = size;
-                        returnOrderLines.StyleId = style;
-                        returnOrderLines.Emp = emp;
-                        returnOrderLines.CustRef = Session["CustRef"].ToString();
-                        returnOrderLines.VAT = _dataConnection.GetlineVat(Convert.ToInt32(qty), Convert.ToDouble(price), _dataConnection.GetVatPercent(style, size));
-                        returnOrderLines.TotalPoints = totalPts;
-                        returnOrderLines.RepId = Convert.ToInt32(Session["Rep_Id"].ToString());
-                        returnOrderLines.StockingUOM1 = 1;
-                        returnOrderLines.Currency_Exchange_Rate = Convert.ToDouble(Session["CurrencyExchangeRate"]);
-                        returnOrderLines.IssueQty1 = Convert.ToInt32(qty);
-                        returnOrderLines.StyleImage = _tblFskStyle.Exists(x => x.StyleID.Contains(style)) ? _tblFskStyle.GetAll(x => x.StyleID.Contains(style)).FirstOrDefault().StyleImage : Url.Content("~/StyleImages/notfound.png");
-                        returnOrderLines.OrgStyle = orgStyl;
-                        returnOrderLines.VatPercent = _dataConnection.GetVatPercent(style, size);
-                        returnOrderLines.Total = _dataConnection.GetlineTotals(Convert.ToDouble(qty), Convert.ToDouble(price), _dataConnection.GetVatPercent(style, size));
-                        returnOrderLines.FreeText1 = reqData1;
-                        returnOrderLines.DeliveryDate = _dataConnection.GetDeliveryDate(Convert.ToInt32(Session["intNoOfday"]) - 1, Convert.ToBoolean(Session["IncWendsDel"]));
-                        returnOrderLines.VatCode1 = _dataConnection.GetVatCode();
-                        returnOrderLines.RepId = Convert.ToInt32(Session["Rep_Id"].ToString());
-                        returnOrderLines.Currency_Exchange_Rate = Convert.ToDouble(Session["CurrencyExchangeRate"]);
-                        returnOrderLines.Cost1 = _dataConnection.GetCostPrice(style, size, color, Session["Currency_Name"].ToString(), 1, 0);
-                        returnOrderLines.DeliveryDate = _dataConnection.GetDeliveryDate(Convert.ToInt32(Session["intNoOfday"]), Convert.ToBoolean(Session["IncWendsDel"]));
-                        returnOrderLines.IssueUOM1 = 1;
-                        returnOrderLines.IssueQty1 = Convert.ToInt32(qty);
-                        returnOrderLines.StockingUOM1 = 1;
-                        returnOrderLines.SOPDetail4 = reason;
-                        returnOrderLines.SOPDetail5 = selectedSitecode != "" ? selectedSitecode.Split('|')[0].Trim() : "";
-                        returnOrderLines.ReasonCode = 0;
-                        ((List<ReturnOrderModel>)Session["rtnLines"]).Add(returnOrderLines);
-                        result = "Success";
+                        result = "qty validation";
                     }
-                    catch (Exception e)
+                    else
                     {
-
+                        result = AddToCartMethod(description, price, size, color, qty, style, orgStyl, entQty, reqData1, reason, QtySizePriceArr, selectedSitecode);
                     }
+
                 }
 
             }
@@ -944,30 +1285,31 @@ namespace Maximus.Controllers
 
         public ActionResult ReorderGridviewPartial()
         {
+            var sss = ((List<ReturnOrderModel>)Session["rtnLines"]).Where(s => s.IsReorder).ToList();
             var model = ((List<ReturnOrderModel>)Session["rtnLines"]).Any(s => s.IsReorder) ? ((List<ReturnOrderModel>)Session["rtnLines"]).Where(s => s.IsReorder && s.IsDleted == 0).ToList() : new List<ReturnOrderModel>();
             return PartialView("_ReorderGridviewPartial", model);
         }
 
         public string GetBtnStatusReturns(string style, string qty, int lineno = 0, bool isReordEdt = false)
         {
-          
+
             var result = "";
             if (style != "" && qty != "")
             {
-                if (Session["OverrideEnt"].ToString().ToLower().Trim() != "show")
+                if (Session["OverrideEnt"].ToString().ToLower().Trim() != "show" && Convert.ToBoolean(Session["IsEmergency"].ToString()) == false)
                 {
                     if (Convert.ToBoolean(Session["POINTSREQ"]))
                     {
                         int availPts = 0;
                         var emp = (((List<ReturnOrderModel>)Session["rtnLines"])).First().Emp;
                         var ucode = (((List<ReturnOrderModel>)Session["rtnLines"])).First().Ucode;
-                        var ucodStylesLst =  _dp.UcodeStyles(ucode, Session["BuisnessId"].ToString())  ;
+                        var ucodStylesLst = _dp.UcodeStyles(ucode, Session["BuisnessId"].ToString());
                         string busId = Session["BuisnessId"].ToString();
                         int totalPts = _pointsByUcode.Exists(s => s.BusinessID == busId && s.UcodeID == ucode) ? _pointsByUcode.GetAll(s => s.BusinessID == busId && s.UcodeID == ucode).First().TotalPoints.Value : 0;
                         int cardPts = _vuPointsCard.Exists(s => s.BusinessID == busId && s.EmployeeID == emp && ucodStylesLst.Contains(s.StyleID)) ? Convert.ToInt32(_vuPointsCard.GetAll(s => s.BusinessID == busId && s.EmployeeID == emp && ucodStylesLst.Contains(s.StyleID)).Sum(s => s.TOTSOPOINTS).Value) : 0;
                         int thisPts = _pointStyle.Exists(s => s.BusinessID == busId && s.UcodeID == ucode.Trim() && s.StyleID.Trim() == style.Trim()) ? _pointStyle.GetAll(s => s.BusinessID == busId && s.UcodeID == ucode.Trim() && s.StyleID.Trim() == style.Trim()).First().Points.Value : 0;
                         int rtnPts = (((List<ReturnOrderModel>)Session["rtnLines"])).Where(s => s.IsReturn && s.IsDleted == 0).Sum(s => s.TotalPoints);
-                        int reOrdPtsEd= isReordEdt ? (((List<ReturnOrderModel>)Session["rtnLines"])).Where(s => s.IsReorder && s.IsDleted == 0 && s.ReOrderLineNo != lineno).Sum(s => s.TotalPoints) : (((List<ReturnOrderModel>)Session["rtnLines"])).Where(s => s.IsReorder && s.IsDleted == 0 && s.ReOrderno == 0).Sum(s => s.TotalPoints);
+                        int reOrdPtsEd = isReordEdt ? (((List<ReturnOrderModel>)Session["rtnLines"])).Where(s => s.IsReorder && s.IsDleted == 0 && s.ReOrderLineNo != lineno).Sum(s => s.TotalPoints) : (((List<ReturnOrderModel>)Session["rtnLines"])).Where(s => s.IsReorder && s.IsDleted == 0 && s.ReOrderno == 0).Sum(s => s.TotalPoints);
                         int reOrdPts = isReordEdt ? (((List<ReturnOrderModel>)Session["rtnLines"])).Where(s => s.IsReorder && s.IsDleted == 0 && s.ReOrderLineNo != lineno).Sum(s => s.TotalPoints) : (((List<ReturnOrderModel>)Session["rtnLines"])).Where(s => s.IsReorder && s.IsDleted == 0 && s.ReOrderno != 0).Sum(s => s.TotalPoints);
                         int thisTotPts = Convert.ToInt32(qty) * thisPts;
                         if (Convert.ToBoolean(Session["ISRTNEDITING"]))
@@ -977,7 +1319,7 @@ namespace Maximus.Controllers
                         }
                         else
                         {
-                            availPts = totalPts - ((cardPts + reOrdPtsEd+ reOrdPts) - rtnPts);
+                            availPts = totalPts - ((cardPts + reOrdPtsEd + reOrdPts) - rtnPts);
                         }
 
                         var ss = (((List<ReturnOrderModel>)Session["rtnLines"])).Where(s => s.IsReturn && s.IsDleted == 0).ToList();
@@ -1046,6 +1388,16 @@ namespace Maximus.Controllers
                 model.Where(s => s.ReturnLineNo == line.ReturnLineNo).First().Reason = line.Reason;
                 model.Where(s => s.ReturnLineNo == line.ReturnLineNo).First().TotalPoints = line.OrdQty * model.Where(s => s.ReturnLineNo == line.ReturnLineNo).First().Points;
                 model.Where(s => s.ReturnLineNo == line.ReturnLineNo).First().Total = _dataConnection.GetlineTotals(Convert.ToDouble(line.OrdQty), Convert.ToDouble(model.Where(s => s.ReturnLineNo == line.ReturnLineNo).First().Price), _dataConnection.GetVatPercent(model.Where(s => s.ReturnLineNo == line.ReturnLineNo).First().StyleId, model.Where(s => s.ReturnLineNo == line.ReturnLineNo).First().SizeId));
+               //if( Convert.ToBoolean(Session["IsEmergency"].ToString()) ||  IsMatUcodeId(model.First().Ucode, Session["BuisnessId"].ToString()))
+               // {
+               //     var frstRetModel = model.Any(s => s.ReturnLineNo == line.ReturnLineNo) ? model.Where(s => s.ReturnLineNo == line.ReturnLineNo).First() : new ReturnOrderModel();
+               //     if (model.Any(s => s.ReturnLineNo == frstRetModel.ReturnLineNo && s.IsReorder))
+               //     {
+               //         model.Where(s => s.ReturnLineNo == frstRetModel.ReturnLineNo && s.IsReorder).ToList().ForEach(s=>s.OrdQty = line.OrdQty);
+               //         model.Where(s => s.ReturnLineNo == frstRetModel.ReturnLineNo && s.IsReorder).ToList().ForEach(s => s.TotalPoints =line.OrdQty*s.Points );
+               //     }
+                   
+               // }
             }
             return PartialView("_ReturnReorderGridviewPartial", model.Where(s => s.IsReturn && s.IsDleted == 0).ToList());
         }
@@ -1194,6 +1546,7 @@ namespace Maximus.Controllers
         #region ResetSessions
         public void ResetSessions()
         {
+            Session["SelectedUcode"] = "";
             Session["qty"] = "0";
             Session["SalesOrderHeader"] = new List<SalesOrderHeaderViewModel>();
             Session["SalesOrderLines"] = new List<SalesOrderLineViewModel>();
@@ -1491,9 +1844,30 @@ namespace Maximus.Controllers
                         Total = s.TotalGoods.Value,
                         EmpName = _employee.GetAll(sa => sa.EmployeeID == s.PinNo).First().Forename + " " + _employee.GetAll(sa => sa.EmployeeID == s.PinNo).First().Surname,
                     }).First();
+
+                    Session["SelectedUcode"] = rntO.Ucode;
                     if (((List<SalesOrderHeaderViewModel>)Session["ReturnOrderHeader"]).Count() == 0)
                     {
-                        SetSalesOrderHeader(rntO.Emp, rntO.CustId);
+                        if (_dp.CheckEmergency(rntO.CustId, rntO.Ucode))
+                        {
+
+                            if (IsMatUcodeId(rntO.Ucode, rntO.CustId))
+                            {
+                                Session["IsEmergency"] = false;
+                                Session["POINTSREQ"] = _dp.BusinessParam("POINTSREQ", rntO.CustId);
+                            }
+                            else
+                            {
+                                Session["IsEmergency"] = true;
+                                Session["POINTSREQ"] = false;
+                            }
+                        }
+                        else
+                        {
+                            Session["IsEmergency"] = false;
+                            Session["POINTSREQ"] = _dp.BusinessParam("POINTSREQ", rntO.CustId);
+                        }
+                        SetSalesOrderHeader(rntO.Emp, rntO.CustId,rntO.Ucode);
                     }
                     Session["CustRef"] = rntO.CustRef;
                     Session["rtnempname"] = rntO.EmpName;
@@ -1530,7 +1904,7 @@ namespace Maximus.Controllers
                         OrdQty = Convert.ToInt32(s.OrdQty),
                         OrgOrdQty = _salesOrderLines.Exists(sa => sa.OrderNo == s.OriginalOrderNo && sa.LineNo == s.OriginalLineNo) ? Convert.ToInt32(_salesOrderLines.GetAll(sa => sa.OrderNo == s.OriginalOrderNo && sa.LineNo == s.OriginalLineNo).First().OrdQty) : 0,
                         OtherReturnQty = otherOrders.Count > 0 ? _salesOrderLines.Exists(sa => otherOrders.Contains(sa.OrderNo) && sa.StyleID == s.StyleID && sa.ColourID == s.ColourID) ? Convert.ToInt32(_salesOrderLines.GetAll(sa => otherOrders.Contains(sa.OrderNo) && sa.StyleID == s.StyleID && sa.ColourID == s.ColourID).Sum(sa => sa.OrdQty).Value) : 0 : 0,
-                        Points = _pointStyle.GetAll(sa => sa.UcodeID == rntO.Ucode && sa.StyleID == s.StyleID).First().Points.Value,
+                        Points = Convert.ToBoolean(Session["IsEmergency"].ToString()) ? 0 : _pointStyle.GetAll(sa => sa.UcodeID == rntO.Ucode && sa.StyleID == s.StyleID).First().Points.Value,
                         Price = Convert.ToDouble(s.Price.Value),
                         RtnOrderno = Convert.ToInt32(s.OrderNo),
                         ReasonCode = s.ReasonCode.Value,
@@ -1539,7 +1913,8 @@ namespace Maximus.Controllers
                         StyleId = s.StyleID,
                         StyleImage = _fskStyle.Exists(sa => sa.StyleID == s.StyleID) ? _fskStyle.GetAll(sa => sa.StyleID == s.StyleID).First().StyleImage : "",
                         SizeId = s.SizeID,
-                        TotalPoints = Convert.ToInt32(s.OrdQty.Value) * _pointStyle.GetAll(sa => sa.UcodeID == rntO.Ucode && sa.StyleID == s.StyleID).First().Points.Value,
+                        TotalPoints = Convert.ToBoolean(Session["IsEmergency"].ToString()) ? 0 : Convert.ToInt32(s.OrdQty.Value) * _pointStyle.GetAll(sa => sa.UcodeID == rntO.Ucode && sa.StyleID == s.StyleID).First().Points.Value,
+                        SOPDetail4 = s.SOPDETAIL4
                     }).ToList();
                     if (_salesOrderLines.Exists(s => s.ReturnOrderNo == orderNo))
                     {
@@ -1572,19 +1947,20 @@ namespace Maximus.Controllers
                             OrderNo = Convert.ToInt32(s.OriginalOrderNo),
                             OrdQty = Convert.ToInt32(s.OrdQty),
                             OrgOrdQty = Convert.ToInt32(s.OrdQty),
-                            Points = _pointStyle.GetAll(sa => sa.UcodeID == rntO.Ucode && sa.StyleID == s.StyleID).First().Points.Value,
+                            Points = Convert.ToBoolean(Session["IsEmergency"].ToString()) ? 0 : _pointStyle.GetAll(sa => sa.UcodeID == rntO.Ucode && sa.StyleID == s.StyleID).First().Points.Value,
                             Price = Convert.ToDouble(s.Price.Value),
                             ReasonCode = s.ReasonCode.Value,
                             RepId = Convert.ToInt32(s.RepID),
                             StyleId = s.StyleID,
                             StyleImage = _fskStyle.GetAll(sa => sa.StyleID == s.StyleID).First().StyleImage,
                             SizeId = s.SizeID,
-                            TotalPoints = Convert.ToInt32(s.OrdQty.Value) * _pointStyle.GetAll(sa => sa.UcodeID == rntO.Ucode && sa.StyleID == s.StyleID).First().Points.Value,
+                            TotalPoints = Convert.ToBoolean(Session["IsEmergency"].ToString()) ? 0 : Convert.ToInt32(s.OrdQty.Value) * _pointStyle.GetAll(sa => sa.UcodeID == rntO.Ucode && sa.StyleID == s.StyleID).First().Points.Value,
+                            SOPDetail4 = s.SOPDETAIL4
                         }).ToList());
                     }
                     var cnfLines = rtnLines.Where(s => s.IsReorder).Any(s => s.IsCnf) ? rtnLines.Where(s => s.IsReorder && s.IsCnf).Select(s => s.ReturnLineNo).ToList() : new List<int>();
                     rtnLines.Where(s => cnfLines.Contains(s.ReturnLineNo) && s.IsReturn).ToList().ForEach(s => s.HasCnfReorders = true);
-                    var model = getreturnordermodel(rntO.Emp, new List<string>(), 0, "", "", 0, rntO.EmpName);
+                    var model = getreturnordermodel(rntO.Emp, new List<string>(), 0, "", "", 0, rntO.EmpName, rntO.Ucode, rntO.CustId);
                     foreach (var lines in rtnLines.Where(s => s.IsReturn))
                     {
                         model.Where(s => s.LineNo == lines.LineNo).ToList().ForEach(s => s.OtherReturnQty = lines.OtherReturnQty);
@@ -1593,6 +1969,12 @@ namespace Maximus.Controllers
                     Session["returnModellst"] = model;
                     Session["rtnLines"] = rtnLines;
                 }
+        }
+
+        public bool IsMatUcodeId(string ucode, string busid)
+        {
+            var matCodes = _ucodeReason.Exists(s => s.UcodeId == "BAR MATERNITY P" | s.UcodeId == "BAR MATERNITY F" | s.UcodeId == "BAR MATERNITY") ? string.Join(",", _ucodeReason.GetAll(s => s.UcodeId == "BAR MATERNITY P" | s.UcodeId == "BAR MATERNITY F" | s.UcodeId == "BAR MATERNITY").Select(s => s.UcodeId.ToLower().Trim().ToString()).ToList()) : "";
+            return matCodes.Contains(ucode.ToLower().Trim()) && _pointsByUcode.Exists(s => s.BusinessID == busid && s.UcodeID == ucode.ToLower().Trim()) ? true : false;
         }
         #endregion
 
@@ -1616,7 +1998,7 @@ namespace Maximus.Controllers
                 string busId = Session["BuisnessId"].ToString();
                 var ss = ((List<ReturnOrderModel>)Session["rtnLines"]);
                 var ucode = (bool)Session["ISRTNEDITING"] ? ((List<ReturnOrderModel>)Session["rtnLines"]).First().Ucode : Session["ReturnOrderHeader"] != null ? ((List<SalesOrderHeaderViewModel>)Session["ReturnOrderHeader"]).Count > 0 ? ((List<SalesOrderHeaderViewModel>)Session["ReturnOrderHeader"]).First().UCodeId : "" : "";
-                var ucodStylesLst = _dp.UcodeStyles(ucode, busId) == null ? _dp.UcodeStyles(ucode,busId): (List<string>)_dp.UcodeStyles(ucode, busId);
+                var ucodStylesLst = _dp.UcodeStyles(ucode, busId) == null ? _dp.UcodeStyles(ucode, busId) : (List<string>)_dp.UcodeStyles(ucode, busId);
                 totalPts = _pointsByUcode.Exists(s => s.BusinessID == busId && s.UcodeID == ucode) ? _pointsByUcode.GetAll(s => s.BusinessID == busId && s.UcodeID == ucode).First().TotalPoints.Value : 0;
                 cardPts = _vuPointsCard.Exists(s => s.BusinessID == busId && s.EmployeeID == emp && ucodStylesLst.Contains(s.StyleID)) ? Convert.ToInt32(_vuPointsCard.GetAll(s => s.BusinessID == busId && s.EmployeeID == emp && ucodStylesLst.Contains(s.StyleID)).Sum(s => s.TOTSOPOINTS).Value) : 0;
 
@@ -1627,20 +2009,28 @@ namespace Maximus.Controllers
                 //else
                 //{
                 rtnPts = (((List<ReturnOrderModel>)Session["rtnLines"])).Any(s => s.IsReturn && s.IsDleted == 0) ? (((List<ReturnOrderModel>)Session["rtnLines"])).Where(s => s.IsReturn && s.IsDleted == 0).Sum(s => s.TotalPoints) : 0;
-                reOrdPts= (((List<ReturnOrderModel>)Session["rtnLines"])).Any(s => s.IsReorder && s.IsDleted == 0) ? (((List<ReturnOrderModel>)Session["rtnLines"])).Where(s => s.IsReorder && s.IsDleted == 0 && s.ReOrderno != 0).Sum(s => s.TotalPoints) : 0;
-                reOrdPtsED = (((List<ReturnOrderModel>)Session["rtnLines"])).Any(s => s.IsReorder && s.IsDleted == 0) ? (((List<ReturnOrderModel>)Session["rtnLines"])).Where(s => s.IsReorder && s.IsDleted == 0 && s.ReOrderno==0).Sum(s => s.TotalPoints) : 0;
-              
+                reOrdPts = (((List<ReturnOrderModel>)Session["rtnLines"])).Any(s => s.IsReorder && s.IsDleted == 0) ? (((List<ReturnOrderModel>)Session["rtnLines"])).Where(s => s.IsReorder && s.IsDleted == 0 && s.ReOrderno != 0).Sum(s => s.TotalPoints) : 0;
+                reOrdPtsED = (((List<ReturnOrderModel>)Session["rtnLines"])).Any(s => s.IsReorder && s.IsDleted == 0) ? (((List<ReturnOrderModel>)Session["rtnLines"])).Where(s => s.IsReorder && s.IsDleted == 0 && s.ReOrderno == 0).Sum(s => s.TotalPoints) : 0;
+
                 if (Convert.ToBoolean(Session["ISRTNEDITING"]))
                 {
+                    int reord= (((List<ReturnOrderModel>)Session["rtnLines"])).Any(s => s.IsReorder && s.IsDleted == 0) ? (((List<ReturnOrderModel>)Session["rtnLines"])).Where(s => s.IsReorder && s.IsDleted == 0 && s.ReOrderno != 0).Sum(s => s.TotalPoints) : 0;
+                    int used = cardPts - rtnPts;
+                    int newUsed = used + reord;
+                    int avail = totalPts - newUsed;
+                    int reOrdPtsDel = (((List<ReturnOrderModel>)Session["rtnLines"])).Any(s => s.IsReorder && s.IsDleted == 1) ? (((List<ReturnOrderModel>)Session["rtnLines"])).Where(s => s.IsReorder && s.IsDleted == 1 && s.ReOrderno != 0).Sum(s => s.TotalPoints) : 0;
                     int thisRTnPts = (((List<ReturnOrderModel>)Session["rtnLines"])).Any(s => s.IsReturn && s.IsDleted == 0 && s.IsRetEdit == false) ? (((List<ReturnOrderModel>)Session["rtnLines"])).Where(s => s.IsReturn && s.IsDleted == 0 && s.IsRetEdit == false).Sum(s => s.TotalPoints) : 0;
-                    availPts = totalPts - ((cardPts + reOrdPtsED)- thisRTnPts);
+                    int incartReordPoints = (((List<ReturnOrderModel>)Session["rtnLines"])).Any(s => s.IsReorder && s.IsDleted == 0) ? (((List<ReturnOrderModel>)Session["rtnLines"])).Where(s => s.IsReorder && s.IsDleted == 0).Sum(s => s.TotalPoints) : 0;
+                    int incartRtnPoints = (((List<ReturnOrderModel>)Session["rtnLines"])).Any(s => s.IsReturn && s.IsDleted == 0) ? (((List<ReturnOrderModel>)Session["rtnLines"])).Where(s => s.IsReturn && s.IsDleted == 0).Sum(s => s.TotalPoints) : 0;
+
+                    availPts = totalPts - ((cardPts + reOrdPtsED) - thisRTnPts);
                 }
                 else
                 {
-                    availPts = totalPts - ((cardPts + reOrdPts+ reOrdPtsED) - rtnPts);
+                    availPts = totalPts - ((cardPts + reOrdPts + reOrdPtsED) - rtnPts);
                 }
                 //}
-                result = "<div class='row'><div class='col-md-2'>Total Points:&nbsp;&nbsp;<b>" + totalPts + "</b></div><div class='col-md-2'>Used Points:<b>&nbsp;&nbsp;" + cardPts + "</b></div><div class='col-md-3'>Available Points:<b>&nbsp;&nbsp;" + availPts + "</b></div><div class='col-md-2'>Return Points:<b>&nbsp;&nbsp;" + rtnPts + "</b></div><div class='col-md-2'>Reorder Points:<b>&nbsp;&nbsp;" +( reOrdPts+ reOrdPtsED) + "</b></div></div>";
+                result = "<div class='row'><div class='col-md-2'>Total Points:&nbsp;&nbsp;<b>" + totalPts + "</b></div><div class='col-md-2'>Used Points:<b>&nbsp;&nbsp;" + cardPts + "</b></div><div class='col-md-3'>Available Points:<b>&nbsp;&nbsp;" + availPts + "</b></div><div class='col-md-2'>Return Points:<b>&nbsp;&nbsp;" + rtnPts + "</b></div><div class='col-md-2'>Reorder Points:<b>&nbsp;&nbsp;" + (reOrdPts + reOrdPtsED) + "</b></div></div>";
             }
             return result;
         }

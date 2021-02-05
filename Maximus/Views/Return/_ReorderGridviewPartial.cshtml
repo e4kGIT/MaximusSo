@@ -1,6 +1,6 @@
 @{
     Maximus.Data.Interface.Concrete.IUnitOfWork _unitOfWork = new Maximus.Data.InterFace.UnitOfWork();
-    Maximus.Controllers.HomeController home = new Maximus.Controllers.HomeController(_unitOfWork);
+    Maximus.Controllers.ReturnController retursn = new Maximus.Controllers.ReturnController(_unitOfWork);
     Maximus.Data.Models.DataProcessing hc = new Maximus.Data.Models.DataProcessing(_unitOfWork);
     Maximus.Services.Interface.IDataConnection _dataConnection = new Maximus.Services.DataConnectionService(_unitOfWork);
 }
@@ -51,10 +51,11 @@
         {
             MVCxGridView gridView = (MVCxGridView)s;
             var value = Convert.ToBoolean(gridView.GetRowValues(e.VisibleIndex, "IsCnf"));
+              
             if (e.ButtonType == ColumnCommandButtonType.Edit)
             {
 
-                if (value)
+                if (value || Convert.ToBoolean(Session["IsEmergency"].ToString())|| retursn.IsMatUcodeId(Session["SelectedUcode"].ToString(), Session["BuisnessId"].ToString()))
                 {
                     e.Visible = false;
                 }
@@ -205,33 +206,52 @@
 
             });
         });
-
-        settings.Columns.Add(col =>
+        if (Convert.ToBoolean(Session["IsEmergency"].ToString()))
         {
-            col.FieldName = "Points"; col.SetEditItemTemplateContent(c =>
+            settings.Columns.Add(col =>
             {
-                GridViewEditItemTemplateContainer templateContainer = c as GridViewEditItemTemplateContainer;
-
-                Html.DevExpress().Label(lblsettings =>
+                col.FieldName = "SOPDetail4"; col.Caption="Emergency reason"; col.SetEditItemTemplateContent(c =>
                 {
-                    lblsettings.Name = "Points";
-                }).Bind(templateContainer.Text).Render();
+                    GridViewEditItemTemplateContainer templateContainer = c as GridViewEditItemTemplateContainer;
 
+                    Html.DevExpress().Label(lblsettings =>
+                    {
+                        lblsettings.Name = "SOPDetail4";
+
+                    }).Bind(templateContainer.Text).Render();
+
+                });
             });
-        });
-        settings.Columns.Add(col =>
+        }
+        if (Convert.ToBoolean(Session["POINTSREQ"]) && Convert.ToBoolean(Session["IsEmergency"].ToString()) == false)
         {
-            col.FieldName = "TotalPoints"; col.SetEditItemTemplateContent(c =>
+            settings.Columns.Add(col =>
             {
-                GridViewEditItemTemplateContainer templateContainer = c as GridViewEditItemTemplateContainer;
-
-                Html.DevExpress().Label(lblsettings =>
+                col.FieldName = "Points"; col.SetEditItemTemplateContent(c =>
                 {
-                    lblsettings.Name = "TotalPoints";
-                }).Bind(templateContainer.Text).Render();
+                    GridViewEditItemTemplateContainer templateContainer = c as GridViewEditItemTemplateContainer;
 
+                    Html.DevExpress().Label(lblsettings =>
+                    {
+                        lblsettings.Name = "Points";
+                    }).Bind(templateContainer.Text).Render();
+
+                });
             });
-        });
+            settings.Columns.Add(col =>
+            {
+                col.FieldName = "TotalPoints"; col.SetEditItemTemplateContent(c =>
+                {
+                    GridViewEditItemTemplateContainer templateContainer = c as GridViewEditItemTemplateContainer;
+
+                    Html.DevExpress().Label(lblsettings =>
+                    {
+                        lblsettings.Name = "TotalPoints";
+                    }).Bind(templateContainer.Text).Render();
+
+                });
+            });
+        }
         //  settings.Columns.Add("Emp");
         if (Session["Price"].ToString().ToLower() != "hide")
         {

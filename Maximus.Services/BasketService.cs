@@ -44,6 +44,7 @@ namespace Maximus.Services
         public readonly PointsByUcode _pointsByUcode;
         public readonly PointStyle _pointStyle;
         public readonly DataProcessing _dp;
+        public readonly FskStyleLocations _fskStyleLocations;
         public readonly tblSalesOrderHeader _tblSalesHeader;
         public readonly tblSalesLines _tblSalesLines;
         public readonly PointsCard _pointsCard;
@@ -62,7 +63,7 @@ namespace Maximus.Services
             AssemblyHeader assemblyHeader = new AssemblyHeader(_unitOfWork);
             UcodeOperationsTbl ucodeOperationsTbl = new UcodeOperationsTbl(_unitOfWork);
             RejectReasonTbl rejectReasonTbl = new RejectReasonTbl(_unitOfWork);
-
+            FskStyleLocations fskStyleLocations=new FskStyleLocations(_unitOfWork);
             BusAddress busAddress = new BusAddress(_unitOfWork);
             BusContact busContact = new BusContact(_unitOfWork);
             CountryCodes countryCodes = new CountryCodes(_unitOfWork);
@@ -96,6 +97,7 @@ namespace Maximus.Services
             _pointsCard = pointsCard;
             _pointsStyle = pointsStyle;
             _fskStyle = fskStyle;
+            _fskStyleLocations = fskStyleLocations;
             _allAssemblies = allAssemblies;
             _assemblyDetail = assemblyDetail;
             _assemblyHeader = assemblyHeader;
@@ -130,7 +132,7 @@ namespace Maximus.Services
 
 
         #region  AcceptOrder 
-        public AcceptResultSet AcceptOrder(string cmpId, bool IsManPack, string busId, List<SalesOrderHeaderViewModel> salesHeaderLst, string addDesc, bool isRollOutOrder, bool isRollOutOrderEst, string OverrideEnt, bool CusRefMan, string POINTSREQ, List<BusAddress1> busAddress, string DIFF_MANPACK_INFO, string NOMCODEMAN, string ONLNEREQNOM1, string ONLNEREQNOM2, string ONLNEREQNOM3, string ONLNEREQNOM4, string ONLNEREQNOM5, string RolloutName, string selectedcar, string UserName, string DELADDR_USER_CREATE, double CARRPERCENT, double CARRREQAMT, string FITALLOC, string DIMALLOC, string BUDGETREQ, string Browser, string REMOTE_ADDR, string ONLCUSREFLBL, string cmpLogo, string custLogo, string adminMail, string mailUsername, string mailPassword, string mailPort, string mailServer, string ueMailEMail, string HTTP_X_FORWARDED_FOR, bool isedit, bool boolDeleteConfirm, string pnlCarriageReason, bool booPtsReq, int empResetMnths, string pricePermission, UpdateMailModel updModel, bool booAutoConfirm = false)
+        public AcceptResultSet AcceptOrder(string cmpId, bool IsManPack, string busId, List<SalesOrderHeaderViewModel> salesHeaderLst, string addDesc, bool isRollOutOrder, bool isRollOutOrderEst, string OverrideEnt, bool CusRefMan, string POINTSREQ, List<BusAddress1> busAddress, string DIFF_MANPACK_INFO, string NOMCODEMAN, string ONLNEREQNOM1, string ONLNEREQNOM2, string ONLNEREQNOM3, string ONLNEREQNOM4, string ONLNEREQNOM5, string RolloutName, string selectedcar, string UserName, string DELADDR_USER_CREATE, double CARRPERCENT, double CARRREQAMT, string FITALLOC, string DIMALLOC, string BUDGETREQ, bool FreeStckCheck, string Browser, string REMOTE_ADDR, string ONLCUSREFLBL, string cmpLogo, string custLogo, string adminMail, string mailUsername, string mailPassword, string mailPort, string mailServer, string ueMailEMail, string HTTP_X_FORWARDED_FOR, bool isedit, bool boolDeleteConfirm, string pnlCarriageReason, bool booPtsReq, int empResetMnths, string pricePermission, UpdateMailModel updModel, bool booAutoConfirm = false)
         {
             int addressId = 0;
             bool booCheck = true;
@@ -561,7 +563,7 @@ namespace Maximus.Services
                     if (checkForAddressChange(salesHead, UserName))
                     {
                         int res = _dp.GetDeliveryAddressId(salesHead.EmployeeID, salesHead.CustID, UserName);
-                        if(res>0)
+                        if (res > 0)
                         {
                             var address = _busAddress.Exists(s => s.AddressID == res) ? _busAddress.GetAll(s => s.AddressID == res).First() : new tblbus_address();
                             salesHead.AddressId = address.AddressID;
@@ -643,7 +645,7 @@ namespace Maximus.Services
                     }
                     if (isedit)
                     {
-                        if (_dp.UpdateSalesOrder(salesHead, empResetMnths, Browser, HTTP_X_FORWARDED_FOR, REMOTE_ADDR, isRollOutOrder, salesHead.OrderNo, busId, UserName.ToString(), isedit, POINTSREQ))
+                        if (_dp.UpdateSalesOrder(salesHead, empResetMnths, Browser, HTTP_X_FORWARDED_FOR, REMOTE_ADDR, isRollOutOrder, salesHead.OrderNo, busId, UserName.ToString(), isedit, POINTSREQ, FreeStckCheck))
                         {
                             if (isedit == false)
                             {
@@ -816,7 +818,7 @@ namespace Maximus.Services
                     }
                     else
                     {
-                        if (_dp.SaveSalesOrder(salesHead, empResetMnths, Browser, HTTP_X_FORWARDED_FOR, REMOTE_ADDR, isRollOutOrder, intSalesOrderNo, busId, UserName.ToString(), isedit, POINTSREQ))
+                        if (_dp.SaveSalesOrder(salesHead, empResetMnths, Browser, HTTP_X_FORWARDED_FOR, REMOTE_ADDR, isRollOutOrder, intSalesOrderNo, busId, UserName.ToString(), isedit, POINTSREQ, FreeStckCheck))
                         {
 
                             if (isedit == false)
@@ -1007,8 +1009,83 @@ namespace Maximus.Services
                 {
                     break;
                 }
-                AcceptResultSet.results = ResultSet;
-                AcceptResultSet.type = "";
+                if (FreeStckCheck && ResultSet.Count == 0)
+                {
+                    var newResult = salesHead.SalesOrderLine.GroupBy(s => new { s.StyleID, s.ColourID, s.SizeID, s.IsDleted }).
+                           Select(sa => new SalesOrderLineViewModel
+                           {
+                               StyleID = sa.First().StyleID.Trim(),
+                               ColourID = sa.First().ColourID.Trim(),
+                               SizeID = sa.First().SizeID.Trim(),
+                               OrdQty = sa.Sum(s => s.OrdQty),
+                               Description = sa.First().Description,
+                               Price = sa.First().Price,
+                               Cost1 = sa.First().Cost1,
+                               IssueUOM1 = sa.First().IssueUOM1,
+                               IssueQty1 = sa.Sum(s => s.IssueQty1),
+                               Currency_Exchange_Rate = sa.First().Currency_Exchange_Rate,
+                               StyleIDref = sa.First().StyleIDref,
+                               VatCode1 = sa.First().VatCode1,
+                               RepId = sa.First().RepId,
+                               KAMID = sa.First().KAMID,
+                               RepRate1 = sa.First().RepRate1,
+                               KAMRate1 = sa.First().KAMRate1,
+                               OriginalOrderNo = sa.First().OriginalOrderNo,
+                               AssemblyID = sa.First().AssemblyID,
+                               AsmLineNo = sa.First().AsmLineNo,
+                               ReturnOrderNo = sa.First().ReturnOrderNo,
+                               ReturnLineNo = sa.First().ReturnLineNo,
+                               SOPDetail5 = sa.First().SOPDetail5,
+                               SOPDetail4 = sa.First().SOPDetail4,
+                               DeliveryDate = sa.First().DeliveryDate,
+                               StockingUOM1 = sa.First().StockingUOM1,
+                               EmployeeId = sa.First().EmployeeId,
+                               IsDleted = sa.First().IsDleted
+                           }).ToList();
+                    string retunCnt = "";
+                    if (isedit)
+                    {
+                        foreach (var line in newResult.Where(s => s.IsDleted == false))
+                        {
+
+                            var freeStock = _dp.GetFreeStock(line.StyleID, line.ColourID, line.SizeID, salesHead.WarehouseID, salesHead.SalesOrderLine, true, false);
+                            //freeStock = freeStock +Convert.ToInt32 (line.OrdQty);
+                            if (line.OrdQty > freeStock)
+                            {
+                                var freeStock1 = freeStock - line.OrdQty > 0 ? freeStock - line.OrdQty : 0;
+                                retunCnt = retunCnt + "{%FREESTOCKERROR%}The ordered quantity(" + line.OrdQty + ") for product " + line.Description + "(" + line.StyleID + ") " + line.ColourID + " " + line.SizeID + " is grater than the available freestock quantity (" + freeStock + ")\n";
+
+                            }
+                            else
+                            {
+                                retunCnt = retunCnt + "";
+                            }
+                        }
+                    }
+                    else
+                    {
+                        foreach (var line in newResult.Where(s => s.IsDleted == false))
+                        {
+                            var freeStock = _dp.GetFreeStock(line.StyleID, line.ColourID, line.SizeID, salesHead.WarehouseID, null, isedit);
+                            if (line.OrdQty > freeStock)
+                            {
+                                retunCnt = retunCnt + "{%FREESTOCKERROR%}The ordered quantity(" + line.OrdQty + ") for product " + line.Description + "(" + line.StyleID + ") " + line.ColourID + " " + line.SizeID + " is grater than the available freestock quantity (" + freeStock + ")\n";
+
+                            }
+                            else
+                            {
+                                retunCnt = retunCnt + "";
+                            }
+
+                        }
+                    }
+                    AcceptResultSet.type = retunCnt;
+                }
+                else
+                {
+                    AcceptResultSet.results = ResultSet;
+                    AcceptResultSet.type = "";
+                }
             }
             return AcceptResultSet;
         }
@@ -1336,39 +1413,54 @@ namespace Maximus.Services
                 if (_tblSalesHeader.Exists(s => s.OrderNo == orderNO))
                 {
                     var salesHead = _tblSalesHeader.GetAll(s => s.OrderNo == orderNO).First();
-                    var salesLines = _tblSalesLines.GetAll(s => s.OrderNo == orderNO).ToList();
-                    foreach (var saleL in salesLines)
+
+                    //var salesLines = _tblSalesLines.GetAll(s => s.OrderNo == orderNO).ToList();
+                    //foreach (var saleL in salesLines)
+                    //{
+                    //    if (dataCar.Contains(saleL.StyleID) != true)
+                    //    {
+                    //        var EmpSo = _stockCard.GetAll(s => s.BusinessID == busId && s.EmployeeID == empId && s.StyleID == saleL.StyleID).First();
+                    //        EmpSo.SOQty = EmpSo.SOQty - Convert.ToInt32(saleL.OrdQty.Value);
+                    //        EmpSo.SOQty = EmpSo.SOQty > 0 ? EmpSo.SOQty : 0;
+                    //        _stockCard.Update(EmpSo);
+                    //        if (isEmergency == false)
+                    //        {
+
+                    //            if (pointsReq)
+                    //            {
+                    //                var ptsCard = _pointsCard.GetAll(s => s.BusinessID == busId && s.EmployeeID == empId && s.StyleID == saleL.StyleID).First();
+                    //                ptsCard.SOPoints = ptsCard.SOPoints - (Convert.ToInt32(saleL.OrdQty) * _pointsStyle.GetAll(s => s.StyleID == saleL.StyleID && s.UcodeID == salesHead.UCodeId).First().Points.Value);
+                    //                ptsCard.SOPoints = ptsCard.SOPoints > 0 ? ptsCard.SOPoints : 0;
+                    //                _pointsCard.Update(ptsCard);
+                    //            }
+                    //        }
+                    //    }
+                    //}
+                    //if (_ucodeOperationsTbl.Exists(s => s.BusinessID == busId && s.UcodeId == salesHead.UCodeId && s.FreeStkChk))
+                    //{
+                    //    foreach (var saleL in salesLines)
+                    //    {
+                    //        var so = _fskStyleLocations.GetAll(s => s.StyleID == saleL.StyleID && s.ColourID == saleL.ColourID && s.SizeID == saleL.SizeID && s.LocationId=="All").First();
+                    //        so.SOQty = so.SOQty - Convert.ToInt32(saleL.OrdQty.Value);
+                    //        _fskStyleLocations.Update(so);
+                    //    }
+                    //}
+                    //_tblSalesLines.Delete(s => s.OrderNo == salesHead.OrderNo);
+                    //_tblSalesHeader.Delete(s => s.OrderNo == salesHead.OrderNo);
+
+                    if (_dp.DeleteOrder(orderNO, empId, onlineUserId, pointsReq, busId, adminMail, mailUsername, mailPassword, mailPort, mailServer, isEmergency, salesHead.UCodeId))
                     {
-                        if (dataCar.Contains(saleL.StyleID) != true)
-                        {
-                            if (isEmergency == false)
-                            {
-                                var EmpSo = _stockCard.GetAll(s => s.BusinessID == busId && s.EmployeeID == empId && s.StyleID == saleL.StyleID).First();
-                                EmpSo.SOQty = EmpSo.SOQty - Convert.ToInt32(saleL.OrdQty.Value);
-                                _stockCard.Update(EmpSo);
-                                if (pointsReq)
-                                {
-                                    var ptsCard = _pointsCard.GetAll(s => s.BusinessID == busId && s.EmployeeID == empId && s.StyleID == saleL.StyleID).First();
-                                    ptsCard.SOPoints = ptsCard.SOPoints - (Convert.ToInt32(saleL.OrdQty) * _pointsStyle.GetAll(s => s.StyleID == saleL.StyleID && s.UcodeID == salesHead.UCodeId).First().Points.Value);
-                                    _pointsCard.Update(ptsCard);
-                                }
-                            }
-                        }
+                        var rejectReason = new tblonline_rejectorder_reasons();
+                        rejectReason.BusinessId = busId;
+                        rejectReason.OrderNo = orderNO;
+                        rejectReason.EmployeeId = empId;
+                        rejectReason.RejectedBy = onlineUserId;
+                        rejectReason.RejectedDate = DateTime.Now;
+                        rejectReason.RejectedReason = reason;
+                        _rejectReasonTbl.Insert(rejectReason);
+                        _dp.sendDeleteMail(orderNO, reason, busId, onlineUserId, salesHead.PinNo, adminMail, mailUsername, mailPassword, mailPort, mailServer);
+                        result = true;
                     }
-                    _tblSalesLines.Delete(s => s.OrderNo == salesHead.OrderNo);
-                    _tblSalesHeader.Delete(s => s.OrderNo == salesHead.OrderNo);
-
-
-                    var rejectReason = new tblonline_rejectorder_reasons();
-                    rejectReason.BusinessId = busId;
-                    rejectReason.OrderNo = orderNO;
-                    rejectReason.EmployeeId = empId;
-                    rejectReason.RejectedBy = onlineUserId;
-                    rejectReason.RejectedDate = DateTime.Now;
-                    rejectReason.RejectedReason = reason;
-                    _rejectReasonTbl.Insert(rejectReason);
-                    _dp.sendDeleteMail(orderNO, reason, busId, onlineUserId, salesHead.PinNo, adminMail, mailUsername, mailPassword, mailPort, mailServer);
-                    result = true;
                 }
             }
             catch (Exception e)
@@ -1377,6 +1469,8 @@ namespace Maximus.Services
             }
             return result;
         }
+
+
         #endregion
 
         #endregion

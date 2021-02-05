@@ -50,7 +50,7 @@ namespace Maximus.Controllers
 
         public ActionResult Login()
         {
-
+            
             if (User.Identity.IsAuthenticated)
             {
                 return RedirectToAction("Index", "Home");
@@ -109,6 +109,8 @@ namespace Maximus.Controllers
                             Session["Access"] = data.First().AccessID;
                             Session["Email"] = data.First().Email_ID;
                             Session["IsEmergency"] = false;
+                            
+                           
                             busId = data.First().BusinessID;
                             Session["BuisnessId"] = data.First().BusinessID;
                             Session["Buisness"] = _dataConnection.GetAllBusBusinness().Where(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim()).First().Name;
@@ -222,6 +224,7 @@ namespace Maximus.Controllers
                             }
                             //booStkLevel = _dataConnection.BusinessParam("REQSTKLEVEL", Session["BuisnessId"].ToString());
                             //Session["REQSTKLEVEL"] = booStkLevel == "" ? false : Convert.ToBoolean(booStkLevel);
+                            Session["REQSTKLEVEL"] = false;
                             Session["DEFEMPLOYEE"] = _dataConnection.DefaultEmployee(ConfigurationSettings.AppSettings["CompanyId"].ToString(), Session["UserName"].ToString().Trim().ToUpper(), Session["BuisnessId"].ToString().ToUpper());
                             booDespConfirm = _dataConnection.BusinessParam("CHKDISPCONFIRM", Session["BuisnessId"].ToString().ToUpper());
                             Session["CHKDISPCONFIRM"] = booDespConfirm == "" ? false : Convert.ToBoolean(Session["CHKDISPCONFIRM"]);
@@ -237,6 +240,7 @@ namespace Maximus.Controllers
                             }
                             BusinessInfo busInfo = new BusinessInfo();
                             busInfo = _dataConnection.GetbusInfo(busId);
+                            Session["isrtntype"] = "";
                             Session["Currency_Name"] = busInfo.Currency_Name;
                             Session["REQSTKLEVEL"] =_dataConnection.BusinessParam("REQSTKLEVEL",busId);
                             Session["CurrencyExchangeRate"] = busInfo.CurrencyExchangeRate;

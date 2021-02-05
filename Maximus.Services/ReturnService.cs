@@ -137,10 +137,11 @@ namespace Maximus.Services
             }
 
         }
-        public List<ReturnOrderModel> GetOrderToReturn(string empId, string businessId, string userId, string OrderPermission, string role, bool pointsReq, List<string> catagory, int OrdNo = 0, string custRef = "", string courierRef = "", int pickingSlipNo = 0)
+        public List<ReturnOrderModel> GetOrderToReturn(string empId, string businessId, string userId, string OrderPermission, string role, bool pointsReq, List<string> catagory, int OrdNo = 0, string custRef = "", string courierRef = "", int pickingSlipNo = 0, bool isEmergency = false, string rtnType = "")
         {
+          
             List<ReturnOrderModel> result = new List<ReturnOrderModel>();
-            result = _dp.GetReturnOrder(empId, businessId, userId, OrderPermission, pointsReq, role, catagory, OrdNo, custRef, courierRef, pickingSlipNo);
+            result = _dp.GetReturnOrder(empId, businessId, userId, OrderPermission, pointsReq, role, catagory, OrdNo, custRef, courierRef, pickingSlipNo, isEmergency, rtnType);
             return result;
         }
         #region CheckCarriage
@@ -215,6 +216,24 @@ namespace Maximus.Services
                         header.DelTown = "";
                         header.DelCity = "";
                     }
+                    
+                    var address1 = _dp.getEmployeeAddress(salesHead.First().EmployeeID, salesHead.First().CustID);
+                    var addArr = new string[] { };
+                    var addresArr = address1.Contains(",-,") ? System.Text.RegularExpressions.Regex.Split(address1, ",-,") : addArr;
+                    int ds = addresArr.Count();
+                     //added by sasi(22-01-20)
+                    foreach (var header in salesHead.Where(s => s.Reorderheader).ToList())
+                    {
+                        header.DelAddress1 = ds > 0 ? addresArr[2] : "";
+                        header.DelAddress2 = ds > 0 ? addresArr[3] : "";
+                        header.DelAddress3 = ds > 0 ? addresArr[4] : "";
+                        header.DelTown = ds > 0 ? addresArr[5] : "";
+                        header.DelCity = ds > 0 ? addresArr[6] : "";
+                        header.DelPostCode = ds > 0 ? addresArr[7] : "";
+                        header.DelCountry = ds > 0 ? addresArr[8] : "";
+                        header.DelCountry = "UK";
+                    }
+                    ///
                     string SQL = "SELECT tblbus_address.Description, tblbus_address.Address1, tblbus_address.Address2, tblbus_address.Address3, tblbus_address.Town, tblbus_address.City, tblbus_address.Postcode, tblbus_countrycodes.Country, tblbus_address.countrycode  FROM tblbus_countrycodes INNER JOIN (tblbus_addresstype_ref INNER JOIN (tblbus_business INNER JOIN (tblbus_addresstypes INNER JOIN tblbus_address ON tblbus_addresstypes.AddressTypeID = tblbus_address.AddressTypeID) ON tblbus_business.BusinessID = tblbus_address.BusinessID) ON tblbus_addresstype_ref.Actual_TypeID = tblbus_addresstypes.Actual_TypeID) ON tblbus_countrycodes.CountryID = tblbus_address.CountryCode  WHERE tblbus_addresstype_ref.Actual_TypeID=3 AND tblbus_business.BusinessID='" + salesHead.First().CustID + "' and tblbus_countrycodes.CompanyID = '" + salesHead.First().CompanyID + "' Order By tblbus_address.Description";
                     var invAddress = _dp.GetAddressDetails(SQL);
                     salesHead.ForEach(s => s.InvAddress1 = invAddress.Address1);
@@ -781,6 +800,7 @@ namespace Maximus.Services
           return _dp.DeleteReturnOrder(orderno,user);
 
         }
+ 
         #endregion
         #endregion
 

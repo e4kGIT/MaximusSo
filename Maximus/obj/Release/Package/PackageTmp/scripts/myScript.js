@@ -491,6 +491,9 @@ function getEntitlementSwatch(style, orgStyl, error, size) {
                                     errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded. Cannot proceed.</span></div>";
                                 }
                             }
+                            else if (response.isfreestk) {
+                                errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed. Order quantity exceeds freestock quantity</span></div>";
+                            }
                             else {
                                 errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed entitlement exceeded</span></div>";
                             }
@@ -526,6 +529,8 @@ function getEntitlementSwatch(style, orgStyl, error, size) {
                             else {
                                 errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded. Cannot proceed.</span></div>";
                             }
+                        } else if (response.isfreestk) {
+                            errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed. Order quantity exceeds freestock quantity</span></div>";
                         }
                         else {
                             errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed entitlement exceeded</span></div>";
@@ -533,7 +538,12 @@ function getEntitlementSwatch(style, orgStyl, error, size) {
                     }
                     var data = document.getElementById("Entitlement");
                     data.innerHTML = response.Result.indexOf('points') > -1 ? response.Result.split("-////-")[0] + errorMsg : response.Result + errorMsg;
-                    Entitlement.SetHeaderText("Entitlement for " + response.EmpId);
+                    if (response.isfreestk) {
+                        Entitlement.SetHeaderText("Entitlement for " + response.EmpId);
+                    }
+                    else {
+                        Entitlement.SetHeaderText("Entitlement for " + response.EmpId);
+                    }
                     Entitlement.Show();
                 },
                 error: function (response) {
@@ -807,12 +817,13 @@ function addTocartSwatchEmergency(s, e) {
     var sizeSwatchName = "swatch_Size_" + stylearr[1];
     var sizeSwatch = document.getElementsByName(sizeSwatchName);
     var reasonName = "CmbReason_" + stylearr[1];
-    var reasonControl = document.getElementsByName(reasonName);
-    var reason;
 
-    if (reasonControl.length > 0) {
-        reason = reasonControl[0].value == "" | reasonControl[0].value == undefined ? reasonControl[0].defaultValue == "" | reasonControl[0].defaultValue == "" ? "" : reasonControl[0].defaultValue : reasonControl[0].value;
-    }
+    var reasonControl = ASPxClientControl.GetControlCollection().GetByName(reasonName)
+    var reason = reasonControl == null ? "" : reasonControl.GetValue() == null ? "" : reasonControl.GetValue();
+
+    //if (reasonControl.length > 0) {
+    //    reason = reasonControl[0].value == "" | reasonControl[0].value == undefined ? reasonControl[0].defaultValue == "" | reasonControl[0].defaultValue == "" ? "" : reasonControl[0].defaultValue : reasonControl[0].value;
+    //}
     if (sizeSwatch.length > 1) {
         for (var i = 0; i < sizeSwatch.length; i++) {
             if (sizeSwatch[i].checked) {
@@ -894,7 +905,7 @@ function addTocartSwatchEmergency(s, e) {
                                         if (response != "") {
                                             var Freestock = document.getElementById("FreeStcoker_" + sStyle + "_" + size + "");
                                             if (Freestock != null) {
-                                                Freestock.innerHTML = "(" + response + ")";
+                                                Freestock.innerHTML = response;
                                             }
                                         }
                                     }
@@ -930,9 +941,14 @@ function addTocartSwatchEmergency(s, e) {
                     })
                 }
                 else {
-                    // document.getElementById("ErrorMessage").style.display = 'block';
-                    loadPopup.Hide();
-                    getEntitlementSwatch(stylearr[1], stylearr[3], 1, size);
+                    if (reason == "" || reason == undefined) {
+                        alert("Please enter a valid reason");
+                    }
+                    else {
+                        // document.getElementById("ErrorMessage").style.display = 'block';
+                        loadPopup.Hide();
+                        getEntitlementSwatch(stylearr[1], stylearr[3], 1, size);
+                    }
 
                 }
             },
@@ -941,6 +957,26 @@ function addTocartSwatchEmergency(s, e) {
                 myFunction("Try again!");
             }
         });
+    }
+    else {
+        if (price == "" || price == null || price == undefined || price == "0") {
+            alert("Please choose a size");
+        }
+        else if (size == "" || size == null || size == undefined) {
+            alert("Please choose a Size");
+        }
+        else if (color == "" || color == null || color == undefined) {
+            alert("Please choose a Colour");
+        }
+        else if (qty == "" || qty == "0" || qty == null || qty == undefined) {
+            alert("Quantity should be greater than 0");
+        } else if (selectedSitecode == "") {
+            alert("Please select a site code");
+        }
+        else if (reqtxt[0].value == "") {
+            alert("Please select Required leg length");
+        }
+
     }
 }
 
@@ -6082,7 +6118,7 @@ function AcceptOrder(s, e) {
 
 
     //var win = document.referrer;
-   // alert(win);
+    // alert(win);
     //$.ajax({
     //    url: "Basket/GetCarriageStatus",
     //    type: "POST",
@@ -6111,6 +6147,12 @@ function AcceptOrder(s, e) {
                                             if (resp.type.indexOf("Carrier") > -1) {
                                                 alert(resp.type);
                                                 AcceptBtnctrl.SetEnabled(true);
+                                            } else if (resp.type.indexOf("{%FREESTOCKERROR%}") > -1) {
+                                                var rnse = "";
+                                                rnse = resp.type.replace("{%FREESTOCKERROR%}", "The Freestock has changed whilst you have been placing the order \n\n");
+                                                alert(rnse);
+                                                AcceptBtnctrl.SetEnabled(true);
+                                                window.location.reload();
                                             }
                                             else {
                                                 alert(resp.type);
@@ -6189,6 +6231,13 @@ function AcceptOrder(s, e) {
                         alert("There are no items in the cart please continue shopping.");
                         window.location = "/Home/Index/"
                     }
+                    else if (response.indexOf("{%FREESTOCKERROR%}") > -1) {
+                        response = response.replace("{%FREESTOCKERROR%}", "The Freestock has changed whilst you have been placing the order \n\n");
+                        alert(response);
+                        loadPopup.Hide();
+                        AcceptBtnctrl.SetEnabled(true);
+                        window.location.reload();
+                    }
                     else {
                         response = response.replace("///", "");
                         if (confirm(response)) {
@@ -6207,6 +6256,13 @@ function AcceptOrder(s, e) {
                                                     if (resp.type.indexOf("Carrier") > -1) {
                                                         alert(resp.type);
                                                         AcceptBtnctrl.SetEnabled(true);
+                                                    }
+                                                    else if (resp.type.indexOf("{%FREESTOCKERROR%}") > -1) {
+                                                        var rnse = "";
+                                                        rnse = resp.type.replace("{%FREESTOCKERROR%}", "The Freestock has changed whilst you have been placing the order \n\n");
+                                                        alert(rnse);
+                                                        AcceptBtnctrl.SetEnabled(true);
+                                                        window.location.reload();
                                                     }
                                                     else {
                                                         alert(resp.type);
@@ -8372,7 +8428,12 @@ function addTocartReturnOrder(s, e) {
                                 CalculateTotals();
                                 Refreshpointsdiv();
 
-                            } else if (response == "size validation") {
+                            }
+                            else if (response == "qty validation") {
+                                loadPopup.Hide();
+                                alert("You cannot reorder above the return quantity");
+                            }
+                            else if (response == "size validation") {
                                 loadPopup.Hide();
                                 alert("You cannot reorder the same uniform");
                             }
@@ -8633,32 +8694,28 @@ function GetAllReturnHeader(s, e) {
     });
 }
 
-function ChangeUcodePointsEmployeeGrid(s,e)
-{
+function ChangeUcodePointsEmployeeGrid(s, e) {
     var allInfo = s.name.split('_');
-   // var ucode = allInfo.length > 0 ? allInfo[2] : "";
-    var employeeId =  allInfo.length > 0 ? allInfo[1]:"";
+    // var ucode = allInfo.length > 0 ? allInfo[2] : "";
+    var employeeId = allInfo.length > 0 ? allInfo[1] : "";
     var totalPointsspan = "TotalPointsSpan_" + employeeId;
     var pointsUsedSpan = "PointsUsedSpan_" + employeeId;
     var selectedUcodeCtrl = ASPxClientControl.GetControlCollection().GetByName(s.name);
     var selectedUcode = selectedUcodeCtrl != null ? selectedUcodeCtrl.GetValue() != null ? selectedUcodeCtrl.GetValue() : "" : "";
-    if(selectedUcode!="")
-    {
+    if (selectedUcode != "") {
         $.ajax({
             url: "/Employee/ChangePointsByEmp/",
             data: { 'emp': employeeId, 'ucode': selectedUcode },
             type: "post",
-            success:function(response)
-            {
-                if(response!=null)
-                {
-                        var totalPts = document.getElementById(totalPointsspan);
-                        var usedPts = document.getElementById(pointsUsedSpan);
-                        totalPts.innerHTML = "";
-                        usedPts.innerHTML = "";
-                        totalPts.innerHTML=response.TotalPoints;
-                        usedPts.innerHTML = response.UsedPoints;
-                } 
+            success: function (response) {
+                if (response != null) {
+                    var totalPts = document.getElementById(totalPointsspan);
+                    var usedPts = document.getElementById(pointsUsedSpan);
+                    totalPts.innerHTML = "";
+                    usedPts.innerHTML = "";
+                    totalPts.innerHTML = response.TotalPoints;
+                    usedPts.innerHTML = response.UsedPoints;
+                }
             }
         });
     }
@@ -8947,7 +9004,7 @@ function OrderEditRT(orderNo, empId) {
         data: { 'empId': empId },
         success: function (resp) {
             if (resp.toLowerCase().indexOf("emp") > -1 == false) {
-                window.location = "/Return/ReturnReorder?ordeNo=" + orderNo;
+                window.location = "/Return/ReturnReorderEdit?ordeNo=" + orderNo;
             }
             else {
                 alert(resp);

@@ -35,7 +35,7 @@
         settings.Settings.ShowFilterRow = true;
         // settings.Settings.ShowFilterRowMenu = true;
         settings.SettingsBehavior.AllowSelectByRowClick = true;
-
+        settings.Styles.Header.Wrap = DefaultBoolean.True;
         settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Disabled;
         //settings.SettingsDetail.ShowDetailRow = true;
         settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCellsWindowLimit;
@@ -58,7 +58,7 @@
                 }
             }
             var ss = Convert.ToInt32(e.GetValue("RtnOrdNo"));
-            if (Convert.ToInt32(e.GetValue("RtnOrdNo"))>0)
+            if (Convert.ToInt32(e.GetValue("RtnOrdNo")) > 0)
             {
                 e.Row.BackColor = System.Drawing.Color.BurlyWood;
                 // e.Row.ForeColor = System.Drawing.Color.whi;
@@ -71,7 +71,7 @@
             if (e.ButtonType == ColumnCommandButtonType.SelectCheckbox)
             {
                 int RtnOrdNo = Convert.ToInt32(gridView.GetRowValues(e.VisibleIndex, "RtnOrdNo"));
-                if(RtnOrdNo>0)
+                if (RtnOrdNo > 0)
                 {
                     e.Visible = false;
                 }
@@ -85,7 +85,7 @@
             List<int> visibleIndices = new List<int>();
             for (int i = 0; i < gridView.VisibleRowCount; i++)
             {
-                if (Convert.ToInt32(gridView.GetRowValues(i, "RtnOrdNo"))>0)
+                if (Convert.ToInt32(gridView.GetRowValues(i, "RtnOrdNo")) > 0)
                 {
                     visibleIndices.Add(Convert.ToInt32(gridView.GetRowValues(i, gridView.KeyFieldName)));
                 }
@@ -125,23 +125,24 @@
         {
             set.FieldName = "OrderNo";
             set.Width = 85;
-
+            
             set.SetDataItemTemplateContent(x =>
             {
+
                 string ordeNos = DataBinder.Eval(x.DataItem, "OrderNo").ToString();
                 string isConfirmed = DataBinder.Eval(x.DataItem, "isConfirmed").ToString();
                 string isProcessed = DataBinder.Eval(x.DataItem, "isProcessed").ToString();
                 string empId = DataBinder.Eval(x.DataItem, "EmpID").ToString();
-                int totPts =Convert.ToInt32( DataBinder.Eval(x.DataItem, "TotalPoints").ToString());
+                int totPts = Convert.ToInt32(DataBinder.Eval(x.DataItem, "TotalPoints").ToString());
                 string ordType = DataBinder.Eval(x.DataItem, "OrderType").ToString();
                 var htmlString = "";
-                if (isConfirmed.ToUpper() == "YES" | isProcessed.ToUpper() == "YES" )
+                if (isConfirmed.ToUpper() == "YES" | isProcessed.ToUpper() == "YES")
                 {
                     htmlString = "<span><b>" + ordeNos + "</b></span>";
                 }
                 else
                 {
-                    if(Session["OT"].ToString().ToLower().Trim() == "rt")
+                    if (Session["OT"].ToString().ToLower().Trim() == "rt")
                     {
                         //htmlString = "<span><b>" + ordeNos + "</b></span>";
                         htmlString = "<span class='Highlighter' onclick=\"OrderEditRT(" + ordeNos + ",'" + empId + "');\"><b>" + ordeNos + "</b></span>";
@@ -182,7 +183,7 @@
             set.Width = 85;
             set.PropertiesEdit.DisplayFormatString = "dd-MM-yyyy";
         });
-        settings.Columns.Add("CustomerRef").Width = 85;
+        settings.Columns.Add("CustomerRef").Width = 60;
         if (Session["OT"].ToString().ToLower().Trim() != "rt")
         {
             settings.Columns.Add("NominalCode").Width = 85;
@@ -273,8 +274,8 @@
                         string isConfirmed = DataBinder.Eval(x.DataItem, "isConfirmed").ToString();
                         string isProcessed = DataBinder.Eval(x.DataItem, "isProcessed").ToString();
                         string empId = DataBinder.Eval(x.DataItem, "EmpID").ToString();
-                        string ordType= DataBinder.Eval(x.DataItem, "OrderType").ToString();
-                        bool isEmergency = ordType.ToLower().Contains("emergency")?true:false;
+                        string ordType = DataBinder.Eval(x.DataItem, "OrderType").ToString();
+                        bool isEmergency = ordType.ToLower().Contains("emergency") ? true : false;
                         var htmlString = "";
                         if (isConfirmed.ToUpper().Trim() == "YES" | isProcessed.ToUpper().Trim() == "YES")
                         {
@@ -319,9 +320,35 @@
                     string isProcessed = DataBinder.Eval(x.DataItem, "isProcessed").ToString();
                     string empId = DataBinder.Eval(x.DataItem, "EmpID").ToString();
                     var htmlString = "";
-                    htmlString = "<button class=\"btn btn-primary\" onclick=\"DeleteReturnOrders(" + ordeNos + ")\" style=\"background-color:#009885;color:white\">Delete</button>";
+                    if (isConfirmed.ToUpper().Trim() == "YES" | isProcessed.ToUpper().Trim() == "YES")
+                    {
+                    }
+                    else
+                    {
+                        htmlString = "<button class=\"btn btn-primary\" onclick=\"DeleteReturnOrders(" + ordeNos + ")\" style=\"background-color:#009885;color:white\">Delete</button>";
+                    }
                     //htmlString = "<button class=\"btn btn-primary\" onclick=\"PrintReturns(" + ordeNos +")\" style=\"background-color:#009885;color:white\">Print</button>";
                     ViewContext.Writer.Write(htmlString);
+                });
+            });
+            settings.Columns.Add(set =>
+            {
+                set.FieldName = "";
+                set.Caption = "";
+                set.Width = 100;
+                set.SetDataItemTemplateContent(x =>
+                {
+                    string ordeNos = DataBinder.Eval(x.DataItem, "OrderNo").ToString();
+                    var htmlString = "";
+                    htmlString = "<button class=\"btn btn-primary\" onclick=\"PrintReturns(" + ordeNos + ")\" style=\"background-color:#009885;color:white\">Print</button>";
+                    ViewContext.Writer.Write(htmlString);
+                });
+                set.SetHeaderTemplateContent(x =>
+                {
+
+                    string content = "<center><img src=\"/Content/Images/xls.png\" title='Export' onclick=\"SaveEmpGrid('ShowOrderGridView','xls')\" width=\"40\" alt='Export'></center>";
+                    ViewContext.Writer.Write(content);
+
                 });
             });
         }
@@ -339,4 +366,3 @@
 @grid.Bind(Model).GetHtml()
 
 
- 

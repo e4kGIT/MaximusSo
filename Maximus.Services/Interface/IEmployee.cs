@@ -26,7 +26,7 @@ namespace Maximus.Services.Interface
         string CreateNewEmployee(DateTime? StartDate = null, DateTime? EndDate = null, string EmpFirstName = "", string EmpLastName = "", string EmployeeId = "", string EmpUcodes = "", string Address = "", string hrsCmb = "", string Department = "", bool isActive = false, bool isMapped = false, string hoursDept = "", string hoursNo = "", List<string> templates = null, string busId = "", string UserName = "", string ShowHourse = "", string REQ_REASONPAGE = "", bool chkMapAddr = false, bool createUsr = false, string emailUsr = "", bool mapUserEmp = false, string roleUsr = "", string reissueUsr = "", DateTime? lstOrddat = null, DateTime? nextOrddat = null,MembershipUser mu=null);
         string ChangeEmpPwd(string oldPwd, string newPwd, string cnfPwd,string empId);
 
-        List<EmployeeViewModel> GetReturnOrders(bool pointsReq, string role, string busId, string userID, string orderPermission);
+        List<EmployeeViewModel> GetReturnOrders(bool pointsReq, string role, string busId, string userID, string orderPermission,bool isEmergency=false,string rtnType="");
         MenuLayoutModel GetAllMenu();
 
         List<UserModule> GatAllUser();

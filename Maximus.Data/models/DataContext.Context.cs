@@ -41,6 +41,7 @@ namespace Maximus.Data.models
         public virtual DbSet<hr_cordant_onl_emp> hr_cordant_onl_emp { get; set; }
         public virtual DbSet<hr_cordant_user> hr_cordant_user { get; set; }
         public virtual DbSet<hr_cordant_user_copy> hr_cordant_user_copy { get; set; }
+        public virtual DbSet<hr_corps01_employee> hr_corps01_employee { get; set; }
         public virtual DbSet<hr_emplo_ve> hr_emplo_ve { get; set; }
         public virtual DbSet<hr_emplo_ve_copy> hr_emplo_ve_copy { get; set; }
         public virtual DbSet<hr_emplo_ve_copy_duplicate> hr_emplo_ve_copy_duplicate { get; set; }
@@ -93,9 +94,11 @@ namespace Maximus.Data.models
         public virtual DbSet<tblaccemp_employee_rollout> tblaccemp_employee_rollout { get; set; }
         public virtual DbSet<tblaccemp_employee_rollout_atlasfm> tblaccemp_employee_rollout_atlasfm { get; set; }
         public virtual DbSet<tblaccemp_employee_rollout_copy> tblaccemp_employee_rollout_copy { get; set; }
+        public virtual DbSet<tblaccemp_employees_custref> tblaccemp_employees_custref { get; set; }
         public virtual DbSet<tblaccemp_points> tblaccemp_points { get; set; }
         public virtual DbSet<tblaccemp_pointsadjustment> tblaccemp_pointsadjustment { get; set; }
         public virtual DbSet<tblaccemp_pointscard> tblaccemp_pointscard { get; set; }
+        public virtual DbSet<tblaccemp_rollout_email> tblaccemp_rollout_email { get; set; }
         public virtual DbSet<tblaccemp_rollout_names> tblaccemp_rollout_names { get; set; }
         public virtual DbSet<tblaccemp_rollout_ucode_ref> tblaccemp_rollout_ucode_ref { get; set; }
         public virtual DbSet<tblaccemp_stockcard> tblaccemp_stockcard { get; set; }
@@ -122,6 +125,7 @@ namespace Maximus.Data.models
         public virtual DbSet<tblbus_business> tblbus_business { get; set; }
         public virtual DbSet<tblbus_business_types> tblbus_business_types { get; set; }
         public virtual DbSet<tblbus_contact> tblbus_contact { get; set; }
+        public virtual DbSet<tblbus_contact_copy> tblbus_contact_copy { get; set; }
         public virtual DbSet<tblbus_contact_ref> tblbus_contact_ref { get; set; }
         public virtual DbSet<tblbus_countrycodes> tblbus_countrycodes { get; set; }
         public virtual DbSet<tblbus_groups_ref> tblbus_groups_ref { get; set; }
@@ -178,6 +182,8 @@ namespace Maximus.Data.models
         public virtual DbSet<tblgen_users> tblgen_users { get; set; }
         public virtual DbSet<tbllanguage> tbllanguages { get; set; }
         public virtual DbSet<tblonline_holidays> tblonline_holidays { get; set; }
+        public virtual DbSet<tblonline_rejectorder_reasons> tblonline_rejectorder_reasons { get; set; }
+        public virtual DbSet<tblonline_rejectorder_ucodes> tblonline_rejectorder_ucodes { get; set; }
         public virtual DbSet<tblonline_rolloutorders_config> tblonline_rolloutorders_config { get; set; }
         public virtual DbSet<tblonline_rolloutorders_reqstatus> tblonline_rolloutorders_reqstatus { get; set; }
         public virtual DbSet<tblonline_rolloutorders_reqstatus_atlasfm> tblonline_rolloutorders_reqstatus_atlasfm { get; set; }
@@ -283,6 +289,7 @@ namespace Maximus.Data.models
         public virtual DbSet<productlist> productlists { get; set; }
         public virtual DbSet<style_dimfitalloc_caption> style_dimfitalloc_caption { get; set; }
         public virtual DbSet<styleby_freetextview> styleby_freetextview { get; set; }
+        public virtual DbSet<styleby_freetextview_emergency> styleby_freetextview_emergency { get; set; }
         public virtual DbSet<styleby_freetextview_ucode> styleby_freetextview_ucode { get; set; }
         public virtual DbSet<stylebytemplateview> stylebytemplateviews { get; set; }
         public virtual DbSet<tblfskstyle_dimension1> tblfskstyle_dimension1 { get; set; }
@@ -299,8 +306,6 @@ namespace Maximus.Data.models
         public virtual DbSet<view_ucode_freetext_tsb_rollout> view_ucode_freetext_tsb_rollout { get; set; }
         public virtual DbSet<view_unmatchedcolourwithorgcolour> view_unmatchedcolourwithorgcolour { get; set; }
         public virtual DbSet<view_unmatchedordercolourid> view_unmatchedordercolourid { get; set; }
-        public virtual DbSet<styleby_freetextview_emergency> styleby_freetextview_emergency { get; set; }
-        public virtual DbSet<tblonline_rejectorder_reasons> tblonline_rejectorder_reasons { get; set; }
         public virtual DbSet<tblonline_ucode_operations> tblonline_ucode_operations { get; set; }
     
         public virtual int bk_CreateCube_OrderDetail()

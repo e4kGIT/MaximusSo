@@ -341,12 +341,28 @@ namespace Maximus.Services
                             }
                             else
                             {
-                                if (ucodes.Contains(EmpUcodes))
+                                if (!ucodes.Contains(EmpUcodes))
                                 {
-                                    ucodes.Remove(EmpUcodes);
-                                    var ucode1 = ucodes[0];
-                                    DeleteEmployee(ucode1, EmployeeId, busId);
+                                    var updateUcode = new tblaccemp_ucodesemployees();
+                                    updateUcode.CompanyID = cmpId;
+                                    updateUcode.UCodeID = EmpUcodes;
+                                    updateUcode.EmployeeID = EmployeeId;
+                                    updateUcode.BusinessID = busId;
+                                    _ucodeEmployees.Insert(updateUcode);
+                                    //commented on (03-02-21)
+                                    //ucodes.Remove(EmpUcodes);
+                                    //var ucode1 = ucodes[0];
+                                    //DeleteEmployee(ucode1, EmployeeId, busId);
                                 }
+                                //else
+                                //{
+                                //    var updateUcode = new tblaccemp_ucodesemployees();
+                                //    updateUcode.CompanyID = cmpId;
+                                //    updateUcode.UCodeID = EmpUcodes;
+                                //    updateUcode.EmployeeID = EmployeeId;
+                                //    updateUcode.BusinessID = busId;
+                                //    _ucodeEmployees.Insert(updateUcode);
+                                //}
                             }
                         }
                         if (hoursNo != "" && hoursDept != "")
@@ -490,12 +506,27 @@ namespace Maximus.Services
                             }
                             else
                             {
-                                if (ucodes.Contains(EmpUcodes))
+                                if (!ucodes.Contains(EmpUcodes))
                                 {
-                                    ucodes.Remove(EmpUcodes);
-                                    var ucode1 = ucodes[0];
-                                    DeleteEmployee(ucode1, EmployeeId, busId);
+                                    var updateUcode = new tblaccemp_ucodesemployees();
+                                    updateUcode.CompanyID = cmpId;
+                                    updateUcode.UCodeID = EmpUcodes;
+                                    updateUcode.EmployeeID = EmployeeId;
+                                    updateUcode.BusinessID = busId;
+                                    _ucodeEmployees.Insert(updateUcode);
+                                    //ucodes.Remove(EmpUcodes);
+                                    //var ucode1 = ucodes[0];
+                                    //DeleteEmployee(ucode1, EmployeeId, busId);
                                 }
+                                //else
+                                //{
+                                //    var updateUcode = new tblaccemp_ucodesemployees();
+                                //    updateUcode.CompanyID = cmpId;
+                                //    updateUcode.UCodeID = EmpUcodes;
+                                //    updateUcode.EmployeeID = EmployeeId;
+                                //    updateUcode.BusinessID = busId;
+                                //    _ucodeEmployees.Insert(updateUcode);
+                                //}
                             }
                         }
                         if (hoursNo != "" && hoursDept != "")
@@ -905,9 +936,9 @@ namespace Maximus.Services
 
         #endregion
         #region GetReturnOrders
-        public List<EmployeeViewModel> GetReturnOrders(bool pointsReq, string role, string busId, string userID, string orderPermission)
+        public List<EmployeeViewModel> GetReturnOrders(bool pointsReq, string role, string busId, string userID, string orderPermission,bool isEmergency=false,string rtnType="")
         {
-            var reseult = _dp.GetReturnOrders(pointsReq, role, busId, userID, orderPermission);
+            var reseult = _dp.GetReturnOrders(pointsReq, role, busId, userID, orderPermission, isEmergency, rtnType);
             return reseult;
         }
 

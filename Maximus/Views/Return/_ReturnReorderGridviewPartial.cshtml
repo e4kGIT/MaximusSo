@@ -267,34 +267,37 @@
 
             });
         });
-        settings.Columns.Add(col =>
+        if (Convert.ToBoolean(Session["POINTSREQ"]) && Convert.ToBoolean(Session["IsEmergency"].ToString()) == false)
         {
-            col.FieldName = "Points"; col.SetEditItemTemplateContent(c =>
+            settings.Columns.Add(col =>
             {
-                GridViewEditItemTemplateContainer templateContainer = c as GridViewEditItemTemplateContainer;
-
-                Html.DevExpress().Label(lblsettings =>
+                col.FieldName = "Points"; col.SetEditItemTemplateContent(c =>
                 {
-                    lblsettings.Name = "Points";
-                }).Bind(templateContainer.Text).Render();
+                    GridViewEditItemTemplateContainer templateContainer = c as GridViewEditItemTemplateContainer;
 
+                    Html.DevExpress().Label(lblsettings =>
+                    {
+                        lblsettings.Name = "Points";
+                    }).Bind(templateContainer.Text).Render();
+
+                });
             });
-        });
-        settings.Columns.Add(col =>
-        {
-            col.FieldName = "TotalPoints";
-            col.Width = 50;
-            col.SetEditItemTemplateContent(c =>
+            settings.Columns.Add(col =>
             {
-                GridViewEditItemTemplateContainer templateContainer = c as GridViewEditItemTemplateContainer;
-
-                Html.DevExpress().Label(lblsettings =>
+                col.FieldName = "TotalPoints";
+                col.Width = 50;
+                col.SetEditItemTemplateContent(c =>
                 {
-                    lblsettings.Name = "TotalPoints";
-                }).Bind(templateContainer.Text).Render();
+                    GridViewEditItemTemplateContainer templateContainer = c as GridViewEditItemTemplateContainer;
 
+                    Html.DevExpress().Label(lblsettings =>
+                    {
+                        lblsettings.Name = "TotalPoints";
+                    }).Bind(templateContainer.Text).Render();
+
+                });
             });
-        });
+        }
         //  settings.Columns.Add("Emp");
         if (Session["Price"].ToString().ToLower() != "hide")
         {

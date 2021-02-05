@@ -1,31 +1,57 @@
-﻿
-<h2>Show orders</h2>
-<div class="row">
+﻿<script>
+    $(document).ready(function () {
+        $('#menu-toggle').click();
+    });
+</script>
+@{
+    if (Convert.ToBoolean(Session["EmergencyTicked"]) && TempData["OrderType"].ToString().ToLower().Trim() == "so")
+    {
+        <h2>Show Emergency Orders</h2>
+    }
+    else if (TempData["OrderType"].ToString().ToLower().Trim() == "rt")
+    {
+        <h2>Show Return Orders</h2>
+    }
+    else if (Convert.ToBoolean(Session["ConfirmOrders"]))
+    {
+        <h2>Confirm Orders</h2>
+    }
+    else if (Convert.ToBoolean(Session["EmergencyTicked"]) && Convert.ToBoolean(Session["ConfirmOrders"]))
+    {
+        <h2>Confirm Emergency Orders</h2>
+    }
+    else
+    {
+        <h2>Show Orders</h2>
+    }
+}
+   
+    <div class="row">
    
         <center>
             @Html.DevExpress().RoundPanel(settings =>
    {
-       settings.Name = "OrderFilter";
-       settings.AllowCollapsingByHeaderClick = true;
-       settings.ShowCollapseButton = true;
-       settings.ShowHeader = true;
-       if (Session["Access"].ToString().ToLower() != "user")
-       {
-           settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
-       }
-       else
-       {
-           settings.Width = System.Web.UI.WebControls.Unit.Pixel(800);
-       }
-       //settings.View = Model.View;
-       settings.EnableAnimation = true;
-       settings.Collapsed = true;
-       settings.HeaderText = "Order Search";
-       // settings.ClientSideEvents.BeginCallback = "setCollapsedOrderFilter";
-       // settings.ClientSideEvents.EndCallback = "setCollapsedOrderFilter";
-       settings.SetHeaderTemplateContent(X => { ViewContext.Writer.Write("<center><span class='glyphicon glyphicon-search'></span>  Order search</center>"); });
-       settings.SetContent(() => Html.RenderPartial("_OrdFilter"));
-   }).GetHtml()
+    settings.Name = "OrderFilter";
+    settings.AllowCollapsingByHeaderClick = true;
+    settings.ShowCollapseButton = true;
+    settings.ShowHeader = true;
+    if (Session["Access"].ToString().ToLower() != "user")
+    {
+        settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+    }
+    else
+    {
+        settings.Width = System.Web.UI.WebControls.Unit.Pixel(800);
+    }
+    //settings.View = Model.View;
+    settings.EnableAnimation = true;
+    settings.Collapsed = true;
+    settings.HeaderText = "Order Search";
+    // settings.ClientSideEvents.BeginCallback = "setCollapsedOrderFilter";
+    // settings.ClientSideEvents.EndCallback = "setCollapsedOrderFilter";
+    settings.SetHeaderTemplateContent(X => { ViewContext.Writer.Write("<center><span class='glyphicon glyphicon-search'></span>  Order search</center>"); });
+    settings.SetContent(() => Html.RenderPartial("_OrdFilter"));
+}).GetHtml()
 
 
         </center>

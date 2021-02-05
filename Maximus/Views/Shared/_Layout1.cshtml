@@ -1,0 +1,2079 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=11" />
+    <title>Sales order processing</title>
+    <link href="~/Content/themes/base/jquery-ui.css" rel="stylesheet" />
+    <link href="~/Content/Site.css" rel="stylesheet" type="text/css" />
+    <link href="~/Content/css/CustomCss.css" rel="stylesheet" />
+    <link href="~/Content/css/Media.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/css/menu.css" rel="stylesheet" />
+    @*<link href="~/Content/jquery.jgrowl.css" rel="stylesheet" />*@
+    <script src="~/scripts/jquery-1.12.4.min.js"></script>
+
+    <link href="~/Content/snackbar.css" rel="stylesheet" />
+    @*  <script src="~/scripts/jquery.jgrowl.js"></script>*@
+    <script src="~/scripts/jquery.growl.js"></script>
+    <link href="~/Content/jquery.growl.css" rel="stylesheet" />
+    <script src="~/scripts/jquery.unobtrusive-ajax.min.js"></script>
+    <script src="~/Scripts/modernizr-2.6.2.js"></script>
+    <script src="~/scripts/myScript.js"></script>
+    @Html.DevExpress().GetStyleSheets(
+        new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+        new StyleSheet { ExtensionSuite = ExtensionSuite.Editors }, new StyleSheet { ExtensionType = ExtensionType.DateEdit },
+          new StyleSheet { ExtensionSuite = ExtensionSuite.CardView },
+          new StyleSheet { ExtensionSuite = ExtensionSuite.HtmlEditor }
+    )
+    @Html.DevExpress().GetScripts(
+
+
+        new Script { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+        new Script { ExtensionSuite = ExtensionSuite.Editors },
+        new Script { ExtensionType = ExtensionType.DateEdit },
+         new Script { ExtensionSuite = ExtensionSuite.CardView },
+           new Script { ExtensionSuite = ExtensionSuite.HtmlEditor }
+    )
+
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
+    @* <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>*@
+    @*<script src="~/scripts/myScript.js"></script>*@
+    <style type="text/css">
+        body {
+            font: 16px Arial;
+        }
+        .col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12{
+            position:inherit !important;
+        }
+        .hideElement {
+            visibility: hidden;
+        }
+
+        .Highlighter:hover {
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .vl {
+            border-left: 6px solid green;
+            height: 500px;
+            position: absolute;
+            left: 50%;
+            margin-left: -3px;
+            top: 0;
+        }
+
+        #txtNewPwd_EC {
+            white-space: normal !important;
+        }
+
+        #txtNewPwd1_EC {
+            white-space: normal !important;
+        }
+
+        #txtCnfNewPwd1_EC {
+            white-space: normal !important;
+        }
+        .gridBorder{
+            overflow:scroll;border:solid #009885 .5px;
+        }
+        #txtCnfNewPwd_EC {
+            white-space: normal !important;
+        }
+
+        .changethisone span {
+            background-color: #FFF;
+        }
+
+        .colrer {
+            color: black;
+            background-color: gainsboro;
+        }
+
+        .changethisone input {
+            border-right-style: none;
+        }
+
+        .funkystyling {
+            background-image: url('../../Content/Images/search.png') right no-repeat;
+            padding-right: 17px;
+        }
+
+        .autocomplete {
+            position: relative;
+            display: inline-block;
+        }
+        /*input {
+            border: 1px solid transparent;
+            background-color: #f1f1f1;
+            padding: 10px;
+            font-size: 16px;
+        }*/
+        .deliveryTbx {
+            width: 250px;
+        }
+
+        .MyThumbnail {
+            height: 370px;
+            background-color: white;
+            color: black;
+            border: 2px solid #009885;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+            .MyThumbnail:hover {
+                background-color: #009885;
+                color: white;
+                border-color: black;
+                cursor: pointer;
+            }
+
+        .MyThumbnail1 {
+            height: 370px;
+            border: 2px solid black;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #009885;
+            cursor: pointer;
+        }
+
+        .container {
+            padding: 2px 16px;
+        }
+
+        input[type=text] {
+            background-color: #f1f1f1;
+            width: 100%;
+        }
+
+        input[type=submit] {
+            background-color: DodgerBlue;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .autocomplete-items {
+            position: absolute;
+            border: 1px solid #d4d4d4;
+            border-bottom: none;
+            border-top: none;
+            z-index: 99;
+            /*position the autocomplete items to be the same width as the container:*/
+            top: 100%;
+            left: 0;
+            right: 0;
+        }
+
+            .autocomplete-items div {
+                padding: 10px;
+                cursor: pointer;
+                background-color: #fff;
+                border-bottom: 1px solid #d4d4d4;
+            }
+
+                /*when hovering an item:*/
+                .autocomplete-items div:hover {
+                    background-color: #e9e9e9;
+                }
+
+        /*when navigating through the items using the arrow keys:*/
+        .autocomplete-active {
+            background-color: DodgerBlue !important;
+            color: #ffffff;
+        }
+
+        #start:focus {
+            border: 1px solid #009688 !important;
+        }
+
+        .center {
+            width: 150px;
+            margin: 40px auto;
+        }
+
+        .itemToHide {
+            display: none;
+        }
+
+        .chek {
+            background-color: #009885;
+            /*//color: yellow;*/
+            color: white;
+            align-content: center;
+        }
+
+        .search {
+            box-shadow: 3px 3px 3px 3px grey;
+            height: 40px;
+            padding: 10px;
+        }
+
+        .dropdowncontent {
+            position: inherit;
+        }
+
+        .round {
+            align-content: center;
+        }
+
+        .badge {
+            padding-left: 9px;
+            padding-right: 9px;
+            -webkit-border-radius: 9px;
+            -moz-border-radius: 9px;
+            border-radius: 9px;
+        }
+
+        .label-warning[href],
+        .badge-warning[href] {
+            background-color: #c67605;
+        }
+
+        .mandatoryStyle {
+            font-weight: 700;
+        }
+
+        .mandatoryStylecart {
+            font-size: 17px;
+        }
+
+        #lblCartCount {
+            font-size: 12px;
+            background: #ff0000;
+            color: #fff;
+            padding: 0 5px;
+            vertical-align: top;
+        }
+
+        .textBoxStyle {
+            width: 100px;
+            background-color: red;
+            color: blue;
+            text-align: center;
+            font-size: 20px;
+        }
+
+            .textBoxStyle .dxeEditArea_DevEx {
+                width: 100px !important;
+            }
+
+        label {
+            display: inline-block;
+            height: 100%;
+            /*width: 100px;*/
+            align-content: center;
+            position: relative;
+            /*//padding: 4px;*/
+            margin: 0 2px;
+            cursor: pointer;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        .swatchLabel {
+            padding: 0px;
+            margin: 0 5px;
+        }
+        /*span {
+                    display: block;*/
+
+        .body {
+            background: #5e6d82;
+            color: white;
+        }
+        /*text-indent: 100%;*/
+        /*white-space: nowrap;*/
+        /*overflow: hidden;
+
+                    border-radius: 3px;
+                    top: 0;
+                    left: 0;
+                    height: 40px;
+                    width: 40px;
+                }*/
+
+        .backg {
+            background-color: #009885;
+            color: white;
+        }
+
+        #radio {
+            -webkit-appearance: none;
+            background-color: white;
+            color: white;
+        }
+
+        .padder {
+            padding: 0px;
+            height: 0px;
+        }
+
+        .divpadder {
+            padding: 10px;
+        }
+
+        .fonter {
+            font-size: 17px;
+        }
+
+        input:checked + span {
+            /*border: 2px solid #009933;*/
+            background-color: #009885;
+            /*//color: yellow;*/
+            color: white;
+            align-content: center;
+        }
+
+        .dimAllocdiv1 {
+            border: 2px solid #009885;
+        }
+
+        .spanner1 {
+            border: 1px solid #7b7e82;
+            background-color: white;
+            color: #7b7e82;
+            padding: 5px;
+            align-content: center;
+            display: block;
+            height: 100%;
+            width: 152px;
+        }
+
+        .checList {
+            background-color: white;
+            color: black;
+        }
+
+        .clr {
+            color: white;
+        }
+
+        .navbar {
+            color: black;
+        }
+
+        .navbar {
+            color: white;
+        }
+
+        a:hover {
+            color: black !important;
+        }
+
+        .sidebar {
+            height: 100%;
+            width: 0;
+            position: fixed;
+            z-index: 1;
+            top: 0;
+            left: 0;
+            background-color: #111;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+        }
+
+            .sidebar a {
+                padding: 8px 8px 8px 32px;
+                text-decoration: none;
+                font-size: 25px;
+                color: #818181;
+                display: block;
+                transition: 0.3s;
+            }
+
+                .sidebar a:hover {
+                    color: #f1f1f1;
+                }
+
+            .sidebar .closebtn {
+                position: absolute;
+                top: 0;
+                right: 25px;
+                font-size: 36px;
+                margin-left: 50px;
+            }
+
+        .openbtn {
+            font-size: 20px;
+            cursor: pointer;
+            background-color: transparent;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+        }
+
+        .backgrnd {
+            background-color: white;
+            color: black;
+        }
+
+        .openbtn:hover {
+            background-color: #444;
+            color: white;
+        }
+
+        .dxpcDropDown_Material {
+            z-index: 10000000;
+        }
+
+        #main {
+            transition: margin-left .5s;
+            padding: 16px;
+        }
+
+        .rightaligntext input {
+            text-align: right !important;
+        }
+
+        .vertical-menu {
+            width: 100%;
+        }
+
+            .vertical-menu div {
+                background-color: White;
+                color: black;
+                display: block;
+                padding: 12px;
+                text-decoration: none;
+            }
+
+        .acceptBtn {
+            margin-top: 20px;
+            height: 43px;
+            width: 300px;
+            font-size: 20px;
+            background-color: white;
+            color: black;
+        }
+
+        #overlayer:hover .overlay {
+            opacity: 1;
+        }
+
+        .overlay {
+            position: fixed;
+            display: none;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0,0,0,0.5);
+            z-index: 2;
+            cursor: pointer;
+        }
+
+        .dxlbd {
+            z-index: 100000;
+        }
+
+
+
+        .dropdown1 {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content1 {
+            display: none;
+            position: absolute;
+            background-color: #f1f1f1;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+            .dropdown-content1 a {
+                color: black;
+                padding: 12px 16px;
+                text-decoration: none;
+                display: block;
+            }
+
+                .dropdown-content1 a:hover {
+                    background-color: #ddd;
+                }
+
+        .dropdown1:hover .dropdown-content1 {
+            display: block;
+        }
+    </style>
+
+    <script type="text/javascript">
+        var selectedItems = [];
+        var selectedColor = "";
+        var selectedColorFil = "";
+        var selectedStyleFil = "";
+        var selectedSizeFil = "";
+        var selectedDescFil = "";
+        var selectedSwatchFIl = "";
+        var selectedImgFil = false;
+        var selectedDimFil = false;
+        var onDemandflag = false;
+        var SelectedOrdersArr = [];
+        //function openNav() {
+        //    document.getElementById("mySidebar").style.width = "600px";
+        //    //document.getElementById("main").style.marginLeft = "500px";
+        //}
+
+        //function closeNav() {
+        //    document.getElementById("mySidebar").style.width = "0";
+        //    //document.getElementById("main").style.marginLeft = "0";
+        //}
+
+
+        function GetData(s, e) {
+            selectedItems = s.GetSelectedValues();
+            var grid = ASPxClientControl.GetControlCollection().GetByName("CardView");
+            if (selectedItems.length > 0) {
+                selectedColorFil = ""; selectedStyleFil = ""; selectedSizeFil = ""; selectedDescFil = ""; selectedImgFil = false; selectedDimFil = false;
+                grid.PerformCallback({ selectedItem: selectedItems, pages: true });
+                MVCxClientUtils.FinalizeCallback();
+            }
+            else {
+                selectedColorFil = ""; selectedStyleFil = ""; selectedSizeFil = ""; selectedDescFil = ""; selectedImgFil = false; selectedDimFil = false;
+                grid.PerformCallback({ pages: true });
+                MVCxClientUtils.FinalizeCallback();
+            }
+        }
+
+        function getEntitlement(style, orgStyl, error) {
+            var colordrop = "Color_" + "Drop_" + style;
+            var colorValue = document.getElementsByName(colordrop);
+            var selectedcolor = colorValue[0].defaultValue == "" & colorValue[0].value == "" ? "" : colorValue[0].defaultValue != "" ? colorValue[0].defaultValue : colorValue[0].value;
+            if (style.indexOf(',') > -1) {
+                var stylerop = "styleDrp_" + style + "_" + orgStyl;
+                var styleValue = document.getElementsByName(stylerop);
+                var selectedStyle = styleValue[0].defaultValue == "" & styleValue[0].value == "" ? "" : styleValue[0].defaultValue != "" & styleValue[0].value != "" ? styleValue[0].value : styleValue[0].defaultValue != "" & styleValue[0].value == "" ? styleValue[0].defaultValue : "";
+                $.ajax({
+                    url: "/Home/GetEntitlement",
+                    type: "POST",
+                    data: { 'StyleId': style, 'ColorId': selectedcolor, 'orgStyle': orgStyle },
+                    success: function (response) {
+                        if (response != "") {
+                            var errorMsg = "";
+                            if (error == 1) {
+                                errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed entitlement exceed</span></div>"
+                            }
+                            var data = document.getElementById("Entitlement");
+                            data.innerHTML = response.Result + errorMsg;
+                            Entitlement.SetHeaderText("Entitlement for " + response.EmpId);
+                            Entitlement.Show();
+                        }
+                    },
+                    error: function (response) {
+
+                    }
+                });
+            }
+            else {
+                $.ajax({
+                    url: "/Home/GetEntitlement",
+                    type: "POST",
+                    data: { 'StyleId': style, 'ColorId': selectedcolor, 'orgStyle': orgStyle },
+                    success: function (response) {
+                        var errorMsg = "";
+                        if (error == 1) {
+                            errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed entitlement exceed</span></div>"
+                        }
+                        var data = document.getElementById("Entitlement");
+                        data.innerHTML = response.Result + errorMsg;
+                        Entitlement.SetHeaderText("Entitlement for " + response.EmpId);
+                        Entitlement.Show();
+                    },
+                    error: function (response) {
+
+                    }
+                });
+            }
+        }
+        function setCardRows() {
+            var cardRo = $("#cardRows").val();
+            var cardCol = $("#cardColumns").val();
+            if (cardCol != "" || cardRo != "") {
+                if (cardRo != "") {
+                    $("#rowVal").hide();
+                    if (cardCol != "") {
+                        $("#colVal").hide();
+                        $.ajax({
+                            type: "POST",
+                            url: "@Url.Content("~/Settings/SetValues/")",
+                            data: { 'rowVal': cardRo, 'columnVal': cardCol, 'flag': selectedSwatchFIl, 'imgFilter': selectedImgFil, 'showDim': selectedDimFil, 'ondemand': onDemandflag },
+                            success: function (response) {
+                                if (response == "Success") {
+                                    alert("Changes successfully saved!");
+                                    window.location = "/Home/Index/";
+                                } else {
+                                    alert("Try again!");
+                                }
+                            },
+                            error: function (erdata) {
+                                alert("Try again!");
+                            }
+                        });
+                    }
+                    else {
+                        $("#colVal").show();
+                    }
+                }
+                else {
+                    $("#rowVal").show();
+                }
+            } else {
+                $("#rowVal").show();
+                $("#colVal").show();
+            }
+        }
+
+
+        function getSelectedColor(s, e) {
+            var data = s.name.split("_");
+            var sizDrp = ASPxClientControl.GetControlCollection().GetByName("Size_" + "Drop_" + data[2]);
+            if (data[2].indexOf(',') > -1) {
+                var cmb = ASPxClientControl.GetControlCollection().GetByName("styleDrp_" + data[2]);
+                data[2] = cmb.lastSuccessText;
+            }
+
+            selectedColor = { 'color': s.GetSelectedItem().value, 'style': data[2] };
+            if (selectedColor.color != "" | selectedColor.color != null | selectedColor.color != undefined) {
+                if (selectedColor.style != "" | selectedColor.style != null | selectedColor.style != undefined) {
+                    $.ajax({
+                        type: "POST",
+                        url: "@Url.Content("~/Home/GetSelectedColourSizes")",
+                        data: { 'Style': selectedColor.style, 'Color': selectedColor.color },
+                        success: function (response) {
+                            if (response.length > 0) {
+                                sizDrp.ClearItems();
+                                for (var i = 0; i < response.length ; i++) {
+                                    sizDrp.AddItem(response[i]);
+                                }
+                                if (response.length == 1) {
+                                    sizDrp.SetSelectedIndex(0);
+                                }
+
+                            }
+                        },
+                        error: function () {
+                        }
+                    })
+                }
+            }
+        }
+        function GetCart() {
+            var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
+            loadPopup.Show();
+            $.ajax({
+                type: "POST",
+                url: "/Home/GetBasketStatus",
+                success: function (response) {
+                    loadPopup.Hide()
+                    if (response == "") {
+                        $.ajax({
+                            url: "/Home/GetOrderEnforcementStatus/",
+                            type: "post",
+                            success: function (respo) {
+                                if (respo == "") {
+                                    var url = "/Basket/ShowBasket";
+                                    window.location = url;
+                                }
+                                else {
+                                    respo = respo + "\n\nPlease click Ok to proceed to cart or Cancel to continue shopping";
+                                    if (confirm(respo)) {
+                                        var url = "/Basket/ShowBasket";
+                                        window.location = url;
+                                    }
+                                }
+                            }
+                        });
+
+                    } else if (response.indexOf("{%FREESTOCKERROR%}") > -1) {
+                        response = response.replace("{%FREESTOCKERROR%}", "The Freestock has changed whilst you have been placing the order \n\n");
+                        alert(response);
+                    }
+                    else if (response.indexOf("///") > -1) {
+                        var capCatagory = response.replace("///", "");
+                        capCatagory = capCatagory + "\n\nPlease click Ok to proceed to cart or Cancel to continue shopping";
+                        if (confirm(capCatagory)) {
+                            $.ajax({
+                                url: "/Home/GetOrderEnforcementStatus/",
+                                type: "post",
+                                success: function (respo) {
+                                    if (respo == "") {
+                                        var url = "/Basket/ShowBasket";
+                                        window.location = url;
+                                    }
+                                    else {
+                                        respo = respo + "\n\nPlease click Ok to proceed to cart or Cancel to continue shopping";
+                                        if (confirm(respo)) {
+                                            var url = "/Basket/ShowBasket";
+                                            window.location = url;
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                    }
+                    else if (response.indexOf("/--/") > -1) {
+                        var capCatagory = response.replace("/--/", "");
+                        capCatagory = capCatagory + "\n\nPlease click Ok to proceed to cart or Cancel to continue shopping";
+                        if (confirm(capCatagory)) {
+                            $.ajax({
+                                url: "/Home/GetOrderEnforcementStatus/",
+                                type: "post",
+                                success: function (respo) {
+                                    respo = respo + "\n\nPlease click Ok to proceed to cart or Cancel to continue shopping";
+                                    if (respo == "") {
+                                        var url = "/Basket/ShowBasket";
+                                        window.location = url;
+                                    }
+                                    else {
+                                        if (confirm(respo)) {
+                                            var url = "/Basket/ShowBasket";
+                                            window.location = url;
+                                        }
+                                    }
+                                }
+                            });
+                        }
+                    }
+                    else {
+                        myFunction("No items in the cart!");
+                    }
+                },
+            });
+        }
+        function GetEnforcement() {
+            $.ajax({
+                url: "/Home/GetOrderEnforcementStatus/",
+                type: "post",
+                success: function (response) {
+                    return response;
+                }
+            }
+            );
+
+        }
+
+        function getSelectedSize(s, e) {
+            var selectedSize = "";
+            var data1 = s.name.split("_");
+            selectedSize = { 'size': s.GetSelectedItem().value, 'name': data1[1] + "_" + data1[2] };
+            var split = "";
+            if (data1[2].indexOf(",") > -1) {
+                var data2 = data1[2].split(',');
+                split = data2[0];
+            }
+            else {
+                split = data1[2];
+            }
+            var styleId_Val = data1[2].indexOf(",") > -1 ? GetStyleId(data1[2], data1[3]) : data1[2];
+
+            if (selectedSize.size != "") {
+
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Content("~/Home/GetPrice/")",
+                    data: { 'StyleID': styleId_Val, 'SizeId': selectedSize.size },
+                    success: function (response) {
+                        if (!response.indexOf("Login") > -1) {
+                            var priceId = "LbPrice" + data1[2];
+                            var price = document.getElementById(priceId);
+                            price.innerHTML = "";
+                            price.innerHTML = response;
+                        }
+                        else {
+                            window.location = "/User/Login/";
+                        }
+                    },
+                    error: function (erdata) {
+                    }
+                });
+            }
+            else {
+                alert("Please select the colorId first!");
+                thisDrop = ASPxClientControl.GetControlCollection().GetByName(s.name);
+                thisDrop.SetValue("");
+            }
+        }
+
+        function getSelectedSize1(s, e) {
+            var selectedSize = "";
+            var data1 = s.name.split("_");
+            selectedSize = { 'size': s.GetSelectedItem().value, 'name': data1[1] + "_" + data1[2] };
+            var split = "";
+            if (data1[2].indexOf(",") > -1) {
+                var data2 = data1[2].split(',');
+                split = data2[0];
+            }
+            else {
+                split = data1[2];
+            }
+            var styleId_Val = data1[2].indexOf(",") > -1 ? GetStyleId1(data1[2]) : data1[2];
+
+            if (selectedSize.size != "") {
+
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Content("~/Home/GetPrice/")",
+                    data: { 'StyleID': styleId_Val, 'SizeId': selectedSize.size },
+                    success: function (response) {
+                        ;
+                        if (!response.indexOf("Login") > -1) {
+                            var priceId = "LbPrice1" + data1[2];
+                            var price = document.getElementById(priceId);
+                            price.innerHTML = "";
+                            price.innerHTML = response;
+                        }
+                        else {
+                            window.location = "/User/Login/";
+                        }
+                    },
+                    error: function (erdata) {
+                    }
+                });
+            }
+            else {
+                alert("Please select the colorId first!");
+                thisDrop = ASPxClientControl.GetControlCollection().GetByName(s.name);
+                thisDrop.SetValue("");
+            }
+        }
+
+
+        function getSelectedSizeDimView(s, e) {
+            var selectedSize = "";
+            var data1 = s.name.split("_");
+            selectedSize = { 'size': s.GetSelectedItem().value, 'name': data1[1] + "_" + data1[2] };
+            var split = "";
+            if (data1[2].indexOf(",") > -1) {
+                var data2 = data1[2].split(',');
+                split = data2[0];
+            }
+            else {
+                split = data1[2];
+            }
+            var styleId_Val = data1[2].indexOf(",") > -1 ? GetStyleId2(data1[2]) : data1[2];
+            if (selectedSize.size != "") {
+
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Content("~/Home/GetPrice/")",
+                    data: { 'StyleID': styleId_Val, 'SizeId': selectedSize.size },
+                    success: function (response) {
+                        ;
+                        if (!response.indexOf("Login") > -1) {
+                            var priceId = "DimviewPrice" + data1[2];
+                            var price = document.getElementById(priceId);
+                            price.innerHTML = "";
+                            price.innerHTML = response;
+                        }
+                        else {
+                            window.location = "/User/Login/";
+                        }
+                    },
+                    error: function (erdata) {
+                    }
+                });
+            }
+            else {
+                alert("Please select the colorId first!");
+                thisDrop = ASPxClientControl.GetControlCollection().GetByName(s.name);
+                thisDrop.SetValue("");
+            }
+        }
+
+        function GetStyleId(data, orgStyl) {
+            var StyleId = ASPxClientControl.GetControlCollection().GetByName("styleDrp_" + data + "_" + orgStyl);
+            var style = StyleId.lastSuccessText;
+            return style;
+        }
+
+        function assemblyChanged(style) {
+            var chkId = "#CHKID" + style.trim().replace(/[^a-zA-Z0-9]/g, '');
+            if ($(chkId).is(":checked")) {
+                $.ajax({
+                    url: "/Home/AddAssemblyList/",
+                    data: { 'style': style },
+                    success: function (response) {
+                        if (response == "1") {
+
+                        }
+                    },
+                    error: function (response) {
+
+                    }
+                });
+            }
+            else {
+                $.ajax({
+                    url: "/Home/RemoveAssemblyList/",
+                    data: { 'style': style },
+                    success: function (response) {
+                        if (response == "1") {
+
+                        }
+                    },
+                    error: function (response) {
+
+                    }
+                });
+            }
+        }
+
+        function GetStyleId1(data) {
+            var StyleId = ASPxClientControl.GetControlCollection().GetByName("styleDimDrp_" + data);
+            var style = StyleId.lastSuccessText;
+            return style;
+        }
+        function GetStyleId2(data) {
+            var StyleId = ASPxClientControl.GetControlCollection().GetByName("styleDimviewDrp_" + data);
+            var style = StyleId.lastSuccessText;
+            return style;
+        }
+
+        function getAssembly(style) {
+            if (style.indexOf(",") > -1) {
+                var stylDrp = ASPxClientControl.GetControlCollection().GetByName("styleDrp_" + style);
+
+                var StyleId = stylDrp.lastSuccessText;
+                var popup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
+                popup.Show();
+                var name = $("#AssemblyDiv").val();
+                var assemblyPopUp = ASPxClientControl.GetControlCollection().GetByName(name);
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Content("~/Home/AssemblyInfo/")",
+                    data: { 'styleId': StyleId },
+                    success: function (response) {
+                        ;
+                        if (response != "") {
+                            try {
+                                var s = document.getElementById("AssemblyInfo");
+                                s.innerHTML = response;
+                                //$("#AssemblyInfo1").html(response);
+                                popup.Hide();
+                                AssemblyInformation.Show();
+                            }
+                            catch (err) {
+                                $("#AssemblyInfo").html("");
+                                $("#AssemblyInfo1").html(response);
+                                popup.Hide();
+                                AssemblyInformation.Show();
+                            }
+
+                        }
+                    },
+                    error: function (erdata) {
+
+                    }
+                });
+
+            }
+            else {
+                var popup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
+                popup.Show();
+                var name = $("#AssemblyDiv").val();
+                var assemblyPopUp = ASPxClientControl.GetControlCollection().GetByName(name);
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Content("~/Home/AssemblyInfo/")",
+                    data: { 'styleId': style },
+                    success: function (response) {
+                        ;
+                        if (response != "") {
+                            try {
+                                var s = document.getElementById("AssemblyInfo");
+                                s.innerHTML = response;
+                                //$("#AssemblyInfo1").html(response);
+                                popup.Hide();
+                                AssemblyInformation.Show();
+                            }
+                            catch (err) {
+                                $("#AssemblyInfo").html("");
+                                $("#AssemblyInfo1").html(response);
+                                popup.Hide();
+                                AssemblyInformation.Show();
+                            }
+
+                        }
+                    },
+                    error: function (erdata) {
+
+                    }
+                });
+
+            }
+
+        }
+
+        function ShowRnC() {
+            RowsnColumns.Show();
+        }
+
+        function addTocart(s, e) {
+            var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
+
+            var stylearr = s.name.split('_');
+            var description = "";
+            var price = "";
+            var size = "";
+            var color = "";
+            var qty = "";
+            var sStyle = "";
+            var descStyle;
+            if (stylearr[1].indexOf(',') > -1) {
+                var data = ASPxClientControl.GetControlCollection().GetByName("styleDrp_" + stylearr[1] + "_" + stylearr[3]);
+                sStyle = data.lastSuccessText;
+                descStyle = stylearr[1].split(',');
+            }
+            else {
+                sStyle = stylearr[1];
+            }
+            var desc = descStyle == undefined ? stylearr[1] : descStyle[0];
+            var sizName = "Size_Drop_" + stylearr[1] + "_" + stylearr[3];
+            var sizedrp = document.getElementsByName(sizName);
+            var name = "Color_Drop_" + stylearr[1];
+            var colorDrp = document.getElementsByName(name);
+            var Spin = ASPxClientControl.GetControlCollection().GetByName("spinEdit_" + stylearr[1]);
+            var reasonName = "CmbReason_" + stylearr[1];
+            var reasonControl = document.getElementsByName(reasonName);
+            var reason = reasonControl[0].value == "" | reasonControl[0].value == undefined ? reasonControl[0].defaultValue == "" | reasonControl[0].defaultValue == "" ? "" : reasonControl[0].defaultValue : reasonControl[0].value;
+            description = document.getElementById("LbDescription" + desc).innerHTML;
+            price = document.getElementById("LbPrice" + stylearr[1]).innerHTML;
+            size = sizedrp[0].value == undefined ? sizedrp[0].defaultValue : sizedrp[0].value;
+            color = colorDrp[0].value == undefined ? colorDrp[0].defaultValue : colorDrp[0].value;
+            qty = Spin.lastValue;
+
+            if (description != "" && price != "" && size != "" && color != "" && qty != "") {
+                if (stylearr[2] != "") {
+                    $.ajax({
+                        url: "/Home/GetBtnStatus/",
+                        type: "POST",
+                        data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty },
+                        success: function (response) {
+                            debugger;
+                            if (response == "enabled" | reason != "") {
+                                loadPopup.Show();
+
+                                $.ajax({
+                                    url: "/Home/Addtocart/",
+                                    type: "POST",
+                                    data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle },
+                                    success: function (response) {
+                                        if (response != "") {
+                                            $("#CartwidCount").html("");
+                                            $("#CartwidCount").html(response);
+                                            loadPopup.Hide();
+                                            myFunction("Added to cart..!");;
+                                        }
+                                        else {
+                                            loadPopup.Hide();
+                                            alert("Try again!");
+                                        }
+                                    },
+                                    error: function () {
+                                        loadPopup.Hide();
+                                        alert("Try again!");
+                                    }
+                                })
+                            }
+                            else {
+                                // document.getElementById("ErrorMessage").style.display = 'block';
+                                loadPopup.Hide();
+                                getEntitlement(stylearr[1], stylearr[3], 1);
+
+                            }
+                        },
+                        error: function () {
+                            loadPopup.Hide();
+                            alert("Try again!");
+                        }
+                    });
+                }
+                else {
+                    loadPopup.Show();
+                    $.ajax({
+                        url: "/Home/GetBtnStatus/",
+                        type: "POST",
+                        data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty },
+                        success: function (response) {
+                            debugger;
+                            if (response == "enabled" | reason != "") {
+                                $.ajax({
+                                    url: "/Home/Addtocart/",
+                                    type: "POST",
+                                    data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle },
+                                    success: function (response) {
+                                        if (response != "") {
+                                            $("#CartwidCount").html("");
+                                            $("#CartwidCount").html(response);
+                                            myFunction("Added to cart..!");;
+                                        }
+                                        else {
+                                            loadPopup.Hide();
+                                            alert("Try again!");
+                                        }
+                                    },
+                                    error: function () {
+                                        loadPopup.Hide();
+                                        alert("Try again!");
+                                    }
+                                })
+                            }
+                            else {
+                                // document.getElementById("ErrorMessage").style.display = 'block';
+                                loadPopup.Hide();
+                                getEntitlement(stylearr[1], 1);
+
+                            }
+                        },
+                        error: function () {
+                            loadPopup.Hide();
+                            alert("Try again!");
+                        }
+                    });
+                }
+
+            }
+            else {
+
+                if (description == "" | description == null) {
+                    alert("Please fill description");
+                }
+                else if (price == "" | price == null) {
+                    alert("Please select a Price");
+                }
+                else if (size == "" | size == null) {
+                    alert("Please select a Size");
+                } else if (color == "" | color == null) {
+                    alert("Please select a Color");
+                }
+                else if (qty == "" | qty == null) {
+                    alert("Please select a Quantity");
+                }
+                else if (sStyle == "" | sStyle == null) {
+                    alert("Please select a Style");
+                }
+            }
+        }
+
+        function addTocartDemand(s, e) {
+            var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
+
+            var stylearr = s.name.split('_');
+            var description = "";
+            var price = "";
+            var size = "";
+            var color = "";
+            var qty = "";
+            var sStyle = "";
+            var descStyle;
+            if (stylearr[1].indexOf(',') > -1) {
+                var data = ASPxClientControl.GetControlCollection().GetByName("styleDimviewDrp_" + stylearr[1]);
+                sStyle = data.lastSuccessText;
+                descStyle = stylearr[1].split(',');
+            }
+            else {
+                sStyle = stylearr[1];
+            }
+            var desc = descStyle == undefined ? stylearr[1] : descStyle[0];
+            description = document.getElementById("DimviewDescription" + desc).innerHTML;
+            price = document.getElementById("DimviewPrice" + stylearr[1]).innerHTML;
+            var sizName = "SizeDimview_Drop_" + stylearr[1];
+            var sizedrp = document.getElementsByName(sizName);
+            size = sizedrp[0].value == undefined ? sizedrp[0].defaultValue : sizedrp[0].value;
+            var name = "ColorDimview_Drop_" + stylearr[1];
+            var colorDrp = document.getElementsByName(name);
+            color = colorDrp[0].value == undefined ? colorDrp[0].defaultValue : colorDrp[0].value;
+            var Spin = ASPxClientControl.GetControlCollection().GetByName("spinEditDemand_" + stylearr[1]);
+            var reasonName = "CmbReasonDemand_" + stylearr[1];
+            var reasonControl = document.getElementsByName(reasonName);
+            var reason = reasonControl[0].value == "" | reasonControl[0].value == undefined ? reasonControl[0].defaultValue == "" | reasonControl[0].defaultValue == "" ? "" : reasonControl[0].defaultValue : reasonControl[0].value;
+            qty = Spin.lastValue; if (description != "" && price != "" && size != "" && color != "" && qty != "") {
+                if (stylearr[2] != "") {
+                    $.ajax({
+                        url: "/Home/GetBtnStatus/",
+                        type: "POST",
+                        data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty },
+                        success: function (response) {
+                            debugger;
+                            if (response == "enabled" | reason != "") {
+                                loadPopup.Show();
+
+                                $.ajax({
+                                    url: "/Home/Addtocart/",
+                                    type: "POST",
+                                    data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle },
+                                    success: function (response) {
+                                        if (response != "") {
+                                            $("#CartwidCount").html("");
+                                            $("#CartwidCount").html(response);
+                                            loadPopup.Hide();
+                                            myFunction("Added to cart..!");;
+                                        }
+                                        else {
+                                            loadPopup.Hide();
+                                            alert("Try again!");
+                                        }
+                                    },
+                                    error: function () {
+                                        loadPopup.Hide();
+                                        alert("Try again!");
+                                    }
+                                });
+                            }
+                            else {
+                                loadPopup.Hide();
+                                getEntitlementDemand(stylearr[1], 1);
+                            }
+                        },
+                        error: function () {
+                            loadPopup.Hide();
+                            alert("Try again!");
+                        }
+                    });
+                }
+                else {
+                    loadPopup.Show();
+                    $.ajax({
+                        url: "/Home/Addtocart/",
+                        type: "POST",
+                        data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle },
+                        success: function (response) {
+                            if (response != "" | reason != "") {
+                                $("#CartwidCount").html("");
+                                $("#CartwidCount").html(response);
+                                loadPopup.Hide();
+                                myFunction("Added to cart..!");;
+                            }
+                            else {
+                                loadPopup.Hide();
+                                alert("Try again!");
+                            }
+                        },
+                        error: function () {
+                            loadPopup.Hide();
+                            alert("Try again!");
+                        }
+                    });
+                }
+
+            }
+            else {
+                if (description == "" | description == null) {
+                    alert("Please fill description");
+                }
+                else if (price == "" | price == null) {
+                    alert("Please select a Price");
+                }
+                else if (size == "" | size == null) {
+                    alert("Please select a Size");
+                } else if (color == "" | color == null) {
+                    alert("Please select a Color");
+                }
+                else if (qty == "" | qty == null) {
+                    alert("Please select a Quantity");
+                }
+                else if (sStyle == "" | sStyle == null) {
+                    alert("Please select a Style");
+                }
+            }
+        }
+
+
+        function addTocartDim(s, e) {
+            var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
+
+            var stylearr = s.name.split('_');
+            var description = "";
+            var price = "";
+            var size = "";
+            var color = "";
+            var qty = "";
+            var sStyle = "";
+            var descStyle;
+            if (stylearr[1].indexOf(',') > -1) {
+                var data = ASPxClientControl.GetControlCollection().GetByName("styleDimDrp_" + stylearr[1]);
+                sStyle = data.lastSuccessText;
+                descStyle = stylearr[1].split(',');
+            }
+            else {
+                sStyle = stylearr[1];
+            }
+            var desc = descStyle == undefined ? stylearr[1] : descStyle[0];
+            description = document.getElementById("LbDescription1" + desc).innerHTML;
+            price = document.getElementById("LbPrice1" + stylearr[1]).innerHTML;
+            var sizName = "SizePop_Drop_" + stylearr[1];
+            var sizedrp = document.getElementsByName(sizName);
+            size = sizedrp[0].value == undefined ? sizedrp[0].defaultValue : sizedrp[0].value;
+            var name = "ColorPop_Drop_" + stylearr[1];
+            var colorDrp = document.getElementsByName(name);
+            color = colorDrp[0].value == undefined ? colorDrp[0].defaultValue : colorDrp[0].value;
+            var Spin = ASPxClientControl.GetControlCollection().GetByName("spinEditDim_" + stylearr[1]);
+            var reasonName = "CmbReasonDim_" + stylearr[1];
+            var reasonControl = document.getElementsByName(reasonName);
+            var reason = reasonControl[0].value == "" | reasonControl[0].value == undefined ? reasonControl[0].defaultValue == "" | reasonControl[0].defaultValue == "" ? "" : reasonControl[0].defaultValue : reasonControl[0].value;
+
+            qty = Spin.lastValue; if (description != "" && price != "" && size != "" && color != "" && qty != "") {
+                if (stylearr[2] != "") {
+                    $.ajax({
+                        url: "/Home/GetBtnStatus/",
+                        type: "POST",
+                        data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty },
+                        success: function (response) {
+                            debugger;
+                            if (response == "enabled" | reason != "") {
+                                loadPopup.Show();
+
+                                $.ajax({
+                                    url: "/Home/Addtocart/",
+                                    type: "POST",
+                                    data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle },
+                                    success: function (response) {
+                                        if (response != "") {
+                                            $("#CartwidCount").html("");
+                                            $("#CartwidCount").html(response);
+                                            loadPopup.Hide();
+                                            myFunction("Added to cart..!");;
+                                        }
+                                        else {
+                                            loadPopup.Hide();
+                                            alert("Try again!");
+                                        }
+                                    },
+                                    error: function () {
+                                        loadPopup.Hide();
+                                        alert("Try again!");
+                                    }
+                                });
+                            }
+                            else {
+                                loadPopup.Hide();
+                                getEntitlementDim(stylearr[1], 1);
+                            }
+                        },
+                        error: function () {
+                            loadPopup.Hide();
+                            alert("Try again!");
+                        }
+                    });
+                }
+                else {
+
+                    loadPopup.Show();
+                    loadPopup.Hide();
+                    $.ajax({
+                        url: "/Home/Addtocart/",
+                        type: "POST",
+                        data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle },
+                        success: function (response) {
+                            if (response != "" | reason != "") {
+                                $("#CartwidCount").html("");
+                                $("#CartwidCount").html(response);
+                                loadPopup.Hide();
+                                myFunction("Added to cart..!");;
+                            }
+                            else {
+                                loadPopup.Hide();
+                                alert("Try again!");
+                            }
+                        },
+                        error: function () {
+                            loadPopup.Hide();
+                            alert("Try again!");
+                        }
+                    });
+                }
+
+            }
+            else {
+                if (description == "" | description == null) {
+                    alert("Please fill description");
+                }
+                else if (price == "" | price == null) {
+                    alert("Please select a Price");
+                }
+                else if (size == "" | size == null) {
+                    alert("Please select a Size");
+                } else if (color == "" | color == null) {
+                    alert("Please select a Color");
+                }
+                else if (qty == "" | qty == null) {
+                    alert("Please select a Quantity");
+                }
+                else if (sStyle == "" | sStyle == null) {
+                    alert("Please select a Style");
+                }
+            }
+        }
+
+
+        function getSelectedDescFilter(s, e) {
+            selectedDescFil = s.lastChangedValue;
+        }
+
+        function Getimage(img, Style) {
+            if (img != "") {
+                $.ajax({
+                    url: "/Home/GetStyleImages/",
+                    type: "get",
+                    data: { 'style': Style },
+                    success: function (responser) {
+                        if (responser.length == 0) {
+                            var popup = ASPxClientControl.GetControlCollection().GetByName("ImagePop");
+                            var response = "<img style='height:60%;width:60%;' src='" + img + "'/> "
+                            $("#ImageDive").html("");
+                            $("#MultipleImages").html("");
+                            $("#ImageDive").html(response);
+                            popup.Show();
+                        }
+                        else {
+                            var popup = ASPxClientControl.GetControlCollection().GetByName("ImagePop");
+                            var response = "<img style='height:60%;width:60%;' src='" + img + "'/> "
+                            var response1 = "";
+                            for (var k = 0; k < responser.length; k++) {
+
+                                response1 = response1 + "<br/><br/><center></center><div class='row'><center><span><img style='height:100px;width:100px;cursor:pointer' id='" + responser[k] + "'  class='ImageTypesDiv_" + Style + "' src='" + responser[k] + "' onclick=\"ChangeStyleImage('" + responser[k] + "','" + Style + "')\"/> </span></center></div>";
+                            }
+                            $("#ImageDive").html("");
+                            $("#MultipleImages").html("");
+                            $("#MultipleImages").html(response1);
+                            $("#ImageDive").html(response);
+                            popup.Show();
+                        }
+                    }
+                });
+
+            }
+        }
+        function ChangeStyleImage(img, style) {
+
+            var styls = document.getElementsByClassName("ImageTypesDiv_" + style);
+            for (var k = 0; k < styls.length; k++)
+            {
+                if (img == styls[k].id) {
+                     
+                    document.getElementById(img).style.border = "2px solid black";
+                }
+                else
+                {
+                    document.getElementById(styls[k].id).style.border = "0px";
+                }
+            }
+            var response = "<img style='height:60%;width:60%;' src='" + img + "'/> ";
+            $("#ImageDive").html("");
+            $("#ImageDive").html(response);
+        }
+
+        function getSelectedDimensionsFilter(s, e) {
+            selectedDimFil = s.GetChecked();
+        }
+
+        function getSelectedColorFilter(s, e) {
+
+            selectedColorFil = s.GetSelectedItem("StyleIDFil").value;
+        }
+
+
+
+        function getSelectedImgFilter(s, e) {
+            selectedImgFil = s.GetChecked();
+        }
+
+        function CheckedChanged(s, e) {
+            var name = s.name;
+            var value = "";
+            if (name == "TraditionalCOMBOBOXES" && name != "") {
+                selectedSwatchFIl = 'COMBOBOXES';
+
+            }
+            else {
+                selectedSwatchFIl = 'SWATCHES';
+            }
+        }
+
+        function getSelectedDimensionsFilter(s, e) {
+            selectedDimFil = s.GetChecked();
+        }
+
+        function setDimensionalView(s, e) {
+            onDemandflag = s.GetChecked();
+        }
+
+
+
+        function getSelectedSizeFilter(s, e) {
+
+            selectedSizeFil = s.GetSelectedItem("SizeIdFil").value;
+        }
+
+        function getSelectedStyleFilter(s, e) {
+
+            selectedStyleFil = s.GetSelectedItem("ColorIDFil").value;
+        }
+        function getCard1(StyleID, orgStyle, caption) {
+            if (StyleID != "" && StyleID != undefined) {
+                var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
+                loadPopup.Show();
+                var popup = ASPxClientControl.GetControlCollection().GetByName("DimAllocPop");
+                var url1 = "@Url.Content("~/Home/GetCard/")";
+                $.ajax({
+                    type: "POST",
+                    url: url1,
+                    data: { 'StyleID': StyleID, 'orgStyle': orgStyle, 'caption': caption },
+                    success: function (response) {
+                        var sss = response.indexOf("Login") > -1;
+                        if (response != "" && !response.indexOf("Login") > -1) {
+                            var dim = document.getElementById("DimId");
+                            dim.innerHTML = "";
+                            dim.innerHTML = response;
+                            loadPopup.Hide();
+                            popup.Initialize();
+                            popup.Show();
+                            MVCxClientUtils.FinalizeCallback();
+                        }
+                        else {
+                            window.location = "/User/Login/";
+                        }
+                    },
+                    error: function () {
+
+                    }
+                });
+            }
+            else {
+                alert("try again!");
+            }
+        }
+
+        function getCard(StyleID) {
+            if (StyleID != "" && StyleID != undefined) {
+                var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
+                loadPopup.Show();
+                var url1 = "@Url.Content("~/Home/GetcardOnDemand/")";
+                $.ajax({
+                    type: "POST",
+                    url: url1,
+                    data: { 'StyleID': StyleID },
+                    success: function (response) {
+                        if (response != "" && !response.indexOf("Login") > -1) {
+                            loadPopup.Hide();
+                            $("#CardViewDiv").html("");
+                            $("#CardViewDiv").html(response);
+                        } else {
+                            window.location = "/User/Login/";
+                        }
+                    },
+                    error: function () {
+
+                    }
+                });
+            }
+            else {
+                alert("try again!");
+            }
+        }
+
+        function GetDrpResultModelDim(s, e) {
+            var style_nam = s.name.split('_');
+            var clrDrp = ASPxClientControl.GetControlCollection().GetByName("ColorDimview_" + "Drop_" + style_nam[1]);
+            var sizDrp = ASPxClientControl.GetControlCollection().GetByName("SizeDimview_" + "Drop_" + style_nam[1]);
+            if (clrDrp != undefined && clrDrp != null)
+            { clrDrp.ClearItems(); }
+            sizDrp.ClearItems();
+            var selStyle = style_nam[2]
+            var styleArr = style_nam[1].split(',');
+            var desc = document.getElementById("DimviewDescription" + styleArr[0]);
+            desc.innerHTML = "";
+            var url = "@Url.Content("~/Home/DrpResultModel")";
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: { 'styleId': selStyle },
+                success: function (response) {
+                    if (response != "") {
+                        $.ajax({
+                            url: "/Home/GetLastSize/",
+                            type: "POST",
+                            data: { 'style': selStyle },
+                            success: function (resp) {
+                                if (resp != "") {
+                                    desc.innerHTML = response.Description;
+                                    if (clrDrp != null && clrDrp != undefined) {
+                                        for (var i = 0; i < response.ColorList.length ; i++) {
+                                            clrDrp.AddItem(response.ColorList[i]);
+                                        }
+                                        if (response.ColorList.length == 1) {
+                                            clrDrp.SetSelectedIndex(0);
+                                        }
+                                    }
+                                    for (var j = 0; j < response.SizeList.length ; j++) {
+                                        sizDrp.AddItem(response.SizeList[j]);
+                                    }
+                                    if (response.SizeList.length == 1) {
+                                        sizDrp.SetSelectedIndex(0);
+                                    }
+                                    var priceId = "DimviewPrice" + style_nam[1];
+                                    var price = document.getElementById(priceId);
+                                    price.innerHTML = "";
+                                    price.innerHTML = response.Price == 0 ? resp.price == "" ? "" : resp.price : response.Price;
+                                    MVCxClientUtils.FinalizeCallback();
+
+                                } else {
+                                    desc.innerHTML = response.Description;
+                                    if (clrDrp != null && clrDrp != undefined) {
+                                        for (var i = 0; i < response.ColorList.length ; i++) {
+                                            clrDrp.AddItem(response.ColorList[i]);
+                                        }
+                                        if (response.ColorList.length == 1) {
+                                            clrDrp.SetSelectedIndex(0);
+                                        }
+                                    }
+                                    for (var j = 0; j < response.SizeList.length ; j++) {
+                                        sizDrp.AddItem(response.SizeList[j]);
+                                    }
+                                    if (response.SizeList.length == 1) {
+                                        sizDrp.SetSelectedIndex(0);
+                                    }
+                                    var priceId = "DimviewPrice" + style_nam[1];
+                                    var price = document.getElementById(priceId);
+                                    price.innerHTML = "";
+                                    price.innerHTML = response.Price == 0 ? "" : response.Price;
+                                    MVCxClientUtils.FinalizeCallback();
+                                }
+                            }
+                        })
+
+                    }
+                },
+                error: function () {
+
+                }
+            });
+        }
+        function getDimAlloc(freeText) {
+            var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
+            loadPopup.Show();
+            var popup = ASPxClientControl.GetControlCollection().GetByName("DimAllocPop");
+            if (freeText != "") {
+                $.ajax({
+                    type: "POST",
+                    url: "@Url.Content("~/Home/GetDimAlloc")",
+                    data: { 'freeText': freeText },
+                    success: function (response) {
+                        if (response != "" && !response.indexOf("Login") > -1) {
+                            var dim = document.getElementById("DimId");
+                            dim.innerHTML = "";
+                            dim.innerHTML = response;
+                            //$("#DimId").html("");
+                            //$("#DimId").html(response);
+                            loadPopup.Hide();
+                            popup.Initialize();
+                            popup.Show();
+                            MVCxClientUtils.FinalizeCallback();
+                        }
+                        else {
+                            window.location = "/User/Login/";
+                        }
+                    },
+                    error: function () {
+
+                    }
+                });
+            }
+        }
+
+        function RemoveFilter() {
+            var card = ASPxClientControl.GetControlCollection().GetByName("CardView");
+
+            selectedColorFil = ""; selectedStyleFil = ""; selectedSizeFil = ""; selectedDescFil = ""; selectedImgFil = false; selectedDimFil = false;
+            card.PerformCallback({ selectedItem: selectedItems, pages: true });
+        }
+
+        @*function GetStyledata() {
+
+            var popup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
+            popup.Show();
+            $.ajax({
+                type: "POST",
+                data: { 'ColorId': selectedColorFil, 'StyleID': selectedStyleFil, 'SizeId': selectedSizeFil, 'StyleIDList': null, 'ColorIdList': null, 'SizeIdList': null, 'Price': selectedStyleFil },
+                url: "@Url.Content("~/Home/CardView1Partial")",
+                success: function (response) {
+                    ;
+                    if (response != "") {
+                        popup.Hide();
+                        $("#resultArea").html(response);
+                    }
+                },
+                error: function (erdata) {
+
+                }
+
+
+            });
+        }*@
+
+        function GetFilter() {
+            selectedColorFil = "";
+            selectedStyleFil = "";
+            selectedSizeFil = "";
+            selectedDescFil = "";
+            selectedDimFil = false;
+            selectedImgFil = false;
+            var popup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
+            popup.Show();
+            $.ajax({
+                type: "POST",
+                url: "@Url.Content("~/Home/GetFilter")",
+                success: function (response) {
+                    ;
+                    if (response != "") {
+                        $("#FilterModel").html(response);
+                        popup.Hide();
+                        Filter.Show();
+                    }
+                },
+                error: function (erdata) {
+                }
+            });
+        }
+
+        function GetDrpResultModel(s, e) {
+            var style_nam = s.name.split('_')
+            var clr_nam = "Color_" + "Drop_" + style_nam[1];
+            var clrDrp = ASPxClientControl.GetControlCollection().GetByName(clr_nam);
+            var sizDrp = ASPxClientControl.GetControlCollection().GetByName("Size_" + "Drop_" + style_nam[1] + "_" + style_nam[2]);
+            //if (clrDrp != undefined && clrDrp != null)
+            //{ clrDrp.ClearItems(); }
+            sizDrp.ClearItems();
+            var selStyle = s.GetSelectedItem(style_nam).value;
+            var styleArr = style_nam[1].split(',');
+            var desc = document.getElementById("LbDescription" + styleArr[0]);
+            desc.innerHTML = "";
+            var url = "@Url.Content("~/Home/DrpResultModel")";
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: { 'styleId': selStyle },
+                success: function (response) {
+                    if (response != "") {
+
+                        $.ajax({
+                            url: "/Home/GetLastSize/",
+                            type: "POST",
+                            data: { 'style': selStyle },
+                            success: function (resp) {
+                                if (resp != "") {
+                                    desc.innerHTML = response.Description;
+                                    //if (clrDrp != null && clrDrp != undefined) {
+                                    //    for (var i = 0; i < response.ColorList.length ; i++) {
+                                    //        clrDrp.AddItem(response.ColorList[i]);
+                                    //    }
+                                    //    if (response.ColorList.length == 1) {
+                                    //        clrDrp.SetSelectedIndex(0);
+                                    //    }
+                                    //}
+                                    for (var j = 0; j < response.SizeList.length ; j++) {
+                                        sizDrp.AddItem(response.SizeList[j]);
+                                    }
+                                    if (response.SizeList.length == 1) {
+                                        sizDrp.SetSelectedIndex(0);
+                                    }
+                                    for (var k = 0; k < sizDrp.GetItemCount() ; k++) {
+                                        var itemsss = sizDrp.GetItem(k);
+                                        if (resp.Size == sizDrp.GetItem(k).text) {
+                                            sizDrp.SetSelectedIndex(k);
+                                        }
+                                    }
+                                    var priceId = "LbPrice" + style_nam[1];
+                                    var price = document.getElementById(priceId);
+                                    price.innerHTML = "";
+                                    price.innerHTML = response.Price == 0 ? resp.price == "" ? "" : resp.price : response.Price;
+
+                                } else {
+                                    desc.innerHTML = response.Description;
+                                    //if (clrDrp != null && clrDrp != undefined) {
+                                    //    for (var i = 0; i < response.ColorList.length ; i++) {
+                                    //        clrDrp.AddItem(response.ColorList[i]);
+                                    //    }
+                                    //    if (response.ColorList.length == 1) {
+                                    //        clrDrp.SetSelectedIndex(0);
+                                    //    }
+                                    //}
+                                    for (var j = 0; j < response.SizeList.length ; j++) {
+                                        sizDrp.AddItem(response.SizeList[j]);
+                                    }
+                                    if (response.SizeList.length == 1) {
+                                        sizDrp.SetSelectedIndex(0);
+                                    }
+                                    var priceId = "LbPrice" + style_nam[1];
+                                    var price = document.getElementById(priceId);
+                                    price.innerHTML = "";
+                                    price.innerHTML = response.Price == 0 ? "" : response.Price;
+                                }
+                            }
+                        })
+
+                    }
+                },
+                error: function () {
+
+                }
+            });
+        }
+        function ShowRowsnColumns() {
+
+        }
+
+
+        function GetDrpResultModel1(s, e) {
+            var style_nam = s.name.split("_")
+            var drp = ASPxClientControl.GetControlCollection().GetByName("styleDimDrp_" + style_nam[1]);
+            var clrDrp = ASPxClientControl.GetControlCollection().GetByName("ColorPop_" + "Drop_" + style_nam[1]);
+            var sizDrp = ASPxClientControl.GetControlCollection().GetByName("SizePop_" + "Drop_" + style_nam[1]);
+
+            sizDrp.ClearItems();
+            var selStyle = style_nam[2];
+            var styleArr = style_nam[1].split(',');
+            var desc = document.getElementById("LbDescription1" + styleArr[0]);
+            desc.innerHTML = "";
+            var url = "@Url.Content("~/Home/DrpResultModel")";
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: { 'styleId': selStyle },
+                success: function (response) {
+                    if (response != "") {
+                        $.ajax({
+                            url: "/Home/GetLastSize/",
+                            type: "POST",
+                            data: { 'style': selStyle },
+                            success: function (resp) {
+                                if (resp != "") {
+                                    desc.innerHTML = response.Description;
+                                    if (response.ColorList.length > 1) {
+                                        clrDrp.ClearItems();
+                                        for (var i = 0; i < response.ColorList.length ; i++) {
+                                            clrDrp.AddItem(response.ColorList[i]);
+                                        }
+                                    }
+                                    for (var j = 0; j < response.SizeList.length ; j++) {
+                                        sizDrp.AddItem(response.SizeList[j]);
+                                    }
+                                    if (response.SizeList.length == 1) {
+                                        sizDrp.SetSelectedIndex(0);
+
+                                    }
+                                    for (var k = 0; k < sizDrp.GetItemCount() ; k++) {
+                                        var itemsss = sizDrp.GetItem(k);
+                                        if (resp.Size == sizDrp.GetItem(k).text) {
+                                            sizDrp.SetSelectedIndex(k);
+                                        }
+                                    }
+                                    var priceId = "LbPrice1" + style_nam[1];
+                                    var price = document.getElementById(priceId);
+                                    price.innerHTML = "";
+                                    price.innerHTML = response.Price == 0 ? resp.price == "" ? "" : resp.price : response.Price;
+                                    MVCxClientUtils.FinalizeCallback();
+
+                                } else {
+                                    desc.innerHTML = response.Description;
+                                    if (response.ColorList.length > 1) {
+                                        clrDrp.ClearItems();
+                                        for (var i = 0; i < response.ColorList.length ; i++) {
+                                            clrDrp.AddItem(response.ColorList[i]);
+                                        }
+                                    }
+                                    for (var j = 0; j < response.SizeList.length ; j++) {
+                                        sizDrp.AddItem(response.SizeList[j]);
+                                    }
+                                    if (response.SizeList.length == 1) {
+                                        sizDrp.SetSelectedIndex(0);
+
+                                    }
+                                    var priceId = "LbPrice1" + style_nam[1];
+                                    var price = document.getElementById(priceId);
+                                    price.innerHTML = "";
+                                    price.innerHTML = response.Price == 0 ? "" : response.Price;
+                                    MVCxClientUtils.FinalizeCallback();
+                                }
+                            }
+                        })
+
+                    }
+                },
+                error: function () {
+
+                }
+            });
+        }
+
+        function GetStyledata1() {
+            var pop = ASPxClientControl.GetControlCollection().GetByName("Filter");
+            pop.Hide();
+            var grid = ASPxClientControl.GetControlCollection().GetByName("CardView");
+
+            grid.PerformCallback({ selectedItem: selectedItems, ColorId: selectedColorFil, StyleID: selectedStyleFil, Description: selectedDescFil, SizeId: selectedSizeFil, BringImages: selectedImgFil, BringDimension: selectedDimFil, pages: true });
+        }
+
+        function BeginCallback(s, e) {
+            command = e.command;
+            var grid = ASPxClientControl.GetControlCollection().GetByName("CardView");
+            if (command == "CUSTOMCALLBACK" || command == "FUNCTION" || command == "SHOWDETAILROW" || command == "HIDEDETAILROW") {
+                var grid = ASPxClientControl.GetControlCollection().GetByName("CardView");
+            }
+            else {
+
+
+                if (selectedItems.length > 0 || selectedColorFil != "" || selectedStyleFil != "" || selectedSizeFil != "" || selectedDescFil != "" || selectedImgFil != false || selectedDimFil != false) {
+                    var grid = ASPxClientControl.GetControlCollection().GetByName("CardView");
+                    if (selectedItems.length > 0 && selectedColorFil == "" && selectedStyleFil == "" && selectedSizeFil == "" && selectedDescFil == "" && selectedImgFil == false && selectedDimFil == false) {
+                        grid.PerformCallback({ selectedItem: selectedItems });
+                    }
+                    else if (selectedColorFil != "" || selectedStyleFil != "" || selectedSizeFil != "" || selectedDescFil != "" || selectedImgFil != false || selectedDimFil != false) {
+                        var grid = ASPxClientControl.GetControlCollection().GetByName("CardView");
+                        grid.PerformCallback({ selectedItem: selectedItems, ColorId: selectedColorFil, StyleID: selectedStyleFil, Description: selectedDescFil, SizeId: selectedSizeFil, BringImages: selectedImgFil, BringDimension: selectedDimFil });
+
+                    }
+                    else {
+                        var grid = ASPxClientControl.GetControlCollection().GetByName("CardView");
+                        grid.PerformCallback({ selectedItem: selectedItems, ColorId: selectedColorFil, StyleID: selectedStyleFil, Description: selectedDescFil, SizeId: selectedSizeFil, BringImages: selectedImgFil, BringDimension: selectedDimFil, pages: true });
+
+                    }
+                }
+                else {
+                    grid.PerformCallback();
+                }
+            }
+
+        }
+
+        function CreateOrder(EmployeeId, UcodesName, EmployeeName) {
+            var popup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
+            var ctrlName = UcodesName.split('_');
+            var ucodeCmb = ASPxClientControl.GetControlCollection().GetByName("checkComboBox_" + ctrlName[1] + "_" + ctrlName[2]);
+            if (ucodeCmb.lastSuccessText != "" && ucodeCmb.lastSuccessText != undefined && ucodeCmb.lastSuccessText != null) {
+                if (EmployeeId != "") {
+                    popup.Show();
+                    $.ajax({
+                        type: "Post",
+                        url: "@Url.Content("~/Employee/GotoCard")",
+                        data: { 'EmployeeId': EmployeeId, 'Ucodes1': ucodeCmb.lastSuccessText, 'EmpName': EmployeeName },
+                        success: function (response) {
+                            if (response != null) {
+                                popup.Hide();
+                                window.location = response;
+                            }
+                        }
+                    });
+                }
+            }
+            else {
+                alert("select Uniforms first!")
+            }
+        }
+
+        var textSeparator = ";";
+        function updateText(s, e) {
+            var thisChk = ASPxClientControl.GetControlCollection().GetByName(s.name);
+            var selectedItems = thisChk.GetSelectedItems();
+            var split = s.name.split('_');
+            var thisCmb = ASPxClientControl.GetControlCollection().GetByName("checkComboBox_" + split[1]+"_"+split[2]);
+            thisCmb.SetText(getSelectedItemsText(selectedItems));
+        }
+        function HideCmb(s, e) {
+            var split = s.name.split('_');
+            var thisCmb = ASPxClientControl.GetControlCollection().GetByName("checkComboBox_" + split[1] + "_" + split[2]);
+            // thisCmb.SetText(getSelectedItemsText(selectedItems));
+            thisCmb.HideDropDown();
+        }
+        function synchronizeListBoxValues(s, e) {
+            var thisCmb = ASPxClientControl.GetControlCollection().GetByName(s.name);
+            thisCmb.UnselectAll();
+            var texts = dropDown.GetText().split(textSeparator);
+            var values = getValuesByTexts(texts);
+            checkListBox.SelectValues(values);
+            updateText(); // for remove non-existing texts
+        }
+        function getSelectedItemsText(items) {
+            var texts = [];
+            for (var i = 0; i < items.length; i++)
+                texts.push(items[i].text);
+            return texts.join(textSeparator);
+        }
+        function getValuesByTexts(texts) {
+            var actualValues = [];
+            var item;
+            for (var i = 0; i < texts.length; i++) {
+                item = checkListBox.FindItemByText(texts[i]);
+                if (item != null)
+                    actualValues.push(item.value);
+            }
+            return actualValues;
+        }
+
+
+    </script>
+
+</head>
+<body class="body">
+    <div id="wrapper">
+        <nav class="navbar navbar-inverse navbar-fixed-top" style="background-color:white" role="navigation">
+            <div class="container-fluid">
+                <div class="navbar-header" style="height:65px;">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <div class="navbar-brand">
+                        <a id="menu-toggle" style="color:#009885" href="#" class="glyphicon glyphicon-align-justify btn-menu toggle">
+                            <i class="fa fa-bars"></i>
+                        </a>
+                        @{
+                            if (Session["LOGO"] != null)
+                            {
+                                var src = "/" + Session["LOGO"].ToString();
+                                <img height="45" src="@src" />
+                            }
+                            else
+                            {
+                                <a href="#">Sales order processing</a>
+                            }
+                        }
+                    </div>
+                </div>
+               
+            </div>
+        </nav>
+        <!-- Sidebar -->
+       
+        <!-- Page content -->
+        <div id="page-content-wrapper">
+            <div class="page-content">
+                <div class="container-fluid">
+                    @RenderBody()
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="snackbar"> </div>
+    <div id="demo1" style="visibility:hidden">
+        <script src="~/scripts/3deye.min.js"></script>
+        <div id="demo"></div>
+    </div>
+
+  
+</body>
+</html>

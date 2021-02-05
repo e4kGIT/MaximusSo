@@ -976,6 +976,7 @@
     <Content Include="Views\Home\_getAllGroups.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\UnityConfig.cs" />
     <Compile Include="Controllers\BasketController.cs" />
@@ -1087,6 +1088,8 @@
     <Content Include="Views\Return\_Deliveryaddress.cshtml" />
     <Content Include="Views\Return\_ReturnCollectionPop.cshtml" />
     <Content Include="Views\Basket\_DeleteOrderPrompt.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout1.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1131,7 +1134,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>5464</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://localhost:5464/</IISUrl>
+          <IISUrl>http://localhost:54641/</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>

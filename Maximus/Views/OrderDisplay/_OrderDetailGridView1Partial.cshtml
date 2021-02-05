@@ -1,8 +1,9 @@
 @model IEnumerable<Maximus.Data.models.OrderDisplayDetail>
 @{
-    var grid = Html.DevExpress().GridView(settings => {
+    var grid = Html.DevExpress().GridView(settings =>
+    {
         settings.Name = "OrderDetail1";
-        settings.CallbackRouteValues = new { Controller = "OrderDisplay", Action = "OrderDetailGridView1Partial" };
+        settings.CallbackRouteValues = new { Controller = "OrderDisplay", Action = "OrderDetailGridView1Partial" , ordno= Convert.ToInt32(TempData["OrderNo"])};
 
         settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "OrderDisplay", Action = "OrderDetailGridView1PartialAddNew" };
         settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "OrderDisplay", Action = "OrderDetailGridView1PartialUpdate" };
@@ -17,7 +18,8 @@
 
         settings.KeyFieldName = "LineNo";
 
-        settings.SettingsPager.Visible = false;
+        settings.SettingsPager.Visible = true;
+        //  settings.SettingsPager.PageSize = ViewData}
         settings.Settings.ShowGroupPanel = false;
         settings.Settings.ShowFilterRow = false;
         settings.SettingsBehavior.AllowSelectByRowClick = false;
@@ -37,7 +39,15 @@
         settings.Columns.Add(s => { s.FieldName = "Description"; s.Caption = "Description"; });
         settings.Columns.Add(s => { s.FieldName = "OrdQty"; s.Caption = "Order Quantity"; });
         settings.Columns.Add(s => { s.FieldName = "Points"; s.Caption = "Points"; });
-        if(Model.Any(s=>s.Reason!=""))
+        if (Session["OT"].ToString().ToLower().Trim() != "rt")
+        {
+            settings.Columns.Add(s => { s.FieldName = "ReturnOrderNo"; s.Caption = "Return orderno"; });
+        }
+        else
+        {
+            settings.Columns.Add(s => { s.FieldName = "ReOrderNo"; s.Caption = "Reorder orderno"; });
+        }
+        if (Model.Any(s=>s.Reason!=""))
         {
             settings.Columns.Add(s => { s.FieldName = "Reason"; s.Caption = "Reason"; });
         }

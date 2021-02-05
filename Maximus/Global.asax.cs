@@ -1,4 +1,5 @@
-﻿using System;
+﻿ 
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -15,6 +16,7 @@ namespace Maximus
     {
         protected void Application_Start()
         {
+            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             AreaRegistration.RegisterAllAreas();
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             ModelBinders.Binders.DefaultBinder = new DevExpress.Web.Mvc.DevExpressEditorsBinder();

@@ -156,6 +156,7 @@ namespace Maximus.Services
                                 var salesHead = _salesOrderHeader.GetAll(s => s.OrderNo == orderNo).First();
                                 salesHead.OnlineConfirm = Convert.ToSByte(true);
                                 salesHead.OnlineConfirmDate = DateTime.Now;
+                                salesHead.OnlineConfirmedBy = userId;
                                 _salesOrderHeader.Update(salesHead);
                                 onlineUserid = salesHead.OnlineUserID;
                                 pinNo = salesHead.PinNo;
@@ -538,7 +539,8 @@ namespace Maximus.Services
                     OrdQty=s.OrdQty.Value,
                     linno=s.LineNo,
                     OrgOrderNo= s.OriginalOrderNo==null?0:s.OriginalOrderNo.Value,
-                    Reason=s.SOPDETAIL4
+                    Reason=s.SOPDETAIL4,
+                    ReturnOrderNo=Convert.ToInt32(s.ReturnOrderNo.Value)
                 }).ToList();
             }
             return OrderDisplayDetail;

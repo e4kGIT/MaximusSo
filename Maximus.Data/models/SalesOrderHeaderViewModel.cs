@@ -15,6 +15,7 @@ namespace Maximus.Data.Models
         public bool Reorderheader { get; set; }
         public string CustomerName { get; set; }
         public bool IsEditing { get; set; }
+       
         public string EmployeeID { get; set; }
         public string EmployeeName { get; set; }
         public string Address { get; set; }

@@ -309,7 +309,7 @@
                                    {
                                        set.Name = "txtCustRef";
                                        set.Properties.Caption = Session["ONLCUSREFLBL"].ToString();
-
+                                       set.ReadOnly = true;
                                        if (Convert.ToBoolean(Session["DIFF_MANPACK_INFO"]))
                                        {
                                            string thisEmp = Session["clickedEmp"] != null ? Session["clickedEmp"].ToString() : Session["SelectedEmp"].ToString();
@@ -793,7 +793,7 @@
                                                                                                    {
                                                                                                        set.Name = "txtCustRef";
                                                                                                        set.Properties.Caption = Session["ONLCUSREFLBL"].ToString();
-
+                                                                                                       set.ReadOnly = true;
                                                                                                        if (Convert.ToBoolean(Session["DIFF_MANPACK_INFO"]))
                                                                                                        {
                                                                                                            string thisEmp = Session["clickedEmp"] != null ? Session["clickedEmp"].ToString() : Session["SelectedEmp"].ToString();

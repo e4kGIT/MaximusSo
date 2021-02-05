@@ -4,87 +4,90 @@
     Maximus.Controllers.EmployeeController Emp = new Maximus.Controllers.EmployeeController(_unitOfWork);
 }
 @{
-    var grid = Html.DevExpress().GridView(settings =>
-    {
-        settings.Name = "EmployeeGridView";
-        settings.CallbackRouteValues = new { Controller = "Employee", Action = "EmployeeGridViewPartial" };
-
-        settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "Employee", Action = "EmployeeGridViewPartialAddNew" };
-        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "Employee", Action = "EmployeeGridViewPartialUpdate" };
-        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "Employee", Action = "EmployeeGridViewPartialDelete" };
-        settings.SettingsEditing.Mode = GridViewEditingMode.PopupEditForm;
-        settings.SettingsBehavior.ConfirmDelete = true;
-        settings.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
-        //settings.CommandColumn.Visible = true;
-        //settings.CommandColumn.ShowNewButton = true;
-        //// settings.CommandColumn.ShowDeleteButton = true;
-        //settings.CommandColumn.ShowEditButton = true;
-
-        settings.KeyFieldName = "EmployeeId";
-
-        //settings.SettingsCommandButton.EditButton.Image.IconID = IconID.EditEdit16x16;
-        //settings.SettingsCommandButton.EditButton.RenderMode = GridCommandButtonRenderMode.Image;
-
-        //settings.SettingsCommandButton.NewButton.Image.IconID = IconID.ActionsAdd16x16;
-        //settings.SettingsCommandButton.NewButton.RenderMode = GridCommandButtonRenderMode.Image;
-
-        //settings.SettingsCommandButton.CancelButton.Image.IconID = IconID.ActionsCancel16x16;
-        //settings.SettingsCommandButton.CancelButton.RenderMode = GridCommandButtonRenderMode.Image;
-
-        //settings.SettingsCommandButton.UpdateButton.Image.IconID = IconID.OtherUpdatetable16x16gray;
-        //settings.SettingsCommandButton.UpdateButton.RenderMode = GridCommandButtonRenderMode.Image;
-
-        settings.SettingsPager.Visible = true;
-        // settings.Settings.ShowGroupPanel = true;
-        settings.Settings.ShowFilterRow = true;
-        settings.SettingsBehavior.AllowSelectByRowClick = true;
-
-        settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.Off;
-        settings.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Right;
-        settings.SettingsAdaptivity.AdaptiveDetailColumnCount = 1;
-        settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = false;
-        settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
-        settings.ClientSideEvents.BeginCallback = "IsCallBack";
-
-        settings.Columns.Add(c =>
+        var grid = Html.DevExpress().GridView(settings =>
         {
-            c.Width = System.Web.UI.WebControls.Unit.Pixel(100);
-            c.SetHeaderTemplateContent(edit =>
-            {
+            settings.Name = "EmployeeGridView";
+            settings.CallbackRouteValues = new { Controller = "Employee", Action = "EmployeeGridViewPartial" };
 
-                var content = "<center>";
-                string addBtn = "<span style=\"cursor:pointer;\" class=\"glyphicon glyphicon-plus\" title=\"Add new employee\" onclick='CreateNewEmployee()'></span>";
-                // string editBtn = string.Format("<span style=\"cursor:pointer;\" class=\"glyphicon glyphicon-edit\" onclick=\"EditEmployee('{0}');\"></span>");
-                content = content + "{0}&nbsp;&nbsp; </center>";
-                if (!(bool)Session["DELADDR_USER_CREATE"])
+            settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "Employee", Action = "EmployeeGridViewPartialAddNew" };
+            settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "Employee", Action = "EmployeeGridViewPartialUpdate" };
+            settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "Employee", Action = "EmployeeGridViewPartialDelete" };
+            settings.SettingsEditing.Mode = GridViewEditingMode.PopupEditForm;
+            settings.SettingsBehavior.ConfirmDelete = true;
+            settings.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+            //settings.CommandColumn.Visible = true;
+            //settings.CommandColumn.ShowNewButton = true;
+            //// settings.CommandColumn.ShowDeleteButton = true;
+            //settings.CommandColumn.ShowEditButton = true;
+
+            settings.KeyFieldName = "EmployeeId";
+
+            //settings.SettingsCommandButton.EditButton.Image.IconID = IconID.EditEdit16x16;
+            //settings.SettingsCommandButton.EditButton.RenderMode = GridCommandButtonRenderMode.Image;
+
+            //settings.SettingsCommandButton.NewButton.Image.IconID = IconID.ActionsAdd16x16;
+            //settings.SettingsCommandButton.NewButton.RenderMode = GridCommandButtonRenderMode.Image;
+
+            //settings.SettingsCommandButton.CancelButton.Image.IconID = IconID.ActionsCancel16x16;
+            //settings.SettingsCommandButton.CancelButton.RenderMode = GridCommandButtonRenderMode.Image;
+
+            //settings.SettingsCommandButton.UpdateButton.Image.IconID = IconID.OtherUpdatetable16x16gray;
+            //settings.SettingsCommandButton.UpdateButton.RenderMode = GridCommandButtonRenderMode.Image;
+
+            settings.SettingsPager.Visible = true;
+            // settings.Settings.ShowGroupPanel = true;
+            settings.Settings.ShowFilterRow = true;
+            settings.SettingsBehavior.AllowSelectByRowClick = true;
+
+            settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.Off;
+            settings.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Right;
+            settings.SettingsAdaptivity.AdaptiveDetailColumnCount = 1;
+            settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = false;
+            settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
+            settings.ClientSideEvents.BeginCallback = "IsCallBack";
+            if(Session["Access"].ToString().ToLower()!="user"){ 
+            settings.Columns.Add(c =>
+            {
+                c.Width = System.Web.UI.WebControls.Unit.Pixel(100);
+                c.SetHeaderTemplateContent(edit =>
                 {
-                    var s = (bool)Session["DELADDR_USER_CREATE"];
-                    ViewContext.Writer.Write(string.Format(content, addBtn));
-                }
-            });
-            c.SetDataItemTemplateContent(edit =>
-            {
-                string EmployeeId = (DataBinder.Eval(edit.DataItem, "EmployeeId")).ToString();
-                var content = "<center>";
-                //string addBtn = "<span style=\"cursor:pointer;\" class=\"glyphicon glyphicon-plus\" onclick='CreateNewEmployee()'></span>";
-                string editBtn = string.Format("<span style=\"cursor:pointer;\" title=\"Edit employee\" class=\"glyphicon glyphicon-edit\" onclick=\"EditEmployee('{0}');\"></span>", EmployeeId);
-                content = content + "{0}&nbsp;&nbsp;</center>";
-                ViewContext.Writer.Write(string.Format(content, editBtn));
-            });
-        });
-        settings.HtmlRowPrepared = (s, e) =>
-        {
-            if (e.GetValue("EmpIsActive") != null && e.GetValue("UserActive") != null)
-            {
 
-
-                if (Convert.ToBoolean(e.GetValue("EmpIsActive").ToString()) == false || Convert.ToBoolean(e.GetValue("UserActive").ToString()) == false)
+                    var content = "<center>";
+                    string addBtn = "<span style=\"cursor:pointer;\" class=\"glyphicon glyphicon-plus\" title=\"Add new employee\" onclick='CreateNewEmployee()'></span>";
+                    // string editBtn = string.Format("<span style=\"cursor:pointer;\" class=\"glyphicon glyphicon-edit\" onclick=\"EditEmployee('{0}');\"></span>");
+                    content = content + "{0}&nbsp;&nbsp; </center>";
+                    if (!(bool)Session["DELADDR_USER_CREATE"])
+                    {
+                        var s = (bool)Session["DELADDR_USER_CREATE"];
+                        ViewContext.Writer.Write(string.Format(content, addBtn));
+                    }
+                });
+                c.SetDataItemTemplateContent(edit =>
                 {
-                    e.Row.BackColor = System.Drawing.Color.Beige;
-                    e.Row.ForeColor = System.Drawing.Color.Red;
+                    string EmployeeId = (DataBinder.Eval(edit.DataItem, "EmployeeId")).ToString();
+                    var content = "<center>";
+                    //string addBtn = "<span style=\"cursor:pointer;\" class=\"glyphicon glyphicon-plus\" onclick='CreateNewEmployee()'></span>";
+                    string editBtn = string.Format("<span style=\"cursor:pointer;\" title=\"Edit employee\" class=\"glyphicon glyphicon-edit\" onclick=\"EditEmployee('{0}');\"></span>", EmployeeId);
+                    content = content + "{0}&nbsp;&nbsp;</center>";
+                    ViewContext.Writer.Write(string.Format(content, editBtn));
+                });
+            });
+        }
+
+
+            settings.HtmlRowPrepared = (s, e) =>
+            {
+                if (e.GetValue("EmpIsActive") != null && e.GetValue("UserActive") != null)
+                {
+
+
+                    if (Convert.ToBoolean(e.GetValue("EmpIsActive").ToString()) == false || Convert.ToBoolean(e.GetValue("UserActive").ToString()) == false)
+                    {
+                        e.Row.BackColor = System.Drawing.Color.Beige;
+                        e.Row.ForeColor = System.Drawing.Color.Red;
+                    }
                 }
-            }
-        };
+            };
         settings.Columns.Add("EmployeeId");
         settings.Columns.Add("Department");
         //settings.Columns.Add("EmpFirstName").Caption = "First name";
@@ -290,7 +293,7 @@
                     string empId = DataBinder.Eval(x.DataItem, "EmployeeId").ToString();
                     string busID = Session["BuisnessId"].ToString();
                     string Ucodes = (string)(DataBinder.Eval(x.DataItem, "EmpUcodes"));
-                    string totalpoints =  (DataBinder.Eval(x.DataItem, "TotalPoints")).ToString(); 
+                    string totalpoints =  (DataBinder.Eval(x.DataItem, "TotalPoints")).ToString();
                     if (Ucodes.Contains(","))
                     {
                         ViewContext.Writer.Write("<span id='TotalPointsSpan_" + empId + "'></span>");

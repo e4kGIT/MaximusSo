@@ -11,5 +11,6 @@ namespace Maximus.Data.Models
         public string  Result { get; set; }
         public int minMandatoryPts { get; set; }
         public int availPts { get; set; }
+        public bool isfreestk { get; set; }
     }
 }

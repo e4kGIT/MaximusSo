@@ -312,6 +312,18 @@ warning 6002: The table/view 'def.e4kmaximusdb.bak_tblaccemp_employee_tsb' does 
           <Property Name="ASPID" Type="int" />
           <Property Name="NEWASPID" Type="int" />
         </EntityType>
+        <EntityType Name="hr_corps01_employee">
+          <Key>
+            <PropertyRef Name="EmpID" />
+          </Key>
+          <Property Name="EmpID" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Title" Type="varchar" MaxLength="5" />
+          <Property Name="Forename" Type="varchar" MaxLength="150" />
+          <Property Name="Surname" Type="varchar" MaxLength="150" />
+          <Property Name="UcodeID" Type="varchar" MaxLength="50" />
+          <Property Name="MapTo" Type="varchar" MaxLength="200" />
+          <Property Name="MapAddress" Type="int" />
+        </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'def.e4kmaximusdb.hr_demo_address' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
         <EntityType Name="hr_demo_address">
@@ -1481,6 +1493,17 @@ warning 6002: The table/view 'def.e4kmaximusdb.tblaccemp_employee_hr_level2' doe
           <Property Name="PrevOrder" Type="int" />
           <Property Name="RolloutName" Type="varchar" MaxLength="150" Nullable="false" />
         </EntityType>
+        <EntityType Name="tblaccemp_employees_custref">
+          <Key>
+            <PropertyRef Name="CompanyID" />
+            <PropertyRef Name="BusinessID" />
+            <PropertyRef Name="EmployeeID" />
+          </Key>
+          <Property Name="CompanyID" Type="varchar" MaxLength="3" Nullable="false" />
+          <Property Name="BusinessID" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="EmployeeID" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="CustRef" Type="varchar" MaxLength="50" />
+        </EntityType>
         <EntityType Name="tblaccemp_points">
           <Key>
             <PropertyRef Name="CompanyId" />
@@ -1531,6 +1554,25 @@ warning 6002: The table/view 'def.e4kmaximusdb.tblaccemp_employee_hr_level2' doe
           <Property Name="FirstIssueDate" Type="timestamp" Precision="6" />
           <Property Name="StartIssueDate" Type="timestamp" Precision="6" />
           <Property Name="LastIssueDate" Type="timestamp" Precision="6" />
+        </EntityType>
+        <EntityType Name="tblaccemp_rollout_email">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="CompanyId" />
+            <PropertyRef Name="BusinessId" />
+            <PropertyRef Name="EmployeeId" />
+            <PropertyRef Name="Emailid" />
+            <PropertyRef Name="RolloutName" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CompanyId" Type="varchar" MaxLength="3" Nullable="false" />
+          <Property Name="BusinessId" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="EmployeeId" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="Emailid" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="RolloutName" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="NextOrderDate" Type="date" />
+          <Property Name="MailSenton" Type="datetime" Precision="0" />
+          <Property Name="IsMailSent" Type="enum" />
         </EntityType>
         <EntityType Name="tblaccemp_rollout_names">
           <Key>
@@ -1953,6 +1995,15 @@ warning 6002: The table/view 'def.e4kmaximusdb.tblaccemp_style_staticqty' does n
           <Property Name="BusType_VAT_Control" Type="varchar" MaxLength="20" />
         </EntityType>
         <EntityType Name="tblbus_contact">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ContactID" Type="int" />
+          <Property Name="ContactType_ID" Type="int" />
+          <Property Name="Value" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="tblbus_contact_copy">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
@@ -2672,6 +2723,17 @@ warning 6002: The table/view 'def.e4kmaximusdb.tblaccemp_style_staticqty' does n
           <Property Name="RejectedBy" Type="varchar" MaxLength="15" Nullable="false" />
           <Property Name="RejectedDate" Type="datetime" Precision="0" Nullable="false" />
           <Property Name="RejectedReason" Type="varchar" MaxLength="500" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblonline_rejectorder_ucodes">
+          <Key>
+            <PropertyRef Name="CompanyID" />
+            <PropertyRef Name="BusinessID" />
+            <PropertyRef Name="UcodeId" />
+          </Key>
+          <Property Name="CompanyID" Type="varchar" MaxLength="3" Nullable="false" />
+          <Property Name="BusinessID" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="UcodeId" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="IsRejectReq" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="tblonline_rolloutorders_config">
           <Key>
@@ -4512,9 +4574,10 @@ warning 6002: The table/view 'def.e4kmaximusdb.styleby_freetextview_emergency' d
         <EntityType Name="styleby_freetextview_emergency">
           <Key>
             <PropertyRef Name="CompanyID" />
+            <PropertyRef Name="StyleID" />
           </Key>
           <Property Name="CompanyID" Type="varchar" MaxLength="3" Nullable="false" />
-          <Property Name="StyleID" Type="text" />
+          <Property Name="StyleID" Type="text" Nullable="false" />
           <Property Name="StyleImage" Type="varchar" MaxLength="255" />
           <Property Name="Product_Group" Type="int" />
           <Property Name="FreeText" Type="text" />
@@ -5027,6 +5090,7 @@ warning 6002: The table/view 'def.e4kmaximusdb.view_unmatchedordercolourid' does
           <EntitySet Name="hr_cordant_onl_emp" EntityType="Self.hr_cordant_onl_emp" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="hr_cordant_user" EntityType="Self.hr_cordant_user" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="hr_cordant_user_copy" EntityType="Self.hr_cordant_user_copy" Schema="e4kmaximusdb" store:Type="Tables" />
+          <EntitySet Name="hr_corps01_employee" EntityType="Self.hr_corps01_employee" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="hr_emplo_ve" EntityType="Self.hr_emplo_ve" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="hr_emplo_ve_copy" EntityType="Self.hr_emplo_ve_copy" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="hr_emplo_ve_copy_duplicate" EntityType="Self.hr_emplo_ve_copy_duplicate" Schema="e4kmaximusdb" store:Type="Tables" />
@@ -5079,9 +5143,11 @@ warning 6002: The table/view 'def.e4kmaximusdb.view_unmatchedordercolourid' does
           <EntitySet Name="tblaccemp_employee_rollout" EntityType="Self.tblaccemp_employee_rollout" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblaccemp_employee_rollout_atlasfm" EntityType="Self.tblaccemp_employee_rollout_atlasfm" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblaccemp_employee_rollout_copy" EntityType="Self.tblaccemp_employee_rollout_copy" Schema="e4kmaximusdb" store:Type="Tables" />
+          <EntitySet Name="tblaccemp_employees_custref" EntityType="Self.tblaccemp_employees_custref" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblaccemp_points" EntityType="Self.tblaccemp_points" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblaccemp_pointsadjustment" EntityType="Self.tblaccemp_pointsadjustment" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblaccemp_pointscard" EntityType="Self.tblaccemp_pointscard" Schema="e4kmaximusdb" store:Type="Tables" />
+          <EntitySet Name="tblaccemp_rollout_email" EntityType="Self.tblaccemp_rollout_email" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblaccemp_rollout_names" EntityType="Self.tblaccemp_rollout_names" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblaccemp_rollout_ucode_ref" EntityType="Self.tblaccemp_rollout_ucode_ref" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblaccemp_stockcard" EntityType="Self.tblaccemp_stockcard" Schema="e4kmaximusdb" store:Type="Tables" />
@@ -5108,6 +5174,7 @@ warning 6002: The table/view 'def.e4kmaximusdb.view_unmatchedordercolourid' does
           <EntitySet Name="tblbus_business" EntityType="Self.tblbus_business" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblbus_business_types" EntityType="Self.tblbus_business_types" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblbus_contact" EntityType="Self.tblbus_contact" Schema="e4kmaximusdb" store:Type="Tables" />
+          <EntitySet Name="tblbus_contact_copy" EntityType="Self.tblbus_contact_copy" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblbus_contact_ref" EntityType="Self.tblbus_contact_ref" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblbus_countrycodes" EntityType="Self.tblbus_countrycodes" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblbus_groups_ref" EntityType="Self.tblbus_groups_ref" Schema="e4kmaximusdb" store:Type="Tables" />
@@ -5165,6 +5232,7 @@ warning 6002: The table/view 'def.e4kmaximusdb.view_unmatchedordercolourid' does
           <EntitySet Name="tbllanguages" EntityType="Self.tbllanguages" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblonline_holidays" EntityType="Self.tblonline_holidays" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblonline_rejectorder_reasons" EntityType="Self.tblonline_rejectorder_reasons" Schema="e4kmaximusdb" store:Type="Tables" />
+          <EntitySet Name="tblonline_rejectorder_ucodes" EntityType="Self.tblonline_rejectorder_ucodes" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblonline_rolloutorders_config" EntityType="Self.tblonline_rolloutorders_config" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblonline_rolloutorders_reqstatus" EntityType="Self.tblonline_rolloutorders_reqstatus" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblonline_rolloutorders_reqstatus_atlasfm" EntityType="Self.tblonline_rolloutorders_reqstatus_atlasfm" Schema="e4kmaximusdb" store:Type="Tables" />
@@ -6744,6 +6812,18 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
           <Property Name="ASPID" Type="Int32" />
           <Property Name="NEWASPID" Type="Int32" />
         </EntityType>
+        <EntityType Name="hr_corps01_employee">
+          <Key>
+            <PropertyRef Name="EmpID" />
+          </Key>
+          <Property Name="EmpID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Title" Type="String" MaxLength="5" FixedLength="false" Unicode="false" />
+          <Property Name="Forename" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="Surname" Type="String" MaxLength="150" FixedLength="false" Unicode="false" />
+          <Property Name="UcodeID" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="MapTo" Type="String" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Name="MapAddress" Type="Int32" />
+        </EntityType>
         <EntityType Name="hr_emplo_ve">
           <Key>
             <PropertyRef Name="Forename" />
@@ -7368,6 +7448,17 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
           <Property Name="PrevOrder" Type="Int32" />
           <Property Name="RolloutName" Type="String" MaxLength="150" FixedLength="false" Unicode="false" Nullable="false" />
         </EntityType>
+        <EntityType Name="tblaccemp_employees_custref">
+          <Key>
+            <PropertyRef Name="CompanyID" />
+            <PropertyRef Name="BusinessID" />
+            <PropertyRef Name="EmployeeID" />
+          </Key>
+          <Property Name="CompanyID" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="BusinessID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="EmployeeID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="CustRef" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
         <EntityType Name="tblaccemp_points">
           <Key>
             <PropertyRef Name="CompanyId" />
@@ -7418,6 +7509,25 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
           <Property Name="FirstIssueDate" Type="DateTime" />
           <Property Name="StartIssueDate" Type="DateTime" />
           <Property Name="LastIssueDate" Type="DateTime" />
+        </EntityType>
+        <EntityType Name="tblaccemp_rollout_email">
+          <Key>
+            <PropertyRef Name="Id" />
+            <PropertyRef Name="CompanyId" />
+            <PropertyRef Name="BusinessId" />
+            <PropertyRef Name="EmployeeId" />
+            <PropertyRef Name="Emailid" />
+            <PropertyRef Name="RolloutName" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CompanyId" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="BusinessId" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="EmployeeId" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="Emailid" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="RolloutName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="NextOrderDate" Type="DateTime" />
+          <Property Name="MailSenton" Type="DateTime" />
+          <Property Name="IsMailSent" Type="String" MaxLength="65532" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="tblaccemp_rollout_names">
           <Key>
@@ -7566,7 +7676,7 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
           <Property Name="BusinessID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="ReasonCodeID" Type="Int32" Nullable="false" />
           <Property Name="ReasonDesc" Type="String" MaxLength="100" FixedLength="false" Unicode="false" />
-          <Property Name="UcodeId" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="UcodeId" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
         </EntityType>
         <EntityType Name="tblaccemp_ucodepoints">
           <Key>
@@ -7821,6 +7931,15 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
           <Property Name="BusType_VAT_Control" Type="String" MaxLength="20" FixedLength="false" Unicode="false" />
         </EntityType>
         <EntityType Name="tblbus_contact">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ContactID" Type="Int32" />
+          <Property Name="ContactType_ID" Type="Int32" />
+          <Property Name="Value" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+        </EntityType>
+        <EntityType Name="tblbus_contact_copy">
           <Key>
             <PropertyRef Name="ID" />
           </Key>
@@ -8528,6 +8647,29 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
           <Property Name="CompanyID" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="Holiday" Type="DateTime" Nullable="false" />
           <Property Name="Days" Type="Int32" />
+        </EntityType>
+        <EntityType Name="tblonline_rejectorder_reasons">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="OrderNo" Type="Int32" Nullable="false" />
+          <Property Name="BusinessId" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="EmployeeId" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="RejectedBy" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="RejectedDate" Type="DateTime" Nullable="false" />
+          <Property Name="RejectedReason" Type="String" MaxLength="500" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblonline_rejectorder_ucodes">
+          <Key>
+            <PropertyRef Name="CompanyID" />
+            <PropertyRef Name="BusinessID" />
+            <PropertyRef Name="UcodeId" />
+          </Key>
+          <Property Name="CompanyID" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="BusinessID" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="UcodeId" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="IsRejectReq" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="tblonline_rolloutorders_config">
           <Key>
@@ -10843,6 +10985,17 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
           <Property Name="Product_Group" Type="Int32" />
           <Property Name="FreeText" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
         </EntityType>
+        <EntityType Name="styleby_freetextview_emergency">
+          <Key>
+            <PropertyRef Name="CompanyID" />
+            <PropertyRef Name="StyleID" />
+          </Key>
+          <Property Name="CompanyID" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="StyleID" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="StyleImage" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Product_Group" Type="Int32" />
+          <Property Name="FreeText" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
+        </EntityType>
         <EntityType Name="styleby_freetextview_ucode">
           <Key>
             <PropertyRef Name="CompanyID" />
@@ -10888,8 +11041,8 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
             <PropertyRef Name="CompanyID" />
             <PropertyRef Name="UCodeID" />
             <PropertyRef Name="StyleID" />
-            <PropertyRef Name="DimFreeText" />
             <PropertyRef Name="FreeText" />
+            <PropertyRef Name="DimFreeText" />
           </Key>
           <Property Name="CompanyID" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="StyleID" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
@@ -11265,6 +11418,7 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
           <EntitySet Name="hr_cordant_onl_emp" EntityType="Self.hr_cordant_onl_emp" />
           <EntitySet Name="hr_cordant_user" EntityType="Self.hr_cordant_user" />
           <EntitySet Name="hr_cordant_user_copy" EntityType="Self.hr_cordant_user_copy" />
+          <EntitySet Name="hr_corps01_employee" EntityType="Self.hr_corps01_employee" />
           <EntitySet Name="hr_emplo_ve" EntityType="Self.hr_emplo_ve" />
           <EntitySet Name="hr_emplo_ve_copy" EntityType="Self.hr_emplo_ve_copy" />
           <EntitySet Name="hr_emplo_ve_copy_duplicate" EntityType="Self.hr_emplo_ve_copy_duplicate" />
@@ -11317,9 +11471,11 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
           <EntitySet Name="tblaccemp_employee_rollout" EntityType="Self.tblaccemp_employee_rollout" />
           <EntitySet Name="tblaccemp_employee_rollout_atlasfm" EntityType="Self.tblaccemp_employee_rollout_atlasfm" />
           <EntitySet Name="tblaccemp_employee_rollout_copy" EntityType="Self.tblaccemp_employee_rollout_copy" />
+          <EntitySet Name="tblaccemp_employees_custref" EntityType="Self.tblaccemp_employees_custref" />
           <EntitySet Name="tblaccemp_points" EntityType="Self.tblaccemp_points" />
           <EntitySet Name="tblaccemp_pointsadjustment" EntityType="Self.tblaccemp_pointsadjustment" />
           <EntitySet Name="tblaccemp_pointscard" EntityType="Self.tblaccemp_pointscard" />
+          <EntitySet Name="tblaccemp_rollout_email" EntityType="Self.tblaccemp_rollout_email" />
           <EntitySet Name="tblaccemp_rollout_names" EntityType="Self.tblaccemp_rollout_names" />
           <EntitySet Name="tblaccemp_rollout_ucode_ref" EntityType="Self.tblaccemp_rollout_ucode_ref" />
           <EntitySet Name="tblaccemp_stockcard" EntityType="Self.tblaccemp_stockcard" />
@@ -11346,6 +11502,7 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
           <EntitySet Name="tblbus_business" EntityType="Self.tblbus_business" />
           <EntitySet Name="tblbus_business_types" EntityType="Self.tblbus_business_types" />
           <EntitySet Name="tblbus_contact" EntityType="Self.tblbus_contact" />
+          <EntitySet Name="tblbus_contact_copy" EntityType="Self.tblbus_contact_copy" />
           <EntitySet Name="tblbus_contact_ref" EntityType="Self.tblbus_contact_ref" />
           <EntitySet Name="tblbus_countrycodes" EntityType="Self.tblbus_countrycodes" />
           <EntitySet Name="tblbus_groups_ref" EntityType="Self.tblbus_groups_ref" />
@@ -11402,6 +11559,8 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
           <EntitySet Name="tblgen_users" EntityType="Self.tblgen_users" />
           <EntitySet Name="tbllanguages" EntityType="Self.tbllanguage" />
           <EntitySet Name="tblonline_holidays" EntityType="Self.tblonline_holidays" />
+          <EntitySet Name="tblonline_rejectorder_reasons" EntityType="Self.tblonline_rejectorder_reasons" />
+          <EntitySet Name="tblonline_rejectorder_ucodes" EntityType="Self.tblonline_rejectorder_ucodes" />
           <EntitySet Name="tblonline_rolloutorders_config" EntityType="Self.tblonline_rolloutorders_config" />
           <EntitySet Name="tblonline_rolloutorders_reqstatus" EntityType="Self.tblonline_rolloutorders_reqstatus" />
           <EntitySet Name="tblonline_rolloutorders_reqstatus_atlasfm" EntityType="Self.tblonline_rolloutorders_reqstatus_atlasfm" />
@@ -11507,6 +11666,7 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
           <EntitySet Name="productlists" EntityType="Self.productlist" />
           <EntitySet Name="style_dimfitalloc_caption" EntityType="Self.style_dimfitalloc_caption" />
           <EntitySet Name="styleby_freetextview" EntityType="Self.styleby_freetextview" />
+          <EntitySet Name="styleby_freetextview_emergency" EntityType="Self.styleby_freetextview_emergency" />
           <EntitySet Name="styleby_freetextview_ucode" EntityType="Self.styleby_freetextview_ucode" />
           <EntitySet Name="stylebytemplateviews" EntityType="Self.stylebytemplateview" />
           <EntitySet Name="tblfskstyle_dimension1" EntityType="Self.tblfskstyle_dimension1" />
@@ -11565,8 +11725,6 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
             <Parameter Name="pUserID" Mode="In" Type="String" />
             <Parameter Name="pRole" Mode="In" Type="String" />
           </FunctionImport>
-          <EntitySet Name="styleby_freetextview_emergency" EntityType="e4kmaximusdbModel.styleby_freetextview_emergency" />
-          <EntitySet Name="tblonline_rejectorder_reasons" EntityType="e4kmaximusdbModel.tblonline_rejectorder_reasons" />
           <EntitySet Name="tblonline_ucode_operations" EntityType="e4kmaximusdbModel.tblonline_ucode_operations" />
         </EntityContainer>
         <ComplexType Name="GetAllUcodeByFreeTextProcedure_Result" />
@@ -11574,28 +11732,6 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
         <ComplexType Name="getColors_Result" />
         <ComplexType Name="getColors_prod_Result" />
         <ComplexType Name="GetEmployeebyId_Result" />
-        <EntityType Name="styleby_freetextview_emergency">
-          <Key>
-            <PropertyRef Name="CompanyID" />
-          </Key>
-          <Property Name="CompanyID" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
-          <Property Name="StyleID" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-          <Property Name="StyleImage" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="Product_Group" Type="Int32" />
-          <Property Name="FreeText" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" />
-        </EntityType>
-        <EntityType Name="tblonline_rejectorder_reasons">
-          <Key>
-            <PropertyRef Name="Id" />
-          </Key>
-          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="OrderNo" Type="Int32" Nullable="false" />
-          <Property Name="BusinessId" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
-          <Property Name="RejectedBy" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
-          <Property Name="RejectedDate" Type="DateTime" Nullable="false" />
-          <Property Name="RejectedReason" Type="String" Nullable="false" MaxLength="500" FixedLength="false" Unicode="false" />
-          <Property Name="EmployeeId" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
-        </EntityType>
         <EntityType Name="tblonline_ucode_operations">
           <Key>
             <PropertyRef Name="CompanyID" />
@@ -11887,6 +12023,19 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
                 <ScalarProperty Name="NewuserID" ColumnName="NewuserID" />
                 <ScalarProperty Name="ASPID" ColumnName="ASPID" />
                 <ScalarProperty Name="NEWASPID" ColumnName="NEWASPID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="hr_corps01_employee">
+            <EntityTypeMapping TypeName="e4kmaximusdbModel.hr_corps01_employee">
+              <MappingFragment StoreEntitySet="hr_corps01_employee">
+                <ScalarProperty Name="EmpID" ColumnName="EmpID" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Forename" ColumnName="Forename" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="UcodeID" ColumnName="UcodeID" />
+                <ScalarProperty Name="MapTo" ColumnName="MapTo" />
+                <ScalarProperty Name="MapAddress" ColumnName="MapAddress" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -12486,6 +12635,16 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="tblaccemp_employees_custref">
+            <EntityTypeMapping TypeName="e4kmaximusdbModel.tblaccemp_employees_custref">
+              <MappingFragment StoreEntitySet="tblaccemp_employees_custref">
+                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+                <ScalarProperty Name="BusinessID" ColumnName="BusinessID" />
+                <ScalarProperty Name="EmployeeID" ColumnName="EmployeeID" />
+                <ScalarProperty Name="CustRef" ColumnName="CustRef" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="tblaccemp_points">
             <EntityTypeMapping TypeName="e4kmaximusdbModel.tblaccemp_points">
               <MappingFragment StoreEntitySet="tblaccemp_points">
@@ -12525,6 +12684,21 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
                 <ScalarProperty Name="FirstIssueDate" ColumnName="FirstIssueDate" />
                 <ScalarProperty Name="StartIssueDate" ColumnName="StartIssueDate" />
                 <ScalarProperty Name="LastIssueDate" ColumnName="LastIssueDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblaccemp_rollout_email">
+            <EntityTypeMapping TypeName="e4kmaximusdbModel.tblaccemp_rollout_email">
+              <MappingFragment StoreEntitySet="tblaccemp_rollout_email">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+                <ScalarProperty Name="BusinessId" ColumnName="BusinessId" />
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+                <ScalarProperty Name="Emailid" ColumnName="Emailid" />
+                <ScalarProperty Name="RolloutName" ColumnName="RolloutName" />
+                <ScalarProperty Name="NextOrderDate" ColumnName="NextOrderDate" />
+                <ScalarProperty Name="MailSenton" ColumnName="MailSenton" />
+                <ScalarProperty Name="IsMailSent" ColumnName="IsMailSent" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -12644,11 +12818,11 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
           <EntitySetMapping Name="tblaccemp_ucode_reasons">
             <EntityTypeMapping TypeName="e4kmaximusdbModel.tblaccemp_ucode_reasons">
               <MappingFragment StoreEntitySet="tblaccemp_ucode_reasons">
-                <ScalarProperty Name="UcodeId" ColumnName="UcodeId" />
                 <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
                 <ScalarProperty Name="BusinessID" ColumnName="BusinessID" />
                 <ScalarProperty Name="ReasonCodeID" ColumnName="ReasonCodeID" />
                 <ScalarProperty Name="ReasonDesc" ColumnName="ReasonDesc" />
+                <ScalarProperty Name="UcodeId" ColumnName="UcodeId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -12894,6 +13068,16 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
           <EntitySetMapping Name="tblbus_contact">
             <EntityTypeMapping TypeName="e4kmaximusdbModel.tblbus_contact">
               <MappingFragment StoreEntitySet="tblbus_contact">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="ContactID" ColumnName="ContactID" />
+                <ScalarProperty Name="ContactType_ID" ColumnName="ContactType_ID" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblbus_contact_copy">
+            <EntityTypeMapping TypeName="e4kmaximusdbModel.tblbus_contact_copy">
+              <MappingFragment StoreEntitySet="tblbus_contact_copy">
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="ContactID" ColumnName="ContactID" />
                 <ScalarProperty Name="ContactType_ID" ColumnName="ContactType_ID" />
@@ -13573,6 +13757,29 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
                 <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
                 <ScalarProperty Name="Holiday" ColumnName="Holiday" />
                 <ScalarProperty Name="Days" ColumnName="Days" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblonline_rejectorder_reasons">
+            <EntityTypeMapping TypeName="e4kmaximusdbModel.tblonline_rejectorder_reasons">
+              <MappingFragment StoreEntitySet="tblonline_rejectorder_reasons">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="OrderNo" ColumnName="OrderNo" />
+                <ScalarProperty Name="BusinessId" ColumnName="BusinessId" />
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+                <ScalarProperty Name="RejectedBy" ColumnName="RejectedBy" />
+                <ScalarProperty Name="RejectedDate" ColumnName="RejectedDate" />
+                <ScalarProperty Name="RejectedReason" ColumnName="RejectedReason" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblonline_rejectorder_ucodes">
+            <EntityTypeMapping TypeName="e4kmaximusdbModel.tblonline_rejectorder_ucodes">
+              <MappingFragment StoreEntitySet="tblonline_rejectorder_ucodes">
+                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+                <ScalarProperty Name="BusinessID" ColumnName="BusinessID" />
+                <ScalarProperty Name="UcodeId" ColumnName="UcodeId" />
+                <ScalarProperty Name="IsRejectReq" ColumnName="IsRejectReq" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -15816,6 +16023,17 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="styleby_freetextview_emergency">
+            <EntityTypeMapping TypeName="e4kmaximusdbModel.styleby_freetextview_emergency">
+              <MappingFragment StoreEntitySet="styleby_freetextview_emergency">
+                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+                <ScalarProperty Name="StyleID" ColumnName="StyleID" />
+                <ScalarProperty Name="StyleImage" ColumnName="StyleImage" />
+                <ScalarProperty Name="Product_Group" ColumnName="Product_Group" />
+                <ScalarProperty Name="FreeText" ColumnName="FreeText" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="styleby_freetextview_ucode">
             <EntityTypeMapping TypeName="e4kmaximusdbModel.styleby_freetextview_ucode">
               <MappingFragment StoreEntitySet="styleby_freetextview_ucode">
@@ -16251,30 +16469,6 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
           <FunctionImportMapping FunctionImportName="GetEmployeeByRole" FunctionName="e4kmaximusdbModel.Store.GetEmployeeByRole" />
           <FunctionImportMapping FunctionImportName="GetEmployeeByRoles1" FunctionName="e4kmaximusdbModel.Store.GetEmployeeByRoles1" />
           <FunctionImportMapping FunctionImportName="GetEmployeeByRolesLast" FunctionName="e4kmaximusdbModel.Store.GetEmployeeByRolesLast" />
-          <EntitySetMapping Name="styleby_freetextview_emergency">
-            <EntityTypeMapping TypeName="e4kmaximusdbModel.styleby_freetextview_emergency">
-              <MappingFragment StoreEntitySet="styleby_freetextview_emergency">
-                <ScalarProperty Name="FreeText" ColumnName="FreeText" />
-                <ScalarProperty Name="Product_Group" ColumnName="Product_Group" />
-                <ScalarProperty Name="StyleImage" ColumnName="StyleImage" />
-                <ScalarProperty Name="StyleID" ColumnName="StyleID" />
-                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
-          <EntitySetMapping Name="tblonline_rejectorder_reasons">
-            <EntityTypeMapping TypeName="e4kmaximusdbModel.tblonline_rejectorder_reasons">
-              <MappingFragment StoreEntitySet="tblonline_rejectorder_reasons">
-                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
-                <ScalarProperty Name="RejectedReason" ColumnName="RejectedReason" />
-                <ScalarProperty Name="RejectedDate" ColumnName="RejectedDate" />
-                <ScalarProperty Name="RejectedBy" ColumnName="RejectedBy" />
-                <ScalarProperty Name="BusinessId" ColumnName="BusinessId" />
-                <ScalarProperty Name="OrderNo" ColumnName="OrderNo" />
-                <ScalarProperty Name="Id" ColumnName="Id" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="tblonline_ucode_operations">
             <EntityTypeMapping TypeName="e4kmaximusdbModel.tblonline_ucode_operations">
               <MappingFragment StoreEntitySet="tblonline_ucode_operations">

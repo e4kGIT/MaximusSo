@@ -64,7 +64,7 @@ namespace Maximus.Controllers
             Session["qty"] = 0;
             Session["EmergencyTicked"] = EmergencyTicked;
             Session["requireemergencyreason"] = false;
-
+            Session["isrtntype"] = "";
             Session["IsManPack"] = true;
             Session["returnorder"] = false;
             
@@ -335,8 +335,10 @@ namespace Maximus.Controllers
         public ActionResult OrderDetailGridView1Partial(int ordno)
         {
             var model = _orderDisp.GetOrderDetail(ordno);
+            TempData["OrderNo"] = ordno;
             foreach (var lines in model)
             {
+                lines.ReOrderNo = _salesLine.Exists(s => s.ReturnOrderNo == ordno) ? Convert.ToInt32(_salesLine.GetAll(s => s.ReturnOrderNo == ordno).First().OrderNo) : 0;
                 lines.Points = _stylePoints.Exists(s => s.StyleID == lines.StyleID) ? _stylePoints.GetAll(s => s.StyleID == lines.StyleID).First().Points.Value : 0;
             }
             return PartialView("_OrderDetailGridView1Partial", model);
@@ -445,12 +447,14 @@ namespace Maximus.Controllers
             var slsHead = new SalesOrderHeaderViewModel();
             if (_salesHead.Exists(x => x.OrderNo == OrderNo))
             {
-                slsHead = _salesHead.GetAll(x => x.OrderNo == OrderNo && x.OnlineConfirm == 0 && x.OnlineProcessed == 0).Select(x => new SalesOrderHeaderViewModel { OrderNo = x.OrderNo, CompanyID = x.CompanyID, WarehouseID = x.WarehouseID, CustID = x.CustID, OrderDate = x.OrderDate.Value.ToString("yyyy-MM-dd"), InvAddress1 = x.InvAddress1, InvAddress2 = x.InvAddress2, InvAddress3 = x.InvAddress3, InvCity = x.InvCity, InvTown = x.InvTown, InvPostCode = x.InvPostCode, InvCountry = x.InvCountry, DelDesc = x.DelDesc, DelAddress1 = x.DelAddress1, DelAddress2 = x.DelAddress2, DelAddress3 = x.DelAddress3, DelCity = x.DelCity, DelTown = x.DelTown, DelPostCode = x.DelPostCode, DelCountry = x.DelCountry, CustRef = x.CustRef, Carrier = x.Carrier, CarrierCharge = Convert.ToDouble(x.CarrierCharge.Value), Comments = x.Comments, CommentsExternal = x.CommentsExternal, TotalGoods = x.TotalGoods.Value, OrderGoods = x.OrderGoods.Value, Currency_Exchange_Rate = x.Currency_Exchange_Rate, UserID = x.UserID, PinNo = x.PinNo, UCodeId = x.UCodeId, Currency_Exchange_Code = x.Currency_Exchange_Code, TIMEOFENTRY = x.TIMEOFENTRY, RepID = x.RepID, ReasonCode = x.ReasonCode, OnlineUserID = x.OnlineUserID, OrderAnalysisCode1 = x.OrderAnalysisCode1, OrderAnalysisCode2 = x.OrderAnalysisCode2, OrderAnalysisCode3 = x.OrderAnalysisCode3, OrderAnalysisCode4 = x.OrderAnalysisCode4, OrderAnalysisCode5 = x.OrderAnalysisCode5, AllowPartShipment = x.AllowPartShipment, OrderType = x.OrderType, ContractRef = x.ContractRef, EmailID = x.EmailID, ContactName = x.ContactName, IsUcode = true }).First();
+                slsHead = _salesHead.GetAll(x => x.OrderNo == OrderNo).Select(x => new SalesOrderHeaderViewModel { OrderNo = x.OrderNo, CompanyID = x.CompanyID, WarehouseID = x.WarehouseID, CustID = x.CustID, OrderDate = x.OrderDate.Value.ToString("yyyy-MM-dd"), InvAddress1 = x.InvAddress1, InvAddress2 = x.InvAddress2, InvAddress3 = x.InvAddress3, InvCity = x.InvCity, InvTown = x.InvTown, InvPostCode = x.InvPostCode, InvCountry = x.InvCountry, DelDesc = x.DelDesc, DelAddress1 = x.DelAddress1, DelAddress2 = x.DelAddress2, DelAddress3 = x.DelAddress3, DelCity = x.DelCity, DelTown = x.DelTown, DelPostCode = x.DelPostCode, DelCountry = x.DelCountry, CustRef = x.CustRef, Carrier = x.Carrier, CarrierCharge = Convert.ToDouble(x.CarrierCharge.Value), Comments = x.Comments, CommentsExternal = x.CommentsExternal, TotalGoods = x.TotalGoods.Value, OrderGoods = x.OrderGoods.Value, Currency_Exchange_Rate = x.Currency_Exchange_Rate, UserID = x.UserID, EmployeeID = x.PinNo, UCodeId = x.UCodeId, Currency_Exchange_Code = x.Currency_Exchange_Code, TIMEOFENTRY = x.TIMEOFENTRY, RepID = x.RepID, ReasonCode = x.ReasonCode, OnlineUserID = x.OnlineUserID, OrderAnalysisCode1 = x.OrderAnalysisCode1, OrderAnalysisCode2 = x.OrderAnalysisCode2, OrderAnalysisCode3 = x.OrderAnalysisCode3, OrderAnalysisCode4 = x.OrderAnalysisCode4, OrderAnalysisCode5 = x.OrderAnalysisCode5, AllowPartShipment = x.AllowPartShipment, OrderType = x.OrderType, ContractRef = x.ContractRef, EmailID = x.EmailID, ContactName = x.ContactName, IsUcode = true }).First();
 
                 slsHead.IsEditing = true;
+                slsHead.EmployeeName = _employee.Exists(s => s.EmployeeID == slsHead.EmployeeID) ? _employee.GetAll(s => s.EmployeeID == slsHead.EmployeeID).First().Forename+" " + _employee.GetAll(s => s.EmployeeID == slsHead.EmployeeID).First().Surname : "";
                 slsHead.SalesOrderLine = _salesLine.GetAll(x => x.OrderNo == OrderNo).Select(x => new SalesOrderLineViewModel
                 {
                     CompanyID = x.CompanyID,
+                   
                     Warehouseid = x.Warehouseid,
                     OrderNo = x.OrderNo,
                     LineNo = x.LineNo,
@@ -516,7 +520,7 @@ namespace Maximus.Controllers
             {
                 set.FieldName = "OrderNo";
             });
-
+              settings.Columns.Add("OrderType");
             settings.Columns.Add(set =>
             {
                 set.FieldName = "OrderDate";

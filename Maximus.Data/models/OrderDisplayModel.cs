@@ -34,6 +34,7 @@ namespace Maximus.Data.models
         public int DeliveryWeek { get; set; }
         public string DeliveryDay { get; set; }
         public string EmergencyReason { get; set; }
+        public string UCODEID { get; set; }
         public List<SalesOrderLineViewModel> saleDetail{ get; set; }
 }
 }

@@ -73,7 +73,7 @@
                     {
                         if (((List<Maximus.Data.models.ReturnOrderModel>)Session["rtnLines"]).Where(sss => sss.IsDleted == 0).Count() > 0)
                         {
-                            int retOrdqty = ((List<Maximus.Data.models.ReturnOrderModel>)Session["rtnLines"]).Any(sss => sss.StyleId == style && sss.LineNo == ReturnLineNo && sss.OrderNo == OrderNo && sss.IsDleted == 0) ? ((List<Maximus.Data.models.ReturnOrderModel>)Session["rtnLines"]).Where(sss => sss.StyleId == style && sss.LineNo == ReturnLineNo && sss.OrderNo == OrderNo && sss.IsDleted == 0).Sum(sss => sss.OrdQty) : 0;
+                            int retOrdqty = ((List<Maximus.Data.models.ReturnOrderModel>)Session["rtnLines"]).Any(sss => sss.StyleId == style && sss.LineNo == ReturnLineNo && sss.OrderNo == OrderNo && sss.IsDleted == 0 && sss.IsReturn) ? ((List<Maximus.Data.models.ReturnOrderModel>)Session["rtnLines"]).Where(sss => sss.StyleId == style && sss.LineNo == ReturnLineNo && sss.OrderNo == OrderNo && sss.IsDleted == 0 && sss.IsReturn).Sum(sss => sss.OrdQty) : 0;
                             if (remainingQty - retOrdqty == 0)
                             {
                                 remainingQty = 0;
@@ -110,7 +110,7 @@
                     {
                         if (((List<Maximus.Data.models.ReturnOrderModel>)Session["rtnLines"]).Where(aas => aas.IsDleted == 0).Count() > 0)
                         {
-                            int retOrdqty = ((List<Maximus.Data.models.ReturnOrderModel>)Session["rtnLines"]).Any(sss => sss.StyleId == style && sss.LineNo == ReturnLineNo && sss.OrderNo == OrderNo && sss.IsDleted == 0) ? ((List<Maximus.Data.models.ReturnOrderModel>)Session["rtnLines"]).Where(sss => sss.StyleId == style && sss.LineNo == ReturnLineNo && sss.OrderNo == OrderNo && sss.IsDleted == 0).Sum(sss => sss.OrdQty) : 0;
+                            int retOrdqty = ((List<Maximus.Data.models.ReturnOrderModel>)Session["rtnLines"]).Any(sss => sss.StyleId == style && sss.LineNo == ReturnLineNo && sss.OrderNo == OrderNo && sss.IsDleted == 0 && sss.IsReturn) ? ((List<Maximus.Data.models.ReturnOrderModel>)Session["rtnLines"]).Where(sss => sss.StyleId == style && sss.LineNo == ReturnLineNo && sss.OrderNo == OrderNo && sss.IsDleted == 0 && sss.IsReturn).Sum(sss => sss.OrdQty) : 0;
                             if (remainingQty - retOrdqty == 0)
                             {
                                 remainingQty = 0;
@@ -261,11 +261,19 @@
 
             });
         });
-        settings.Columns.Add(col => { col.FieldName = "Points"; col.Width = 70; });
-        settings.Columns.Add(col => { col.FieldName = "TotalPoints"; col.Width = 70; });
+        if (Convert.ToBoolean(Session["IsEmergency"].ToString()) == false)
+        {
+            settings.Columns.Add(col => { col.FieldName = "Points"; col.Width = 70; });
+            settings.Columns.Add(col => { col.FieldName = "TotalPoints"; col.Width = 70; });
+        }
         if (Session["Price"].ToString().ToLower() != "hide")
         {
             settings.Columns.Add(col => { col.FieldName = "Price"; col.Width = 70; });
+        }
+
+        if (Convert.ToBoolean(Session["IsEmergency"].ToString()) )
+        {
+            settings.Columns.Add(col => { col.FieldName = "SOPDetail4"; col.Width = 70;col.Caption = "Emergency Reason"; });
         }
         ///settings.Columns.Add("");}
         //settings.Columns.Add(set => { set.FieldName = "Price"; });
