@@ -125,7 +125,7 @@
         {
             set.FieldName = "OrderNo";
             set.Width = 85;
-            
+
             set.SetDataItemTemplateContent(x =>
             {
 
@@ -161,7 +161,14 @@
                             }
                             else
                             {
-                                htmlString = "<span class='Highlighter' title='No detail lines found for this order'><b>" + ordeNos + "</b></span>";
+                                if (ordType.ToLower().Contains("private"))
+                                {
+                                    htmlString = "<span class='Highlighter' title='This is a private order'><b>" + ordeNos + "</b></span>";
+                                }
+                                else
+                                {
+                                    htmlString = "<span class='Highlighter' title='No detail lines found for this order'><b>" + ordeNos + "</b></span>";
+                                }
                             }
                         }
                     }
@@ -353,8 +360,58 @@
             });
         }
 
-        settings.Columns.Add("FirstDespatch").Width = 70; ;
-        settings.Columns.Add("CourrierRef").Width = 70; ;
+        //settings.Columns.Add("FirstDespatch").Width = 70; ;
+        settings.Columns.Add(set =>
+        {
+            set.FieldName = "FirstDespatch";
+            set.Caption = "Despatch date";
+            set.Width = 150;
+            set.HeaderStyle.Wrap =DefaultBoolean.False;
+            set.SetDataItemTemplateContent(x =>
+            {
+                string DespDate = DataBinder.Eval(x.DataItem, "FirstDespatch").ToString();
+                string cnt = "";
+                if(DespDate.Contains(","))
+                {
+                    foreach (var det in DespDate.Split(','))
+                    {
+                        cnt = cnt + "<center><span>" + det + "</span></center>";
+                    }
+                }
+                else
+                {
+                    cnt = cnt + "<center><span>"+ DespDate + "</span></center>";
+                }
+                ViewContext.Writer.Write(cnt);
+            });
+
+        }) ;
+       // settings.Columns.Add("CourrierRef").Width = 70; ;
+        settings.Columns.Add(set =>
+        {
+            set.FieldName = "CourrierRef";
+
+            set.Width = 70;
+            set.SetDataItemTemplateContent(x =>
+            {
+                string courierRef = DataBinder.Eval(x.DataItem, "CourrierRef").ToString();
+                string cnt = "";
+                if (courierRef.Contains(","))
+                {
+                    foreach (var det in courierRef.Split(','))
+                    {
+                        cnt = cnt + "<center><span>" + det + "</span></center>";
+                    }
+                }
+                else
+                {
+                    cnt = cnt + "<center><span>" + courierRef + "</span></center>";
+                }
+                ViewContext.Writer.Write(cnt);
+            });
+
+        });
+        //settings.Columns.Add("CourrierRef").Width = 70; ;
 
 
     });

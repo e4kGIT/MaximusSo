@@ -269,7 +269,36 @@ function getEntitlementDim(style, error) {
         });
     }
 }
+function getSelectedSizeSwatchPrivate(style, size, orgStyle) {
+    var styleId_Val = style.indexOf(",") > -1 ? GetStyleIdSwatch(style, orgStyle) : style;
 
+    if (size != "" && styleId_Val != "") {
+        $.ajax({
+            type: "POST",
+            url: '/Private/GetPrivatePrices/',
+            data: { 'StyleID': styleId_Val, 'SizeId': size },
+            success: function (response) {
+                var priceId = "LbPrice" + style;
+                var price = document.getElementById(priceId);
+                price.innerHTML = "";
+                price.innerHTML = "<span class='incv'>(exc. VAT)</span><input class='form-control priceVat' readonly id='LbPriceinput" + style + "' readonly  type=\"number\" min=\"1\" max=\"10000\" value='" + response.Price + "'/>";
+                if (response.showVat) {
+                    var priceIdVAT = "LbPriceVAT" + style;
+                    var priceVAT = document.getElementById(priceIdVAT);
+                    priceVAT.innerHTML = "";
+                    priceVAT.innerHTML = "<span class='incv'>(inc. VAT)</span><input class='form-control priceVat' readonly id='LbPriceinput" + style + "' type='number' min='1' max='10000' value=" + response.PriceVAT + ">";
+                }
+            },
+            error: function (erdata) {
+            }
+        });
+    }
+    else {
+        alert("Please select the colorId first!");
+        thisDrop = ASPxClientControl.GetControlCollection().GetByName(s.name);
+        thisDrop.SetValue("");
+    }
+}
 
 
 function getSelectedSizeSwatch(style, size, orgStyle) {
@@ -501,7 +530,7 @@ function getEntitlementSwatch(style, orgStyl, error, size) {
                         var data = document.getElementById("Entitlement");
                         data.innerHTML = response.Result.indexOf('points') > -1 ? response.Result.split("-////-")[0] + errorMsg : response.Result + errorMsg;
                         if (response.isfreestk) {
-                            Entitlement.SetHeaderText("Freestock for "+ response.EmpId);
+                            Entitlement.SetHeaderText("Freestock for " + response.EmpId);
                         }
                         else {
                             Entitlement.SetHeaderText("Entitlement for " + response.EmpId);
@@ -544,7 +573,7 @@ function getEntitlementSwatch(style, orgStyl, error, size) {
                     var data = document.getElementById("Entitlement");
                     data.innerHTML = response.Result.indexOf('points') > -1 ? response.Result.split("-////-")[0] + errorMsg : response.Result + errorMsg;
                     if (response.isfreestk) {
-                        Entitlement.SetHeaderText("Freestock for "+ response.EmpId);
+                        Entitlement.SetHeaderText("Freestock for " + response.EmpId);
                     }
                     else {
                         Entitlement.SetHeaderText("Entitlement for " + response.EmpId);
@@ -983,6 +1012,163 @@ function addTocartSwatchEmergency(s, e) {
         }
 
     }
+}
+function addTocartSwatchPrivate(s, e) {
+    var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
+    var sitecode = ASPxClientControl.GetControlCollection().GetByName("SiteCodeCmb");
+    var selectedSitecode = sitecode != null ? sitecode.GetValue() != null ? sitecode.GetValue() : "" : "SITECODENULL";
+    var stylearr = s.name.split('_');
+    var description = "";
+    var price = "";
+    var size = "";
+    var color = "";
+    var qty = "";
+    var sStyle = "";
+    var descStyle;
+    var colorValue;
+    var sizeValue;
+    var colorSwatchName = "swatch_Color_" + stylearr[1];
+    var colorSwatch = document.getElementsByName(colorSwatchName);
+    var sizeSwatchName = "swatch_Size_" + stylearr[1];
+    var sizeSwatch = document.getElementsByName(sizeSwatchName);
+    var reasonName = "CmbReason_" + stylearr[1];
+    var reasonControl = document.getElementsByName(reasonName);
+    var reason;
+
+    if (reasonControl.length > 0) {
+        reason = reasonControl[0].value == "" | reasonControl[0].value == undefined ? reasonControl[0].defaultValue == "" | reasonControl[0].defaultValue == "" ? "" : reasonControl[0].defaultValue : reasonControl[0].value;
+    }
+    if (sizeSwatch.length > 1) {
+        for (var i = 0; i < sizeSwatch.length; i++) {
+            if (sizeSwatch[i].checked) {
+                sizeValue = sizeSwatch[i].offsetParent.innerText;
+            }
+        }
+    }
+    else {
+        if (sizeSwatch[0].checked) {
+            sizeValue = sizeSwatch[0].offsetParent.innerText;
+        }
+    }
+    if (colorSwatch.length > 1) {
+        for (var i = 0; i < colorSwatch.length; i++) {
+            if (colorSwatch[i].checked) {
+                colorValue = colorSwatch[i].offsetParent.innerText;
+            }
+        }
+    }
+    else {
+        if (colorSwatch[0].checked) {
+            colorValue = colorSwatch[0].offsetParent.innerText;
+        }
+    }
+    size = sizeValue != undefined && sizeValue != "" ? sizeValue : "";
+    color = colorValue != undefined && colorValue != "" ? colorValue : "";
+
+    if (stylearr[1].indexOf(',') > -1) {
+        var name = 'Swatch_Style_FieldSet_' + stylearr[1];
+        var fieldSet = document.getElementsByName(name);
+        var selStyle;
+        for (var i = 0; i < fieldSet[0].elements.length; i++) {
+            if (fieldSet[0].elements[i].checked) {
+                selStyle = fieldSet[0].elements[i].value;
+            }
+        }
+        sStyle = selStyle;
+        descStyle = stylearr[1].split(',');
+    }
+    else {
+        sStyle = stylearr[1];
+    }
+    var minPtsDivName = "minPtsDiv_" + sStyle;
+    var minPtsDiv = document.getElementsByClassName(minPtsDivName)
+    var desc = descStyle == undefined ? stylearr[1] : descStyle[0];
+    var Spin = document.getElementsByName("spinEdit_" + stylearr[1]);
+    var descriptionDiv = document.getElementById("LbDescription" + desc);
+    description = descriptionDiv.innerHTML;
+    var priceId = document.getElementById("LbPriceinput" + stylearr[1]);
+    price = priceId != undefined && priceId != null ? priceId.value : priceId == undefined ? "0.0" : "0";
+    qty = Spin[0].value;
+    var clsName = "reqData" + stylearr[1];
+    var reqdatatxt = "reqdatatxt" + stylearr[1];
+    var reqData = document.getElementsByClassName(clsName);
+    if (description != "" && price != "" && price != "0" && size != "" && color != "" && qty != "" && qty != "0" && (selectedSitecode != "" | selectedSitecode == "SITECODENULL")) {
+        if (stylearr[2] != "") {
+            loadPopup.Show();
+            selectedSitecode = selectedSitecode == "SITECODENULL" ? "" : selectedSitecode;
+            $.ajax({
+                url: "/Private/Addtocart/",
+                type: "POST",
+                data: { 'description': description, 'price': price, 'size': size, 'color': color, 'qty': qty, 'style': sStyle, 'orgStyl': stylearr[3], 'entQty': stylearr[2], 'reason': reason, 'selectedSitecode': selectedSitecode },
+                success: function (response) {
+                    if (response != "") {
+                        $("#CartwidCount").html("");
+                        $("#CartwidCount").html(response);
+                        loadPopup.Hide();
+                        $.ajax({
+                            url: "/Private/GetPriceDiv/",
+                            type: "POST",
+                            success: function (response) {
+                                if (response != "" && response != null) {
+                                    var PrivPrice = document.getElementById("PrivPrice");
+                                    PrivPrice.innerHTML = "";
+                                    PrivPrice.innerHTML = response;
+                                }
+                            }
+                        });
+
+                        myFunction("Added to cart..!");
+
+                        //myFunction("Added to cart..!");  ;
+                    }
+                    else {
+                        loadPopup.Hide();
+                        $.ajax({
+                            url: "/Home/IsreasonFailed/",
+                            type: "POST",
+                            data: { 'reason': reason },
+                            success: function (response) {
+                                if (response != "") {
+                                    alert(response);
+                                }
+                                else {
+                                    alert("Try again..!");
+                                }
+
+                            }
+                        });
+                        //alert("Try again!");
+                    }
+                },
+                error: function () {
+                    loadPopup.Hide();
+                    myFunction("Try again..!");
+                    //alert("Try again!");
+                }
+            })
+        }
+    }
+    else {
+        if (price == "" || price == null || price == undefined || price == "0") {
+            alert("Please choose a size");
+        }
+        else if (size == "" || size == null || size == undefined) {
+            alert("Please choose a Size");
+        }
+        else if (color == "" || color == null || color == undefined) {
+            alert("Please choose a Colour");
+        }
+        else if (qty == "" || qty == "0" || qty == null || qty == undefined) {
+            alert("Quantity should be greater than 0");
+        }
+        else if (selectedSitecode == "") {
+            alert("Please select a site code");
+        }
+        else if (reqtxt[0].value == "") {
+            alert("Please select Required leg length");
+        }
+    }
+
 }
 
 function addTocartSwatch(s, e) {
@@ -2870,6 +3056,167 @@ function GetDrpResulTemplateModelSwatch(stle, selStyle, orgStyle) {
                             var price = document.getElementById(priceId);
                             price.innerHTML = "";
                             price.innerHTML = response.Price == 0 ? "" : response.Price;
+                            $.ajax({
+                                type: "POST",
+                                url: "/Home/GetReqData/",
+                                data: { 'StyleID': styleId_Val },
+                                success: function (response) {
+                                    if (response != "") {
+                                        var clsName = "reqData" + style;
+                                        var headClsName = "reqDataHeading" + style;
+                                        var stylVal = document.getElementsByClassName(clsName);
+                                        var headVal = document.getElementsByClassName(headClsName);
+                                        headVal[0].innerHTML = response;
+                                        stylVal[0].style.display = 'block';
+                                    }
+                                    else {
+                                        var clsName = "reqData" + style;
+                                        var headClsName = "reqDataHeading" + style;
+                                        var stylVal = document.getElementsByClassName(clsName);
+                                        var headVal = document.getElementsByClassName(headClsName);
+                                        headVal[0].innerHTML = response;
+                                        stylVal[0].style.display = 'none';
+                                    }
+                                }
+                            });
+                        }
+                    }
+                })
+
+            }
+        },
+        error: function () {
+
+        }
+    });
+}
+
+function GetDrpResultModelSwatchPrivate(stle, selStyle, orgStyle) {
+    var style_nam = stle;
+
+    var colorFieldsetName = "Swatch_Color_FieldSet_Private_" + style_nam;
+    var sizeFieldsetName = "Swatch_Size_FieldSet_Private_" + style_nam;
+    var colorFieldset = document.getElementsByName(colorFieldsetName);
+    var sizeFieldset = document.getElementsByName(sizeFieldsetName);
+    var clrContent = "";
+    var sizContent = "";
+    var description = document.getElementById("LbDescription" + style_nam.split(',')[0]);
+    var colorSwatchName = "swatch_Color_" + stle;
+    var colorSwatch = document.getElementsByName(colorSwatchName);
+    if (colorSwatch.length > 1) {
+        for (var i = 0; i < colorSwatch.length; i++) {
+            if (colorSwatch[i].checked) {
+                colorValue = colorSwatch[i].offsetParent.innerText;
+            }
+        }
+    }
+    else {
+        if (colorSwatch[0].checked) {
+            colorValue = colorSwatch[0].offsetParent.innerText;
+        }
+    }
+    description.innerHTML = "";
+    var url = "/Private/DrpResultModelPrivate";
+    $.ajax({
+        url: url,
+        type: "POST",
+        data: { 'styleId': selStyle, 'color': colorValue },
+        success: function (response) {
+            if (response != "") {
+
+                $.ajax({
+                    url: "/Private/GetLastSizePrivate/",
+                    type: "POST",
+                    data: { 'style': selStyle },
+                    success: function (resp) {
+                        if (resp != "") {
+                            var VatString = "";
+                            description.innerHTML = response.Description;
+                            sizeFieldset[0].innerHTML = "";
+                            for (var i = 0; i < response.SizeList.length ; i++) {
+                                if (response.SizeList.length > 1) {
+                                    VatString = response.showVat ? "<span id='PrivatePrice_" + style_nam + "_" + response.PriceList[i].Size + "' title='Price'>" + response.PriceList[i].PriceVAT + " </span> </b> <span class='incv'>(inc. VAT)</span>" : "<span id='PrivatePrice_" + style_nam + "_" + response.PriceList[i].Size + "' title='Price'>" + response.PriceList[i].Price + " </span> </b>";
+                                    if (response.PriceList[i] == resp.Size) {
+
+                                        sizContent = sizContent + "<div class='col-md-2 frestkpad'><center class='ovrdispsize'><span>Price:</span>   <b>" + VatString + "</center><center><label class='swatchLabel'><input type='radio'  id='radio' name=\"swatch_Size_" + style_nam + "\" checked=\"checked\"/><span class='spanner1' onclick=\"getSelectedSizeSwatchPrivate('" + style_nam + "','" + response.PriceList[i].Size + "','" + orgStyle + "')\"><center><bold>" + response.PriceList[i].Size + "</bold></center></span></label></center></div>";
+                                    }
+                                    else {
+                                        sizContent = sizContent + "<div class='col-md-2 frestkpad'> <center class='ovrdispsize'><span>Price:</span>   <b>" + VatString + "</center><center><label class='swatchLabel'><input type='radio'  id='radio' name=\"swatch_Size_" + style_nam + "\" value='blue'/><span class='spanner1' onclick=\"getSelectedSizeSwatchPrivate('" + style_nam + "','" + response.PriceList[i].Size + "','" + orgStyle + "')\"><center><bold>" + response.PriceList[i].Size + "</bold></center></span></label></center></div>";
+                                    }
+                                }
+                                else {
+                                    VatString = response.showVat ? "<span id='PrivatePrice_" + style_nam + "_" + response.PriceList[i].Size + "' title='Price'>" + response.PriceList[i].PriceVAT + " </span> </b> <span class='incv'>(inc. VAT)</span>" : "<span id='PrivatePrice_" + style_nam + "_" + response.PriceList[i].Size + "' title='Price'>" + response.PriceList[i].Price + " </span> </b>";
+                                    sizContent = sizContent + "<div class='col-md-2 frestkpad'><center class='ovrdispsize'><span>Price:</span>   <b>" + VatString + "</center><center> <label class='swatchLabel'><input type='radio'  id='radio' name=\"swatch_Size_" + style_nam + "\" checked=\"checked\"/><span class='spanner1' onclick=\"getSelectedSizeSwatchPrivate('" + style_nam + "','" + response.PriceList[i].Size + "','" + orgStyle + "')\"><center><bold>" + response.PriceList[i].Size + "</bold></center></span></label></center></div>";
+                                }
+                            }
+                            var cnt = "";
+                            colorFieldset[0].innerHTML = clrContent != "" ? clrContent : colorFieldset[0].innerHTML;
+                            sizeFieldset[0].innerHTML = "<div class='row'><div class='col-md-10'><div class='row'>" + cnt + sizContent + "</div></div></div>";
+                            var priceId = "LbPrice" + style_nam;
+                            var price = document.getElementById(priceId);
+                            var priceVAl = response.Price == 0 ? resp.price == "" ? "" : resp.price : response.Price;
+                            price.innerHTML = "<span class='incv'>(exc. VAT)</span><input class='form-control priceVat' readonly id='LbPriceinput" + style_nam + "' type='number' min='1' max='10000' value=" + priceVAl + "> ";
+                            if (response.showVat) {
+                                var priceIdVAT = "LbPriceVAT" + style_nam;
+                                var priceVAT = document.getElementById(priceIdVAT);
+                                priceVAT.innerHTML = "";
+                                var priceVAlVAT = response.priceVAT == 0 ? resp.priceVAT == "" ? "" : resp.priceVAT : response.priceVAT;
+                                priceVAT.innerHTML = "<span class='incv'>(inc. VAT)</span><input class='form-control priceVat' readonly id='LbPriceinput" + style_nam + "' type='number' min='1' max='10000' value=" + priceVAlVAT + ">";
+
+                            }
+
+                            $.ajax({
+                                type: "POST",
+                                url: "/Home/GetReqData/",
+                                data: { 'StyleID': selStyle },
+                                success: function (response) {
+                                    if (response != "") {
+                                        var clsName = "reqData" + stle;
+                                        var headClsName = "reqDataHeading" + stle;
+                                        var stylVal = document.getElementsByClassName(clsName);
+                                        var headVal = document.getElementsByClassName(headClsName);
+                                        headVal[0].innerHTML = response;
+                                        stylVal[0].style.display = 'block';
+                                    }
+                                    else {
+                                        var clsName = "reqData" + stle;
+                                        var headClsName = "reqDataHeading" + stle;
+                                        var stylVal = document.getElementsByClassName(clsName);
+                                        var headVal = document.getElementsByClassName(headClsName);
+                                        headVal[0].innerHTML = response;
+                                        stylVal[0].style.display = 'none';
+                                    }
+                                }
+                            });
+                        } else {
+                            description.innerHTML = response.Description;
+                            colorFieldset[0].innerHTML = "";
+                            sizeFieldset[0].innerHTML = "";
+                            for (var i = 0; i < response.SizeList.length ; i++) {
+                                VatString = response.showVat ? "<span id='PrivatePrice_" + style_nam + "_" + response.PriceList[i].Size + "' title='Price'>" + response.PriceList[i].PriceVAT + " </span> </b> <span class='incv'>(inc. VAT)</span>" : "<span id='PrivatePrice_" + style_nam + "_" + response.PriceList[i].Size + "' title='Price'>" + response.PriceList[i].Price + " </span> </b>";
+                                if (response.SizeList.length > 1) {
+
+                                    sizContent = sizContent + "<div class='col-md-2 frestkpad'><center class='ovrdispsize'><span>Price:</span>   <b>" + VatString + "</center><center><label><input type='radio'  id='radio' name=\"swatch_Size_" + style_nam + "\" checked=\"checked\"/><span class='spanner1' onclick=\"getSelectedSizeSwatchPrivate('" + style_nam + "','" + response.PriceList[i].Size + "','" + stylearr[1] + "')\"><center><bold>" + response.PriceList[i].Size + "</bold></center></span></label></center></div>";
+
+                                }
+                                else {
+                                    sizContent = sizContent + "<div class='col-md-2 frestkpad'><center class='ovrdispsize'><span>Price:</span>   <b>" + VatString + "</center><center><label><input type='radio'  id='radio' name=\"swatch_Size_" + style_nam + "\" checked=\"checked\"/><span class='spanner1'  onclick=\"getSelectedSizeSwatchPrivate('" + style_nam + "','" + response.PriceList[i].Size + "','" + stylearr[1] + "')\"><center><bold>" + response.PriceList[i].Size + "</bold></center></span></label></center></div>";
+                                }
+                            }
+                            colorFieldset[0].innerHTML = clrContent;
+                            sizeFieldset[0].innerHTML = "<div class='row'><div class='col-md-10'><div class='row'>" + cnt + sizContent + "</div></div></div>";
+                            var priceId = "LbPrice" + style_nam;
+                            var price = document.getElementById(priceId);
+                            price.innerHTML = "";
+                            var priceVAl = response.Price == 0 ? resp.price == "" ? "" : resp.price : response.Price;
+                            price.innerHTML = "<span class='incv'>(exc. VAT)</span><input class='form-control' readonly id='LbPriceinput" + style_nam + "' type='number' min='1' max='10000' value=" + priceVAl + ">";
+                            if (response.showVat) {
+                                var priceIdVAT = "LbPriceVAT" + style_nam;
+                                var priceVAT = document.getElementById(priceIdVAT);
+                                priceVAT.innerHTML = "";
+                                var priceVAlVAT = response.priceVAT == 0 ? resp.priceVAT == "" ? "" : resp.priceVAT : response.priceVAT;
+                                priceVAT.innerHTML = "<span class='incv'>(inc. VAT)</span><input class='form-control priceVat' readonly id='LbPriceinput" + style_nam + "' type='number' min='1' max='10000' value=" + priceVAlVAT + ">";
+                            }
                             $.ajax({
                                 type: "POST",
                                 url: "/Home/GetReqData/",
@@ -5698,39 +6045,75 @@ function filterresults(s, e) {
     card.PerformCallback({ filterText: tXt });
 }
 
-function plus(name) {
-    var valuee = document.getElementsByName(name);
-    var curVale = parseInt(valuee[0].value);
-    var currentVal = curVale == null | curVale == undefined ? parseInt($('input[name=' + name + ']').val()) : curVale;
-    if (!isNaN(currentVal)) {
-        // Increment
-        document.getElementsByName(name)[0].value = currentVal + 1;
-        //$('input[name=' + fieldName + ']').val(currentVal + 1);
-    } else {
-        // Otherwise put a 0 there
-        document.getElementsByName(name)[0].value = 0;
-    }
+function filterresults1(s, e) {
+    var tXt = s.GetText();
+    var card = ASPxClientControl.GetControlCollection().GetByName("PrivateCardView");
+    card.PerformCallback({ filterText: tXt });
 }
+function FilterBasedonCat(catagory) {
+    //CatagoryCard
+    var arr = document.getElementsByClassName("CatagoryCard");
 
-function minus(name) {
-
-    var valuee = document.getElementsByName(name);
-    var curVale = parseInt(valuee[0].value);
-    // Get its current value
-    var currentVal = curVale == null | curVale == undefined ? parseInt($('input[name=' + name + ']').val()) : curVale;
-    // If it isn't undefined or its greater than 0
-    if (!isNaN(currentVal) && currentVal > 1) {
-        // Decrement one
-        document.getElementsByName(name)[0].value = currentVal - 1;
-    } else {
-        // Otherwise put a 0 there
-        if (currentVal != 1) {
-            document.getElementsByName(name)[0].value = 0;
+    for (var i = 0; i < arr.length; i++) {
+        if (arr[i].id == "CATAGORY_" + catagory) {
+            var docId = document.getElementById(arr[i].id);
+            docId.style.backgroundColor = "darkcyan";
+            docId.style.color = "white";
+        }
+        else {
+            var docId = document.getElementById(arr[i].id);
+            docId.style.backgroundColor = "lightgray";
+            docId.style.color = "black";
         }
     }
+    var card = ASPxClientControl.GetControlCollection().GetByName("PrivateCardView");
+    card.PerformCallback({ selectedItem: catagory });
+    MVCxClientUtils.FinalizeCallback();
 }
-
-jQuery(document).ready(function () {
+$(document).ajaxComplete(function () {
+    // This button will increment the value
+    $('.qtyplus').click(function (e) {
+        // Stop acting like a button
+        e.preventDefault();
+        // Get the field name
+        fieldName = $(this).attr('field');
+        // Get its current value
+        var valuee = document.getElementsByName(fieldName);
+        var curVale = parseInt(valuee[0].value);
+        var currentVal = curVale == null | curVale == undefined ? parseInt($('input[name=' + fieldName + ']').val()) : curVale;
+        // If is not undefined
+        if (!isNaN(currentVal)) {
+            // Increment
+            document.getElementsByName(fieldName)[0].value = currentVal + 1;
+            //$('input[name=' + fieldName + ']').val(currentVal + 1);
+        } else {
+            // Otherwise put a 0 there
+            document.getElementsByName(fieldName)[0].value = 0;
+        }
+    });
+    // This button will decrement the value till 0
+    $(".qtyminus").click(function (e) {
+        // Stop acting like a button
+        e.preventDefault();
+        // Get the field name
+        fieldName = $(this).attr('field');
+        var valuee = document.getElementsByName(fieldName);
+        var curVale = parseInt(valuee[0].value);
+        // Get its current value
+        var currentVal = curVale == null | curVale == undefined ? parseInt($('input[name=' + fieldName + ']').val()) : curVale;
+        // If it isn't undefined or its greater than 0
+        if (!isNaN(currentVal) && currentVal > 1) {
+            // Decrement one
+            document.getElementsByName(fieldName)[0].value = currentVal - 1;
+        } else {
+            // Otherwise put a 0 there
+            if (currentVal != 1) {
+                document.getElementsByName(fieldName)[0].value = 0;
+            }
+        }
+    });
+});
+$(document).ready(function () {
     // This button will increment the value
     $('.qtyplus').click(function (e) {
         // Stop acting like a button
@@ -5799,6 +6182,39 @@ jQuery(document).ready(function () {
     //    });
     //});
 });
+
+function plus(name) {
+    var valuee = document.getElementsByName(name);
+    var curVale = parseInt(valuee[0].value);
+    var currentVal = curVale == null | curVale == undefined ? parseInt($('input[name=' + name + ']').val()) : curVale;
+    if (!isNaN(currentVal)) {
+        // Increment
+        document.getElementsByName(name)[0].value = currentVal + 1;
+        //$('input[name=' + fieldName + ']').val(currentVal + 1);
+    } else {
+        // Otherwise put a 0 there
+        document.getElementsByName(name)[0].value = 0;
+    }
+}
+
+function minus(name) {
+
+    var valuee = document.getElementsByName(name);
+    var curVale = parseInt(valuee[0].value);
+    // Get its current value
+    var currentVal = curVale == null | curVale == undefined ? parseInt($('input[name=' + name + ']').val()) : curVale;
+    // If it isn't undefined or its greater than 0
+    if (!isNaN(currentVal) && currentVal > 1) {
+        // Decrement one
+        document.getElementsByName(name)[0].value = currentVal - 1;
+    } else {
+        // Otherwise put a 0 there
+        if (currentVal != 1) {
+            document.getElementsByName(name)[0].value = 0;
+        }
+    }
+}
+
 
 function getAssemblySwatch(style) {
     var name = 'Swatch_Style_FieldSet_' + style;
@@ -6191,7 +6607,15 @@ function AcceptOrder(s, e) {
                                                         loadPopup.Hide();
                                                         ////window.history.back();
                                                         if (document.referrer.indexOf("Home") > -1) {
-                                                            window.location = "/Employee/Index/";
+                                                            $.ajax({
+                                                                url: "/Home/GetRedirectionUrl/",
+                                                                type: "Post",
+                                                                success: function (response) {
+                                                                    if (response != null && response != "") {
+                                                                        window.location = response;
+                                                                    }
+                                                                }
+                                                            });
                                                         }
                                                         else {
                                                             window.location = document.referrer;
@@ -6204,7 +6628,15 @@ function AcceptOrder(s, e) {
                                                     loadPopup.Hide();
                                                     ////window.history.back();
                                                     if (document.referrer.indexOf("Home") > -1) {
-                                                        window.location = "/Employee/Index/";
+                                                        $.ajax({
+                                                            url: "/Home/GetRedirectionUrl/",
+                                                            type: "Post",
+                                                            success: function (response) {
+                                                                if (response != null && response != "") {
+                                                                    window.location = response;
+                                                                }
+                                                            }
+                                                        });
                                                     }
                                                     else {
                                                         window.location = document.referrer;
@@ -6302,7 +6734,15 @@ function AcceptOrder(s, e) {
                                                                 loadPopup.Hide();
                                                                 //window.history.back();
                                                                 if (document.referrer.indexOf("Home") > -1) {
-                                                                    window.location = "/Employee/Index/";
+                                                                    $.ajax({
+                                                                        url: "/Home/GetRedirectionUrl/",
+                                                                        type: "Post",
+                                                                        success: function (response) {
+                                                                            if (response != null && response != "") {
+                                                                                window.location = response;
+                                                                            }
+                                                                        }
+                                                                    });
                                                                 }
                                                                 else {
                                                                     window.location = document.referrer;
@@ -6316,7 +6756,15 @@ function AcceptOrder(s, e) {
                                                             loadPopup.Hide();
                                                             //window.history.back();
                                                             if (document.referrer.indexOf("Home") > -1) {
-                                                                window.location = "/Employee/Index/";
+                                                                $.ajax({
+                                                                    url: "/Home/GetRedirectionUrl/",
+                                                                    type: "Post",
+                                                                    success: function (response) {
+                                                                        if (response != null && response != "") {
+                                                                            window.location = response;
+                                                                        }
+                                                                    }
+                                                                });
                                                             }
                                                             else {
                                                                 window.location = document.referrer;
@@ -6644,7 +7092,9 @@ function NextEmployee() {
     }
 
 }
-
+function ContinueShopPrivate() {
+    window.location = "/Private/Index/";
+}
 function ContinueShop() {
     var address = ASPxClientControl.GetControlCollection().GetByName("CmbAddress");
     var addressId = address.GetValue();
@@ -7408,7 +7858,26 @@ function Adjustment(s, e) {
     }
     PointsEndCallBack();
 }
+function CarriageStyleCmbboxchangePrivate(s, e) {
+    var carrierStylecmb = ASPxClientControl.GetControlCollection().GetByName(s.name);
+    var selStyle = carrierStylecmb.GetValue();
+    if (selStyle != null && selStyle != "") {
+        $.ajax({
+            url: "/Private/InsertCarriageLine/",
+            type: "POST",
+            data: { 'carrStyle': selStyle },
+            success: function (response) {
+                if (response != "") {
+                    window.location.reload();
+                }
+                else {
+                    alert("The carriage style already exists in the cart");
+                }
+            }
+        });
+    }
 
+}
 function CarriageStyleCmbboxchange(s, e) {
     var carrierStylecmb = ASPxClientControl.GetControlCollection().GetByName(s.name);
     var selStyle = carrierStylecmb.GetValue();
@@ -7782,6 +8251,27 @@ function EmergencyMessagePop() {
         }
     });
 }
+function PrivateMessagePop() {
+    $.ajax({
+        type: "POST",
+        url: "/Private/GetPrivateMessagePop",
+        success: function (response) {
+            if (response != "" && response != null) {
+                var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
+                loadPopup.Hide();
+                var pop = ASPxClientControl.GetControlCollection().GetByName("PrivateMessage");
+                var content = document.getElementById("PrivateMessageContent");
+                content.innerHTML = "";
+                content.innerHTML = response;
+                pop.Show();
+                MVCxClientUtils.FinalizeCallback();
+            }
+        },
+        error: function () {
+
+        }
+    });
+}
 
 function GetRolloutCheck() {
     $.ajax({
@@ -7862,7 +8352,7 @@ function gotoindex() {
 function CheckConditions() {
     checkEmpEmail();
     GetRolloutCheck();
-    EmergencyMessagePop();
+    // EmergencyMessagePop();
 }
 function SaveEmpGrid(chart) {
     if (chart == "EmployeeGridView") {
@@ -7951,7 +8441,7 @@ function OnGetSelectedFieldValuess(selectedValues) {
                 data: { 'orderLst': selArr },
                 success: function (response) {
                     if (response == "") {
-                        alert("Confirmed succssfully");
+                        alert("Confirmed successfully");
                         loadPopup.Hide();
                         window.location.reload();
                     }
@@ -8501,7 +8991,35 @@ function RefreshReorderGrid(s, e) {
     CalculateTotals();
     Refreshpointsdiv();
 }
-
+function RefereshPrivateCartPg() {
+    window.location.reload();
+}
+function CalculateTotalsPrivate() {
+    var totGoodsCtrl = ASPxClientControl.GetControlCollection().GetByName("lblTotGoodsVal");
+    var carrierChargesCtrl = ASPxClientControl.GetControlCollection().GetByName("lblCarrChargesVal");
+    var ordTotalCtrl = ASPxClientControl.GetControlCollection().GetByName("lblOrdTotalVal");
+    var VATCtrl = ASPxClientControl.GetControlCollection().GetByName("lblOrdVATVal");
+    var grndTotCtrl = ASPxClientControl.GetControlCollection().GetByName("lblOrdGrandTotVal");
+    $.ajax({
+        url: "/Private/GetRetReordTotals/",
+        type: "post",
+        success: function (response) {
+            if (response != null) {
+                if (response.length > 0) {
+                    if (totGoodsCtrl != null) {
+                        for (var j = 0; j < response.length; j++) {
+                            totGoodsCtrl.SetValue(response[j].Total);
+                            carrierChargesCtrl.SetValue(response[j].carriage);
+                            ordTotalCtrl.SetValue(response[j].ordeTotal);
+                            VATCtrl.SetValue(response[j].totalVat);
+                            grndTotCtrl.SetValue(response[j].gross);
+                        }
+                    }
+                }
+            }
+        }
+    })
+}
 function CalculateTotals() {
     var totGoodsCtrl = ASPxClientControl.GetControlCollection().GetByName("txtTotGoods");
     var carrierChargesCtrl = ASPxClientControl.GetControlCollection().GetByName("txtCarrierCharges");
@@ -8738,7 +9256,16 @@ function redirect(s, e) {
                 //window.history.back();
                 //window.location = "/Employee/Index/";
                 if (document.referrer.indexOf("Home") > -1) {
-                    window.location = "/Employee/Index/";
+                    $.ajax({
+                        url: "/Home/GetRedirectionUrl/",
+                        type: "Post",
+                        success:function(response)
+                        {
+                            if (response != null && response != "") {
+                                window.location = response;
+                            }
+                        }
+                    });
                 }
                 else {
                     window.location = document.referrer;
@@ -8750,7 +9277,15 @@ function redirect(s, e) {
             //window.history.back();
             // window.location = "/Employee/Index/";
             if (document.referrer.indexOf("Home") > -1) {
-                window.location = "/Employee/Index/";
+                $.ajax({
+                    url: "/Home/GetRedirectionUrl/",
+                    type: "Post",
+                    success: function (response) {
+                        if (response != null && response != "") {
+                            window.location = response;
+                        }
+                    }
+                });
             }
             else {
                 window.location = document.referrer;
@@ -8769,7 +9304,15 @@ function redirect(s, e) {
                 //window.history.back();
                 //  window.location = "/Employee/ChangeOrdertype?orderType=return";
                 if (document.referrer.indexOf("Home") > -1) {
-                    window.location = "/Employee/Index/";
+                    $.ajax({
+                        url: "/Home/GetRedirectionUrl/",
+                        type: "Post",
+                        success: function (response) {
+                            if (response != null && response != "") {
+                                window.location = response;
+                            }
+                        }
+                    });
                 }
                 else {
                     window.location = document.referrer;
@@ -8781,7 +9324,15 @@ function redirect(s, e) {
             //window.history.back();
             // window.location = "/Employee/ChangeOrdertype?orderType=return";
             if (document.referrer.indexOf("Home") > -1) {
-                window.location = "/Employee/Index/";
+                $.ajax({
+                    url: "/Home/GetRedirectionUrl/",
+                    type: "Post",
+                    success: function (response) {
+                        if (response != null && response != "") {
+                            window.location = response;
+                        }
+                    }
+                });
             }
             else {
                 window.location = document.referrer;
@@ -9017,4 +9568,341 @@ function OrderEditRT(orderNo, empId) {
         }
     });
 
+}
+function ChangeVatStatus(s, e) {
+    var vatCTRl = ASPxClientControl.GetControlCollection().GetByName(s.name);
+    var vatVal = vatCTRl != null ? vatCTRl.GetValue() != null ? vatCTRl.GetValue() : false : false;
+    $.ajax({
+        url: "/Private/SetVatStatus/",
+        type: "post",
+        data: { value: vatVal },
+        success: function (resp) {
+            window.location.reload();
+        }
+    });
+}
+
+function SetEditValue(value) {
+    var data = value == null ? true : false;
+    $.ajax({
+        url: "/Private/BillingPrivate/",
+        type: "post",
+        data: { isEdit: data },
+        success: function (resp) {
+            if (resp != null && resp != "") {
+                var divId = document.getElementById("BILLADDPRIVATE");
+                divId.innerHTML = "";
+                divId.innerHTML = resp;
+                MVCxClientUtils.FinalizeCallback();
+            }
+        }
+    });
+}
+function ShowAddressForm() {
+    var popCtrl = ASPxClientControl.GetControlCollection().GetByName("AddressEditForm");
+    if (popCtrl != null) {
+        $.ajax({
+            url: "/Private/ShowAddressForm/",
+            type: "post",
+
+            success: function (resp) {
+                if (resp != null && resp != "") {
+                    var divId = document.getElementById("AddressDiv");
+                    divId.innerHTML = "";
+                    divId.innerHTML = resp;
+                    popCtrl.Show();
+                    MVCxClientUtils.FinalizeCallback();
+                }
+            }
+        });
+    }
+}
+function ValidatePhone(str) {
+    var a = /^(1\s|1|)?((\(\d{3}\))|\d{3})(\-|\s)?(\d{3})(\-|\s)?(\d{4})$/.test(str);
+    return a;
+}
+
+
+
+function AcceptOrderPrivate(s, e) {
+    var AcceptBtnctrl = ASPxClientControl.GetControlCollection().GetByName(s.name);
+    var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
+    loadPopup.Show();
+    $.ajax({
+        url: "/Private/GetBasketStatus/",
+        type: "POST",
+        success: function (response) {
+            if (response == "") {
+                AcceptBtnctrl.SetEnabled(false);
+                $.ajax({
+                    url: "/Private/AcceptOrderPrivate/",
+                    type: "POST",
+                    success: function (response) {
+                        if (response.type == "") {
+                            if (response.results != null) {
+                                WorldPay(response.results[0].OrderNo, 'worldpay');
+                                // window.location = "/Private/Payments?orderno=" + response.results[0].OrderNo;
+                            }
+                        }
+                        else if (response.type == "CarrierPrompt") {
+                            alert("Please select a carrier style");
+                            loadPopup.Hide();
+                            AcceptBtnctrl.SetEnabled(true);
+                        }
+                    }
+                });
+            }
+            else if (response == "1") {
+                alert("There are no items in cart. Please continue shopping");
+                loadPopup.Hide();
+                AcceptBtnctrl.SetEnabled(true);
+            }
+            else if (response == "2") {
+                alert("Please fill address1 of billing address");
+                loadPopup.Hide();
+                AcceptBtnctrl.SetEnabled(true);
+            }
+            else if (response == "3") {
+                alert("Please fill town of billing address");
+                loadPopup.Hide();
+                AcceptBtnctrl.SetEnabled(true);
+            }
+            else if (response == "4") {
+                alert("Please fill postcode of billing address");
+                loadPopup.Hide();
+                AcceptBtnctrl.SetEnabled(true);
+            }
+            else if (response == "5") {
+                alert("Please fill email of billing address");
+                loadPopup.Hide();
+                AcceptBtnctrl.SetEnabled(true);
+            }
+            else if (response == "6") {
+                alert("Please fill phone of billing address");
+                loadPopup.Hide();
+                AcceptBtnctrl.SetEnabled(true);
+            }
+        }
+    });
+}
+
+function WorldPay(orderno, gateway) {
+    if (orderno > 0) {
+        $.ajax({
+            url: "/Private/GetPaymentUrl/",
+            type: "post",
+            data: { 'orderno': orderno, 'gateway': gateway },
+            success: function (resp) {
+                if (resp != "") {
+                    window.location = resp;
+                }
+            }
+
+        });
+    }
+}
+
+function setInvAddrasdelAddr(s, e) {
+    var ctrlName = ASPxClientControl.GetControlCollection().GetByName(s.name);
+    var value = ctrlName != null ? ctrlName.GetValue() != null ? ctrlName.GetValue() : false : false;
+    $.ajax({
+        url: "/Private/SetDeliveryAddress/",
+        type: "post",
+        data: { 'value': value },
+        success: function (resp) {
+            if (resp != null && resp != "") {
+                var divId = document.getElementById("BILLADDPRIVATE");
+                divId.innerHTML = "";
+                divId.innerHTML = resp;
+                MVCxClientUtils.FinalizeCallback();
+            }
+        }
+
+    });
+}
+function SaveBillingAddress(s, e) {
+
+    var tbxAddr1Ctrl = ASPxClientControl.GetControlCollection().GetByName("tbxAddr1");
+    var tbxAddr2Ctrl = ASPxClientControl.GetControlCollection().GetByName("tbxAddr2");
+    var tbxAddr3Ctrl = ASPxClientControl.GetControlCollection().GetByName("tbxAddr3");
+    var tbxTownCtrl = ASPxClientControl.GetControlCollection().GetByName("tbxTown");
+    var tbxPhoneCtrl = ASPxClientControl.GetControlCollection().GetByName("tbxPhone");
+    var tbxEmailCtrl = ASPxClientControl.GetControlCollection().GetByName("tbxEmail");
+    var tbxCountryCtrl = ASPxClientControl.GetControlCollection().GetByName("tbxCountry");
+    var tbxCityCtrl = ASPxClientControl.GetControlCollection().GetByName("tbxCity");
+    var tbxPostcodeCtrl = ASPxClientControl.GetControlCollection().GetByName("tbxPostcode");
+    var tbxDELAddr1Ctrl = ASPxClientControl.GetControlCollection().GetByName("DELtbxAddr1");
+    var tbxDELAddr2Ctrl = ASPxClientControl.GetControlCollection().GetByName("DELtbxAddr2");
+    var tbxDELAddr3Ctrl = ASPxClientControl.GetControlCollection().GetByName("DELtbxAddr3");
+    var tbxDELTownCtrl = ASPxClientControl.GetControlCollection().GetByName("DELtbxTown");
+    var tbxDELPhoneCtrl = ASPxClientControl.GetControlCollection().GetByName("DELtbxPhone");
+    var tbxDELEmailCtrl = ASPxClientControl.GetControlCollection().GetByName("DELtbxEmail");
+    var tbxDELCountryCtrl = ASPxClientControl.GetControlCollection().GetByName("DELtbxCountry");
+    var tbxDELPostcodeCtrl = ASPxClientControl.GetControlCollection().GetByName("DELtbxPostcode");
+    var tbxDELCityCtrl = ASPxClientControl.GetControlCollection().GetByName("DELtbxCity");
+    var tbxAddr1 = tbxAddr1Ctrl != null ? tbxAddr1Ctrl.GetValue() != null ? tbxAddr1Ctrl.GetValue() : "" : "";
+    var tbxAddr2 = tbxAddr2Ctrl != null ? tbxAddr2Ctrl.GetValue() != null ? tbxAddr2Ctrl.GetValue() : "" : "";
+    var tbxAddr3 = tbxAddr3Ctrl != null ? tbxAddr3Ctrl.GetValue() != null ? tbxAddr3Ctrl.GetValue() : "" : "";
+    var tbxTown = tbxTownCtrl != null ? tbxTownCtrl.GetValue() != null ? tbxTownCtrl.GetValue() : "" : "";
+    var tbxPhone = tbxPhoneCtrl != null ? tbxPhoneCtrl.GetValue() != null ? tbxPhoneCtrl.GetValue() : "" : "";
+    var tbxEmail = tbxEmailCtrl != null ? tbxEmailCtrl.GetValue() != null ? tbxEmailCtrl.GetValue() : "" : "";
+    var tbxCountry = tbxCountryCtrl != null ? tbxCountryCtrl.GetValue() != null ? tbxCountryCtrl.GetValue() : "" : "";
+    var tbxPostcode = tbxPostcodeCtrl != null ? tbxPostcodeCtrl.GetValue() != null ? tbxPostcodeCtrl.GetValue() : "" : "";
+    var tbxCity = tbxCityCtrl != null ? tbxCityCtrl.GetValue() != null ? tbxCityCtrl.GetValue() : "" : "";
+    var tbxDELAddr1 = tbxDELAddr1Ctrl != null ? tbxDELAddr1Ctrl.GetValue() != null ? tbxDELAddr1Ctrl.GetValue() : "" : "";
+    var tbxDELAddr2 = tbxDELAddr2Ctrl != null ? tbxDELAddr2Ctrl.GetValue() != null ? tbxDELAddr2Ctrl.GetValue() : "" : "";
+    var tbxDELAddr3 = tbxDELAddr3Ctrl != null ? tbxDELAddr3Ctrl.GetValue() != null ? tbxDELAddr3Ctrl.GetValue() : "" : "";
+    var tbxDELTown = tbxDELTownCtrl != null ? tbxDELTownCtrl.GetValue() != null ? tbxDELTownCtrl.GetValue() : "" : "";
+    var tbxDELPhone = tbxDELPhoneCtrl != null ? tbxDELPhoneCtrl.GetValue() != null ? tbxDELPhoneCtrl.GetValue() : "" : "";
+    var tbxDELEmail = tbxDELEmailCtrl != null ? tbxDELEmailCtrl.GetValue() != null ? tbxDELEmailCtrl.GetValue() : "" : "";
+    var tbxDELCountry = tbxDELCountryCtrl != null ? tbxDELCountryCtrl.GetValue() != null ? tbxDELCountryCtrl.GetValue() : "" : "";
+    var tbxDELPostcode = tbxDELPostcodeCtrl != null ? tbxDELPostcodeCtrl.GetValue() != null ? tbxDELPostcodeCtrl.GetValue() : "" : "";
+    var tbxDELCity = tbxDELCityCtrl != null ? tbxDELCityCtrl.GetValue() != null ? tbxDELCityCtrl.GetValue() : "" : "";
+
+    if (tbxAddr1.trim() != "" && tbxTown.trim() != "" && tbxPhone != "" && tbxEmail.trim() != "" && tbxPostcode.trim() != "" && tbxDELAddr1.trim() != "" && tbxDELTown.trim() != "" && tbxDELPhone != "" && tbxDELEmail.trim() != "" && tbxDELPostcode.trim() != "") {
+        if (validateEmail(tbxEmail)) {
+            if (ValidatePhone(tbxPhone)) {
+
+                $.ajax({
+                    url: "/Private/BillingPrivateSave/",
+                    type: "post",
+                    data: { 'tbxAddr1': tbxAddr1.trim(), 'tbxTown': tbxTown.trim(), 'tbxPhone': tbxPhone, 'tbxEmail': tbxEmail.trim(), 'tbxPostcode': tbxPostcode.trim(), 'tbxCity': tbxCity.trim(), 'tbxAddr2': tbxAddr2.trim(), 'tbxAddr3': tbxAddr3.trim(), 'tbxCountry': tbxCountry.trim(), 'tbxDELAddr1': tbxDELAddr1.trim(), 'tbxDELTown': tbxDELTown.trim(), 'tbxDELPhone': tbxDELPhone, 'tbxDELEmail': tbxDELEmail.trim(), 'tbxDELPostcode': tbxDELPostcode.trim(), 'tbxDELCity': tbxDELCity.trim(), 'tbxDELAddr2': tbxDELAddr2.trim(), 'tbxDELAddr3': tbxDELAddr3.trim(), 'tbxDELCountry': tbxDELCountry.trim() },
+                    success: function (resp) {
+                        if (resp != null && resp != "") {
+                            window.location.reload();
+                        }
+                    }
+                });
+            }
+            else {
+                alert("Please enter a valid phonenumber");
+                tbxPhoneCtrl.SetValue("");
+                tbxPhoneCtrl.Focus();
+            }
+        }
+        else {
+            alert("Please enter a valid email");
+            tbxEmailCtrl.SetValue("");
+            tbxEmailCtrl.Focus();
+        }
+    }
+}
+
+function CloseDelAddPop() {
+    var popCtrl = ASPxClientControl.GetControlCollection().GetByName("AddressEditForm");
+    popCtrl.Hide();
+}
+function ChangeBillingAddress(s, e) {
+    var chekCtrl = ASPxClientControl.GetControlCollection().GetByName(s.name);
+    var ChkVal = chekCtrl != null ? chekCtrl.GetValue() != null ? chekCtrl.GetValue() : false : false;
+    var value = s.name.toLowerCase().indexOf("cancel") > -1 ? 1 : 0;
+    var tbxAddr1Ctrl = ASPxClientControl.GetControlCollection().GetByName("tbxAddr1");
+    var tbxAddr2Ctrl = ASPxClientControl.GetControlCollection().GetByName("tbxAddr2");
+    var tbxAddr3Ctrl = ASPxClientControl.GetControlCollection().GetByName("tbxAddr3");
+    var tbxTownCtrl = ASPxClientControl.GetControlCollection().GetByName("tbxTown");
+    var tbxPhoneCtrl = ASPxClientControl.GetControlCollection().GetByName("tbxPhone");
+    var tbxEmailCtrl = ASPxClientControl.GetControlCollection().GetByName("tbxEmail");
+    var tbxCountryCtrl = ASPxClientControl.GetControlCollection().GetByName("tbxCountry");
+    var tbxCityCtrl = ASPxClientControl.GetControlCollection().GetByName("tbxCity");
+    var tbxPostcodeCtrl = ASPxClientControl.GetControlCollection().GetByName("tbxPostcode");
+    var tbxDELAddr1Ctrl = ASPxClientControl.GetControlCollection().GetByName("DELtbxAddr1");
+    var tbxDELAddr2Ctrl = ASPxClientControl.GetControlCollection().GetByName("DELtbxAddr2");
+    var tbxDELAddr3Ctrl = ASPxClientControl.GetControlCollection().GetByName("DELtbxAddr3");
+    var tbxDELTownCtrl = ASPxClientControl.GetControlCollection().GetByName("DELtbxTown");
+    var tbxDELPhoneCtrl = ASPxClientControl.GetControlCollection().GetByName("DELtbxPhone");
+    var tbxDELEmailCtrl = ASPxClientControl.GetControlCollection().GetByName("DELtbxEmail");
+    var tbxDELCountryCtrl = ASPxClientControl.GetControlCollection().GetByName("DELtbxCountry");
+    var tbxDELPostcodeCtrl = ASPxClientControl.GetControlCollection().GetByName("DELtbxPostcode");
+    var tbxDELCityCtrl = ASPxClientControl.GetControlCollection().GetByName("DELtbxCity");
+    var tbxAddr1 = tbxAddr1Ctrl != null ? tbxAddr1Ctrl.GetValue() != null ? tbxAddr1Ctrl.GetValue() : "" : "";
+    var tbxAddr2 = tbxAddr2Ctrl != null ? tbxAddr2Ctrl.GetValue() != null ? tbxAddr2Ctrl.GetValue() : "" : "";
+    var tbxAddr3 = tbxAddr3Ctrl != null ? tbxAddr3Ctrl.GetValue() != null ? tbxAddr3Ctrl.GetValue() : "" : "";
+    var tbxTown = tbxTownCtrl != null ? tbxTownCtrl.GetValue() != null ? tbxTownCtrl.GetValue() : "" : "";
+    var tbxPhone = tbxPhoneCtrl != null ? tbxPhoneCtrl.GetValue() != null ? tbxPhoneCtrl.GetValue() : "" : "";
+    var tbxEmail = tbxEmailCtrl != null ? tbxEmailCtrl.GetValue() != null ? tbxEmailCtrl.GetValue() : "" : "";
+    var tbxCountry = tbxCountryCtrl != null ? tbxCountryCtrl.GetValue() != null ? tbxCountryCtrl.GetValue() : "" : "";
+    var tbxPostcode = tbxPostcodeCtrl != null ? tbxPostcodeCtrl.GetValue() != null ? tbxPostcodeCtrl.GetValue() : "" : "";
+    var tbxCity = tbxCityCtrl != null ? tbxCityCtrl.GetValue() != null ? tbxCityCtrl.GetValue() : "" : "";
+    var tbxDELAddr1 = tbxDELAddr1Ctrl != null ? tbxDELAddr1Ctrl.GetValue() != null ? tbxDELAddr1Ctrl.GetValue() : "" : "";
+    var tbxDELAddr2 = tbxDELAddr2Ctrl != null ? tbxDELAddr2Ctrl.GetValue() != null ? tbxDELAddr2Ctrl.GetValue() : "" : "";
+    var tbxDELAddr3 = tbxDELAddr3Ctrl != null ? tbxDELAddr3Ctrl.GetValue() != null ? tbxDELAddr3Ctrl.GetValue() : "" : "";
+    var tbxDELTown = tbxDELTownCtrl != null ? tbxDELTownCtrl.GetValue() != null ? tbxDELTownCtrl.GetValue() : "" : "";
+    var tbxDELPhone = tbxDELPhoneCtrl != null ? tbxDELPhoneCtrl.GetValue() != null ? tbxDELPhoneCtrl.GetValue() : "" : "";
+    var tbxDELEmail = tbxDELEmailCtrl != null ? tbxDELEmailCtrl.GetValue() != null ? tbxDELEmailCtrl.GetValue() : "" : "";
+    var tbxDELCountry = tbxDELCountryCtrl != null ? tbxDELCountryCtrl.GetValue() != null ? tbxDELCountryCtrl.GetValue() : "" : "";
+    var tbxDELPostcode = tbxDELPostcodeCtrl != null ? tbxDELPostcodeCtrl.GetValue() != null ? tbxDELPostcodeCtrl.GetValue() : "" : "";
+    var tbxDELCity = tbxDELCityCtrl != null ? tbxDELCityCtrl.GetValue() != null ? tbxDELCityCtrl.GetValue() : "" : "";
+    if (ChkVal) {
+        tbxAddr1Ctrl.SetValue(tbxDELAddr1);
+        tbxAddr2Ctrl.SetValue(tbxDELAddr2);
+        tbxAddr3Ctrl.SetValue(tbxDELAddr3);
+        tbxTownCtrl.SetValue(tbxDELTown);
+        tbxPhoneCtrl.SetValue(tbxDELPhone);
+        tbxEmailCtrl.SetValue(tbxDELEmail);
+        tbxCountryCtrl.SetValue(tbxDELCountry);
+        tbxPostcodeCtrl.SetValue(tbxDELPostcode);
+        tbxCityCtrl.SetValue(tbxDELCity);
+    }
+}
+function PrintPrivate(orderno) {
+    var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
+    loadPopup.Show();
+    if (orderno != null && orderno != "") {
+        $.ajax({
+            url: "/Private/PrintPrivateOrders/",
+            type: "post",
+            data: { 'orderNO': orderno },
+            success: function (response) {
+                var orderConfirmationPopup = ASPxClientControl.GetControlCollection().GetByName("PrintOrderConfirmation");
+                if (response != null && response!="") {
+                    loadPopup.Hide();
+                    var ordConfim = document.getElementById("ordeConfirm1");
+                    ordConfim.innerHTML = "";
+                    ordConfim.innerHTML = response;
+                    orderConfirmationPopup.Show();
+                }
+                else
+                {
+                    loadPopup.Hide();
+                }
+            }
+        });
+       
+    }
+}
+
+function GetCardAlternate(StyleID, BannerStyle,desc) {
+    //GetCardAlternateStyle(string StyleID, string BannerStyle, string caption = "")
+    if (StyleID != "" && StyleID != null && BannerStyle!=null && BannerStyle!="") {
+        var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
+        loadPopup.Show();
+        var popup = ASPxClientControl.GetControlCollection().GetByName("DimAllocPop");
+        var url1 = "/Home/GetCardAlternateStyle/";
+        $.ajax({
+            type: "POST",
+            url: url1,
+            data: { 'StyleID': StyleID, 'BannerStyle': BannerStyle },
+            success: function (response) {
+                if (response != "" && !response.indexOf("Login") > -1) {
+                    var dim = document.getElementById("DimId");
+                    dim.innerHTML = "";
+                    dim.innerHTML = response;
+                    loadPopup.Hide();
+                    popup.Initialize();
+                    popup.SetHeaderText("Alternative style for " + BannerStyle +"-"+desc);
+                    popup.Show();
+                    MVCxClientUtils.FinalizeCallback();
+                }
+                else {
+                    window.location = "/User/Login/";
+                }
+            },
+            error: function () {
+
+            }
+        });
+    }
+    else {
+        alert("try again!");
+    }
 }

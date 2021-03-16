@@ -94,7 +94,7 @@
                                 count2 = count2 + home._styleColorSizeObsolete.GetAll(y => y.StyleID == StyleID && y.ColourID == colors && y.Obsolete_Class == 0).Select(y => y.SizeID).Count();
                             }
                         }
-                        if (count1 < 1 && count2 < 0)
+                        if (count1 < 1 && count2 < 1)
                         {
                             filterExpressionSTR = filterExpressionSTR + "'" + StyleID + "',";
 
@@ -415,20 +415,20 @@
                         if (style1.Contains(','))
                         {
                             Html.DevExpress().ComboBox(
-                                c =>
-                                {
-                                    var styleArr = style1.Split(',');
-                                    c.Properties.Caption = "Style";
-                                    c.Name = "styleDrp_" + style + "_" + orgStyle;
-                                    foreach (string data in (string[])styleArr)
+                                    c =>
                                     {
-                                        c.Properties.Items.Add(data);
+                                        var styleArr = style1.Split(',');
+                                        c.Properties.Caption = "Style";
+                                        c.Name = "styleDrp_" + style + "_" + orgStyle;
+                                        foreach (string data in (string[])styleArr)
+                                        {
+                                            c.Properties.Items.Add(data);
 
+                                        }
+                                        c.SelectedIndex = 0;
+                                        c.Properties.ClientSideEvents.SelectedIndexChanged = "GetDrpResultModel";
                                     }
-                                    c.SelectedIndex = 0;
-                                    c.Properties.ClientSideEvents.SelectedIndexChanged = "GetDrpResultModel";
-                                }
-                                                ).Render();
+                                                    ).Render();
                         }
                         else
                         {
@@ -479,6 +479,18 @@
                         }
 
 
+                    }
+                }
+                if (Convert.ToBoolean(Session["IsEmergency"]) && Convert.ToBoolean(Session["REQSTKLEVEL"]))
+                {
+
+                    var alTStyls = hc.GetAlternateStyle(style);
+                    var appPath = System.Web.HttpContext.Current.Request.MapPath(@"~\");
+                    if (alTStyls.StyleID != null && alTStyls.StyleID != "")
+                    {
+                        string desc1 = home._tblFskStyle.GetAll(s => s.StyleID == style.ToString()).FirstOrDefault().Description != null ? home._tblFskStyle.GetAll(s => s.StyleID == style.ToString()).FirstOrDefault().Description.ToString() : "";
+
+                        content1 = content1 + string.Format("<div class='col-md-6' style='margin-top: 14px;padding:0px'><center><img src='{2}'  class='AlternateImage'  title='{0}'   onclick=\"GetCardAlternate('{0}','{1}','{3}');\"/><span>Alternative style</span></center></div>", alTStyls.StyleID, alTStyls.BannerStyleid, alTStyls.styleimage,desc1);
                     }
                 }
                 if (template.Count == 0)
@@ -1670,12 +1682,16 @@
                                                     {
                                                         if (prevHistory.Size.Trim() == dr.ItemArray[3].ToString().Trim())
                                                         {
-                                                             
+
                                                             if (Convert.ToBoolean(Session["IsEmergency"]) && Convert.ToBoolean(Session["REQSTKLEVEL"]))
                                                             {
                                                                 content = content + "<div class='col-md-2 frestkpad'><center><span>Freestock:</span>   <b><span id='FreeStcoker_" + style + "_" + dr.ItemArray[3].ToString() + "' title='Free stock'>" + dp.GetFreeStock(style, EmergencyStockColor, dr.ItemArray[3].ToString(), Session["WareHouseID"].ToString(), salesOrderLinesCart, Convert.ToBoolean(Session["ISEDITING"])) + "</span> </b></center><center>" + string.Format("<label class='swatchLabel'><input type='radio' checked id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString(), orgStyle) + "</center></div>";
-                                                                 
+
                                                             }
+                                                            //else if(Convert.ToBoolean(Session["PRIVATEORDER"]))
+                                                            //{
+                                                            //    content = content + "<div class='col-md-2 frestkpad'><center><span>Price:</span>   <b><span id='PrivatePrice_" + style + "_" + dr.ItemArray[3].ToString() + "' title='Price'>" + dp.GetPrice(style, dr.ItemArray[3].ToString(),businessId,"") + "</span> </b></center><center>" + string.Format("<label class='swatchLabel'><input type='radio' checked id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString(), orgStyle) + "</center></div>";
+                                                            //}
                                                             else
                                                             {
                                                                 content = content + string.Format("<label class='swatchLabel'><input type='radio' checked id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString(), orgStyle);
@@ -1691,6 +1707,10 @@
                                                                     content = content + "<div class='col-md-2 frestkpad'><center><span>Freestock:</span>   <b><span id='FreeStcoker_" + style + "_" + dr.ItemArray[3].ToString() + "' title='Free stock'>" + dp.GetFreeStock(style, EmergencyStockColor, dr.ItemArray[3].ToString(), Session["WareHouseID"].ToString(), salesOrderLinesCart, Convert.ToBoolean(Session["ISEDITING"])) + "</span> </b></center><center>" + string.Format("<label class='swatchLabel'><input  type='radio' id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString(), orgStyle) + "</center></div>";
 
                                                                 }
+                                                                //else if (Convert.ToBoolean(Session["PRIVATEORDER"]))
+                                                                //{
+                                                                //    content = content + "<div class='col-md-2 frestkpad'><center><span>Price:</span>   <b><span id='PrivatePrice_" + style + "_" + dr.ItemArray[3].ToString() + "' title='Price'>" + dp.GetPrice(style, dr.ItemArray[3].ToString(), businessId, "") + "</span> </b></center><center>" + string.Format("<label class='swatchLabel'><input type='radio' checked id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString(), orgStyle) + "</center></div>";
+                                                                //}
                                                                 else
                                                                 {
                                                                     content = content + string.Format("<label class='swatchLabel'><input  type='radio' id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString(), orgStyle);
@@ -1704,6 +1724,10 @@
                                                                     content = content + "<div class='col-md-2 frestkpad'><center><span>Freestock:</span>   <b><span id='FreeStcoker_" + style + "_" + dr.ItemArray[3].ToString() + "' title='Free stock'>" + dp.GetFreeStock(style, EmergencyStockColor, dr.ItemArray[3].ToString(), Session["WareHouseID"].ToString(), salesOrderLinesCart, Convert.ToBoolean(Session["ISEDITING"])) + "</span> </b></center><center>" + string.Format("<label class='swatchLabel'><input checked type='radio' id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString(), orgStyle) + "</center></div>";
 
                                                                 }
+                                                                //else if (Convert.ToBoolean(Session["PRIVATEORDER"]))
+                                                                //{
+                                                                //    content = content + "<div class='col-md-2 frestkpad'><center><span>Price:</span>   <b><span id='PrivatePrice_" + style + "_" + dr.ItemArray[3].ToString() + "' title='Price'>" + dp.GetPrice(style, dr.ItemArray[3].ToString(), businessId, "") + "</span> </b></center><center>" + string.Format("<label class='swatchLabel'><input type='radio' checked id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString(), orgStyle) + "</center></div>";
+                                                                //}
                                                                 else
                                                                 {
                                                                     content = content + string.Format("<label class='swatchLabel'><input checked type='radio' id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString(), orgStyle);
@@ -1725,6 +1749,10 @@
                                                             content = content + "<div class='col-md-2 frestkpad'><center><span>Freestock:</span>   <b><span id='FreeStcoker_" + style + "_" + dr.ItemArray[2].ToString() + "' title='Free stock'>" + dp.GetFreeStock(style, EmergencyStockColor, dr.ItemArray[2].ToString(), Session["WareHouseID"].ToString(), salesOrderLinesCart, Convert.ToBoolean(Session["ISEDITING"])) + "</span></b></center><center>" + string.Format("<label class='swatchLabel'><input type='radio' checked id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[2].ToString(), orgStyle) + "</center></div>";
 
                                                         }
+                                                        //else if (Convert.ToBoolean(Session["PRIVATEORDER"]))
+                                                        //{
+                                                        //    content = content + "<div class='col-md-2 frestkpad'><center><span>Price:</span>   <b><span id='PrivatePrice_" + style + "_" + dr.ItemArray[3].ToString() + "' title='Price'>" + dp.GetPrice(style, dr.ItemArray[2].ToString(), businessId, "") + "</span> </b></center><center>" + string.Format("<label class='swatchLabel'><input type='radio' checked id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[2].ToString(), orgStyle) + "</center></div>";
+                                                        //}
                                                         else
                                                         {
                                                             content = content + string.Format("<label class='swatchLabel'><input type='radio' checked id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[2].ToString(), orgStyle);
@@ -1740,6 +1768,10 @@
                                                                 content = content + "<div class='col-md-2 frestkpad'><center><span>Freestock:</span>   <b><span id='FreeStcoker_" + style + "_" + dr.ItemArray[2].ToString() + "' title='Free stock'>" + dp.GetFreeStock(style, EmergencyStockColor, dr.ItemArray[2].ToString(), Session["WareHouseID"].ToString(), salesOrderLinesCart, Convert.ToBoolean(Session["ISEDITING"])) + "</span></b></center><center>" + string.Format("<label class='swatchLabel'><input  type='radio' id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center>{1}</center></span></label>", style, dr.ItemArray[2].ToString(), orgStyle) + "</center></div>";
 
                                                             }
+                                                            //else if (Convert.ToBoolean(Session["PRIVATEORDER"]))
+                                                            //{
+                                                            //    content = content + "<div class='col-md-2 frestkpad'><center><span>Price:</span>   <b><span id='PrivatePrice_" + style + "_" + dr.ItemArray[3].ToString() + "' title='Price'>" + dp.GetPrice(style, dr.ItemArray[2].ToString(), businessId, "") + "</span> </b></center><center>" + string.Format("<label class='swatchLabel'><input type='radio' checked id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[2].ToString(), orgStyle) + "</center></div>";
+                                                            //}
                                                             else
                                                             {
                                                                 content = content + string.Format("<label class='swatchLabel'><input  type='radio' id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center>{1}</center></span></label>", style, dr.ItemArray[2].ToString(), orgStyle);
@@ -1753,6 +1785,10 @@
                                                                 content = content + "<div class='col-md-2 frestkpad'><center><span>Freestock:</span>   <b><span id='FreeStcoker_" + style + "_" + dr.ItemArray[2].ToString() + "' title='Free stock'>" + dp.GetFreeStock(style, EmergencyStockColor, dr.ItemArray[2].ToString(), Session["WareHouseID"].ToString(), salesOrderLinesCart, Convert.ToBoolean(Session["ISEDITING"])) + "</span></b></center><center>" + string.Format("<label class='swatchLabel'><input checked type='radio' id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[2].ToString(), orgStyle) + "</center></div>";
 
                                                             }
+                                                            //else if (Convert.ToBoolean(Session["PRIVATEORDER"]))
+                                                            //{
+                                                            //    content = content + "<div class='col-md-2 frestkpad'><center><span>Price:</span>   <b><span id='PrivatePrice_" + style + "_" + dr.ItemArray[3].ToString() + "' title='Price'>" + dp.GetPrice(style, dr.ItemArray[2].ToString(), businessId, "") + "</span> </b></center><center>" + string.Format("<label class='swatchLabel'><input type='radio' checked id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[2].ToString(), orgStyle) + "</center></div>";
+                                                            //}
                                                             else
                                                             {
                                                                 content = content + string.Format("<label class='swatchLabel'><input checked type='radio' id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[2].ToString(), orgStyle);
@@ -1859,6 +1895,10 @@
                                                                 content = content + "<div class='col-md-2 frestkpad'><center><span>Freestock:</span>   <b><span  id='FreeStcoker_" + style + "_" + dr.ItemArray[3].ToString() + "' title='Free stock'>" + dp.GetFreeStock(style, EmergencyStockColor, dr.ItemArray[3].ToString(), Session["WareHouseID"].ToString(), salesOrderLinesCart, Convert.ToBoolean(Session["ISEDITING"])) + "</span></b></center><center>" + string.Format("<label class='swatchLabel'><input type='radio' checked id='radio' name=\"swatch_Size_" + style + "\" value='blue'  checked/><span class='spanner1'  onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString()) + "</center></div>";
 
                                                             }
+                                                            //else if (Convert.ToBoolean(Session["PRIVATEORDER"]))
+                                                            //{
+                                                            //    content = content + "<div class='col-md-2 frestkpad'><center><span>Price:</span>   <b><span id='PrivatePrice_" + style + "_" + dr.ItemArray[3].ToString() + "' title='Price'>" + dp.GetPrice(style, dr.ItemArray[3].ToString(), businessId, "") + "</span> </b></center><center>" + string.Format("<label class='swatchLabel'><input type='radio' checked id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString(), orgStyle) + "</center></div>";
+                                                            //}
                                                             else
                                                             {
                                                                 content = content + string.Format("<label class='swatchLabel'><input type='radio' checked id='radio' name=\"swatch_Size_" + style + "\" value='blue'  checked/><span class='spanner1'  onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString());
@@ -1874,6 +1914,10 @@
                                                                     content = content + "<div class='col-md-2 frestkpad'><center><span>Freestock:</span>   <b><span id='FreeStcoker_" + style + "_" + dr.ItemArray[3].ToString() + "' title='Free stock'>" + dp.GetFreeStock(style, EmergencyStockColor, dr.ItemArray[3].ToString(), Session["WareHouseID"].ToString(), salesOrderLinesCart, Convert.ToBoolean(Session["ISEDITING"])) + "</span></b></center><center>" + string.Format("<label class='swatchLabel'><input type='radio' id='radio' name=\"swatch_Size_" + style + "\" value='blue'/><span class='spanner1'  onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString()) + "</center></div>";
 
                                                                 }
+                                                                //else if (Convert.ToBoolean(Session["PRIVATEORDER"]))
+                                                                //{
+                                                                //    content = content + "<div class='col-md-2 frestkpad'><center><span>Price:</span>   <b><span id='PrivatePrice_" + style + "_" + dr.ItemArray[3].ToString() + "' title='Price'>" + dp.GetPrice(style, dr.ItemArray[3].ToString(), businessId, "") + "</span> </b></center><center>" + string.Format("<label class='swatchLabel'><input type='radio' checked id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString(), orgStyle) + "</center></div>";
+                                                                //}
                                                                 else
                                                                 {
                                                                     content = content + string.Format("<label class='swatchLabel'><input type='radio' id='radio' name=\"swatch_Size_" + style + "\" value='blue'/><span class='spanner1'  onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString());
@@ -1887,6 +1931,10 @@
                                                                     content = content + "<div class='col-md-2 frestkpad'><center><span>Freestock:</span>   <b><span id='FreeStcoker_" + style + "_" + dr.ItemArray[3].ToString() + "' title='Free stock'>" + dp.GetFreeStock(style, EmergencyStockColor, dr.ItemArray[3].ToString(), Session["WareHouseID"].ToString(), salesOrderLinesCart, Convert.ToBoolean(Session["ISEDITING"])) + "</span></b></center><center>" + string.Format("<label class='swatchLabel'><input type='radio' id='radio' name=\"swatch_Size_" + style + "\" value='blue'  checked/><span class='spanner1'  onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString()) + "</center></div>";
 
                                                                 }
+                                                                //else if (Convert.ToBoolean(Session["PRIVATEORDER"]))
+                                                                //{
+                                                                //    content = content + "<div class='col-md-2 frestkpad'><center><span>Price:</span>   <b><span id='PrivatePrice_" + style + "_" + dr.ItemArray[3].ToString() + "' title='Price'>" + dp.GetPrice(style, dr.ItemArray[3].ToString(), businessId, "") + "</span> </b></center><center>" + string.Format("<label class='swatchLabel'><input type='radio' checked id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString(), orgStyle) + "</center></div>";
+                                                                //}
                                                                 else
                                                                 {
                                                                     content = content + string.Format("<label class='swatchLabel'><input type='radio' id='radio' name=\"swatch_Size_" + style + "\" value='blue'  checked/><span class='spanner1'  onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString());
@@ -1910,6 +1958,10 @@
                                                             content = content + "<div class='col-md-2 frestkpad'><center><span>Freestock:</span>   <b><span id='FreeStcoker_" + style + "_" + dr.ItemArray[2].ToString() + "' title='Free stock'>" + dp.GetFreeStock(style, EmergencyStockColor, dr.ItemArray[2].ToString(), Session["WareHouseID"].ToString(), salesOrderLinesCart, Convert.ToBoolean(Session["ISEDITING"])) + "</span></b></center><center>" + string.Format("<label class='swatchLabel'><input type='radio' checked id='radio' name=\"swatch_Size_" + style + "\" value='blue'  checked/><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[2].ToString()) + "</center></div>";
 
                                                         }
+                                                        //else if (Convert.ToBoolean(Session["PRIVATEORDER"]))
+                                                        //{
+                                                        //    content = content + "<div class='col-md-2 frestkpad'><center><span>Price:</span>   <b><span id='PrivatePrice_" + style + "_" + dr.ItemArray[3].ToString() + "' title='Price'>" + dp.GetPrice(style, dr.ItemArray[2].ToString(), businessId, "") + "</span> </b></center><center>" + string.Format("<label class='swatchLabel'><input type='radio' checked id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[2].ToString(), orgStyle) + "</center></div>";
+                                                        //}
                                                         else
                                                         {
                                                             content = content + string.Format("<label class='swatchLabel'><input type='radio' checked id='radio' name=\"swatch_Size_" + style + "\" value='blue'  checked/><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[2].ToString());
@@ -1925,6 +1977,10 @@
                                                                 content = content + "<div class='col-md-2 frestkpad'><center><span>Freestock:</span>   <b><span id='FreeStcoker_" + style + "_" + dr.ItemArray[2].ToString() + "' title='Free stock'>" + dp.GetFreeStock(style, EmergencyStockColor, dr.ItemArray[2].ToString(), Session["WareHouseID"].ToString(), salesOrderLinesCart, Convert.ToBoolean(Session["ISEDITING"])) + "</span></b></center><center>" + string.Format("<label class='swatchLabel'><input type='radio'   id='radio' name=\"swatch_Size_" + style + "\" value='blue'  /><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[2].ToString()) + "</center></div>";
 
                                                             }
+                                                            //else if (Convert.ToBoolean(Session["PRIVATEORDER"]))
+                                                            //{
+                                                            //    content = content + "<div class='col-md-2 frestkpad'><center><span>Price:</span>   <b><span id='PrivatePrice_" + style + "_" + dr.ItemArray[3].ToString() + "' title='Price'>" + dp.GetPrice(style, dr.ItemArray[2].ToString(), businessId, "") + "</span> </b></center><center>" + string.Format("<label class='swatchLabel'><input type='radio' checked id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[2].ToString(), orgStyle) + "</center></div>";
+                                                            //}
                                                             else
                                                             {
                                                                 content = content + string.Format("<label class='swatchLabel'><input type='radio'   id='radio' name=\"swatch_Size_" + style + "\" value='blue'  /><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[2].ToString());
@@ -1939,6 +1995,10 @@
 
 
                                                             }
+                                                            //else if (Convert.ToBoolean(Session["PRIVATEORDER"]))
+                                                            //{
+                                                            //    content = content + "<div class='col-md-2 frestkpad'><center><span>Price:</span>   <b><span id='PrivatePrice_" + style + "_" + dr.ItemArray[3].ToString() + "' title='Price'>" + dp.GetPrice(style, dr.ItemArray[2].ToString(), businessId, "") + "</span> </b></center><center>" + string.Format("<label class='swatchLabel'><input type='radio' checked id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[2].ToString(), orgStyle) + "</center></div>";
+                                                            //}
                                                             else
                                                             {
                                                                 content = content + string.Format("<label class='swatchLabel'><input type='radio'   id='radio' name=\"swatch_Size_" + style + "\" value='blue'  checked/><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[2].ToString());
@@ -2204,6 +2264,10 @@
                                                                 content = content + "<div class='col-md-2 frestkpad'><center><span>Freestock:</span>   <b><span id='FreeStcoker_" + style + "_" + dr.ItemArray[3].ToString() + "' title='Free stock'>" + dp.GetFreeStock(style, EmergencyStockColor, dr.ItemArray[3].ToString(), Session["WareHouseID"].ToString(), salesOrderLinesCart, Convert.ToBoolean(Session["ISEDITING"])) + "</span></b></center><center>" + string.Format("<label class='swatchLabel'><input type='radio'  checked id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1'  onclick=\"getSelectedSizeSwatch('{0}','{1}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString()) + "</center></div>";
 
                                                             }
+                                                            //else if (Convert.ToBoolean(Session["PRIVATEORDER"]))
+                                                            //{
+                                                            //    content = content + "<div class='col-md-2 frestkpad'><center><span>Price:</span>   <b><span id='PrivatePrice_" + style + "_" + dr.ItemArray[3].ToString() + "' title='Price'>" + dp.GetPrice(style, dr.ItemArray[2].ToString(), businessId, "") + "</span> </b></center><center>" + string.Format("<label class='swatchLabel'><input type='radio' checked id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString(), orgStyle) + "</center></div>";
+                                                            //}
                                                             else
                                                             {
                                                                 content = content + string.Format("<label class='swatchLabel'><input type='radio'  checked id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1'  onclick=\"getSelectedSizeSwatch('{0}','{1}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString());
@@ -2221,6 +2285,10 @@
                                                                     content = content + "<div class='col-md-2 frestkpad'><center><span>Freestock:</span>   <b><span id='FreeStcoker_" + style + "_" + dr.ItemArray[3].ToString() + "' title='Free stock'>" + dp.GetFreeStock(style, EmergencyStockColor, dr.ItemArray[3].ToString(), Session["WareHouseID"].ToString(), salesOrderLinesCart, Convert.ToBoolean(Session["ISEDITING"])) + "</span></b></center><center>" + string.Format("<label class='swatchLabel'><input type='radio'  id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1'  onclick=\"getSelectedSizeSwatch('{0}','{1}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString()) + "</center></div>";
 
                                                                 }
+                                                                //else if (Convert.ToBoolean(Session["PRIVATEORDER"]))
+                                                                //{
+                                                                //    content = content + "<div class='col-md-2 frestkpad'><center><span>Price:</span>   <b><span id='PrivatePrice_" + style + "_" + dr.ItemArray[3].ToString() + "' title='Price'>" + dp.GetPrice(style, dr.ItemArray[3].ToString(), businessId, "") + "</span> </b></center><center>" + string.Format("<label class='swatchLabel'><input type='radio' checked id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString(), orgStyle) + "</center></div>";
+                                                                //}
                                                                 else
                                                                 {
                                                                     content = content + string.Format("<label class='swatchLabel'><input type='radio'  id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1'  onclick=\"getSelectedSizeSwatch('{0}','{1}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString());
@@ -2236,6 +2304,10 @@
                                                                         content = content + "<div class='col-md-2 frestkpad'><center><span>Freestock:</span>   <b><span id='FreeStcoker_" + style + "_" + dr.ItemArray[3].ToString() + "' title='Free stock'>" + dp.GetFreeStock(style, EmergencyStockColor, dr.ItemArray[3].ToString(), Session["WareHouseID"].ToString(), salesOrderLinesCart, Convert.ToBoolean(Session["ISEDITING"])) + "</span></b></center><center>" + string.Format("<label class='swatchLabel'><input type='radio' id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1'  onclick=\"getSelectedSizeSwatch('{0}','{1}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString()) + "</center></div>";
 
                                                                     }
+                                                                    //else if (Convert.ToBoolean(Session["PRIVATEORDER"]))
+                                                                    //{
+                                                                    //    content = content + "<div class='col-md-2 frestkpad'><center><span>Price:</span>   <b><span id='PrivatePrice_" + style + "_" + dr.ItemArray[3].ToString() + "' title='Price'>" + dp.GetPrice(style, dr.ItemArray[3].ToString(), businessId, "") + "</span> </b></center><center>" + string.Format("<label class='swatchLabel'><input type='radio' checked id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString(), orgStyle) + "</center></div>";
+                                                                    //}
                                                                     else
                                                                     {
                                                                         content = content + string.Format("<label class='swatchLabel'><input type='radio' id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1'  onclick=\"getSelectedSizeSwatch('{0}','{1}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString());
@@ -2249,6 +2321,10 @@
                                                                         content = content + "<div class='col-md-2 frestkpad'><center><span>Freestock:</span>   <b><span id='FreeStcoker_" + style + "_" + dr.ItemArray[3].ToString() + "' title='Free stock'>" + dp.GetFreeStock(style, EmergencyStockColor, dr.ItemArray[3].ToString(), Session["WareHouseID"].ToString(), salesOrderLinesCart, Convert.ToBoolean(Session["ISEDITING"])) + "</span></b></center><center>" + string.Format("<label class='swatchLabel'><input type='radio' checked id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1'  onclick=\"getSelectedSizeSwatch('{0}','{1}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString()) + "</center></div>";
 
                                                                     }
+                                                                    //else if (Convert.ToBoolean(Session["PRIVATEORDER"]))
+                                                                    //{
+                                                                    //    content = content + "<div class='col-md-2 frestkpad'><center><span>Price:</span>   <b><span id='PrivatePrice_" + style + "_" + dr.ItemArray[3].ToString() + "' title='Price'>" + dp.GetPrice(style, dr.ItemArray[2].ToString(), businessId, "") + "</span> </b></center><center>" + string.Format("<label class='swatchLabel'><input type='radio' checked id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString(), orgStyle) + "</center></div>";
+                                                                    //}
                                                                     else
                                                                     {
                                                                         content = content + string.Format("<label class='swatchLabel'><input type='radio' checked id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1'  onclick=\"getSelectedSizeSwatch('{0}','{1}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString());
@@ -2271,6 +2347,10 @@
                                                         {
                                                             content = content + "<div class='col-md-2 frestkpad'><center><span>Freestock:</span>   <b><span id='FreeStcoker_" + style + "_" + dr.ItemArray[2].ToString() + "' title='Free stock'>" + dp.GetFreeStock(style, EmergencyStockColor, dr.ItemArray[2].ToString(), Session["WareHouseID"].ToString(), salesOrderLinesCart, Convert.ToBoolean(Session["ISEDITING"])) + "</span></b></center><center>" + string.Format("<label class='swatchLabel'><input type='radio' checked  id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1'   onclick=\"getSelectedSizeSwatch('{0}','{1}')\"><center >{1}</center></span></label>", style, dr.ItemArray[2].ToString()) + "</center></div>";
                                                         }
+                                                        //else if (Convert.ToBoolean(Session["PRIVATEORDER"]))
+                                                        //{
+                                                        //    content = content + "<div class='col-md-2 frestkpad'><center><span>Price:</span>   <b><span id='PrivatePrice_" + style + "_" + dr.ItemArray[3].ToString() + "' title='Price'>" + dp.GetPrice(style, dr.ItemArray[2].ToString(), businessId, "") + "</span> </b></center><center>" + string.Format("<label class='swatchLabel'><input type='radio' checked id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[2].ToString(), orgStyle) + "</center></div>";
+                                                        //}
                                                         else
                                                         {
                                                             content = content + string.Format("<label class='swatchLabel'><input type='radio' checked  id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1'   onclick=\"getSelectedSizeSwatch('{0}','{1}')\"><center >{1}</center></span></label>", style, dr.ItemArray[2].ToString());
@@ -2284,6 +2364,10 @@
                                                             content = content + "<div class='col-md-2 frestkpad'><center><span>Freestock:</span>   <b><span id='FreeStcoker_" + style + "_" + dr.ItemArray[2].ToString() + "' title='Free stock'>" + dp.GetFreeStock(style, EmergencyStockColor, dr.ItemArray[2].ToString(), Session["WareHouseID"].ToString(), salesOrderLinesCart, Convert.ToBoolean(Session["ISEDITING"])) + "</span></b></center><center>" + string.Format("<label class='swatchLabel'><input type='radio' id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1'  onclick=\"getSelectedSizeSwatch('{0}','{1}')\"><center >{1}</center></span></label>", style, dr.ItemArray[2].ToString()) + "</center></div>";
 
                                                         }
+                                                        //else if (Convert.ToBoolean(Session["PRIVATEORDER"]))
+                                                        //{
+                                                        //    content = content + "<div class='col-md-2 frestkpad'><center><span>Price:</span>   <b><span id='PrivatePrice_" + style + "_" + dr.ItemArray[3].ToString() + "' title='Price'>" + dp.GetPrice(style, dr.ItemArray[2].ToString(), businessId, "") + "</span> </b></center><center>" + string.Format("<label class='swatchLabel'><input type='radio' checked id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[2].ToString(), orgStyle) + "</center></div>";
+                                                        //}
                                                         else
                                                         {
                                                             content = content + string.Format("<label class='swatchLabel'><input type='radio' id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1'  onclick=\"getSelectedSizeSwatch('{0}','{1}')\"><center >{1}</center></span></label>", style, dr.ItemArray[2].ToString());
@@ -2420,6 +2504,10 @@
 
 
                                                             }
+                                                            //else if (Convert.ToBoolean(Session["PRIVATEORDER"]))
+                                                            //{
+                                                            //    content = content + "<div class='col-md-2 frestkpad'><center><span>Price:</span>   <b><span id='PrivatePrice_" + style + "_" + dr.ItemArray[3].ToString() + "' title='Price'>" + dp.GetPrice(style, dr.ItemArray[2].ToString(), businessId, "") + "</span> </b></center><center>" + string.Format("<label class='swatchLabel'><input type='radio' checked id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString(), orgStyle) + "</center></div>";
+                                                            //}
                                                             else
                                                             {
                                                                 content = content + string.Format("<label class='swatchLabel'><input type='radio' checked id='radio' name=\"swatch_Size_" + style + "\" value='blue' checked/><span class='spanner1'  onclick=\"getSelectedSizeSwatch('{0}','{1}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString());
@@ -2437,6 +2525,10 @@
 
 
                                                                 }
+                                                                //else if (Convert.ToBoolean(Session["PRIVATEORDER"]))
+                                                                //{
+                                                                //    content = content + "<div class='col-md-2 frestkpad'><center><span>Price:</span>   <b><span id='PrivatePrice_" + style + "_" + dr.ItemArray[3].ToString() + "' title='Price'>" + dp.GetPrice(style, dr.ItemArray[2].ToString(), businessId, "") + "</span> </b></center><center>" + string.Format("<label class='swatchLabel'><input type='radio' checked id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString(), orgStyle) + "</center></div>";
+                                                                //}
                                                                 else
                                                                 {
                                                                     content = content + string.Format("<label class='swatchLabel'><input type='radio'   id='radio' name=\"swatch_Size_" + style + "\" value='blue'/><span class='spanner1'  onclick=\"getSelectedSizeSwatch('{0}','{1}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString());
@@ -2449,6 +2541,10 @@
                                                                 {
                                                                     content = content + "<div class='col-md-2 frestkpad'><center><span>Freestock:</span>   <b><span id='FreeStcoker_" + style + "_" + dr.ItemArray[3].ToString() + "' title='Free stock'>" + dp.GetFreeStock(style, EmergencyStockColor, dr.ItemArray[3].ToString(), Session["WareHouseID"].ToString(), salesOrderLinesCart, Convert.ToBoolean(Session["ISEDITING"])) + "</span></b></center><center>" + string.Format("<label class='swatchLabel'><input type='radio'   id='radio' name=\"swatch_Size_" + style + "\" value='blue' checked/><span class='spanner1'  onclick=\"getSelectedSizeSwatch('{0}','{1}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString()) + "</center></div>";
                                                                 }
+                                                                //else if (Convert.ToBoolean(Session["PRIVATEORDER"]))
+                                                                //{
+                                                                //    content = content + "<div class='col-md-2 frestkpad'><center><span>Price:</span>   <b><span id='PrivatePrice_" + style + "_" + dr.ItemArray[3].ToString() + "' title='Price'>" + dp.GetPrice(style, dr.ItemArray[3].ToString(), businessId, "") + "</span> </b></center><center>" + string.Format("<label class='swatchLabel'><input type='radio' checked id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString(), orgStyle) + "</center></div>";
+                                                                //}
                                                                 else
                                                                 {
                                                                     content = content + string.Format("<label class='swatchLabel'><input type='radio'   id='radio' name=\"swatch_Size_" + style + "\" value='blue' checked/><span class='spanner1'  onclick=\"getSelectedSizeSwatch('{0}','{1}')\"><center >{1}</center></span></label>", style, dr.ItemArray[3].ToString());
@@ -2472,6 +2568,10 @@
                                                             content = content + "<div class='col-md-2 frestkpad'><center><span>Freestock:</span>   <b><span id='FreeStcoker_" + style + "_" + dr.ItemArray[2].ToString() + "' title='Free stock'>" + dp.GetFreeStock(style, EmergencyStockColor, dr.ItemArray[2].ToString(), Session["WareHouseID"].ToString(), salesOrderLinesCart, Convert.ToBoolean(Session["ISEDITING"])) + "</span></b></center><center>" + string.Format("<label class='swatchLabel'><input type='radio' checked id='radio' name=\"swatch_Size_" + style + "\" value='blue' checked/><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}')\"><center >{1}</center></span></label>", style, dr.ItemArray[2].ToString()) + "</center></div>";
 
                                                         }
+                                                        //else if (Convert.ToBoolean(Session["PRIVATEORDER"]))
+                                                        //{
+                                                        //    content = content + "<div class='col-md-2 frestkpad'><center><span>Price:</span>   <b><span id='PrivatePrice_" + style + "_" + dr.ItemArray[3].ToString() + "' title='Price'>" + dp.GetPrice(style, dr.ItemArray[2].ToString(), businessId, "") + "</span> </b></center><center>" + string.Format("<label class='swatchLabel'><input type='radio' checked id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[2].ToString(), orgStyle) + "</center></div>";
+                                                        //}
                                                         else
                                                         {
                                                             content = content + string.Format("<label class='swatchLabel'><input type='radio' checked id='radio' name=\"swatch_Size_" + style + "\" value='blue' checked/><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}')\"><center >{1}</center></span></label>", style, dr.ItemArray[2].ToString());
@@ -2487,6 +2587,10 @@
                                                                 content = content + "<div class='col-md-2 frestkpad'><center><span>Freestock:</span>   <b><span id='FreeStcoker_" + style + "_" + dr.ItemArray[3].ToString() + "' title='Free stock'>" + dp.GetFreeStock(style, EmergencyStockColor, dr.ItemArray[2].ToString(), Session["WareHouseID"].ToString(), salesOrderLinesCart, Convert.ToBoolean(Session["ISEDITING"])) + "</span></b></center><center>" + string.Format("<label class='swatchLabel'><input type='radio' id='radio' name=\"swatch_Size_" + style + "\" value='blue'/><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}')\"><center >{1}</center></span></label>", style, dr.ItemArray[2].ToString()) + "</center></div>";
 
                                                             }
+                                                            //else if (Convert.ToBoolean(Session["PRIVATEORDER"]))
+                                                            //{
+                                                            //    content = content + "<div class='col-md-2 frestkpad'><center><span>Price:</span>   <b><span id='PrivatePrice_" + style + "_" + dr.ItemArray[3].ToString() + "' title='Price'>" + dp.GetPrice(style, dr.ItemArray[2].ToString(), businessId, "") + "</span> </b></center><center>" + string.Format("<label class='swatchLabel'><input type='radio' checked id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[2].ToString(), orgStyle) + "</center></div>";
+                                                            //}
                                                             else
                                                             {
                                                                 content = content + string.Format("<label class='swatchLabel'><input type='radio' id='radio' name=\"swatch_Size_" + style + "\" value='blue'/><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}')\"><center >{1}</center></span></label>", style, dr.ItemArray[2].ToString());
@@ -2500,6 +2604,10 @@
                                                                 content = content + "<div class='col-md-2 frestkpad'><center><span>Freestock:</span>   <b><span id='FreeStcoker_" + style + "_" + dr.ItemArray[3].ToString() + "' title='Free stock'>" + dp.GetFreeStock(style, EmergencyStockColor, dr.ItemArray[2].ToString(), Session["WareHouseID"].ToString(), salesOrderLinesCart, Convert.ToBoolean(Session["ISEDITING"])) + "</span></b></center><center>" + string.Format("<label class='swatchLabel'><input type='radio' id='radio' name=\"swatch_Size_" + style + "\" value='blue' checked/><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}')\"><center >{1}</center></span></label>", style, dr.ItemArray[2].ToString()) + "</center></div>";
 
                                                             }
+                                                            //else if (Convert.ToBoolean(Session["PRIVATEORDER"]))
+                                                            //{
+                                                            //    content = content + "<div class='col-md-2 frestkpad'><center><span>Price:</span>   <b><span id='PrivatePrice_" + style + "_" + dr.ItemArray[3].ToString() + "' title='Price'>" + dp.GetPrice(style, dr.ItemArray[2].ToString(), businessId, "") + "</span> </b></center><center>" + string.Format("<label class='swatchLabel'><input type='radio' checked id='radio' name=\"swatch_Size_" + style + "\" value='blue' /><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}','{2}')\"><center >{1}</center></span></label>", style, dr.ItemArray[2].ToString(), orgStyle) + "</center></div>";
+                                                            //}
                                                             else
                                                             {
                                                                 content = content + string.Format("<label class='swatchLabel'><input type='radio' id='radio' name=\"swatch_Size_" + style + "\" value='blue' checked/><span class='spanner1' onclick=\"getSelectedSizeSwatch('{0}','{1}')\"><center >{1}</center></span></label>", style, dr.ItemArray[2].ToString());
@@ -2647,11 +2755,11 @@
                                     price = _dataConnection.GetStyleSizePrices(style1, prevHistory.Size, "All").ToString();
                                 }
                             }
-                            if (Session["Price"].ToString().ToLower() != "hide" && Session["Price"].ToString().ToLower() != "readwrite")
+                            if ((Session["Price"].ToString().ToLower() != "hide") && Session["Price"].ToString().ToLower() != "readwrite")
                             {
                                 ViewContext.Writer.Write(string.Format("<b>Price</b><hr style='margin: 0;'/><br/><div id='LbPrice" + style + "'><input class='form-control' id='LbPriceinput" + style + "' readonly  type=\"number\" min=\"1\" max=\"10000\" value='{0}'/></div>", price));
                             }
-                            else if (Session["Price"].ToString().ToLower() != "hide" && Session["Price"].ToString().ToLower() == "readwrite")
+                            else if ((Session["Price"].ToString().ToLower() != "hide") && Session["Price"].ToString().ToLower() == "readwrite")
                             {
                                 ViewContext.Writer.Write(string.Format("<b>Price</b><hr style='margin: 0;'/><br/><div id='LbPrice" + style + "'><input class='form-control' id='LbPriceinput" + style + "' type=\"number\" min=\"1\" max=\"10000\" value='{0}'/></div>", price));
                             }
@@ -2670,11 +2778,11 @@
                                     price = _dataConnection.GetStyleSizePrices(style, prevHistory.Size, businessId).ToString();
                                 }
                             }
-                            if (Session["Price"].ToString().ToLower() != "hide" && Session["Price"].ToString().ToLower() != "readwrite")
+                            if ((Session["Price"].ToString().ToLower() != "hide") && Session["Price"].ToString().ToLower() != "readwrite")
                             {
                                 ViewContext.Writer.Write(string.Format("<b>Price</b><hr style='margin: 0;'/><br/><div id='LbPrice" + style + "'><input class='form-control' readonly id='LbPriceinput" + style + "' type=\"number\" min=\"1\" max=\"10000\" value='{0}'/></div>", price));
                             }
-                            else if (Session["Price"].ToString().ToLower() != "hide" && Session["Price"].ToString().ToLower() == "readwrite")
+                            else if ((Session["Price"].ToString().ToLower() != "hide") && Session["Price"].ToString().ToLower() == "readwrite")
                             {
                                 ViewContext.Writer.Write(string.Format("<b>Price</b><hr style='margin: 0;'/><br/><div id='LbPrice" + style + "'><input class='form-control' id='LbPriceinput" + style + "' type=\"number\" min=\"1\" max=\"10000\" value='{0}'/></div>", price));
 

@@ -1,0 +1,129 @@
+@{
+    var grid = Html.DevExpress().GridView(settings => {
+        settings.Name = "ShowPrivateOrdersGridView";
+        settings.CallbackRouteValues = new { Controller = "Private", Action = "ShowPrivateOrdersGridViewPartial" };
+
+        settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "Private", Action = "ShowPrivateOrdersGridViewPartialAddNew" };
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "Private", Action = "ShowPrivateOrdersGridViewPartialUpdate" };
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "Private", Action = "ShowPrivateOrdersGridViewPartialDelete" };
+        settings.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
+        settings.SettingsBehavior.ConfirmDelete = true;
+
+        settings.CommandColumn.Visible = false;
+        settings.CommandColumn.ShowNewButton = true;
+        settings.CommandColumn.ShowDeleteButton = true;
+        settings.CommandColumn.ShowEditButton = true;
+
+        settings.KeyFieldName = "orderno";
+
+        settings.SettingsPager.Visible = true;
+        settings.Settings.ShowGroupPanel = false;
+        settings.Settings.ShowFilterRow = true;
+        settings.SettingsBehavior.AllowSelectByRowClick = true;
+
+        settings.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+        settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.Off;
+        settings.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Right;
+        settings.SettingsAdaptivity.AdaptiveDetailColumnCount = 1;
+        settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = false;
+        settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
+        settings.SettingsDetail.ShowDetailButtons = true;
+        settings.SettingsDetail.ShowDetailRow = true;
+        settings.SettingsDetail.AllowOnlyOneMasterRowExpanded = true;
+
+        settings.HtmlRowPrepared = (s, e) =>
+        {
+            if (e.GetValue("responsestatus") != null)
+            {
+                if (e.GetValue("responsestatus").ToString().ToLower() == "paid")
+                {
+                    e.Row.BackColor = System.Drawing.Color.Beige;
+                    // e.Row.ForeColor = System.Drawing.Color.White;
+                }
+            }
+        };
+        settings.SetDetailRowTemplateContent(x =>
+        {
+            Html.RenderAction("PaymentsPartial", new { orderno = x.KeyValue , hideGateway =true});
+        });
+        settings.Columns.Add("orderno").Caption="Order No";
+        settings.Columns.Add("orderdate").Caption="Date";
+        settings.Columns.Add("totalgoods").Caption="Goods Total";
+        settings.Columns.Add("vat").Caption = "VAT";
+        settings.Columns.Add("ordergoods").Caption= "Grand Total";
+
+        settings.Columns.Add("deliveryto").Caption="Del Address";
+        settings.Columns.Add("txnid").Caption = "Transaction Id";
+        settings.Columns.Add("txnip").Caption = "IP Address";
+        //   settings.Columns.Add("txndate").Caption = "Del Address";
+        settings.Columns.Add("paymentdate").Caption = "Payment Date";
+        // settings.Columns.Add("responsedate");
+        settings.Columns.Add("responsestatus").Caption = "Payment Status";
+
+        //settings.Columns.Add("gateway");
+        settings.Columns.Add(sol => {
+            sol.Caption = "User";
+            sol.SetDataItemTemplateContent(s => {
+                var empId= DataBinder.Eval(s.DataItem, "employeeid").ToString();
+                var empName = DataBinder.Eval(s.DataItem, "employeename").ToString();
+                ViewContext.Writer.Write(empId + " - " + empName);
+            });
+
+        });
+        settings.Columns.Add(sol =>
+        {
+            sol.Caption = " ";
+            sol.SetDataItemTemplateContent(s =>
+            {
+                var ono = DataBinder.Eval(s.DataItem, "orderno").ToString();
+                var sts = DataBinder.Eval(s.DataItem, "responsestatus").ToString();
+                string content = "";
+                    content = content + "<button type='button' style='background-color:#009885;color:white' onclick='PrintPrivate("+ ono + ")' class='btn btn-default'>Print</button>";
+                    ViewContext.Writer.Write(content);
+            });
+
+        });
+        settings.Columns.Add(sol =>
+        {
+            sol.Caption = "";
+            sol.SetDataItemTemplateContent(s =>
+            {
+                var ono = DataBinder.Eval(s.DataItem, "orderno").ToString();
+                var sts = DataBinder.Eval(s.DataItem, "responsestatus").ToString();
+                string empId = DataBinder.Eval(s.DataItem, "employeeid").ToString();
+                string content = "";
+                if (sts.ToLower().Trim() != "paid")
+                {
+                    string Url = "/Private/Payments?orderno=" + ono;
+                    content = content + "<button class=\"btn btn-primary\" onclick=\"DeleteOrder(" + ono + ",'" + empId + "','" + false + "')\" style=\"background-color:#009885;color:white\">Delete</button>";
+                    ViewContext.Writer.Write(content);
+                }
+            });
+
+        });
+        settings.Columns.Add(sol =>
+        {
+            sol.Caption = "";
+            sol.SetDataItemTemplateContent(s =>
+            {
+                var ono = DataBinder.Eval(s.DataItem, "orderno").ToString();
+                var sts = DataBinder.Eval(s.DataItem, "responsestatus").ToString();
+                string content = "";
+                if(sts.ToLower().Trim()!="paid")
+                {
+                    string Url = "/Private/Payments?orderno=" + ono;
+                    content = content + "<a href="+Url+ "><button type='button' style='background-color:#009885;color:white' class='btn btn-default'>Make Payment</button></a>";
+                    ViewContext.Writer.Write(content);
+                }
+            });
+
+        });
+
+        settings.Columns.Add("employeeid").Visible=false;
+        settings.Columns.Add("employeename").Visible = false;
+    });
+    if (ViewData["EditError"] != null){
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()

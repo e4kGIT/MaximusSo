@@ -1,0 +1,253 @@
+﻿
+
+@model Maximus.Data.models.tblsop_salesorder_header
+
+<div class="container-fluid" style="background-color:white;color:dimgray">
+    @*@*<div class="row" style="background-color:#009885;color:white">
+            <center>
+               <h3>Please select a payment for the following order(s)</h3>
+            </center>
+        </div>
+        <br />*@
+    <div class="row">
+        <div class="col-md-3">
+            <center><h3>Order Details</h3></center>
+
+            <hr />
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-4">@Html.DevExpress().Label(s => { s.Name = "lblOrderNo"; s.Text = "Order No"; }).GetHtml()</div>
+                <div class="col-md-6">@Html.DevExpress().Label(s => { s.Name = "lblOrderNoTXT"; s.Text = Model.OrderNo.ToString(); s.ControlStyle.CssClass = "privDelAdd"; }).GetHtml()</div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-4">@Html.DevExpress().Label(s => { s.Name = "lblOrderDt"; s.Text = "Order Date"; }).GetHtml()</div>
+                <div class="col-md-6">@Html.DevExpress().Label(s => { s.Name = "lblOrderDtTXT"; s.Text = Model.OrderDate.Value.ToString("dd-MM-yyyy"); s.ControlStyle.CssClass = "privDelAdd"; }).GetHtml()</div>
+            </div><br />
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-4">@Html.DevExpress().Label(s => { s.Name = "lblCustRef"; s.Text = "Customer Ref"; }).GetHtml()</div>
+                <div class="col-md-6">@Html.DevExpress().Label(s => { s.Name = "lblCustRefTXT"; s.Text = Model.CustRef; s.ControlStyle.CssClass = "privDelAdd"; }).GetHtml()</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <center><h3>Billing Address</h3></center>
+            <hr />
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-4">@Html.DevExpress().Label(s => { s.Name = "lblBillAdd1"; s.Text = "Address1"; }).GetHtml()</div>
+                <div class="col-md-6">@Html.DevExpress().Label(s => { s.Name = "lblBillAdd1TXT"; s.Text = Model.InvAddress1.ToString(); s.ControlStyle.CssClass = "privDelAdd"; }).GetHtml()</div>
+            </div><br />
+
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-4">@Html.DevExpress().Label(s => { s.Name = "lblBillTwn"; s.Text = "Town"; }).GetHtml()</div>
+                <div class="col-md-6">@Html.DevExpress().Label(s => { s.Name = "lblBillTwnTXT"; s.Text = Model.InvTown; s.ControlStyle.CssClass = "privDelAdd"; }).GetHtml()</div>
+            </div><br />
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-4">@Html.DevExpress().Label(s => { s.Name = "lblBillPos"; s.Text = "Post Code"; }).GetHtml()</div>
+                <div class="col-md-6">@Html.DevExpress().Label(s => { s.Name = "lblBillPosTXT"; s.Text = Model.InvPostCode; s.ControlStyle.CssClass = "privDelAdd"; }).GetHtml()</div>
+            </div><br />
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-4">@Html.DevExpress().Label(s => { s.Name = "lblBillCntry"; s.Text = "Country"; }).GetHtml()</div>
+                <div class="col-md-6">@Html.DevExpress().Label(s => { s.Name = "lblBillCntryTXT"; s.Text = Model.InvCountry; s.ControlStyle.CssClass = "privDelAdd"; }).GetHtml()</div>
+            </div><br />
+        </div>
+        <div class="col-md-3">
+            <center><h3>Delivery Address</h3></center>
+            <hr />
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-4">@Html.DevExpress().Label(s => { s.Name = "lbldelAdd1"; s.Text = "Address1"; }).GetHtml()</div>
+                <div class="col-md-6">@Html.DevExpress().Label(s => { s.Name = "lbldelAdd1TXT"; s.Text = Model.DelAddress1.ToString(); s.ControlStyle.CssClass = "privDelAdd"; }).GetHtml()</div>
+            </div><br />
+
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-4">@Html.DevExpress().Label(s => { s.Name = "lbldelTwn"; s.Text = "Town"; }).GetHtml()</div>
+                <div class="col-md-6">@Html.DevExpress().Label(s => { s.Name = "lbldelTwnTXT"; s.Text = Model.DelTown; s.ControlStyle.CssClass = "privDelAdd"; }).GetHtml()</div>
+            </div><br />
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-4">@Html.DevExpress().Label(s => { s.Name = "lbldelPos"; s.Text = "Post Code"; }).GetHtml()</div>
+                <div class="col-md-6">@Html.DevExpress().Label(s => { s.Name = "lbldelPosTXT"; s.Text = Model.DelPostCode; s.ControlStyle.CssClass = "privDelAdd"; }).GetHtml()</div>
+            </div><br />
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-4">@Html.DevExpress().Label(s => { s.Name = "lbldelCntry"; s.Text = "Country"; }).GetHtml()</div>
+                <div class="col-md-6">@Html.DevExpress().Label(s => { s.Name = "lbldelCntryTXT"; s.Text = Model.DelCountry; s.ControlStyle.CssClass = "privDelAdd"; }).GetHtml()</div>
+            </div><br />
+        </div>
+        <div class="col-md-3">
+            <center><h3>Payment Methods</h3></center>
+            <hr />
+            @if (ViewBag.HidePayments)
+            {
+                <div class="row" style="color:#009885">
+                    <center>
+                        <p>
+                            You have already paid for this order
+                        </p>
+                    </center>
+                </div>
+            }
+            else
+            {
+                @*<div class="row">
+
+                    <center>
+                        <div>
+                            <script src="https://www.paypal.com/sdk/js?client-id=@Session["paypaltoken"].ToString()&currency=GBP"></script>
+                            <script>
+                                $(document).ready(function () {
+
+                                    $.ajax({
+                                        url: "/Private/GetPayemetDetails/",
+                                        type: "POST",
+                                        data:{'OrderNo':@Model.OrderNo,'gateway':'paypal'},
+                                        success:function(model)
+                                        {
+
+                                            if(model!=null)
+                                            {
+                                                paypal.Buttons({
+                                                    createOrder: function (data, actions) {
+
+                                                        // This function sets up the details of the transaction, including the amount and line item details.
+                                                        return actions.order.create({
+                                                            payer: {
+                                                                name: {
+                                                                    given_name: model.firstname,
+                                                                    surname: model.surname
+                                                                },
+                                                                address: {
+                                                                    address_line_1:model.invaddr1 ,
+                                                                    address_line_2: model.invaddr2  ,
+                                                                    admin_area_2: model.invaddrtown  ,
+                                                                    admin_area_1: model.invaddrtown  ,
+                                                                    postal_code: model.invpostcode  ,
+                                                                    country_code: model.invcountry
+                                                                },
+                                                                email_address: model.emailid ,
+
+                                                            },
+                                                            purchase_units: [
+                                                              {
+                                                                  amount: {
+                                                                      value: model.ordtotal,
+                                                                      currency_code: 'GBP'
+                                                                  },
+                                                                  shipping: {
+                                                                      address: {
+                                                                          address_line_1:model.deladdr1 ,
+                                                                          address_line_2: model.deladdr2 ,
+                                                                          admin_area_2: model.deltown ,
+                                                                          admin_area_1:model.delcity,
+                                                                          postal_code: model.delpostcode,
+                                                                          country_code: 'US'
+                                                                      }
+                                                                  },
+                                                              }
+                                                            ]
+                                                        });
+                                                    }, onApprove: function (data, actions) {
+                                                        // This function captures the funds from the transaction.
+                                                        return actions.order.capture().then(function (details) {
+                                                            if(details!=null)
+                                                            {
+                                                                //$http.post("/User/SavePaypalTransactionCheckout", { 'TxnID': details.id, 'txnDate': details.update_time, 'payername': details.payer.name.given_name, 'PayerEmail': details.payer.email_address, 'PaymentDate': details.update_time, 'PaymentStatus': details.status, 'PaidAmount': details.purchase_units[0].amount.value, 'token': $scope.CurrentTokenId, 'refrence': data1.value, 'invLst': invLst, 'chapterId': $scope.CurrentChap.ChapterID }).then(function (response)
+                                                                //{
+                                                                if(details.status=="COMPLETED")
+                                                                {
+                                                                    alert('Transaction completed by ' + model.firstname +" "+model.surname);
+                                                                    $.ajax({
+                                                                        url:"/Private/UpdateTxn/",
+                                                                        data:{'TxnID': details.id,'txnDate': details.update_time,'refNo':@Model.OrderNo,'txnStatus':details.status,'txnAmt':details.purchase_units[0].amount.value,'gatewayid':model.gateway},
+                                                                        type:"post",
+                                                                        function(resp)
+                                                                        {
+                                                                            if(resp!=null && resp!="")
+                                                                            {
+                                                                                window.location="/Employee/ChangeOrderType?ordertype=private";
+                                                                            }
+                                                                        }
+                                                                    });
+                                                                }
+                                                                else
+                                                                {
+
+                                                                }
+                                                            }
+                                                            //  $scope.successore(details, "invless");
+                                                        });
+                                                    }
+                                                    ,
+                                                    onCancel: function (data) {
+                                                        alert('Transaction cancelled by ' + model.firstname +" "+model.surname);
+                                                        $.ajax({
+                                                            url:"/Private/CancelPaypalTxn/",
+                                                            type:"post",
+                                                            data:{'orderno':@Model.OrderNo},
+                                                            function(resp)
+                                                            {
+                                                                if(resp!=null && resp!="")
+                                                                {
+                                                                    window.location="/Employee/ChangeOrderType?ordertype=private";
+                                                                }
+                                                            }
+                                                        });
+                                                    }
+                                                }).render('#paypal-button1');
+                                            }
+                                        }
+                                    });
+                                });
+                            </script>
+                            <div id="paypal-button1"></div>
+                            @*<center> <img onclick="WorldPay(@Model.OrderNo,'paypal')" style="cursor:pointer;max-width:119px" src="~/Content/Images/paypal.png" /></center>
+                        </div>
+                    </center>
+                </div><br />
+
+                <div class="row">
+                    <center>
+                        or
+                    </center>
+                </div><br />*@
+                <div class="row">
+                    <center> <img onclick="WorldPay(@Model.OrderNo,'worldpay')" style="cursor:pointer" src="~/Content/Images/worldpay.png" /></center>
+                </div><br />
+            }
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-md-3">
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-4">@Html.DevExpress().Label(s => { s.Name = "lblOrdRef"; s.Text = "Order ref"; }).GetHtml()</div>
+                <div class="col-md-6">@Html.DevExpress().Label(s => { s.Name = "lblOrdRefTXT"; s.Text = Model.OrderNo.ToString(); s.ControlStyle.CssClass = "privDelAdd"; }).GetHtml()</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-4">@Html.DevExpress().Label(s => { s.Name = "lblOrdTot"; s.Text = "Total"; }).GetHtml()</div>
+                <div class="col-md-6"><span><b>@Session["CurrencySymbol"].ToString()</b></span> @Html.DevExpress().Label(s => { s.ControlStyle.ForeColor = System.Drawing.Color.DarkCyan; s.Name = "lblOrdTotTXT"; s.Text = Model.OrderGoods.Value.ToString("0.00"); s.ControlStyle.CssClass = "privDelAdd"; }).GetHtml()</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            
+        </div>
+        <div class="col-md-3">
+            <center>
+                <button type="button" class="btn btn-default" style="background-color:#009885;color:white;" onclick="WorldPay(@Model.OrderNo,'worldpay')">Make Payment</button>
+            </center>
+        </div>
+
+    </div>
+    <br />
+</div>

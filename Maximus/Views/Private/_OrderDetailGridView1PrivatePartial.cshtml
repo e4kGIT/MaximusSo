@@ -1,0 +1,46 @@
+@model IEnumerable<Maximus.Data.models.OrderDisplayDetail>
+@{
+    var grid = Html.DevExpress().GridView(settings =>
+    {
+        settings.Name = "OrderDetail1";
+        settings.CallbackRouteValues = new { Controller = "Private", Action = "_OrderDetailGridView1PrivatePartial", ordno= Convert.ToInt32(TempData["OrderNo"])};
+
+        settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "Private", Action = "OrderDetailGridView1PartialAddNew" };
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "Private", Action = "OrderDetailGridView1PartialUpdate" };
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "Private", Action = "OrderDetailGridView1PartialDelete" };
+        settings.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
+        settings.SettingsBehavior.ConfirmDelete = true;
+
+        settings.CommandColumn.Visible = false;
+        settings.CommandColumn.ShowNewButton = true;
+        settings.CommandColumn.ShowDeleteButton = true;
+        settings.CommandColumn.ShowEditButton = true;
+
+        settings.KeyFieldName = "LineNo";
+         
+        settings.SettingsPager.Visible = true;
+        //  settings.SettingsPager.PageSize = ViewData}
+        settings.Settings.ShowGroupPanel = false;
+        settings.Settings.ShowFilterRow = false;
+        settings.SettingsBehavior.AllowSelectByRowClick = false;
+
+        settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.Off;
+        settings.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Right;
+        settings.SettingsAdaptivity.AdaptiveDetailColumnCount = 1;
+        settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = false;
+        settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
+        settings.Columns.Add(s => { s.FieldName = "StyleID"; s.Caption = "Product"; });
+        settings.Columns.Add(s => { s.FieldName = "ColourID"; s.Caption = "Colour"; });
+        settings.Columns.Add(s => { s.FieldName = "SizeID"; s.Caption = "Size"; });
+        settings.Columns.Add(s => { s.FieldName = "Description"; s.Caption = "Description"; });
+        settings.Columns.Add(s => { s.FieldName = "OrdQty"; s.Caption = "Order Quantity"; });
+        settings.Columns.Add(s => { s.FieldName = "Price"; s.Caption = "Price"; });
+        settings.Columns.Add(s => { s.FieldName = "Vat"; s.Caption = "VAT"; });
+        settings.Columns.Add(s => { s.FieldName = "Total"; s.Caption = "Total"; });
+
+    });
+    if (ViewData["EditError"] != null){
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()

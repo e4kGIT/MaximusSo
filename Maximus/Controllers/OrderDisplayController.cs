@@ -27,6 +27,10 @@ namespace Maximus.Controllers
         public readonly tblSalesOrderHeader _salesHead;
         private readonly IBasket _basket;
         public readonly SalesDetail _salesLine;
+        public readonly PickingSlipHeader _pickingHead;
+        public readonly tblCourierinformation _courierInfo;
+        public readonly PickingSlipDetail _pickingdetail;
+
         private readonly DataProcessing _dp;
         public OrderDisplayController(IUnitOfWork unitOfWork)
         {
@@ -42,6 +46,12 @@ namespace Maximus.Controllers
             SalesDetail salesLine = new SalesDetail(_unitOfWork);
             BasketService basket = new BasketService(_unitOfWork);
             PointStyle pointStyle = new PointStyle(_unitOfWork);
+            PickingSlipHeader pickingHead=new PickingSlipHeader(_unitOfWork);
+            PickingSlipDetail pickingdetail=new PickingSlipDetail(_unitOfWork);
+            tblCourierinformation courierInfo = new tblCourierinformation(_unitOfWork);
+            _pickingHead = pickingHead;
+            _pickingdetail = pickingdetail;
+            _courierInfo = courierInfo;
             _dataConnection = dataConnection;
             _salesHead = salesHead;
             _salesLine = salesLine;
@@ -67,7 +77,7 @@ namespace Maximus.Controllers
             Session["isrtntype"] = "";
             Session["IsManPack"] = true;
             Session["returnorder"] = false;
-            
+            Session["PRIVATEORDER"] = false;
             TempData["OrderType"] = OrderType;
             string busId = Session["BuisnessId"].ToString();
             string userId = Session["UserName"].ToString();
@@ -331,18 +341,35 @@ namespace Maximus.Controllers
         }
 
 
-        [ValidateInput(false)]
-        public ActionResult OrderDetailGridView1Partial(int ordno)
+     
+           public ActionResult OrderDetailGridView1Partial(int ordno)
         {
             var model = _orderDisp.GetOrderDetail(ordno);
             TempData["OrderNo"] = ordno;
+
             foreach (var lines in model)
             {
+                if (_pickingHead.Exists(s => s.OrderNo == ordno))
+                {
+                    var sss = _pickingHead.GetAll(s => s.OrderNo == ordno).Select(s => s.PickingSlipNo).ToList();
+
+                    if (_pickingdetail.Exists(s => sss.Contains(s.PickingSlipNo) && s.StyleID == lines.StyleID && s.SizeID == lines.SizeID ))
+                    {
+                        foreach (var data1 in _pickingdetail.GetAll(s => sss.Contains(s.PickingSlipNo) && s.StyleID == lines.StyleID && s.SizeID == lines.SizeID ).ToList())
+                        {
+                            if (_courierInfo.Exists(s => s.DeliveryNote == data1.PickingSlipNo))
+                            {
+                                lines.CourierRef = _courierInfo.GetAll(s => s.DeliveryNote == data1.PickingSlipNo).First().CourierRef;
+                            }
+                        }
+                    }
+                }
                 lines.ReOrderNo = _salesLine.Exists(s => s.ReturnOrderNo == ordno) ? Convert.ToInt32(_salesLine.GetAll(s => s.ReturnOrderNo == ordno).First().OrderNo) : 0;
                 lines.Points = _stylePoints.Exists(s => s.StyleID == lines.StyleID) ? _stylePoints.GetAll(s => s.StyleID == lines.StyleID).First().Points.Value : 0;
             }
             return PartialView("_OrderDetailGridView1Partial", model);
         }
+ 
         public ActionResult ConfrimOrder(bool EmergencyTicked = false)
         {
             string busId = Session["BuisnessId"].ToString();

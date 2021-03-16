@@ -232,6 +232,8 @@ namespace Maximus.Services
                         header.DelPostCode = ds > 0 ? addresArr[7] : "";
                         header.DelCountry = ds > 0 ? addresArr[8] : "";
                         header.DelCountry = "UK";
+                        header.DelDesc = ds > 0 ? addresArr[1] : "";
+                        header.CustRef = ds > 0 ? addresArr[1] : "";
                     }
                     ///
                     string SQL = "SELECT tblbus_address.Description, tblbus_address.Address1, tblbus_address.Address2, tblbus_address.Address3, tblbus_address.Town, tblbus_address.City, tblbus_address.Postcode, tblbus_countrycodes.Country, tblbus_address.countrycode  FROM tblbus_countrycodes INNER JOIN (tblbus_addresstype_ref INNER JOIN (tblbus_business INNER JOIN (tblbus_addresstypes INNER JOIN tblbus_address ON tblbus_addresstypes.AddressTypeID = tblbus_address.AddressTypeID) ON tblbus_business.BusinessID = tblbus_address.BusinessID) ON tblbus_addresstype_ref.Actual_TypeID = tblbus_addresstypes.Actual_TypeID) ON tblbus_countrycodes.CountryID = tblbus_address.CountryCode  WHERE tblbus_addresstype_ref.Actual_TypeID=3 AND tblbus_business.BusinessID='" + salesHead.First().CustID + "' and tblbus_countrycodes.CompanyID = '" + salesHead.First().CompanyID + "' Order By tblbus_address.Description";

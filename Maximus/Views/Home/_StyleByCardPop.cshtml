@@ -99,13 +99,7 @@
         settings.Settings.ShowHeaderFilterButton = true;
         settings.Settings.EnableFilterControlPopupMenuScrolling = false;
         settings.SettingsBehavior.AllowSelectByCardClick = true;
-        //settings.Settings.ShowHeaderPanel = true;
-        //settings.ClientSideEvents.BeginCallback = "BeginCallback";
-
         string filterExpression = ""; string filterExpressionSTR = "";
-
-
-
         #region prerendr
         settings.PreRender = (sender, e) =>
         {
@@ -136,7 +130,7 @@
                                 count2 = count2 + home._styleColorSizeObsolete.GetAll(y => y.StyleID == StyleID && y.ColourID == colors && y.Obsolete_Class == 0).Select(y => y.SizeID).Count();
                             }
                         }
-                        if (count1 < 1 && count2 < 0)
+                        if (count1 < 1 && count2 < 1)
                         {
                             filterExpressionSTR = filterExpressionSTR + "'" + StyleID + "',";
 
@@ -427,7 +421,8 @@
 
                     }
                 }
-                if (template.Count == 0)
+                if (template.Count == 0 && Convert.ToBoolean(Session["REQSTKLEVEL"]) == false)
+
                 {
                     if (Session["ColorSizestyle"].ToString() == "SWATCHES")
                     {
@@ -773,64 +768,64 @@
                     if (style.Contains(','))
                     {
                         Html.DevExpress().ComboBox(
-                    c =>
-                    {
-                        var styleArr = style.Split(',');
-                        string style1 = styleArr[0].ToString();
-                        c.Name = "SizeDimview_" + "Drop_" + style;
-                        List<string> sizeIdLst = (List<string>)home._style_Sizes.GetAll(s => s.StyleID == style1).Distinct().OrderBy(s => s.SeqNo).Select(s => s.SizeID).ToList();
-                        foreach (string data in sizeIdLst)
+                        c =>
                         {
-                            c.Properties.Items.Add(data);
-                        }
-                        if (sizeIdLst.Count == 1)
-                        {
-                            c.SelectedIndex = 0; c.Enabled = false;
-                        }
-                        c.Properties.ClientSideEvents.SelectedIndexChanged = "getSelectedSizeDimView";
-                        if (prevHistory.Size != "")
-                        {
-                            foreach (DevExpress.Web.ListEditItem item in c.Properties.Items)
+                            var styleArr = style.Split(',');
+                            string style1 = styleArr[0].ToString();
+                            c.Name = "SizeDimview_" + "Drop_" + style;
+                            List<string> sizeIdLst = (List<string>)home._style_Sizes.GetAll(s => s.StyleID == style1).Distinct().OrderBy(s => s.SeqNo).Select(s => s.SizeID).ToList();
+                            foreach (string data in sizeIdLst)
                             {
-                                if (item.ToString() == prevHistory.Size)
+                                c.Properties.Items.Add(data);
+                            }
+                            if (sizeIdLst.Count == 1)
+                            {
+                                c.SelectedIndex = 0; c.Enabled = false;
+                            }
+                            c.Properties.ClientSideEvents.SelectedIndexChanged = "getSelectedSizeDimView";
+                            if (prevHistory.Size != "")
+                            {
+                                foreach (DevExpress.Web.ListEditItem item in c.Properties.Items)
                                 {
-                                    c.SelectedIndex = c.Properties.Items.IndexOf(item);
+                                    if (item.ToString() == prevHistory.Size)
+                                    {
+                                        c.SelectedIndex = c.Properties.Items.IndexOf(item);
+                                    }
                                 }
                             }
                         }
-                    }
-                                    ).Render();
+                                        ).Render();
 
                     }
                     else
                     {
                         Html.DevExpress().ComboBox(
-                    c =>
-                    {
-                        c.Name = "SizeDimview_" + "Drop_" + style;
-                        List<string> sizeIdLst = (List<string>)home._style_Sizes.GetAll(s => s.StyleID == style).Distinct().OrderBy(s => s.SeqNo).Select(s => s.SizeID).ToList();
-                        foreach (string data in sizeIdLst)
+                        c =>
                         {
-                            c.Properties.Items.Add(data);
-
-                        }
-                        if (sizeIdLst.Count == 1)
-                        {
-                            c.SelectedIndex = 0; c.Enabled = false;
-                        }
-                        c.Properties.ClientSideEvents.SelectedIndexChanged = "getSelectedSizeDimView";
-                        if (prevHistory.Size != "")
-                        {
-                            foreach (DevExpress.Web.ListEditItem item in c.Properties.Items)
+                            c.Name = "SizeDimview_" + "Drop_" + style;
+                            List<string> sizeIdLst = (List<string>)home._style_Sizes.GetAll(s => s.StyleID == style).Distinct().OrderBy(s => s.SeqNo).Select(s => s.SizeID).ToList();
+                            foreach (string data in sizeIdLst)
                             {
-                                if (item.ToString() == prevHistory.Size)
+                                c.Properties.Items.Add(data);
+
+                            }
+                            if (sizeIdLst.Count == 1)
+                            {
+                                c.SelectedIndex = 0; c.Enabled = false;
+                            }
+                            c.Properties.ClientSideEvents.SelectedIndexChanged = "getSelectedSizeDimView";
+                            if (prevHistory.Size != "")
+                            {
+                                foreach (DevExpress.Web.ListEditItem item in c.Properties.Items)
                                 {
-                                    c.SelectedIndex = c.Properties.Items.IndexOf(item);
+                                    if (item.ToString() == prevHistory.Size)
+                                    {
+                                        c.SelectedIndex = c.Properties.Items.IndexOf(item);
+                                    }
                                 }
                             }
                         }
-                    }
-                                    ).Render();
+                                        ).Render();
                     }
                 }
                 else
@@ -1043,7 +1038,35 @@
                     }
                     else
                     {
+                        List<Maximus.Data.models.BannerStyleClrSiz> omitSize = new List<Maximus.Data.models.BannerStyleClrSiz>();
+                        List<Maximus.Data.models.BannerStyleClrSiz> nonOmitSize = new List<Maximus.Data.models.BannerStyleClrSiz>();
                         List<string> sizeIdLst = (List<string>)home._style_Sizes.GetAll(s => s.StyleID == style).Distinct().OrderBy(s => s.SeqNo).Select(s => s.SizeID).ToList();
+                        if (Convert.ToBoolean(Session["IsEmergency"]) && Convert.ToBoolean(Session["REQSTKLEVEL"]))
+                        {
+                            var orgStyle = (DataBinder.Eval(col.DataItem, "OriginalStyleid")).ToString();
+                            if (orgStyle == "BA231")
+                            {
+
+                            }
+                            var Lst = home.GetBannerSizes(orgStyle);
+                            if (Lst.Count > 0)
+                            {
+                                foreach (var objBan in Lst)
+                                {
+                                    if (objBan.IsBannerObsolete == false)
+                                    {
+                                        if (home.GetFreeStockValue(objBan.BannerStyle, objBan.BannerColour, objBan.BannerSize, true) <= 0)
+                                        {
+                                            nonOmitSize.Add(objBan);
+                                        }
+                                        else
+                                        {
+                                            omitSize.Add(objBan);
+                                        }
+                                    }
+                                }
+                            }
+                        }
                         if ((bool)Session["IsBulkOrder1"] == true)
                         {
                             if (sizeIdLst.Count > 2)
@@ -1229,12 +1252,43 @@
                                     }
                                     else
                                     {
-                                        content = content + string.Format("<label class='swatchLabel'><input type='radio'  id='radio'  name=\"swatch_DemandSize_" + style + "\" class='' value='" + data + "'/><span class='spanner1' onclick=\"getSelectedSizeDemandSwatch('{0}','{1}')\"><center><bold>{1}</bold></center></span></label>", style, data);
+                                        if (Convert.ToBoolean(Session["IsEmergency"]) && Convert.ToBoolean(Session["REQSTKLEVEL"]))
+                                        {
+
+                                            if (omitSize.Select(s => s.BannerSize).ToList().Contains(data) == false && nonOmitSize.Select(s => s.UeSize).ToList().Contains(data) == false
+                                        && omitSize.Select(s => s.BannerSize).ToList().Contains(data) && omitSize.Select(s => s.UeSize).ToList().Contains(data))
+                                            {
+                                                content = content + string.Format("<label class='swatchLabel'><input type='radio'  id='radio'  name=\"swatch_DemandSize_" + style + "\" class='' value='" + data + "'/><span class='spanner1' onclick=\"getSelectedSizeDemandSwatch('{0}','{1}')\"><center><bold>{1}</bold></center></span></label>", style, data);
+                                            }
+                                            else if (omitSize.Select(s => s.BannerSize).ToList().Contains(data) == false && omitSize.Select(s => s.UeSize).ToList().Contains(data) == false)
+                                            {
+                                                content = content + string.Format("<label class='swatchLabel'><input type='radio'  id='radio'  name=\"swatch_DemandSize_" + style + "\" class='' value='" + data + "'/><span class='spanner1' onclick=\"getSelectedSizeDemandSwatch('{0}','{1}')\"><center><bold>{1}</bold></center></span></label>", style, data);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            content = content + string.Format("<label class='swatchLabel'><input type='radio'  id='radio'  name=\"swatch_DemandSize_" + style + "\" class='' value='" + data + "'/><span class='spanner1' onclick=\"getSelectedSizeDemandSwatch('{0}','{1}')\"><center><bold>{1}</bold></center></span></label>", style, data);
+                                        }
                                     }
                                 }
                                 else
                                 {
-                                    content = content + string.Format("<label class='swatchLabel'><input type='radio'  id='radio' name=\"swatch_DemandSize_" + style + "\" class='' value='" + data + "' checked=\"checked\"/><span class='spanner1'  onclick=\"getSelectedSizeDemandSwatch('{0}','{1}')\"><center><bold>{1}</bold></center></span></label>", style, data);
+                                    if (Convert.ToBoolean(Session["IsEmergency"]) && Convert.ToBoolean(Session["REQSTKLEVEL"]))
+                                    {
+
+                                        if (omitSize.Select(s => s.BannerSize).Contains(data) == false && omitSize.Select(s => s.UeSize).Contains(data) == false && nonOmitSize.Select(s => s.BannerSize).Contains(data) && nonOmitSize.Select(s => s.UeSize).Contains(data))
+                                        {
+                                            content = content + string.Format("<label class='swatchLabel'><input type='radio'  id='radio'  name=\"swatch_DemandSize_" + style + "\" class='' value='" + data + "'/><span class='spanner1' onclick=\"getSelectedSizeDemandSwatch('{0}','{1}')\"><center><bold>{1}</bold></center></span></label>", style, data);
+                                        }
+                                        else if (omitSize.Select(s => s.UeSize).Contains(data) == false && omitSize.Select(s => s.BannerSize).Contains(data) == false)
+                                        {
+                                            content = content + string.Format("<label class='swatchLabel'><input type='radio'  id='radio'  name=\"swatch_DemandSize_" + style + "\" class='' value='" + data + "'/><span class='spanner1' onclick=\"getSelectedSizeDemandSwatch('{0}','{1}')\"><center><bold>{1}</bold></center></span></label>", style, data);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        content = content + string.Format("<label class='swatchLabel'><input type='radio'  id='radio' name=\"swatch_DemandSize_" + style + "\" class='' value='" + data + "' checked=\"checked\"/><span class='spanner1'  onclick=\"getSelectedSizeDemandSwatch('{0}','{1}')\"><center><bold>{1}</bold></center></span></label>", style, data);
+                                    }
                                 }
 
                             }
@@ -1385,7 +1439,7 @@
 
                     content = content + "</div>";
                     ViewContext.Writer.Write(content);
-                    if (Session["OVERRIDE_ENT_WITH_REASON"].ToString().ToLower() == "show" && reason && home._pointStyle.Exists(s=>s.UcodeID==selUcode && s.BusinessID==businessId)==false)
+                    if (Session["OVERRIDE_ENT_WITH_REASON"].ToString().ToLower() == "show" && reason && home._pointStyle.Exists(s => s.UcodeID == selUcode && s.BusinessID == businessId) == false)
                     {
                         ViewContext.Writer.Write("<div class='col-md-4 col-xs-4 col-sm-4 col-lg-4'><b>Reason</b><hr style='margin:0px'/><br>");
                         if (template.Count > 0)
@@ -1398,7 +1452,7 @@
                                 Html.DevExpress().ComboBox(edit =>
                                 {
                                     edit.Name = "CmbReasonTemplate_" + style;
-                                   // edit.Properties.RenderIFrameForPopupElements = DefaultBoolean.Default;
+                                    // edit.Properties.RenderIFrameForPopupElements = DefaultBoolean.Default;
                                     if (reasons.Count > 0)
                                     {
                                         foreach (var dta in reasons)
@@ -1583,6 +1637,10 @@
             </button>
         </span>
     </div>*@
+
+
+
+
 
 
 

@@ -300,7 +300,7 @@ namespace Maximus.Services
                             {
                                 if (_salesOrdHead.Exists(s => s.PinNo == EmployeeId && s.OrderType.ToLower() == "so" && s.OnlineConfirm == 0))
                                 {
-                                    foreach (var salesHeader in _salesOrdHead.GetAll(s => s.PinNo == EmployeeId && s.OrderType.ToLower()=="so" && s.OnlineConfirm == 0).ToList())
+                                    foreach (var salesHeader in _salesOrdHead.GetAll(s => s.PinNo == EmployeeId && s.OrderType.ToLower()=="so" && s.OnlineConfirm == 0 && s.CustRef.ToLower().Contains("private")==false).ToList())
                                     {
                                         if (address.Description.Trim() != salesHeader.DelDesc.Trim())
                                         {
@@ -465,7 +465,7 @@ namespace Maximus.Services
                             {
                                 if (_salesOrdHead.Exists(s => s.PinNo == EmployeeId && s.OrderType.ToLower() == "so" && s.OnlineConfirm==0))
                                 {
-                                    foreach (var salesHeader in _salesOrdHead.GetAll(s => s.PinNo == EmployeeId && s.OrderType.ToLower() == "so" && s.OnlineConfirm == 0).ToList())
+                                    foreach (var salesHeader in _salesOrdHead.GetAll(s => s.PinNo == EmployeeId && s.OrderType.ToLower() == "so" && s.OnlineConfirm == 0    && s.CustRef.ToLower().Contains("private") == false).ToList())
                                     {
                                         if (address.Description.Trim() != salesHeader.DelDesc.Trim())
                                         {

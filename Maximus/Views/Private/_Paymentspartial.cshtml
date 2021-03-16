@@ -1,0 +1,100 @@
+﻿
+
+@model Maximus.Data.models.tblsop_salesorder_header
+<div style="background-color:white;color:dimgray">
+     
+    <div class="row">
+        <div class="col-md-4">
+            <center><h3>Order Details</h3></center>
+
+            <hr />
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-4">@Html.DevExpress().Label(s => { s.Name = "lblOrderNo"; s.Text = "Order No"; }).GetHtml()</div>
+                <div class="col-md-6">@Html.DevExpress().Label(s => { s.Name = "lblOrderNoTXT"; s.Text = Model.OrderNo.ToString(); s.ControlStyle.CssClass = "privDelAdd"; }).GetHtml()</div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-4">@Html.DevExpress().Label(s => { s.Name = "lblOrderDt"; s.Text = "Order Date"; }).GetHtml()</div>
+                <div class="col-md-6">@Html.DevExpress().Label(s => { s.Name = "lblOrderDtTXT"; s.Text = Model.OrderDate.Value.ToString("dd-MM-yyyy"); s.ControlStyle.CssClass = "privDelAdd"; }).GetHtml()</div>
+            </div><br />
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-4">@Html.DevExpress().Label(s => { s.Name = "lblCustRef"; s.Text = "Customer Ref"; }).GetHtml()</div>
+                <div class="col-md-6">@Html.DevExpress().Label(s => { s.Name = "lblCustRefTXT"; s.Text = Model.CustRef; s.ControlStyle.CssClass = "privDelAdd"; }).GetHtml()</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <center><h3>Billing Address</h3></center>
+            <hr />
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-4">@Html.DevExpress().Label(s => { s.Name = "lblBillAdd1"; s.Text = "Address1"; }).GetHtml()</div>
+                <div class="col-md-6">@Html.DevExpress().Label(s => { s.Name = "lblBillAdd1TXT"; s.Text = Model.InvAddress1.ToString(); s.ControlStyle.CssClass = "privDelAdd"; }).GetHtml()</div>
+            </div><br />
+
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-4">@Html.DevExpress().Label(s => { s.Name = "lblBillTwn"; s.Text = "Town"; }).GetHtml()</div>
+                <div class="col-md-6">@Html.DevExpress().Label(s => { s.Name = "lblBillTwnTXT"; s.Text = Model.InvTown; s.ControlStyle.CssClass = "privDelAdd"; }).GetHtml()</div>
+            </div><br />
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-4">@Html.DevExpress().Label(s => { s.Name = "lblBillPos"; s.Text = "Post Code"; }).GetHtml()</div>
+                <div class="col-md-6">@Html.DevExpress().Label(s => { s.Name = "lblBillPosTXT"; s.Text = Model.InvPostCode; s.ControlStyle.CssClass = "privDelAdd"; }).GetHtml()</div>
+            </div><br />
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-4">@Html.DevExpress().Label(s => { s.Name = "lblBillCntry"; s.Text = "Country"; }).GetHtml()</div>
+                <div class="col-md-6">@Html.DevExpress().Label(s => { s.Name = "lblBillCntryTXT"; s.Text = Model.InvCountry; s.ControlStyle.CssClass = "privDelAdd"; }).GetHtml()</div>
+            </div><br />
+        </div>
+        <div class="col-md-4">
+            <center><h3>Delivery Address</h3></center>
+            <hr />
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-4">@Html.DevExpress().Label(s => { s.Name = "lbldelAdd1"; s.Text = "Address1"; }).GetHtml()</div>
+                <div class="col-md-6">@Html.DevExpress().Label(s => { s.Name = "lbldelAdd1TXT"; s.Text = Model.DelAddress1.ToString(); s.ControlStyle.CssClass = "privDelAdd"; }).GetHtml()</div>
+            </div><br />
+
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-4">@Html.DevExpress().Label(s => { s.Name = "lbldelTwn"; s.Text = "Town"; }).GetHtml()</div>
+                <div class="col-md-6">@Html.DevExpress().Label(s => { s.Name = "lbldelTwnTXT"; s.Text = Model.DelTown; s.ControlStyle.CssClass = "privDelAdd"; }).GetHtml()</div>
+            </div><br />
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-4">@Html.DevExpress().Label(s => { s.Name = "lbldelPos"; s.Text = "Post Code"; }).GetHtml()</div>
+                <div class="col-md-6">@Html.DevExpress().Label(s => { s.Name = "lbldelPosTXT"; s.Text = Model.DelPostCode; s.ControlStyle.CssClass = "privDelAdd"; }).GetHtml()</div>
+            </div><br />
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-4">@Html.DevExpress().Label(s => { s.Name = "lbldelCntry"; s.Text = "Country"; }).GetHtml()</div>
+                <div class="col-md-6">@Html.DevExpress().Label(s => { s.Name = "lbldelCntryTXT"; s.Text = Model.DelCountry; s.ControlStyle.CssClass = "privDelAdd"; }).GetHtml()</div>
+            </div><br />
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-md-3">
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-4">@Html.DevExpress().Label(s => { s.Name = "lblOrdRef"; s.Text = "Order ref"; }).GetHtml()</div>
+                <div class="col-md-6">@Html.DevExpress().Label(s => { s.Name = "lblOrdRefTXT"; s.Text = Model.OrderNo.ToString(); s.ControlStyle.CssClass = "privDelAdd"; }).GetHtml()</div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="row">
+                <div class="col-md-1"></div>
+                <div class="col-md-4">@Html.DevExpress().Label(s => { s.Name = "lblOrdTot"; s.Text = "Total"; }).GetHtml()</div>
+                <div class="col-md-6"><span><b>@Session["CurrencySymbol"].ToString()</b></span> @Html.DevExpress().Label(s => { s.ControlStyle.ForeColor = System.Drawing.Color.DarkCyan; s.Name = "lblOrdTotTXT"; s.Text = Model.OrderGoods.Value.ToString("0.00"); s.ControlStyle.CssClass = "privDelAdd"; }).GetHtml()</div>
+            </div>
+        </div>
+
+    </div>
+    <br />
+</div> 
+
+ @{Html.RenderAction("OrderDetailGridView1Partial");}

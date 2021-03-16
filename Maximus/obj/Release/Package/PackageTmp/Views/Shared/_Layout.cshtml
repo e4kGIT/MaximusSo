@@ -74,6 +74,13 @@
             padding-left: 0px;
             padding-right: 0px;
         }
+          .AlternateImage{
+           cursor: pointer; border: 2px solid darkcyan;border-radius: 8px;box-shadow: 0px 0px 4px 0px; height:100px;width:100px;
+        }
+        .AlternateImage:hover{
+           cursor: pointer; border: 2px solid darkcyan;border-radius: 8px;box-shadow: 0px 0px 4px 0px;
+           height:120px;width:120px;
+        }
 
         #txtNewPwd_EC {
             white-space: normal !important;
@@ -109,6 +116,7 @@
             border-right-style: none;
         }
 
+         
         .funkystyling {
             background-image: url('../../Content/Images/search.png') right no-repeat;
             padding-right: 17px;
@@ -118,14 +126,75 @@
             position: relative;
             display: inline-block;
         }
-        /*input {
-            border: 1px solid transparent;
-            background-color: #f1f1f1;
-            padding: 10px;
-            font-size: 16px;
-        }*/
+
+        .hide {
+            display: none;
+        }
+
+            .hide:hover {
+                color: black;
+                font-size: 20px;
+            }
+
+        .privDelAdd {
+            font-weight: bold;
+        }
+
+        .CatagoryCard {
+            color: black;
+            border: 1.5px solid #009885;
+            background-color: lightgray;
+            border-radius: 3px;
+            overflow-wrap: anywhere;
+            z-index: 0;
+        }
+
+            .CatagoryCard:hover {
+                color: black;
+                background-color: lightgray;
+                height: 170px;
+                width: 144px;
+                overflow-wrap: anywhere;
+                z-index: 1000;
+                cursor: pointer;
+            }
+
+
+        .dot {
+            height: 125px;
+            width:160px;
+            background-color: white;
+            /*border-radius: 50%;*/
+            display: inline-block;
+            margin-top: 5px;
+        }
+
+        .dot1 {
+            height: 115px;
+            width: 115px;
+            margin-top: 2.5px;
+            background-color: black;
+            /*border: solid 2px white;*/
+            /*border-radius: 50%;*/
+            display: inline-block;
+        }
+
+            .dot1:hover {
+                height: 127px;
+                width: 127px;
+                margin-top: -2px;
+                background-color: black;
+                border: solid 1px #009885;
+                /*border-radius: 50%;*/
+                display: inline-block;
+            }
+
         .deliveryTbx {
             width: 250px;
+        }
+
+        .InvAddrInp {
+            min-width: 280px;
         }
 
         .MyThumbnail {
@@ -193,10 +262,24 @@
                     background-color: #e9e9e9;
                 }
 
+        .priceVat {
+            max-width: 141px;
+            text-align: center;
+        }
+
+        .ovrdispsize {
+            margin-bottom: 2px;
+            font-size: 12px;
+        }
         /*when navigating through the items using the arrow keys:*/
         .autocomplete-active {
             background-color: DodgerBlue !important;
             color: #ffffff;
+        }
+
+        .incv {
+            font-size: 12px;
+            font-style: italic;
         }
 
         #start:focus {
@@ -320,7 +403,7 @@
             -webkit-appearance: none;
             background-color: white;
             color: white;
-            display:flex;
+            display: flex;
         }
 
         .padder {
@@ -681,47 +764,34 @@
                 }
             }
         }
-        function GetCart() {
-            var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
-            loadPopup.Show();
-            $.ajax({
-                type: "POST",
-                url: "/Home/GetBasketStatus",
-                success: function (response) {
-                    loadPopup.Hide()
-                    if (response == "") {
-                        $.ajax({
-                            url: "/Home/GetOrderEnforcementStatus/",
-                            type: "post",
-                            success: function (respo) {
-                                if (respo == "") {
-                                    var url = "/Basket/ShowBasket";
-                                    window.location = url;
-                                }
-                                else {
-                                    respo = respo + "\n\nPlease click Ok to proceed to cart or Cancel to continue shopping";
-                                    if (confirm(respo)) {
-                                        var url = "/Basket/ShowBasket";
-                                        window.location = url;
-                                    }
-                                }
-                            }
-                        });
-
-                    }
-                    else if (response.indexOf("{%FREESTOCKERROR%}") > -1) {
-                        response = response.replace("{%FREESTOCKERROR%}", "The Freestock has changed whilst you have been placing the order \n\n");
-                        response = response + "\n\nPlease click Ok to proceed to cart or Cancel to continue shopping";
-                        if(confirm(response))
-                        {
-                            var url = "/Basket/ShowBasket";
+        function GetCart(value) {
+            if (value != null) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Private/GetcartStatus",
+                    success: function (response) {
+                       
+                        if (response == "") {
+                            var url = "/Private/ShowBasketPrivate";
                             window.location = url;
                         }
+                        else 
+                        {
+                            alert("No items in cart");
+                        }
                     }
-                    else if (response.indexOf("///") > -1) {
-                        var capCatagory = response.replace("///", "");
-                        capCatagory = capCatagory + "\n\nPlease click Ok to proceed to cart or Cancel to continue shopping";
-                        if (confirm(capCatagory)) {
+                }
+                );
+            }
+            else {
+                var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
+                loadPopup.Show();
+                $.ajax({
+                    type: "POST",
+                    url: "/Home/GetBasketStatus",
+                    success: function (response) {
+                        loadPopup.Hide()
+                        if (response == "") {
                             $.ajax({
                                 url: "/Home/GetOrderEnforcementStatus/",
                                 type: "post",
@@ -739,36 +809,68 @@
                                     }
                                 }
                             });
+
                         }
-                    }
-                    else if (response.indexOf("/--/") > -1) {
-                        var capCatagory = response.replace("/--/", "");
-                        capCatagory = capCatagory + "\n\nPlease click Ok to proceed to cart or Cancel to continue shopping";
-                        if (confirm(capCatagory)) {
-                            $.ajax({
-                                url: "/Home/GetOrderEnforcementStatus/",
-                                type: "post",
-                                success: function (respo) {
-                                    respo = respo + "\n\nPlease click Ok to proceed to cart or Cancel to continue shopping";
-                                    if (respo == "") {
-                                        var url = "/Basket/ShowBasket";
-                                        window.location = url;
-                                    }
-                                    else {
-                                        if (confirm(respo)) {
+                        else if (response.indexOf("{%FREESTOCKERROR%}") > -1) {
+                            response = response.replace("{%FREESTOCKERROR%}", "The Freestock has changed whilst you have been placing the order \n\n");
+                            response = response + "\n\nPlease click Ok to proceed to cart or Cancel to continue shopping";
+                            if (confirm(response)) {
+                                var url = "/Basket/ShowBasket";
+                                window.location = url;
+                            }
+                        }
+                        else if (response.indexOf("///") > -1) {
+                            var capCatagory = response.replace("///", "");
+                            capCatagory = capCatagory + "\n\nPlease click Ok to proceed to cart or Cancel to continue shopping";
+                            if (confirm(capCatagory)) {
+                                $.ajax({
+                                    url: "/Home/GetOrderEnforcementStatus/",
+                                    type: "post",
+                                    success: function (respo) {
+                                        if (respo == "") {
                                             var url = "/Basket/ShowBasket";
                                             window.location = url;
                                         }
+                                        else {
+                                            respo = respo + "\n\nPlease click Ok to proceed to cart or Cancel to continue shopping";
+                                            if (confirm(respo)) {
+                                                var url = "/Basket/ShowBasket";
+                                                window.location = url;
+                                            }
+                                        }
                                     }
-                                }
-                            });
+                                });
+                            }
                         }
-                    }
-                    else {
-                        myFunction("No items in the cart!");
-                    }
-                },
-            });
+                        else if (response.indexOf("/--/") > -1) {
+                            var capCatagory = response.replace("/--/", "");
+                            capCatagory = capCatagory + "\n\nPlease click Ok to proceed to cart or Cancel to continue shopping";
+                            if (confirm(capCatagory)) {
+                                $.ajax({
+                                    url: "/Home/GetOrderEnforcementStatus/",
+                                    type: "post",
+                                    success: function (respo) {
+                                        respo = respo + "\n\nPlease click Ok to proceed to cart or Cancel to continue shopping";
+                                        if (respo == "") {
+                                            var url = "/Basket/ShowBasket";
+                                            window.location = url;
+                                        }
+                                        else {
+                                            if (confirm(respo)) {
+                                                var url = "/Basket/ShowBasket";
+                                                window.location = url;
+                                            }
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                        else {
+                            myFunction("No items in the cart!");
+                        }
+                    },
+                });
+            }
         }
         function GetEnforcement() {
             $.ajax({
@@ -1998,6 +2100,30 @@
                 alert("select Uniforms first!")
             }
         }
+        function CreatePrivateOrder(EmployeeId, UcodesName, EmployeeName) {
+            var popup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
+            var ctrlName = UcodesName.split('_');
+            var ucodeCmb = ASPxClientControl.GetControlCollection().GetByName("checkComboBox_" + ctrlName[1] + "_" + ctrlName[2]);
+            if (UcodesName != "" && UcodesName != undefined && UcodesName != null) {
+                if (EmployeeId != "") {
+                    popup.Show();
+                    $.ajax({
+                        type: "Post",
+                        url: "@Url.Content("~/Employee/GotoCard")",
+                        data: { 'EmployeeId': EmployeeId, 'Ucodes1': UcodesName, 'EmpName': EmployeeName },
+                    success: function (response) {
+                        if (response != null) {
+                            popup.Hide();
+                            window.location = response;
+                        }
+                    }
+                });
+            }
+        }
+        else {
+                alert("select Uniforms first!")
+        }
+        }
 
         var textSeparator = ";";
         function updateText(s, e) {
@@ -2163,6 +2289,29 @@
 }).GetHtml()
     @Html.DevExpress().PopupControl(sett =>
 {
+    sett.Width = System.Web.UI.WebControls.Unit.Pixel(1200);
+    sett.Height = System.Web.UI.WebControls.Unit.Pixel(700);
+    sett.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+    sett.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    sett.Name = "AddressEditForm";
+    sett.AllowResize = false;
+    sett.ShowHeader = true;
+    sett.ShowOnPageLoad = false;
+    sett.AllowDragging = true;
+    sett.CloseAction = CloseAction.OuterMouseClick;
+    sett.CloseOnEscape = false;
+    sett.PopupAnimationType = AnimationType.Auto;
+    sett.Modal = true;
+    sett.HeaderText = "";
+    //sett.ClientSideEvents.Closing = "redirect";
+    sett.ScrollBars = System.Web.UI.WebControls.ScrollBars.Vertical;
+    sett.SetContent(() =>
+    {
+        ViewContext.Writer.Write("<div id='AddressDiv'></div>");
+    });
+}).GetHtml()
+    @Html.DevExpress().PopupControl(sett =>
+{
     sett.Width = System.Web.UI.WebControls.Unit.Pixel(1300);
     sett.Height = System.Web.UI.WebControls.Unit.Pixel(800);
     sett.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
@@ -2261,6 +2410,8 @@
     sett.CloseAction = CloseAction.CloseButton;
     sett.CloseOnEscape = true;
     sett.PopupAnimationType = AnimationType.Auto;
+
+    sett.ScrollBars = System.Web.UI.WebControls.ScrollBars.Horizontal;
     sett.Modal = true;
     sett.HeaderText = "";
     sett.ShowHeader = true;
@@ -2269,6 +2420,31 @@
         ViewContext.Writer.Write("<div><div id='EmergencyMessageContent'></div></div>");
     });
 }).GetHtml()
+    @Html.DevExpress().PopupControl(sett =>
+        {
+            sett.Width = System.Web.UI.WebControls.Unit.Pixel(700);
+            sett.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+            sett.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+            sett.Name = "PrivateMessage";
+            sett.AllowResize = true;
+            sett.ShowHeader = true;
+            sett.ShowOnPageLoad = false;
+            sett.AllowDragging = false;
+            sett.CloseAction = CloseAction.CloseButton;
+            sett.CloseOnEscape = true;
+            sett.PopupAnimationType = AnimationType.Auto;
+            sett.ScrollBars = System.Web.UI.WebControls.ScrollBars.Horizontal;
+            sett.Modal = true;
+            sett.HeaderText = "";
+            sett.ShowHeader = true;
+            sett.SetContent(() =>
+            {
+                ViewContext.Writer.Write("<div><div id='PrivateMessageContent'></div></div>");
+            });
+        }).GetHtml()
+
+    
+
     @Html.DevExpress().PopupControl(sett =>
 {
     sett.Width = System.Web.UI.WebControls.Unit.Pixel(500);
@@ -2289,6 +2465,8 @@
         ViewContext.Writer.Write("<div><div id='forgetpwdContent'></div></div>");
     });
 }).GetHtml()
+
+
     @Html.DevExpress().PopupControl(sett =>
 {
     sett.Width = System.Web.UI.WebControls.Unit.Pixel(1400);
@@ -2493,14 +2671,43 @@
                                     @* @Html.ActionLink("Logout", "Logoff", "User", new { area = "" }, new { @class = "navbar-light" })*@
                                 </li>
                                 <li id="CartwidCount">
-                                    <button class="btn" style="background-color:#009885;color:white" onclick="GetCart()"><b>View Basket &nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-shopping-cart" style="color:white;font-size:25px"></span><sup class="badge" id="lblCartCount">@Convert.ToInt32(Session["qty"])</sup></b></button>
+                                    @if ((bool)Session["PRIVATEORDER"])
+                                    {
+                                        <button class="btn" style="background-color:#009885;color:white" onclick="GetCart(1)"><b>View Basket &nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-shopping-cart" style="color:white;font-size:25px"></span><sup class="badge" id="lblCartCount">@Convert.ToInt32(Session["qty"])</sup></b></button>
+
+                                    }
+                                    else
+                                    {
+                                        <button class="btn" style="background-color:#009885;color:white" onclick="GetCart()"><b>View Basket &nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-shopping-cart" style="color:white;font-size:25px"></span><sup class="badge" id="lblCartCount">@Convert.ToInt32(Session["qty"])</sup></b></button>
+
+                                    }
                                 </li>
-                                <li>
-                                    <a style="text-decoration:none;" class="glyphicon glyphicon-log-out" title="Logout" href="/User/LogOff/"></a>
-                                </li>
+                                @if ((bool)Session["PRIVATEORDER"])
+                                {
+                                    var value = "";
+                                    <li style="color:black">
+                                        @if (Session["SalesOrderHeader"] != null)
+                                        {
+                                            if (((List<Maximus.Data.Models.SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Any(s => s.SalesOrderLine.Count > 0))
+                                            {
+                                                string emp = Session["SelectedEmp"].ToString();
+                                                string selUcode = Session["SelectedUcode"].ToString();
+                                                if (((List<Maximus.Data.Models.SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(s => s.UCodeId == selUcode && s.EmployeeID == emp).Any(s => s.SalesOrderLine.Count > 0))
+                                                {
+                                                    var model12 = ((List<Maximus.Data.Models.SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(s => s.UCodeId == selUcode && s.EmployeeID == emp).First().SalesOrderLine;
+                                                    var totVal = model12.Sum(s => s.Total) + model12.Sum(s => s.VAT);
+                                                    value = Session["CurrencySymbol"].ToString() + " " + totVal.ToString("0.00") + " (inc. VAt)";
+
+                                                }
+                                            }
+                                        }
+                                        <a id="PrivPrice" class="navbar-light">@value</a>
+                                    </li>
+                                }
                             </ul>
                             <br />
-                            <div class="col-md-2 col-sm-12 col-lg-2 col-xs-12"></div><div class="col-md-2 col-sm-12 col-lg-2 col-xs-12"></div><div class="col-md-2 col-sm-12 col-lg-2 col-xs-12"></div>
+                            <div class="col-md-2 col-sm-12 col-lg-2 col-xs-12">
+                            </div><div class="col-md-2 col-sm-12 col-lg-2 col-xs-12"></div><div class="col-md-2 col-sm-12 col-lg-2 col-xs-12"></div>
                             <div class="col-md-2 col-sm-12 col-lg-2 col-xs-12">
                                 @*<div id="CartwidCount">
                                         <button class="btn" style="background-color:#009885;color:white" onclick="GetCart()"><b>View Basket &nbsp;&nbsp;&nbsp;<span class="glyphicon glyphicon-shopping-cart" style="color:white;font-size:25px"></span><sup class="badge" id="lblCartCount">@Convert.ToInt32(Session["qty"])</sup></b></button>
@@ -2598,12 +2805,12 @@
                                                 <p>
                                                     @SiteCodeUserAddress.UserAddress.Address3
                                                 </p>
-                                                <p>
-                                                    @SiteCodeUserAddress.UserAddress.Town
-                                                </p> <p>
-                                                    @SiteCodeUserAddress.UserAddress.City
-                                                </p>
-                                                <p>   @SiteCodeUserAddress.UserAddress.Postcode</p>
+                                                            <p>
+                                                                @SiteCodeUserAddress.UserAddress.Town
+                                                            </p> <p>
+                                                                @SiteCodeUserAddress.UserAddress.City
+                                                            </p>
+                                                            <p>   @SiteCodeUserAddress.UserAddress.Postcode</p>
 
                                             }
                                         }
@@ -2646,12 +2853,12 @@
                                             <p>
                                                 @SiteCodeUserAddress1.Address3
                                             </p>
-                                            <p>
-                                                @SiteCodeUserAddress1.Town
-                                            </p> <p>
-                                                @SiteCodeUserAddress1.City
-                                            </p>
-                                            <p>   @SiteCodeUserAddress1.Postcode</p>
+                                                                <p>
+                                                                    @SiteCodeUserAddress1.Town
+                                                                </p> <p>
+                                                                    @SiteCodeUserAddress1.City
+                                                                </p>
+                                                                <p>   @SiteCodeUserAddress1.Postcode</p>
                                         }
                                     }
                                 }

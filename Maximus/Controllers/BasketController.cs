@@ -68,6 +68,7 @@ namespace Maximus.Controllers
         public readonly PointsCard _pointsCard;
         public readonly PointsByUcode _pointsByUcode;
         public readonly PointsAdjustment _pointsAdjustment;
+             public readonly TblAlternateTable _tblAlternates;
         public readonly ViewPointsCard _vuPointsCard;
         private string busId;
         private string access;
@@ -80,7 +81,9 @@ namespace Maximus.Controllers
         {
             _unitOfWork = unitOfWork;
             BasketService basket = new BasketService(_unitOfWork);
+            TblAlternateTable tblAlternates=new TblAlternateTable(_unitOfWork);
             _basket = basket;
+            _tblAlternates = tblAlternates;
             DataConnectionService dataConnection = new DataConnectionService(_unitOfWork);
             _dataConnection = dataConnection;
             tblSalesLines salesOrderLines = new tblSalesLines(_unitOfWork);
@@ -175,99 +178,146 @@ namespace Maximus.Controllers
         }
         #endregion
 
-
+        #region CanAccessOrder
+        public bool CanAccessOrder(string empid, int orderno)
+        {
+            string access = Session["Access"].ToString();
+            if (access.ToLower().Trim() != "user")
+            {
+                if (_salesOrderHeader.Exists(s =>   s.OrderNo == orderno   && s.OnlineConfirm == 0))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+                  
+            }
+            else if (access.ToLower().Trim() == "user")
+            {
+                if (_salesOrderHeader.Exists(s => s.PinNo == empid && s.OrderNo == orderno && s.OnlineUserID == empid && s.OnlineConfirm==0))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+        #endregion
         #region ShowBasket 
         public ActionResult ShowBasket(int ordeNo = 0)
         {
             double carriage = 0.0;
-            if (ordeNo > 0 || Convert.ToBoolean(Session["ISEDITING"]))
+            if ((ordeNo > 0 || Convert.ToBoolean(Session["ISEDITING"])))
             {
-                if (EditOrder(ordeNo) || Convert.ToBoolean(Session["ISEDITING"]))
+                ordeNo = ordeNo == 0 ?Convert.ToInt32 (((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.IsEditing).ToList().First().OrderNo) : ordeNo;
+                if (CanAccessOrder(userName, ordeNo))
                 {
-
-                    Session["ISEDITING"] = true;
-                    var model1 = ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.IsEditing).ToList();
-                    Session["DeliveryAddress"] = _basket.FillCombo_CustomerDelivery(busId, access, orderPermit, userName, true, model1.First().PinNo);
-                    TotalModel tot = new TotalModel();
-                    string ucode = model1.First().UCodeId;
-                    var ss = Convert.ToBoolean(Session["POINTSREQ"]);
-                    if (Convert.ToBoolean(Session["POINTSREQ"]) && model1.First().OrderType == "SO" && (model1.First().ReasonCode == 0 | _pointsByUcode.Exists(s => s.BusinessID == busId && s.UcodeID == ucode)))
+                    if ((EditOrder(ordeNo) || Convert.ToBoolean(Session["ISEDITING"])))
                     {
-                        //  _dp.UcodeStyles(ucode, busId) = _dp.UcodeStyles(ucode, busId);
-                        Session["Pointsmodel"] = _basket.GetPointsModel(model1.First().UCodeId, busId);
-                        Session["IsEmergency"] = false;
-                    }
-                    else
-                    {
-                        Session["IsEmergency"] = true;
-                        Session["POINTSREQ"] = false;
-                        Session["REQSTKLEVEL"] = _dp.GetRestockValue(ucode, busId);
-                        if (Session["emergencyUcode"] != null)
+                        Session["ISEDITING"] = true;
+                        var model1 = ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.IsEditing).ToList();
+                        Session["DeliveryAddress"] = _basket.FillCombo_CustomerDelivery(busId, access, orderPermit, userName, true, model1.First().PinNo);
+                        TotalModel tot = new TotalModel();
+                        string ucode = model1.First().UCodeId;
+                        var ss = Convert.ToBoolean(Session["POINTSREQ"]);
+                        if (Convert.ToBoolean(Session["POINTSREQ"]) && model1.First().OrderType == "SO" && (model1.First().ReasonCode == 0 | _pointsByUcode.Exists(s => s.BusinessID == busId && s.UcodeID == ucode)))
                         {
-
-                            ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes = Session["emergencyUcode"].ToString();
+                            //  _dp.UcodeStyles(ucode, busId) = _dp.UcodeStyles(ucode, busId);
+                            Session["Pointsmodel"] = _basket.GetPointsModel(model1.First().UCodeId, busId);
+                            Session["IsEmergency"] = false;
                         }
-
-
-                    }
-                    if (ordeNo > 0 & model1.First().IsUcode)
-                    {
-                        Init(model1.FirstOrDefault());
-                    }
-
-                    //var sss = ((List<Maximus.Data.Models.BusAddress1>)Session["DeliveryAddress"]);
-                    Session["cboDelAddress"] = ((List<Maximus.Data.Models.BusAddress1>)Session["DeliveryAddress"]).Any(x => x.AddressDescription == model1.First().DelDesc) ? ((List<Maximus.Data.Models.BusAddress1>)Session["DeliveryAddress"]).Where(x => x.AddressDescription == model1.First().DelDesc).First().AddressId : 0;
-                    tot = _dataConnection.GetAlltotals(model1, carriage, true);
-                    ViewBag.VatPercent = tot.vatSpan;
-                    ViewBag.carriage = tot.carriage;
-                    ViewBag.ordeTotal = tot.ordeTotal;
-                    ViewBag.totalVat = tot.totalVat;
-                    ViewBag.Total = tot.Total;
-                    ViewBag.GrossTotal = tot.gross;
-                    ViewData["SiteCodes"] = FillSiteCode();
-                    if (Convert.ToBoolean(Session["IsBulkOrder1"]) == false)
-                    {
-                        Session["SelectedEmp"] = model1.First().EmployeeID;
-                    }
-                    else
-                    {
-                        Session["SelectedEmp"] = "";
-                    }
-                    Session["SelectedUcode"] = model1.First().UCodeId;
-                    if (model1.First().SalesOrderLine.Where(s => s.IsDleted == false).Count() > 0)
-                    {
-                        Session["qty"] = model1.First().SalesOrderLine.Where(x => x.OrdQty != 0 && x.IsDleted == false).Sum(x => x.OrdQty);
-                    }
-                    else
-                    {
-                        Session["qty"] = 0;
-                    }
-                    var carr = FillCarrierDropdown();
-                    if (carr.Count > 0)
-                    {
-                        ViewData["carrierFill"] = carr;
-                        foreach (var item in carr)
+                        else
                         {
-                            if (item.Contains(Session["Carrier"].ToString()))
+                            Session["IsEmergency"] = true;
+                            Session["POINTSREQ"] = false;
+                            Session["REQSTKLEVEL"] = _dp.GetRestockValue(ucode, busId);
+                            if (Session["emergencyUcode"] != null)
                             {
 
-                                Session["selectedcar"] = item.Trim();
+                                ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes = Session["emergencyUcode"].ToString();
                             }
                         }
+                        if (ordeNo > 0 & model1.First().IsUcode)
+                        {
+                            Init(model1.FirstOrDefault());
+                        }
+
+                        //var sss = ((List<Maximus.Data.Models.BusAddress1>)Session["DeliveryAddress"]);
+                        Session["cboDelAddress"] = ((List<Maximus.Data.Models.BusAddress1>)Session["DeliveryAddress"]).Any(x => x.AddressDescription == model1.First().DelDesc) ? ((List<Maximus.Data.Models.BusAddress1>)Session["DeliveryAddress"]).Where(x => x.AddressDescription == model1.First().DelDesc).First().AddressId : 0;
+                        tot = _dataConnection.GetAlltotals(model1, carriage, true);
+                        ViewBag.VatPercent = tot.vatSpan;
+                        ViewBag.carriage = tot.carriage;
+                        ViewBag.ordeTotal = tot.ordeTotal;
+                        ViewBag.totalVat = tot.totalVat;
+                        ViewBag.Total = tot.Total;
+                        ViewBag.GrossTotal = tot.gross;
+                        ViewData["SiteCodes"] = FillSiteCode();
+                        if (Convert.ToBoolean(Session["IsBulkOrder1"]) == false)
+                        {
+                            Session["SelectedEmp"] = model1.First().EmployeeID;
+                        }
+                        else
+                        {
+                            Session["SelectedEmp"] = "";
+                        }
+                        Session["SelectedUcode"] = model1.First().UCodeId;
+                        if (model1.First().SalesOrderLine.Where(s => s.IsDleted == false).Count() > 0)
+                        {
+                            Session["qty"] = model1.First().SalesOrderLine.Where(x => x.OrdQty != 0 && x.IsDleted == false).Sum(x => x.OrdQty);
+                        }
+                        else
+                        {
+                            Session["qty"] = 0;
+                        }
+                        var carr = FillCarrierDropdown();
+                        if (carr.Count > 0)
+                        {
+                            ViewData["carrierFill"] = carr;
+                            foreach (var item in carr)
+                            {
+                                if (item.Contains(Session["Carrier"].ToString()))
+                                {
+
+                                    Session["selectedcar"] = item.Trim();
+                                }
+                            }
+                        }
+                        var carrier = FillCarrierStyle();
+                        Session["carrStyle"] = carrier;
+                        ViewData["carrierStyleFill"] = carrier;
+                        if (Convert.ToBoolean(Session["POINTSREQ"]) && Convert.ToBoolean(Session["IsEmergency"]) == false)
+                        {
+                            GetPointsDiv();
+                        }
+                        var sssss = ((UpdateMailModel)Session["updateEmailTemplate"]).OrderNo;
+                        if (((UpdateMailModel)Session["updateEmailTemplate"]).OrderNo != model1.First().OrderNo)
+                        {
+                            FillUpdateMailTemplate(model1.First(), Session["Price"].ToString());
+                        }
+
                     }
-                    var carrier = FillCarrierStyle();
-                    Session["carrStyle"] = carrier;
-                    ViewData["carrierStyleFill"] = carrier;
-                    if (Convert.ToBoolean(Session["POINTSREQ"]) && Convert.ToBoolean(Session["IsEmergency"]) == false)
+                }
+                else
+                {
+                    ViewBag.CannotAccess = "Cannot Access the order";
+                    if (_salesOrderHeader.Exists(s=>s.OrderNo== ordeNo && s.OnlineConfirm==1))
                     {
-                        GetPointsDiv();
+                        ViewBag.CannotAccess = "Cannot access this order because it is already confrimed";
                     }
-                    var sssss = ((UpdateMailModel)Session["updateEmailTemplate"]).OrderNo;
-                    if (((UpdateMailModel)Session["updateEmailTemplate"]).OrderNo != model1.First().OrderNo)
+                    else
                     {
-                        FillUpdateMailTemplate(model1.First(), Session["Price"].ToString());
+                        ViewBag.CannotAccess = "Cannot access this order because it belongs to some other colleague";
                     }
 
+                    return View("CannotAccess");
                 }
             }
             else
@@ -288,7 +338,7 @@ namespace Maximus.Controllers
                 var contactId = 0;
                 List<double> varpercents = new List<double>();
                 var data = "";
-                var ss = Session["cboDelAddress"].ToString();
+
                 var result = Session["cboDelAddress"].ToString() == "" ? _dataConnection.GetDeliveryAddressId(emp, busId, Session["UserName"].ToString()) : Convert.ToInt32(Session["cboDelAddress"].ToString());
                 result = result > 0 ? result : model1.First().AddressId;
                 var mod = (List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"];
@@ -445,7 +495,8 @@ namespace Maximus.Controllers
                     var carrier = FillCarrierStyle();
                     string emp = "";
                     SalesOrderHeaderViewModel slsHead = ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Any(x => x.IsEditing) ? ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.IsEditing).First() : new SalesOrderHeaderViewModel();
-                    if (_salesOrderHeader.Exists(x => x.OrderNo == OrderNo))
+
+                    if (_salesOrderHeader.Exists(x => x.OrderNo == OrderNo && x.OnlineConfirm == 0 && x.OnlineProcessed == 0))
                     {
                         slsHead = _salesOrderHeader.GetAll(x => x.OrderNo == OrderNo && x.OnlineConfirm == 0 && x.OnlineProcessed == 0).Select(x => new SalesOrderHeaderViewModel { OrderNo = x.OrderNo, CompanyID = x.CompanyID, WarehouseID = x.WarehouseID, CustID = x.CustID, OrderDate = x.OrderDate.Value.ToString("yyyy-MM-dd"), InvAddress1 = x.InvAddress1, InvAddress2 = x.InvAddress2, InvAddress3 = x.InvAddress3, InvCity = x.InvCity, InvTown = x.InvTown, InvPostCode = x.InvPostCode, InvCountry = x.InvCountry, DelDesc = x.DelDesc, DelAddress1 = x.DelAddress1, DelAddress2 = x.DelAddress2, DelAddress3 = x.DelAddress3, DelCity = x.DelCity, DelTown = x.DelTown, DelPostCode = x.DelPostCode, DelCountry = x.DelCountry, CustRef = x.CustRef, Carrier = x.Carrier, CarrierCharge = Convert.ToDouble(x.CarrierCharge.Value), Comments = x.Comments, CommentsExternal = x.CommentsExternal, TotalGoods = x.TotalGoods.Value, OrderGoods = x.OrderGoods.Value, Currency_Exchange_Rate = x.Currency_Exchange_Rate, UserID = x.UserID, PinNo = x.PinNo, UCodeId = x.UCodeId, Currency_Exchange_Code = x.Currency_Exchange_Code, TIMEOFENTRY = x.TIMEOFENTRY, RepID = x.RepID, ReasonCode = x.ReasonCode, OnlineUserID = x.OnlineUserID, OrderAnalysisCode1 = x.OrderAnalysisCode1, OrderAnalysisCode2 = x.OrderAnalysisCode2, OrderAnalysisCode3 = x.OrderAnalysisCode3, OrderAnalysisCode4 = x.OrderAnalysisCode4, OrderAnalysisCode5 = x.OrderAnalysisCode5, AllowPartShipment = x.AllowPartShipment, OrderType = x.OrderType, ContractRef = x.ContractRef, EmailID = x.EmailID, ContactName = x.ContactName, IsUcode = true }).First();
                         if (slsHead.PinNo != "" && slsHead.PinNo != null)
@@ -474,54 +525,149 @@ namespace Maximus.Controllers
                             slsHead.IsUcode = true;
                         }
                         slsHead.IsEditing = true;
-                        slsHead.SalesOrderLine = _salesOrderLines.GetAll(x => x.OrderNo == OrderNo).Select(x => new SalesOrderLineViewModel
+                        var SalesOrderLine = new List<SalesOrderLineViewModel>();
+                      
+                        if (_ucodeOperationsTbl.Exists(s=>s.BusinessID==busId && s.UcodeId==slsHead.UCodeId && s.FreeStkChk==true))
                         {
-                            CompanyID = x.CompanyID,
-                            Warehouseid = x.Warehouseid,
-                            OrderNo = x.OrderNo,
-                            LineNo = x.LineNo,
-                            StyleID = x.StyleID,
-                            ColourID = x.ColourID,
-                            Description = x.Description,
-                            SizeID = x.SizeID,
-                            Price = Convert.ToDouble(x.Price),
-                            OrdQty = x.OrdQty.Value,
-                            AllQty = x.AllQty.Value,
-                            InvQty = x.InvQty.Value,
-                            DespQty = x.DespQty.Value,
-                            DeliveryDate = x.Deliverydate.Value.ToString(),
-                            VatCode1 = x.VatCode.Value,
-                            RepId = Convert.ToInt32(x.RepID),
-                            KAMID = Convert.ToInt32(x.KamID),
-                            KAMRate1 = x.KAMRate.Value,
-                            RepRate1 = x.RepRate.Value,
-                            Currency_Exchange_Rate = x.Currency_Exchange_Rate.Value,
-                            StyleIDref = x.StyleIDref,
-                            FreeText1 = x.FreeText,
-                            Cost1 = Convert.ToDouble(x.Cost),
-                            IssueUOM1 = Convert.ToInt32(x.IssueUOM),
-                            IssueQty1 = Convert.ToInt32(x.IssueQty),
-                            StockingUOM1 = Convert.ToInt32(x.StockingUOM),
-                            NomCode1 = x.NomCode.Value,
-                            EmployeeId = emp,
-                            OriginalOrderNo = x.OriginalOrderNo.Value,
-                            OriginalLineNo = x.OriginalLineNo,
-                            AssemblyID = x.AssemblyID.Value,
-                            AsmLineNo = x.AsmLineNo.Value,
-                            ReasonCodeLine = Convert.ToInt64(x.ReasonCode),
-                            ReturnOrderNo = x.ReturnOrderNo.Value,
-                            ReturnLineNo = x.ReturnLineNo.Value,
-                            SOPDetail5 = x.SOPDETAIL5,
-                            SOPDetail4 = x.SOPDETAIL4,
-                            SoqtyForempSO = x.OrdQty.Value,
+                            var data= _salesOrderLines.GetAll(x => x.OrderNo == OrderNo).Select(x => new SalesOrderLineViewModel
+                            {
+                                CompanyID = x.CompanyID,
+                                Warehouseid = x.Warehouseid,
+                                OrderNo = x.OrderNo,
+                                LineNo = x.LineNo,
+                                StyleID = x.StyleID,
+                                ColourID = x.ColourID,
+                                Description = x.Description,
+                                SizeID = x.SizeID,
+                                Price = Convert.ToDouble(x.Price),
+                                OrdQty = x.OrdQty.Value,
+                                AllQty = x.AllQty.Value,
+                                InvQty = x.InvQty.Value,
+                                DespQty = x.DespQty.Value,
+                                DeliveryDate = x.Deliverydate.Value.ToString(),
+                                VatCode1 = x.VatCode.Value,
+                                RepId = Convert.ToInt32(x.RepID),
+                                KAMID = Convert.ToInt32(x.KamID),
+                                KAMRate1 = x.KAMRate.Value,
+                                RepRate1 = x.RepRate.Value,
+                                Currency_Exchange_Rate = x.Currency_Exchange_Rate.Value,
+                                StyleIDref = x.StyleIDref,
+                                FreeText1 = x.FreeText,
+                                Cost1 = Convert.ToDouble(x.Cost),
+                                IssueUOM1 = Convert.ToInt32(x.IssueUOM),
+                                IssueQty1 = Convert.ToInt32(x.IssueQty),
+                                StockingUOM1 = Convert.ToInt32(x.StockingUOM),
+                                NomCode1 = x.NomCode.Value,
+                                EmployeeId = emp,
+                                OriginalOrderNo = x.OriginalOrderNo.Value,
+                                OriginalLineNo = x.OriginalLineNo,
+                                AssemblyID = x.AssemblyID.Value,
+                                AsmLineNo = x.AsmLineNo.Value,
+                                ReasonCodeLine = Convert.ToInt64(x.ReasonCode),
+                                ReturnOrderNo = x.ReturnOrderNo.Value,
+                                ReturnLineNo = x.ReturnLineNo.Value,
+                                SOPDetail5 = x.SOPDETAIL5,
+                                SOPDetail4 = x.SOPDETAIL4,
+                                SoqtyForempSO = x.OrdQty.Value,
+                                
+                                Isedit = true,
+                                Total = _dataConnection.GetlineTotals(Convert.ToDouble(x.OrdQty), Convert.ToDouble(x.Price), _dataConnection.GetVatPercent(x.StyleID, x.SizeID)),
+                                VatPercent = _dataConnection.GetVatPercent(x.StyleID, x.SizeID)
+                            }).ToList();
+                            SalesOrderLine =data.GroupBy(s => new { s.StyleID, s.ColourID, s.SizeID, s.IsDleted,s.Isedit, s.IsAlternateStyle }).
+                         Select(sa => new SalesOrderLineViewModel
+                         {
+                             OrderNo=sa.First().OrderNo,
+                             IsAlternateStyle = sa.First().IsAlternateStyle,
+                             StyleID = sa.First().StyleID.Trim(),
+                             ColourID = sa.First().ColourID.Trim(),
+                             SizeID = sa.First().SizeID.Trim(),
+                             OrdQty = sa.Sum(s => s.OrdQty),
+                             Description = sa.First().Description,
+                             Price = sa.First().Price,
+                             Cost1 = sa.First().Cost1,
+                             IssueUOM1 = sa.First().IssueUOM1,
+                             IssueQty1 = sa.First().IssueQty1,
+                             Currency_Exchange_Rate = sa.First().Currency_Exchange_Rate,
+                             StyleIDref = sa.First().StyleIDref,
+                             VatCode1 = sa.First().VatCode1,
+                             RepId = sa.First().RepId,
+                             KAMID = sa.First().KAMID,
+                             RepRate1 = sa.First().RepRate1,
+                             KAMRate1 = sa.First().KAMRate1,
+                             OriginalOrderNo = sa.First().OriginalOrderNo,
+                             Isedit=sa.First().Isedit,
+                             AssemblyID = sa.First().AssemblyID,
+                             AsmLineNo = sa.First().AsmLineNo,
+                             ReturnOrderNo = sa.First().ReturnOrderNo,
+                             ReturnLineNo = sa.First().ReturnLineNo,
+                             SOPDetail5 = sa.First().SOPDetail5,
+                             SOPDetail4 = sa.First().SOPDetail4,
+                             IsDleted = sa.First().IsDleted,
+                             SoqtyForempSO=sa.Sum(s=>s.SoqtyForempSO),
+                             DeliveryDate=sa.First().DeliveryDate
+                         }).ToList();
+                            for (int i = 0; i < SalesOrderLine.Count; i++)
+                            {
 
-                            Isedit = true,
-                            Total = _dataConnection.GetlineTotals(Convert.ToDouble(x.OrdQty), Convert.ToDouble(x.Price), _dataConnection.GetVatPercent(x.StyleID, x.SizeID)),
-                            VatPercent = _dataConnection.GetVatPercent(x.StyleID, x.SizeID)
-                        }).ToList();
+                                SalesOrderLine[i].LineNo = i + 1;
+                                
+                            }
+                            SalesOrderLine.ForEach(S => S.EmployeeId = slsHead.PinNo);
+                        }
+                        else
+                        {
+                            SalesOrderLine= _salesOrderLines.GetAll(x => x.OrderNo == OrderNo).Select(x => new SalesOrderLineViewModel
+                            {
+                                CompanyID = x.CompanyID,
+                                Warehouseid = x.Warehouseid,
+                                OrderNo = x.OrderNo,
+                                LineNo = x.LineNo,
+                                StyleID = x.StyleID,
+                                ColourID = x.ColourID,
+                                Description = x.Description,
+                                SizeID = x.SizeID,
+                                Price = Convert.ToDouble(x.Price),
+                                OrdQty = x.OrdQty.Value,
+                                AllQty = x.AllQty.Value,
+                                InvQty = x.InvQty.Value,
+                                DespQty = x.DespQty.Value,
+                                DeliveryDate = x.Deliverydate.Value.ToString(),
+                                VatCode1 = x.VatCode.Value,
+                                RepId = Convert.ToInt32(x.RepID),
+                                KAMID = Convert.ToInt32(x.KamID),
+                                KAMRate1 = x.KAMRate.Value,
+                                RepRate1 = x.RepRate.Value,
+                                Currency_Exchange_Rate = x.Currency_Exchange_Rate.Value,
+                                StyleIDref = x.StyleIDref,
+                                FreeText1 = x.FreeText,
+                                Cost1 = Convert.ToDouble(x.Cost),
+                                IssueUOM1 = Convert.ToInt32(x.IssueUOM),
+                                IssueQty1 = Convert.ToInt32(x.IssueQty),
+                                StockingUOM1 = Convert.ToInt32(x.StockingUOM),
+                                NomCode1 = x.NomCode.Value,
+                                EmployeeId = emp,
+                                OriginalOrderNo = x.OriginalOrderNo.Value,
+                                OriginalLineNo = x.OriginalLineNo,
+                                AssemblyID = x.AssemblyID.Value,
+                                AsmLineNo = x.AsmLineNo.Value,
+                                ReasonCodeLine = Convert.ToInt64(x.ReasonCode),
+                                ReturnOrderNo = x.ReturnOrderNo.Value,
+                                ReturnLineNo = x.ReturnLineNo.Value,
+                                SOPDetail5 = x.SOPDETAIL5,
+                                SOPDetail4 = x.SOPDETAIL4,
+                                SoqtyForempSO = x.OrdQty.Value,
+
+                                Isedit = true,
+                                Total = _dataConnection.GetlineTotals(Convert.ToDouble(x.OrdQty), Convert.ToDouble(x.Price), _dataConnection.GetVatPercent(x.StyleID, x.SizeID)),
+                                VatPercent = _dataConnection.GetVatPercent(x.StyleID, x.SizeID)
+                            }).ToList();
+                           
+                        }
+                        slsHead.SalesOrderLine = SalesOrderLine;
                         foreach (var lin in slsHead.SalesOrderLine.Where(s => s.IsDleted == false))
                         {
-                            if(Convert.ToBoolean(Convert.ToBoolean(Session["REQSTKLEVEL"])))
+                            if (Convert.ToBoolean(Convert.ToBoolean(Session["REQSTKLEVEL"])))
                             {
                                 lin.TotalFreeStock = _dp.GetFreeStock(lin.StyleID, lin.ColourID, lin.SizeID, slsHead.WarehouseID, slsHead.SalesOrderLine, true, false);
                             }
@@ -529,6 +675,7 @@ namespace Maximus.Controllers
                             lin.TotalPoints = _pointStyle.Exists(s => s.StyleID == lin.StyleID && s.BusinessID == busId) ? _pointStyle.GetAll(s => s.StyleID == lin.StyleID && s.BusinessID == busId).First().Points.Value * Convert.ToInt32(lin.OrdQty) : 0;
                             lin.SoqtyForempSOPoints = (lin.SoqtyForempSO * lin.Points);
                             lin.isCarrline = carrier.Contains(lin.StyleID) ? true : false;
+                            lin.IsAlternateStyle = _tblAlternates.Exists(s => s.AltStyleId == lin.StyleID) ? true : false;
                         }
                         Session["selectedUcodes"] = slsHead.UCodeId;
 
@@ -541,6 +688,7 @@ namespace Maximus.Controllers
 
                         }
                         SetSalesOrderHeaderLoc();
+                        var sss = ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.IsEditing).First();
                         return true;
                     }
                     else
@@ -666,19 +814,39 @@ namespace Maximus.Controllers
             var vuPoints = _dp.ViewtotalPointLst(busId, selEMP);
             //string selUcode = Session["SelectedUcode"].ToString();
             List<string> lst = new List<string>();
-            foreach (var data in _ucodeByFreeText.GetAll(x => x.UCodeID == shs.UCodeId).Select(x => new UcodeModel { StyleId = x.StyleID, FreeText = x.FreeText }).ToList())
+            var IsHiddenUcode = _ucodeOperationsTbl.Exists(s => s.UcodeId == shs.UCodeId && s.FreeStkChk && s.IsEmergency) ? _ucodeOperationsTbl.GetAll(s => s.UcodeId == shs.UCodeId && s.FreeStkChk && s.IsEmergency).First().HasAltStyles : false;
+            if (IsHiddenUcode && Convert.ToBoolean(Session["IsEmergency"]) && Convert.ToBoolean(Session["REQSTKLEVEL"]))
             {
-                if (data.FreeText == null | data.FreeText == "")
+                foreach (var data in _ucodeByFreeText.GetAll(x => x.UCodeID == shs.UCodeId && x.IsHidden==0).Select(x => new UcodeModel { StyleId = x.StyleID, FreeText = x.FreeText }).ToList())
                 {
-                    lst.Add(data.StyleId);
+                    if (data.FreeText == null | data.FreeText == "")
+                    {
+                        lst.Add(data.StyleId);
+                    }
+                    else
+                    {
+                        lst.Add(data.FreeText);
+                    }
                 }
-                else
+            }
+            else
+            {
+                foreach (var data in _ucodeByFreeText.GetAll(x => x.UCodeID == shs.UCodeId).Select(x => new UcodeModel { StyleId = x.StyleID, FreeText = x.FreeText }).ToList())
                 {
-                    lst.Add(data.FreeText);
+                    if (data.FreeText == null | data.FreeText == "")
+                    {
+                        lst.Add(data.StyleId);
+                    }
+                    else
+                    {
+                        lst.Add(data.FreeText);
+                    }
                 }
             }
             lst = lst.Distinct().ToList();
             Session["UcFreeTxt"] = lst;
+
+            var sss = (List<string>)Session["UcFreeTxt"];
             var model = _ucodeByFreeText.GetAll(x => lst.Contains(x.FreeText) && x.UCodeID == shs.UCodeId).ToList().Select(x => new styleViewmodel
             {
                 StyleID = x.StyleID,
@@ -1028,7 +1196,7 @@ namespace Maximus.Controllers
                     {
                         if (Convert.ToBoolean(Convert.ToBoolean(Session["REQSTKLEVEL"])))
                         {
-                            data1.TotalFreeStock = _dp.GetFreeStock(data1.StyleID, data1.ColourID, data1.SizeID, salesHeaders.First().WarehouseID, null, Convert.ToBoolean(Session["ISEDITING"]));
+                            data1.TotalFreeStock = Convert.ToBoolean(Session["ISEDITING"])? _dp.GetFreeStock(data1.StyleID, data1.ColourID, data1.SizeID, salesHeaders.First().WarehouseID, salesHeaders.First().SalesOrderLine, Convert.ToBoolean(Session["ISEDITING"]),false) : _dp.GetFreeStock(data1.StyleID, data1.ColourID, data1.SizeID, salesHeaders.First().WarehouseID, null, Convert.ToBoolean(Session["ISEDITING"]));
                         }
                         if (data1.StyleImage.Contains(":"))
                         {
@@ -1735,15 +1903,15 @@ namespace Maximus.Controllers
                             int oqty = Convert.ToInt32(item.OrdQty);
                             int freeStck = 0;
                             var salesOrderLines = salesHead.SalesOrderLine;
-                            var thisLine = salesOrderLines.Any(s => s.LineNo == item.LineNo && s.IsDleted==false) ? salesOrderLines.Where(s => s.LineNo == item.LineNo && s.IsDleted == false).First() : new SalesOrderLineViewModel();
-                             
-                            freeStck =   _dp.GetFreeStock(thisLine.StyleID, thisLine.ColourID, thisLine.SizeID, Session["WareHouseID"].ToString(), salesOrderLines, Convert.ToBoolean(Session["ISEDITING"]), false);
-                            var unCart = salesOrderLines.Any(s => s.StyleID == thisLine.StyleID && s.ColourID == thisLine.ColourID && s.SizeID == thisLine.SizeID && s.IsDleted == false && s.Isedit == false && s.LineNo!=item.LineNo) ? salesOrderLines.Where(s => s.StyleID == thisLine.StyleID && s.ColourID == thisLine.ColourID && s.SizeID == thisLine.SizeID && s.IsDleted == false && s.Isedit == false && s.LineNo != item.LineNo).Sum(s => s.OrdQty) : 0;
-                            long otherStk= salesOrderLines.Any(s => s.StyleID == thisLine.StyleID && s.ColourID == thisLine.ColourID && s.SizeID == thisLine.SizeID && s.IsDleted == false && s.Isedit  && s.LineNo != item.LineNo) ? salesOrderLines.Where(s => s.StyleID == thisLine.StyleID && s.ColourID == thisLine.ColourID && s.SizeID == thisLine.SizeID && s.IsDleted == false && s.Isedit  && s.LineNo != item.LineNo).Sum(s => s.OrdQty) : 0;
+                            var thisLine = salesOrderLines.Any(s => s.LineNo == item.LineNo && s.IsDleted == false) ? salesOrderLines.Where(s => s.LineNo == item.LineNo && s.IsDleted == false).First() : new SalesOrderLineViewModel();
+
+                            freeStck = _dp.GetFreeStock(thisLine.StyleID, thisLine.ColourID, thisLine.SizeID, Session["WareHouseID"].ToString(), salesOrderLines, Convert.ToBoolean(Session["ISEDITING"]), false);
+                            var unCart = salesOrderLines.Any(s => s.StyleID == thisLine.StyleID && s.ColourID == thisLine.ColourID && s.SizeID == thisLine.SizeID && s.IsDleted == false && s.Isedit == false && s.LineNo != item.LineNo) ? salesOrderLines.Where(s => s.StyleID == thisLine.StyleID && s.ColourID == thisLine.ColourID && s.SizeID == thisLine.SizeID && s.IsDleted == false && s.Isedit == false && s.LineNo != item.LineNo).Sum(s => s.OrdQty) : 0;
+                            long otherStk = salesOrderLines.Any(s => s.StyleID == thisLine.StyleID && s.ColourID == thisLine.ColourID && s.SizeID == thisLine.SizeID && s.IsDleted == false && s.Isedit && s.LineNo != item.LineNo) ? salesOrderLines.Where(s => s.StyleID == thisLine.StyleID && s.ColourID == thisLine.ColourID && s.SizeID == thisLine.SizeID && s.IsDleted == false && s.Isedit && s.LineNo != item.LineNo).Sum(s => s.OrdQty) : 0;
                             freeStck = freeStck - Convert.ToInt32(unCart);
-                            if (freeStck - (oqty+ otherStk) >= 0)
+                            if (freeStck - (oqty + otherStk) >= 0)
                             {
-                                ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.EmployeeID == Session["thisEmp"].ToString()).First().SalesOrderLine.Where(s => s.LineNo == item.LineNo && s.IsDleted==false).First().OrdQty = oqty;
+                                ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.EmployeeID == Session["thisEmp"].ToString()).First().SalesOrderLine.Where(s => s.LineNo == item.LineNo && s.IsDleted == false).First().OrdQty = oqty;
                                 ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.EmployeeID == Session["thisEmp"].ToString()).First().SalesOrderLine.Where(s => s.LineNo == item.LineNo && s.IsDleted == false).First().InvQty = oqty;
                             }
                             else

@@ -8,7 +8,7 @@ namespace Maximus.Data.Models
     #region styleViewmodel
     public class styleViewmodel
     {
-
+        public int count { get; set; }
         public string StyleID { get; set; }
         public string Description { get; set; }
         public string StyleImage { get; set; }
@@ -23,6 +23,7 @@ namespace Maximus.Data.Models
         public int SeqNO { get; set; }
         public PreviousQty HasPreviousSize { get; set; }
         public string OriginalStyleid { get; set; }
+        public bool IsHidden { get; set; }
         public string Freetext { get; set; }
         public string Entitlement { get; set; }
         public string Reqdata { get; set; }
