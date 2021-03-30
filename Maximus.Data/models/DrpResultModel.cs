@@ -12,10 +12,9 @@ namespace Maximus.Data.Models
         public List<string> SizeList { get; set; }
         public List<SizePrice> PriceList { get; set; }
         public decimal Price { get; set; }
-        public string PriceVAT { get; set; }
         public bool isManpack { get; set; }
         public bool isBulk { get; set; }
-        public bool showVat { get; set; }
+
         public bool HasReqData { get; set; }
         public string ReqData { get; set; }
     }
@@ -23,9 +22,8 @@ namespace Maximus.Data.Models
     public class SizePrice
     {
         public string Size { get; set; }
-        public string Price { get; set; }
-        public string PriceVAT { get; set; }
-        public bool showVat { get; set; }
+        public decimal Price { get; set; }
+
         public string Currency { get; set; }
     }
 }

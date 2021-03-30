@@ -219,9 +219,7 @@
     <Content Include="Content\Images\doc.png" />
     <Content Include="Content\Images\embroidery.png" />
     <Content Include="Content\Images\empHistory.png" />
-    <Content Include="Content\Images\paypal.png" />
     <Content Include="Content\Images\multi.png" />
-    <Content Include="Content\Images\pound.png" />
     <Content Include="Content\Images\saleLogo.png" />
     <Content Include="Content\Images\salesorder.netsuite.png" />
     <Content Include="Content\Images\search.png" />
@@ -231,7 +229,6 @@
     <Content Include="Content\Images\ui-icons_777777_256x240.png" />
     <Content Include="Content\Images\ui-icons_cc0000_256x240.png" />
     <Content Include="Content\Images\ui-icons_ffffff_256x240.png" />
-    <Content Include="Content\Images\worldpay.png" />
     <Content Include="Content\Images\xls.png" />
     <Content Include="Content\jquery-ui.css" />
     <Content Include="Content\jquery-ui.structure.css" />
@@ -284,11 +281,9 @@
     <Content Include="Content\themes\base\tooltip.css" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="MailTemplates\ConfirmPrivateorder.html" />
     <Content Include="MailTemplates\EditOrderTemplate.html" />
     <Content Include="MailTemplates\EmergencyEmail.html" />
     <Content Include="MailTemplates\ConfirmOrderTemplate.html" />
-    <Content Include="MailTemplates\PrivateMessage.html" />
     <Content Include="MailTemplates\EmergencyMessage.html" />
     <Content Include="MailTemplates\ForgetPassword.html" />
     <Content Include="MailTemplates\OrderDetail_Template.html" />
@@ -990,7 +985,6 @@
     <Compile Include="Controllers\ImportExportController.cs" />
     <Compile Include="Controllers\OrderDisplayController.cs" />
     <Compile Include="Controllers\PointsAdjustmentController.cs" />
-    <Compile Include="Controllers\PrivateController.cs" />
     <Compile Include="Controllers\ReportController.cs" />
     <Compile Include="Controllers\ReturnController.cs" />
     <Compile Include="Controllers\SettingsController.cs" />
@@ -1096,26 +1090,6 @@
     <Content Include="Views\Basket\_DeleteOrderPrompt.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout1.cshtml" />
-    <Content Include="Views\Private\_PrivateCatagoryPartial.cshtml" />
-    <Content Include="Views\Private\Index.cshtml" />
-    <Content Include="Views\Private\_PrivateCardViewPartial.cshtml" />
-    <Content Include="Views\Private\ShowBasketPrivate.cshtml" />
-    <Content Include="Views\Private\_DeliveryaddressPrivate.cshtml" />
-    <Content Include="Views\Private\_CartviewDetailGridViewGridViewPartial.cshtml" />
-    <Content Include="Views\Private\_CartViewPrivate.cshtml" />
-    <Content Include="Views\Private\_CardDetailAssemblyPrivate.cshtml" />
-    <Content Include="Views\Private\model\_CarriageView.cshtml" />
-    <Content Include="Views\Private\model\_EmployeeView.cshtml" />
-    <Content Include="Views\Private\_BillingPrivate.cshtml" />
-    <Content Include="Views\Private\_AddressPrivateForm.cshtml" />
-    <Content Include="Views\Private\Payments.cshtml" />
-    <Content Include="Views\Private\ShowPrivateOrders.cshtml" />
-    <Content Include="Views\Private\_ShowPrivateOrdersGridViewPartial.cshtml" />
-    <Content Include="Views\Basket\CannotAccess.cshtml" />
-    <Content Include="Views\Private\ShowBasket.cshtml" />
-    <Content Include="Views\Private\_Paymentspartial.cshtml" />
-    <Content Include="Views\Private\_EmployeeGridViewPartial.cshtml" />
-    <Content Include="Views\Private\_OrderDetailGridView1PrivatePartial.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

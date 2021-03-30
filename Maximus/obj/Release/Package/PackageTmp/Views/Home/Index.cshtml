@@ -1,16 +1,16 @@
-﻿<script>
-    $(document).ready(function () {
-        EmergencyMessagePop();
-    });
-</script>
-
+﻿    <script>
+        $(document).ready(function () {
+            EmergencyMessagePop();
+        });
+    </script>
+                            
 <br /><br /><br />
 
 @if (Convert.ToBoolean(Session["ISEDITING"]) && ((List<Maximus.Data.Models.SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.IsEditing).First().IsTemplate)
 {
-    <div class="row">
-        @Html.Action("EmployeeGridViewPartial", "Employee", new { txtEmpNO = ((List<Maximus.Data.Models.SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.IsEditing).First().PinNo })
-    </div><br />
+<div class="row">
+   @Html.Action( "EmployeeGridViewPartial", "Employee", new { txtEmpNO = ((List<Maximus.Data.Models.SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.IsEditing).First().PinNo })
+</div><br />
 }
 else
 {
@@ -29,7 +29,7 @@ else
         @{
             if (Session["BuisnessId"] != null)
             {
-                if (Session["SelectedEmp"] != null && Session["SelectedEmp"] != "")
+                if (Session["SelectedEmp"] != null && Session["SelectedEmp"]!="")
                 {
                     var s = Convert.ToInt32(Session["qty"]);
                     //string content = string.Format("<div class=\"col-md-3\" style=\"padding:0px;\" ><p><b>Employee Id:</b></p>{0}</div> <div style=\"padding:0px;\" class=\"col-md-3\"> <p><b>EmployeeName:</b></p> {2}</div><div style=\"padding:0px;\" class=\"col-md-4\"> <p><b>Ucodes:</b></p> {1}</div><div class=\"col-md-2\"> <p><b>Business Id:</b></p>" + Session["BuisnessId"].ToString() + "</div>", Session["SelectedEmp"].ToString(), Session["UcodeDesc"].ToString(), Session["EmpName"].ToString());
@@ -50,9 +50,9 @@ else
                     <div class="col-md-5">
                         @{if (((List<string>)Session["Templates"]).Count() > 0)
                             {
-
+                                
                                 <span><b>Template:</b></span>ViewContext.Writer.Write(string.Format("{0}", Session["UcodeDesc"].ToString()));
-
+                                
                             }
                             else
                             { <span><b>Ucode:</b></span>
@@ -98,91 +98,64 @@ else
             {
                 if (Session["Pointsmodel"] != null)
                 {
-                    if (((Maximus.Data.models.PointsModel)Session["Pointsmodel"]).TotalPoints > 0)
+                    if (((Maximus.Data.models.PointsModel)Session["Pointsmodel"]).TotalPoints>0)
                     {
-                        <div id="PointsDiv">
-                            <div class='col-md-6'> <span><b>Total Points: </b></span> @ViewBag.TotalPoints </div> <div class='col-md-6'> <span><b>Available Points: </b></span>  @ViewBag.availabelPoints </div> <div class='col-md-6'> <span><b>Used Points: </b></span>@ViewBag.usedPoints </div><div class='col-md-6'> <span><b>Cart Points: </b></span>@ViewBag.inCartPoints  </div>
-
-                        </div>
+                                <div id="PointsDiv">
+                    <div class='col-md-6'> <span><b>Total Points: </b></span> @ViewBag.TotalPoints </div> <div class='col-md-6'> <span><b>Available Points: </b></span>  @ViewBag.availabelPoints </div> <div class='col-md-6'> <span><b>Used Points: </b></span>@ViewBag.usedPoints </div><div class='col-md-6'> <span><b>Cart Points: </b></span>@ViewBag.inCartPoints  </div>
+                     
+                </div>
+                        }
                     }
                 }
             }
-        }
     </div>
     <div class="col-md-5 col-lg-5 col-xs-5 col-sm-5">
-        @{
+            @{
 
-            if (Session["costCenter"] != null)
-            {
-                if (((List<Maximus.Data.models.tblsop_customerorder_template_costcentre>)Session["costCenter"]).Count > 0)
+                if (Session["costCenter"] != null)
                 {
-                    Html.DevExpress().ComboBox(x =>
+                    if (((List<Maximus.Data.models.tblsop_customerorder_template_costcentre>)Session["costCenter"]).Count > 0)
                     {
-                        x.Name = "SiteCodeCmb";
-                        x.Properties.Caption = "Sitecode";
-                        x.Properties.ClientSideEvents.SelectedIndexChanged = "AddClientCode";
-                        //
-                        var projectcode = Session["selectedClientcode"] != null ? Session["selectedClientcode"].ToString().Split('|')[0].Trim() : "";
-                        var data = ((List<Maximus.Data.models.tblsop_customerorder_template_costcentre>)Session["costCenter"]).Where(xa => xa.ProjectCode == projectcode).Select(xa => xa.ProjectCode).ToList().IndexOf(projectcode);
-                        if (((List<Maximus.Data.models.tblsop_customerorder_template_costcentre>)Session["costCenter"]).Count > 1)
+                        Html.DevExpress().ComboBox(x =>
                         {
-                            foreach (var dat in (List<Maximus.Data.models.tblsop_customerorder_template_costcentre>)Session["costCenter"])
+                            x.Name = "SiteCodeCmb";
+                            x.Properties.Caption = "Sitecode";
+                            x.Properties.ClientSideEvents.SelectedIndexChanged = "AddClientCode";
+                            //
+                            var projectcode = Session["selectedClientcode"] != null ? Session["selectedClientcode"].ToString().Split('|')[0].Trim() : "";
+                            var data =( (List<Maximus.Data.models.tblsop_customerorder_template_costcentre>)Session["costCenter"]).Where(xa=>xa.ProjectCode==projectcode).Select(xa=>xa.ProjectCode).ToList().IndexOf(projectcode);
+                            if (((List<Maximus.Data.models.tblsop_customerorder_template_costcentre>)Session["costCenter"]).Count > 1)
                             {
-                                x.Properties.Items.Add(dat.ProjectCode + " | " + dat.SiteName);
+                                foreach (var dat in (List<Maximus.Data.models.tblsop_customerorder_template_costcentre>)Session["costCenter"])
+                                {
+                                    x.Properties.Items.Add(dat.ProjectCode + " | " + dat.SiteName);
+                                }
                             }
-                        }
-                        else
-                        {
-                            x.SelectedIndex = 0;
-                            x.Properties.Items.Add(((List<Maximus.Data.models.tblsop_customerorder_template_costcentre>)Session["costCenter"])[0].ProjectCode + " | " + ((List<Maximus.Data.models.tblsop_customerorder_template_costcentre>)Session["costCenter"])[0].SiteName);
-                        }
-                        if (data > -1)
-                        {
-                            x.SelectedIndex = data;
-                        }
-                    }).GetHtml();
+                            else
+                            {
+                                x.SelectedIndex = 0;
+                                x.Properties.Items.Add(((List<Maximus.Data.models.tblsop_customerorder_template_costcentre>)Session["costCenter"])[0].ProjectCode + " | " + ((List<Maximus.Data.models.tblsop_customerorder_template_costcentre>)Session["costCenter"])[0].SiteName);
+                            }
+                            if(data>-1)
+                            {
+                                x.SelectedIndex = data;
+                            }
+                        }).GetHtml();
+                    }
                 }
             }
-        }
-    </div>
+        </div>
 </div>
 <br />
 <div class="row" style="padding:0px">
-    @if (Session["BuisnessId"].ToString() != "BARBAN01")
+    @if (Session["BuisnessId"].ToString()!="BARBAN01")
     {
-        <div class="col-md-2 col-lg-2 col-xs-2 col-sm-12" style="padding-left:0px;padding-right:3px;">
-            <center>
-                @Html.Action("GetAllGroups")
-            </center>
-        </div>
-        <div class="col-md-10 col-lg-10 col-xs-12 col-sm-12" style="padding-left:3px;padding-right:0px">
-
-            @Html.DevExpress().ButtonEdit(sett =>
-   {
-       sett.Name = "searchPanel";
-       sett.ControlStyle.BackColor = System.Drawing.Color.White;
-       sett.ReadOnly = false;
-       //sett.ControlStyle.CssClass = "input-group changethisone";
-       sett.Properties.Buttons.Add("<span disabled class=\"input-group-addon\"><span class=\"glyphicon glyphicon-search\"></span></span>");
-       sett.Width = System.Web.UI.WebControls.Unit.Percentage(100);
-       sett.Properties.ClientSideEvents.TextChanged = "filterresults";
-       sett.EncodeHtml = false;
-   }).GetHtml()
-            <br />
-            <div id="resultArea">
-                @Html.Action("CardViewPartial")
-            </div>
-
-        </div>
-    }
-    else if (Convert.ToBoolean(Session["PRIVATEORDER"]))
-    {
-        <div class="row" style="margin:0px;background-color:white;border:solid 3px #009885;">
-
+    <div class="col-md-2 col-lg-2 col-xs-2 col-sm-12" style="padding-left:0px;padding-right:3px;">
+        <center>
             @Html.Action("GetAllGroups")
-
-        </div>
-        <br />
+        </center>
+    </div>
+    <div class="col-md-10 col-lg-10 col-xs-12 col-sm-12" style="padding-left:3px;padding-right:0px">
 
         @Html.DevExpress().ButtonEdit(sett =>
    {
@@ -200,23 +173,23 @@ else
             @Html.Action("CardViewPartial")
         </div>
 
-
+    </div>
     }
     else
     {
         <div class="col-md-12 col-lg-12 col-xs-12 col-sm-12" style="padding-left:3px;padding-right:0px">
 
             @Html.DevExpress().ButtonEdit(sett =>
-       {
-           sett.Name = "searchPanel";
-           sett.ControlStyle.BackColor = System.Drawing.Color.White;
-           sett.ReadOnly = false;
-           //sett.ControlStyle.CssClass = "input-group changethisone";
-           sett.Properties.Buttons.Add("<span disabled class=\"input-group-addon\"><span class=\"glyphicon glyphicon-search\"></span></span>");
-           sett.Width = System.Web.UI.WebControls.Unit.Percentage(100);
-           sett.Properties.ClientSideEvents.TextChanged = "filterresults";
-           sett.EncodeHtml = false;
-       }).GetHtml()
+   {
+       sett.Name = "searchPanel";
+       sett.ControlStyle.BackColor = System.Drawing.Color.White;
+       sett.ReadOnly = false;
+       //sett.ControlStyle.CssClass = "input-group changethisone";
+       sett.Properties.Buttons.Add("<span disabled class=\"input-group-addon\"><span class=\"glyphicon glyphicon-search\"></span></span>");
+       sett.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+       sett.Properties.ClientSideEvents.TextChanged = "filterresults";
+       sett.EncodeHtml = false;
+   }).GetHtml()
             <br />
             <div id="resultArea">
                 @Html.Action("CardViewPartial")

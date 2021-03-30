@@ -293,6 +293,7 @@ namespace Maximus.Data.models
         public virtual DbSet<styleby_freetextview_ucode> styleby_freetextview_ucode { get; set; }
         public virtual DbSet<stylebytemplateview> stylebytemplateviews { get; set; }
         public virtual DbSet<tblfskstyle_dimension1> tblfskstyle_dimension1 { get; set; }
+        public virtual DbSet<ucodeby_freetextview> ucodeby_freetextview { get; set; }
         public virtual DbSet<unrelatedorder> unrelatedorders { get; set; }
         public virtual DbSet<view_manpack> view_manpack { get; set; }
         public virtual DbSet<view_noorderplacedforthisemployee> view_noorderplacedforthisemployee { get; set; }
@@ -306,8 +307,6 @@ namespace Maximus.Data.models
         public virtual DbSet<view_unmatchedcolourwithorgcolour> view_unmatchedcolourwithorgcolour { get; set; }
         public virtual DbSet<view_unmatchedordercolourid> view_unmatchedordercolourid { get; set; }
         public virtual DbSet<tblonline_ucode_operations> tblonline_ucode_operations { get; set; }
-        public virtual DbSet<tblaccemp_ucode_alternates> tblaccemp_ucode_alternates { get; set; }
-        public virtual DbSet<ucodeby_freetextview> ucodeby_freetextview { get; set; }
     
         public virtual int bk_CreateCube_OrderDetail()
         {

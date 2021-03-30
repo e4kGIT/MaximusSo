@@ -39,7 +39,6 @@
         settings.Columns.Add(s => { s.FieldName = "Description"; s.Caption = "Description"; });
         settings.Columns.Add(s => { s.FieldName = "OrdQty"; s.Caption = "Order Quantity"; });
         settings.Columns.Add(s => { s.FieldName = "Points"; s.Caption = "Points"; });
-        settings.Columns.Add(s => { s.FieldName = "CourierRef"; s.Caption = "Courier Ref"; });
         if (Session["OT"].ToString().ToLower().Trim() != "rt")
         {
             settings.Columns.Add(s => { s.FieldName = "ReturnOrderNo"; s.Caption = "Return orderno"; });

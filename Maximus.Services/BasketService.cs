@@ -1011,10 +1011,9 @@ namespace Maximus.Services
                 }
                 if (FreeStckCheck && ResultSet.Count == 0)
                 {
-                    var newResult = salesHead.SalesOrderLine.GroupBy(s => new { s.StyleID, s.ColourID, s.SizeID, s.IsDleted,s.IsAlternateStyle }).
+                    var newResult = salesHead.SalesOrderLine.GroupBy(s => new { s.StyleID, s.ColourID, s.SizeID, s.IsDleted }).
                            Select(sa => new SalesOrderLineViewModel
                            {
-                               IsAlternateStyle = sa.First().IsAlternateStyle,
                                StyleID = sa.First().StyleID.Trim(),
                                ColourID = sa.First().ColourID.Trim(),
                                SizeID = sa.First().SizeID.Trim(),
@@ -1046,7 +1045,7 @@ namespace Maximus.Services
                     string retunCnt = "";
                     if (isedit)
                     {
-                        foreach (var line in newResult.Where(s => s.IsDleted == false &&   s.IsAlternateStyle == false))
+                        foreach (var line in newResult.Where(s => s.IsDleted == false))
                         {
 
                             var freeStock = _dp.GetFreeStock(line.StyleID, line.ColourID, line.SizeID, salesHead.WarehouseID, salesHead.SalesOrderLine, true, false);
@@ -1065,7 +1064,7 @@ namespace Maximus.Services
                     }
                     else
                     {
-                        foreach (var line in newResult.Where(s => s.IsDleted == false && s.IsAlternateStyle == false))
+                        foreach (var line in newResult.Where(s => s.IsDleted == false))
                         {
                             var freeStock = _dp.GetFreeStock(line.StyleID, line.ColourID, line.SizeID, salesHead.WarehouseID, null, isedit);
                             if (line.OrdQty > freeStock)
@@ -1212,7 +1211,7 @@ namespace Maximus.Services
         public string GetOlderOrderInfoMail(SalesOrderHeaderViewModel salesHead, string pricePermission)
         {
 
-            string message = _dp.FillExistingOrderLineMessage(salesHead, "hide");
+            string message = _dp.FillExistingOrderLineMessage(salesHead, pricePermission);
             return message;
         }
         #endregion

@@ -291,7 +291,7 @@ namespace Maximus.Services
                         }
                     }
                 }
-                FillmailTemplatemess = FillmailTemplatemess + FillmailTemplate(orderDetailTemplate, salesHead, orderLinesTemplate, "Hide", ONLCUSREFLBL) + "<br/><br/><br/><br/><br/>";
+                FillmailTemplatemess = FillmailTemplatemess + FillmailTemplate(orderDetailTemplate, salesHead, orderLinesTemplate, pricePermission, ONLCUSREFLBL) + "<br/><br/><br/><br/><br/>";
 
             }
             if (orderHeaderTemplate != "")

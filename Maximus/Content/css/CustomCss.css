@@ -30,7 +30,6 @@
       width: 1500px  !important;
       height:100%;
   }
-     
 }
 
 @media screen and (max-width: 1600px) {
@@ -49,7 +48,6 @@
       width: 1300px  !important;
       height:100%;
   }
-       
 }
 
 @media screen and (max-width: 1440px) {
@@ -68,7 +66,6 @@
       width: 1200px  !important;
       height:100%;
   }
-        
 }
 
 @media screen and (max-width: 1366px) {
@@ -87,7 +84,6 @@
       width: 1000px  !important;
       height:100%;
   }
-    
 }
 
 @media screen and (max-width: 1280px) {
@@ -106,7 +102,6 @@
       width: 900px  !important;
       height:100%;
   }
-     
 }
 
 @media screen and (max-width: 1024px) {
@@ -125,6 +120,5 @@
       width: 650px  !important;
       height:500px;
   }
-      
 }
 

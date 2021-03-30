@@ -14,7 +14,6 @@ namespace Maximus.Data.Models
         public string CompanyID { get; set; }
         public int Points { get; set; }
         public int TotalPoints { get; set; }
-        public bool IsAlternateStyle { get; set; }
         public int IssueQty1 { get; set; }
         public int StockingUOM1 { get; set; }
         public int Ratio1 { get; set; }

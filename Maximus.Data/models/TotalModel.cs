@@ -9,12 +9,10 @@ namespace Maximus.Data.Models
     {
         public string vatSpan { get; set; }
         public double ordeTotal { get; set; }
-        public double ordeTotal1 { get; set; }
         public double Total { get; set; }
         public double totalVat { get; set; }
         public double carriage { get; set; }
         public double gross { get; set; }
-        public double gross1 { get; set; }
         public bool isreord { get; set; }
         public bool isreturn { get; set; }
 

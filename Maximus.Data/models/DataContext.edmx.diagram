@@ -271,6 +271,7 @@
         <EntityTypeShape EntityType="e4kmaximusdbModel.styleby_freetextview_ucode" Width="1.5" PointX="48.75" PointY="31.75" IsExpanded="true" />
         <EntityTypeShape EntityType="e4kmaximusdbModel.stylebytemplateview" Width="1.5" PointX="48.75" PointY="34.75" IsExpanded="true" />
         <EntityTypeShape EntityType="e4kmaximusdbModel.tblfskstyle_dimension1" Width="1.5" PointX="48.75" PointY="38.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="e4kmaximusdbModel.ucodeby_freetextview" Width="1.5" PointX="48.75" PointY="41.75" IsExpanded="true" />
         <EntityTypeShape EntityType="e4kmaximusdbModel.unrelatedorder" Width="1.5" PointX="48.75" PointY="45.75" IsExpanded="true" />
         <EntityTypeShape EntityType="e4kmaximusdbModel.view_manpack" Width="1.5" PointX="14.75" PointY="49.75" IsExpanded="true" />
         <EntityTypeShape EntityType="e4kmaximusdbModel.view_noorderplacedforthisemployee" Width="1.5" PointX="30.75" PointY="49.75" IsExpanded="true" />
@@ -284,8 +285,6 @@
         <EntityTypeShape EntityType="e4kmaximusdbModel.view_unmatchedcolourwithorgcolour" Width="1.5" PointX="50.75" PointY="26.75" IsExpanded="true" />
         <EntityTypeShape EntityType="e4kmaximusdbModel.view_unmatchedordercolourid" Width="1.5" PointX="50.75" PointY="31.75" IsExpanded="true" />
         <EntityTypeShape EntityType="e4kmaximusdbModel.tblonline_ucode_operations" Width="1.5" PointX="43.375" PointY="50.75" />
-        <EntityTypeShape EntityType="e4kmaximusdbModel.tblaccemp_ucode_alternates" Width="1.5" PointX="11.375" PointY="51.75" />
-        <EntityTypeShape EntityType="e4kmaximusdbModel.ucodeby_freetextview" Width="1.5" PointX="49.375" PointY="41.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

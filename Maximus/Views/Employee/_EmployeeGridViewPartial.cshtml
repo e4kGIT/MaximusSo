@@ -2,52 +2,50 @@
 @{
     Maximus.Data.Interface.Concrete.IUnitOfWork _unitOfWork = new Maximus.Data.InterFace.UnitOfWork();
     Maximus.Controllers.EmployeeController Emp = new Maximus.Controllers.EmployeeController(_unitOfWork);
-    Maximus.Data.Models.DataProcessing _dp = new Maximus.Data.Models.DataProcessing(_unitOfWork);
 }
 @{
-    var grid = Html.DevExpress().GridView(settings =>
-    {
-        settings.Name = "EmployeeGridView";
-        settings.CallbackRouteValues = new { Controller = "Employee", Action = "EmployeeGridViewPartial" };
-
-        settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "Employee", Action = "EmployeeGridViewPartialAddNew" };
-        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "Employee", Action = "EmployeeGridViewPartialUpdate" };
-        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "Employee", Action = "EmployeeGridViewPartialDelete" };
-        settings.SettingsEditing.Mode = GridViewEditingMode.PopupEditForm;
-        settings.SettingsBehavior.ConfirmDelete = true;
-        settings.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
-        //settings.CommandColumn.Visible = true;
-        //settings.CommandColumn.ShowNewButton = true;
-        //// settings.CommandColumn.ShowDeleteButton = true;
-        //settings.CommandColumn.ShowEditButton = true;
-
-        settings.KeyFieldName = "EmployeeId";
-
-        //settings.SettingsCommandButton.EditButton.Image.IconID = IconID.EditEdit16x16;
-        //settings.SettingsCommandButton.EditButton.RenderMode = GridCommandButtonRenderMode.Image;
-
-        //settings.SettingsCommandButton.NewButton.Image.IconID = IconID.ActionsAdd16x16;
-        //settings.SettingsCommandButton.NewButton.RenderMode = GridCommandButtonRenderMode.Image;
-
-        //settings.SettingsCommandButton.CancelButton.Image.IconID = IconID.ActionsCancel16x16;
-        //settings.SettingsCommandButton.CancelButton.RenderMode = GridCommandButtonRenderMode.Image;
-
-        //settings.SettingsCommandButton.UpdateButton.Image.IconID = IconID.OtherUpdatetable16x16gray;
-        //settings.SettingsCommandButton.UpdateButton.RenderMode = GridCommandButtonRenderMode.Image;
-
-        settings.SettingsPager.Visible = true;
-        // settings.Settings.ShowGroupPanel = true;
-        settings.Settings.ShowFilterRow = true;
-        settings.SettingsBehavior.AllowSelectByRowClick = true;
-
-        settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.Off;
-        settings.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Right;
-        settings.SettingsAdaptivity.AdaptiveDetailColumnCount = 1;
-        settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = false;
-        settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
-        settings.ClientSideEvents.BeginCallback = "IsCallBack";
-        if (Session["Access"].ToString().ToLower() != "user")
+        var grid = Html.DevExpress().GridView(settings =>
         {
+            settings.Name = "EmployeeGridView";
+            settings.CallbackRouteValues = new { Controller = "Employee", Action = "EmployeeGridViewPartial" };
+
+            settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "Employee", Action = "EmployeeGridViewPartialAddNew" };
+            settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "Employee", Action = "EmployeeGridViewPartialUpdate" };
+            settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "Employee", Action = "EmployeeGridViewPartialDelete" };
+            settings.SettingsEditing.Mode = GridViewEditingMode.PopupEditForm;
+            settings.SettingsBehavior.ConfirmDelete = true;
+            settings.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+            //settings.CommandColumn.Visible = true;
+            //settings.CommandColumn.ShowNewButton = true;
+            //// settings.CommandColumn.ShowDeleteButton = true;
+            //settings.CommandColumn.ShowEditButton = true;
+
+            settings.KeyFieldName = "EmployeeId";
+
+            //settings.SettingsCommandButton.EditButton.Image.IconID = IconID.EditEdit16x16;
+            //settings.SettingsCommandButton.EditButton.RenderMode = GridCommandButtonRenderMode.Image;
+
+            //settings.SettingsCommandButton.NewButton.Image.IconID = IconID.ActionsAdd16x16;
+            //settings.SettingsCommandButton.NewButton.RenderMode = GridCommandButtonRenderMode.Image;
+
+            //settings.SettingsCommandButton.CancelButton.Image.IconID = IconID.ActionsCancel16x16;
+            //settings.SettingsCommandButton.CancelButton.RenderMode = GridCommandButtonRenderMode.Image;
+
+            //settings.SettingsCommandButton.UpdateButton.Image.IconID = IconID.OtherUpdatetable16x16gray;
+            //settings.SettingsCommandButton.UpdateButton.RenderMode = GridCommandButtonRenderMode.Image;
+
+            settings.SettingsPager.Visible = true;
+            // settings.Settings.ShowGroupPanel = true;
+            settings.Settings.ShowFilterRow = true;
+            settings.SettingsBehavior.AllowSelectByRowClick = true;
+
+            settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.Off;
+            settings.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Right;
+            settings.SettingsAdaptivity.AdaptiveDetailColumnCount = 1;
+            settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = false;
+            settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
+            settings.ClientSideEvents.BeginCallback = "IsCallBack";
+            if(Session["Access"].ToString().ToLower()!="user"){ 
             settings.Columns.Add(c =>
             {
                 c.Width = System.Web.UI.WebControls.Unit.Pixel(100);
@@ -77,19 +75,19 @@
         }
 
 
-        settings.HtmlRowPrepared = (s, e) =>
-        {
-            if (e.GetValue("EmpIsActive") != null && e.GetValue("UserActive") != null)
+            settings.HtmlRowPrepared = (s, e) =>
             {
-
-
-                if (Convert.ToBoolean(e.GetValue("EmpIsActive").ToString()) == false || Convert.ToBoolean(e.GetValue("UserActive").ToString()) == false)
+                if (e.GetValue("EmpIsActive") != null && e.GetValue("UserActive") != null)
                 {
-                    e.Row.BackColor = System.Drawing.Color.Beige;
-                    e.Row.ForeColor = System.Drawing.Color.Red;
+
+
+                    if (Convert.ToBoolean(e.GetValue("EmpIsActive").ToString()) == false || Convert.ToBoolean(e.GetValue("UserActive").ToString()) == false)
+                    {
+                        e.Row.BackColor = System.Drawing.Color.Beige;
+                        e.Row.ForeColor = System.Drawing.Color.Red;
+                    }
                 }
-            }
-        };
+            };
         settings.Columns.Add("EmployeeId");
         settings.Columns.Add("Department");
         //settings.Columns.Add("EmpFirstName").Caption = "First name";
@@ -126,180 +124,165 @@
         }
         //settings.Columns.Add("StartDate").PropertiesEdit.DisplayFormatString = "dd.MM.yyyy"; ;
         //settings.Columns.Add("EndDate").PropertiesEdit.DisplayFormatString = "dd.MM.yyyy"; ;
-        if(Convert.ToBoolean(Session["PRIVATEORDER"])==false)
+        if (((List<string>)Session["Templates"]).Count > 0)
         {
-            if (((List<string>)Session["Templates"]).Count > 0)
+            settings.Columns.Add(col =>
             {
-                settings.Columns.Add(col =>
+                col.FieldName = "EmpUcodes";
+                col.Caption = "Templates";
+                col.SetDataItemTemplateContent(x =>
                 {
-                    col.FieldName = "EmpUcodes";
-                    col.Caption = "Templates";
-                    col.SetDataItemTemplateContent(x =>
+                    string EmployeeId = (DataBinder.Eval(x.DataItem, "EmployeeId")).ToString();
+                    List<string> Templates = (List<string>)Session["Templates"];
+                    Html.DevExpress().DropDownEdit(cmb =>
                     {
-                        string EmployeeId = (DataBinder.Eval(x.DataItem, "EmployeeId")).ToString();
-                        List<string> Templates = (List<string>)Session["Templates"];
-                        Html.DevExpress().DropDownEdit(cmb =>
+                        cmb.Name = "checkComboBox_" + EmployeeId;
+                        cmb.Width = 285;
+                        cmb.Properties.DropDownWindowStyle.BackColor = System.Drawing.Color.FromArgb(0xEDEDED);
+
+                        cmb.SetDropDownWindowTemplateContent(c =>
                         {
-                            cmb.Name = "checkComboBox_" + EmployeeId;
-                            cmb.Width = 285;
-                            cmb.Properties.DropDownWindowStyle.BackColor = System.Drawing.Color.FromArgb(0xEDEDED);
-
-                            cmb.SetDropDownWindowTemplateContent(c =>
+                            Html.DevExpress().ListBox(listBoxSettings =>
                             {
-                                Html.DevExpress().ListBox(listBoxSettings =>
-                                {
-                                    listBoxSettings.Name = "checkListBox_" + EmployeeId;
-                                    listBoxSettings.ControlStyle.Border.BorderWidth = 0;
-                                    listBoxSettings.ControlStyle.BorderBottom.BorderWidth = 1;
-                                    listBoxSettings.ControlStyle.BorderBottom.BorderColor = System.Drawing.Color.FromArgb(0xDCDCDC);
-                                    listBoxSettings.Height = System.Web.UI.WebControls.Unit.Pixel(200);
-                                    listBoxSettings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+                                listBoxSettings.Name = "checkListBox_" + EmployeeId;
+                                listBoxSettings.ControlStyle.Border.BorderWidth = 0;
+                                listBoxSettings.ControlStyle.BorderBottom.BorderWidth = 1;
+                                listBoxSettings.ControlStyle.BorderBottom.BorderColor = System.Drawing.Color.FromArgb(0xDCDCDC);
+                                listBoxSettings.Height = System.Web.UI.WebControls.Unit.Pixel(200);
+                                listBoxSettings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
 
-                                    //listBoxSettings.Properties.EnableSelectAll = true;
-                                    //listBoxSettings.Properties.FilteringSettings.ShowSearchUI = true;
-                                    listBoxSettings.Properties.SelectionMode = ListEditSelectionMode.CheckColumn;
-                                    foreach (var item in Templates)
-                                    {
-                                        listBoxSettings.Properties.Items.Add(item);
-                                    }
-                                    if (Templates.Count == 1)
-                                    {
-                                        listBoxSettings.SelectedIndex = 0;
-                                    }
-                                    listBoxSettings.Properties.ClientSideEvents.SelectedIndexChanged = "updateText";
-                                    listBoxSettings.Properties.ClientSideEvents.Init = "updateText";
-                                }).Render();
-                                ViewContext.Writer.Write("<div style=\"margin: 6px; overflow: hidden;\">");
-                                Html.DevExpress().Button(buttonSettings =>
+                                //listBoxSettings.Properties.EnableSelectAll = true;
+                                //listBoxSettings.Properties.FilteringSettings.ShowSearchUI = true;
+                                listBoxSettings.Properties.SelectionMode = ListEditSelectionMode.CheckColumn;
+                                foreach (var item in Templates)
                                 {
-                                    buttonSettings.Name = "buttonClose_" + EmployeeId;
-                                    buttonSettings.Text = "Close";
-                                    buttonSettings.Style.Add("float", "right");
-                                    buttonSettings.ClientSideEvents.Click = "HideCmb";
-                                    buttonSettings.Height = 26;
-                                }).Render();
-                                ViewContext.Writer.Write("</div>");
-                            });
-                            cmb.Properties.AnimationType = AnimationType.None;
-                            cmb.Properties.ClientSideEvents.TextChanged = "synchronizeListBoxValues";
-                            cmb.Properties.ClientSideEvents.DropDown = "synchronizeListBoxValues";
-                        }).GetHtml();
-                    });
+                                    listBoxSettings.Properties.Items.Add(item);
+                                }
+                                if (Templates.Count == 1)
+                                {
+                                    listBoxSettings.SelectedIndex = 0;
+                                }
+                                listBoxSettings.Properties.ClientSideEvents.SelectedIndexChanged = "updateText";
+                                listBoxSettings.Properties.ClientSideEvents.Init = "updateText";
+                            }).Render();
+                            ViewContext.Writer.Write("<div style=\"margin: 6px; overflow: hidden;\">");
+                            Html.DevExpress().Button(buttonSettings =>
+                            {
+                                buttonSettings.Name = "buttonClose_" + EmployeeId;
+                                buttonSettings.Text = "Close";
+                                buttonSettings.Style.Add("float", "right");
+                                buttonSettings.ClientSideEvents.Click = "HideCmb";
+                                buttonSettings.Height = 26;
+                            }).Render();
+                            ViewContext.Writer.Write("</div>");
+                        });
+                        cmb.Properties.AnimationType = AnimationType.None;
+                        cmb.Properties.ClientSideEvents.TextChanged = "synchronizeListBoxValues";
+                        cmb.Properties.ClientSideEvents.DropDown = "synchronizeListBoxValues";
+                    }).GetHtml();
                 });
-            }
-            else
+            });
+        }
+        else
+        {
+            settings.Columns.Add(col =>
             {
-                settings.Columns.Add(col =>
+                col.FieldName = "EmpUcodes";
+                col.Caption = "Uniforms";
+                col.SetDataItemTemplateContent(x =>
                 {
-                    col.FieldName = "EmpUcodes";
-                    col.Caption = "Uniforms";
-                    col.SetDataItemTemplateContent(x =>
+                    string EmployeeId = (DataBinder.Eval(x.DataItem, "EmployeeId")).ToString();
+                    string Ucodes = (string)(DataBinder.Eval(x.DataItem, "EmpUcodes"));
+
+                    if (Ucodes.Contains(','))
                     {
-                        string EmployeeId = (DataBinder.Eval(x.DataItem, "EmployeeId")).ToString();
-                        string Ucodes = (string)(DataBinder.Eval(x.DataItem, "EmpUcodes"));
-
-                        if (Ucodes.Contains(','))
+                        var ucodesArr = Ucodes.Split(',');
+                        Html.DevExpress().ComboBox(cmb =>
                         {
-                            var ucodesArr = Ucodes.Split(',');
-                            Html.DevExpress().ComboBox(cmb =>
+                            cmb.Name = "checkComboBox_" + EmployeeId +"_"+ Ucodes;
+                            cmb.Properties.ClientSideEvents.SelectedIndexChanged = "ChangeUcodePointsEmployeeGrid";
+                            cmb.Width = 285;
+                            if (Convert.ToBoolean(Session["POINTSREQ"]))
                             {
-                                cmb.Name = "checkComboBox_" + EmployeeId + "_" + Ucodes;
-                                cmb.Properties.ClientSideEvents.SelectedIndexChanged = "ChangeUcodePointsEmployeeGrid";
-                                cmb.Width = 285;
-                                if (Convert.ToBoolean(Session["POINTSREQ"]))
+                                if (Convert.ToBoolean(Session["IsEmergency"]))
                                 {
-                                    if (Convert.ToBoolean(Session["IsEmergency"]))
+                                    foreach (var item in ucodesArr)
                                     {
-                                        foreach (var item in ucodesArr)
+                                        if (Emp._pointsByUcode.Exists(s => s.UcodeID == item) == false)
                                         {
-                                            if (Emp._pointsByUcode.Exists(s => s.UcodeID == item) == false)
-                                            {
-                                                cmb.Properties.Items.Add(item);
-                                            }
+                                            cmb.Properties.Items.Add(item);
                                         }
                                     }
-                                    else
+                                }
+                                else
+                                {
+                                    foreach (var item in ucodesArr)
                                     {
-                                        foreach (var item in ucodesArr)
+                                        if (Emp._pointsByUcode.Exists(s => s.UcodeID == item))
                                         {
-                                            if (Emp._pointsByUcode.Exists(s => s.UcodeID == item))
-                                            {
-                                                if (Convert.ToBoolean(Session["Maternity"]))
-                                                {
-                                                    if (item.ToLower().Contains("materni"))
-                                                    {
-                                                        cmb.Properties.Items.Add(item);
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    cmb.Properties.Items.Add(item);
-                                                }
-                                            }
+                                            cmb.Properties.Items.Add(item);
                                         }
                                     }
+                                }
 
-                                    //  cmb.Properties.Items.Count()==0?
+                                //  cmb.Properties.Items.Count()==0?
+                                cmb.SelectedIndex = cmb.Properties.Items.Count == 1 ? 0 : -1;
+                            }
+                            else
+                            {
+                                if (Convert.ToBoolean(Session["IsEmergency"]))
+                                {
+                                    foreach (var item in ucodesArr)
+                                    {
+                                        if (Emp._pointsByUcode.Exists(s => s.UcodeID == item) == false)
+                                        {
+                                            cmb.Properties.Items.Add(item);
+                                        }
+                                    }
                                     cmb.SelectedIndex = cmb.Properties.Items.Count == 1 ? 0 : -1;
                                 }
                                 else
                                 {
-                                    if (Convert.ToBoolean(Session["IsEmergency"]))
+                                    foreach (var item in ucodesArr)
                                     {
-                                        foreach (var item in ucodesArr)
-                                        {
-                                            if (Emp._pointsByUcode.Exists(s => s.UcodeID == item) == false)
-                                            {
-                                                cmb.Properties.Items.Add(item);
-                                            }
-                                        }
-                                        cmb.SelectedIndex = cmb.Properties.Items.Count == 1 ? 0 : -1;
-                                    }
-                                    else
-                                    {
-                                        foreach (var item in ucodesArr)
-                                        {
 
-                                            cmb.Properties.Items.Add(item);
-                                        }
-                                        cmb.SelectedIndex = cmb.Properties.Items.Count == 1 ? 0 : -1;
+                                        cmb.Properties.Items.Add(item);
                                     }
-
+                                    cmb.SelectedIndex = cmb.Properties.Items.Count == 1 ? 0 : -1;
                                 }
-                            }).GetHtml();
-                        }
-                        else
+
+                            }
+                        }).GetHtml();
+                    }
+                    else
+                    {
+
+                        Html.DevExpress().ComboBox(cmb =>
                         {
-
-                            Html.DevExpress().ComboBox(cmb =>
+                            cmb.Name = "checkComboBox_" + EmployeeId + "_" + Ucodes;
+                            cmb.Properties.ClientSideEvents.SelectedIndexChanged = "ChangeUcodePointsEmployeeGrid";
+                            if (Convert.ToBoolean(Session["IsEmergency"]))
                             {
-                                cmb.Name = "checkComboBox_" + EmployeeId + "_" + Ucodes;
-                                cmb.Properties.ClientSideEvents.SelectedIndexChanged = "ChangeUcodePointsEmployeeGrid";
-                                if (Convert.ToBoolean(Session["IsEmergency"]))
+                                if (Emp._pointsByUcode.Exists(s => s.UcodeID == Ucodes) == false)
                                 {
-                                    if (Emp._pointsByUcode.Exists(s => s.UcodeID == Ucodes) == false)
-                                    {
-                                        cmb.Properties.Items.Add(Ucodes);
-                                    }
+                                    cmb.Properties.Items.Add(Ucodes);
                                 }
-                                else
+                            }
+                            else
+                            {
+                                if (Emp._pointsByUcode.Exists(s => s.UcodeID == Ucodes))
                                 {
-                                    if (Emp._pointsByUcode.Exists(s => s.UcodeID == Ucodes))
-                                    {
-                                        cmb.Properties.Items.Add(Ucodes);
-                                    }
+                                    cmb.Properties.Items.Add(Ucodes);
                                 }
-                                cmb.SelectedIndex = 0;
-                            }).GetHtml();
-                        }
-                    });
+                            }
+                            cmb.SelectedIndex = 0;
+                        }).GetHtml();
+                    }
                 });
-            }
+            });
         }
-
-
         var finUcode = "";
-        if (Convert.ToBoolean(Session["POINTSREQ"]) && Convert.ToBoolean(Session["IsEmergency"]) == false && Convert.ToBoolean(Session["PRIVATEORDER"])==false)
+        if (Convert.ToBoolean(Session["POINTSREQ"]) && Convert.ToBoolean(Session["IsEmergency"]) == false)
         {
             settings.Columns.Add(col =>
             {
@@ -485,15 +468,7 @@
                         string UcodesName = (DataBinder.Eval(x.DataItem, "EmpUcodes")).ToString();
                         string EmployeeName = (DataBinder.Eval(x.DataItem, "EmpFirstName")).ToString() + " " + (DataBinder.Eval(x.DataItem, "EmpLastName")).ToString();
                         string EmployeeId = (DataBinder.Eval(x.DataItem, "EmployeeId")).ToString();
-                        if (Convert.ToBoolean(Session["PRIVATEORDER"]))
-                        {
-                            UcodesName = _dp.BusinessParam("PRIVATEUCODE", Session["BuisnessId"].ToString());
-                            Content = Convert.ToBoolean(Session["OnStop"].ToString()) ? string.Format("<button style='background-color:#009885;' disabled onclick=\"CreatePrivateOrder('{0}','{1}','{2}')\" class=\"btn btn-primary\">Create Order</button>", EmployeeId, UcodesName, EmployeeName) : string.Format("<button style='background-color:#009885;' onclick=\"CreatePrivateOrder('{0}','{1}','{2}')\" class=\"btn btn-primary\">Create Order</button>", EmployeeId, UcodesName, EmployeeName);
-                        }
-                        else
-                        {
-                            Content = Convert.ToBoolean(Session["OnStop"].ToString()) ? string.Format("<button style='background-color:#009885;' disabled onclick=\"CreateOrder('{0}','{1}','{2}')\" class=\"btn btn-primary\">Create Order</button>", EmployeeId, "CmbUcode_" + EmployeeId + "_" + UcodesName, EmployeeName) : string.Format("<button style='background-color:#009885;' onclick=\"CreateOrder('{0}','{1}','{2}')\" class=\"btn btn-primary\">Create Order</button>", EmployeeId, "CmbUcode_" + EmployeeId + "_" + UcodesName, EmployeeName);
-                        }
+                        Content = Convert.ToBoolean(Session["OnStop"].ToString()) ? string.Format("<button style='background-color:#009885;' disabled onclick=\"CreateOrder('{0}','{1}','{2}')\" class=\"btn btn-primary\">Create Order</button>", EmployeeId, "CmbUcode_" + EmployeeId+"_" + UcodesName, EmployeeName) : string.Format("<button style='background-color:#009885;' onclick=\"CreateOrder('{0}','{1}','{2}')\" class=\"btn btn-primary\">Create Order</button>", EmployeeId, "CmbUcode_" + EmployeeId + "_" + UcodesName, EmployeeName);
                     }
                     ViewContext.Writer.Write(Content);
                 });

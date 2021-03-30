@@ -22,6 +22,5 @@ namespace Maximus.Data.models
         public string DimFreeText { get; set; }
         public string UCodeID { get; set; }
         public Nullable<int> SeqNo { get; set; }
-        public Nullable<int> IsHidden { get; set; }
     }
 }
