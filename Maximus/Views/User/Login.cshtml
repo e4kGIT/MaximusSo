@@ -18,6 +18,7 @@
 @Html.DevExpress().TextBoxFor(m => m.UserName, tb =>
 {
     tb.Properties.Caption = "Username";
+    tb.Properties.CaptionStyle.ForeColor =System.Drawing.Color.White;
     tb.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
     tb.ShowModelErrors = true;
     tb.Properties.ValidationSettings.Display = Display.Dynamic;
@@ -29,6 +30,7 @@
 {
     tb.Properties.Caption = "Password";
     tb.Properties.Password = true;
+    tb.Properties.CaptionStyle.ForeColor = System.Drawing.Color.White;
     tb.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
     tb.ShowModelErrors = true;
     tb.Properties.ValidationSettings.Display = Display.Dynamic;

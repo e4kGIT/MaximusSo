@@ -1,0 +1,144 @@
+﻿<div><center><h3>Delivery Address</h3></center></div><br />
+
+<div class="row">  <center>
+    <div class="row">
+        <div class="col-md-4">
+            @Html.DevExpress().Label(s =>
+                               {
+                                   s.Name = "lblDELAddress1";
+                                   s.Text = "Address1";
+                               }).GetHtml()
+        </div>
+        <div class="col-md-8">
+            @Html.DevExpress().TextBox(s =>
+   {
+       s.Name = "DELtbxAddr1";
+       s.Properties.ValidationSettings.RequiredField.ErrorText = "Address1 is required";
+       s.Text = Session["DeliveryAddress"] != null && ((List<Maximus.Data.Models.BusAddress1>)Session["DeliveryAddress"]).Count > 0 ? ((List<Maximus.Data.Models.BusAddress1>)Session["DeliveryAddress"]).First().Address2 != null ? ((List<Maximus.Data.Models.BusAddress1>)Session["DeliveryAddress"]).First().Address1 : "-" : "-";
+       s.Properties.ValidationSettings.RequiredField.IsRequired = true;
+       s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.Text;
+       s.Properties.ValidationSettings.ErrorTextPosition = ErrorTextPosition.Bottom;
+       s.ControlStyle.CssClass = "privDelAdd InvAddrInp";
+   }).GetHtml()
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            @Html.DevExpress().Label(s =>
+                               {
+                                   s.Name = "lblDELAddress2";
+                                   s.Text = "Address2";
+                               }).GetHtml()
+        </div>
+        <div class="col-md-8">
+            @Html.DevExpress().TextBox(s =>
+   {
+       s.Name = "DELtbxAddr2";
+       s.Text = Session["DeliveryAddress"] != null && ((List<Maximus.Data.Models.BusAddress1>)Session["DeliveryAddress"]).Count > 0 ? ((List<Maximus.Data.Models.BusAddress1>)Session["DeliveryAddress"]).First().Address2 != null ? ((List<Maximus.Data.Models.BusAddress1>)Session["DeliveryAddress"]).First().Address2 : "-" : "-";
+       s.ControlStyle.CssClass = "privDelAdd InvAddrInp";
+   }).GetHtml()
+        </div>
+    </div><br />
+    <div class="row">
+        <div class="col-md-4">
+            @Html.DevExpress().Label(s =>
+                               {
+                                   s.Name = "lblDELAddress3";
+                                   s.Text = "Address3";
+                               }).GetHtml()
+        </div>
+        <div class="col-md-8">
+            @Html.DevExpress().TextBox(s =>
+   {
+       s.Name = "DELtbxAddr3";
+       s.Text = Session["DeliveryAddress"] != null && ((List<Maximus.Data.Models.BusAddress1>)Session["DeliveryAddress"]).Count > 0 ? ((List<Maximus.Data.Models.BusAddress1>)Session["DeliveryAddress"]).First().Address3 != null ? ((List<Maximus.Data.Models.BusAddress1>)Session["DeliveryAddress"]).First().Address3 : "-" : "-";
+       s.ControlStyle.CssClass = "privDelAdd InvAddrInp";
+   }).GetHtml()
+        </div>
+    </div><br />
+    <div class="row">
+        <div class="col-md-4">
+            @Html.DevExpress().Label(s =>
+                               {
+                                   s.Name = "lblDELTown";
+                                   s.Text = "Town";
+                               }).GetHtml()
+        </div>
+        <div class="col-md-8">
+            @Html.DevExpress().TextBox(s =>
+   {
+       s.Name = "DELtbxTown";
+       s.Properties.ValidationSettings.RequiredField.ErrorText = "Town is required";
+       s.Properties.ValidationSettings.RequiredField.IsRequired = true;
+       s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.Text;
+       s.Properties.ValidationSettings.ErrorTextPosition = ErrorTextPosition.Bottom;
+       s.Text = Session["DeliveryAddress"] != null && ((List<Maximus.Data.Models.BusAddress1>)Session["DeliveryAddress"]).Count > 0 ? ((List<Maximus.Data.Models.BusAddress1>)Session["DeliveryAddress"]).First().Town != null ? ((List<Maximus.Data.Models.BusAddress1>)Session["DeliveryAddress"]).First().Town : "-" : "-";
+       s.ControlStyle.CssClass = "privDelAdd InvAddrInp";
+   }).GetHtml()
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            @Html.DevExpress().Label(s =>
+                               {
+                                   s.Name = "lblDELCity";
+                                   s.Text = "City";
+                               }).GetHtml()
+        </div>
+        <div class="col-md-8">
+            @Html.DevExpress().TextBox(s =>
+   {
+       s.Name = "DELtbxCity";
+       s.Text = Session["DeliveryAddress"] != null && ((List<Maximus.Data.Models.BusAddress1>)Session["DeliveryAddress"]).Count > 0 ? ((List<Maximus.Data.Models.BusAddress1>)Session["DeliveryAddress"]).First().City != null ? ((List<Maximus.Data.Models.BusAddress1>)Session["DeliveryAddress"]).First().City : "-" : "-";
+       s.ControlStyle.CssClass = "privDelAdd InvAddrInp";
+   }).GetHtml()
+        </div>
+    </div><br />
+    <div class="row">
+        <div class="col-md-4">
+            @Html.DevExpress().Label(s =>
+                               {
+                                   s.Name = "lblDELPostcode";
+                                   s.Text = "Postcode";
+                               }).GetHtml()
+        </div>
+        <div class="col-md-8">
+            @Html.DevExpress().TextBox(s =>
+   {
+       s.Name = "DELtbxPostcode";
+       s.Properties.ValidationSettings.RequiredField.ErrorText = "Postcode is required";
+       s.Properties.ValidationSettings.RequiredField.IsRequired = true;
+       s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.Text;
+       s.Properties.ValidationSettings.ErrorTextPosition = ErrorTextPosition.Bottom;
+       s.Text = Session["DeliveryAddress"] != null && ((List<Maximus.Data.Models.BusAddress1>)Session["DeliveryAddress"]).Count > 0 ? ((List<Maximus.Data.Models.BusAddress1>)Session["DeliveryAddress"]).First().PostCode != null ? ((List<Maximus.Data.Models.BusAddress1>)Session["DeliveryAddress"]).First().PostCode : "-" : "-";
+       s.ControlStyle.CssClass = "privDelAdd InvAddrInp";
+   }).GetHtml()
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-4">
+            @Html.DevExpress().Label(s =>
+                               {
+                                   s.Name = "lblDELCountry";
+                                   s.Text = "Country";
+                               }).GetHtml()
+        </div>
+        <div class="col-md-8">
+
+            @Html.DevExpress().TextBox(s =>
+                               {
+                                   s.Name = "DELtbxCountry";
+                                   s.Text = "UK";
+                                   s.ReadOnly = true;
+                                   s.ControlStyle.CssClass = "privDelAdd InvAddrInp";
+                               }).GetHtml()
+        </div>
+    </div><br />
+                       <div class="row">
+                            
+
+                           <button  style="background-color:darkcyan;color:white;" class="btn btn-default" onclick="SavePrivateRtnAdd()">Save</button> 
+                            
+                       </div><br />
+    </center>
+</div>

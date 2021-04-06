@@ -62,7 +62,7 @@
 
                 bool isretedit = (bool)e.GetValue("IsRetEdit");
                 int ordQty = Convert.ToInt32(e.GetValue("OrgOrdQty"));
-                int OrgRetOrdQty = isDel == 1 ? 0 : Convert.ToInt32(e.GetValue("OrgRetOrdQty"));
+                int OrgRetOrdQty = Convert.ToInt32(e.GetValue("OrgRetOrdQty"));
                 int remainingQty = ordQty - OrgRetOrdQty;
                 int ReturnLineNo = Convert.ToInt32(e.GetValue("LineNo"));
                 int OrderNo = Convert.ToInt32(e.GetValue("OrderNo"));
@@ -99,7 +99,7 @@
                 bool isretedit = (bool)gridView.GetRowValues(e.VisibleIndex, "IsRetEdit");
                 var value = Convert.ToBoolean(gridView.GetRowValues(e.VisibleIndex, "IsSelect"));
                 int ordQty = Convert.ToInt32(gridView.GetRowValues(e.VisibleIndex, "OrgOrdQty"));
-                int OrgRetOrdQty = isDel == 1 ? 0 : Convert.ToInt32(gridView.GetRowValues(e.VisibleIndex, "OrgRetOrdQty"));
+                int OrgRetOrdQty =   Convert.ToInt32(gridView.GetRowValues(e.VisibleIndex, "OrgRetOrdQty"));
                 int remainingQty = ordQty - OrgRetOrdQty;
                 int ReturnLineNo = Convert.ToInt32(gridView.GetRowValues(e.VisibleIndex, "LineNo"));
                 int OrderNo = Convert.ToInt32(gridView.GetRowValues(e.VisibleIndex, "OrderNo"));
@@ -216,18 +216,18 @@
                     {
                         if (isretedit== false)
                         {
-                            int retOrdqty =  ((List<Maximus.Data.models.ReturnOrderModel>)Session["rtnLines"]).Any(sss => sss.StyleId == style && sss.LineNo == lineNO && sss.OrderNo == OrderNo && sss.SizeId == size && sss.IsDleted == 0) ? ((List<Maximus.Data.models.ReturnOrderModel>)Session["rtnLines"]).Where(sss => sss.StyleId == style && sss.LineNo == lineNO && sss.OrderNo == OrderNo && sss.SizeId == size && sss.IsDleted == 0).Sum(sss => sss.OrdQty) : 0;
+                            int retOrdqty =  ((List<Maximus.Data.models.ReturnOrderModel>)Session["rtnLines"]).Any(sss => sss.StyleId == style && sss.LineNo == lineNO && sss.OrderNo == OrderNo && sss.SizeId == size && sss.IsDleted == 0) ? ((List<Maximus.Data.models.ReturnOrderModel>)Session["rtnLines"]).Where(sss => sss.StyleId == style && sss.LineNo == lineNO && sss.OrderNo == OrderNo && sss.SizeId == size && sss.IsDleted == 0).Sum(sss => sss.RtnQty) : 0;
 
                             //if (remainingQty > 0)
                             //{
-                            if (remainingQty - retOrdqty == 0)
-                            {
-                                remainingQty = 0;
-                            }
-                            else
-                            {
-                                remainingQty = remainingQty - retOrdqty;
-                            }
+                            //if (remainingQty - retOrdqty == 0)
+                            //{
+                            //    remainingQty = 0;
+                            //}
+                            //else
+                            //{
+                            //    remainingQty = remainingQty - retOrdqty;
+                            //}
                             //}
                             //else
                             //{
@@ -304,7 +304,7 @@
                 var reasons = home._returnReasonCodes.GetAll().Distinct().ToList();
                 int OrderNO = (int)DataBinder.Eval(dat.DataItem, "OrderNo");
                 bool IsSelect = (bool)DataBinder.Eval(dat.DataItem, "IsSelect");
-                int OrgRetOrdQty = isDel == 1 ? 0 : (int)DataBinder.Eval(dat.DataItem, "OrgRetOrdQty");
+                int OrgRetOrdQty =  (int)DataBinder.Eval(dat.DataItem, "OrgRetOrdQty");
                 int remainingQty = ordQty - OrgRetOrdQty;
                 if (Session["rtnLines"] != null)
                 {
@@ -315,7 +315,7 @@
 
                             var stts = ((List<Maximus.Data.models.ReturnOrderModel>)Session["rtnLines"]).ToList();
 
-                            int retOrdqty = ((List<Maximus.Data.models.ReturnOrderModel>)Session["rtnLines"]).Any(sss => sss.StyleId == style && sss.LineNo == lineNO && sss.OrderNo == OrderNO && sss.SizeId == size && sss.IsDleted == 0) ? ((List<Maximus.Data.models.ReturnOrderModel>)Session["rtnLines"]).Where(sss => sss.StyleId == style && sss.LineNo == lineNO && sss.OrderNo == OrderNO && sss.SizeId == size && sss.IsDleted == 0).Sum(sss => sss.OrdQty) : 0;
+                            int retOrdqty = ((List<Maximus.Data.models.ReturnOrderModel>)Session["rtnLines"]).Any(sss => sss.StyleId == style && sss.LineNo == lineNO && sss.OrderNo == OrderNO && sss.SizeId == size && sss.IsDleted == 0) ? ((List<Maximus.Data.models.ReturnOrderModel>)Session["rtnLines"]).Where(sss => sss.StyleId == style && sss.LineNo == lineNO && sss.OrderNo == OrderNO && sss.SizeId == size && sss.IsDleted == 0).Sum(sss => sss.RtnQty) : 0;
                             if (remainingQty - retOrdqty == 0)
                             {
                                 remainingQty = 0;
@@ -360,3 +360,4 @@
     }
 }
 @grid.Bind(Model).GetHtml()
+

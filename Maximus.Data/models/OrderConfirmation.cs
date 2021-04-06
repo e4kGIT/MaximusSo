@@ -10,5 +10,7 @@ namespace Maximus.Data.models
     {
        public string OrderConfirmationemail { get; set; }
         public string OrderConfirmationPOP { get; set; }
+
+        public string PrivateReorder { get; set; }
     }
 }

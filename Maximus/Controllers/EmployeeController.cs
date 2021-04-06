@@ -68,6 +68,7 @@ namespace Maximus.Controllers
         public readonly EmployeeRollout _empRollout;
         public readonly UcodeReasons _ucodeReason;
         public readonly User _user;
+        public readonly UcodeOperationsTbl _ucodeOperationsTbl;
         #endregion
 
         #region EmployeeController constructor
@@ -85,6 +86,7 @@ namespace Maximus.Controllers
             AllAssemblies allAssemblies = new AllAssemblies(_unitOfWork);
             BusBusiness busBusiness = new BusBusiness(_unitOfWork);
             AssemblyDetail assemblyDetail = new AssemblyDetail(_unitOfWork);
+            UcodeOperationsTbl ucodeOperationsTbl = new UcodeOperationsTbl(_unitOfWork);
             AssemblyHeader assemblyHeader = new AssemblyHeader(_unitOfWork);
             BusAddress busAddress = new BusAddress(_unitOfWork);
             BusContact busContact = new BusContact(_unitOfWork);
@@ -123,6 +125,7 @@ namespace Maximus.Controllers
             _pointsByUcode = pointsByUcode;
             _pointsCard = pointsCard;
             _busSetValues = busSetValues;
+            _ucodeOperationsTbl = ucodeOperationsTbl;
             _employee = employee;
             _fskSetValues = fskSetValues;
             _dimFitCap = dimFitCap;
@@ -299,7 +302,28 @@ namespace Maximus.Controllers
                 Session["EmployeeViewModel"] = (List<EmployeeViewModel>)_employee.GetEmployee(BusinessID, Session["UserName"].ToString(), Session["OrderPermit"].ToString(), "", "", "", "", "", "", "", "", Session["RequirePermissionUSR"].ToString());
                 if (((List<EmployeeViewModel>)Session["EmployeeViewModel"]).Count == 1)
                 {
-                    if (((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpIsActive)
+                    if (Convert.ToBoolean(Session["PRIVATEORDER"]))
+                    {
+                        var ucodeID = _dp.BusinessParam("PRIVATEUCODE", BusinessID);
+                        GotoCard(((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmployeeId, ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpFirstName + " " + ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpLastName, ucodeID);
+
+                        var templates = _customerOrderTemplate.Exists(x => x.BusinessID == BusinessID) ? _customerOrderTemplate.GetAll(x => x.BusinessID == BusinessID).OrderBy(x => x.SeqNo).Select(x => x.Template).Distinct().ToList() : new List<string>();
+                        if (templates.Count > 0)
+                        {
+                            Session["Templates"] = templates;
+                        }
+                        else
+                        {
+                            Session["Templates"] = new List<string>();
+                        }
+                        if (Convert.ToBoolean(Session["IsEmergency"]) != true && IsEmergencyUcde(((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes))
+                        {
+                            return RedirectToAction("Welcome", new { BusinessID = BusinessID });
+                        }
+
+                        return RedirectToAction("Index", "Private");
+                    }
+                    else if (((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpIsActive)
                     {
                         ViewBag.HideSearch = false;
                         if (!((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes.Contains(',') || GetEmergencyOrderDetail(BusinessID))
@@ -345,9 +369,29 @@ namespace Maximus.Controllers
 
                 if (((List<EmployeeViewModel>)Session["EmployeeViewModel"]).Count == 1)
                 {
-                    ViewBag.HideSearch = false;
-                    var sss = ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes;
-                    if (!((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes.Contains(','))
+
+                    if (Convert.ToBoolean(Session["PRIVATEORDER"]))
+                    {
+                        var ucodeID = _dp.BusinessParam("PRIVATEUCODE", BusinessID);
+                        GotoCard(((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmployeeId, ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpFirstName + " " + ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpLastName, ucodeID);
+
+                        var templates = _customerOrderTemplate.Exists(x => x.BusinessID == BusinessID) ? _customerOrderTemplate.GetAll(x => x.BusinessID == BusinessID).OrderBy(x => x.SeqNo).Select(x => x.Template).Distinct().ToList() : new List<string>();
+                        if (templates.Count > 0)
+                        {
+                            Session["Templates"] = templates;
+                        }
+                        else
+                        {
+                            Session["Templates"] = new List<string>();
+                        }
+                        if (Convert.ToBoolean(Session["IsEmergency"]) != true && IsEmergencyUcde(((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes))
+                        {
+                            return RedirectToAction("Welcome", new { BusinessID = BusinessID });
+                        }
+
+                        return RedirectToAction("Index", "Private");
+                    }
+                    else if (!((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes.Contains(','))
                     {
                         GotoCard(((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmployeeId, ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpFirstName + " " + ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpLastName, ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes);
                         var templates = _customerOrderTemplate.Exists(x => x.BusinessID == BusinessID) ? _customerOrderTemplate.GetAll(x => x.BusinessID == BusinessID).OrderBy(x => x.SeqNo).Select(x => x.Template).Distinct().ToList() : new List<string>();
@@ -426,6 +470,7 @@ namespace Maximus.Controllers
             bool result = true;
             var arr = new string[] { };
             List<string> normUcode = new List<string>();
+            List<string> matUcode = new List<string>();
             List<string> emergencyUcode = new List<string>();
             var selEmpUcode = ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes;
             if (selEmpUcode.Contains(","))
@@ -436,7 +481,14 @@ namespace Maximus.Controllers
             {
                 if (_pointsByUcode.Exists(s => s.UcodeID == ucode))
                 {
-                    normUcode.Add(ucode);
+                    if (ucode.ToLower().Contains("maternity"))
+                    {
+                        matUcode.Add(ucode);
+                    }
+                    else
+                    {
+                        normUcode.Add(ucode);
+                    }
                 }
                 else
                 {
@@ -465,6 +517,24 @@ namespace Maximus.Controllers
                     return false;
                 }
             }
+            else if (emergencyUcode.Count > 1 && emergencyUcode.Count != 0 && matUcode.Count==1 && normUcode.Count==0)
+            {
+                Session["normUcode"] = Convert.ToBoolean(Session["Maternity"]) && matUcode.Count > 0 ? matUcode.First() : Convert.ToBoolean(Session["Maternity"]) == false ? normUcode.Count > 0 ? normUcode.First() : "" : "";
+                Session["emergencyUcode"] = string.Join(",", emergencyUcode.ToArray());
+                if (Convert.ToBoolean(Session["IsEmergency"]) == false)
+                {
+                    ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes = Convert.ToBoolean(Session["Maternity"]) && matUcode.Count > 0 ? matUcode.First() : Convert.ToBoolean(Session["Maternity"]) == false ? normUcode.Count > 0 ? normUcode.First() : "" : "";
+                    return true;
+                }
+                else
+                {
+                    var mvjvb = ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes;
+                    ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes = string.Join(",", emergencyUcode.ToArray());
+                    var mvjvb1 = ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes;
+                    return false;
+                }
+
+            }
             else if (emergencyUcode.Count > 1 && emergencyUcode.Count != 0)
             {
                 var mvjvb = ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes;
@@ -474,7 +544,7 @@ namespace Maximus.Controllers
             }
             else
             {
-                Session["normUcode"] = normUcode.Count > 0 ? normUcode.First() : "";
+                Session["normUcode"] = Convert.ToBoolean(Session["Maternity"]) && matUcode.Count > 0 ? matUcode.First() : Convert.ToBoolean(Session["Maternity"]) == false ? normUcode.Count > 0 ? normUcode.First() : "" : "";
                 Session["emergencyUcode"] = emergencyUcode.First();
                 ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes = selEmpUcode.Replace(emergencyUcode.First(), "").TrimEnd(',');
                 var mvjvb = ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes;
@@ -610,7 +680,10 @@ namespace Maximus.Controllers
         #region cardRedirection
         public string GotoCard(string EmployeeId, string EmpName, string Ucodes1)
         {
-            string Ucodes = "";
+            string Ucodes = ""; var busine = Session["BuisnessId"].ToString();
+
+
+
             if (Convert.ToBoolean(Session["IsEmergency"]))
             {
                 if (Session["emergencyUcode"] != null)
@@ -642,12 +715,12 @@ namespace Maximus.Controllers
             Session["EmpName"] = EmpName;
             Session["SelectedEmp"] = EmployeeId;
             Session["selectedUcodes"] = Ucodes;
-            var busine = Session["BuisnessId"].ToString();
+
             //var UCODESTYLES = _stylePoints.Exists(s => s.UcodeID.ToLower().Trim() == Ucodes.ToLower().Trim() && s.BusinessID.ToLower().Trim() == busine.ToLower().Trim()) ? _stylePoints.GetAll(s => s.UcodeID.ToLower().Trim() == Ucodes.ToLower().Trim() && s.BusinessID.ToLower().Trim() == busine.ToLower().Trim()).Select(s => s.StyleID).ToList() : new List<string>();
             ///added by sasi(30-12-20) barclays wanted points for maternity too 
             // _dp.UcodeStyles(ucode, busId) = _stylePoints.Exists(s => s.UcodeID.ToLower().Trim() == Ucodes.ToLower().Trim() && s.BusinessID.ToLower().Trim() == busine.ToLower().Trim()) ? _stylePoints.GetAll(s => s.UcodeID.ToLower().Trim() == Ucodes.ToLower().Trim() && s.BusinessID.ToLower().Trim() == busine.ToLower().Trim()).Select(s => s.StyleID).ToList() : new List<string>();
             ///
-            Session["REQSTKLEVEL"] = _dp.GetRestockValue(Ucodes,busine);
+            Session["REQSTKLEVEL"] = _dp.GetRestockValue(Ucodes, busine);
             if ((bool)Session["IsBulkOrder1"] == false && (bool)Session["IsManPack"] == true)
             {
                 Session["EmpName"] = EmpName;
@@ -692,6 +765,7 @@ namespace Maximus.Controllers
                 Session["RolloutName"] = nomcode3;
                 Session["RolloutOrderEst"] = Convert.ToBoolean(Session["IsEmergency"]) | _dp.CheckEmergency(businessId, Ucodes) ? false : nomcode3 != "" && nomcode3 != null ? true : Convert.ToBoolean(Session["RolloutOrderEst"]);
                 int reasonCodeHeader = Convert.ToBoolean(Session["IsEmergency"]) | _dp.CheckEmergency(businessId, Ucodes) ? _ucodeReason.Exists(s => s.BusinessID == busine && s.UcodeId.ToLower() == Ucodes.ToLower()) ? _ucodeReason.GetAll(s => s.BusinessID == busine && s.UcodeId.ToLower() == Ucodes.ToLower()).First().ReasonCodeID : 0 : 0;
+                string email = _user.Exists(s => s.UserName == emp && s.Email_ID != null) ? _user.GetAll(s => s.UserName == emp).First().Email_ID : "";
                 if (!salesOrderHeader.Any(x => x.EmployeeID == emp))
                 {
                     var ds = addresArr.Count();
@@ -723,6 +797,7 @@ namespace Maximus.Controllers
                         OrderType = Session["OrderType"].ToString(),
                         OrderDate = DateTime.Now.ToString("yyyy-MM-dd"),
                         ReasonCode = reasonCodeHeader,
+                        EmailID = Convert.ToBoolean(Session["PRIVATEORDER"]) ? email : "",
                         SalesOrderLine = new List<SalesOrderLineViewModel>()
                     });
                     SalesOrderHeaderLoc.Add(new SalesOrderHeaderViewModel
@@ -748,8 +823,8 @@ namespace Maximus.Controllers
                         Currency_Exchange_Code = Session["Currency_Name"].ToString(),
                         RepID = Convert.ToInt32(Session["Rep_Id"]),
                         OrderType = Session["OrderType"].ToString(),
+                        EmailID = Convert.ToBoolean(Session["PRIVATEORDER"]) ? email : "",
                         OrderDate = DateTime.Now.ToString("yyyy-MM-dd"),
-
                         SalesOrderLine = new List<SalesOrderLineViewModel>()
                     });
                 }
@@ -781,18 +856,25 @@ namespace Maximus.Controllers
                         string ucodeDesc = _ucode_Description.Exists(x => x.UCodeID == ucode) ? _ucode_Description.GetAll(x => x.UCodeID == Ucodes).First().Description : ucode;
                         ucodeHtml = ucodeHtml + " <span>" + ucode + "</span>-<span>" + ucodeDesc + "</span> ";
                         ucodeLst1.AddRange(_dataConnection.GetAllUcodeLst(ucode));
-
                     }
                 }
                 else
                 {
                     try
                     {
+                        var IsHiddenUcode = _ucodeOperationsTbl.Exists(s => s.UcodeId == Ucodes && s.FreeStkChk && s.IsEmergency) ? _ucodeOperationsTbl.GetAll(s => s.UcodeId == Ucodes && s.FreeStkChk && s.IsEmergency).First().HasAltStyles : false;
                         string ucodeDesc = _ucode_Description.Exists(x => x.UCodeID == Ucodes) ? _ucode_Description.GetAll(x => x.UCodeID == Ucodes).First().Description : Ucodes;
                         ucodeHtml = ucodeHtml + " <span>" + Ucodes + "</span>-<span>" + ucodeDesc + "</span> ";
                         //       var SSS = _ucodeByFreeText.ExecWithStoreProcedure("Call GetAllUcodeByFreeTextProcedure (@uCode)",
                         //new MySqlParameter("uCode", MySqlDbType.VarChar) { Value = Ucodes }).ToList();
-                        ucodeLst1 = _ucodeByFreeText.GetAll(x => x.UCodeID == Ucodes).Select(x => new UcodeModel { StyleId = x.StyleID, FreeText = x.FreeText }).ToList();
+                        if (IsHiddenUcode &&  Convert.ToBoolean(Session["IsEmergency"]) && Convert.ToBoolean(Session["REQSTKLEVEL"]))
+                        {
+                            ucodeLst1 = _ucodeByFreeText.GetAll(x => x.UCodeID == Ucodes && x.IsHidden==0).Select(x => new UcodeModel { StyleId = x.StyleID, FreeText = x.FreeText }).ToList();
+                        }
+                        else
+                        {
+                            ucodeLst1 = _ucodeByFreeText.GetAll(x => x.UCodeID == Ucodes).Select(x => new UcodeModel { StyleId = x.StyleID, FreeText = x.FreeText }).ToList();
+                        }
                     }
                     catch (Exception e)
                     {
@@ -938,7 +1020,14 @@ namespace Maximus.Controllers
                 Session["UcFreeTxt"] = lst.Distinct().ToList();
             }
 
-            return Url.Content("~/Home/Index");
+            if (Convert.ToBoolean(Session["PRIVATEORDER"]))
+            {
+                return Url.Content("~/Private/Index");
+            }
+            else
+            {
+                return Url.Content("~/Home/Index");
+            }
         }
         #endregion
 
@@ -1354,10 +1443,20 @@ namespace Maximus.Controllers
 
                                     if (mu != null)
                                     {
+                                        if (mu != null)
+                                        {
+                                            MembershipUser memuSr = new MembershipUser(mu.ProviderName, mu.UserName, mu.ProviderUserKey, emailUsr, "", "", true, false, DateTime.Now, DateTime.Now, DateTime.Now, DateTime.Now, DateTime.Now);
+                                            Membership.UpdateUser(memuSr);
+                                        }
                                         result = _employee.CreateNewEmployee(StartDate, EndDate, EmpFirstName, EmpLastName, EmployeeId, EmpUcodes, Address, hrsCmb, Department, isActive, isMapped, hoursDept, hoursNo, (List<string>)Session["Templates"], busId, Session["UserName"].ToString().Trim(), Session["ShowHourse"].ToString(), Session["REQ_REASONPAGE"].ToString(), chkMapAddr, createUsr, emailUsr, mapUserEmp, roleUsr, reissueUsr, lstOrddat, nextOrddat, mu);
                                     }
                                     else
                                     {
+                                        if (mu != null)
+                                        {
+                                            MembershipUser memuSr = new MembershipUser(mu.ProviderName, mu.UserName, mu.ProviderUserKey, emailUsr, "", "", true, false, DateTime.Now, DateTime.Now, DateTime.Now, DateTime.Now, DateTime.Now);
+                                            Membership.UpdateUser(memuSr);
+                                        }
                                         mu = Membership.CreateUser(EmployeeId, rndPwd);
                                         result = _employee.CreateNewEmployee(StartDate, EndDate, EmpFirstName, EmpLastName, EmployeeId, EmpUcodes, Address, hrsCmb, Department, isActive, isMapped, hoursDept, hoursNo, (List<string>)Session["Templates"], busId, Session["UserName"].ToString().Trim(), Session["ShowHourse"].ToString(), Session["REQ_REASONPAGE"].ToString(), chkMapAddr, createUsr, emailUsr, mapUserEmp, roleUsr, reissueUsr, lstOrddat, nextOrddat, mu);
                                     }
@@ -1385,10 +1484,20 @@ namespace Maximus.Controllers
                             {
                                 if (mu != null)
                                 {
+                                    if (mu != null)
+                                    {
+                                        MembershipUser memuSr = new MembershipUser(mu.ProviderName, mu.UserName, mu.ProviderUserKey, emailUsr, "", "", true, false, DateTime.Now, DateTime.Now, DateTime.Now, DateTime.Now, DateTime.Now);
+                                        Membership.UpdateUser(memuSr);
+                                    }
                                     result = _employee.CreateNewEmployee(StartDate, EndDate, EmpFirstName, EmpLastName, EmployeeId, EmpUcodes, Address, hrsCmb, Department, isActive, isMapped, hoursDept, hoursNo, (List<string>)Session["Templates"], busId, Session["UserName"].ToString().Trim(), Session["ShowHourse"].ToString(), Session["REQ_REASONPAGE"].ToString(), chkMapAddr, createUsr, emailUsr, mapUserEmp, roleUsr, reissueUsr, lstOrddat, nextOrddat, mu);
                                 }
                                 else
                                 {
+                                    if (mu != null)
+                                    {
+                                        MembershipUser memuSr = new MembershipUser(mu.ProviderName, mu.UserName, mu.ProviderUserKey, emailUsr, "", "", true, false, DateTime.Now, DateTime.Now, DateTime.Now, DateTime.Now, DateTime.Now);
+                                        Membership.UpdateUser(memuSr);
+                                    }
                                     mu = Membership.CreateUser(EmployeeId, rndPwd);
                                     result = _employee.CreateNewEmployee(StartDate, EndDate, EmpFirstName, EmpLastName, EmployeeId, EmpUcodes, Address, hrsCmb, Department, isActive, isMapped, hoursDept, hoursNo, (List<string>)Session["Templates"], busId, Session["UserName"].ToString().Trim(), Session["ShowHourse"].ToString(), Session["REQ_REASONPAGE"].ToString(), chkMapAddr, createUsr, emailUsr, mapUserEmp, roleUsr, reissueUsr, lstOrddat, nextOrddat, mu);
                                 }
@@ -1464,8 +1573,18 @@ namespace Maximus.Controllers
         #region ChangeOrderType
         public ActionResult ChangeOrderType(string orderType = "")
         {
+            Session["OrderType"] = "SO";
+            Session["Maternity"] = false; ;
             Session["qty"] = 0;
             Session["REQSTKLEVEL"] = false;
+            Session["PRIVATEORDER"] = false;
+            Session["IsEmergency"] = false;
+            Session["PrivateMessage"] = false;
+            Session["EmergencyMsg"] = false;
+            Session["requireemergencyreason"] = false;
+            Session["OVERRIDE_ENT_WITH_REASON"] = ((List<PermissionList>)Session["permissionLst"]).Any(x => x.ControlId.Trim() == "OVERRIDE_ENT_WITH_REASON") ? ((List<PermissionList>)Session["permissionLst"]).Where(x => x.ControlId.Trim() == "OVERRIDE_ENT_WITH_REASON").First().Permission.ToLower() : "hide";
+            var permissionLst = _dataConnection.PermissionSettings(Session["BuisnessId"].ToString(), Session["UserName"].ToString(), "chkMapEmp", Session["Access"].ToString());
+            Session["Price"] = permissionLst.Any(x => x.ControlId.Trim() == "Price") ? permissionLst.Where(x => x.ControlId.Trim() == "Price").First().Permission.ToLower() : "hide";
             string busId = Session["BuisnessId"].ToString();
             if (orderType.ToLower().Contains("bulk"))
             {
@@ -1506,6 +1625,32 @@ namespace Maximus.Controllers
                 Session["IsManPack"] = true;
                 Session["IsBulkOrder1"] = false;
                 Session["returnorder"] = false;
+                Session["POINTSREQ"] = _dataConnection.BusinessParam("POINTSREQ", busId);  
+
+            }
+            else if (orderType.ToLower().Contains("matern"))
+            {
+                Session["isrtntype"] = "";
+
+                Session["SalesOrderHeader"] = new List<SalesOrderHeaderViewModel>();
+                Session["ReturnOrderHeader"] = new List<SalesOrderHeaderViewModel>();
+                Session["StyleMinPoints"] = new List<StyleAndMinPoints>();
+                Session["OrderType"] = "SO";
+                var sss = Convert.ToBoolean(Session["IsManPack"]);
+                if (Convert.ToBoolean(Session["ISEDITING"]) || Convert.ToBoolean(Session["IsManPack"]) == false || Convert.ToBoolean(Session["IsEmergency"]) == true)
+                {
+                    Session["SalesOrderHeader"] = null;
+                    Session["ReturnOrderHeader"] = null;
+                }
+                Session["requireemergencyreason"] = false;
+                Session["OVERRIDE_ENT_WITH_REASON"] = ((List<PermissionList>)Session["permissionLst"]).Any(x => x.ControlId.Trim() == "OVERRIDE_ENT_WITH_REASON") ? ((List<PermissionList>)Session["permissionLst"]).Where(x => x.ControlId.Trim() == "OVERRIDE_ENT_WITH_REASON").First().Permission.ToLower() : "hide";
+                Session["EmployeeViewModel"] = null;
+                Session["RolloutOrderEst"] = true;
+                Session["IsEmergency"] = false;
+                Session["IsManPack"] = true;
+                Session["IsBulkOrder1"] = false;
+                Session["returnorder"] = false;
+                Session["Maternity"] = true;
                 Session["POINTSREQ"] = _dataConnection.BusinessParam("POINTSREQ", busId); Session["OrderType"] = "SO";
 
             }
@@ -1637,6 +1782,37 @@ namespace Maximus.Controllers
                 Session["IsBulkOrder1"] = false;
                 Session["returnorder"] = true;
                 return RedirectToAction("GetReturnOrderGrid");
+            }
+            else if(orderType.ToLower().Contains("retpriv"))
+            {
+                Session["Price"] = "ReadOnly";
+                Session["selectedRetLine"] = null;
+                Session["requireemergencyreason"] = false;
+                Session["EmployeeViewModel"] = null;
+                Session["OrderType"] = "RT";
+                Session["OVERRIDE_ENT_WITH_REASON"] = "hide";
+                Session["IsManPack"] = true;
+                Session["rtnempid"] = "";
+                Session["rtnempname"] = "";
+                Session["rtnLines"] = new List<ReturnOrderModel>();
+                Session["returnModellst"] = new List<ReturnOrderModel>();
+                Session["ReturnOrderHeader"] = new List<SalesOrderHeaderViewModel>();
+                Session["POINTSREQ"] = false;
+                Session["RolloutOrderEst"] = false;
+                Session["IsEmergency"] = false;
+                Session["isrtntype"] = ReturnTypes.PRIVATE.ToString();
+                Session["IsBulkOrder1"] = false;
+                Session["returnorder"] = true;
+                return RedirectToAction("GetReturnOrderGrid");
+            }
+            else if (orderType.ToLower().Contains("private"))
+            {
+                Session["Price"] = "ReadOnly";
+                Session["PRIVATEORDER"] = true;
+                Session["SalesOrderHeader"] = new List<SalesOrderHeaderViewModel>();
+                Session["ReturnOrderHeader"] = new List<SalesOrderHeaderViewModel>();
+                Session["StyleMinPoints"] = new List<StyleAndMinPoints>();
+                // Session["REQSTKLEVEL"] = true;
             }
             var BusinessID = Session["BuisnessId"].ToString();
             return RedirectToAction("Index", "Employee", new { BusinessID = BusinessID });

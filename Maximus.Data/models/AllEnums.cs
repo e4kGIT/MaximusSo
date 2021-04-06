@@ -17,7 +17,8 @@ namespace Maximus.Data.Models
     {
         RETURNS = 1,
         EMERGENCY = 2,
-        MATERNITY = 3
+        MATERNITY = 3,
+        PRIVATE=4
     }
     public enum controls
     {

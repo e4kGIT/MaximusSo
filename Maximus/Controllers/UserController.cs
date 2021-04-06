@@ -69,7 +69,7 @@ namespace Maximus.Controllers
             {
                 if (logDetails.UserName != "" & logDetails.Password != "")
                 {
-                    // MembershipUser mu = Membership.GetUser(logDetails.UserName);
+                   
                     // var mcount = _user.GetUserCount(logDetails.UserName);
                     List<EmployeeLoginModel> data = _user.GetLoginDetails(logDetails.UserName, logDetails.Password);
                     if (data.Count > 0)
@@ -77,7 +77,7 @@ namespace Maximus.Controllers
 
                         //if (data.Any(x => x.UserName.ToLower() == logDetails.UserName.ToLower() && x.Password == logDetails.Password && x.Active.ToLower() == "y"))
                         //if(Membership.ValidateUser(logDetails.UserName,logDetails.Password))
-                        if (data.Any(x => x.UserName.ToLower() == logDetails.UserName.ToLower() && x.Password == logDetails.Password && x.Active.ToLower() == "y"))
+                        if (data.Any(x => x.UserName.ToLower() == logDetails.UserName.ToLower() && x.Password == logDetails.Password && x.Active.ToLower() == "y") && Membership.ValidateUser(logDetails.UserName, logDetails.Password))
                         {
                             FormsAuthentication.SetAuthCookie(logDetails.UserName, false);
                             string custrefdef = "";
@@ -163,12 +163,13 @@ namespace Maximus.Controllers
                                 Session["FITALLOC"] = "FITALLOC_RO";
                                 Session["DIMALLOC"] = "DIMALLOC_RO";
                             }
-                            Session["Roles"] = _dp.GetRoles(busId);
+                            Session["Maternity"] = false;
+                           Session["Roles"] = _dp.GetRoles(busId);
                             Session["Emprolloutnames"] = _empRolloutName.GetAll(sa => sa.Businessid == busId && sa.IsClosed == 0).Select(sa => sa.Rollname).Distinct().OrderBy(sa => sa).ToList();
                             Session["AddressChanged"] = false;
                             Session["BUDGETREQ"] = Convert.ToBoolean(_dataConnection.BusinessParam("BUDGETREQ", busId));
                             Session["RolloutOrderEst"] = false;
-                            
+                            Session["SHOWVAT"] =_dataConnection.BusinessParam("SHOW_PRICE_VAT", busId);
                             Session["RolloutOrder"] = Session["RolloutName"] == null | Session["RolloutName"].ToString() == "" ? false : true;
                             Session["SalesOrderHeaderLoc"] = new List<SalesOrderHeaderViewModel>();
                             booNom = _dataConnection.CompanyParam("ONLNEREQNOM1", cmpId);
@@ -182,6 +183,8 @@ namespace Maximus.Controllers
                             booNom = _dataConnection.CompanyParam("ONLNEREQNOM5", cmpId);
                             Session["ONLNEREQNOM5"] = booNom == "" ? false : booNom.ToLower() == "true" ? true : false;
                             Session["returnorder"] = false;
+                            Session["PRIVATEORDER"] = false;
+                            Session["PrivateMessage"] = false;
                             booDefDelAddr = _dataConnection.BusinessParam("DEFINVADDR", data.First().BusinessID.Trim().ToUpper());
                             Session["DEFINVADDR"] = booDefDelAddr == "" ? false : booDefDelAddr.ToLower() == "true" ? true : false;
                             booDefDelRef = _dataConnection.BusinessParam("DELREFREQ", data.First().BusinessID.Trim().ToUpper());

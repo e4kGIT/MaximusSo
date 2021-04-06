@@ -45,17 +45,38 @@
         settings.SettingsAdaptivity.AdaptiveDetailColumnCount = 1;
         settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = false;
         settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
+
+
         settings.ClientSideEvents.EndCallback = "CalculateTotals";
+        if (Session["isrtntype"].ToString() == "PRIVATE")
+        {
+            settings.ClientSideEvents.EndCallback = "CalculateTotals1";
+        }
+        else
+        {
+            settings.ClientSideEvents.EndCallback = "CalculateTotals";
+        }
         settings.Columns.Add("OrderNo").Visible = false;
+        settings.CustomJSProperties = (s, e) =>
+        {
+            if (ViewData["EditResult"] != null)
+            {
+                e.Properties["cpIsReloadReqired"] =(bool)ViewData["EditResult"];
+            }
+        };
         settings.CommandButtonInitialize = (s, e) =>
         {
             MVCxGridView gridView = (MVCxGridView)s;
             var value = Convert.ToBoolean(gridView.GetRowValues(e.VisibleIndex, "IsCnf"));
-              
-            if (e.ButtonType == ColumnCommandButtonType.Edit)
+
+            if (e.ButtonType == ColumnCommandButtonType.Edit )
             {
 
                 if (value || Convert.ToBoolean(Session["IsEmergency"].ToString())|| retursn.IsMatUcodeId(Session["SelectedUcode"].ToString(), Session["BuisnessId"].ToString()))
+                {
+                    e.Visible = false;
+                }
+                else  if(Session["isrtntype"].ToString() == "PRIVATE")
                 {
                     e.Visible = false;
                 }

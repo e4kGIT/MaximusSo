@@ -24,7 +24,7 @@ namespace Maximus.Controllers
 
     public class HomeController : Controller
     {
-
+        log4net.ILog logger = log4net.LogManager.GetLogger(typeof(HomeController));
         #region declarations
         //ControllerHelperMethods ctrlHelp = new ControllerHelperMethods();
         AllEnums enus = new AllEnums();
@@ -55,6 +55,7 @@ namespace Maximus.Controllers
         public readonly TblFskStyle _tblFskStyle;
         public readonly Ucode_Description _ucode_Description;
         public readonly UcodeByFreeTextView _ucodeByFreeText;
+        public readonly UcodeOperationsTbl _ucodeOperationsTbl;
         public readonly UcodeEmployees _ucodeEmployees;
         public readonly Ucodes _ucodes;
         public readonly BusAddress _busAddress;
@@ -81,6 +82,7 @@ namespace Maximus.Controllers
         public readonly User _user;
         public readonly EmployeeRollout _empRollout;
         public readonly ReturnReasonCodes _returnReasonCodes;
+        public readonly TblAlternateTable _tblAlternates;
         public HomeController(IUnitOfWork unitOfWork = null)
         {
             _unitOfWork = unitOfWork;
@@ -90,6 +92,9 @@ namespace Maximus.Controllers
             _home = home;
             StyleColorSize styleColorSize = new StyleColorSize(_unitOfWork);
             tblSalesLines salesOrderLines = new tblSalesLines(_unitOfWork);
+            UcodeOperationsTbl ucodeOperationsTbl = new UcodeOperationsTbl(_unitOfWork);
+            TblAlternateTable tblAlternates = new TblAlternateTable(_unitOfWork);
+            _ucodeOperationsTbl = ucodeOperationsTbl;
             DimFitCaption dimFitCap = new DimFitCaption(_unitOfWork);
             FskColour fskColor = new FskColour(_unitOfWork);
             Reasoncodes reason = new Reasoncodes(_unitOfWork);
@@ -141,6 +146,7 @@ namespace Maximus.Controllers
             _pointStyle = pointStyle;
             _pointsCard = pointsCard;
             _ucodeByFreetext = ucodeByFreetext;
+            _tblAlternates = tblAlternates;
             _fskSetValues = fskSetValues;
             _styleColorSize = styleColorSize;
             _dimFitCap = dimFitCap;
@@ -361,7 +367,17 @@ namespace Maximus.Controllers
                 string ucodeHtml = "<p style=\"padding:0px;\">";
                 ucodeHtml = ucodeHtml + " <span>" + ucode + "</span>-<span>" + ucodeDesc + "</span> ";
                 Session["UcodeDesc"] = ucodeHtml.ToString();
-                var lst1 = _ucodeByFreeText.GetAll(x => x.UCodeID == salesHead.UCodeId).Select(x => new UcodeModel { StyleId = x.StyleID, FreeText = x.FreeText }).ToList();
+                var lst1 = new List<UcodeModel>();
+                var IsHiddenUcode = _ucodeOperationsTbl.Exists(s => s.UcodeId == ucode && s.FreeStkChk && s.IsEmergency) ? _ucodeOperationsTbl.GetAll(s => s.UcodeId == ucode && s.FreeStkChk && s.IsEmergency).First().HasAltStyles : false;
+                if (IsHiddenUcode && Convert.ToBoolean(Session["IsEmergency"]) && Convert.ToBoolean(Session["REQSTKLEVEL"]))
+                {
+                    lst1= _ucodeByFreeText.GetAll(x => x.UCodeID == salesHead.UCodeId && x.IsHidden==0).Select(x => new UcodeModel { StyleId = x.StyleID, FreeText = x.FreeText }).ToList();
+                }
+                else
+                {
+                    lst1= _ucodeByFreeText.GetAll(x => x.UCodeID == salesHead.UCodeId).Select(x => new UcodeModel { StyleId = x.StyleID, FreeText = x.FreeText }).ToList();
+                }
+               
                 Session["UcodeDesc"] = ucodeHtml.ToString();
                 Session["Pointsmodel"] = _home.GetPointsModel(ucode, busId);
                 Session["SelectedEmp"] = salesHead.EmployeeID;
@@ -407,11 +423,10 @@ namespace Maximus.Controllers
         #region getting all groups for checkboxlist
         public ActionResult GetAllGroups()
         {
-
+            string busId = Session["BuisnessId"].ToString();
 
             try
             {
-
                 if (Session["UcodeStyle"] != null)
                 {
                     List<UcodeModel> UcodeStyle = (List<UcodeModel>)Session["UcodeStyle"];
@@ -451,8 +466,10 @@ namespace Maximus.Controllers
             }
             catch (Exception e)
             {
+                logger .Warn(e.Message);logger.Warn(e.StackTrace);; logger.Warn(e.StackTrace);
                 return null;
             }
+
 
         }
         #endregion
@@ -695,7 +712,8 @@ namespace Maximus.Controllers
                         }
                         if (filterText != "")
                         {
-                            model = model.Any(x => x.StyleID.ToLower().Contains(filterText.ToLower().Trim()) | x.Description.ToLower().Trim().Contains(filterText.ToLower().Trim())) ? model.Where(x => x.StyleID.ToLower().Trim().Contains(filterText.ToLower().Trim()) | x.Description.ToLower().Trim().Contains(filterText.ToLower().Trim())).ToList() : null;
+
+                            model = model.Any(x => x.StyleID.ToLower().Contains(filterText.ToLower().Trim()) | x.Description.ToLower().Trim().Contains(filterText.ToLower().Trim())) ? model.Where(x => x.StyleID.ToLower().Trim().Contains(filterText.ToLower().Trim()) | x.Description.ToLower().Trim().Contains(filterText.ToLower().Trim())).ToList() : new List<styleViewmodel>();
                         }
                         model = model.GroupBy(x => x.StyleID).Select(y => y.First()).ToList();
                         if (BringImages)
@@ -706,7 +724,7 @@ namespace Maximus.Controllers
                 }
                 catch (Exception e)
                 {
-
+                    logger .Warn(e.Message);logger.Warn(e.StackTrace); logger.Warn("inner exception:"+e.InnerException);  
                 }
             }
             return PartialView("_CardViewPartial", model.Distinct());
@@ -726,6 +744,7 @@ namespace Maximus.Controllers
             }
             catch (Exception e)
             {
+                logger .Warn(e.Message);logger.Warn(e.StackTrace);;
             }
             return null;
         }
@@ -795,12 +814,12 @@ namespace Maximus.Controllers
                     {
                         foreach (var size in result.SizeList)
                         {
-                            priceLst.Add(new SizePrice { Size = size, Price = _dataConnection.GetPrice(styleId, size, Session["BuisnessId"].ToString()), Currency = Session["CurrencySymbol"].ToString() });
+                            priceLst.Add(new SizePrice { Size = size, Price = _dataConnection.GetPrice(styleId, size, Session["BuisnessId"].ToString()).ToString("0.00"), Currency = Session["CurrencySymbol"].ToString() });
                         }
                     }
                     catch (Exception e)
                     {
-
+                        logger .Warn(e.Message);logger.Warn(e.StackTrace);;
                     }
                     result.PriceList = priceLst;
                 }
@@ -826,7 +845,7 @@ namespace Maximus.Controllers
                         result.SizeList = data1;
                         foreach (var size in result.SizeList)
                         {
-                            priceLst.Add(new SizePrice { Size = size, Price = _dataConnection.GetPrice(styleId, size, Session["BuisnessId"].ToString()), Currency = Session["CurrencySymbol"].ToString() });
+                            priceLst.Add(new SizePrice { Size = size, Price = _dataConnection.GetPrice(styleId, size, Session["BuisnessId"].ToString()).ToString("0.00"), Currency = Session["CurrencySymbol"].ToString() });
                         }
                         result.PriceList = priceLst;
                     }
@@ -835,7 +854,7 @@ namespace Maximus.Controllers
                         result.SizeList = data1;
                         foreach (var size in result.SizeList)
                         {
-                            priceLst.Add(new SizePrice { Size = size, Price = _dataConnection.GetPrice(styleId, size, Session["BuisnessId"].ToString()), Currency = Session["CurrencySymbol"].ToString() });
+                            priceLst.Add(new SizePrice { Size = size, Price = _dataConnection.GetPrice(styleId, size, Session["BuisnessId"].ToString()).ToString("0.00"), Currency = Session["CurrencySymbol"].ToString() });
                         }
                         result.PriceList = priceLst;
                     }
@@ -970,7 +989,7 @@ namespace Maximus.Controllers
                 }
                 catch (Exception e)
                 {
-
+                    logger .Warn(e.Message);logger.Warn(e.StackTrace);;
                 }
                 foreach (var data1 in result)
                 {
@@ -997,8 +1016,55 @@ namespace Maximus.Controllers
         }
         #endregion
 
+        #region getCardAlternate
+        public ActionResult GetCardAlternateStyle(string StyleID, string BannerStyle)
+        {
+            List<styleViewmodel> model = new List<styleViewmodel>();
+            try
+            {
+                styleViewmodel svm = new styleViewmodel();
+                if (_tblFskStyle.Exists(x => x.StyleID == StyleID))
+                {
+                    svm = _tblFskStyle.GetAll(x => x.StyleID == StyleID).ToList().Select(x => new styleViewmodel
+                    {
+                        StyleID = x.StyleID,
+                        ProductGroup = x.Product_Group != null ? x.Product_Group.Value : 0,
+                        StyleImage = x.StyleImage == "" | x.StyleImage == null ? "/StyleImages/notfound.png" : x.StyleImage,
+                        Assembly = _customAssembly.Exists(d => d.ParentStyleID == x.StyleID) ? _customAssembly.Exists(d => d.ParentStyleID == x.StyleID && d.isChargeable == false) ? 1 : 0 : 0,
+                        OriginalStyleid = BannerStyle,
+                    }).FirstOrDefault();
+                }
+                model.Add(svm);
+                foreach (var data1 in model)
+                {
+                    data1.Reqdata = _dataConnection.GetReqData(data1.StyleID);
+                    data1.HasPreviousSize = new PreviousQty();
+                }
+            }
+            catch(Exception e)
+            {
+                logger .Warn(e.Message);logger.Warn(e.StackTrace);;
+            }
+            return PartialView("_StyleByCardPop", model);
+
+        }
+        #endregion
+
+        #region getBannerStyles
+        public List<BannerStyleClrSiz> GetBannerSizes(string StyleID)
+        {
+            List<BannerStyleClrSiz> result = new List<BannerStyleClrSiz>();
+            if (_tblAlternates.Exists(s => s.StyleId == StyleID))
+            {
+                result = _tblAlternates.GetAll(s => s.StyleId == StyleID).Select(s => new BannerStyleClrSiz { BannerStyle = s.StyleId, BannerColour = s.ColourId, BannerSize = s.SizeId, UeColor = s.AltColourId, UeStyle = s.AltStyleId, UeSize = s.AltSizeId }).ToList();
+                result.ForEach(s => s.IsBannerObsolete = _styleColorSizeObsolete.Exists(a => a.ColourID == s.BannerColour && a.SizeID == s.BannerSize && a.StyleID == s.BannerStyle) ? _styleColorSizeObsolete.GetAll(a => a.ColourID == s.BannerColour && a.SizeID == s.BannerSize && a.StyleID == s.BannerStyle).First().Obsolete_Class == 0 ? false : true : false);
+            }
+            return result;
+        }
+        #endregion
+
         #region  getCard
-        public ActionResult GetCard(string StyleID, string Orgstyle, string caption = "")
+        public ActionResult GetCard(string StyleID, string Orgstyle, string caption = "",string Privatesize="",string PrivateColour="",int PrivateOrdQty=1)
         {
             //StyleID = "TSB LJ1/L";
             Session["CatagoryCaption"] = caption;
@@ -1007,22 +1073,14 @@ namespace Maximus.Controllers
 
             var hasFit = _fskStyleFreetext.GetAll(x => x.StyleId == StyleID).Any(x => x.FreeTextType == "FITALLOC") ? _fskStyleFreetext.GetAll(x => x.StyleId == StyleID & x.FreeTextType == "FITALLOC").First().FreeText : "";
             List<styleViewmodel> model = new List<styleViewmodel>();
-            if (hasFit == "")
+            if (Session["isrtntype"].ToString() != "PRIVATE")
             {
-                try
+                if (hasFit == "")
                 {
-                    styleViewmodel svm = new styleViewmodel();
-                    svm = _ucodeByFreetext.GetAll(x => x.StyleID == StyleID).ToList().Select(x => new styleViewmodel
+                    try
                     {
-                        StyleID = x.StyleID,
-                        ProductGroup = x.Product_Group != null ? x.Product_Group.Value : 0,
-                        StyleImage = x.StyleImage == "" | x.StyleImage == null ? "/StyleImages/notfound.png" : x.StyleImage,
-                        Assembly = _customAssembly.Exists(d => d.ParentStyleID == x.StyleID) ? _customAssembly.Exists(d => d.ParentStyleID == x.StyleID && d.isChargeable == false) ? 1 : 0 : 0,
-                        OriginalStyleid = Orgstyle
-                    }).FirstOrDefault();
-                    if (svm == null && Convert.ToBoolean(Session["IsEmergency"]) == false)
-                    {
-                        svm = _styleByFreetext.GetAll(x => x.StyleID == StyleID).ToList().Select(x => new styleViewmodel
+                        styleViewmodel svm = new styleViewmodel();
+                        svm = _ucodeByFreetext.GetAll(x => x.StyleID == StyleID).ToList().Select(x => new styleViewmodel
                         {
                             StyleID = x.StyleID,
                             ProductGroup = x.Product_Group != null ? x.Product_Group.Value : 0,
@@ -1030,67 +1088,151 @@ namespace Maximus.Controllers
                             Assembly = _customAssembly.Exists(d => d.ParentStyleID == x.StyleID) ? _customAssembly.Exists(d => d.ParentStyleID == x.StyleID && d.isChargeable == false) ? 1 : 0 : 0,
                             OriginalStyleid = Orgstyle
                         }).FirstOrDefault();
-                    }
-                    if (svm == null)
-                    {
-                        svm = _styleFreetxtEmer.GetAll(x => x.StyleID == StyleID).ToList().Select(x => new styleViewmodel
+                        if (svm == null && Convert.ToBoolean(Session["IsEmergency"]) == false)
                         {
-                            StyleID = x.StyleID,
-                            ProductGroup = x.Product_Group != null ? x.Product_Group.Value : 0,
-                            StyleImage = x.StyleImage == "" | x.StyleImage == null ? "/StyleImages/notfound.png" : x.StyleImage,
-                            Assembly = _customAssembly.Exists(d => d.ParentStyleID == x.StyleID) ? _customAssembly.Exists(d => d.ParentStyleID == x.StyleID && d.isChargeable == false) ? 1 : 0 : 0,
-                            OriginalStyleid = Orgstyle
-                        }).FirstOrDefault();
-                    }
+                            svm = _styleByFreetext.GetAll(x => x.StyleID == StyleID).ToList().Select(x => new styleViewmodel
+                            {
+                                StyleID = x.StyleID,
+                                ProductGroup = x.Product_Group != null ? x.Product_Group.Value : 0,
+                                StyleImage = x.StyleImage == "" | x.StyleImage == null ? "/StyleImages/notfound.png" : x.StyleImage,
+                                Assembly = _customAssembly.Exists(d => d.ParentStyleID == x.StyleID) ? _customAssembly.Exists(d => d.ParentStyleID == x.StyleID && d.isChargeable == false) ? 1 : 0 : 0,
+                                OriginalStyleid = Orgstyle
+                            }).FirstOrDefault();
+                        }
+                        if (svm == null)
+                        {
+                            svm = _styleFreetxtEmer.GetAll(x => x.StyleID == StyleID).ToList().Select(x => new styleViewmodel
+                            {
+                                StyleID = x.StyleID,
+                                ProductGroup = x.Product_Group != null ? x.Product_Group.Value : 0,
+                                StyleImage = x.StyleImage == "" | x.StyleImage == null ? "/StyleImages/notfound.png" : x.StyleImage,
+                                Assembly = _customAssembly.Exists(d => d.ParentStyleID == x.StyleID) ? _customAssembly.Exists(d => d.ParentStyleID == x.StyleID && d.isChargeable == false) ? 1 : 0 : 0,
+                                OriginalStyleid = Orgstyle
+                            }).FirstOrDefault();
+                        }
 
-                    if (svm != null)
+                        if (svm != null)
+                        {
+                            model.Add(svm);
+                        }
+                    }
+                    catch (Exception e)
+                    { logger.Warn(e.Message); logger.Warn(e.StackTrace); ; }
+                    foreach (var data1 in model)
                     {
-                        model.Add(svm);
+                        data1.Reqdata = _dataConnection.GetReqData(data1.StyleID);
+                        if (!data1.StyleID.Contains(","))
+                        {
+                            if (Convert.ToBoolean(Session["IsBulkOrder1"]) == false)
+                            {
+                                data1.HasPreviousSize = _dataConnection.GetPreviousHistory(Session["SelectedEmp"].ToString(), Session["BuisnessId"].ToString(), data1.StyleID);
+                            }
+                            else
+                            {
+                                data1.HasPreviousSize = new PreviousQty();
+                            }
+                        }
+                        else
+                        {
+                            if (Convert.ToBoolean(Session["IsBulkOrder1"]) == false)
+                            {
+                                data1.HasPreviousSize = _dataConnection.GetPreviousHistory(Session["SelectedEmp"].ToString(), Session["BuisnessId"].ToString(), data1.StyleID.Split(',')[0]);
+                            }
+                            else
+                            {
+                                data1.HasPreviousSize = new PreviousQty();
+                            }
+
+                        }
+                        if (data1.StyleImage.Contains(":"))
+                        {
+
+                            var data = data1.StyleImage.Substring(data1.StyleImage.IndexOf(":") + 1, data1.StyleImage.Length - data1.StyleImage.IndexOf(":") - 1);
+                            if (System.IO.File.Exists(appPath + data1.StyleImage.Substring(data1.StyleImage.IndexOf(":") + 1, data1.StyleImage.Length - data1.StyleImage.IndexOf(":") - 1)) != true)
+                            {
+                                data1.StyleImage = Url.Content("~/StyleImages/notfound.png");
+                            }
+                            else
+                            {
+                                data1.StyleImage = Url.Content("~/" + data1.StyleImage.Substring(data1.StyleImage.IndexOf(":") + 1, data1.StyleImage.Length - data1.StyleImage.IndexOf(":") - 1));
+                            }
+                        }
+                        else
+                        {
+                            if (System.IO.File.Exists(appPath + data1.StyleImage) != true)
+                            {
+                                data1.StyleImage = Url.Content("~/StyleImages/notfound.png");
+                            }
+                            else
+                            {
+                                data1.StyleImage = Url.Content("~/" + data1.StyleImage);
+                            }
+                        }
                     }
                 }
-                catch (Exception e)
-                { }
-                foreach (var data1 in model)
+                else
                 {
-                    data1.Reqdata = _dataConnection.GetReqData(data1.StyleID);
-                    if (!data1.StyleID.Contains(","))
+                    string style = "";
+                    var curStyle = _styleByFreetext.GetAll(x => x.FreeText == hasFit).Select(x => x.StyleID).FirstOrDefault();
+
+                    var s11 = _styleByFreetext.GetAll(x => x.FreeText == hasFit).FirstOrDefault();
+
+                    var S1 = _ucodeByFreetext.GetAll(x => x.StyleID == StyleID).ToList().Select(x => new styleViewmodel
                     {
-                        if (Convert.ToBoolean(Session["IsBulkOrder1"]) == false)
+                        StyleID = curStyle,
+                        ProductGroup = x.Product_Group != null ? x.Product_Group.Value : 0,
+                        StyleImage = x.StyleImage == "" | x.StyleImage == null ? "/StyleImages/notfound.png" : x.StyleImage,
+                        Assembly = _customAssembly.GetAll(d => d.ParentStyleID == x.StyleID).Any() ? _customAssembly.GetAll(d => d.ParentStyleID == x.StyleID && d.isChargeable == false).Any() ? 1 : 0 : 0,
+                        OriginalStyleid = Orgstyle
+                    }).FirstOrDefault();
+                    if (S1 != null)
+                    {
+                        model.Add(new styleViewmodel
                         {
-                            data1.HasPreviousSize = _dataConnection.GetPreviousHistory(Session["SelectedEmp"].ToString(), Session["BuisnessId"].ToString(), data1.StyleID);
-                        }
-                        else
-                        {
-                            data1.HasPreviousSize = new PreviousQty();
-                        }
+                            StyleID = curStyle,
+                            ProductGroup = S1.ProductGroup,
+                            StyleImage = S1.StyleImage,
+                            Assembly = S1.Assembly,
+                            OriginalStyleid = Orgstyle
+                        });
                     }
                     else
                     {
-                        if (Convert.ToBoolean(Session["IsBulkOrder1"]) == false)
+                        model.Add(new styleViewmodel
                         {
-                            data1.HasPreviousSize = _dataConnection.GetPreviousHistory(Session["SelectedEmp"].ToString(), Session["BuisnessId"].ToString(), data1.StyleID.Split(',')[0]);
+                            StyleID = curStyle,
+                            ProductGroup = s11.Product_Group != null ? s11.Product_Group.Value : 0,
+                            StyleImage = s11.StyleImage == "" | s11.StyleImage == null ? "/StyleImages/notfound.png" : s11.StyleImage,
+                            Assembly = _customAssembly.GetAll(d => d.ParentStyleID == s11.StyleID).Any() ? _customAssembly.GetAll(d => d.ParentStyleID == s11.StyleID && d.isChargeable == false).Any() ? 1 : 0 : 0,
+                            OriginalStyleid = Orgstyle
+                        });
+
+                    }
+                    foreach (var data1 in model)
+                    {
+                        data1.Reqdata = _dataConnection.GetReqData(data1.StyleID);
+                        if (!data1.StyleID.Contains(","))
+                        {
+                            if (Convert.ToBoolean(Session["IsBulkOrder1"]) == false)
+                            {
+                                data1.HasPreviousSize = _dataConnection.GetPreviousHistory(Session["SelectedEmp"].ToString(), Session["BuisnessId"].ToString(), data1.OriginalStyleid);
+                            }
+                            else
+                            {
+                                data1.HasPreviousSize = new PreviousQty();
+                            }
                         }
                         else
                         {
-                            data1.HasPreviousSize = new PreviousQty();
+                            if (Convert.ToBoolean(Session["IsBulkOrder1"]) == false)
+                            {
+                                data1.HasPreviousSize = _dataConnection.GetPreviousHistory(Session["SelectedEmp"].ToString(), Session["BuisnessId"].ToString(), data1.StyleID.Split(',')[0]);
+                            }
+                            else
+                            {
+                                data1.HasPreviousSize = new PreviousQty();
+                            }
                         }
-
-                    }
-                    if (data1.StyleImage.Contains(":"))
-                    {
-
-                        var data = data1.StyleImage.Substring(data1.StyleImage.IndexOf(":") + 1, data1.StyleImage.Length - data1.StyleImage.IndexOf(":") - 1);
-                        if (System.IO.File.Exists(appPath + data1.StyleImage.Substring(data1.StyleImage.IndexOf(":") + 1, data1.StyleImage.Length - data1.StyleImage.IndexOf(":") - 1)) != true)
-                        {
-                            data1.StyleImage = Url.Content("~/StyleImages/notfound.png");
-                        }
-                        else
-                        {
-                            data1.StyleImage = Url.Content("~/" + data1.StyleImage.Substring(data1.StyleImage.IndexOf(":") + 1, data1.StyleImage.Length - data1.StyleImage.IndexOf(":") - 1));
-                        }
-                    }
-                    else
-                    {
                         if (System.IO.File.Exists(appPath + data1.StyleImage) != true)
                         {
                             data1.StyleImage = Url.Content("~/StyleImages/notfound.png");
@@ -1102,78 +1244,38 @@ namespace Maximus.Controllers
                     }
                 }
             }
-            else
+            else if(Session["isrtntype"].ToString()=="PRIVATE")
             {
-                string style = "";
-                var curStyle = _styleByFreetext.GetAll(x => x.FreeText == hasFit).Select(x => x.StyleID).FirstOrDefault();
-
-                var s11 = _styleByFreetext.GetAll(x => x.FreeText == hasFit).FirstOrDefault();
-
-                var S1 = _ucodeByFreetext.GetAll(x => x.StyleID == StyleID).ToList().Select(x => new styleViewmodel
+                try
                 {
-                    StyleID = curStyle,
-                    ProductGroup = x.Product_Group != null ? x.Product_Group.Value : 0,
-                    StyleImage = x.StyleImage == "" | x.StyleImage == null ? "/StyleImages/notfound.png" : x.StyleImage,
-                    Assembly = _customAssembly.GetAll(d => d.ParentStyleID == x.StyleID).Any() ? _customAssembly.GetAll(d => d.ParentStyleID == x.StyleID && d.isChargeable == false).Any() ? 1 : 0 : 0,
-                    OriginalStyleid = Orgstyle
-                }).FirstOrDefault();
-                if (S1 != null)
-                {
-                    model.Add(new styleViewmodel
+                    styleViewmodel svm = new styleViewmodel();
+                    if (_tblFskStyle.Exists(x => x.StyleID == StyleID))
                     {
-                        StyleID = curStyle,
-                        ProductGroup = S1.ProductGroup,
-                        StyleImage = S1.StyleImage,
-                        Assembly = S1.Assembly,
-                        OriginalStyleid = Orgstyle
-                    });
+                        svm = _tblFskStyle.GetAll(x => x.StyleID == StyleID).ToList().Select(x => new styleViewmodel
+                        {
+                            StyleID = x.StyleID,
+                            ProductGroup = x.Product_Group != null ? x.Product_Group.Value : 0,
+                            StyleImage = x.StyleImage == "" | x.StyleImage == null ? "/StyleImages/notfound.png" : x.StyleImage,
+                            Assembly = _customAssembly.Exists(d => d.ParentStyleID == x.StyleID) ? _customAssembly.Exists(d => d.ParentStyleID == x.StyleID && d.isChargeable == false) ? 1 : 0 : 0,
+                            OriginalStyleid = x.StyleID,
+                        }).FirstOrDefault();
+                       
+                    }
+                    model.Add(svm);
+                    foreach (var data1 in model)
+                    {
+                        data1.Reqdata = _dataConnection.GetReqData(data1.StyleID);
+                        data1.HasPreviousSize = new PreviousQty();
+                    }
+                    ViewBag.PRIVATESIZE = Privatesize;
+                    ViewBag.PRIIVATEORDQTY = PrivateOrdQty;
+                    ViewBag.PRIIVATECOLOUR = PrivateColour;
                 }
-                else
+                catch (Exception e)
                 {
-                    model.Add(new styleViewmodel
-                    {
-                        StyleID = curStyle,
-                        ProductGroup = s11.Product_Group != null ? s11.Product_Group.Value : 0,
-                        StyleImage = s11.StyleImage == "" | s11.StyleImage == null ? "/StyleImages/notfound.png" : s11.StyleImage,
-                        Assembly = _customAssembly.GetAll(d => d.ParentStyleID == s11.StyleID).Any() ? _customAssembly.GetAll(d => d.ParentStyleID == s11.StyleID && d.isChargeable == false).Any() ? 1 : 0 : 0,
-                        OriginalStyleid = Orgstyle
-                    });
-
+                    logger.Warn(e.Message); logger.Warn(e.StackTrace); ;
                 }
-                foreach (var data1 in model)
-                {
-                    data1.Reqdata = _dataConnection.GetReqData(data1.StyleID);
-                    if (!data1.StyleID.Contains(","))
-                    {
-                        if (Convert.ToBoolean(Session["IsBulkOrder1"]) == false)
-                        {
-                            data1.HasPreviousSize = _dataConnection.GetPreviousHistory(Session["SelectedEmp"].ToString(), Session["BuisnessId"].ToString(), data1.OriginalStyleid);
-                        }
-                        else
-                        {
-                            data1.HasPreviousSize = new PreviousQty();
-                        }
-                    }
-                    else
-                    {
-                        if (Convert.ToBoolean(Session["IsBulkOrder1"]) == false)
-                        {
-                            data1.HasPreviousSize = _dataConnection.GetPreviousHistory(Session["SelectedEmp"].ToString(), Session["BuisnessId"].ToString(), data1.StyleID.Split(',')[0]);
-                        }
-                        else
-                        {
-                            data1.HasPreviousSize = new PreviousQty();
-                        }
-                    }
-                    if (System.IO.File.Exists(appPath + data1.StyleImage) != true)
-                    {
-                        data1.StyleImage = Url.Content("~/StyleImages/notfound.png");
-                    }
-                    else
-                    {
-                        data1.StyleImage = Url.Content("~/" + data1.StyleImage);
-                    }
-                }
+               
             }
             return PartialView("_StyleByCardPop", model);
         }
@@ -1317,16 +1419,20 @@ namespace Maximus.Controllers
                 }
                 catch (Exception e)
                 {
-
+                    logger .Warn(e.Message);logger.Warn(e.StackTrace);;
                 }
             }
             if (salesOrderLines.Count > 0)
             {
                 if ((bool)Session["IsBulkOrder1"] == false)
                 {
-
-                    lineNo = salesOrderLines.Where(x => x.EmployeeId == Session["SelectedEmp"].ToString()).OrderByDescending(x => x.LineNo).FirstOrDefault().LineNo + 1;
-
+                    try
+                    {
+                        lineNo = salesOrderLines.Where(x => x.EmployeeId == Session["SelectedEmp"].ToString()).OrderByDescending(x => x.LineNo).FirstOrDefault().LineNo + 1;
+                    }catch(Exception E)
+                    {
+                        logger .Warn(E.Message);logger.Warn(E.StackTrace);;
+                    }
                 }
                 else if ((bool)Session["IsBulkOrder1"] == true)
                 {
@@ -1378,6 +1484,7 @@ namespace Maximus.Controllers
 
                                 salesOrderLines.Add(new SalesOrderLineViewModel
                                 {
+                                    IsAlternateStyle = _tblAlternates.Exists(s => s.AltStyleId == style) ? true : false,
                                     ColourID = color,
                                     LineNo = lineNo,
                                     Description = description,
@@ -1410,7 +1517,7 @@ namespace Maximus.Controllers
                             {
                                 if (((List<string>)Session["SelectedTemplates"]).Count() > 0)
                                 {
-                                    salesOrderLines.Add(new SalesOrderLineViewModel { ColourID = color, LineNo = lineNo, Description = description, OrdQty = item.Qty, Price = Pricenull, SizeID = item.Size, StyleID = style, SelectedTemplate = Session["SelectedTemplate"].ToString(), StyleImage = _tblFskStyle.Exists(x => x.StyleID.Contains(style)) ? _tblFskStyle.GetAll(x => x.StyleID.Contains(style)).FirstOrDefault().StyleImage : Url.Content("~/StyleImages/notfound.png"), orgStyleId = orgStyl, VatPercent = _dataConnection.GetVatPercent(style, item.Size), Total = _dataConnection.GetlineTotals(Convert.ToDouble(item.Qty), Convert.ToDouble(price), _dataConnection.GetVatPercent(style, item.Size)), EntQty = entQty, FreeText1 = item.ReqData, DeliveryDate = _dataConnection.GetDeliveryDate(Convert.ToInt32(Session["intNoOfday"]) - 1, Convert.ToBoolean(Session["IncWendsDel"])), VatCode1 = _dataConnection.GetVatCode(), RepId = Convert.ToInt32(Session["Rep_Id"].ToString()), Currency_Exchange_Rate = Convert.ToDouble(Session["CurrencyExchangeRate"]), Cost1 = _dataConnection.GetCostPrice(style, item.Size, color, Session["Currency_Name"].ToString(), 1, 0), IssueUOM1 = 1, IssueQty1 = Convert.ToInt32(item.Qty), StockingUOM1 = 1, SOPDetail4 = reason, SOPDetail5 = selectedSitecode != "" ? selectedSitecode.Split('|')[0].Trim() : "", CatagoryCaption = Session["CatagoryCaption"] != null ? Session["CatagoryCaption"].ToString() : "" });
+                                    salesOrderLines.Add(new SalesOrderLineViewModel { IsAlternateStyle = _tblAlternates.Exists(s => s.AltStyleId == style) ? true : false, ColourID = color, LineNo = lineNo, Description = description, OrdQty = item.Qty, Price = Pricenull, SizeID = item.Size, StyleID = style, SelectedTemplate = Session["SelectedTemplate"].ToString(), StyleImage = _tblFskStyle.Exists(x => x.StyleID.Contains(style)) ? _tblFskStyle.GetAll(x => x.StyleID.Contains(style)).FirstOrDefault().StyleImage : Url.Content("~/StyleImages/notfound.png"), orgStyleId = orgStyl, VatPercent = _dataConnection.GetVatPercent(style, item.Size), Total = _dataConnection.GetlineTotals(Convert.ToDouble(item.Qty), Convert.ToDouble(price), _dataConnection.GetVatPercent(style, item.Size)), EntQty = entQty, FreeText1 = item.ReqData, DeliveryDate = _dataConnection.GetDeliveryDate(Convert.ToInt32(Session["intNoOfday"]) - 1, Convert.ToBoolean(Session["IncWendsDel"])), VatCode1 = _dataConnection.GetVatCode(), RepId = Convert.ToInt32(Session["Rep_Id"].ToString()), Currency_Exchange_Rate = Convert.ToDouble(Session["CurrencyExchangeRate"]), Cost1 = _dataConnection.GetCostPrice(style, item.Size, color, Session["Currency_Name"].ToString(), 1, 0), IssueUOM1 = 1, IssueQty1 = Convert.ToInt32(item.Qty), StockingUOM1 = 1, SOPDetail4 = reason, SOPDetail5 = selectedSitecode != "" ? selectedSitecode.Split('|')[0].Trim() : "", CatagoryCaption = Session["CatagoryCaption"] != null ? Session["CatagoryCaption"].ToString() : "" });
                                 }
                                 else
                                 {
@@ -1448,6 +1555,7 @@ namespace Maximus.Controllers
                         }
                         catch (Exception e)
                         {
+                            logger .Warn(e.Message);logger.Warn(e.StackTrace);;
                             var EmployeeId = Session["SelectedEmp"].ToString();
                             var EmployeeName = Session["EmpName"].ToString();
                         }
@@ -1551,7 +1659,7 @@ namespace Maximus.Controllers
                         }
                         catch (Exception e)
                         {
-
+                            logger .Warn(e.Message);logger.Warn(e.StackTrace);;
                         }
                     }
                     Session["SalesOrderHeader"] = salesOrderHeader;
@@ -1607,7 +1715,7 @@ namespace Maximus.Controllers
                     }
                     catch (Exception e)
                     {
-
+                        logger .Warn(e.Message);logger.Warn(e.StackTrace);;
                     }
                 }
                 if (salesOrderLines.Count > 0)
@@ -1624,10 +1732,11 @@ namespace Maximus.Controllers
                     {
                         //Total = _dataConnection.GetVatPercent(x.StyleID, x.SizeID) + Convert.ToDouble(x.Price.Value),
 
-                        salesOrderLines.Add(new SalesOrderLineViewModel { ColourID = color, LineNo = lineNo, Description = description, OrdQty = Convert.ToInt64(qty), Price = Convert.ToDouble(price) == 0 ? Convert.ToDouble(GetPrice(style, size)) : Convert.ToDouble(price), SizeID = size, StyleID = style, EmployeeId = Session["SelectedEmp"].ToString(), EmployeeName = Session["EmpName"].ToString(), StyleImage = _tblFskStyle.Exists(x => x.StyleID.Contains(style)) ? _tblFskStyle.GetAll(x => x.StyleID.Contains(style)).FirstOrDefault().StyleImage : Url.Content("~/StyleImages/notfound.png"), orgStyleId = orgStyl, VatPercent = _dataConnection.GetVatPercent(style, size), Total = _dataConnection.GetlineTotals(Convert.ToDouble(qty), Convert.ToDouble(price), _dataConnection.GetVatPercent(style, size)), EntQty = entQty, FreeText1 = reqData1, DeliveryDate = _dataConnection.GetDeliveryDate(Convert.ToInt32(Session["intNoOfday"]) - 1, Convert.ToBoolean(Session["IncWendsDel"])), VatCode1 = _dataConnection.GetVatCode(), RepId = Convert.ToInt32(Session["Rep_Id"].ToString()), Currency_Exchange_Rate = Convert.ToDouble(Session["CurrencyExchangeRate"]), Cost1 = _dataConnection.GetCostPrice(style, size, color, Session["Currency_Name"].ToString(), 1, 0), IssueUOM1 = 1, IssueQty1 = Convert.ToInt32(qty), StockingUOM1 = 1, SOPDetail4 = reason, SOPDetail5 = selectedSitecode != "" ? selectedSitecode.Split('|')[0].Trim() : "", Points = points.Value, TotalPoints = points.Value * Convert.ToInt32(qty), CatagoryCaption = Session["CatagoryCaption"] != null ? Session["CatagoryCaption"].ToString() : "" });
+                        salesOrderLines.Add(new SalesOrderLineViewModel { IsAlternateStyle = _tblAlternates.Exists(s => s.AltStyleId == style) ? true : false, ColourID = color, LineNo = lineNo, Description = description, OrdQty = Convert.ToInt64(qty), Price = Convert.ToDouble(price) == 0 ? Convert.ToDouble(GetPrice(style, size)) : Convert.ToDouble(price), SizeID = size, StyleID = style, EmployeeId = Session["SelectedEmp"].ToString(), EmployeeName = Session["EmpName"].ToString(), StyleImage = _tblFskStyle.Exists(x => x.StyleID.Contains(style)) ? _tblFskStyle.GetAll(x => x.StyleID.Contains(style)).FirstOrDefault().StyleImage : Url.Content("~/StyleImages/notfound.png"), orgStyleId = orgStyl, VatPercent = _dataConnection.GetVatPercent(style, size), Total = _dataConnection.GetlineTotals(Convert.ToDouble(qty), Convert.ToDouble(price), _dataConnection.GetVatPercent(style, size)), EntQty = entQty, FreeText1 = reqData1, DeliveryDate = _dataConnection.GetDeliveryDate(Convert.ToInt32(Session["intNoOfday"]) - 1, Convert.ToBoolean(Session["IncWendsDel"])), VatCode1 = _dataConnection.GetVatCode(), RepId = Convert.ToInt32(Session["Rep_Id"].ToString()), Currency_Exchange_Rate = Convert.ToDouble(Session["CurrencyExchangeRate"]), Cost1 = _dataConnection.GetCostPrice(style, size, color, Session["Currency_Name"].ToString(), 1, 0), IssueUOM1 = 1, IssueQty1 = Convert.ToInt32(qty), StockingUOM1 = 1, SOPDetail4 = reason, SOPDetail5 = selectedSitecode != "" ? selectedSitecode.Split('|')[0].Trim() : "", Points = points.Value, TotalPoints = points.Value * Convert.ToInt32(qty), CatagoryCaption = Session["CatagoryCaption"] != null ? Session["CatagoryCaption"].ToString() : "" });
                     }
                     catch (Exception e)
                     {
+                        logger .Warn(e.Message);logger.Warn(e.StackTrace);;
                         var EmployeeId = Session["SelectedEmp"].ToString();
                         var EmployeeName = Session["EmpName"].ToString();
                     }
@@ -1756,19 +1865,20 @@ namespace Maximus.Controllers
         #endregion
 
         #region GetFreeStockValue
-        public int GetFreeStockValue(string StyleId, string ColorId, string size)
+        public int GetFreeStockValue(string StyleId, string ColorId, string size,bool isAlternateStyle=false)
         {
             int value = 0;
-            var emp = Session["SelectedEmp"].ToString();
-            var salesHead = ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Any(x => x.EmployeeID == emp) ? ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.EmployeeID == emp).First() : new SalesOrderHeaderViewModel();
+            var emp = System.Web.HttpContext.Current.Session["SelectedEmp"].ToString();
+            var salesHead = ((List<SalesOrderHeaderViewModel>)System.Web.HttpContext.Current.Session["SalesOrderHeader"]).Any(x => x.EmployeeID == emp) ? ((List<SalesOrderHeaderViewModel>)System.Web.HttpContext.Current.Session["SalesOrderHeader"]).Where(x => x.EmployeeID == emp).First() : new SalesOrderHeaderViewModel();
             long cartValue = 0;
+            salesHead.SalesOrderLine = salesHead.SalesOrderLine != null ? salesHead.SalesOrderLine : new List<SalesOrderLineViewModel>();
             var salesOrderLines = salesHead.SalesOrderLine;
             if (salesOrderLines.Count() > 0)
             {
                 cartValue = salesOrderLines.Any(s => s.StyleID == StyleId && s.ColourID == ColorId && s.SizeID == size && s.IsDleted == false) ? salesOrderLines.Where(s => s.StyleID == StyleId && s.ColourID == ColorId && s.SizeID == size && s.IsDleted == false).Sum(s => s.OrdQty) : 0;
             }
-            int freestock = _dp.GetFreeStock(StyleId, ColorId, size, Session["WareHouseID"].ToString() , salesOrderLines, Convert.ToBoolean(Session["ISEDITING"]),false);
-            value = freestock - Convert.ToInt32(cartValue);
+            int freestock = _dp.GetFreeStock(StyleId, ColorId, size, System.Web.HttpContext.Current.Session["WareHouseID"].ToString(), salesOrderLines, Convert.ToBoolean(System.Web.HttpContext.Current.Session["ISEDITING"]), false);
+            value = isAlternateStyle==false? freestock - Convert.ToInt32(cartValue):freestock;
             value = value > 0 ? value : 0;
             return value;
         }
@@ -1946,6 +2056,15 @@ namespace Maximus.Controllers
                     return Json(em);
                 }
             }
+            else if(Session["isrtntype"].ToString() == "PRIVATE")
+            {
+                var model1 = ((List<ReturnOrderModel>)Session["rtnLines"]);
+                var selected = Session["selectedRetLine"] != null ? (ReturnOrderModel)Session["selectedRetLine"] : new ReturnOrderModel();
+                var reOrdQty = Convert.ToBoolean(Session["ISRTNEDITING"]) ? model1.Where(s => s.IsReorder && s.ReturnLineNo == selected.ReturnLineNo && s.StyleId == selected.StyleId && s.ColourId == selected.ColourId && s.SizeId == selected.SizeId && s.IsDleted==0).Sum(s => s.OrdQty) : model1.Where(s => s.IsReorder && s.LineNo == selected.LineNo && s.ReturnLineNo == selected.ReturnLineNo && s.StyleId == selected.StyleId && s.ColourId == selected.ColourId && s.SizeId == selected.SizeId && s.IsDleted == 0).Sum(s => s.OrdQty);
+                em.isPrivate = true;
+                em.Result = Convert.ToBoolean(Session["ISRTNEDITING"]) ? selected.LineNo > 0 ? "<table class=\"table\"><tr><td>Return qty: " + selected.OrdQty + "</td></tr><tr><td>Cart qty: " + reOrdQty + "</td></tr></table>" : "" :   selected.LineNo>0? "<table class=\"table\"><tr><td>Return qty: " + selected.RtnQty + "</td></tr><tr><td>Cart qty: " + reOrdQty + "</td></tr></table>" : "" ;
+                return Json(em);
+            }
             else if (Convert.ToBoolean(Session["IsEmergency"]) && Convert.ToBoolean(Session["REQSTKLEVEL"]))
             {
                 var salesHead = ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Any(x => x.EmployeeID == emp) ? ((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeader"]).Where(x => x.EmployeeID == emp).First() : new SalesOrderHeaderViewModel();
@@ -1956,7 +2075,7 @@ namespace Maximus.Controllers
                     cartValue = salesOrderLines.Any(s => s.StyleID == StyleId && s.ColourID == ColorId && s.SizeID == size && s.IsDleted == false) ? salesOrderLines.Where(s => s.StyleID == StyleId && s.ColourID == ColorId && s.SizeID == size && s.IsDleted == false).Sum(s => s.OrdQty) : 0;
                 }
                 em.isfreestk = true;
-                em.Result = "<table class=\"table\"><tr><td>Free Stock:  " + _dp.GetFreeStock(StyleId, ColorId, size, Session["WareHouseID"].ToString() ,null, Convert.ToBoolean(Session["ISEDITING"])) + "</td></tr><tr><td>Issued: 0</td></tr><tr><td>In Cart: " + cartValue + "</td></tr><tr><td>Previous History: N/A</td></tr></table>";
+                em.Result = "<table class=\"table\"><tr><td>Free Stock:  " + _dp.GetFreeStock(StyleId, ColorId, size, Session["WareHouseID"].ToString(), null, Convert.ToBoolean(Session["ISEDITING"])) + "</td></tr><tr><td>Issued: 0</td></tr><tr><td>In Cart: " + cartValue + "</td></tr><tr><td>Previous History: N/A</td></tr></table>";
                 return Json(em);
             }
             else
@@ -2086,7 +2205,7 @@ namespace Maximus.Controllers
                     {
                         cartValue = salesOrderLines1.Any(s => s.StyleID == style && s.ColourID == color && s.SizeID == size && s.IsDleted == false) ? salesOrderLines.Where(s => s.StyleID == style && s.ColourID == color && s.SizeID == size && s.IsDleted == false).Sum(s => s.OrdQty) : 0;
                     }
-                    freeStck = _dp.GetFreeStock(style, color, size, Session["WareHouseID"].ToString(), salesOrderLines1, Convert.ToBoolean(Session["ISEDITING"]),false);
+                    freeStck = _dp.GetFreeStock(style, color, size, Session["WareHouseID"].ToString(), salesOrderLines1, Convert.ToBoolean(Session["ISEDITING"]), false);
                     var ordedSum = cartValue + oQty;
                     result = freeStck - ordedSum >= 0 ? "enabled" : "";
                 }
@@ -2108,7 +2227,7 @@ namespace Maximus.Controllers
                             }
                             catch (Exception e)
                             {
-
+                                logger .Warn(e.Message);logger.Warn(e.StackTrace);;
                             }
 
                         }
@@ -2603,6 +2722,7 @@ namespace Maximus.Controllers
                 }
                 catch (Exception e)
                 {
+                    logger .Warn(e.Message);logger.Warn(e.StackTrace);;
 
                 }
             }
@@ -2637,7 +2757,7 @@ namespace Maximus.Controllers
                 }
                 catch (Exception e)
                 {
-
+                    logger .Warn(e.Message);logger.Warn(e.StackTrace);;
                 }
             }
             return result;
@@ -2719,78 +2839,94 @@ namespace Maximus.Controllers
                 }
                 else if (Convert.ToBoolean(Session["IsEmergency"]) && Convert.ToBoolean(Session["REQSTKLEVEL"]))
                 {
-                     
+
                     if (salesHeader.Any(x => x.SalesOrderLine != null) && salesHeader.Any(x => x.SalesOrderLine.Where(s => s.IsDleted == false).Count() > 0))
                     {
                         string retunCnt = "";
                         var thisHeader1 = salesHeader.Where(x => x.EmployeeID == empId && x.UCodeId == ucode).First();
                         var model = thisHeader1.SalesOrderLine;
-                        //"INSERT INTO tblsop_salesorder_detail (CompanyID, Warehouseid, OrderNo, LineNo,   LineType , StyleID, ColourID, SizeID,  Description, Price, OrdQty, AllQty, InvQty, DespQty,  CommissionRate, Deliverydate, VatCode, RepId, KamId, KAMrate, REPRate, Currency_Exchange_Rate,styleIDref,FreeText,Cost, IssueUOM, IssueQty,StockingUOM, NomCode, OriginalOrderNo, OriginalLineNo, AssemblyID, AsmLineNo, ReasonCode, ReturnOrderNo, ReturnLineNo, SOPDETAIL5, SOPDETAIL4)  VALUES('" + cmpId + "','" + saleHead.WarehouseID + "'," + saleno + "," + line.LineNo + ",1,'" + line.StyleID + "','" + line.ColourID.Trim() + "','" + line.SizeID.Trim() + "','" + line.Description + "'," + line.Price + "," + line.OrdQty + "," + line.AllQty + "," + line.InvQty + "," + line.InvQty + ",0,'" + delDate + "'," + line.VatCode1 + "," + line.RepId + "," + line.KAMID + "," + line.KAMRate1 + "," + line.RepRate1 + "," + line.Currency_Exchange_Rate + ",'" + line.StyleIDref + "','" + line.FreeText1 + "'," + line.Cost1 + "," + line.IssueUOM1 + "," + line.IssueQty1 + "," + line.StockingUOM1 + ",'" + line.NomCode + "'," + line.OriginalOrderNo + "," + orgLineno + "," + line.AssemblyID + "," + line.AsmLineNo + "," + line.ReasonCodeLine + "," + line.ReturnOrderNo + "," + line.ReturnLineNo + ",'" + line.SOPDetail5 + "','" + line.SOPDetail4 + "')";
-                        var newResult = model.GroupBy(s => new { s.StyleID, s.ColourID, s.SizeID ,s.IsDleted}).
-                            Select(sa => new SalesOrderLineViewModel {
+                         
+                        var newResult = model.GroupBy(s => new { s.StyleID, s.ColourID, s.SizeID, s.IsDleted, s.IsAlternateStyle }).
+                            Select(sa => new SalesOrderLineViewModel
+                            {
+                                IsAlternateStyle = sa.First().IsAlternateStyle,
                                 StyleID = sa.First().StyleID.Trim(),
                                 ColourID = sa.First().ColourID.Trim(),
                                 SizeID = sa.First().SizeID.Trim(),
-                                OrdQty = sa.Sum(s=>s.OrdQty),
-                                Description=sa.First().Description,
-                                Price=sa.First().Price,
-                                Cost1=sa.First().Cost1,
-                                IssueUOM1=sa.First().IssueUOM1,
+                                OrdQty = sa.Sum(s => s.OrdQty),
+                                Description = sa.First().Description,
+                                Price = sa.First().Price,
+                                Cost1 = sa.First().Cost1,
+                                IssueUOM1 = sa.First().IssueUOM1,
                                 IssueQty1 = sa.First().IssueQty1,
-                                Currency_Exchange_Rate=sa.First().Currency_Exchange_Rate,
-                                StyleIDref=sa.First().StyleIDref,
-                                VatCode1=sa.First().VatCode1,
-                                RepId=sa.First().RepId,
-                                KAMID=sa.First().KAMID,
-                                RepRate1=sa.First().RepRate1,
-                                KAMRate1=sa.First().KAMRate1,
-                                OriginalOrderNo= sa.First().OriginalOrderNo,
-                                AssemblyID=sa.First().AssemblyID,
-                                AsmLineNo= sa.First().AsmLineNo,
-                                ReturnOrderNo= sa.First().ReturnOrderNo,
-                                ReturnLineNo= sa.First().ReturnLineNo,
-                                SOPDetail5= sa.First().SOPDetail5,
-                                SOPDetail4= sa.First().SOPDetail4,
-                                IsDleted=sa.First().IsDleted
+                                Currency_Exchange_Rate = sa.First().Currency_Exchange_Rate,
+                                StyleIDref = sa.First().StyleIDref,
+                                VatCode1 = sa.First().VatCode1,
+                                RepId = sa.First().RepId,
+                                KAMID = sa.First().KAMID,
+                                RepRate1 = sa.First().RepRate1,
+                                KAMRate1 = sa.First().KAMRate1,
+                                OriginalOrderNo = sa.First().OriginalOrderNo,
+                                AssemblyID = sa.First().AssemblyID,
+                                AsmLineNo = sa.First().AsmLineNo,
+                                ReturnOrderNo = sa.First().ReturnOrderNo,
+                                ReturnLineNo = sa.First().ReturnLineNo,
+                                SOPDetail5 = sa.First().SOPDetail5,
+                                SOPDetail4 = sa.First().SOPDetail4,
+                                IsDleted = sa.First().IsDleted
                             }).ToList();
-                        if (Convert.ToBoolean(Session["ISEDITING"])==false)
+                        if (Convert.ToBoolean(Session["ISEDITING"]) == false)
                         {
-                            foreach (var line in newResult.Where(s => s.IsDleted == false))
+                            if (newResult.Where(s => s.IsDleted == false && s.IsAlternateStyle).Count() > 0 && newResult.Where(s => s.IsDleted == false && s.IsAlternateStyle == false).Count() == 0)
                             {
-                                var freeStock = _dp.GetFreeStock(line.StyleID, line.ColourID, line.SizeID, Session["WareHouseID"].ToString(), null, Convert.ToBoolean(Session["ISEDITING"]));
-                                if (line.OrdQty > freeStock)
-                                {
-                                    retunCnt = retunCnt + "{%FREESTOCKERROR%}The ordered quantity(" + line.OrdQty + ") for product " + line.Description + "(" + line.StyleID + ") " + line.ColourID + " " + line.SizeID + " is grater than the available freestock quantity (" + freeStock + ")\n";
-                                    return retunCnt;
-                                }
-                                else
-                                {
-                                    retunCnt = "";
-                                }
                                 result = retunCnt;
+                            }
+                            else
+                            {
+                                foreach (var line in newResult.Where(s => s.IsDleted == false && s.IsAlternateStyle == false))
+                                {
+                                    var freeStock = _dp.GetFreeStock(line.StyleID, line.ColourID, line.SizeID, Session["WareHouseID"].ToString(), null, Convert.ToBoolean(Session["ISEDITING"]));
+                                    if (line.OrdQty > freeStock)
+                                    {
+                                        retunCnt = retunCnt + "{%FREESTOCKERROR%}The ordered quantity(" + line.OrdQty + ") for product " + line.Description + "(" + line.StyleID + ") " + line.ColourID + " " + line.SizeID + " is grater than the available freestock quantity (" + freeStock + ")\n";
+                                        return retunCnt;
+                                    }
+                                    else
+                                    {
+                                        retunCnt = "";
+                                    }
+                                    result = retunCnt;
+                                }
                             }
                         }
                         else
                         {
-                            foreach (var line in newResult.Where(s=>s.IsDleted==false))
+                            if (newResult.Where(s => s.IsDleted == false && s.IsAlternateStyle).Count() > 0 && newResult.Where(s => s.IsDleted == false && s.IsAlternateStyle == false).Count() == 0)
                             {
-                                
-                                var freeStock = _dp.GetFreeStock(line.StyleID, line.ColourID, line.SizeID, Session["WareHouseID"].ToString(),model,true,false);
-                                //freeStock = freeStock +Convert.ToInt32 (line.OrdQty);
-                                if (line.OrdQty > freeStock)
-                                {
-                                    var freeStock1 = freeStock - line.OrdQty > 0 ? freeStock - line.OrdQty : 0;
-                                    retunCnt = retunCnt + "{%FREESTOCKERROR%}The ordered quantity(" + line.OrdQty + ") for product " + line.Description + "(" + line.StyleID + ") " + line.ColourID + " " + line.SizeID + " is grater than the available freestock quantity (" + freeStock + ")\n";
-                                    return retunCnt;
-                                }
-                                else
-                                {
-                                    retunCnt = "";
-                                }
                                 result = retunCnt;
                             }
+                            else
+                            {
+                                foreach (var line in newResult.Where(s => s.IsDleted == false && s.IsAlternateStyle == false))
+                                {
+
+                                    var freeStock = _dp.GetFreeStock(line.StyleID, line.ColourID, line.SizeID, Session["WareHouseID"].ToString(), model, true, false);
+                                    //freeStock = freeStock +Convert.ToInt32 (line.OrdQty);
+                                    if (line.OrdQty > freeStock)
+                                    {
+                                        var freeStock1 = freeStock - line.OrdQty > 0 ? freeStock - line.OrdQty : 0;
+                                        retunCnt = retunCnt + "{%FREESTOCKERROR%}The ordered quantity(" + line.OrdQty + ") for product " + line.Description + "(" + line.StyleID + ") " + line.ColourID + " " + line.SizeID + " is grater than the available freestock quantity (" + freeStock + ")\n";
+                                        return retunCnt;
+                                    }
+                                    else
+                                    {
+                                        retunCnt = "";
+                                    }
+                                    result = retunCnt;
+                                }
+                            }
                         }
-                        
+
 
                     }
                 }
@@ -2802,9 +2938,9 @@ namespace Maximus.Controllers
                     }
                     else
                     {
-                       
+
                         var orgStyleNPoints = ((List<Maximus.Data.models.StyleAndMinPoints>)Session["StyleMinPoints"]);
-                       
+
                         if (_pointsAdjustment.Exists(s => s.BusinessID == busId && s.UcodeID == ucode))
                         {
                             adjmapStyl = _pointsAdjustment.GetAll(s => s.BusinessID == busId && s.UcodeID == ucode).Select(s => s.MapStyleID).Distinct().ToList();
@@ -2937,7 +3073,7 @@ namespace Maximus.Controllers
                                         }
                                         catch (Exception e)
                                         {
-
+                                            logger .Warn(e.Message);logger.Warn(e.StackTrace);;
                                         }
 
                                     }
@@ -3230,7 +3366,7 @@ namespace Maximus.Controllers
             }
             catch (Exception e)
             {
-
+                logger .Warn(e.Message);logger.Warn(e.StackTrace);;
             }
 
             if (((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeaderLoc"]).First().SalesOrderLine.Where(s => s.IsDleted == false).Count() > 0)
@@ -3438,5 +3574,42 @@ namespace Maximus.Controllers
         }
         #endregion
 
+        #region GetRedirectionUrl
+        public string GetRedirectionUrl()
+        {
+            if (Convert.ToBoolean(Session["POINTSREQ"]) && Convert.ToBoolean(Session["IsEmergency"]) == false && Convert.ToBoolean(Session["Maternity"])==false)
+            {
+                return "/Employee/ChangeOrderType?orderType=manpack";
+            }
+            else if(Convert.ToBoolean(Session["IsEmergency"]))
+            {
+                return "/Employee/ChangeOrderType?orderType=emergency";
+            }
+            else if(Convert.ToBoolean(Session["returnorder"]))
+            {
+                return "/Employee/ChangeOrderType?orderType=return";
+            }
+            else if(Convert.ToBoolean(Session["Maternity"]))
+            {
+                return "/Employee/ChangeOrderType?orderType=maternity";
+            }
+            return "/Employee/Index";
+        }
+        #endregion
+
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -21,5 +21,6 @@ namespace Maximus.Data.models
         public bool IsAutoCnf { get; set; }
         public bool FreeStkChk { get; set; }
         public bool IsEmergency { get; set; }
+        public bool HasAltStyles { get; set; }
     }
 }

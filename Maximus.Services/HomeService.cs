@@ -13,6 +13,7 @@ namespace Maximus.Services
 {
     public class HomeService : IHome
     {
+       
         #region declarations
         public readonly IUnitOfWork _unitOfWork;
         public readonly AllAssemblies _allAssemblies;

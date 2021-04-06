@@ -9,7 +9,7 @@ namespace Maximus.Data.Models
     {
         public string Size { get; set; }
         public int OrdQty { get; set; }
-
+        public string priceVAT { get; set; }
         public string price { get; set; }
     }
 }

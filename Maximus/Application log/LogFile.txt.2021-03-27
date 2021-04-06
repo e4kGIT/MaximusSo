@@ -1,0 +1,945 @@
+2021-03-27 18:03:17,104 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:03:17,124 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:03:17,670 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:03:17,670 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:03:27,899 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:03:27,899 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:05:05,370 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:05:05,371 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getEmployeeAddress(String EmpId, String BuisnessId) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 2844
+2021-03-27 18:05:05,588 WARN Maximus.Data.Models.DataProcessing - Duplicate entry '001-9001631-BARBAN01' for key 'NewIndex1'
+2021-03-27 18:05:05,588 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteNonQuery()
+   at Maximus.Data.Models.DataProcessing.ExecuteQuery(MySqlConnection conn, String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 7496
+2021-03-27 18:05:05,838 WARN Maximus.Data.Models.DataProcessing - Duplicate entry '001-8009825-BARBAN01' for key 'NewIndex1'
+2021-03-27 18:05:05,839 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteNonQuery()
+   at Maximus.Data.Models.DataProcessing.ExecuteQuery(MySqlConnection conn, String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 7496
+2021-03-27 18:05:06,103 WARN Maximus.Data.Models.DataProcessing - You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'AND '2021-03-27' BETWEEN StartDate AND EndDate' at line 1
+2021-03-27 18:05:06,103 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader()
+   at Maximus.Data.Models.DataProcessing.EmpAnnualIssue(String styleId, String FITALLOC, String DIMALLOC, String colourId, String Ucode, Boolean booDimAlloc) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 7294
+2021-03-27 18:05:06,326 WARN Maximus.Data.Models.DataProcessing - You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'AND '2021-03-27' BETWEEN StartDate AND EndDate' at line 1
+2021-03-27 18:05:06,326 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader()
+   at Maximus.Data.Models.DataProcessing.EmpAnnualIssue(String styleId, String FITALLOC, String DIMALLOC, String colourId, String Ucode, Boolean booDimAlloc) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 7294
+2021-03-27 18:05:08,046 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:05:08,046 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:05:08,759 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:05:08,759 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getEmployeeAddress(String EmpId, String BuisnessId) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 2844
+2021-03-27 18:05:11,245 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:05:11,245 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:05:13,700 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:05:13,701 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:05:16,273 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:05:16,273 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:05:16,815 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:05:16,815 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:05:25,109 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:05:25,109 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getEmployeeAddress(String EmpId, String BuisnessId) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 2844
+2021-03-27 18:05:25,327 WARN Maximus.Data.Models.DataProcessing - Duplicate entry '001-9001631-BARBAN01' for key 'NewIndex1'
+2021-03-27 18:05:25,327 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteNonQuery()
+   at Maximus.Data.Models.DataProcessing.ExecuteQuery(MySqlConnection conn, String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 7496
+2021-03-27 18:05:25,588 WARN Maximus.Data.Models.DataProcessing - You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'AND '2021-03-27' BETWEEN StartDate AND EndDate' at line 1
+2021-03-27 18:05:25,589 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader()
+   at Maximus.Data.Models.DataProcessing.EmpAnnualIssue(String styleId, String FITALLOC, String DIMALLOC, String colourId, String Ucode, Boolean booDimAlloc) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 7294
+2021-03-27 18:05:25,816 WARN Maximus.Data.Models.DataProcessing - You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'AND '2021-03-27' BETWEEN StartDate AND EndDate' at line 1
+2021-03-27 18:05:25,816 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader()
+   at Maximus.Data.Models.DataProcessing.EmpAnnualIssue(String styleId, String FITALLOC, String DIMALLOC, String colourId, String Ucode, Boolean booDimAlloc) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 7294
+2021-03-27 18:05:25,988 WARN Maximus.Data.Models.DataProcessing - Duplicate entry '001-8009827-BARBAN01' for key 'NewIndex1'
+2021-03-27 18:05:25,989 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteNonQuery()
+   at Maximus.Data.Models.DataProcessing.ExecuteQuery(MySqlConnection conn, String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 7496
+2021-03-27 18:05:26,281 WARN Maximus.Data.Models.DataProcessing - You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'AND '2021-03-27' BETWEEN StartDate AND EndDate' at line 1
+2021-03-27 18:05:26,281 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader()
+   at Maximus.Data.Models.DataProcessing.EmpAnnualIssue(String styleId, String FITALLOC, String DIMALLOC, String colourId, String Ucode, Boolean booDimAlloc) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 7294
+2021-03-27 18:05:28,089 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:05:28,090 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:05:28,808 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:05:28,808 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getEmployeeAddress(String EmpId, String BuisnessId) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 2844
+2021-03-27 18:05:31,356 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:05:31,357 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:05:32,674 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:05:32,674 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:05:35,753 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:05:35,753 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:05:36,302 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:05:36,302 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:05:45,509 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:05:45,509 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getEmployeeAddress(String EmpId, String BuisnessId) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 2844
+2021-03-27 18:05:45,726 WARN Maximus.Data.Models.DataProcessing - Duplicate entry '001-9001631-BARBAN01' for key 'NewIndex1'
+2021-03-27 18:05:45,726 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteNonQuery()
+   at Maximus.Data.Models.DataProcessing.ExecuteQuery(MySqlConnection conn, String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 7496
+2021-03-27 18:05:45,995 WARN Maximus.Data.Models.DataProcessing - You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'AND '2021-03-27' BETWEEN StartDate AND EndDate' at line 1
+2021-03-27 18:05:45,995 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader()
+   at Maximus.Data.Models.DataProcessing.EmpAnnualIssue(String styleId, String FITALLOC, String DIMALLOC, String colourId, String Ucode, Boolean booDimAlloc) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 7294
+2021-03-27 18:05:46,206 WARN Maximus.Data.Models.DataProcessing - You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'AND '2021-03-27' BETWEEN StartDate AND EndDate' at line 1
+2021-03-27 18:05:46,206 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader()
+   at Maximus.Data.Models.DataProcessing.EmpAnnualIssue(String styleId, String FITALLOC, String DIMALLOC, String colourId, String Ucode, Boolean booDimAlloc) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 7294
+2021-03-27 18:05:46,420 WARN Maximus.Data.Models.DataProcessing - You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'AND '2021-03-27' BETWEEN StartDate AND EndDate' at line 1
+2021-03-27 18:05:46,420 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader()
+   at Maximus.Data.Models.DataProcessing.EmpAnnualIssue(String styleId, String FITALLOC, String DIMALLOC, String colourId, String Ucode, Boolean booDimAlloc) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 7294
+2021-03-27 18:05:46,613 WARN Maximus.Data.Models.DataProcessing - Duplicate entry '001-8009827-BARBAN01' for key 'NewIndex1'
+2021-03-27 18:05:46,613 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteNonQuery()
+   at Maximus.Data.Models.DataProcessing.ExecuteQuery(MySqlConnection conn, String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 7496
+2021-03-27 18:05:46,857 WARN Maximus.Data.Models.DataProcessing - You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'AND '2021-03-27' BETWEEN StartDate AND EndDate' at line 1
+2021-03-27 18:05:46,857 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader()
+   at Maximus.Data.Models.DataProcessing.EmpAnnualIssue(String styleId, String FITALLOC, String DIMALLOC, String colourId, String Ucode, Boolean booDimAlloc) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 7294
+2021-03-27 18:05:48,618 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:05:48,618 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:05:49,320 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:05:49,320 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getEmployeeAddress(String EmpId, String BuisnessId) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 2844
+2021-03-27 18:05:51,816 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:05:51,817 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:05:55,874 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:05:55,874 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:06:05,201 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:06:05,202 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:06:05,771 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:06:05,772 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:06:28,139 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:06:28,140 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:06:30,574 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:06:30,574 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getEmployeeAddress(String EmpId, String BuisnessId) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 2844
+2021-03-27 18:06:30,650 WARN Maximus.Data.Models.DataProcessing - The CommandText property has not been properly initialized.
+2021-03-27 18:06:30,650 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.Interceptors.ExceptionInterceptor.Throw(Exception exception)
+   at MySql.Data.MySqlClient.MySqlConnection.Throw(Exception ex)
+   at MySql.Data.MySqlClient.MySqlCommand.Throw(Exception ex)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteNonQuery()
+   at Maximus.Data.Models.DataProcessing.ExecuteQuery(MySqlConnection conn, String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 7496
+2021-03-27 18:06:30,717 WARN Maximus.Data.Models.DataProcessing - The CommandText property has not been properly initialized.
+2021-03-27 18:06:30,718 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.Interceptors.ExceptionInterceptor.Throw(Exception exception)
+   at MySql.Data.MySqlClient.MySqlConnection.Throw(Exception ex)
+   at MySql.Data.MySqlClient.MySqlCommand.Throw(Exception ex)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteNonQuery()
+   at Maximus.Data.Models.DataProcessing.ExecuteQuery(MySqlConnection conn, String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 7496
+2021-03-27 18:06:30,770 WARN Maximus.Data.Models.DataProcessing - The CommandText property has not been properly initialized.
+2021-03-27 18:06:30,770 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.Interceptors.ExceptionInterceptor.Throw(Exception exception)
+   at MySql.Data.MySqlClient.MySqlConnection.Throw(Exception ex)
+   at MySql.Data.MySqlClient.MySqlCommand.Throw(Exception ex)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteNonQuery()
+   at Maximus.Data.Models.DataProcessing.ExecuteQuery(MySqlConnection conn, String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 7496
+2021-03-27 18:06:30,821 WARN Maximus.Data.Models.DataProcessing - The CommandText property has not been properly initialized.
+2021-03-27 18:06:30,821 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.Interceptors.ExceptionInterceptor.Throw(Exception exception)
+   at MySql.Data.MySqlClient.MySqlConnection.Throw(Exception ex)
+   at MySql.Data.MySqlClient.MySqlCommand.Throw(Exception ex)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteNonQuery()
+   at Maximus.Data.Models.DataProcessing.ExecuteQuery(MySqlConnection conn, String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 7496
+2021-03-27 18:06:31,001 WARN Maximus.Data.Models.DataProcessing - Duplicate entry '001-9001631-BARBAN01' for key 'NewIndex1'
+2021-03-27 18:06:31,001 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteNonQuery()
+   at Maximus.Data.Models.DataProcessing.ExecuteQuery(MySqlConnection conn, String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 7496
+2021-03-27 18:06:31,227 WARN Maximus.Data.Models.DataProcessing - Duplicate entry '001-8009827-BARBAN01' for key 'NewIndex1'
+2021-03-27 18:06:31,227 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteNonQuery()
+   at Maximus.Data.Models.DataProcessing.ExecuteQuery(MySqlConnection conn, String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 7496
+2021-03-27 18:06:37,373 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:06:37,373 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:06:38,078 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:06:38,079 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getEmployeeAddress(String EmpId, String BuisnessId) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 2844
+2021-03-27 18:06:40,541 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:06:40,542 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:06:47,803 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:06:47,803 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:06:50,208 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:06:50,208 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:06:50,748 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:06:50,748 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:07:34,742 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:07:34,742 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:07:39,692 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:07:39,693 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:07:44,093 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:07:44,093 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:07:49,356 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:07:49,357 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:07:50,062 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:07:50,062 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getEmployeeAddress(String EmpId, String BuisnessId) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 2844
+2021-03-27 18:07:50,582 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:07:50,582 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:08:07,245 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:08:07,245 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:08:26,771 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:08:26,771 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getEmployeeAddress(String EmpId, String BuisnessId) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 2844
+2021-03-27 18:08:27,090 WARN Maximus.Data.Models.DataProcessing - You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'AND '2021-03-27' BETWEEN StartDate AND EndDate' at line 1
+2021-03-27 18:08:27,090 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader()
+   at Maximus.Data.Models.DataProcessing.EmpAnnualIssue(String styleId, String FITALLOC, String DIMALLOC, String colourId, String Ucode, Boolean booDimAlloc) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 7294
+2021-03-27 18:08:27,312 WARN Maximus.Data.Models.DataProcessing - You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'AND '2021-03-27' BETWEEN StartDate AND EndDate' at line 1
+2021-03-27 18:08:27,312 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader()
+   at Maximus.Data.Models.DataProcessing.EmpAnnualIssue(String styleId, String FITALLOC, String DIMALLOC, String colourId, String Ucode, Boolean booDimAlloc) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 7294
+2021-03-27 18:08:29,566 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:08:29,566 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:08:30,279 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:08:30,279 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getEmployeeAddress(String EmpId, String BuisnessId) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 2844
+2021-03-27 18:08:32,707 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:08:32,707 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:10:21,425 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-03-27 18:10:21,437 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.IsSuperUser(String cmpId, String custId, String _user) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 841
+2021-03-27 18:10:21,569 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-03-27 18:10:21,569 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038
+2021-03-27 18:10:21,766 WARN Maximus.Data.Models.DataProcessing - Connection must be valid and open.
+2021-03-27 18:10:21,767 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlConnection.Throw(Exception ex)
+   at MySql.Data.MySqlClient.MySqlCommand.Throw(Exception ex)
+   at MySql.Data.MySqlClient.MySqlCommand.CheckState()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader()
+   at Maximus.Data.Models.DataProcessing.GetValue(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1235
+2021-03-27 18:10:21,922 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-03-27 18:10:21,922 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038
+2021-03-27 18:10:22,486 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:10:22,487 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:10:23,367 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:10:23,367 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getEmployeeAddress(String EmpId, String BuisnessId) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 2844
+2021-03-27 18:10:31,935 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:10:31,935 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:10:35,145 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:10:35,145 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:10:36,921 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:10:36,922 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:11:12,986 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:11:12,986 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:11:25,090 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:11:25,091 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:11:48,924 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:11:48,924 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:11:57,918 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:11:57,918 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getEmployeeAddress(String EmpId, String BuisnessId) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 2844
+2021-03-27 18:11:58,128 WARN Maximus.Data.Models.DataProcessing - The CommandText property has not been properly initialized.
+2021-03-27 18:11:58,128 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.Interceptors.ExceptionInterceptor.Throw(Exception exception)
+   at MySql.Data.MySqlClient.MySqlConnection.Throw(Exception ex)
+   at MySql.Data.MySqlClient.MySqlCommand.Throw(Exception ex)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteNonQuery()
+   at Maximus.Data.Models.DataProcessing.ExecuteQuery(MySqlConnection conn, String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 7496
+2021-03-27 18:11:58,181 WARN Maximus.Data.Models.DataProcessing - The CommandText property has not been properly initialized.
+2021-03-27 18:11:58,182 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.Interceptors.ExceptionInterceptor.Throw(Exception exception)
+   at MySql.Data.MySqlClient.MySqlConnection.Throw(Exception ex)
+   at MySql.Data.MySqlClient.MySqlCommand.Throw(Exception ex)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteNonQuery()
+   at Maximus.Data.Models.DataProcessing.ExecuteQuery(MySqlConnection conn, String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 7496
+2021-03-27 18:11:58,378 WARN Maximus.Data.Models.DataProcessing - Duplicate entry '001-9001632-BARBAN01' for key 'NewIndex1'
+2021-03-27 18:11:58,379 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteNonQuery()
+   at Maximus.Data.Models.DataProcessing.ExecuteQuery(MySqlConnection conn, String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 7496
+2021-03-27 18:11:58,701 WARN Maximus.Data.Models.DataProcessing - You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'AND '2021-03-27' BETWEEN StartDate AND EndDate' at line 1
+2021-03-27 18:11:58,702 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader()
+   at Maximus.Data.Models.DataProcessing.EmpAnnualIssue(String styleId, String FITALLOC, String DIMALLOC, String colourId, String Ucode, Boolean booDimAlloc) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 7294
+2021-03-27 18:11:58,913 WARN Maximus.Data.Models.DataProcessing - Duplicate entry '001-8009830-BARBAN01' for key 'NewIndex1'
+2021-03-27 18:11:58,913 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteNonQuery()
+   at Maximus.Data.Models.DataProcessing.ExecuteQuery(MySqlConnection conn, String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 7496
+2021-03-27 18:12:00,350 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:12:00,351 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:12:01,081 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:12:01,081 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getEmployeeAddress(String EmpId, String BuisnessId) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 2844
+2021-03-27 18:12:03,611 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:12:03,612 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:12:07,725 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:12:07,726 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:13:44,130 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:13:44,130 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:13:44,716 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:13:44,716 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:18:25,207 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-03-27 18:18:25,226 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.IsSuperUser(String cmpId, String custId, String _user) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 841
+2021-03-27 18:18:25,361 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-03-27 18:18:25,361 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038
+2021-03-27 18:18:25,562 WARN Maximus.Data.Models.DataProcessing - Connection must be valid and open.
+2021-03-27 18:18:25,563 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlConnection.Throw(Exception ex)
+   at MySql.Data.MySqlClient.MySqlCommand.Throw(Exception ex)
+   at MySql.Data.MySqlClient.MySqlCommand.CheckState()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader()
+   at Maximus.Data.Models.DataProcessing.GetValue(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1235
+2021-03-27 18:18:25,733 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-03-27 18:18:25,733 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038
+2021-03-27 18:18:26,303 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:18:26,303 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:18:27,196 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:18:27,197 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getEmployeeAddress(String EmpId, String BuisnessId) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 2844
+2021-03-27 18:18:37,652 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:18:37,652 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:31:38,544 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:31:38,545 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:31:43,069 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:31:43,069 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:37:37,064 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:37:37,065 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:37:37,769 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:37:37,769 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getEmployeeAddress(String EmpId, String BuisnessId) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 2844
+2021-03-27 18:37:43,281 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:37:43,281 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:37:52,062 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:37:52,062 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:38:00,348 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:38:00,349 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getEmployeeAddress(String EmpId, String BuisnessId) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 2844
+2021-03-27 18:52:59,547 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-03-27 18:52:59,558 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.IsSuperUser(String cmpId, String custId, String _user) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 841
+2021-03-27 18:52:59,703 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-03-27 18:52:59,704 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038
+2021-03-27 18:52:59,908 WARN Maximus.Data.Models.DataProcessing - Connection must be valid and open.
+2021-03-27 18:52:59,909 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlConnection.Throw(Exception ex)
+   at MySql.Data.MySqlClient.MySqlCommand.Throw(Exception ex)
+   at MySql.Data.MySqlClient.MySqlCommand.CheckState()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader()
+   at Maximus.Data.Models.DataProcessing.GetValue(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1235
+2021-03-27 18:53:00,077 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-03-27 18:53:00,077 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038
+2021-03-27 18:53:00,620 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:53:00,621 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:53:01,506 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:53:01,506 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getEmployeeAddress(String EmpId, String BuisnessId) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 2844
+2021-03-27 18:53:09,318 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:53:09,318 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:53:10,006 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:53:10,007 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getEmployeeAddress(String EmpId, String BuisnessId) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 2844
+2021-03-27 18:53:10,994 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:53:10,995 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776
+2021-03-27 18:53:35,646 WARN Maximus.Data.Models.DataProcessing - The user specified as a definer ('root'@'%') does not exist
+2021-03-27 18:53:35,646 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteScalar()
+   at Maximus.Data.Models.DataProcessing.getNewPermissionUser(String Users, String UserList, String EmpList, String busID) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1776

@@ -46,7 +46,9 @@
         settings.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Right;
         settings.SettingsAdaptivity.AdaptiveDetailColumnCount = 1;
         settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = false;
-        settings.ClientSideEvents.EndCallback = "RefreshReorderGrid";
+      
+            settings.ClientSideEvents.EndCallback = "RefreshReorderGrid";
+    
         settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
         settings.CommandButtonInitialize = (s, e) =>
         {
@@ -355,20 +357,50 @@
                 var OredrQty = (int)DataBinder.Eval(temp.DataItem, "OrgOrdQty");
                 bool Iscarr =(bool) DataBinder.Eval(temp.DataItem, "Iscarr");
                 bool hasCnfReord = (bool)DataBinder.Eval(temp.DataItem, "HasCnfReorders");
-                if (Convert.ToBoolean(Session["ONL_REORDER_REQ"]))
-                {
-                    if (Iscarr == false)
-                    {
-                        if (hasCnfReord == false)
-                        {
+                //int reasoncode = Convert.ToInt32(DataBinder.Eval(temp.DataItem, "ReasonCode").ToString());
+                var modelReas = DataBinder.Eval(temp.DataItem, "Reason").ToString();
+                bool HideReorderBtn = (bool)DataBinder.Eval(temp.DataItem, "HideReorderBtn");
 
-                            Html.DevExpress().Button(s =>
+                if (Session["isrtntype"].ToString() == "PRIVATE")
+                {
+                    if((modelReas.ToLower().Trim()== "exchange - supplier error" || modelReas.ToLower().Trim() == "exchange - quality issue/fault")&& HideReorderBtn==false)
+                    {
+                        if (Convert.ToBoolean(Session["ONL_REORDER_REQ"]))
+                        {
+                            if (Iscarr == false)
                             {
-                                s.Name = "btnReorder_" + OrderNo + "_" + LineNo + "_" + StyleId + "_" + ColourId + "_" + OredrQty + "_" + Size;
-                                s.Text = "Re Order";
-                                s.ClientSideEvents.Click = "GetReOrdProducts";
-                                s.UseSubmitBehavior = false;
-                            }).GetHtml();
+                                if (hasCnfReord == false)
+                                {
+
+                                    Html.DevExpress().Button(s =>
+                                    {
+                                        s.Name = "btnReorder_" + OrderNo + "_" + LineNo + "_" + StyleId + "_" + ColourId + "_" + OredrQty + "_" + Size;
+                                        s.Text = "Re Order";
+                                        s.ClientSideEvents.Click = "GetReOrdProductsPRIVATEORDER";
+                                        s.UseSubmitBehavior = false;
+                                    }).GetHtml();
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if (Convert.ToBoolean(Session["ONL_REORDER_REQ"]))
+                    {
+                        if (Iscarr == false)
+                        {
+                            if (hasCnfReord == false)
+                            {
+
+                                Html.DevExpress().Button(s =>
+                                {
+                                    s.Name = "btnReorder_" + OrderNo + "_" + LineNo + "_" + StyleId + "_" + ColourId + "_" + OredrQty + "_" + Size;
+                                    s.Text = "Re Order";
+                                    s.ClientSideEvents.Click = "GetReOrdProducts";
+                                    s.UseSubmitBehavior = false;
+                                }).GetHtml();
+                            }
                         }
                     }
                 }

@@ -68,7 +68,7 @@ namespace Maximus.Data.models
         public string AllocText { get; set; }
         public int Points { get; set; }
         public int TotalPoints { get; set; }
-
+        public bool HideReorderBtn { get; set; }
         public string Emp { get; set; }
         public string Ucode { get; set; }
 

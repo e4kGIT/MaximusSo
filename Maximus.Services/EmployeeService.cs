@@ -300,7 +300,7 @@ namespace Maximus.Services
                             {
                                 if (_salesOrdHead.Exists(s => s.PinNo == EmployeeId && s.OrderType.ToLower() == "so" && s.OnlineConfirm == 0))
                                 {
-                                    foreach (var salesHeader in _salesOrdHead.GetAll(s => s.PinNo == EmployeeId && s.OrderType.ToLower()=="so" && s.OnlineConfirm == 0).ToList())
+                                    foreach (var salesHeader in _salesOrdHead.GetAll(s => s.PinNo == EmployeeId && s.OrderType.ToLower()=="so" && s.OnlineConfirm == 0 && s.CustRef.ToLower().Contains("private")==false).ToList())
                                     {
                                         if (address.Description.Trim() != salesHeader.DelDesc.Trim())
                                         {
@@ -465,7 +465,7 @@ namespace Maximus.Services
                             {
                                 if (_salesOrdHead.Exists(s => s.PinNo == EmployeeId && s.OrderType.ToLower() == "so" && s.OnlineConfirm==0))
                                 {
-                                    foreach (var salesHeader in _salesOrdHead.GetAll(s => s.PinNo == EmployeeId && s.OrderType.ToLower() == "so" && s.OnlineConfirm == 0).ToList())
+                                    foreach (var salesHeader in _salesOrdHead.GetAll(s => s.PinNo == EmployeeId && s.OrderType.ToLower() == "so" && s.OnlineConfirm == 0    && s.CustRef.ToLower().Contains("private") == false).ToList())
                                     {
                                         if (address.Description.Trim() != salesHeader.DelDesc.Trim())
                                         {
@@ -626,7 +626,7 @@ namespace Maximus.Services
                                 usr.Active = isActive ? "Y" : "N";
                                 usr.BusinessID = busId;
                                 usr.BusinessName = busId;
-                                usr.AspUserID = mu != null ? mu.ProviderName : EmployeeId;
+                                usr.AspUserID = mu != null ? mu.UserName : EmployeeId;
                                 usr.CreateDate = DateTime.Now;
                                 _user.Insert(usr);
                                 if (mapUserEmp)
@@ -780,7 +780,7 @@ namespace Maximus.Services
                                 usr.Createdby = UserName.ToString().Trim();
                                 usr.Active = isActive ? "Y" : "N";
                                 usr.BusinessID = busId;
-                                usr.AspUserID = mu != null ? mu.ProviderName : EmployeeId;
+                                usr.AspUserID = mu != null ? mu.UserName : EmployeeId;
                                 usr.BusinessName = busId;
                                 usr.CreateDate = DateTime.Now;
                                 _user.Insert(usr);

@@ -1,0 +1,50 @@
+﻿<div class="row">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="row">
+                <div class="col-md-4">@Html.DevExpress().Label(s => { s.Name = "lblDelAddDesc"; s.Text = "Address description"; }).GetHtml()</div>
+                <div class="col-md-6">@Html.DevExpress().Label(s => { s.Name = "lblDelAddDescVal"; s.Text = Session["DeliveryAddress"] != null && ((List<Maximus.Data.Models.BusAddress1>)Session["DeliveryAddress"]).Count > 0 ? ((List<Maximus.Data.Models.BusAddress1>)Session["DeliveryAddress"]).First().AddressDescription : "-"; s.ControlStyle.CssClass = "privDelAdd"; }).GetHtml()</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="row">
+                <div class="col-md-6"></div>
+                <div class="col-md-6"></div>
+            </div>
+        </div>
+        </div>
+    <br />
+    <div class="row">
+        <div class="col-md-4">
+            <div class="row">
+                <div class="col-md-4">@Html.DevExpress().Label(s => { s.Name = "lblDelAdd1"; s.Text = "Address1"; }).GetHtml()</div>
+                <div class="col-md-8">@Html.DevExpress().Label(s => { s.Name = "lblDelAdd1Val"; s.Text = Session["DeliveryAddress"] != null && ((List<Maximus.Data.Models.BusAddress1>)Session["DeliveryAddress"]).Count > 0 ? ((List<Maximus.Data.Models.BusAddress1>)Session["DeliveryAddress"]).First().Address1 !=null? ((List<Maximus.Data.Models.BusAddress1>)Session["DeliveryAddress"]).First().Address1: "-" : "-"; s.ControlStyle.CssClass = "privDelAdd"; }).GetHtml()</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="row">
+                <div class="col-md-4">@Html.DevExpress().Label(s => { s.Name = "lblDelAdd2"; s.Text = "Address2"; }).GetHtml()</div>
+                <div class="col-md-8">@Html.DevExpress().Label(s => { s.Name = "lblDelAdd2Val"; s.Text = Session["DeliveryAddress"] != null && ((List<Maximus.Data.Models.BusAddress1>)Session["DeliveryAddress"]).Count > 0 ? ((List<Maximus.Data.Models.BusAddress1>)Session["DeliveryAddress"]).First().Address2 != null ? ((List<Maximus.Data.Models.BusAddress1>)Session["DeliveryAddress"]).First().Address2 : "-" : "-"; s.ControlStyle.CssClass = "privDelAdd"; }).GetHtml()</div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="row">
+                <div class="col-md-4">@Html.DevExpress().Label(s => { s.Name = "lblDelTown"; s.Text = "Town"; }).GetHtml()</div>
+                <div class="col-md-8">@Html.DevExpress().Label(s => { s.Name = "lblDelTownVal"; s.Text = Session["DeliveryAddress"] != null && ((List<Maximus.Data.Models.BusAddress1>)Session["DeliveryAddress"]).Count > 0 ? ((List<Maximus.Data.Models.BusAddress1>)Session["DeliveryAddress"]).First().Town != null ? ((List<Maximus.Data.Models.BusAddress1>)Session["DeliveryAddress"]).First().Town : "-" : "-"; s.ControlStyle.CssClass = "privDelAdd"; }).GetHtml()</div>
+            </div>
+        </div>
+    </div><br /><div class="row">
+    <div class="col-md-4">
+        <div class="row">
+            <div class="col-md-4">@Html.DevExpress().Label(s => { s.Name = "lblDelCity"; s.Text = "City"; }).GetHtml()</div>
+            <div class="col-md-8">@Html.DevExpress().Label(s => { s.Name = "lblDelCityVal"; s.Text = Session["DeliveryAddress"] != null && ((List<Maximus.Data.Models.BusAddress1>)Session["DeliveryAddress"]).Count > 0 ? ((List<Maximus.Data.Models.BusAddress1>)Session["DeliveryAddress"]).First().City != null ? ((List<Maximus.Data.Models.BusAddress1>)Session["DeliveryAddress"]).First().City : "-" : "-"; s.ControlStyle.CssClass = "privDelAdd"; }).GetHtml()</div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="row">
+            <div class="col-md-4">@Html.DevExpress().Label(s => { s.Name = "lblDelPostCode"; s.Text = "Postcode"; }).GetHtml()</div>
+            <div class="col-md-8">@Html.DevExpress().Label(s => { s.Name = "lblDelPostCodeVal"; s.Text = Session["DeliveryAddress"] != null && ((List<Maximus.Data.Models.BusAddress1>)Session["DeliveryAddress"]).Count > 0 ? ((List<Maximus.Data.Models.BusAddress1>)Session["DeliveryAddress"]).First().PostCode != null ? ((List<Maximus.Data.Models.BusAddress1>)Session["DeliveryAddress"]).First().PostCode : "-" : "-"; s.ControlStyle.CssClass = "privDelAdd"; }).GetHtml()</div>
+        </div>
+    </div>
+    </div>
+</div>

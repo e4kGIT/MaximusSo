@@ -1730,6 +1730,26 @@ warning 6002: The table/view 'def.e4kmaximusdb.tblaccemp_style_staticqty' does n
           <Property Name="MinPts" Type="int" />
           <Property Name="MaxPts" Type="int" />
         </EntityType>
+        <EntityType Name="tblaccemp_ucode_alternates">
+          <Key>
+            <PropertyRef Name="CompanyId" />
+            <PropertyRef Name="BusinessId" />
+            <PropertyRef Name="UcodeId" />
+            <PropertyRef Name="StyleId" />
+            <PropertyRef Name="ColourId" />
+            <PropertyRef Name="SizeId" />
+          </Key>
+          <Property Name="CompanyId" Type="varchar" MaxLength="3" Nullable="false" />
+          <Property Name="BusinessId" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="UcodeId" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="StyleId" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="ColourId" Type="varchar" MaxLength="15" Nullable="false" />
+          <Property Name="SizeId" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="AltStyleId" Type="varchar" MaxLength="25" />
+          <Property Name="AltColourId" Type="varchar" MaxLength="15" />
+          <Property Name="AltSizeId" Type="varchar" MaxLength="10" />
+          <Property Name="IsHidden" Type="bool" />
+        </EntityType>
         <EntityType Name="tblaccemp_ucode_reasons">
           <Key>
             <PropertyRef Name="CompanyID" />
@@ -2788,6 +2808,7 @@ warning 6002: The table/view 'def.e4kmaximusdb.tblaccemp_style_staticqty' does n
           <Property Name="IsAutoCnf" Type="bit" Nullable="false" />
           <Property Name="FreeStkChk" Type="bit" Nullable="false" />
           <Property Name="IsEmergency" Type="bit" Nullable="false" />
+          <Property Name="HasAltStyles" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="tblonline_userid_employee">
           <Key>
@@ -4646,6 +4667,7 @@ warning 6002: The table/view 'def.e4kmaximusdb.ucodeby_freetextview' does not ha
           <Property Name="DimFreeText" Type="text" Nullable="false" />
           <Property Name="UCodeID" Type="varchar" MaxLength="15" Nullable="false" />
           <Property Name="SeqNo" Type="int" />
+          <Property Name="IsHidden" Type="int" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'def.e4kmaximusdb.unrelatedorders' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -5155,6 +5177,7 @@ warning 6002: The table/view 'def.e4kmaximusdb.view_unmatchedordercolourid' does
           <EntitySet Name="tblaccemp_stockcard_atlasfm_" EntityType="Self.tblaccemp_stockcard_atlasfm_" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblaccemp_stockcard_copy" EntityType="Self.tblaccemp_stockcard_copy" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblaccemp_stylepoints" EntityType="Self.tblaccemp_stylepoints" Schema="e4kmaximusdb" store:Type="Tables" />
+          <EntitySet Name="tblaccemp_ucode_alternates" EntityType="Self.tblaccemp_ucode_alternates" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblaccemp_ucode_reasons" EntityType="Self.tblaccemp_ucode_reasons" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblaccemp_ucodepoints" EntityType="Self.tblaccemp_ucodepoints" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblaccemp_ucodes" EntityType="Self.tblaccemp_ucodes" Schema="e4kmaximusdb" store:Type="Tables" />
@@ -6197,7 +6220,8 @@ FROM `tblfskstyle_dimension1` AS `tblfskstyle_dimension1`</DefiningQuery>
 `ucodeby_freetextview`.`FreeText`, 
 `ucodeby_freetextview`.`DimFreeText`, 
 `ucodeby_freetextview`.`UCodeID`, 
-`ucodeby_freetextview`.`SeqNo`
+`ucodeby_freetextview`.`SeqNo`, 
+`ucodeby_freetextview`.`IsHidden`
 FROM `ucodeby_freetextview` AS `ucodeby_freetextview`</DefiningQuery>
           </EntitySet>
           <EntitySet Name="unrelatedorders" EntityType="Self.unrelatedorders" store:Type="Views" store:Schema="e4kmaximusdb">
@@ -11036,23 +11060,6 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
           <Property Name="StyleImage" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
           <Property Name="Description" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
         </EntityType>
-        <EntityType Name="ucodeby_freetextview">
-          <Key>
-            <PropertyRef Name="CompanyID" />
-            <PropertyRef Name="UCodeID" />
-            <PropertyRef Name="StyleID" />
-            <PropertyRef Name="FreeText" />
-            <PropertyRef Name="DimFreeText" />
-          </Key>
-          <Property Name="CompanyID" Type="String" MaxLength="3" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="StyleID" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="StyleImage" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
-          <Property Name="Product_Group" Type="Int32" />
-          <Property Name="FreeText" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="DimFreeText" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="UCodeID" Type="String" MaxLength="15" FixedLength="false" Unicode="false" Nullable="false" />
-          <Property Name="SeqNo" Type="Int32" />
-        </EntityType>
         <EntityType Name="unrelatedorder">
           <Key>
             <PropertyRef Name="OrderNo" />
@@ -11670,7 +11677,6 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
           <EntitySet Name="styleby_freetextview_ucode" EntityType="Self.styleby_freetextview_ucode" />
           <EntitySet Name="stylebytemplateviews" EntityType="Self.stylebytemplateview" />
           <EntitySet Name="tblfskstyle_dimension1" EntityType="Self.tblfskstyle_dimension1" />
-          <EntitySet Name="ucodeby_freetextview" EntityType="Self.ucodeby_freetextview" />
           <EntitySet Name="unrelatedorders" EntityType="Self.unrelatedorder" />
           <EntitySet Name="view_manpack" EntityType="Self.view_manpack" />
           <EntitySet Name="view_noorderplacedforthisemployee" EntityType="Self.view_noorderplacedforthisemployee" />
@@ -11726,6 +11732,8 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
             <Parameter Name="pRole" Mode="In" Type="String" />
           </FunctionImport>
           <EntitySet Name="tblonline_ucode_operations" EntityType="e4kmaximusdbModel.tblonline_ucode_operations" />
+          <EntitySet Name="tblaccemp_ucode_alternates" EntityType="e4kmaximusdbModel.tblaccemp_ucode_alternates" />
+          <EntitySet Name="ucodeby_freetextview" EntityType="e4kmaximusdbModel.ucodeby_freetextview" />
         </EntityContainer>
         <ComplexType Name="GetAllUcodeByFreeTextProcedure_Result" />
         <ComplexType Name="getColorProcedure_Result" />
@@ -11745,6 +11753,45 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
           <Property Name="IsAutoCnf" Type="Boolean" Nullable="false" />
           <Property Name="FreeStkChk" Type="Boolean" Nullable="false" />
           <Property Name="IsEmergency" Type="Boolean" Nullable="false" />
+          <Property Name="HasAltStyles" Type="Boolean" Nullable="false" />
+        </EntityType>
+        <EntityType Name="tblaccemp_ucode_alternates">
+          <Key>
+            <PropertyRef Name="CompanyId" />
+            <PropertyRef Name="BusinessId" />
+            <PropertyRef Name="UcodeId" />
+            <PropertyRef Name="StyleId" />
+            <PropertyRef Name="ColourId" />
+            <PropertyRef Name="SizeId" />
+          </Key>
+          <Property Name="CompanyId" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="BusinessId" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="UcodeId" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="StyleId" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="ColourId" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="SizeId" Type="String" Nullable="false" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="AltStyleId" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="AltColourId" Type="String" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="AltSizeId" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="IsHidden" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="ucodeby_freetextview">
+          <Key>
+            <PropertyRef Name="CompanyID" />
+            <PropertyRef Name="UCodeID" />
+            <PropertyRef Name="StyleID" />
+            <PropertyRef Name="FreeText" />
+            <PropertyRef Name="DimFreeText" />
+          </Key>
+          <Property Name="CompanyID" Type="String" Nullable="false" MaxLength="3" FixedLength="false" Unicode="false" />
+          <Property Name="StyleID" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="StyleImage" Type="String" MaxLength="255" FixedLength="false" Unicode="false" />
+          <Property Name="Product_Group" Type="Int32" />
+          <Property Name="FreeText" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="DimFreeText" Type="String" MaxLength="65535" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="UCodeID" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
+          <Property Name="SeqNo" Type="Int32" />
+          <Property Name="IsHidden" Type="Int32" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -16071,20 +16118,6 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="ucodeby_freetextview">
-            <EntityTypeMapping TypeName="e4kmaximusdbModel.ucodeby_freetextview">
-              <MappingFragment StoreEntitySet="ucodeby_freetextview">
-                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
-                <ScalarProperty Name="StyleID" ColumnName="StyleID" />
-                <ScalarProperty Name="StyleImage" ColumnName="StyleImage" />
-                <ScalarProperty Name="Product_Group" ColumnName="Product_Group" />
-                <ScalarProperty Name="FreeText" ColumnName="FreeText" />
-                <ScalarProperty Name="DimFreeText" ColumnName="DimFreeText" />
-                <ScalarProperty Name="UCodeID" ColumnName="UCodeID" />
-                <ScalarProperty Name="SeqNo" ColumnName="SeqNo" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="unrelatedorders">
             <EntityTypeMapping TypeName="e4kmaximusdbModel.unrelatedorder">
               <MappingFragment StoreEntitySet="unrelatedorders">
@@ -16472,12 +16505,44 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
           <EntitySetMapping Name="tblonline_ucode_operations">
             <EntityTypeMapping TypeName="e4kmaximusdbModel.tblonline_ucode_operations">
               <MappingFragment StoreEntitySet="tblonline_ucode_operations">
+                <ScalarProperty Name="HasAltStyles" ColumnName="HasAltStyles" />
                 <ScalarProperty Name="IsEmergency" ColumnName="IsEmergency" />
                 <ScalarProperty Name="FreeStkChk" ColumnName="FreeStkChk" />
                 <ScalarProperty Name="IsAutoCnf" ColumnName="IsAutoCnf" />
                 <ScalarProperty Name="IsRejectReq" ColumnName="IsRejectReq" />
                 <ScalarProperty Name="UcodeId" ColumnName="UcodeId" />
                 <ScalarProperty Name="BusinessID" ColumnName="BusinessID" />
+                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblaccemp_ucode_alternates">
+            <EntityTypeMapping TypeName="e4kmaximusdbModel.tblaccemp_ucode_alternates">
+              <MappingFragment StoreEntitySet="tblaccemp_ucode_alternates">
+                <ScalarProperty Name="IsHidden" ColumnName="IsHidden" />
+                <ScalarProperty Name="AltSizeId" ColumnName="AltSizeId" />
+                <ScalarProperty Name="AltColourId" ColumnName="AltColourId" />
+                <ScalarProperty Name="AltStyleId" ColumnName="AltStyleId" />
+                <ScalarProperty Name="SizeId" ColumnName="SizeId" />
+                <ScalarProperty Name="ColourId" ColumnName="ColourId" />
+                <ScalarProperty Name="StyleId" ColumnName="StyleId" />
+                <ScalarProperty Name="UcodeId" ColumnName="UcodeId" />
+                <ScalarProperty Name="BusinessId" ColumnName="BusinessId" />
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ucodeby_freetextview">
+            <EntityTypeMapping TypeName="e4kmaximusdbModel.ucodeby_freetextview">
+              <MappingFragment StoreEntitySet="ucodeby_freetextview">
+                <ScalarProperty Name="IsHidden" ColumnName="IsHidden" />
+                <ScalarProperty Name="SeqNo" ColumnName="SeqNo" />
+                <ScalarProperty Name="UCodeID" ColumnName="UCodeID" />
+                <ScalarProperty Name="DimFreeText" ColumnName="DimFreeText" />
+                <ScalarProperty Name="FreeText" ColumnName="FreeText" />
+                <ScalarProperty Name="Product_Group" ColumnName="Product_Group" />
+                <ScalarProperty Name="StyleImage" ColumnName="StyleImage" />
+                <ScalarProperty Name="StyleID" ColumnName="StyleID" />
                 <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
               </MappingFragment>
             </EntityTypeMapping>

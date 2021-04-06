@@ -139,7 +139,7 @@ namespace Maximus.Services
         }
         public List<ReturnOrderModel> GetOrderToReturn(string empId, string businessId, string userId, string OrderPermission, string role, bool pointsReq, List<string> catagory, int OrdNo = 0, string custRef = "", string courierRef = "", int pickingSlipNo = 0, bool isEmergency = false, string rtnType = "")
         {
-          
+
             List<ReturnOrderModel> result = new List<ReturnOrderModel>();
             result = _dp.GetReturnOrder(empId, businessId, userId, OrderPermission, pointsReq, role, catagory, OrdNo, custRef, courierRef, pickingSlipNo, isEmergency, rtnType);
             return result;
@@ -175,7 +175,7 @@ namespace Maximus.Services
         }
         #endregion
         #region AcceptReturns
-        public AcceptResultSet AcceptReturns(string conString, List<SalesOrderHeaderViewModel> salesHead, string cmpId, double CARRPERCENT, string CARRPRICE_RTN, bool DELADDR_USER_CREATE, string OverrideEnt, string CARRPRICE_XCHG, string RTN_Collection_Style, string PriceList, string FITALLOC, string DIMALLOC, string rolloutName, string WAREHOUSE_RTN, string pnlCarriageReason, string selectedCarr, bool IsManPack, int empResetMnths, string Browser, string HTTP_X_FORWARDED_FOR, string REMOTE_ADDR, bool IsRollOutOrder, string usrId, bool editFlag, string POINTSREQ, string ONLCUSREFLBL, string cmpLogo, string custLogo, string adminMail, string mailUsername, string mailPassword, string mailPort, string mailServer, string ueMailEMail, string permissionPrice, int collectionStatus = 0)
+        public AcceptResultSet AcceptReturns(string access, string conString, List<SalesOrderHeaderViewModel> salesHead, string cmpId, double CARRPERCENT, string CARRPRICE_RTN, bool DELADDR_USER_CREATE, string OverrideEnt, string CARRPRICE_XCHG, string RTN_Collection_Style, string PriceList, string FITALLOC, string DIMALLOC, string rolloutName, string WAREHOUSE_RTN, string pnlCarriageReason, string selectedCarr, bool IsManPack, int empResetMnths, string Browser, string HTTP_X_FORWARDED_FOR, string REMOTE_ADDR, bool IsRollOutOrder, string usrId, bool editFlag, string POINTSREQ, string ONLCUSREFLBL, string cmpLogo, string custLogo, string adminMail, string mailUsername, string mailPassword, string mailPort, string mailServer, string ueMailEMail, string permissionPrice, int collectionStatus = 0, bool isPrivateRtn = false)
         {
             var booAutoConfirm = false; bool busBudgetReq = false; long mStackManPack = 0;
             bool booStackOrder = Convert.ToBoolean(_dp.BusinessParam("STACKORDERS", salesHead.First().CustID)), booEmpPointEntitleCheck = true;
@@ -216,35 +216,54 @@ namespace Maximus.Services
                         header.DelTown = "";
                         header.DelCity = "";
                     }
-                    
+
                     var address1 = _dp.getEmployeeAddress(salesHead.First().EmployeeID, salesHead.First().CustID);
                     var addArr = new string[] { };
                     var addresArr = address1.Contains(",-,") ? System.Text.RegularExpressions.Regex.Split(address1, ",-,") : addArr;
                     int ds = addresArr.Count();
-                     //added by sasi(22-01-20)
-                    foreach (var header in salesHead.Where(s => s.Reorderheader).ToList())
+                    //added by sasi(22-01-20)
+                    if (isPrivateRtn == false)
                     {
-                        header.DelAddress1 = ds > 0 ? addresArr[2] : "";
-                        header.DelAddress2 = ds > 0 ? addresArr[3] : "";
-                        header.DelAddress3 = ds > 0 ? addresArr[4] : "";
-                        header.DelTown = ds > 0 ? addresArr[5] : "";
-                        header.DelCity = ds > 0 ? addresArr[6] : "";
-                        header.DelPostCode = ds > 0 ? addresArr[7] : "";
-                        header.DelCountry = ds > 0 ? addresArr[8] : "";
-                        header.DelCountry = "UK";
+                        foreach (var header in salesHead.Where(s => s.Reorderheader).ToList())
+                        {
+                            header.DelAddress1 = ds > 0 ? addresArr[2] : "";
+                            header.DelAddress2 = ds > 0 ? addresArr[3] : "";
+                            header.DelAddress3 = ds > 0 ? addresArr[4] : "";
+                            header.DelTown = ds > 0 ? addresArr[5] : "";
+                            header.DelCity = ds > 0 ? addresArr[6] : "";
+                            header.DelPostCode = ds > 0 ? addresArr[7] : "";
+                            header.DelCountry = ds > 0 ? addresArr[8] : "";
+                            header.DelCountry = "UK";
+                            header.DelDesc = ds > 0 ? addresArr[1] : "";
+                            header.CustRef = ds > 0 ? addresArr[1] : "";
+                        }
                     }
                     ///
                     string SQL = "SELECT tblbus_address.Description, tblbus_address.Address1, tblbus_address.Address2, tblbus_address.Address3, tblbus_address.Town, tblbus_address.City, tblbus_address.Postcode, tblbus_countrycodes.Country, tblbus_address.countrycode  FROM tblbus_countrycodes INNER JOIN (tblbus_addresstype_ref INNER JOIN (tblbus_business INNER JOIN (tblbus_addresstypes INNER JOIN tblbus_address ON tblbus_addresstypes.AddressTypeID = tblbus_address.AddressTypeID) ON tblbus_business.BusinessID = tblbus_address.BusinessID) ON tblbus_addresstype_ref.Actual_TypeID = tblbus_addresstypes.Actual_TypeID) ON tblbus_countrycodes.CountryID = tblbus_address.CountryCode  WHERE tblbus_addresstype_ref.Actual_TypeID=3 AND tblbus_business.BusinessID='" + salesHead.First().CustID + "' and tblbus_countrycodes.CompanyID = '" + salesHead.First().CompanyID + "' Order By tblbus_address.Description";
                     var invAddress = _dp.GetAddressDetails(SQL);
-                    salesHead.ForEach(s => s.InvAddress1 = invAddress.Address1);
-                    salesHead.ForEach(s => s.InvAddress2 = invAddress.Address2);
-                    salesHead.ForEach(s => s.InvAddress3 = invAddress.Address3);
-                    salesHead.ForEach(s => s.InvDesc = invAddress.AddressDescription);
-                    salesHead.ForEach(s => s.InvPostCode = invAddress.PostCode);
-                    salesHead.ForEach(s => s.InvTown = invAddress.Town);
-                    salesHead.ForEach(s => s.InvCity = invAddress.City);
-                    salesHead.ForEach(s => s.InvCountry = invAddress.Country);
-                    salesHead.ForEach(s => s.CarrierCharge = 0.0);
+                    salesHead.Where(s => s.Returnheader).ToList().ForEach(s => s.InvAddress1 = invAddress.Address1);
+                    salesHead.Where(s => s.Returnheader).ToList().ForEach(s => s.InvAddress2 = invAddress.Address2);
+                    salesHead.Where(s => s.Returnheader).ToList().ForEach(s => s.InvAddress3 = invAddress.Address3);
+                    salesHead.Where(s => s.Returnheader).ToList().ForEach(s => s.InvDesc = invAddress.AddressDescription);
+                    salesHead.Where(s => s.Returnheader).ToList().ForEach(s => s.InvPostCode = invAddress.PostCode);
+                    salesHead.Where(s => s.Returnheader).ToList().ForEach(s => s.InvTown = invAddress.Town);
+                    salesHead.Where(s => s.Returnheader).ToList().ForEach(s => s.InvCity = invAddress.City);
+                    salesHead.Where(s => s.Returnheader).ToList().ForEach(s => s.InvCountry = invAddress.Country);
+                    salesHead.ToList().ForEach(s => s.CarrierCharge = 0.0);
+                    if (isPrivateRtn == false)
+                    {
+
+                        salesHead.Where(s => s.Reorderheader).ToList().ForEach(s => s.InvAddress1 = invAddress.Address1);
+                        salesHead.Where(s => s.Reorderheader).ToList().ForEach(s => s.InvAddress2 = invAddress.Address2);
+                        salesHead.Where(s => s.Reorderheader).ToList().ForEach(s => s.InvAddress3 = invAddress.Address3);
+                        salesHead.Where(s => s.Reorderheader).ToList().ForEach(s => s.InvDesc = invAddress.AddressDescription);
+                        salesHead.Where(s => s.Reorderheader).ToList().ForEach(s => s.InvPostCode = invAddress.PostCode);
+                        salesHead.Where(s => s.Reorderheader).ToList().ForEach(s => s.InvTown = invAddress.Town);
+                        salesHead.Where(s => s.Reorderheader).ToList().ForEach(s => s.InvCity = invAddress.City);
+                        salesHead.Where(s => s.Reorderheader).ToList().ForEach(s => s.InvCountry = invAddress.Country);
+
+                    }
+
                 }
                 if (!CheckCarriage(salesHead, true, CARRPERCENT, CARRPRICE_RTN, CARRPRICE_XCHG))
                 {
@@ -319,8 +338,8 @@ namespace Maximus.Services
                                     result.type = "failure";
                                 }
                             }
-
-                            returnRes.RtnResult = _dp.SaveReturnOrder(conn, headers, empResetMnths, Browser, HTTP_X_FORWARDED_FOR, REMOTE_ADDR, IsRollOutOrder, rtnOrdNo, headers.CustID, usrId, editFlag, POINTSREQ);
+                            bool isPrivate = headers.CustRef.ToLower().Contains("private") && (headers.UCodeId == "" || headers.UCodeId == null) ? true : false;
+                            returnRes.RtnResult = _dp.SaveReturnOrder(access, conn, headers, empResetMnths, Browser, HTTP_X_FORWARDED_FOR, REMOTE_ADDR, IsRollOutOrder, rtnOrdNo, headers.CustID, usrId, editFlag, POINTSREQ, isPrivate).result;
 
 
                             if (returnRes.RtnResult)
@@ -387,10 +406,8 @@ namespace Maximus.Services
                             long reOrdNo = headers.IsEditing ? headers.OrderNo : _dp.Getnextno("SALE ORDER", conn); ;
                             long manPckReord = _dp.Getnextno("MANPACK ORDER", conn);
                             headers.SalesOrderLine.ForEach(s => s.ReturnOrderNo = returnOrderNo);
-
-                            returnRes.ReOrdResult = _dp.SaveReturnOrder(conn, headers, empResetMnths, Browser, HTTP_X_FORWARDED_FOR, REMOTE_ADDR, IsRollOutOrder, reOrdNo, headers.CustID, usrId, editFlag, POINTSREQ);
-
-
+                            bool isPrivate = headers.CustRef.ToLower().Contains("private") && (headers.UCodeId == "" || headers.UCodeId == null) ? true : false;
+                            returnRes.ReOrdResult = _dp.SaveReturnOrder(access, conn, headers, empResetMnths, Browser, HTTP_X_FORWARDED_FOR, REMOTE_ADDR, IsRollOutOrder, reOrdNo, headers.CustID, usrId, editFlag, POINTSREQ, isPrivate).result;
                             booEmpPointEntitleCheck = Convert.ToBoolean(POINTSREQ) ? true : overrideEntitlement ? overrideEntitlement : _dp.EmpEntilementCheck(rolloutName, OverrideEnt, FITALLOC, DIMALLOC, headers, busId, 0, IsManPack, false);
                             headers.OrderNo = reOrdNo;
                             if (returnRes.ReOrdResult)
@@ -633,6 +650,17 @@ namespace Maximus.Services
             }
             if (ResultSet.Count > 0)
             {
+                if (salesHead.Any(s => s.Returnheader && s.CustRef.ToLower().Contains("private") && (s.UCodeId == "" || s.UCodeId == null
+                 )))
+                {
+                    if (ResultSet.Any(s => s.IsReturn))
+                    {
+                        var privateReord = PrintPrivateReturns(salesHead, custLogo, cmpLogo, 0, ONLCUSREFLBL, editFlag);
+                        var message = ResultSet.Where(s => s.IsReturn).First().OrderConfirmationPop;
+                        message = message.Replace("%privateconfirmation%", privateReord);
+                        ResultSet.Where(s => s.IsReturn).First().OrderConfirmationPop = message;
+                    }
+                }
                 if (salesHead.Any(s => s.Reorderheader))
                 {
                     if (salesHead.Where(s => s.Reorderheader).First().SalesOrderLine != null)
@@ -795,13 +823,29 @@ namespace Maximus.Services
         }
 
         #region DeleteReturnOrders
-        public bool DeleteReturnOrders(int orderno,string user)
+        public bool DeleteReturnOrders(int orderno, string user)
         {
-          return _dp.DeleteReturnOrder(orderno,user);
+            return _dp.DeleteReturnOrder(orderno, user);
 
         }
- 
         #endregion
+
+        #region PrintPrivateReturns
+        public string PrintPrivateReturns(List<SalesOrderHeaderViewModel> lst,string custLogo,string cmpLogo,int manpck,string ONLCUSREFLBL,bool isedit=false)
+        {
+            var reult = "";
+            if (lst.Any(s => s.Reorderheader))
+            {
+                foreach (var lines in lst.Where(s => s.Reorderheader))
+                {
+                    reult = reult+ _dp.GetPrivateReturnMail(lines,"",custLogo,cmpLogo,lines.manPack,"readonly",ONLCUSREFLBL,lines.OrderNo,isedit,null);
+                }
+            }
+            return reult;
+        }
+        #endregion
+
+
         #endregion
 
     }

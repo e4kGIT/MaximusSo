@@ -12,5 +12,6 @@ namespace Maximus.Data.Models
         public int minMandatoryPts { get; set; }
         public int availPts { get; set; }
         public bool isfreestk { get; set; }
+        public bool isPrivate { get; set; }
     }
 }

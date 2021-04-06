@@ -27,6 +27,10 @@ namespace Maximus.Controllers
         public readonly tblSalesOrderHeader _salesHead;
         private readonly IBasket _basket;
         public readonly SalesDetail _salesLine;
+        public readonly PickingSlipHeader _pickingHead;
+        public readonly tblCourierinformation _courierInfo;
+        public readonly PickingSlipDetail _pickingdetail;
+
         private readonly DataProcessing _dp;
         public OrderDisplayController(IUnitOfWork unitOfWork)
         {
@@ -42,6 +46,12 @@ namespace Maximus.Controllers
             SalesDetail salesLine = new SalesDetail(_unitOfWork);
             BasketService basket = new BasketService(_unitOfWork);
             PointStyle pointStyle = new PointStyle(_unitOfWork);
+            PickingSlipHeader pickingHead = new PickingSlipHeader(_unitOfWork);
+            PickingSlipDetail pickingdetail = new PickingSlipDetail(_unitOfWork);
+            tblCourierinformation courierInfo = new tblCourierinformation(_unitOfWork);
+            _pickingHead = pickingHead;
+            _pickingdetail = pickingdetail;
+            _courierInfo = courierInfo;
             _dataConnection = dataConnection;
             _salesHead = salesHead;
             _salesLine = salesLine;
@@ -54,7 +64,7 @@ namespace Maximus.Controllers
             _basket = basket;
             _stylePoints = stylePoints;
         }
-        public ActionResult ShowOrders(string OrderType="SO",bool EmergencyTicked=false)
+        public ActionResult ShowOrders(string OrderType = "SO", bool EmergencyTicked = false)
         {
             Session["rtnLines"] = new List<ReturnOrderModel>();
             Session["returnModellst"] = new List<ReturnOrderModel>();
@@ -67,7 +77,7 @@ namespace Maximus.Controllers
             Session["isrtntype"] = "";
             Session["IsManPack"] = true;
             Session["returnorder"] = false;
-            
+            Session["PRIVATEORDER"] = false;
             TempData["OrderType"] = OrderType;
             string busId = Session["BuisnessId"].ToString();
             string userId = Session["UserName"].ToString();
@@ -99,18 +109,18 @@ namespace Maximus.Controllers
         public ActionResult ShowOrderGridViewPartial(string OrderType = "SO", int frmOrderno = 0, int toOrderNo = 0, Nullable<DateTime> frmOrderdate = null, Nullable<DateTime> toOrderDate = null, string custRef = "", string ordStatus = "", string users = "", int recsToDisplay = 0, bool like = false, bool exact = false, string Empid = "", string Empname = "", Nullable<DateTime> StrtDate = null, bool iscallback = false)
         {
             bool emergenVal = false;
-             
+
             if (iscallback == true)
             {
-                custRef=((OrdersFilterModel)Session["orderfiltermodel"]).custRef  ;
-                frmOrderno=((OrdersFilterModel)Session["orderfiltermodel"]).frmOrderno  ;
-                frmOrderdate=((OrdersFilterModel)Session["orderfiltermodel"]).frmOrderdate;
-                toOrderNo=((OrdersFilterModel)Session["orderfiltermodel"]).toOrderNo;
-                toOrderDate=((OrdersFilterModel)Session["orderfiltermodel"]).toOrderDate;
-                users=((OrdersFilterModel)Session["orderfiltermodel"]).users;
-                Empid=((OrdersFilterModel)Session["orderfiltermodel"]).Empid ;
+                custRef = ((OrdersFilterModel)Session["orderfiltermodel"]).custRef;
+                frmOrderno = ((OrdersFilterModel)Session["orderfiltermodel"]).frmOrderno;
+                frmOrderdate = ((OrdersFilterModel)Session["orderfiltermodel"]).frmOrderdate;
+                toOrderNo = ((OrdersFilterModel)Session["orderfiltermodel"]).toOrderNo;
+                toOrderDate = ((OrdersFilterModel)Session["orderfiltermodel"]).toOrderDate;
+                users = ((OrdersFilterModel)Session["orderfiltermodel"]).users;
+                Empid = ((OrdersFilterModel)Session["orderfiltermodel"]).Empid;
                 Empname = ((OrdersFilterModel)Session["orderfiltermodel"]).Empname;
-                ordStatus=((OrdersFilterModel)Session["orderfiltermodel"]).ordStatus ;
+                ordStatus = ((OrdersFilterModel)Session["orderfiltermodel"]).ordStatus;
             }
             else
             {
@@ -141,11 +151,11 @@ namespace Maximus.Controllers
 
             if (Convert.ToBoolean(Session["ConfirmOrders"]))
             {
-                model = _orderDisp.GetAllOrders(Session["OT"].ToString(), busId, Convert.ToBoolean(Session["POINTSREQ"].ToString()), userId, (List<string>)Session["userLst"], Session["Access"].ToString(), Session["OrderPermit"].ToString(), Convert.ToBoolean(Session["EmergencyTicked"]), true,false, Session["RequirePermissionUSR"].ToString());
+                model = _orderDisp.GetAllOrders(Session["OT"].ToString(), busId, Convert.ToBoolean(Session["POINTSREQ"].ToString()), userId, (List<string>)Session["userLst"], Session["Access"].ToString(), Session["OrderPermit"].ToString(), Convert.ToBoolean(Session["EmergencyTicked"]), true, false, Session["RequirePermissionUSR"].ToString());
             }
             else
             {
-                model = _orderDisp.GetAllOrders(Session["OT"].ToString(), busId, Convert.ToBoolean(Session["POINTSREQ"].ToString()), userId, (List<string>)Session["userLst"], Session["Access"].ToString(), Session["OrderPermit"].ToString(), Convert.ToBoolean(Session["EmergencyTicked"]),false,false, Session["RequirePermissionUSR"].ToString());
+                model = _orderDisp.GetAllOrders(Session["OT"].ToString(), busId, Convert.ToBoolean(Session["POINTSREQ"].ToString()), userId, (List<string>)Session["userLst"], Session["Access"].ToString(), Session["OrderPermit"].ToString(), Convert.ToBoolean(Session["EmergencyTicked"]), false, false, Session["RequirePermissionUSR"].ToString());
             }
             if (StrtDate != null)
             {
@@ -331,18 +341,35 @@ namespace Maximus.Controllers
         }
 
 
-        [ValidateInput(false)]
+
         public ActionResult OrderDetailGridView1Partial(int ordno)
         {
             var model = _orderDisp.GetOrderDetail(ordno);
             TempData["OrderNo"] = ordno;
+
             foreach (var lines in model)
             {
+                if (_pickingHead.Exists(s => s.OrderNo == ordno))
+                {
+                    var sss = _pickingHead.GetAll(s => s.OrderNo == ordno).Select(s => s.PickingSlipNo).ToList();
+
+                    if (_pickingdetail.Exists(s => sss.Contains(s.PickingSlipNo) && s.StyleID == lines.StyleID && s.SizeID == lines.SizeID))
+                    {
+                        foreach (var data1 in _pickingdetail.GetAll(s => sss.Contains(s.PickingSlipNo) && s.StyleID == lines.StyleID && s.SizeID == lines.SizeID).ToList())
+                        {
+                            if (_courierInfo.Exists(s => s.DeliveryNote == data1.PickingSlipNo))
+                            {
+                                lines.CourierRef = _courierInfo.GetAll(s => s.DeliveryNote == data1.PickingSlipNo).First().CourierRef;
+                            }
+                        }
+                    }
+                }
                 lines.ReOrderNo = _salesLine.Exists(s => s.ReturnOrderNo == ordno) ? Convert.ToInt32(_salesLine.GetAll(s => s.ReturnOrderNo == ordno).First().OrderNo) : 0;
                 lines.Points = _stylePoints.Exists(s => s.StyleID == lines.StyleID) ? _stylePoints.GetAll(s => s.StyleID == lines.StyleID).First().Points.Value : 0;
             }
             return PartialView("_OrderDetailGridView1Partial", model);
         }
+
         public ActionResult ConfrimOrder(bool EmergencyTicked = false)
         {
             string busId = Session["BuisnessId"].ToString();
@@ -378,10 +405,10 @@ namespace Maximus.Controllers
             List<OrderDisplayModel> model = new List<OrderDisplayModel>();
             string busId = Session["BuisnessId"].ToString();
             string userId = Session["UserName"].ToString();
-            var usr = _dp.GetEmployee(busId, Session["UserName"].ToString(), Session["OrderPermit"].ToString(),"","","","","","","","", Session["RequirePermissionUSR"].ToString()).Select(s => s.EmployeeId).ToList();
+            var usr = _dp.GetEmployee(busId, Session["UserName"].ToString(), Session["OrderPermit"].ToString(), "", "", "", "", "", "", "", "", Session["RequirePermissionUSR"].ToString()).Select(s => s.EmployeeId).ToList();
             usr.Add(userId);
             Session["userLst"] = usr;
-            Session["OrderDisplayModel"] = _orderDisp.GetAllOrders(Session["OT"].ToString(), busId, Convert.ToBoolean(Session["POINTSREQ"].ToString()), userId, (List<string>)Session["userLst"], Session["Access"].ToString(), Session["OrderPermit"].ToString(), Convert.ToBoolean(Session["EmergencyTicked"]), true,false, Session["RequirePermissionUSR"].ToString()).OrderBy(s => s.OrderNo).ToList();
+            Session["OrderDisplayModel"] = _orderDisp.GetAllOrders(Session["OT"].ToString(), busId, Convert.ToBoolean(Session["POINTSREQ"].ToString()), userId, (List<string>)Session["userLst"], Session["Access"].ToString(), Session["OrderPermit"].ToString(), Convert.ToBoolean(Session["EmergencyTicked"]), true, false, Session["RequirePermissionUSR"].ToString()).OrderBy(s => s.OrderNo).ToList();
             return View();
         }
         public string GetPrintTemplates(string frmOrdno, string toOrdno)
@@ -435,7 +462,7 @@ namespace Maximus.Controllers
             string mailPort = System.Configuration.ConfigurationManager.AppSettings["mailPort"].ToString();
             string mailServer = System.Configuration.ConfigurationManager.AppSettings["mailserver"].ToString();
             string ueMailEMail = System.Configuration.ConfigurationManager.AppSettings["uemail/email"].ToString();
-
+            string privateReordMsg = "";
             var HTTP_X_FORWARDED_FOR = System.Web.HttpContext.Current.Request.ServerVariables["HTTP_X_FORWARDED_FOR"];
             var REMOTE_ADDR = System.Web.HttpContext.Current.Request.ServerVariables["REMOTE_ADDR"];
             string Browser = System.Web.HttpContext.Current.Request.Browser.Browser;
@@ -450,11 +477,11 @@ namespace Maximus.Controllers
                 slsHead = _salesHead.GetAll(x => x.OrderNo == OrderNo).Select(x => new SalesOrderHeaderViewModel { OrderNo = x.OrderNo, CompanyID = x.CompanyID, WarehouseID = x.WarehouseID, CustID = x.CustID, OrderDate = x.OrderDate.Value.ToString("yyyy-MM-dd"), InvAddress1 = x.InvAddress1, InvAddress2 = x.InvAddress2, InvAddress3 = x.InvAddress3, InvCity = x.InvCity, InvTown = x.InvTown, InvPostCode = x.InvPostCode, InvCountry = x.InvCountry, DelDesc = x.DelDesc, DelAddress1 = x.DelAddress1, DelAddress2 = x.DelAddress2, DelAddress3 = x.DelAddress3, DelCity = x.DelCity, DelTown = x.DelTown, DelPostCode = x.DelPostCode, DelCountry = x.DelCountry, CustRef = x.CustRef, Carrier = x.Carrier, CarrierCharge = Convert.ToDouble(x.CarrierCharge.Value), Comments = x.Comments, CommentsExternal = x.CommentsExternal, TotalGoods = x.TotalGoods.Value, OrderGoods = x.OrderGoods.Value, Currency_Exchange_Rate = x.Currency_Exchange_Rate, UserID = x.UserID, EmployeeID = x.PinNo, UCodeId = x.UCodeId, Currency_Exchange_Code = x.Currency_Exchange_Code, TIMEOFENTRY = x.TIMEOFENTRY, RepID = x.RepID, ReasonCode = x.ReasonCode, OnlineUserID = x.OnlineUserID, OrderAnalysisCode1 = x.OrderAnalysisCode1, OrderAnalysisCode2 = x.OrderAnalysisCode2, OrderAnalysisCode3 = x.OrderAnalysisCode3, OrderAnalysisCode4 = x.OrderAnalysisCode4, OrderAnalysisCode5 = x.OrderAnalysisCode5, AllowPartShipment = x.AllowPartShipment, OrderType = x.OrderType, ContractRef = x.ContractRef, EmailID = x.EmailID, ContactName = x.ContactName, IsUcode = true }).First();
 
                 slsHead.IsEditing = true;
-                slsHead.EmployeeName = _employee.Exists(s => s.EmployeeID == slsHead.EmployeeID) ? _employee.GetAll(s => s.EmployeeID == slsHead.EmployeeID).First().Forename+" " + _employee.GetAll(s => s.EmployeeID == slsHead.EmployeeID).First().Surname : "";
+                slsHead.EmployeeName = _employee.Exists(s => s.EmployeeID == slsHead.EmployeeID) ? _employee.GetAll(s => s.EmployeeID == slsHead.EmployeeID).First().Forename + " " + _employee.GetAll(s => s.EmployeeID == slsHead.EmployeeID).First().Surname : "";
                 slsHead.SalesOrderLine = _salesLine.GetAll(x => x.OrderNo == OrderNo).Select(x => new SalesOrderLineViewModel
                 {
                     CompanyID = x.CompanyID,
-                   
+
                     Warehouseid = x.Warehouseid,
                     OrderNo = x.OrderNo,
                     LineNo = x.LineNo,
@@ -503,12 +530,78 @@ namespace Maximus.Controllers
 
                 }
                 var cnfResult = _basket.GetEmailMessage(slsHead, "", 0, permissionPrice, Session["ONLCUSREFLBL"].ToString(), cmpLogo, custLogo, OrderNo, false, null);
+                if (slsHead.CustRef.ToLower().Contains("private"))
+                {
+
+                    privateReordMsg = _dp.GetPrivateReturnMail(GetPrivateReorderLines(OrderNo), "", "", "", 0, "readonly", "", 0, false, null);
+
+                }
+
                 if (cnfResult.OrderConfirmationPOP != null && cnfResult.OrderConfirmationPOP != "")
                 {
+                    cnfResult.OrderConfirmationPOP= cnfResult.OrderConfirmationPOP.Replace("%privateconfirmation%", privateReordMsg);
                     result = cnfResult.OrderConfirmationPOP;
                 }
             }
             return result;
+        }
+        public SalesOrderHeaderViewModel GetPrivateReorderLines(int rtnNo)
+        {
+            long FrstreOrder = 0;
+            var slsHead = new SalesOrderHeaderViewModel();
+            var slsLine = new List<SalesOrderLineViewModel>();
+            slsLine = _salesLine.GetAll(x => x.ReturnOrderNo == rtnNo).Select(x => new SalesOrderLineViewModel
+            {
+                CompanyID = x.CompanyID,
+
+                Warehouseid = x.Warehouseid,
+                OrderNo = x.OrderNo,
+                LineNo = x.LineNo,
+                StyleID = x.StyleID,
+                ColourID = x.ColourID,
+                Description = x.Description,
+                SizeID = x.SizeID,
+                Price = Convert.ToDouble(x.Price),
+                OrdQty = x.OrdQty.Value,
+                AllQty = x.AllQty.Value,
+                InvQty = x.InvQty.Value,
+                DespQty = x.DespQty.Value,
+                DeliveryDate = x.Deliverydate.Value.ToString(),
+                VatCode1 = x.VatCode.Value,
+                RepId = Convert.ToInt32(x.RepID),
+                KAMID = Convert.ToInt32(x.KamID),
+                KAMRate1 = x.KAMRate.Value,
+                RepRate1 = x.RepRate.Value,
+                Currency_Exchange_Rate = x.Currency_Exchange_Rate.Value,
+                StyleIDref = x.StyleIDref,
+                FreeText1 = x.FreeText,
+                Cost1 = Convert.ToDouble(x.Cost),
+                IssueUOM1 = Convert.ToInt32(x.IssueUOM),
+                IssueQty1 = Convert.ToInt32(x.IssueQty),
+                StockingUOM1 = Convert.ToInt32(x.StockingUOM),
+                NomCode1 = x.NomCode.Value,
+                OriginalOrderNo = x.OriginalOrderNo.Value,
+                OriginalLineNo = x.OriginalLineNo,
+                AssemblyID = x.AssemblyID.Value,
+                AsmLineNo = x.AsmLineNo.Value,
+                ReasonCodeLine = Convert.ToInt64(x.ReasonCode),
+                ReturnOrderNo = x.ReturnOrderNo.Value,
+                ReturnLineNo = x.ReturnLineNo.Value,
+                SOPDetail5 = x.SOPDETAIL5,
+                SOPDetail4 = x.SOPDETAIL4,
+                SoqtyForempSO = x.OrdQty.Value,
+                Isedit = true,
+                Total = _dataConnection.GetlineTotals(Convert.ToDouble(x.OrdQty), Convert.ToDouble(x.Price), _dataConnection.GetVatPercent(x.StyleID, x.SizeID)),
+                VatPercent = _dataConnection.GetVatPercent(x.StyleID, x.SizeID)
+            }).ToList();
+            FrstreOrder = slsLine.Count>0?slsLine.First().OrderNo:0;
+            if (FrstreOrder > 0)
+            {
+                slsHead = _salesHead.GetAll(x => x.OrderNo == FrstreOrder).Select(x => new SalesOrderHeaderViewModel { OrderNo = x.OrderNo, CompanyID = x.CompanyID, WarehouseID = x.WarehouseID, CustID = x.CustID, OrderDate = x.OrderDate.Value.ToString("yyyy-MM-dd"), InvAddress1 = x.InvAddress1, InvAddress2 = x.InvAddress2, InvAddress3 = x.InvAddress3, InvCity = x.InvCity, InvTown = x.InvTown, InvPostCode = x.InvPostCode, InvCountry = x.InvCountry, DelDesc = x.DelDesc, DelAddress1 = x.DelAddress1, DelAddress2 = x.DelAddress2, DelAddress3 = x.DelAddress3, DelCity = x.DelCity, DelTown = x.DelTown, DelPostCode = x.DelPostCode, DelCountry = x.DelCountry, CustRef = x.CustRef, Carrier = x.Carrier, CarrierCharge = Convert.ToDouble(x.CarrierCharge.Value), Comments = x.Comments, CommentsExternal = x.CommentsExternal, TotalGoods = x.TotalGoods.Value, OrderGoods = x.OrderGoods.Value, Currency_Exchange_Rate = x.Currency_Exchange_Rate, UserID = x.UserID, EmployeeID = x.PinNo, UCodeId = x.UCodeId, Currency_Exchange_Code = x.Currency_Exchange_Code, TIMEOFENTRY = x.TIMEOFENTRY, RepID = x.RepID, ReasonCode = x.ReasonCode, OnlineUserID = x.OnlineUserID, OrderAnalysisCode1 = x.OrderAnalysisCode1, OrderAnalysisCode2 = x.OrderAnalysisCode2, OrderAnalysisCode3 = x.OrderAnalysisCode3, OrderAnalysisCode4 = x.OrderAnalysisCode4, OrderAnalysisCode5 = x.OrderAnalysisCode5, AllowPartShipment = x.AllowPartShipment, OrderType = x.OrderType, ContractRef = x.ContractRef, EmailID = x.EmailID, ContactName = x.ContactName, IsUcode = true }).First();
+                slsHead.SalesOrderLine = slsLine;
+            }
+            return slsHead;
+
         }
         public GridViewSettings CreateExportGridViewSettings()
         {
@@ -520,7 +613,7 @@ namespace Maximus.Controllers
             {
                 set.FieldName = "OrderNo";
             });
-              settings.Columns.Add("OrderType");
+            settings.Columns.Add("OrderType");
             settings.Columns.Add(set =>
             {
                 set.FieldName = "OrderDate";

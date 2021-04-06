@@ -166,7 +166,7 @@
         <br />
                                                         <center>
                                                             <h3 style="color:white">
-                                                                Sorry but you cannot place any orders at the moment . Please contact customer services
+                                                                Sorry, but you cannot place any orders at the moment . Please contact customer services
                                                             </h3>
                                                         </center>
                                                         <br />
@@ -183,13 +183,22 @@
     else
     {
         <div class="row">
-
+            @if (Convert.ToBoolean(Session["PRIVATEORDER"]))
+            {
+                <div class="col-md-12">
+                    <div id="EmployeeGridViewPartial">
+                        @Html.Action("EmployeeGridViewPartial")
+                    </div>
+                </div>
+            }
+            else
+            {
             <div class="col-md-12">
                 <div id="EmployeeGridViewPartial">
                     @Html.Action("EmployeeGridViewPartial")
                 </div>
             </div>
-
+            }
         </div>
     }
 }

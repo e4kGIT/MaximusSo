@@ -63,7 +63,7 @@ namespace Maximus.Services
             AssemblyHeader assemblyHeader = new AssemblyHeader(_unitOfWork);
             UcodeOperationsTbl ucodeOperationsTbl = new UcodeOperationsTbl(_unitOfWork);
             RejectReasonTbl rejectReasonTbl = new RejectReasonTbl(_unitOfWork);
-            FskStyleLocations fskStyleLocations=new FskStyleLocations(_unitOfWork);
+            FskStyleLocations fskStyleLocations = new FskStyleLocations(_unitOfWork);
             BusAddress busAddress = new BusAddress(_unitOfWork);
             BusContact busContact = new BusContact(_unitOfWork);
             CountryCodes countryCodes = new CountryCodes(_unitOfWork);
@@ -132,8 +132,9 @@ namespace Maximus.Services
 
 
         #region  AcceptOrder 
-        public AcceptResultSet AcceptOrder(string cmpId, bool IsManPack, string busId, List<SalesOrderHeaderViewModel> salesHeaderLst, string addDesc, bool isRollOutOrder, bool isRollOutOrderEst, string OverrideEnt, bool CusRefMan, string POINTSREQ, List<BusAddress1> busAddress, string DIFF_MANPACK_INFO, string NOMCODEMAN, string ONLNEREQNOM1, string ONLNEREQNOM2, string ONLNEREQNOM3, string ONLNEREQNOM4, string ONLNEREQNOM5, string RolloutName, string selectedcar, string UserName, string DELADDR_USER_CREATE, double CARRPERCENT, double CARRREQAMT, string FITALLOC, string DIMALLOC, string BUDGETREQ, bool FreeStckCheck, string Browser, string REMOTE_ADDR, string ONLCUSREFLBL, string cmpLogo, string custLogo, string adminMail, string mailUsername, string mailPassword, string mailPort, string mailServer, string ueMailEMail, string HTTP_X_FORWARDED_FOR, bool isedit, bool boolDeleteConfirm, string pnlCarriageReason, bool booPtsReq, int empResetMnths, string pricePermission, UpdateMailModel updModel, bool booAutoConfirm = false)
+        public AcceptResultSet AcceptOrder(string access, string cmpId, bool IsManPack, string busId, List<SalesOrderHeaderViewModel> salesHeaderLst, string addDesc, bool isRollOutOrder, bool isRollOutOrderEst, string OverrideEnt, bool CusRefMan, string POINTSREQ, List<BusAddress1> busAddress, string DIFF_MANPACK_INFO, string NOMCODEMAN, string ONLNEREQNOM1, string ONLNEREQNOM2, string ONLNEREQNOM3, string ONLNEREQNOM4, string ONLNEREQNOM5, string RolloutName, string selectedcar, string UserName, string DELADDR_USER_CREATE, double CARRPERCENT, double CARRREQAMT, string FITALLOC, string DIMALLOC, string BUDGETREQ, bool FreeStckCheck, string Browser, string REMOTE_ADDR, string ONLCUSREFLBL, string cmpLogo, string custLogo, string adminMail, string mailUsername, string mailPassword, string mailPort, string mailServer, string ueMailEMail, string HTTP_X_FORWARDED_FOR, bool isedit, bool boolDeleteConfirm, string pnlCarriageReason, bool booPtsReq, int empResetMnths, string pricePermission, UpdateMailModel updModel, bool booAutoConfirm = false)
         {
+            SaveResultModel savModel = new SaveResultModel();
             int addressId = 0;
             bool booCheck = true;
             //bool booAutoConfirm = false;
@@ -645,7 +646,8 @@ namespace Maximus.Services
                     }
                     if (isedit)
                     {
-                        if (_dp.UpdateSalesOrder(salesHead, empResetMnths, Browser, HTTP_X_FORWARDED_FOR, REMOTE_ADDR, isRollOutOrder, salesHead.OrderNo, busId, UserName.ToString(), isedit, POINTSREQ, FreeStckCheck))
+                        savModel = _dp.UpdateSalesOrder(access, salesHead, empResetMnths, Browser, HTTP_X_FORWARDED_FOR, REMOTE_ADDR, isRollOutOrder, salesHead.OrderNo, busId, UserName.ToString(), isedit, POINTSREQ, FreeStckCheck);
+                        if (savModel.result)
                         {
                             if (isedit == false)
                             {
@@ -818,7 +820,8 @@ namespace Maximus.Services
                     }
                     else
                     {
-                        if (_dp.SaveSalesOrder(salesHead, empResetMnths, Browser, HTTP_X_FORWARDED_FOR, REMOTE_ADDR, isRollOutOrder, intSalesOrderNo, busId, UserName.ToString(), isedit, POINTSREQ, FreeStckCheck))
+                        savModel = _dp.SaveSalesOrder(access, salesHead, empResetMnths, Browser, HTTP_X_FORWARDED_FOR, REMOTE_ADDR, isRollOutOrder, intSalesOrderNo, busId, UserName.ToString(), isedit, POINTSREQ, FreeStckCheck);
+                        if (savModel.result)
                         {
 
                             if (isedit == false)
@@ -1009,77 +1012,85 @@ namespace Maximus.Services
                 {
                     break;
                 }
-                if (FreeStckCheck && ResultSet.Count == 0)
+                if (savModel.errorstring != null && savModel.errorstring != "")
                 {
-                    var newResult = salesHead.SalesOrderLine.GroupBy(s => new { s.StyleID, s.ColourID, s.SizeID, s.IsDleted }).
-                           Select(sa => new SalesOrderLineViewModel
-                           {
-                               StyleID = sa.First().StyleID.Trim(),
-                               ColourID = sa.First().ColourID.Trim(),
-                               SizeID = sa.First().SizeID.Trim(),
-                               OrdQty = sa.Sum(s => s.OrdQty),
-                               Description = sa.First().Description,
-                               Price = sa.First().Price,
-                               Cost1 = sa.First().Cost1,
-                               IssueUOM1 = sa.First().IssueUOM1,
-                               IssueQty1 = sa.Sum(s => s.IssueQty1),
-                               Currency_Exchange_Rate = sa.First().Currency_Exchange_Rate,
-                               StyleIDref = sa.First().StyleIDref,
-                               VatCode1 = sa.First().VatCode1,
-                               RepId = sa.First().RepId,
-                               KAMID = sa.First().KAMID,
-                               RepRate1 = sa.First().RepRate1,
-                               KAMRate1 = sa.First().KAMRate1,
-                               OriginalOrderNo = sa.First().OriginalOrderNo,
-                               AssemblyID = sa.First().AssemblyID,
-                               AsmLineNo = sa.First().AsmLineNo,
-                               ReturnOrderNo = sa.First().ReturnOrderNo,
-                               ReturnLineNo = sa.First().ReturnLineNo,
-                               SOPDetail5 = sa.First().SOPDetail5,
-                               SOPDetail4 = sa.First().SOPDetail4,
-                               DeliveryDate = sa.First().DeliveryDate,
-                               StockingUOM1 = sa.First().StockingUOM1,
-                               EmployeeId = sa.First().EmployeeId,
-                               IsDleted = sa.First().IsDleted
-                           }).ToList();
-                    string retunCnt = "";
-                    if (isedit)
+                    if (FreeStckCheck && ResultSet.Count == 0 && savModel.errorstring.ToLower() == "freestock")
                     {
-                        foreach (var line in newResult.Where(s => s.IsDleted == false))
+                        var newResult = salesHead.SalesOrderLine.GroupBy(s => new { s.StyleID, s.ColourID, s.SizeID, s.IsDleted, s.IsAlternateStyle }).
+                               Select(sa => new SalesOrderLineViewModel
+                               {
+                                   IsAlternateStyle = sa.First().IsAlternateStyle,
+                                   StyleID = sa.First().StyleID.Trim(),
+                                   ColourID = sa.First().ColourID.Trim(),
+                                   SizeID = sa.First().SizeID.Trim(),
+                                   OrdQty = sa.Sum(s => s.OrdQty),
+                                   Description = sa.First().Description,
+                                   Price = sa.First().Price,
+                                   Cost1 = sa.First().Cost1,
+                                   IssueUOM1 = sa.First().IssueUOM1,
+                                   IssueQty1 = sa.Sum(s => s.IssueQty1),
+                                   Currency_Exchange_Rate = sa.First().Currency_Exchange_Rate,
+                                   StyleIDref = sa.First().StyleIDref,
+                                   VatCode1 = sa.First().VatCode1,
+                                   RepId = sa.First().RepId,
+                                   KAMID = sa.First().KAMID,
+                                   RepRate1 = sa.First().RepRate1,
+                                   KAMRate1 = sa.First().KAMRate1,
+                                   OriginalOrderNo = sa.First().OriginalOrderNo,
+                                   AssemblyID = sa.First().AssemblyID,
+                                   AsmLineNo = sa.First().AsmLineNo,
+                                   ReturnOrderNo = sa.First().ReturnOrderNo,
+                                   ReturnLineNo = sa.First().ReturnLineNo,
+                                   SOPDetail5 = sa.First().SOPDetail5,
+                                   SOPDetail4 = sa.First().SOPDetail4,
+                                   DeliveryDate = sa.First().DeliveryDate,
+                                   StockingUOM1 = sa.First().StockingUOM1,
+                                   EmployeeId = sa.First().EmployeeId,
+                                   IsDleted = sa.First().IsDleted
+                               }).ToList();
+                        string retunCnt = "";
+                        if (isedit)
                         {
-
-                            var freeStock = _dp.GetFreeStock(line.StyleID, line.ColourID, line.SizeID, salesHead.WarehouseID, salesHead.SalesOrderLine, true, false);
-                            //freeStock = freeStock +Convert.ToInt32 (line.OrdQty);
-                            if (line.OrdQty > freeStock)
+                            foreach (var line in newResult.Where(s => s.IsDleted == false && s.IsAlternateStyle == false))
                             {
-                                var freeStock1 = freeStock - line.OrdQty > 0 ? freeStock - line.OrdQty : 0;
-                                retunCnt = retunCnt + "{%FREESTOCKERROR%}The ordered quantity(" + line.OrdQty + ") for product " + line.Description + "(" + line.StyleID + ") " + line.ColourID + " " + line.SizeID + " is grater than the available freestock quantity (" + freeStock + ")\n";
 
-                            }
-                            else
-                            {
-                                retunCnt = retunCnt + "";
+                                var freeStock = _dp.GetFreeStock(line.StyleID, line.ColourID, line.SizeID, salesHead.WarehouseID, salesHead.SalesOrderLine, true, false);
+                                //freeStock = freeStock +Convert.ToInt32 (line.OrdQty);
+                                if (line.OrdQty > freeStock)
+                                {
+                                    var freeStock1 = freeStock - line.OrdQty > 0 ? freeStock - line.OrdQty : 0;
+                                    retunCnt = retunCnt + "{%FREESTOCKERROR%}The ordered quantity(" + line.OrdQty + ") for product " + line.Description + "(" + line.StyleID + ") " + line.ColourID + " " + line.SizeID + " is grater than the available freestock quantity (" + freeStock + ")\n";
+
+                                }
+                                else
+                                {
+                                    retunCnt = retunCnt + "";
+                                }
                             }
                         }
-                    }
-                    else
-                    {
-                        foreach (var line in newResult.Where(s => s.IsDleted == false))
+                        else
                         {
-                            var freeStock = _dp.GetFreeStock(line.StyleID, line.ColourID, line.SizeID, salesHead.WarehouseID, null, isedit);
-                            if (line.OrdQty > freeStock)
+                            foreach (var line in newResult.Where(s => s.IsDleted == false && s.IsAlternateStyle == false))
                             {
-                                retunCnt = retunCnt + "{%FREESTOCKERROR%}The ordered quantity(" + line.OrdQty + ") for product " + line.Description + "(" + line.StyleID + ") " + line.ColourID + " " + line.SizeID + " is grater than the available freestock quantity (" + freeStock + ")\n";
+                                var freeStock = _dp.GetFreeStock(line.StyleID, line.ColourID, line.SizeID, salesHead.WarehouseID, null, isedit);
+                                if (line.OrdQty > freeStock)
+                                {
+                                    retunCnt = retunCnt + "{%FREESTOCKERROR%}The ordered quantity(" + line.OrdQty + ") for product " + line.Description + "(" + line.StyleID + ") " + line.ColourID + " " + line.SizeID + " is grater than the available freestock quantity (" + freeStock + ")\n";
+
+                                }
+                                else
+                                {
+                                    retunCnt = retunCnt + "";
+                                }
 
                             }
-                            else
-                            {
-                                retunCnt = retunCnt + "";
-                            }
-
                         }
+                        AcceptResultSet.type = retunCnt;
                     }
-                    AcceptResultSet.type = retunCnt;
+                    else if (savModel.errorstring.ToLower() == "pointsexceeded")
+                    {
+                        AcceptResultSet.type = "The orderded points has exceeded the maximum points.";
+                    }
                 }
                 else
                 {
@@ -1211,7 +1222,7 @@ namespace Maximus.Services
         public string GetOlderOrderInfoMail(SalesOrderHeaderViewModel salesHead, string pricePermission)
         {
 
-            string message = _dp.FillExistingOrderLineMessage(salesHead, pricePermission);
+            string message = _dp.FillExistingOrderLineMessage(salesHead, "hide");
             return message;
         }
         #endregion

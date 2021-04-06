@@ -41,6 +41,9 @@
       <HintPath>..\packages\EntityFramework.6.4.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="log4net">
+      <HintPath>..\Maximus\bin\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="MySql.Data, Version=8.0.18.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>C:\Program Files (x86)\MySQL\MySQL Connector Net 8.0.18\Assemblies\v4.5.2\MySql.Data.dll</HintPath>
@@ -57,6 +60,7 @@
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -69,9 +73,12 @@
     <Compile Include="InterFace\BaseRepository.cs" />
     <Compile Include="InterFace\UnitOfWork.cs" />
     <Compile Include="InterFace\Concrete\IUnitOfWork.cs" />
+    <Compile Include="models\AlternateStyles.cs" />
     <Compile Include="models\bak_tblaccemp_employee_tsb.cs">
       <DependentUpon>DataContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="models\BannerStyleClrSiz.cs" />
+    <Compile Include="models\BillingAddrPrivate.cs" />
     <Compile Include="models\ChildMenuLayout.cs" />
     <Compile Include="models\copy_my_aspnet_membership.cs">
       <DependentUpon>DataContext.tt</DependentUpon>
@@ -370,9 +377,12 @@
     <Compile Include="models\OrderDisplayModel.cs" />
     <Compile Include="models\OrdersFilterModel.cs" />
     <Compile Include="models\ParentMenuLayout.cs" />
+    <Compile Include="models\PaymentDetails.cs" />
+    <Compile Include="models\PickingSlipDetail.cs" />
     <Compile Include="models\PointsAdjustmentModel.cs" />
     <Compile Include="models\PointsModel.cs" />
     <Compile Include="models\PointsResult1.cs" />
+    <Compile Include="models\PrivateOrderResultModel.cs" />
     <Compile Include="models\productlist.cs">
       <DependentUpon>DataContext.tt</DependentUpon>
     </Compile>
@@ -380,6 +390,7 @@
       <DependentUpon>DataContext.tt</DependentUpon>
     </Compile>
     <Compile Include="models\RepositoryModels\FskStyleLocations.cs" />
+    <Compile Include="models\RepositoryModels\GatewayTbl.cs" />
     <Compile Include="models\RepositoryModels\PickingSlipHeader.cs" />
     <Compile Include="models\RepositoryModels\RejectReasonTbl.cs" />
     <Compile Include="models\RepositoryModels\AccVatCodes.cs" />
@@ -457,6 +468,8 @@
     <Compile Include="models\RepositoryModels\StylesView.cs" />
     <Compile Include="models\RepositoryModels\Style_Colour.cs" />
     <Compile Include="models\RepositoryModels\Style_Sizes.cs" />
+    <Compile Include="models\RepositoryModels\TblAlternateTable.cs" />
+    <Compile Include="models\RepositoryModels\tblCourierinformation.cs" />
     <Compile Include="models\RepositoryModels\tblCourrierRef.cs" />
     <Compile Include="models\RepositoryModels\TblFskStyle.cs" />
     <Compile Include="models\RepositoryModels\tblManPackOrders.cs" />
@@ -464,6 +477,7 @@
     <Compile Include="models\RepositoryModels\tblRoles.cs" />
     <Compile Include="models\RepositoryModels\tblSalesLines.cs" />
     <Compile Include="models\RepositoryModels\tblSalesOrderHeader.cs" />
+    <Compile Include="models\RepositoryModels\TransactionTbl.cs" />
     <Compile Include="models\RepositoryModels\UcodeByFreeTextView.cs" />
     <Compile Include="models\RepositoryModels\UcodeEmployees.cs" />
     <Compile Include="models\RepositoryModels\UcodeOperationsTbl.cs" />
@@ -473,6 +487,7 @@
     <Compile Include="models\RepositoryModels\User.cs" />
     <Compile Include="models\RepositoryModels\ViewPointsCard.cs" />
     <Compile Include="models\RepositoryModels\Warehouses.cs" />
+    <Compile Include="models\RepositoryModels\WorldPayTransTbl.cs" />
     <Compile Include="models\ResultChk.cs" />
     <Compile Include="models\ReturnOrderModel.cs" />
     <Compile Include="models\ReturnReasonCodes.cs" />
@@ -494,6 +509,7 @@
     <Compile Include="models\SalesOrderLineViewModel.cs" />
     <Compile Include="models\SalesOrderViewModel.cs" />
     <Compile Include="models\SaveOrderResultSet.cs" />
+    <Compile Include="models\SaveResultModel.cs" />
     <Compile Include="models\SiteCodeModel.cs" />
     <Compile Include="models\SiteCodeUserAddress.cs" />
     <Compile Include="models\Size.cs" />
@@ -514,6 +530,7 @@
     <Compile Include="models\styleby_freetextview_ucode.cs">
       <DependentUpon>DataContext.tt</DependentUpon>
     </Compile>
+    <Compile Include="models\StyleCatagoryModel.cs" />
     <Compile Include="models\styleViewmodel.cs" />
     <Compile Include="models\StyleViewModelPts.cs" />
     <Compile Include="models\style_dimfitalloc_caption.cs">
@@ -613,6 +630,9 @@
       <DependentUpon>DataContext.tt</DependentUpon>
     </Compile>
     <Compile Include="models\tblaccemp_ucodes_hours.cs">
+      <DependentUpon>DataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="models\tblaccemp_ucode_alternates.cs">
       <DependentUpon>DataContext.tt</DependentUpon>
     </Compile>
     <Compile Include="models\tblaccemp_ucode_reasons.cs">
@@ -1072,6 +1092,7 @@
       <DependentUpon>DataContext.tt</DependentUpon>
     </Compile>
     <Compile Include="models\vuTotalPointsModel.cs" />
+    <Compile Include="models\Worldpaysuccess.cs" />
     <Compile Include="models\xml_salesorder_detail.cs">
       <DependentUpon>DataContext.tt</DependentUpon>
     </Compile>
