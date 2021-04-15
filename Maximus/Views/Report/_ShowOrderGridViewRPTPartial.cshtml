@@ -1,0 +1,164 @@
+@{
+    Maximus.Data.Interface.Concrete.IUnitOfWork _unitOfWork = new Maximus.Data.InterFace.UnitOfWork();
+    Maximus.Controllers.OrderDisplayController odc = new Maximus.Controllers.OrderDisplayController(_unitOfWork);
+}
+
+@{
+        var grid = Html.DevExpress().GridView(settings =>
+        {
+            settings.Name = "ShowOrderGridViewRPT";
+
+
+            settings.CallbackRouteValues = new { Controller = "Report", Action = "GetAllOrderRPT" ,empId= TempData["rptemployeeid"].ToString()  };
+
+        //settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "OrderDisplay", Action = "ShowOrderGridViewPartialAddNew" };
+        //settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "OrderDisplay", Action = "ShowOrderGridViewPartialUpdate" };
+        //settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "OrderDisplay", Action = "ShowOrderGridViewPartialDelete" };
+        settings.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
+        settings.SettingsDetail.ShowDetailButtons = true;
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.ShowNewButton = false;
+        settings.CommandColumn.ShowDeleteButton = false;
+        settings.CommandColumn.ShowEditButton = false;
+        settings.SettingsBehavior.AllowSelectByRowClick = true;
+        settings.KeyFieldName = "OrderNo";
+        settings.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+        // settings.Settings.ShowFilterRowMenu = true;
+        if (Convert.ToBoolean(Session["ConfirmOrders"]))
+        {
+            settings.CommandColumn.ShowSelectCheckbox = true;
+            settings.CommandColumn.Width = 50;
+            settings.CommandColumn.SelectAllCheckboxMode = GridViewSelectAllCheckBoxMode.AllPages;
+        }//settings.ClientSideEvents.RowDblClick = "ShowDetailOrder";
+        settings.SettingsPager.Visible = true;
+        settings.Settings.ShowGroupPanel = true;
+        settings.Settings.ShowFilterRow = true;
+        // settings.Settings.ShowFilterRowMenu = true;
+        settings.SettingsBehavior.AllowSelectByRowClick = true;
+        settings.Styles.Header.Wrap = DefaultBoolean.True;
+        settings.SettingsBehavior.ColumnResizeMode = ColumnResizeMode.Disabled;
+        //settings.SettingsDetail.ShowDetailRow = true;
+        settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.HideDataCellsWindowLimit;
+        settings.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Right;
+        settings.SettingsAdaptivity.AdaptiveDetailColumnCount = 6;
+        settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = false;
+        settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
+        settings.SettingsDetail.ShowDetailRow = true;
+        settings.SettingsDetail.AllowOnlyOneMasterRowExpanded = true;
+        settings.SettingsCommandButton.EditButton.Image.IconID = IconID.EditEdit16x16;
+        settings.SettingsCommandButton.EditButton.RenderMode = GridCommandButtonRenderMode.Image;
+        settings.ClientSideEvents.BeginCallback = "ItsCallBack";
+         
+        settings.SetDetailRowTemplateContent(x =>
+        {
+            Html.RenderAction("OrderDetailGridView1Partial", new { ordno = x.KeyValue });
+        });
+      
+
+        settings.Columns.Add(set =>
+        {
+            set.FieldName = "OrderNo";
+            set.Width = 85;
+
+            set.SetDataItemTemplateContent(x =>
+            {
+
+                string ordeNos = DataBinder.Eval(x.DataItem, "OrderNo").ToString();
+                string isConfirmed = DataBinder.Eval(x.DataItem, "isConfirmed").ToString();
+                string isProcessed = DataBinder.Eval(x.DataItem, "isProcessed").ToString();
+                string empId = DataBinder.Eval(x.DataItem, "EmpID").ToString();
+                int totPts = Convert.ToInt32(DataBinder.Eval(x.DataItem, "TotalPoints").ToString());
+                string ordType = DataBinder.Eval(x.DataItem, "OrderType").ToString();
+                var htmlString = "";
+
+                htmlString = "<span><b>" + ordeNos + "</b></span>";
+
+                ViewContext.Writer.Write(htmlString);
+            });
+        });
+        settings.Columns.Add(set =>
+        {
+            set.FieldName = "OrderType";
+            set.Width = 85;
+
+        });
+
+        settings.Columns.Add(set =>
+        {
+            set.FieldName = "OrderDate";
+            set.Width = 85;
+            set.PropertiesEdit.DisplayFormatString = "dd-MM-yyyy";
+        });
+        settings.Columns.Add("CustomerRef").Width = 60;
+        if (Session["OT"].ToString().ToLower().Trim() != "rt")
+        {
+            settings.Columns.Add("NominalCode").Width = 85;
+        }
+        settings.Columns.Add("Address1").Width = 85;
+        settings.Columns.Add("DelDesc").Width = 85;
+        if (Session["Price"].ToString().ToLower() != "hide")
+        {
+            settings.Columns.Add(set =>
+            {
+                set.FieldName = "TotalQty";
+                set.Caption = "Quantity";
+                set.Width = 60;
+            });
+            settings.Columns.Add(set =>
+            {
+                set.FieldName = "TotalIncVat";
+                set.Caption = "Total";
+                set.Width = 60;
+            });
+            settings.Columns.Add(set =>
+            {
+                set.FieldName = "GoodsValue";
+                set.Caption = "Goods";
+                set.Width = 60;
+            });
+
+        }
+        settings.Columns.Add("UserId").Width = 90;
+        settings.Columns.Add(set =>
+        {
+            set.FieldName = "EmpID";
+            set.Caption = "Employee Id";
+            set.Width = 90;
+        });
+        settings.Columns.Add(set =>
+        {
+            set.FieldName = "EmpName";
+            set.Caption = "Employee Name";
+            set.Width = 85;
+        });
+
+        if (Convert.ToBoolean(Session["POINTSREQ"]) && Session["cardmenu"].ToString().ToLower()=="points")
+        {
+            settings.Columns.Add(set =>
+            {
+                set.FieldName = "PointsSpent";
+                set.Caption = Session["OT"].ToString().ToLower().Trim() != "rt" ? "Points Spent" : "Points Returned";
+                set.Width = 45;
+            });
+            settings.Columns.Add(set =>
+            {
+                set.FieldName = "TotalPoints";
+                set.Caption = "Total Points";
+                set.Width = 45;
+            });
+
+            //settings.Columns.Add("TotalPoints").Caption="Total Points";
+        }
+        settings.Columns.Add("IsConfirmed").Caption = "Confirmed";
+
+
+
+    });
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()
+
+

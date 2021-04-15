@@ -2220,6 +2220,50 @@
 }).GetHtml()
     @Html.DevExpress().PopupControl(sett =>
 {
+    sett.Width = System.Web.UI.WebControls.Unit.Pixel(800);
+   // sett.Height = System.Web.UI.WebControls.Unit.Pixel(100);
+    sett.PopupVerticalAlign = PopupVerticalAlign.TopSides;
+    sett.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    sett.Name = "SHOWORDERSRPT";
+    sett.AllowResize = true;
+    sett.ShowHeader = true;
+    sett.ShowOnPageLoad = false;
+    sett.AllowDragging = true;
+    sett.CloseAction = CloseAction.OuterMouseClick;
+    sett.CloseOnEscape = false;
+    sett.PopupAnimationType = AnimationType.Auto;
+    //sett.ScrollBars= System.Web.UI.WebControls.ScrollBars.Vertical;
+    sett.Modal = true;
+    sett.SetContent(() =>
+    {
+        ViewContext.Writer.Write("<div style='overflow:scroll;height:700px;'><div  id='showordsrpt'></div></div>");
+    });
+
+}).GetHtml()
+    @Html.DevExpress().PopupControl(sett =>
+{
+    sett.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+    sett.Height = System.Web.UI.WebControls.Unit.Pixel(300);
+    sett.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+    sett.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    sett.Name = "SHOWORDERSRPT1";
+    sett.AllowResize = true;
+    sett.ShowHeader = true;
+    sett.ShowOnPageLoad = false;
+    sett.AllowDragging = true;
+    sett.CloseAction = CloseAction.OuterMouseClick;
+    sett.CloseOnEscape = false;
+    sett.PopupAnimationType = AnimationType.Auto;
+    //sett.ScrollBars= System.Web.UI.WebControls.ScrollBars.Vertical;
+    sett.Modal = true;
+    sett.SetContent(() =>
+    {
+        ViewContext.Writer.Write("<div ><div  id='showordsrpt1'></div></div>");
+    });
+
+}).GetHtml()
+    @Html.DevExpress().PopupControl(sett =>
+{
     sett.Width = System.Web.UI.WebControls.Unit.Pixel(500);
     sett.Height = System.Web.UI.WebControls.Unit.Pixel(400);
     sett.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;

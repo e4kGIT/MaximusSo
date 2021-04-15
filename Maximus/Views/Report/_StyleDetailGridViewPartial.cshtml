@@ -1,0 +1,45 @@
+@{
+    var grid = Html.DevExpress().GridView(settings => {
+        settings.Name = "StyleDetailGridView";
+        settings.CallbackRouteValues = new { Controller = "Report", Action = "StyleDetailGridViewPartial" };
+
+        settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "Report", Action = "StyleDetailGridViewPartialAddNew" };
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "Report", Action = "StyleDetailGridViewPartialUpdate" };
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "Report", Action = "StyleDetailGridViewPartialDelete" };
+        settings.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
+        settings.SettingsBehavior.ConfirmDelete = true;
+
+        settings.CommandColumn.Visible = false;
+        settings.CommandColumn.ShowNewButton = true;
+        settings.CommandColumn.ShowDeleteButton = true;
+        settings.CommandColumn.ShowEditButton = true;
+
+        settings.KeyFieldName = "styleid";
+        settings.SettingsPager.Visible = true;
+        settings.Settings.ShowGroupPanel = true;
+        settings.Settings.ShowFilterRow = true;
+        settings.SettingsBehavior.AllowSelectByRowClick = true;
+        settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.Off;
+        settings.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Right;
+        settings.SettingsAdaptivity.AdaptiveDetailColumnCount = 1;
+        settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = false;
+        settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
+
+        settings.Columns.Add("orderno").Caption="Order no";
+        settings.Columns.Add("ordertype").Caption = "Order type";
+        settings.Columns.Add("empid").Caption = "Colleague id";
+        settings.Columns.Add("ucode").Caption = "Ucode";
+        settings.Columns.Add("styleid").Caption = "Style";
+        settings.Columns.Add("colourid").Caption = "Colour";
+        settings.Columns.Add("sizeid").Caption = "Size";
+        settings.Columns.Add("ordqty").Caption="Order quantity";
+        if (Session["cardmenu"].ToString().ToLower() == "points" && Convert.ToBoolean(Session["POINTSREQ"]))
+        {
+            settings.Columns.Add("points").Caption="Total points";
+        }
+    });
+    if (ViewData["EditError"] != null){
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()

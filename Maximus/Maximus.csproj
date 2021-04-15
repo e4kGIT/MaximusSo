@@ -1119,6 +1119,12 @@
     <Content Include="Views\Private\_OrderDetailGridView1PrivatePartial.cshtml" />
     <Content Include="Views\Return\_PrivateReorderAddress.cshtml" />
     <Content Include="Views\Return\_EditDeliveryAddress.cshtml" />
+    <Content Include="Views\Report\GetCardReports.cshtml" />
+    <Content Include="Views\Report\_CardReportGridViewPartial.cshtml" />
+    <Content Include="Views\Report\_DetailCardPartial.cshtml" />
+    <Content Include="Views\Report\_ShowOrderGridViewRPTPartial.cshtml" />
+    <Content Include="Views\Report\_OrderDetailGridView1Partial.cshtml" />
+    <Content Include="Views\Report\_StyleDetailGridViewPartial.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -1,0 +1,160 @@
+2021-04-07 10:21:41,877 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 10:21:41,949 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.IsSuperUser(String cmpId, String custId, String _user) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 841
+2021-04-07 10:21:42,103 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 10:21:42,104 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038
+2021-04-07 10:21:43,324 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 10:21:43,325 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038
+2021-04-07 10:33:09,370 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 10:33:09,645 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.IsSuperUser(String cmpId, String custId, String _user) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 841
+2021-04-07 10:33:09,871 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 10:33:09,871 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038
+2021-04-07 10:33:10,775 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 10:33:10,775 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038
+2021-04-07 10:34:25,340 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 10:34:25,353 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.IsSuperUser(String cmpId, String custId, String _user) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 841
+2021-04-07 10:34:25,484 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 10:34:25,484 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038
+2021-04-07 10:34:25,790 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 10:34:25,790 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038
+2021-04-07 10:37:02,995 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 10:37:03,050 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.IsSuperUser(String cmpId, String custId, String _user) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 841
+2021-04-07 10:37:03,131 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 10:37:03,131 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038
+2021-04-07 10:37:03,399 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 10:37:03,399 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038
+2021-04-07 10:37:58,144 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 10:37:58,156 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.IsSuperUser(String cmpId, String custId, String _user) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 841
+2021-04-07 10:37:58,290 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 10:37:58,290 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038
+2021-04-07 10:37:58,595 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 10:37:58,596 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038
+2021-04-07 10:42:26,286 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 10:42:26,298 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.IsSuperUser(String cmpId, String custId, String _user) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 841
+2021-04-07 10:42:26,431 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 10:42:26,431 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038
+2021-04-07 10:42:26,721 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 10:42:26,721 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038
+2021-04-07 11:09:43,522 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 11:09:43,550 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.IsSuperUser(String cmpId, String custId, String _user) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 841
+2021-04-07 11:09:43,630 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 11:09:43,630 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038
+2021-04-07 11:09:43,864 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 11:09:43,864 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038
+2021-04-07 11:11:05,695 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 11:11:05,707 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.IsSuperUser(String cmpId, String custId, String _user) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 841
+2021-04-07 11:11:05,839 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 11:11:05,839 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038
+2021-04-07 11:11:06,142 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 11:11:06,142 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038
+2021-04-07 11:16:24,908 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 11:16:24,920 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.IsSuperUser(String cmpId, String custId, String _user) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 841
+2021-04-07 11:16:25,059 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 11:16:25,060 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038
+2021-04-07 11:16:25,364 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 11:16:25,364 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038
+2021-04-07 11:31:18,137 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 11:31:18,137 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.IsSuperUser(String cmpId, String custId, String _user) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 841
+2021-04-07 11:31:18,240 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 11:31:18,241 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038
+2021-04-07 11:31:18,443 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 11:31:18,443 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038
+2021-04-07 11:31:45,084 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 11:31:45,084 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.IsSuperUser(String cmpId, String custId, String _user) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 841
+2021-04-07 11:31:45,179 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 11:31:45,180 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038
+2021-04-07 11:31:45,357 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 11:31:45,357 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038
+2021-04-07 12:24:53,193 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 12:24:53,194 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.IsSuperUser(String cmpId, String custId, String _user) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 841
+2021-04-07 12:24:53,285 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 12:24:53,285 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038
+2021-04-07 12:24:53,479 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 12:24:53,479 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038
+2021-04-07 12:57:27,216 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 12:57:27,452 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.IsSuperUser(String cmpId, String custId, String _user) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 841
+2021-04-07 12:57:27,652 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 12:57:27,653 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038
+2021-04-07 12:57:28,119 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 12:57:28,120 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038
+2021-04-07 13:04:43,918 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 13:04:43,919 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.getEmployeeAddress(String EmpId, String BuisnessId) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 2849
+2021-04-07 13:05:24,439 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 13:05:24,440 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.getEmployeeAddress(String EmpId, String BuisnessId) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 2849
+2021-04-07 13:16:00,378 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 13:16:00,378 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.IsSuperUser(String cmpId, String custId, String _user) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 841
+2021-04-07 13:16:00,548 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 13:16:00,548 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038
+2021-04-07 13:16:00,730 WARN Maximus.Data.Models.DataProcessing - Connection must be valid and open.
+2021-04-07 13:16:00,734 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlConnection.Throw(Exception ex)
+   at MySql.Data.MySqlClient.MySqlCommand.Throw(Exception ex)
+   at MySql.Data.MySqlClient.MySqlCommand.CheckState()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader()
+   at Maximus.Data.Models.DataProcessing.GetValue(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1235
+2021-04-07 13:16:00,849 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 13:16:00,849 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038
+2021-04-07 13:17:21,487 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 13:17:21,488 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038
+2021-04-07 13:19:53,812 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 13:19:53,812 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038
+2021-04-07 13:20:47,174 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 13:20:47,175 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.IsSuperUser(String cmpId, String custId, String _user) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 841
+2021-04-07 13:20:47,345 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 13:20:47,345 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038
+2021-04-07 13:20:47,513 WARN Maximus.Data.Models.DataProcessing - Connection must be valid and open.
+2021-04-07 13:20:47,514 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlConnection.Throw(Exception ex)
+   at MySql.Data.MySqlClient.MySqlCommand.Throw(Exception ex)
+   at MySql.Data.MySqlClient.MySqlCommand.CheckState()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader()
+   at Maximus.Data.Models.DataProcessing.GetValue(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1235
+2021-04-07 13:20:47,638 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 13:20:47,639 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038
+2021-04-07 13:22:59,899 WARN Maximus.Data.Models.DataProcessing - Fill: SelectCommand.Connection property has not been initialized.
+2021-04-07 13:22:59,901 WARN Maximus.Data.Models.DataProcessing -    at System.Data.Common.DbDataAdapter.GetConnection3(DbDataAdapter adapter, IDbCommand command, String method)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at Maximus.Data.Models.DataProcessing.qryResult(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 5208
+2021-04-07 14:35:55,110 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 14:35:55,123 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.IsSuperUser(String cmpId, String custId, String _user) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 841
+2021-04-07 14:35:55,263 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 14:35:55,264 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038
+2021-04-07 14:35:55,580 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 14:35:55,581 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038
+2021-04-07 15:33:06,387 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 15:33:06,400 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.IsSuperUser(String cmpId, String custId, String _user) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 841
+2021-04-07 15:33:06,559 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 15:33:06,559 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038
+2021-04-07 15:33:06,875 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 15:33:06,875 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038
+2021-04-07 17:19:52,577 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 17:19:52,589 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.IsSuperUser(String cmpId, String custId, String _user) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 841
+2021-04-07 17:19:52,724 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 17:19:52,725 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038
+2021-04-07 17:19:53,028 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 17:19:53,028 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038
+2021-04-07 17:29:56,483 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 17:29:56,495 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.IsSuperUser(String cmpId, String custId, String _user) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 841
+2021-04-07 17:29:56,641 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 17:29:56,641 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038
+2021-04-07 17:29:56,956 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 17:29:56,956 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038
+2021-04-07 18:39:08,234 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 18:39:08,246 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.IsSuperUser(String cmpId, String custId, String _user) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 841
+2021-04-07 18:39:08,415 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 18:39:08,415 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038
+2021-04-07 18:39:08,730 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 18:39:08,730 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038
+2021-04-07 18:39:27,285 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 18:39:27,286 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.IsSuperUser(String cmpId, String custId, String _user) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 841
+2021-04-07 18:39:27,383 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 18:39:27,384 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038
+2021-04-07 18:39:27,576 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 18:39:27,576 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038
+2021-04-07 18:55:59,173 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 18:55:59,185 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.IsSuperUser(String cmpId, String custId, String _user) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 841
+2021-04-07 18:55:59,335 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 18:55:59,335 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038
+2021-04-07 18:55:59,642 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-04-07 18:55:59,642 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1038

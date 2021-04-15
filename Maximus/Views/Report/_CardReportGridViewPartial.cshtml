@@ -1,0 +1,97 @@
+@{
+    var grid = Html.DevExpress().GridView(settings =>
+    {
+        settings.Name = "CardReportGridView";
+        settings.CallbackRouteValues = new { Controller = "Report", Action = "CardReportGridViewPartial" };
+
+        settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "Report", Action = "CardReportGridViewPartialAddNew" };
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "Report", Action = "CardReportGridViewPartialUpdate" };
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "Report", Action = "CardReportGridViewPartialDelete" };
+        settings.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
+        settings.SettingsBehavior.ConfirmDelete = true;
+        settings.SettingsSearchPanel.HighlightResults = true;
+
+        settings.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+        settings.CommandColumn.Visible = false;
+        settings.CommandColumn.ShowNewButton = false;
+        settings.CommandColumn.ShowDeleteButton = false;
+        settings.CommandColumn.ShowEditButton = false;
+
+        settings.KeyFieldName = "employeeid";
+        settings.SettingsDetail.ShowDetailButtons = true;
+        settings.SettingsPager.Visible = true;
+        settings.Settings.ShowGroupPanel = false;
+        settings.Settings.ShowFilterRow = true;
+        settings.SettingsBehavior.AllowSelectByRowClick = true;
+        //settings.ClientSideEvents.RowDblClick = "function(s, e) {s.ExpandDetailRow(e.visibleIndex);}";
+
+        settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.Off;
+        settings.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Right;
+        //settings.SettingsAdaptivity.AdaptiveDetailColumnCount = 1;
+        settings.SettingsDetail.ShowDetailRow = true;
+
+        settings.SettingsDetail.AllowOnlyOneMasterRowExpanded = true;
+        settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = true;
+        settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
+        settings.SetDetailRowTemplateContent(x =>
+        {
+            @Html.RenderAction("DetailCardPartial", new { empId = x.KeyValue });
+        });
+        settings.Columns.Add("employeeid").Caption = "Colleague id";
+        settings.Columns.Add("employeename").Caption = "Colleague name";
+        settings.Columns.Add("startdate").Caption = "Start date";
+        settings.Columns.Add("enddate").Caption = "End date";
+        settings.Columns.Add("replenishmentdate").Caption = "Replenishment date";
+        if (Session["cardmenu"].ToString().ToLower() == "points")
+        {
+            settings.Columns.Add(set =>
+            {
+                set.FieldName = "ucodedata";
+                set.Caption = "Ucode data";
+                set.Width = 300;
+                set.CellStyle.Wrap = DefaultBoolean.True;
+                set.SetDataItemTemplateContent(x =>
+                {
+                    string courierRef = DataBinder.Eval(x.DataItem, "ucodedata").ToString();
+                    string cnt = "";
+                    if (courierRef.Contains(","))
+                    {
+                        foreach (var det in courierRef.Split(','))
+                        {
+                            cnt = cnt + "<center><span>" + det + "</span></center></br>";
+                        }
+                    }
+                    else
+                    {
+                        cnt = cnt + "<center><span>" + courierRef + "</span></center>";
+                    }
+                    ViewContext.Writer.Write(cnt);
+                });
+
+            });
+        }
+
+        settings.Columns.Add(s =>
+        {
+            s.Caption = "";
+            s.SetHeaderTemplateContent(excel =>
+            {
+                var content = " <div class='col-lg-1 col-md-1'><center><img src='/Content/Images/xls.png' style='cursor:pointer' title='Export' onclick='ExportCardgrid()' width='40' alt='Export'></center></div>";
+                ViewContext.Writer.Write(content);
+            });
+            s.SetDataItemTemplateContent(dat =>
+            {
+                var empId = (DataBinder.Eval(dat.DataItem, "employeeid")).ToString();
+                string cnt = "";
+                cnt = "<button class='btn btn-default' onclick=\"GetAllOrderRPT('" + empId + "')\" style='color:white;Background-color:darkcyan;'>Show all orders</button>";
+                ViewContext.Writer.Write(cnt);
+            });
+        });
+
+    });
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()

@@ -14,7 +14,7 @@ namespace Maximus.Services.Interface
         string GetPrintTemplate(int fromOrdNo, int toOrdNo, string cmpLogo, string custlogo, string userId, string pricePermission, string ONLCUSREFLBL);
 
           List<OrderDisplayDetail> GetOrderDetail(int orderno);
-
+    
         //List<int> GetPrintRange(string busid,string userid,List<string> usrLst,string empid = "", string empname = "", string ucode = "", string ucodedesc = "", string address = "", Nullable<DateTime> startdate = null, int firstOrdNo = 0, int lastOrdNo = 0, Nullable<DateTime> frsOrdDate = null, Nullable<DateTime> lstOrdDate = null);
     }
 }

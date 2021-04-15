@@ -534,9 +534,9 @@ namespace Maximus.Data.Models
         public bool IsPrivateUcode(string busId, string ucode = "")
         {
             var privatUcode = BusinessParam("PRIVATEUCODE", busId);
-           if(privatUcode!="")
+            if (privatUcode != "")
             {
-                if(privatUcode.ToLower().Trim() == ucode.ToLower().Trim())
+                if (privatUcode.ToLower().Trim() == ucode.ToLower().Trim())
                 {
                     return true;
                 }
@@ -3388,7 +3388,7 @@ namespace Maximus.Data.Models
             {
                 OrderDisplayDetail = _salesDetail.GetAll(s => s.OrderNo == orderno).Select(s => new OrderDisplayDetail
                 {
-                    RtnNo=s.ReturnOrderNo.Value,
+                    RtnNo = s.ReturnOrderNo.Value,
                     ColourID = s.ColourID,
                     SizeID = s.SizeID,
                     StyleID = s.StyleID,
@@ -7724,7 +7724,7 @@ namespace Maximus.Data.Models
             string result = "";
             string appPath = AppDomain.CurrentDomain.BaseDirectory + "MailTemplates";
             string orderLinesTemplate = System.IO.File.ReadAllText(appPath + "\\OrderLines_Template.html");
-            string orderDetailTemplate =   System.IO.File.ReadAllText(appPath + "\\PrivateReturnConfirmation.html") ;
+            string orderDetailTemplate = System.IO.File.ReadAllText(appPath + "\\PrivateReturnConfirmation.html");
             if (salesHead.SalesOrderLine != null)
             {
                 result = FillmailTemplate(orderDetailTemplate, salesHead, manpackNo, orderLinesTemplate, pricePermission, "N", ONLCUSREFLBL, orderNo, isedit, updModel);
@@ -7840,7 +7840,7 @@ namespace Maximus.Data.Models
                 {
                     orderLinesBuilder.Replace("%returnOrdNo% ", "");
                 }
-                
+
                 orderLinesBuilder.Replace("%first_companyname%", warehouseCompanyName);
                 ocnfirm.OrderConfirmationPOP = "<html><head></head><body><div style='width:10%;'></div><div style='width:80%;'>" + finalEmailTemplate + "</div><div style='width:10%;'></div></body></html>";
                 if (salesHead.CustRef.ToLower().Contains("private") == false || salesHead.OrderType.ToLower() == "so" || (salesHead.OrderAnalysisCode4 != "" && salesHead.OrderAnalysisCode4 != null) || (salesHead.UCodeId != "" && salesHead.UCodeId != null))
@@ -7917,7 +7917,7 @@ namespace Maximus.Data.Models
             {
                 builder1.Replace("%editedorderinformation%", updModel.MailTemplate);
             }
-            if(saleshead.OrderType=="RT" && saleshead.CustRef.ToLower().Contains("private")==false)
+            if (saleshead.OrderType == "RT" && saleshead.CustRef.ToLower().Contains("private") == false)
             {
                 builder1.Replace("%privateconfirmation%", "");
                 builder1.Replace("%reOrdNo%", "");
@@ -7939,7 +7939,7 @@ namespace Maximus.Data.Models
                     builder1.Replace("%reOrdNo%", "");
                 }
             }
-                builder1.Replace("%BarcodeOrderNo%", "");
+            builder1.Replace("%BarcodeOrderNo%", "");
             builder1.Replace("%customer_name%", saleshead.CustomerName);
             builder1.Replace("%customer_address1%", saleshead.InvAddress1);
             builder1.Replace("%customer_address2%", saleshead.InvAddress2);
@@ -8030,7 +8030,7 @@ namespace Maximus.Data.Models
                     builder2.Replace("%price%", String.Format(CultureInfo.InvariantCulture, "{0:F}", Math.Round(saleLine.Price, 2)));
                     builder2.Replace("%netvalue%", String.Format(CultureInfo.InvariantCulture, "{0:F}", Math.Round
                     ((saleLine.OrdQty) * saleLine.Total, 2)));
-                    builder2.Replace("%vat%", GetlineVat(saleLine.OrdQty,saleLine.Price, GetVatPercent(saleLine.StyleID, saleLine.SizeID)).ToString());
+                    builder2.Replace("%vat%", GetlineVat(saleLine.OrdQty, saleLine.Price, GetVatPercent(saleLine.StyleID, saleLine.SizeID)).ToString());
                 }
                 else if (pricePermission.ToUpper() == "HIDE")
                 {
@@ -8063,18 +8063,18 @@ namespace Maximus.Data.Models
                     var reason = _reason.Exists(s => s.ReasonCode == saleLine.ReasonCodeLine && s.CompanyID == saleshead.CompanyID) ? _reason.GetAll(s => s.ReasonCode == saleLine.ReasonCodeLine && s.CompanyID == saleshead.CompanyID).First().Description : "";
                     builder2.Replace("%reason%", reason);
                     builder2.Replace("%returnOrdNo%", "<td style='border: 1px solid #dddddd;text-align: left;padding: 8px;'>" + saleLine.OriginalOrderNo.ToString() + "</td>");
-                      builder2.Replace("%reOrdNo%","");
+                    builder2.Replace("%reOrdNo%", "");
                 }
                 else
                 {
-                    if(saleshead.CustRef.ToLower().Contains("private") && saleshead.OrderType.ToLower()=="so")
+                    if (saleshead.CustRef.ToLower().Contains("private") && saleshead.OrderType.ToLower() == "so")
                     {
                         var orderNO = saleLine.OrderNo > 0 ? saleLine.OrderNo : saleshead.OrderNo;
                         builder2.Replace("%reOrdNo%", "<td style='border: 1px solid #dddddd;text-align: left;padding: 8px;'>" + orderNO.ToString() + "</td>");
                     }
                     else
                     {
-                        builder2.Replace("%reOrdNo%","");
+                        builder2.Replace("%reOrdNo%", "");
                     }
                     builder2.Replace("%returnOrdNo%", "");
                     builder2.Replace("%reason%", saleLine.SOPDetail4);
@@ -8107,8 +8107,8 @@ namespace Maximus.Data.Models
 
             saleLst.Add(saleshead);
             var ordTotal = GetAlltotals(saleLst, saleshead.CarrierCharge.Value, false);
-        
-            if (pricePermission.ToLower() == "hide" && saleshead.CustRef.ToLower().Contains("private")==false)
+
+            if (pricePermission.ToLower() == "hide" && saleshead.CustRef.ToLower().Contains("private") == false)
             {
                 builder1.Replace("Carrier Charges", "");
                 builder1.Replace("%carriercharges%", "");
@@ -8119,7 +8119,7 @@ namespace Maximus.Data.Models
             }
             if (saleshead.CustRef.ToLower().Contains("private"))
             {
-                builder1.Replace("%totalgoods%",String.Format(CultureInfo.InvariantCulture, "{0:F}", Math.Round(ordTotal.ordeTotal, 2)));
+                builder1.Replace("%totalgoods%", String.Format(CultureInfo.InvariantCulture, "{0:F}", Math.Round(ordTotal.ordeTotal, 2)));
                 builder1.Replace("%vattotal%", String.Format(CultureInfo.InvariantCulture, "{0:F}", Math.Round(tot.totalVat, 2)));
                 builder1.Replace("%ordertotal%", String.Format(CultureInfo.InvariantCulture, "{0:F}", Math.Round(Convert.ToDouble(tot.Total), 2)));
                 builder1.Replace("%grandtotal%", String.Format(CultureInfo.InvariantCulture, "{0:F}", Math.Round(Convert.ToDouble(tot.gross), 2)));
@@ -9302,7 +9302,7 @@ namespace Maximus.Data.Models
                 string reasoncode = _ucodeReason.Exists(s => s.UcodeId == "BAR MATERNITY P" | s.UcodeId == "BAR MATERNITY F" | s.UcodeId == "BAR MATERNITY") ? string.Join(",", _ucodeReason.GetAll(s => s.UcodeId == "BAR MATERNITY P" | s.UcodeId == "BAR MATERNITY F" | s.UcodeId == "BAR MATERNITY").Select(s => s.ReasonCodeID.ToString()).ToList()) : "";
                 strsql += " AND(h.OrderType = 'SO' OR ISNULL(h.OrderType))   AND h.reasoncode in(" + reasoncode + ")   AND c.DespatchDate>= '" + returnEligibleDt.ToString("yyyy-MM-dd") + "'   AND d.AssemblyID = 0 AND AsmLineNo = 0 AND h.OnlineConfirm = 1 AND h.OnlineProcessed = 1 ";
             }
-            else if(rtnType == "PRIVATE")
+            else if (rtnType == "PRIVATE")
             {
                 strsql += " AND(h.OrderType = 'SO' OR ISNULL(h.OrderType))   AND h.reasoncode =99 AND h.custref like '%Private order%'  AND c.DespatchDate>= '" + returnEligibleDt.ToString("yyyy-MM-dd") + "'   AND d.AssemblyID = 0 AND AsmLineNo = 0 AND h.OnlineConfirm = 1 AND h.OnlineProcessed = 1 AND d.styleid NOT IN (SELECT styleid FROM `tblonlinebus_carriage`)   AND d.styleid NOT IN (SELECT styleid FROM `tblonlinesop_carriage`) ";
             }
@@ -9379,7 +9379,7 @@ namespace Maximus.Data.Models
                             Ucode = s["ucode"].ToString() != "" ? s["ucode"].ToString() : ""
                         }).ToList();
                     }
-                    else if(rtnType=="PRIVATE")
+                    else if (rtnType == "PRIVATE")
                     {
                         result = dt.AsEnumerable().Select(s => new ReturnOrderModel
                         {
@@ -9640,7 +9640,6 @@ namespace Maximus.Data.Models
                 {
                     if (_salesDetail.Exists(s => s.OrderNo == orderno))
                     {
-
                         string Allreorders = "select * from tblsop_salesorder_detail where returnorderno =" + orderno + "";
                         var salesHead = _salesHead.Exists(s => s.OrderNo == orderno) ? _salesHead.GetAll(s => s.OrderNo == orderno).First() : new tblsop_salesorder_header();
                         if (salesHead.OrderNo > 0)
@@ -9742,7 +9741,7 @@ namespace Maximus.Data.Models
                             stckCardQry = "update `tblaccemp_stockcard` set soqty=soqty-(" + lline.OrdQty + ") where styleid='" + lline.StyleID + "' and colourid='" + lline.ColourID + "' and employeeid='" + salesHead.PinNo + "'";
                             int pointsToUpdate = ucodPts * Convert.ToInt32(lline.OrdQty);
                             ptsCardQry = "update `tblaccemp_pointscard` set sopoints=sopoints-(" + pointsToUpdate + ") where styleid='" + lline.StyleID + "' and colourid='" + lline.ColourID + "' and employeeid='" + salesHead.PinNo + "'";
-                            if (ExecuteQuery(conn,ptsCardQry) > 0)
+                            if (ExecuteQuery(conn, ptsCardQry) > 0)
                             {
                                 result = true;
                             }
@@ -9825,11 +9824,11 @@ namespace Maximus.Data.Models
                         stckCardQry = "update `tblaccemp_stockcard` set soqty=soqty+(" + lline.OrdQty + ") where styleid='" + lline.StyleID + "' and colourid='" + lline.ColourID + "' and employeeid='" + salesHead.PinNo + "'";
                         int pointsToUpdate = ucodPts * Convert.ToInt32(lline.OrdQty);
                         ptsCardQry = "update `tblaccemp_pointscard` set sopoints=sopoints+(" + pointsToUpdate + ") where styleid='" + lline.StyleID + "' and colourid='" + lline.ColourID + "' and employeeid='" + salesHead.PinNo + "'";
-                        if (ExecuteQuerywidTrans(ptsCardQry) > 0)
+                        if (ExecuteQuery(conn, ptsCardQry) > 0)
                         {
                             result = true;
                         }
-                        if (ExecuteQuerywidTrans(stckCardQry) > 0)
+                        if (ExecuteQuery(conn, ptsCardQry) > 0)
                         {
                             result = true;
                         }
@@ -10408,7 +10407,351 @@ namespace Maximus.Data.Models
             return privateResult;
         }
         #endregion
+        #region  GetCardReport
+        public List<CardReportModel> GetCardReport(string busId, string userID, string access)
+        {
+            var sbyteVale = Convert.ToSByte(false);
+            var model = new List<CardReportModel>();
+            string qry = "SELECT DISTINCT t1.`EmployeeID` empid,CONCAT(t1.`Forename`,' ',t1.`Surname`) empname,t1.`StartDate` startdate, t1.`EndDate` enddate,t2.`NextOrder` replenishmentdate,tss.ucodeData FROM `tblaccemp_employee` t1 JOIN `tblaccemp_employee_rollout` t2 ON t1.`BusinessID`= t2.`BusinessID` AND t1.`EmployeeID`= t2.`EmployeeID` JOIN `tblsop_salesorder_header` t3 ON t1.`BusinessID` = t3.`custid` AND t1.`EmployeeID`= t3.`PinNo` JOIN(SELECT te.`EmployeeID`,GROUP_CONCAT(CONCAT('Ucode :','<b>',te.`UCodeID`,'</b>',' ',';  Total points :','<b>',tu.`TotalPoints`,'</b>'))  ucodeData  FROM `tblaccemp_ucodesemployees` te JOIN  `tblaccemp_ucodepoints` tu ON te.`BusinessID`= tu.`BusinessID` AND te.`UCodeID`= tu.`UcodeID` GROUP BY te.`EmployeeID` ) tss ON t1.`EmployeeID`= tss.employeeid WHERE t1.`EmployeeClosed`=0";
+            if (access.ToLower().Trim() != "manager" && access.ToLower().Trim() != "admin")
+            {
+                qry = qry + " AND t1.employeeid='" + userID.Trim() + "'";
+            }
+            MySqlConnection conn = new MySqlConnection(ConnectionString);
+            conn.Open();
+            try
+            {
+                MySqlCommand cmd = new MySqlCommand(qry, conn);
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                if (dt.Rows.Count > 0)
+                {
+                    model = dt.AsEnumerable().Select(s => new CardReportModel
+                    {
+                        ucodedata = s["ucodeData"].ToString(),
+                        employeeid = s["empid"].ToString(),
+                        employeename = s["empname"].ToString(),
+                        startdate = s["startdate"].ToString() != "" ? Convert.ToDateTime(s["startdate"].ToString()).ToString("dd-MM-yyyy") : "",
+                        enddate = s["enddate"].ToString() != "" ? Convert.ToDateTime(s["enddate"].ToString()).ToString("dd-MM-yyyy") : "",
+                        replenishmentdate = s["replenishmentdate"].ToString() != "" ? Convert.ToDateTime(s["replenishmentdate"].ToString()).ToString("dd-MM-yyyy") : "",
+                    }).ToList();
+                }
 
+            }
+            catch (Exception e)
+            {
+
+            }
+            finally
+            {
+
+            }
+            return model;
+        }
+        #endregion
+
+        #region  GetCardReport
+        public List<CardReportModel> GetdetailCard(string empId, string busId, string cardType, bool pointsreq)
+        {
+            List<CardReportModel> model = new List<CardReportModel>();
+            try
+            {
+                if (cardType.ToLower().Trim() == "stock")
+                {
+                    if (_stockCard.Exists(s => s.EmployeeID == empId && s.BusinessID == busId))
+                    {
+                        model = _stockCard.GetAll(s => s.EmployeeID == empId && s.BusinessID == busId).Select(s => new CardReportModel
+                        {
+                            styleid = s.StyleID,
+                            colour = s.ColourID,
+                            soqty = s.SOQty != null ? s.SOQty.Value : 0,
+                            pickqty = s.PickQty != null ? s.PickQty.Value : 0,
+                            invoiceqty = s.InvQty != null ? s.InvQty.Value : 0,
+                            total = GetTotalRep(s.SOQty, s.PickQty, s.InvQty),
+                            // lastissuedate = s.LastIssueDate != null ? s.LastIssueDate.Value.ToString("dd-MM-yyyy") : "",
+                            firstissuedate = s.FirstIssueDate != null ? s.FirstIssueDate.Value.ToString("dd-MM-yyyy") : "",
+                            // startissuedate = s.StartIssueDate != null ? s.StartIssueDate.Value.ToString("dd-MM-yyyy") : "",
+                            year = s.Year == 0 ? "current" : s.Year == 1 ? "Last year" : s.Year > 1 && s.Year != 99 ? s.Year + " years older" : ""
+                        }).ToList();
+                    }
+                }
+                else if (cardType.ToLower().Trim() == "points" && pointsreq)
+                {
+                    model = _pointsCard.GetAll(s => s.EmployeeID == empId && s.BusinessID == busId).Select(s => new CardReportModel
+                    {
+                        styleid = s.StyleID,
+                        colour = s.ColourID,
+                        sopoints = s.SOPoints != null ? s.SOPoints.Value : 0,
+                        pickpoints = s.PickPoints != null ? s.PickPoints.Value : 0,
+                        invoicepoints = s.InvPoints != null ? s.InvPoints.Value : 0,
+                        total = GetTotalRep(s.SOPoints, s.PickPoints, s.InvPoints),
+                        //lastissuedate = s.LastIssueDate != null ? s.LastIssueDate.Value.ToString("dd-MM-yyyy") : "",
+                        firstissuedate = s.FirstIssueDate != null ? s.FirstIssueDate.Value.ToString("dd-MM-yyyy") : "",
+                        //startissuedate = s.StartIssueDate != null ? s.StartIssueDate.Value.ToString("dd-MM-yyyy") : "",
+                        year = s.Year == 0 ? "current" : s.Year == 1 ? "Last year" : s.Year > 1 && s.Year != 99 ? s.Year + " years older" : ""
+                    }).ToList();
+                }
+                model.ForEach(s => s.styledescription = _fskStyle.Exists(sa => sa.StyleID == s.styleid) ? _fskStyle.GetAll(sa => sa.StyleID == s.styleid).First().Description : "");
+            }
+            catch (Exception e)
+            {
+
+            }
+            return model;
+        }
+        #endregion
+        #region GetTotalRep
+        public int GetTotalRep(int? so, int? pick, int? inv)
+        {
+            var so1 = so.HasValue ? so.Value : 0;
+            var pick1 = pick.HasValue ? pick.Value : 0;
+            var inv1 = inv.HasValue ? inv.Value : 0;
+            return so1 + pick1 + inv1;
+        }
+        #endregion
+
+
+        #region
+        public List<OrderDisplayModel> GetAllOrderRPT(string empId, string CardType, string busid)
+        {
+            List<OrderDisplayModel> model = new List<OrderDisplayModel>();
+            if (_salesHead.Exists(s => s.PinNo == empId && s.ReasonCode != 99))
+            {
+
+                var ucodeLst = _pointsByUcode.GetAll(s => s.BusinessID == busid).Select(s => s.UcodeID).Distinct().ToList();
+                if (_salesHead.Exists(s => s.PinNo == empId && s.ReasonCode != 99 && ucodeLst.Contains(s.UCodeId)))
+                {
+                    var qry = CardType.ToLower() == "stock" ? getAllords(busid, empId, false) : getAllords(busid, empId, true);
+                    MySqlConnection conn = new MySqlConnection(ConnectionString);
+                    conn.Open();
+                    try
+                    {
+                        MySqlCommand cmd = new MySqlCommand(qry, conn);
+                        MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                        DataTable dt = new DataTable();
+                        da.Fill(dt);
+                        if (dt.Rows.Count > 0)
+                        {
+                            model = dt.AsEnumerable().Select(s => new OrderDisplayModel
+                            {
+                                OrderNo = s["OrderNo"].ToString() != null && s["OrderNo"].ToString() != "" ? Convert.ToInt32(s["OrderNo"].ToString()) : 0,
+                                OrderDate = DateTime.Parse(s["OrderDate"].ToString()),
+                                DelDesc = s["DelDesc"].ToString() != null && s["DelDesc"].ToString().ToString() != "" ? s["DelDesc"].ToString() : "",
+                                Address1 = s["DelAddress1"].ToString() != null && s["DelAddress1"].ToString() != "" ? s["DelAddress1"].ToString() : "",
+                                TotalQty = s["TotQty"].ToString() != null && s["TotQty"].ToString() != "" ? Convert.ToInt64(s["TotQty"].ToString()) : 0,
+                                GoodsValue = s["OrderGoods"].ToString() != null && s["OrderGoods"].ToString() != "" ? Convert.ToDouble(s["OrderGoods"].ToString()) : 0,
+                                TotalIncVat = s["TotalGoods"].ToString() != null && s["TotalGoods"].ToString() != "" ? Convert.ToDouble(s["TotalGoods"].ToString()) : 0,
+                                UserId = s["OnlineUserID"].ToString() != null && s["OnlineUserID"].ToString() != "" ? s["OnlineUserID"].ToString() : "",
+                                IsConfirmed = s["OnlineConfirm"].ToString() != null && s["OnlineConfirm"].ToString() != "" ? s["OnlineConfirm"].ToString() : "",
+                                IsProcessed = s["OnlineProcessed"].ToString() != null && s["OnlineProcessed"].ToString() != "" ? s["OnlineProcessed"].ToString() : "",
+                                CustomerRef = s["CustRef"].ToString() != null && s["CustRef"].ToString() != "" ? s["CustRef"].ToString() : "",
+                                EmpID = s["Pinno"].ToString() != null && s["Pinno"].ToString() != "" ? s["Pinno"].ToString() : "",
+                                PersonPackNo = s["manpackno"].ToString() != null && s["manpackno"].ToString() != "" ? Convert.ToInt32(s["manpackno"].ToString()) : 0,
+                                EmpName = s["EmpName"].ToString() != null && s["EmpName"].ToString() != "" ? s["EmpName"].ToString() : "",
+                                TotalPoints = s["TotalPoints"].ToString() != "" ? Convert.ToInt32(s["TotalPoints"].ToString()) : 0,
+                                NominalCode = s["OrderAnalysisCode4"].ToString() != "" ? s["OrderAnalysisCode4"].ToString() : "",
+                                PointsSpent = s["OrderPoints"].ToString() != "" ? Convert.ToInt32(s["OrderPoints"].ToString()) : 0,
+                                OrderType = s["ordertype"].ToString() != "" ? s["ordertype"].ToString() : "",
+                                UCODEID = s["ucodeid"].ToString()
+                            }).ToList();
+                            var matUcodes = _ucodeReason.Exists(s => s.BusinessID == busid && s.UcodeId.ToLower().Contains("maternity")) ? _ucodeReason.GetAll(s => s.BusinessID == busid && s.UcodeId.ToLower().Contains("maternity")).Select(s => s.UcodeId).ToList() : new List<string>();
+                            var emergencyucode = _ucodeReason.Exists(s => s.BusinessID == busid && s.UcodeId.ToLower().Contains("matern") == false) ? _ucodeReason.GetAll(s => s.BusinessID == busid && s.UcodeId.ToLower().Contains("matern") == false).Select(s => s.UcodeId).ToList() : new List<string>();
+                            if (model.Any(s => s.RtnOrdNo > 0 || s.NominalCode == "" && s.CustomerRef.ToLower().Contains("private") == false && matUcodes.Contains(s.UCODEID) == false && emergencyucode.Contains(s.UCODEID))  )
+                            {
+                                model.Where(s => s.RtnOrdNo > 0 || s.NominalCode == "" && s.CustomerRef.ToLower().Contains("private") == false && matUcodes.Contains(s.UCODEID) == false && emergencyucode.Contains(s.UCODEID)).ToList().ForEach(s => s.OrderType = "Emergency order");
+                            }
+                            else if (model.Any(s => matUcodes.Contains(s.UCODEID)))
+                            {
+                                model.Where(s => matUcodes.Contains(s.UCODEID)).ToList().ForEach(s => s.OrderType = "Maternity order");
+                            }
+                           
+                            model.Where(s => s.NominalCode.ToLower() != "" || (s.NominalCode=="" && emergencyucode.Contains(s.UCODEID))==false && s.OrderType.ToLower()=="so").ToList().ForEach(s => s.OrderType = "Rollout order");
+                            model.Where(s => s.OrderType.ToLower() == "rt").ToList().ForEach(s => s.OrderType = "Return order");
+
+                        }
+
+                    }
+                    catch (Exception e)
+                    {
+
+                    }
+                    finally
+                    {
+                        conn.Close();
+                    }
+
+                }
+            }
+            return model;
+        }
+
+        #endregion
+
+
+        #region getshowallordQry()
+        public string getAllords(string busId, string empid, bool bootpts, string role = "Admin")
+        {
+            string strsql = "";
+            int EmployeeRenewDays = 0;
+            if (EmployeeRenewDays == 0)
+            {
+                int value = (Convert.ToInt32(BusinessParam("EmployeeRenew", busId)) / 12);
+                EmployeeRenewDays = value * 365;
+            }
+            strsql = "SELECT h.OrderNo,h.ucodeid, h.OrderDate, b.Name, h.DelDesc, h.DelAddress1,IF(isnull(SUM(d.OrdQty)),0,SUM(d.OrdQty)) AS TotQty, h.OrderGoods, h.TotalGoods, h.OnlineUserID, IF(h.OnlineConfirm = 0, 'No', 'Yes') AS OnlineConfirm, IF(h.OnlineProcessed = 0, 'No', 'Yes') AS OnlineProcessed, h.CompanyID, h.CustID, h.CustRef, h.OrderAnalysisCode1, h.Pinno, IF(ISNULL(m.ManPackNo), 0, m.ManPackNo) manpackno, CONCAT(e.Forename, ' ', e.Surname) AS EmpName, IF( ISNULL(h.Comments) OR h.Comments = '', '~~~', h.Comments ) AS OrdComments, h.OrderAnalysisCode4, IF(isnull(MAX(d.sopdetail5)),0,MAX(d.sopdetail5)) AS sop,h.ordertype ,  IF(isnull(ci.DespatchDate),'',ci.DespatchDate), IF(isnull(ci.CourierRef),'',ci.CourierRef)";
+            if (bootpts)
+            {
+                strsql += ", ucp.TotalPoints, SUM(d.`OrdQty` * t2.`Points`) OrderPoints";
+            }
+            else
+            {
+                strsql += ", 0 AS TotalPoints, 0 AS OrderPoints ";
+            }
+            strsql += ",MAX(IF(ISNULL(d.`ReturnOrderNo`),0,d.`ReturnOrderNo`)) RtnOrder ";
+            strsql += "from tblsop_salesorder_header h LEFT JOIN tblsop_salesorder_detail d ON h.`CompanyID` = d.`CompanyID` AND h.`OrderNo` = d.`OrderNo` LEFT JOIN `tblaccemp_stylepoints` t2 ON d.`StyleID` = t2.`StyleID` AND d.`CompanyID` = t2.`CompanyID` AND d.`ColourID` = t2.`ColourID` AND h.`UCodeId` = t2.`UcodeID` AND h.`CustID` = t2.`BusinessID` LEFT JOIN tblbus_business b ON h.CustID = b.BusinessID AND h.companyid = b.companyid LEFT JOIN tblsop_manpackorders m ON h.CompanyID = m.CompanyID AND h.OrderNo = m.OrderNo";
+            strsql += " LEFT JOIN tblaccemp_employee e ON h.CompanyID=e.CompanyID AND h.CustID=e.BusinessID AND h.Pinno=e.EmployeeID LEFT JOIN tblonline_emp_address ea ON (e.EmployeeID = ea.EmployeeID) AND (e.`BusinessID` = ea.EmployeeID) AND (e.`CompanyID` = ea.`Companyid`)  LEFT JOIN tblbus_address ba ON (ea.AddressID = ba.AddressID) AND (ea.BusinessID = ba.BusinessID) AND (ea.`Companyid` = ba.`CompanyID`) ";
+            strsql += "LEFT JOIN ( SELECT CompanyID,CustID,OrderNo,GROUP_CONCAT(Date_Format(DespatchDate,'%d-%m-%Y')) DespatchDate,GROUP_CONCAT(CourierRef) CourierRef FROM tblsop_courier_information GROUP BY orderno ) ci ON h.`CompanyID` = ci.`CompanyID` AND h.`OrderNo` = ci.`OrderNo` AND h.`CustID` = ci.CustID";
+            if (bootpts)
+            {
+                strsql = strsql + " LEFT JOIN tblaccemp_ucodepoints ucp ON h.CompanyID = ucp.CompanyID AND h.CustID = ucp.BusinessID AND h.UcodeID = ucp.UcodeID";
+            }
+            strsql += " WHERE h.CompanyID='" + cmpId + "' AND h.CustID='" + busId + "' and h.pinno='" + empid + "' ";
+            if (bootpts)
+            {
+                var ptsUcode = _pointsByUcode.GetAll(s => s.BusinessID == busId ).Select(s => s.UcodeID).ToList();
+                var list = "'" + string.Join("','", ptsUcode) + "'";
+                strsql += " and h.ucodeid in ("+ list + ")";
+            }
+
+            strsql += "GROUP BY h.OrderNo, h.OrderDate, b.Name, h.DelDesc, h.DelAddress1, h.OrderGoods, h.TotalGoods, h.OnlineUserID, OnlineConfirm, OnlineProcessed, h.CompanyID, h.CustID, h.CustRef, h.OrderAnalysisCode1, h.Pinno, EmpName, OrdComments, h.OrderAnalysisCode4";
+            if (bootpts)
+            {
+                strsql += ", ucp.TotalPoints";
+            }
+
+            strsql += " ORDER BY h.OrderNo DESC";
+
+            return strsql;
+        }
+        #endregion
+        #region  GetExporterData
+        public List<CardReportModel> GetExporterData(string CardType, string userId, string access)
+        {
+            var model = new List<CardReportModel>();
+            string tablename = "";
+            string qry = "";
+            qry = qry + "SELECT t1.`EmployeeID` employeeid, CONCAT(t1.`Forename`, ' ', t1.`Surname`) employeename, t1.`StartDate` startdate, t1.`EndDate` enddate, t2.`StyleID` styleid,t2.`ColourID` colour, IF(t2.`Year`= 0, 'Current', IF(t2.`Year`= 1, 'Last year', CONCAT(t2.`Year`, ' ', 'years older'))) year";
+
+            if (CardType.ToLower().Trim() == "points")
+            {
+                tablename = "`tblaccemp_pointscard`";
+                qry = qry + ",t2.`SOPoints` sopoints, t2.`InvPoints` invoicepoints, t2.`PickPoints` pickpoints,( IF(ISNULL( t2.`SOPoints`),0, t2.`SOPoints`)+IF(ISNULL(t2.`InvPoints`),0,t2.`InvPoints`) + IF(ISNULL(t2.`PickPoints`),0,t2.`PickPoints`) ) total,";
+
+            }
+            else
+            {
+                tablename = "`tblaccemp_stockcard`";
+                qry = qry + ",t2.`soqty` soqty, t2.`invqty` invoiceqty, t2.`pickqty` pickqty,(IF(ISNULL( t2.`soqty`),0, t2.`soqty`)  + IF(ISNULL(t2.`invqty`),0,t2.`invqty`)+ IF(ISNULL( t2.`pickqty`),0,  t2.`pickqty`)) total,";
+            }
+            qry = qry + "t2.`FirstIssueDate` firstissuedate, t2.`LastIssueDate` lastissuedate, t2.`StartIssueDate` startissuedate FROM `tblaccemp_employee` t1 RIGHT JOIN " + tablename + " t2 ON t1.`BusinessID`= t2.`BusinessID` AND t1.`EmployeeID`= t2.`EmployeeID` AND t1.`EmployeeClosed`= 0";
+            if (access.ToLower() != "manager" && access.ToLower() != "admin")
+            {
+                qry = qry + " where  t1.`EmployeeID`='" + userId + "'";
+            }
+            MySqlConnection conn = new MySqlConnection(ConnectionString);
+            conn.Open();
+            try
+            {
+                MySqlCommand cmd = new MySqlCommand(qry, conn);
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                if (dt.Rows.Count > 0)
+                {
+                    model = dt.AsEnumerable().Select(s => new CardReportModel
+                    {
+                        colour = s["colour"].ToString(),
+                        employeeid = s["employeeid"].ToString(),
+                        employeename = s["employeename"].ToString(),
+                        enddate = s["enddate"].ToString(),
+                        firstissuedate = s["firstissuedate"].ToString(),
+                        intyear = 0,
+                        invoicepoints = CardType.ToLower().Trim() == "stock" ? 0 : s["invoicepoints"].ToString() != "" ? Convert.ToInt32(s["invoicepoints"].ToString()) : 0,
+                        invoiceqty = CardType.ToLower().Trim() == "stock" ? s["invoiceqty"].ToString() != "" ? Convert.ToInt32(s["invoiceqty"].ToString()) : 0 : 0,
+                        lastissuedate = s["lastissuedate"].ToString(),
+                        pickpoints = CardType.ToLower().Trim() == "stock" ? 0 : s["pickpoints"].ToString() != "" ? Convert.ToInt32(s["pickpoints"].ToString()) : 0,
+                        pickqty = CardType.ToLower().Trim() == "stock" ? s["pickqty"].ToString() != "" ? Convert.ToInt32(s["pickqty"].ToString()) : 0 : 0,
+                        // replenishmentdate = s["replenishmentdate"].ToString(),
+                        sopoints = CardType.ToLower().Trim() == "stock" ? 0 : s["sopoints"].ToString() != "" ? Convert.ToInt32(s["sopoints"].ToString()) : 0,
+                        soqty = CardType.ToLower().Trim() == "stock" ? s["soqty"].ToString() != "" ? Convert.ToInt32(s["soqty"].ToString()) : 0 : 0,
+                        startdate = s["startdate"].ToString(),
+                        startissuedate = s["startissuedate"].ToString(),
+                        styleid = s["styleid"].ToString(),
+                        total = CardType.ToLower().Trim() == "stock" ? s["total"].ToString() != "" ? Convert.ToInt32(s["total"].ToString()) : 0 : 0,
+                        year = s["year"].ToString(),
+                    }).ToList();
+                }
+            }
+            catch (Exception e)
+            {
+
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return model;
+        }
+
+        #endregion
+
+        #region 
+        public List<CardByStyle> GetOrderLinesBystyle(string styleid, string empid, string CardType)
+        {
+            List<CardByStyle> models = new List<CardByStyle>();
+            string qry = "";
+
+            qry = "SELECT t2.orderno,t2.orderdate orderdate,t2.`PinNo` empid,t2.ucodeid,IF(t2.`OrderType`='SO','Rollout order','Return order') ot,t1.`StyleID` styleid, t1.`ColourID` colourid, t1.`SizeID` sizeid, t1.`OrdQty` ordqty   FROM tblsop_salesorder_detail t1 JOIN tblsop_salesorder_header t2 ON t1.`CompanyID`=t2.`CompanyID` AND t1.`OrderNo`=t2.`OrderNo`  WHERE t1.`StyleID`='" + styleid + "' AND t2.`PinNo`='" + empid + "'";
+            if (CardType.ToLower() == "points")
+            {
+                qry = qry + " AND t2.ucodeid    IN (SELECT DISTINCT ucodeid FROM  `tblaccemp_ucodepoints`)";
+            }
+            MySqlConnection conn = new MySqlConnection(ConnectionString);
+            conn.Open();
+            try
+            {
+                MySqlCommand cmd = new MySqlCommand(qry, conn);
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                if (dt.Rows.Count > 0)
+                {
+                    models = dt.AsEnumerable().Select(s => new CardByStyle
+                    {
+                        orderno = s["orderno"].ToString() != "" ? Convert.ToInt32(s["orderno"].ToString()) : 0,
+                        orderdate = s["orderdate"].ToString(),
+                        colourid = s["colourid"].ToString(),
+                        styleid = s["styleid"].ToString(),
+                        sizeid = s["sizeid"].ToString(),
+                        empid = s["empid"].ToString(),
+                        ucode = s["ucodeid"].ToString(),
+                        ordertype = s["ot"].ToString(),
+                        ordqty = s["ordqty"].ToString() != "" ? Convert.ToInt32(s["ordqty"].ToString()) : 0,
+                    }).ToList();
+                    models.ForEach(s => s.points = _stylePoints.Exists(sa => sa.StyleID == s.styleid) ? _stylePoints.GetAll(sa => sa.StyleID == s.styleid).First().Points.Value * s.ordqty : 0);
+                }
+            }
+            catch (Exception e)
+            {
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return models;
+        }
+        #endregion
     }
     public class ColorsOb
     {

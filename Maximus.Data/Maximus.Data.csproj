@@ -79,6 +79,8 @@
     </Compile>
     <Compile Include="models\BannerStyleClrSiz.cs" />
     <Compile Include="models\BillingAddrPrivate.cs" />
+    <Compile Include="models\CardByStyle.cs" />
+    <Compile Include="models\CardReportModel.cs" />
     <Compile Include="models\ChildMenuLayout.cs" />
     <Compile Include="models\copy_my_aspnet_membership.cs">
       <DependentUpon>DataContext.tt</DependentUpon>

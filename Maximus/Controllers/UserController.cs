@@ -80,6 +80,7 @@ namespace Maximus.Controllers
                         if (data.Any(x => x.UserName.ToLower() == logDetails.UserName.ToLower() && x.Password == logDetails.Password && x.Active.ToLower() == "y") && Membership.ValidateUser(logDetails.UserName, logDetails.Password))
                         {
                             FormsAuthentication.SetAuthCookie(logDetails.UserName, false);
+                       
                             string custrefdef = "";
                             string onlineDefNom = "";
                             string booNom = "";

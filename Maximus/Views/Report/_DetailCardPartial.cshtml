@@ -1,0 +1,81 @@
+@{
+    var grid = Html.DevExpress().GridView(settings =>
+    {
+        settings.Name = "DetailCardGridView";
+        settings.CallbackRouteValues = new { Controller = "Report", Action = "DetailCardPartial", empId = TempData["rptemployeeid"].ToString() };
+
+        //settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "Report", Action = "DetailCardPartialAddNew" };
+        //settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "Report", Action = "DetailCardPartialUpdate" };
+        //settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "Report", Action = "DetailCardPartialDelete" };
+        settings.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
+        settings.SettingsBehavior.ConfirmDelete = true;
+
+        settings.CommandColumn.Visible = false;
+        settings.CommandColumn.ShowNewButton = true;
+        settings.CommandColumn.ShowDeleteButton = true;
+        settings.CommandColumn.ShowEditButton = true;
+
+        settings.KeyFieldName = "employeeid";
+
+        settings.SettingsPager.Visible = true;
+        settings.Settings.ShowGroupPanel = true;
+        settings.Settings.ShowFilterRow = true;
+        settings.SettingsBehavior.AllowSelectByRowClick = true;
+        settings.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+        settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.Off;
+        settings.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Right;
+        settings.SettingsAdaptivity.AdaptiveDetailColumnCount = 1;
+        settings.ClientSideEvents.Init = "function(s, e) { s.ExpandAll(); }";
+        settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = false;
+        settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
+
+        settings.Columns.Add("styleid").Caption = "Style";
+        settings.Columns.Add("styledescription").Caption = "Description";
+        settings.Columns.Add("colour").Caption = "Colour";
+        settings.Columns.Add("firstissuedate").Caption = "First issue date";
+        //settings.Columns.Add("lastissuedate").Caption = "Last issue date";
+        //settings.Columns.Add("startissuedate").Caption = "Start issue date";
+        settings.Settings.ShowFooter = true;
+        if (Session["cardmenu"].ToString().ToLower() == "stock")
+        {
+            settings.Columns.Add("soqty").Caption = "So quantity";
+            settings.Columns.Add("pickqty").Caption = "Pick quantity";
+            settings.Columns.Add("invoiceqty").Caption = "Invoice quantity";
+
+
+
+        }
+        else if (Session["cardmenu"].ToString().ToLower() == "points" && Convert.ToBoolean(Session["POINTSREQ"]))
+        {
+            settings.Columns.Add("sopoints").Caption = "SO points";
+            settings.Columns.Add("pickpoints").Caption = "Pick points";
+            settings.Columns.Add("invoicepoints").Caption = "Invoice points";
+
+            settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "sopoints");
+            settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "pickpoints");
+            settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "invoicepoints");
+
+            settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "total");
+            settings.GroupSummary.Add(DevExpress.Data.SummaryItemType.Sum, "total");
+        }
+        settings.Columns.Add("total").Caption = Session["cardmenu"].ToString().ToLower() == "points" && Convert.ToBoolean(Session["POINTSREQ"]) ? "Total points" : "Total quantity";
+        settings.Columns.Add(s =>
+        {
+            s.FieldName = "";
+            s.SetDataItemTemplateContent(dat =>
+            {
+                var styleid = (DataBinder.Eval(dat.DataItem, "styleid")).ToString();
+                string cnt = "";
+                cnt = Session["cardmenu"].ToString().ToLower() == "points" && Convert.ToBoolean(Session["POINTSREQ"]) ? "<button class='btn btn-default' onclick=\"GetOrdDetailsByStyle('" + styleid + "','" + TempData["rptemployeeid"].ToString() + "')\" style='color:white;Background-color:darkcyan;'>Show all orders</button>" : "<button class='btn btn-default' onclick=\"GetOrdDetailsByStyle('" + styleid + "','" + TempData["rptemployeeid"].ToString() + "')\" style='color:white;Background-color:darkcyan;'>Show all orders</button>";
+                ViewContext.Writer.Write(cnt);
+            });
+        });
+        settings.Columns.Add(S => { S.FieldName = "year"; S.Caption = "Year"; S.GroupIndex = 0; });
+        settings.Settings.ShowGroupPanel = false;
+    });
+    if (ViewData["EditError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()

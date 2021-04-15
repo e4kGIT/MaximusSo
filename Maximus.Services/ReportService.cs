@@ -37,5 +37,42 @@ namespace Maximus.Services
             result= _dp.GetRolloutReports(busId, selRollout, reportName, reportTypes, embro, uncnf, pointsREq);
             return result;
         }
+
+        public List<CardReportModel> GetCardReport(string busId, string userID, string access)
+        {
+            List<CardReportModel> model = new List<CardReportModel>();
+            model = _dp.GetCardReport(busId, userID, access);
+            return model;
+        }
+
+        public List<CardReportModel> GetdetailCard(string empId,string busId, string cardType,bool pointsReq)
+        {
+            List<CardReportModel> model = new List<CardReportModel>();
+            model = _dp.GetdetailCard( empId,busId, cardType, pointsReq);
+           var model1 = _dp.GetAllOrderRPT(empId, cardType, busId);
+            return model;
+        }
+
+        public List<OrderDisplayModel> GetAllOrderRPT(string empId,string busId, string cardType,bool pointsReq)
+        {
+            List<OrderDisplayModel> model = new List<OrderDisplayModel>();
+           
+              model = _dp.GetAllOrderRPT(empId, cardType, busId);
+            return model;
+        }
+
+        public List<CardByStyle> GetOrderLinesBystyle(string styleid, string empid, string CardType)
+        {
+            List<CardByStyle> model = new List<CardByStyle>();
+            model =_dp.GetOrderLinesBystyle( styleid, empid, CardType);
+            return model;
+        }
+
+        public List<CardReportModel> GetExporterData(string CardType,string access,string userid)
+        {
+            List<CardReportModel> model = new List<CardReportModel>();
+            model = _dp.GetExporterData(CardType, userid, access);
+            return model;
+        }
     }
 }

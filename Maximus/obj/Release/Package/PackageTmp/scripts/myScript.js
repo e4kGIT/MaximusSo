@@ -740,8 +740,7 @@ function getEntitlementDemandSwatch(style, orgStyl, error) {
                                     errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded. Cannot proceed.</span></div>";
                                 }
                             }
-                            else if (response.isPrivate)
-                            {
+                            else if (response.isPrivate) {
                                 errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed reorder quantity exceeds the return quantity</span></div>";
                             }
                             else {
@@ -779,8 +778,7 @@ function getEntitlementDemandSwatch(style, orgStyl, error) {
                             else {
                                 errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded. Cannot proceed.</span></div>";
                             }
-                        }else if(response.isPrivate)
-                        {
+                        } else if (response.isPrivate) {
                             errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed reorder quantity exceeds the return quantity</span></div>";
                         }
                         else {
@@ -8757,8 +8755,7 @@ function ResetToGeneric(user, active) {
     }
 }
 
-function GetReOrdProductsPRIVATEORDER(s, e)
-{
+function GetReOrdProductsPRIVATEORDER(s, e) {
     var styleNameArr = s.name.split("_");
     var style = styleNameArr[3];
     var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
@@ -8950,7 +8947,7 @@ function addTocartReturnOrder(s, e) {
         $.ajax({
             url: "/Return/GetBtnStatusReturns/",
             type: "POST",
-            data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty, 'orgStyl': stylearr[3]  },
+            data: { 'ordQty': stylearr[2], 'color': color, 'style': sStyle, 'qty': qty, 'orgStyl': stylearr[3] },
             success: function (response) {
                 if (response == "enabled") {
                     $.ajax({
@@ -9065,10 +9062,8 @@ function CalculateTotalsPrivate() {
         }
     })
 }
-function CalculateTotals1(s,e)
-{
-    if(s.cpIsReloadReqired)
-    {
+function CalculateTotals1(s, e) {
+    if (s.cpIsReloadReqired) {
         window.location.reload();
     }
 }
@@ -9118,7 +9113,7 @@ function CalculateTotals() {
             }
         }
     })
-   // window.location.reload();
+    // window.location.reload();
 }
 //
 function Refreshpointsdiv() {
@@ -9979,21 +9974,17 @@ function GetCardAlternate(StyleID, BannerStyle, desc) {
 }
 
 
-function ChangeDeliveryAddress()
-{
+function ChangeDeliveryAddress() {
     var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
     loadPopup.Show();
     $.ajax({
         url: "/Return/ChangeDeliveryAddress",
         type: "POST",
-        success:function(response)
-        {
+        success: function (response) {
             loadPopup.Hide();
-            if(response!=null && response!="")
-            {
+            if (response != null && response != "") {
                 var pop = ASPxClientControl.GetControlCollection().GetByName("PrivateRetunDelChange");
-                if(pop!=null)
-                {
+                if (pop != null) {
                     var docelement = document.getElementById("PvtDelAddCng");
                     docelement.innerHTML = "";
                     docelement.innerHTML = response;
@@ -10005,45 +9996,96 @@ function ChangeDeliveryAddress()
     });
     loadPopup.Hide();
 }
-function CancelAddresscng(s,e)
-{
+function CancelAddresscng(s, e) {
     var pop = ASPxClientControl.GetControlCollection().GetByName("PrivateRetunDelChange");
     pop.Hide();
 }
-function SavePrivateRtnAdd(s, e)
-{
+function SavePrivateRtnAdd(s, e) {
     var tbxDELAddr1Ctrl = ASPxClientControl.GetControlCollection().GetByName("DELtbxAddr1");
     var tbxDELAddr2Ctrl = ASPxClientControl.GetControlCollection().GetByName("DELtbxAddr2");
     var tbxDELAddr3Ctrl = ASPxClientControl.GetControlCollection().GetByName("DELtbxAddr3");
     var tbxDELTownCtrl = ASPxClientControl.GetControlCollection().GetByName("DELtbxTown");
-    
+
     var tbxDELCountryCtrl = ASPxClientControl.GetControlCollection().GetByName("DELtbxCountry");
     var tbxDELPostcodeCtrl = ASPxClientControl.GetControlCollection().GetByName("DELtbxPostcode");
     var tbxDELCityCtrl = ASPxClientControl.GetControlCollection().GetByName("DELtbxCity");
-   
+
     var tbxDELAddr1 = tbxDELAddr1Ctrl != null ? tbxDELAddr1Ctrl.GetValue() != null ? tbxDELAddr1Ctrl.GetValue() : "" : "";
     var tbxDELAddr2 = tbxDELAddr2Ctrl != null ? tbxDELAddr2Ctrl.GetValue() != null ? tbxDELAddr2Ctrl.GetValue() : "" : "";
     var tbxDELAddr3 = tbxDELAddr3Ctrl != null ? tbxDELAddr3Ctrl.GetValue() != null ? tbxDELAddr3Ctrl.GetValue() : "" : "";
     var tbxDELTown = tbxDELTownCtrl != null ? tbxDELTownCtrl.GetValue() != null ? tbxDELTownCtrl.GetValue() : "" : "";
-     
+
     var tbxDELCountry = tbxDELCountryCtrl != null ? tbxDELCountryCtrl.GetValue() != null ? tbxDELCountryCtrl.GetValue() : "" : "";
     var tbxDELPostcode = tbxDELPostcodeCtrl != null ? tbxDELPostcodeCtrl.GetValue() != null ? tbxDELPostcodeCtrl.GetValue() : "" : "";
     var tbxDELCity = tbxDELCityCtrl != null ? tbxDELCityCtrl.GetValue() != null ? tbxDELCityCtrl.GetValue() : "" : "";
 
-    if (tbxDELAddr1.trim() != "" && tbxDELTown.trim() != "" && tbxDELPostcode.trim() != "" && tbxDELAddr1.trim() != "" && tbxDELTown.trim() != ""  && tbxDELPostcode.trim() != "") {
-    
+    if (tbxDELAddr1.trim() != "" && tbxDELTown.trim() != "" && tbxDELPostcode.trim() != "" && tbxDELAddr1.trim() != "" && tbxDELTown.trim() != "" && tbxDELPostcode.trim() != "") {
 
-                $.ajax({
-                    url: "/Return/SavePrivateAddress/",
-                    type: "post",
-                    data: { 'tbxDELAddr1': tbxDELAddr1.trim(), 'tbxDELTown': tbxDELTown.trim(),   'tbxDELPostcode': tbxDELPostcode.trim(), 'tbxDELCity': tbxDELCity.trim(), 'tbxDELAddr2': tbxDELAddr2.trim(), 'tbxDELAddr3': tbxDELAddr3.trim(), 'tbxDELCountry': tbxDELCountry.trim() },
-                    success: function (resp) {
-                        if (resp != null && resp != "") {
-                            window.location.reload();
-                        }
-                    }
-                });
-            
+
+        $.ajax({
+            url: "/Return/SavePrivateAddress/",
+            type: "post",
+            data: { 'tbxDELAddr1': tbxDELAddr1.trim(), 'tbxDELTown': tbxDELTown.trim(), 'tbxDELPostcode': tbxDELPostcode.trim(), 'tbxDELCity': tbxDELCity.trim(), 'tbxDELAddr2': tbxDELAddr2.trim(), 'tbxDELAddr3': tbxDELAddr3.trim(), 'tbxDELCountry': tbxDELCountry.trim() },
+            success: function (resp) {
+                if (resp != null && resp != "") {
+                    window.location.reload();
+                }
+            }
+        });
+
     }
 
+}
+
+function GetAllOrderRPT(empId) {
+    if (empId != "") {
+        $.ajax({
+            url: "/Report/GetAllOrderRPT/",
+            type: "Post",
+            data: { 'empId': empId },
+            success: function (resp) {
+                if(resp!=null && resp!="")
+                {
+                    var pop = ASPxClientControl.GetControlCollection().GetByName("SHOWORDERSRPT");
+                    if(pop!=null)
+                    {
+                        var docelement = document.getElementById("showordsrpt");
+                        docelement.innerHTML = "";
+                        docelement.innerHTML = resp;
+                        MVCxClientUtils.FinalizeCallback();
+                        pop.Show();
+                    }
+                }
+            }
+        });
+    }
+}
+
+function GetOrdDetailsByStyle(style,empId)
+{
+    if (empId != "" && style!="") {
+        $.ajax({
+            url: "/Report/StyleDetailGridViewPartial/",
+            type: "Post",
+            data: { 'empId': empId, 'style': style },
+            success: function (resp) {
+                if (resp != null && resp != "") {
+                    var pop = ASPxClientControl.GetControlCollection().GetByName("SHOWORDERSRPT1");
+                    if (pop != null) {
+                        var docelement = document.getElementById("showordsrpt1");
+                        docelement.innerHTML = "";
+                        docelement.innerHTML = resp;
+                        MVCxClientUtils.FinalizeCallback();
+                        pop.SetHeaderText("Orders of Colleague id:<b>" + empId + "</b> for Product:<b>" + style + "</b> ")
+                        pop.Show();
+                    }
+                }
+            }
+        });
+    }
+}
+
+function ExportCardgrid()
+{
+    window.open('/Report/CardExporter/', '_blank');
 }
