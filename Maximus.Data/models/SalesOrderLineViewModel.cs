@@ -8,6 +8,7 @@ namespace Maximus.Data.Models
     public class SalesOrderLineViewModel
     {
         public int IssueUOM1 { get; set; }
+        public bool HasReorder { get; set; }
         public bool IsDleted { get; set; }
 
         public bool isCarrline { get; set; }

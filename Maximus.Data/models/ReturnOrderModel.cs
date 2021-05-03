@@ -9,6 +9,8 @@ namespace Maximus.Data.models
 {
     public class ReturnOrderModel
     {
+        public int SoqtyForempSO { get; set; }
+        public int SoqtyForempSOPoints { get; set; }
         public bool Iscarr { get; set; }
         public bool isCarrline { get; set; }
         public bool IsCnf { get; set; }
@@ -62,7 +64,7 @@ namespace Maximus.Data.models
         public int PickingSlipNo { get; set; }
         public string CourierRef { get; set; }
         public string CustRef { get; set; }
-
+        public bool HasReorder { get; set; }
         public int RtnQty { get; set; }
         public int OriginalLineNo { get; set; }
         public string AllocText { get; set; }

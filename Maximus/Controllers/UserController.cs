@@ -268,7 +268,7 @@ namespace Maximus.Controllers
                             Session["RequirePermissionUSR"] = permissionLst.Any(x => x.ControlId.Trim() == "RequirePermissionUSR") ? permissionLst.Where(x => x.ControlId.Trim() == "RequirePermissionUSR").First().Permission.ToLower() : "hide";
                             Session["PermissionLst"] = permissionLst;
                             Session["chkMapEmp"] = permissionLst.Any(x => x.ControlId.Trim() == "chkMapEmp") ? permissionLst.Where(x => x.ControlId.Trim() == "chkMapEmp").First().Permission.ToLower() : "hide";
-                            Session[""] =
+                            Session["ShowRtnCredBtn"] = permissionLst.Any(x => x.ControlId.Trim() == "ShowRtnCredBtn") ? permissionLst.Where(x => x.ControlId.Trim() == "ShowRtnCredBtn").First().Permission.ToLower() : "hide";
                             Session["Price"] = permissionLst.Any(x => x.ControlId.Trim() == "Price") ? permissionLst.Where(x => x.ControlId.Trim() == "Price").First().Permission.ToLower() : "hide";
                             Session["pnlCommentsNominal"] = permissionLst.Any(x => x.ControlId.Trim() == "pnlCommentsNominal") ? permissionLst.Where(x => x.ControlId.Trim() == "pnlCommentsNominal").First().Permission.ToLower() : "hide";
                             Session["pnlCarriageReason"] = permissionLst.Any(x => x.ControlId.Trim() == "pnlCarriageReason") ? permissionLst.Where(x => x.ControlId.Trim() == "pnlCarriageReason").First().Permission.ToLower() : "hide";

@@ -3492,6 +3492,20 @@ warning 6002: The table/view 'def.e4kmaximusdb.tblonlinesop_backorders' does not
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Reasons" Type="varchar" MaxLength="50" />
         </EntityType>
+        <EntityType Name="tblsop_return_credited">
+          <Key>
+            <PropertyRef Name="CompanyId" />
+            <PropertyRef Name="BusinessId" />
+            <PropertyRef Name="OrderNo" />
+          </Key>
+          <Property Name="CompanyId" Type="char" MaxLength="4" Nullable="false" />
+          <Property Name="BusinessId" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="OrderNo" Type="int" Nullable="false" />
+          <Property Name="CreditedDate" Type="datetime" Precision="0" Nullable="false" />
+          <Property Name="UserId" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="EmployeeId" Type="varchar" MaxLength="30" Nullable="false" />
+          <Property Name="TotalPoints" Type="int" Nullable="false" />
+        </EntityType>
         <EntityType Name="tblsop_return_reasoncodes">
           <Key>
             <PropertyRef Name="CompanyID" />
@@ -5299,6 +5313,7 @@ warning 6002: The table/view 'def.e4kmaximusdb.view_unmatchedordercolourid' does
           <EntitySet Name="tblsop_pickingslip_header" EntityType="Self.tblsop_pickingslip_header" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblsop_reasoncodes" EntityType="Self.tblsop_reasoncodes" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblsop_reasons" EntityType="Self.tblsop_reasons" Schema="e4kmaximusdb" store:Type="Tables" />
+          <EntitySet Name="tblsop_return_credited" EntityType="Self.tblsop_return_credited" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblsop_return_reasoncodes" EntityType="Self.tblsop_return_reasoncodes" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblsop_return_reasoncodes_customer" EntityType="Self.tblsop_return_reasoncodes_customer" Schema="e4kmaximusdb" store:Type="Tables" />
           <EntitySet Name="tblsop_salesorder_approved" EntityType="Self.tblsop_salesorder_approved" Schema="e4kmaximusdb" store:Type="Tables" />
@@ -11734,6 +11749,7 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
           <EntitySet Name="tblonline_ucode_operations" EntityType="e4kmaximusdbModel.tblonline_ucode_operations" />
           <EntitySet Name="tblaccemp_ucode_alternates" EntityType="e4kmaximusdbModel.tblaccemp_ucode_alternates" />
           <EntitySet Name="ucodeby_freetextview" EntityType="e4kmaximusdbModel.ucodeby_freetextview" />
+          <EntitySet Name="tblsop_return_credited" EntityType="e4kmaximusdbModel.tblsop_return_credited" />
         </EntityContainer>
         <ComplexType Name="GetAllUcodeByFreeTextProcedure_Result" />
         <ComplexType Name="getColorProcedure_Result" />
@@ -11792,6 +11808,20 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
           <Property Name="UCodeID" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="false" />
           <Property Name="SeqNo" Type="Int32" />
           <Property Name="IsHidden" Type="Int32" />
+        </EntityType>
+        <EntityType Name="tblsop_return_credited">
+          <Key>
+            <PropertyRef Name="CompanyId" />
+            <PropertyRef Name="BusinessId" />
+            <PropertyRef Name="OrderNo" />
+          </Key>
+          <Property Name="CompanyId" Type="String" Nullable="false" MaxLength="4" FixedLength="false" Unicode="false" />
+          <Property Name="BusinessId" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="OrderNo" Type="Int32" Nullable="false" />
+          <Property Name="CreditedDate" Type="DateTime" Nullable="false" />
+          <Property Name="UserId" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="EmployeeId" Type="String" Nullable="false" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="TotalPoints" Type="Int32" Nullable="false" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -16544,6 +16574,19 @@ FROM `view_unmatchedordercolourid` AS `view_unmatchedordercolourid`</DefiningQue
                 <ScalarProperty Name="StyleImage" ColumnName="StyleImage" />
                 <ScalarProperty Name="StyleID" ColumnName="StyleID" />
                 <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tblsop_return_credited">
+            <EntityTypeMapping TypeName="e4kmaximusdbModel.tblsop_return_credited">
+              <MappingFragment StoreEntitySet="tblsop_return_credited">
+                <ScalarProperty Name="TotalPoints" ColumnName="TotalPoints" />
+                <ScalarProperty Name="EmployeeId" ColumnName="EmployeeId" />
+                <ScalarProperty Name="UserId" ColumnName="UserId" />
+                <ScalarProperty Name="CreditedDate" ColumnName="CreditedDate" />
+                <ScalarProperty Name="OrderNo" ColumnName="OrderNo" />
+                <ScalarProperty Name="BusinessId" ColumnName="BusinessId" />
+                <ScalarProperty Name="CompanyId" ColumnName="CompanyId" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

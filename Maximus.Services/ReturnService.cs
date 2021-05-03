@@ -186,6 +186,7 @@ namespace Maximus.Services
             bool overrideEntitlement = false;
             overrideEntitlement = OverrideEnt.ToString().ToUpper().Trim() == "SHOW" ? true : false;
             long reOrderNo = 0;
+            SaveResultModel savModel = new SaveResultModel();
             List<SaveOrderResultSet> ResultSet = new List<SaveOrderResultSet>();
             AcceptResultSet result = new AcceptResultSet();
             ResultSet.Add(new SaveOrderResultSet { IsReturn = true });
@@ -339,6 +340,7 @@ namespace Maximus.Services
                                 }
                             }
                             bool isPrivate = headers.CustRef.ToLower().Contains("private") && (headers.UCodeId == "" || headers.UCodeId == null) ? true : false;
+
                             returnRes.RtnResult = _dp.SaveReturnOrder(access, conn, headers, empResetMnths, Browser, HTTP_X_FORWARDED_FOR, REMOTE_ADDR, IsRollOutOrder, rtnOrdNo, headers.CustID, usrId, editFlag, POINTSREQ, isPrivate).result;
 
 
@@ -831,20 +833,27 @@ namespace Maximus.Services
         #endregion
 
         #region PrintPrivateReturns
-        public string PrintPrivateReturns(List<SalesOrderHeaderViewModel> lst,string custLogo,string cmpLogo,int manpck,string ONLCUSREFLBL,bool isedit=false)
+        public string PrintPrivateReturns(List<SalesOrderHeaderViewModel> lst, string custLogo, string cmpLogo, int manpck, string ONLCUSREFLBL, bool isedit = false)
         {
             var reult = "";
             if (lst.Any(s => s.Reorderheader))
             {
                 foreach (var lines in lst.Where(s => s.Reorderheader))
                 {
-                    reult = reult+ _dp.GetPrivateReturnMail(lines,"",custLogo,cmpLogo,lines.manPack,"readonly",ONLCUSREFLBL,lines.OrderNo,isedit,null);
+                    reult = reult + _dp.GetPrivateReturnMail(lines, "", custLogo, cmpLogo, lines.manPack, "readonly", ONLCUSREFLBL, lines.OrderNo, isedit, null);
                 }
             }
             return reult;
         }
-        #endregion
 
+
+        #endregion
+        public string CreditreturnPoints(int orderno,string onlineUser)
+        {
+            var result = "";
+            result = _dp.CreditreturnPoints(orderno, onlineUser);
+            return result;
+        }
 
         #endregion
 

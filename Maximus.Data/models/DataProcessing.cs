@@ -120,6 +120,7 @@ namespace Maximus.Data.Models
         public readonly Company _company;
         public readonly UcodeReasons _ucodeReason;
         public readonly TblAlternateTable _tblAlternates;
+        public readonly TblReturnsCredited _tblRtnCredites;
         public DataProcessing(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
@@ -147,6 +148,7 @@ namespace Maximus.Data.Models
             FskStyleFreetext fskStyleFreetext = new FskStyleFreetext(_unitOfWork);
             Nextno nextno = new Nextno(_unitOfWork);
             StockCard stockCard = new StockCard(_unitOfWork);
+            TblReturnsCredited tblRtnCredites = new TblReturnsCredited(_unitOfWork);
             Style_Colour style_Colour = new Style_Colour(_unitOfWork);
             Style_Sizes style_Sizes = new Style_Sizes(_unitOfWork);
             StyleByFreetext styleByFreetext = new StyleByFreetext(_unitOfWork);
@@ -185,6 +187,7 @@ namespace Maximus.Data.Models
             _reason = reason;
             _salesHead = salesHead;
             _stylePoints = stylePoints;
+            _tblRtnCredites = tblRtnCredites;
             _busAccount = busAccount;
             _allAssemblies = allAssemblies;
             _assemblyDetail = assemblyDetail;
@@ -6036,7 +6039,7 @@ namespace Maximus.Data.Models
         #endregion
 
         #region DeleteLines
-        public int DeleteLines(List<SalesOrderLineViewModel> salesLines, string ordertype, MySqlConnection conn, bool POINTSREQ, bool freestockchk = false)
+        public int DeleteLines(List<SalesOrderLineViewModel> salesLines, string ordertype, MySqlConnection conn, bool POINTSREQ, bool freestockchk = false, string busId = "")
         {
             int del = 0;
             if (salesLines.Any(x => x.IsDleted && x.Isedit))
@@ -6078,6 +6081,7 @@ namespace Maximus.Data.Models
                                 //commeneted by sasi(11-01-2021)
                                 //if (rest.InvFlag == "so")
                                 //{
+
                                 UpdSoqty = UpdSoqty + Convert.ToInt32(stockCardQty);
                                 sql = "UPDATE `tblaccemp_stockcard` SET `SOQty`=" + UpdSoqty + " WHERE `StyleID`='" + rest.StyleID + "' AND `EmployeeID`='" + EmpId + "'";
                                 // sqlIssueQty = "UPDATE `tblaccemp_stockcard` SET `TotalIssues`=" + updStock.TotalIssues + " WHERE `StyleID`='" + rest.StyleID + "' AND `EmployeeID`='" + EmpId + "'";
@@ -6098,16 +6102,18 @@ namespace Maximus.Data.Models
                                 //}
 
                                 // MySqlCommand cmd1 = new MySqlCommand(sql, conn);
-                                if (ExecuteQuery(conn, sql) == 0)
+                                if (rest.HasReorder || Convert.ToBoolean(BusinessParam("RTN_ADJ_REQ", busId)))
                                 {
+                                    if (ExecuteQuery(conn, sql) == 0)
+                                    {
 
+                                    }
+                                    //MySqlCommand cmd2 = new MySqlCommand(sqlIssueQty, conn);
+                                    if (ExecuteQuery(conn, sqlIssueQty) == 0)
+                                    {
+
+                                    }
                                 }
-                                //MySqlCommand cmd2 = new MySqlCommand(sqlIssueQty, conn);
-                                if (ExecuteQuery(conn, sqlIssueQty) == 0)
-                                {
-
-                                }
-
                                 sql = "";
                                 sqlIssueQty = "";
                             }
@@ -6144,9 +6150,12 @@ namespace Maximus.Data.Models
 
 
                                 MySqlCommand cmd1 = new MySqlCommand(sql, conn);
-                                if (ExecuteQuery(conn, sql) == 0)
+                                if (rest.HasReorder || Convert.ToBoolean(BusinessParam("RTN_ADJ_REQ", busId)))
                                 {
+                                    if (ExecuteQuery(conn, sql) == 0)
+                                    {
 
+                                    }
                                 }
                                 sql = "";
                             }
@@ -6299,6 +6308,26 @@ namespace Maximus.Data.Models
             return usedPts;
         }
         #endregion
+        #region GetUsedPoints
+        public int GetUsedPointsMaternity(string busId,string empId, MySqlConnection conn)
+        {
+            string usdQry = "";
+            int usedPts = 0;
+            var matucodes=_stylePoints.Exists(s=>s.BusinessID== busId && s.UcodeID.ToLower().Contains("maternit"))? "'" + string.Join("','", _stylePoints.GetAll(s => s.BusinessID == busId && s.UcodeID.ToLower().Contains("maternit")).Select(s => s.StyleID).ToList()) + "'":"";
+            usdQry = matucodes!="" ? " SELECT SUM(IF(ISNULL(SOPOINTS),0,SOPOINTS)+IF(ISNULL(PICKPOINTS),0,PICKPOINTS)+IF(ISNULL(INVPOINTS),0,INVPOINTS)) USEDPOINTS FROM `tblaccemp_pointscard` WHERE EMPLOYEEID = '" + empId + "' and styleid in (" + matucodes + ") GROUP BY EMPLOYEEID" : " SELECT SUM(IF(ISNULL(SOPOINTS),0,SOPOINTS)+IF(ISNULL(PICKPOINTS),0,PICKPOINTS)+IF(ISNULL(INVPOINTS),0,INVPOINTS)) USEDPOINTS FROM `tblaccemp_pointscard` WHERE EMPLOYEEID = '" + empId + "' GROUP BY EMPLOYEEID";
+            try
+            {
+                MySqlCommand cmd = new MySqlCommand(usdQry, conn);
+                usedPts = cmd.ExecuteScalar() != null ? Convert.ToInt32(cmd.ExecuteScalar()) : 0;
+            }
+            catch (Exception e)
+            {
+                logger.Warn(e.Message);
+                logger.Warn(e.StackTrace);
+            }
+            return usedPts;
+        }
+        #endregion
 
 
         #region SaveSalesorderlines
@@ -6391,7 +6420,7 @@ namespace Maximus.Data.Models
             }
             else
             {
-                DEL = DeleteLines(saleHead.SalesOrderLine, saleHead.OrderType, conn, Convert.ToBoolean(POINTSREQ), freestockchk);
+                DEL = DeleteLines(saleHead.SalesOrderLine, saleHead.OrderType, conn, Convert.ToBoolean(POINTSREQ), freestockchk, saleHead.CustID);
             }
             foreach (var line in saleHead.SalesOrderLine.Where(s => s.IsDleted == false))
             {
@@ -6612,7 +6641,7 @@ namespace Maximus.Data.Models
                                         }
                                         if (Convert.ToBoolean(POINTSREQ))
                                         {
-                                            usedPoints = GetUsedPoints(line.EmployeeId, conn);
+                                            usedPoints =IsMatUcodeId(saleHead.UCodeId,saleHead.CustID)? line.Isedit ? GetUsedPointsMaternity(saleHead.CustID,line.EmployeeId, conn) - line.TotalPoints : GetUsedPointsMaternity(saleHead.CustID, line.EmployeeId, conn): line.Isedit ? GetUsedPoints(line.EmployeeId, conn) - line.TotalPoints : GetUsedPoints(line.EmployeeId, conn);
                                             if ((usedPoints + line.TotalPoints) <= ucodePoints || access.ToLower() != "user" || line.Isedit)
                                             {
                                                 if (_pointsByUcode.Exists(s => s.UcodeID.ToLower().Trim() == saleHead.UCodeId.ToLower().Trim()))
@@ -6712,229 +6741,232 @@ namespace Maximus.Data.Models
                     }
                     else
                     {
-                        if (booStock)
+                        if (line.HasReorder ||( CheckEmergency(saleHead.CustID, saleHead.UCodeId)==true && IsMatUcodeId(saleHead.UCodeId,saleHead.CustID)==false) || Convert.ToBoolean(BusinessParam("RTN_ADJ_REQ", saleHead.CustID)))
                         {
-
-                            sSQL = "SELECT `CompanyID`,`BusinessID`,`EmployeeID`,`StyleID`,`ColourID`,`Year`,IF(ISNULL(`SOQty`),0,`SOQty`) SOQty, IF(ISNULL(`PickQty`), 0,`PickQty`) PickQty,IF(ISNULL( `InvQty`), 0,`InvQty`) `InvQty`,`TotalIssues`,`FirstIssueDate`, `StartIssueDate`,`LastIssueDate` FROM tblAccEmp_StockCard WHERE CompanyID='" + cmpId + "' AND BusinessID='" + busId + "' AND EmployeeID='" + line.EmployeeId + "' AND StyleID='" + line.StyleID.Trim() + "' AND ColourID='" + line.ColourID.Trim() + "' AND Year=" + sYear;
-                            MySqlCommand cmd1 = new MySqlCommand(sSQL, conn);
-                            MySqlDataAdapter da = new MySqlDataAdapter(cmd1);
-                            DataTable dt1 = new DataTable();
-                            da.Fill(dt1);
-                            if (empResetMnths > 0 && dt1.Rows.Count > 0)
+                            if (booStock)
                             {
-                                var stockCard = dt1.AsEnumerable().Select(s => new tblaccemp_stockcard
+
+                                sSQL = "SELECT `CompanyID`,`BusinessID`,`EmployeeID`,`StyleID`,`ColourID`,`Year`,IF(ISNULL(`SOQty`),0,`SOQty`) SOQty, IF(ISNULL(`PickQty`), 0,`PickQty`) PickQty,IF(ISNULL( `InvQty`), 0,`InvQty`) `InvQty`,`TotalIssues`,`FirstIssueDate`, `StartIssueDate`,`LastIssueDate` FROM tblAccEmp_StockCard WHERE CompanyID='" + cmpId + "' AND BusinessID='" + busId + "' AND EmployeeID='" + line.EmployeeId + "' AND StyleID='" + line.StyleID.Trim() + "' AND ColourID='" + line.ColourID.Trim() + "' AND Year=" + sYear;
+                                MySqlCommand cmd1 = new MySqlCommand(sSQL, conn);
+                                MySqlDataAdapter da = new MySqlDataAdapter(cmd1);
+                                DataTable dt1 = new DataTable();
+                                da.Fill(dt1);
+                                if (empResetMnths > 0 && dt1.Rows.Count > 0)
                                 {
-                                    FirstIssueDate = DateTime.Parse(s.ItemArray[10].ToString())
-                                }).First();
-                                var date1 = DateTime.Now;
-                                var date2 = stockCard.FirstIssueDate.Value;
-                                int months = (date1.Year - date2.Year) * 12 + date1.Month - date2.Month;
-                                if (months >= empResetMnths)
-                                {
-                                    ResetStockcard(stockCard, conn);
-                                }
-
-                            }
-
-
-
-                            long sum = 0;
-                            long totPointsSty = 0;
-                            int soqty = 0;
-                            var empSoQty = dt1.AsEnumerable().Select(s => Convert.ToInt32(s.ItemArray[6].ToString())).ToList();
-                            if (line.Isedit)
-                            {
-                                totPointsSty = saleHead.SalesOrderLine.Where(x => x.StyleID == line.StyleID.Trim() && x.LineNo == line.LineNo && x.IsDleted == false).Sum(x => x.OrdQty);
-                                //Added by sasi
-                                //Orderqty-SoqtyForempSO=somevalue(changes to have either negative or positive value)
-                                //sum= cardqty+somevalue
-                                //if (line.InvFlag == "so")
-                                //{
-                                //so=so-(ret-orgqty)
-                                var empInvQty = dt1.AsEnumerable().Select(s => Convert.ToInt32(s["SOQty"].ToString())).ToList();
-                                var cardQty = empInvQty.Sum();
-                                var newSoqty = line.SoqtyForempSO > line.OrdQty ? cardQty - (line.SoqtyForempSO - line.OrdQty) : cardQty - (line.OrdQty - line.SoqtyForempSO);
-
-                                //var rtnQty = line.OrdQty;
-                                //var existingRtnQty = line.SoqtyForempSO;
-                                //var newValueRtn = existingRtnQty - rtnQty;
-                                //var cardQty = empInvQty.Sum();
-                                //var newCardQty = cardQty + newValueRtn;
-                                sSQL = "UPDATE tblaccemp_stockcard SET SOQty=" + newSoqty + " WHERE CompanyID='" + cmpId + "' AND BusinessID='" + saleHead.CustID + "' AND EmployeeID='" + saleHead.EmployeeID + "' AND StyleID='" + line.StyleID.Trim() + "' AND ColourID='" + line.ColourID.Trim() + "' AND Year=" + sYear;
-                                //sSQLTotIsu = "UPDATE tblaccemp_stockcard SET totalissues=" + newSoqty + " WHERE CompanyID='" + cmpId + "' AND BusinessID='" + saleHead.CustID + "' AND EmployeeID='" + saleHead.EmployeeID + "' AND StyleID='" + line.StyleID.Trim() + "' AND ColourID='" + line.ColourID.Trim() + "' AND Year=" + sYear;
-                                //}commeneted by sasi(11-01-2021)
-                                //else if (line.InvFlag == "pick")
-                                //{
-                                //    var empInvQty = dt1.AsEnumerable().Select(s => Convert.ToInt32(s["PickQty"].ToString())).ToList();
-                                //    var cardQty = empInvQty.Sum();
-                                //    var newpckQty = cardQty - (line.OrdQty - line.SoqtyForempSO);
-                                //    //var empInvQty = dt1.AsEnumerable().Select(s => Convert.ToInt32(s["InvQty"].ToString())).ToList();
-                                //    //var rtnQty = line.OrdQty;
-                                //    //var existingRtnQty = line.SoqtyForempSO;
-                                //    //var newValueRtn = existingRtnQty - rtnQty;
-                                //    //var cardQty = empInvQty.Sum();
-                                //    //var newCardQty = cardQty + newValueRtn;
-
-                                //    sSQL = "UPDATE tblaccemp_stockcard SET PickQty=" + newpckQty + " WHERE CompanyID='" + cmpId + "' AND BusinessID='" + saleHead.CustID + "' AND EmployeeID='" + saleHead.EmployeeID + "' AND StyleID='" + line.StyleID.Trim() + "' AND ColourID='" + line.ColourID.Trim() + "' AND Year=" + sYear;
-                                //    sSQLTotIsu = "UPDATE tblaccemp_stockcard SET totalissues=" + newpckQty + " WHERE CompanyID='" + cmpId + "' AND BusinessID='" + saleHead.CustID + "' AND EmployeeID='" + saleHead.EmployeeID + "' AND StyleID='" + line.StyleID.Trim() + "' AND ColourID='" + line.ColourID.Trim() + "' AND Year=" + sYear;
-                                //}
-                                //else if (line.InvFlag == "inv")
-                                //{
-                                //    var empInvQty = dt1.AsEnumerable().Select(s => Convert.ToInt32(s["InvQty"].ToString())).ToList();
-                                //    var cardQty = empInvQty.Sum();
-                                //    var newinvQty = cardQty - (line.OrdQty - line.SoqtyForempSO);
-                                //    //var empInvQty = dt1.AsEnumerable().Select(s => Convert.ToInt32(s["InvQty"].ToString())).ToList();
-                                //    //var rtnQty = line.OrdQty;
-                                //    //var existingRtnQty = line.SoqtyForempSO;
-                                //    //var newValueRtn =  rtnQty-existingRtnQty;
-                                //    //var cardQty = empInvQty.Sum();
-                                //    //var newCardQty = cardQty - newValueRtn;
-
-                                //    sSQL = "UPDATE tblaccemp_stockcard SET InvQty=" + newinvQty + " WHERE CompanyID='" + cmpId + "' AND BusinessID='" + saleHead.CustID + "' AND EmployeeID='" + saleHead.EmployeeID + "' AND StyleID='" + line.StyleID.Trim() + "' AND ColourID='" + line.ColourID.Trim() + "' AND Year=" + sYear;
-                                //    sSQLTotIsu = "UPDATE tblaccemp_stockcard SET totalissues=" + newinvQty + " WHERE CompanyID='" + cmpId + "' AND BusinessID='" + saleHead.CustID + "' AND EmployeeID='" + saleHead.EmployeeID + "' AND StyleID='" + line.StyleID.Trim() + "' AND ColourID='" + line.ColourID.Trim() + "' AND Year=" + sYear;
-                                //}
-                            }
-                            else
-                            {
-                                //if (line.InvFlag == "so")
-                                //{
-
-                                var rtnQty = line.OrdQty;
-                                var cardQty = empSoQty.Sum();
-                                var newCardQty = cardQty - line.OrdQty;
-
-                                sSQL = "UPDATE tblaccemp_stockcard SET SOQty=" + newCardQty + " WHERE CompanyID='" + cmpId + "' AND BusinessID='" + saleHead.CustID + "' AND EmployeeID='" + saleHead.EmployeeID + "' AND StyleID='" + line.StyleID.Trim() + "' AND ColourID='" + line.ColourID.Trim() + "' AND Year=" + sYear;
-                                //sSQLTotIsu = "UPDATE tblaccemp_stockcard SET totalissues=" + newCardQty + " WHERE CompanyID='" + cmpId + "' AND BusinessID='" + saleHead.CustID + "' AND EmployeeID='" + saleHead.EmployeeID + "' AND StyleID='" + line.StyleID.Trim() + "' AND ColourID='" + line.ColourID.Trim() + "' AND Year=" + sYear;
-                                //}
-                                //else if (line.InvFlag == "pick")
-                                //{
-                                //    var empPkQty = dt1.AsEnumerable().Select(s => Convert.ToInt32(s["PickQty"].ToString())).ToList();
-                                //    var rtnQty = line.OrdQty;
-                                //    var cardQty = empPkQty.Sum();
-                                //    var newCardQty = cardQty - line.OrdQty;
-
-                                //    sSQL = "UPDATE tblaccemp_stockcard SET PickQty=" + newCardQty + " WHERE CompanyID='" + cmpId + "' AND BusinessID='" + saleHead.CustID + "' AND EmployeeID='" + saleHead.EmployeeID + "' AND StyleID='" + line.StyleID.Trim() + "' AND ColourID='" + line.ColourID.Trim() + "' AND Year=" + sYear;
-                                //    sSQLTotIsu = "UPDATE tblaccemp_stockcard SET totalissues=" + newCardQty + " WHERE CompanyID='" + cmpId + "' AND BusinessID='" + saleHead.CustID + "' AND EmployeeID='" + saleHead.EmployeeID + "' AND StyleID='" + line.StyleID.Trim() + "' AND ColourID='" + line.ColourID.Trim() + "' AND Year=" + sYear;
-                                //}
-                                //else if (line.InvFlag == "inv")
-                                //{
-                                //    var empInvQty = dt1.AsEnumerable().Select(s => Convert.ToInt32(s["InvQty"].ToString())).ToList();
-                                //    var rtnQty = line.OrdQty;
-                                //    var cardQty = empInvQty.Sum();
-                                //    var newCardQty = cardQty - line.OrdQty;
-
-                                //    sSQL = "UPDATE tblaccemp_stockcard SET InvQty=" + newCardQty + " WHERE CompanyID='" + cmpId + "' AND BusinessID='" + saleHead.CustID + "' AND EmployeeID='" + saleHead.EmployeeID + "' AND StyleID='" + line.StyleID.Trim() + "' AND ColourID='" + line.ColourID.Trim() + "' AND Year=" + sYear;
-                                //    sSQLTotIsu = "UPDATE tblaccemp_stockcard SET totalissues=" + newCardQty + " WHERE CompanyID='" + cmpId + "' AND BusinessID='" + saleHead.CustID + "' AND EmployeeID='" + saleHead.EmployeeID + "' AND StyleID='" + line.StyleID.Trim() + "' AND ColourID='" + line.ColourID.Trim() + "' AND Year=" + sYear;
-                                //}
-
-                                //long totqty = saleHead.SalesOrderLine.Where(x => x.StyleID == line.StyleID.Trim() && x.IsDleted == false).Sum(x => x.OrdQty);
-                                //int sOqty = Convert.ToInt32(dt1.Rows[0]["SOQty"].ToString());
-                                //if (sOqty != totqty)
-                                //{
-
-                                //    sum = Convert.ToInt32(dt1.Rows[0]["SOQty"].ToString()) + (line.OrdQty);
-                                //    sSQL = "UPDATE tblaccemp_stockcard SET SOQty=" + sum + " WHERE CompanyID='" + cmpId + "' AND BusinessID='" + saleHead.CustID + "' AND EmployeeID='" + saleHead.EmployeeID + "' AND StyleID='" + line.StyleID.Trim() + "' AND ColourID='" + line.ColourID.Trim() + "' AND Year=" + sYear;
-
-                                //}
-                                //else
-                                //{
-                                //    sSQL = "UPDATE tblaccemp_stockcard SET SOQty=SOQty+" + sOqty + " WHERE CompanyID='" + cmpId + "' AND BusinessID='" + saleHead.CustID + "' AND EmployeeID='" + saleHead.EmployeeID + "' AND StyleID='" + line.StyleID.Trim() + "' AND ColourID='" + line.ColourID.Trim() + "' AND Year=" + sYear;
-                                //}
-                            }
-                            List<string> qryLst = new List<string>();
-                            qryLst.Add(sSQL);
-                            // qryLst.Add(sSQLTotIsu);
-                            foreach (var sql in qryLst)
-                            {
-                                if (sql != "")
-                                {
-                                    if (ExecuteQuery(conn, sql) > 0)
+                                    var stockCard = dt1.AsEnumerable().Select(s => new tblaccemp_stockcard
                                     {
-                                        result.result = true;
+                                        FirstIssueDate = DateTime.Parse(s.ItemArray[10].ToString())
+                                    }).First();
+                                    var date1 = DateTime.Now;
+                                    var date2 = stockCard.FirstIssueDate.Value;
+                                    int months = (date1.Year - date2.Year) * 12 + date1.Month - date2.Month;
+                                    if (months >= empResetMnths)
+                                    {
+                                        ResetStockcard(stockCard, conn);
                                     }
-                                }
-                            }
-                            if (Convert.ToBoolean(POINTSREQ))
-                            {
-                                if (_pointsByUcode.Exists(s => s.UcodeID.ToLower().Trim() == saleHead.UCodeId.ToLower().Trim()))
-                                {
-                                    string existQry = "";
-                                    existQry = existQry + "SELECT `CompanyID`,`BusinessID`,`EmployeeID`,`StyleID`,`ColourID`,`Year`,IF(ISNULL(`SOpoints`),0,`SOpoints`) SOpoints, IF(ISNULL(`Pickpoints`), 0,`Pickpoints`) Pickpoints,IF(ISNULL( `Invpoints`), 0,`Invpoints`) `Invpoints`,`FirstIssueDate`, `StartIssueDate`,`LastIssueDate` FROM `tblaccemp_pointscard` WHERE `CompanyID`='" + cmpId + "' AND `BusinessID`='" + busId + "' AND `EmployeeID`='" + line.EmployeeId + "' AND `StyleID`='" + line.StyleID.Trim() + "' AND `ColourID`='" + line.ColourID.Trim() + "' AND `Year`=" + sYear;
-                                    MySqlCommand cmd21 = new MySqlCommand(existQry, conn);
-                                    MySqlDataAdapter da21 = new MySqlDataAdapter(cmd21);
-                                    DataTable dt21 = new DataTable();
-                                    da21.Fill(dt21);
-                                    if (dt21.Rows.Count > 0)
-                                    {
-                                        string sSql1 = "";
-                                        int sumRtn = 0;
-                                        if (empResetMnths > 0)
-                                        {
-                                            var pointsCard = dt21.AsEnumerable().Select(s => new tblaccemp_pointscard { FirstIssueDate = DateTime.Parse(s.ItemArray[9].ToString()) }).First();
-                                            var date1 = DateTime.Now;
-                                            var date2 = pointsCard.FirstIssueDate.Value;
-                                            int months = (date1.Year - date2.Year) * 12 + date1.Month - date2.Month;
-                                            if (DateTime.Now >= pointsCard.FirstIssueDate.Value.AddMonths(empResetMnths))
-                                            {
-                                                ResetPointscard(pointsCard);
-                                            }
-                                        }
-                                        if (line.Isedit)
-                                        {
-                                            var empSoQtyRtn = dt21.AsEnumerable().Select(s => Convert.ToInt32(s.ItemArray[6].ToString())).ToList();
-                                            int totPointsStyRtn = saleHead.SalesOrderLine.Where(x => x.StyleID == line.StyleID.Trim() && x.LineNo == line.LineNo && x.IsDleted == false).Sum(x => x.TotalPoints);
-                                            var cardQty = empSoQtyRtn.Sum();
-                                            var newSoqty = line.SoqtyForempSOPoints > totPointsStyRtn ? cardQty - (line.SoqtyForempSOPoints - totPointsStyRtn) : cardQty - (totPointsStyRtn - line.SoqtyForempSOPoints);
-                                            //soqty = Convert.ToInt32(line.SoqtyForempSOPoints) - Convert.ToInt32(totPointsStyRtn);
-                                            //sum = Convert.ToInt32(empSoQtyRtn.Sum(s => s)) + soqty;
-                                            sum = newSoqty;
-                                            sSql1 = sSql1 + "UPDATE `tblaccemp_pointscard` SET `SOPoints`=" + sum + " WHERE `CompanyID`='" + cmpId + "' AND `BusinessID`='" + busId + "' AND `EmployeeID`='" + line.EmployeeId + "' AND `StyleID`='" + line.StyleID.Trim() + "' AND `ColourID`='" + line.ColourID.Trim() + "' AND `Year`=" + sYear;
-                                        }
-                                        else
-                                        {
-                                            //commeneted by sasi(11 - 01 - 2021)
-                                            //if (line.InvFlag == "so")
-                                            //{
-                                            int rtnPts = line.TotalPoints;
-                                            int cardPts = Convert.ToInt32(dt21.Rows[0]["SOPoints"].ToString());
-                                            int newCardPts = cardPts - rtnPts;
-                                            sSql1 = sSql1 + "UPDATE `tblaccemp_pointscard` SET `SOPoints`=" + newCardPts + " WHERE `CompanyID`='" + cmpId + "' AND `BusinessID`='" + busId + "' AND `EmployeeID`='" + line.EmployeeId + "' AND `StyleID`='" + line.StyleID.Trim() + "' AND `ColourID`='" + line.ColourID.Trim() + "' AND `Year`=" + sYear;
-                                            //}
-                                            //else if (line.InvFlag == "pick")
-                                            //{
-                                            //    int rtnPts = line.TotalPoints;
-                                            //    int cardPts = Convert.ToInt32(dt21.Rows[0]["PickPoints"].ToString());
-                                            //    int newCardPts = cardPts - rtnPts;
-                                            //    sSql1 = sSql1 + "UPDATE `tblaccemp_pointscard` SET `PickPoints`=" + newCardPts + " WHERE `CompanyID`='" + cmpId + "' AND `BusinessID`='" + busId + "' AND `EmployeeID`='" + line.EmployeeId + "' AND `StyleID`='" + line.StyleID.Trim() + "' AND `ColourID`='" + line.ColourID.Trim() + "' AND `Year`=" + sYear;
-                                            //}
-                                            //else if (line.InvFlag == "inv")
-                                            //{
-                                            //    int rtnPts = line.TotalPoints;
-                                            //    int cardPts = Convert.ToInt32(dt21.Rows[0]["InvPoints"].ToString());
-                                            //    int newCardPts = cardPts - rtnPts;
-                                            //    sSql1 = sSql1 + "UPDATE `tblaccemp_pointscard` SET `InvPoints`=" + newCardPts + " WHERE `CompanyID`='" + cmpId + "' AND `BusinessID`='" + busId + "' AND `EmployeeID`='" + line.EmployeeId + "' AND `StyleID`='" + line.StyleID.Trim() + "' AND `ColourID`='" + line.ColourID.Trim() + "' AND `Year`=" + sYear;
-                                            //}
-                                            //int totPointsStyRtn = saleHead.SalesOrderLine.Where(x => x.StyleID == line.StyleID.Trim() && x.IsDleted == false).Sum(x => x.TotalPoints);
-                                            //int soPts = Convert.ToInt32(dt21.Rows[0]["SOPoints"].ToString());
-                                            //if (soPts != totPointsStyRtn)
-                                            //{
-                                            //    sumRtn = Convert.ToInt32(dt21.Rows[0]["SOPoints"].ToString()) + (line.TotalPoints);
-                                            //    sSql1 = sSql1 + "UPDATE `tblaccemp_pointscard` SET `SOPoints`=" + sumRtn + " WHERE `CompanyID`='" + cmpId + "' AND `BusinessID`='" + busId + "' AND `EmployeeID`='" + line.EmployeeId + "' AND `StyleID`='" + line.StyleID.Trim() + "' AND `ColourID`='" + line.ColourID.Trim() + "' AND `Year`=" + sYear;
-                                            //}
-                                            //else
-                                            //{
-                                            //    sSql1 = sSql1 + "UPDATE `tblaccemp_pointscard` SET `SOPoints`=SOPoints+" + soPts + " WHERE `CompanyID`='" + cmpId + "' AND `BusinessID`='" + busId + "' AND `EmployeeID`='" + line.EmployeeId + "' AND `StyleID`='" + line.StyleID.Trim() + "' AND `ColourID`='" + line.ColourID.Trim() + "' AND `Year`=" + sYear;
-                                            //}
-                                        }
 
-                                        if (ExecuteQuery(conn, sSql1) > 0)
+                                }
+
+
+
+                                long sum = 0;
+                                long totPointsSty = 0;
+                                int soqty = 0;
+                                var empSoQty = dt1.AsEnumerable().Select(s => Convert.ToInt32(s.ItemArray[6].ToString())).ToList();
+                                if (line.Isedit)
+                                {
+                                    totPointsSty = saleHead.SalesOrderLine.Where(x => x.StyleID == line.StyleID.Trim() && x.LineNo == line.LineNo && x.IsDleted == false).Sum(x => x.OrdQty);
+                                    //Added by sasi
+                                    //Orderqty-SoqtyForempSO=somevalue(changes to have either negative or positive value)
+                                    //sum= cardqty+somevalue
+                                    //if (line.InvFlag == "so")
+                                    //{
+                                    //so=so-(ret-orgqty)
+                                    var empInvQty = dt1.AsEnumerable().Select(s => Convert.ToInt32(s["SOQty"].ToString())).ToList();
+                                    var cardQty = empInvQty.Sum();
+                                    var newSoqty = line.SoqtyForempSO > line.OrdQty ? cardQty + (line.SoqtyForempSO - line.OrdQty) : cardQty - (line.OrdQty - line.SoqtyForempSO);
+
+                                    //var rtnQty = line.OrdQty;
+                                    //var existingRtnQty = line.SoqtyForempSO;
+                                    //var newValueRtn = existingRtnQty - rtnQty;
+                                    //var cardQty = empInvQty.Sum();
+                                    //var newCardQty = cardQty + newValueRtn;
+                                    sSQL = "UPDATE tblaccemp_stockcard SET SOQty=" + newSoqty + " WHERE CompanyID='" + cmpId + "' AND BusinessID='" + saleHead.CustID + "' AND EmployeeID='" + saleHead.EmployeeID + "' AND StyleID='" + line.StyleID.Trim() + "' AND ColourID='" + line.ColourID.Trim() + "' AND Year=" + sYear;
+                                    //sSQLTotIsu = "UPDATE tblaccemp_stockcard SET totalissues=" + newSoqty + " WHERE CompanyID='" + cmpId + "' AND BusinessID='" + saleHead.CustID + "' AND EmployeeID='" + saleHead.EmployeeID + "' AND StyleID='" + line.StyleID.Trim() + "' AND ColourID='" + line.ColourID.Trim() + "' AND Year=" + sYear;
+                                    //}commeneted by sasi(11-01-2021)
+                                    //else if (line.InvFlag == "pick")
+                                    //{
+                                    //    var empInvQty = dt1.AsEnumerable().Select(s => Convert.ToInt32(s["PickQty"].ToString())).ToList();
+                                    //    var cardQty = empInvQty.Sum();
+                                    //    var newpckQty = cardQty - (line.OrdQty - line.SoqtyForempSO);
+                                    //    //var empInvQty = dt1.AsEnumerable().Select(s => Convert.ToInt32(s["InvQty"].ToString())).ToList();
+                                    //    //var rtnQty = line.OrdQty;
+                                    //    //var existingRtnQty = line.SoqtyForempSO;
+                                    //    //var newValueRtn = existingRtnQty - rtnQty;
+                                    //    //var cardQty = empInvQty.Sum();
+                                    //    //var newCardQty = cardQty + newValueRtn;
+
+                                    //    sSQL = "UPDATE tblaccemp_stockcard SET PickQty=" + newpckQty + " WHERE CompanyID='" + cmpId + "' AND BusinessID='" + saleHead.CustID + "' AND EmployeeID='" + saleHead.EmployeeID + "' AND StyleID='" + line.StyleID.Trim() + "' AND ColourID='" + line.ColourID.Trim() + "' AND Year=" + sYear;
+                                    //    sSQLTotIsu = "UPDATE tblaccemp_stockcard SET totalissues=" + newpckQty + " WHERE CompanyID='" + cmpId + "' AND BusinessID='" + saleHead.CustID + "' AND EmployeeID='" + saleHead.EmployeeID + "' AND StyleID='" + line.StyleID.Trim() + "' AND ColourID='" + line.ColourID.Trim() + "' AND Year=" + sYear;
+                                    //}
+                                    //else if (line.InvFlag == "inv")
+                                    //{
+                                    //    var empInvQty = dt1.AsEnumerable().Select(s => Convert.ToInt32(s["InvQty"].ToString())).ToList();
+                                    //    var cardQty = empInvQty.Sum();
+                                    //    var newinvQty = cardQty - (line.OrdQty - line.SoqtyForempSO);
+                                    //    //var empInvQty = dt1.AsEnumerable().Select(s => Convert.ToInt32(s["InvQty"].ToString())).ToList();
+                                    //    //var rtnQty = line.OrdQty;
+                                    //    //var existingRtnQty = line.SoqtyForempSO;
+                                    //    //var newValueRtn =  rtnQty-existingRtnQty;
+                                    //    //var cardQty = empInvQty.Sum();
+                                    //    //var newCardQty = cardQty - newValueRtn;
+
+                                    //    sSQL = "UPDATE tblaccemp_stockcard SET InvQty=" + newinvQty + " WHERE CompanyID='" + cmpId + "' AND BusinessID='" + saleHead.CustID + "' AND EmployeeID='" + saleHead.EmployeeID + "' AND StyleID='" + line.StyleID.Trim() + "' AND ColourID='" + line.ColourID.Trim() + "' AND Year=" + sYear;
+                                    //    sSQLTotIsu = "UPDATE tblaccemp_stockcard SET totalissues=" + newinvQty + " WHERE CompanyID='" + cmpId + "' AND BusinessID='" + saleHead.CustID + "' AND EmployeeID='" + saleHead.EmployeeID + "' AND StyleID='" + line.StyleID.Trim() + "' AND ColourID='" + line.ColourID.Trim() + "' AND Year=" + sYear;
+                                    //}
+                                }
+                                else
+                                {
+                                    //if (line.InvFlag == "so")
+                                    //{
+
+                                    var rtnQty = line.OrdQty;
+                                    var cardQty = empSoQty.Sum();
+                                    var newCardQty = cardQty - line.OrdQty;
+
+                                    sSQL = "UPDATE tblaccemp_stockcard SET SOQty=" + newCardQty + " WHERE CompanyID='" + cmpId + "' AND BusinessID='" + saleHead.CustID + "' AND EmployeeID='" + saleHead.EmployeeID + "' AND StyleID='" + line.StyleID.Trim() + "' AND ColourID='" + line.ColourID.Trim() + "' AND Year=" + sYear;
+                                    //sSQLTotIsu = "UPDATE tblaccemp_stockcard SET totalissues=" + newCardQty + " WHERE CompanyID='" + cmpId + "' AND BusinessID='" + saleHead.CustID + "' AND EmployeeID='" + saleHead.EmployeeID + "' AND StyleID='" + line.StyleID.Trim() + "' AND ColourID='" + line.ColourID.Trim() + "' AND Year=" + sYear;
+                                    //}
+                                    //else if (line.InvFlag == "pick")
+                                    //{
+                                    //    var empPkQty = dt1.AsEnumerable().Select(s => Convert.ToInt32(s["PickQty"].ToString())).ToList();
+                                    //    var rtnQty = line.OrdQty;
+                                    //    var cardQty = empPkQty.Sum();
+                                    //    var newCardQty = cardQty - line.OrdQty;
+
+                                    //    sSQL = "UPDATE tblaccemp_stockcard SET PickQty=" + newCardQty + " WHERE CompanyID='" + cmpId + "' AND BusinessID='" + saleHead.CustID + "' AND EmployeeID='" + saleHead.EmployeeID + "' AND StyleID='" + line.StyleID.Trim() + "' AND ColourID='" + line.ColourID.Trim() + "' AND Year=" + sYear;
+                                    //    sSQLTotIsu = "UPDATE tblaccemp_stockcard SET totalissues=" + newCardQty + " WHERE CompanyID='" + cmpId + "' AND BusinessID='" + saleHead.CustID + "' AND EmployeeID='" + saleHead.EmployeeID + "' AND StyleID='" + line.StyleID.Trim() + "' AND ColourID='" + line.ColourID.Trim() + "' AND Year=" + sYear;
+                                    //}
+                                    //else if (line.InvFlag == "inv")
+                                    //{
+                                    //    var empInvQty = dt1.AsEnumerable().Select(s => Convert.ToInt32(s["InvQty"].ToString())).ToList();
+                                    //    var rtnQty = line.OrdQty;
+                                    //    var cardQty = empInvQty.Sum();
+                                    //    var newCardQty = cardQty - line.OrdQty;
+
+                                    //    sSQL = "UPDATE tblaccemp_stockcard SET InvQty=" + newCardQty + " WHERE CompanyID='" + cmpId + "' AND BusinessID='" + saleHead.CustID + "' AND EmployeeID='" + saleHead.EmployeeID + "' AND StyleID='" + line.StyleID.Trim() + "' AND ColourID='" + line.ColourID.Trim() + "' AND Year=" + sYear;
+                                    //    sSQLTotIsu = "UPDATE tblaccemp_stockcard SET totalissues=" + newCardQty + " WHERE CompanyID='" + cmpId + "' AND BusinessID='" + saleHead.CustID + "' AND EmployeeID='" + saleHead.EmployeeID + "' AND StyleID='" + line.StyleID.Trim() + "' AND ColourID='" + line.ColourID.Trim() + "' AND Year=" + sYear;
+                                    //}
+
+                                    //long totqty = saleHead.SalesOrderLine.Where(x => x.StyleID == line.StyleID.Trim() && x.IsDleted == false).Sum(x => x.OrdQty);
+                                    //int sOqty = Convert.ToInt32(dt1.Rows[0]["SOQty"].ToString());
+                                    //if (sOqty != totqty)
+                                    //{
+
+                                    //    sum = Convert.ToInt32(dt1.Rows[0]["SOQty"].ToString()) + (line.OrdQty);
+                                    //    sSQL = "UPDATE tblaccemp_stockcard SET SOQty=" + sum + " WHERE CompanyID='" + cmpId + "' AND BusinessID='" + saleHead.CustID + "' AND EmployeeID='" + saleHead.EmployeeID + "' AND StyleID='" + line.StyleID.Trim() + "' AND ColourID='" + line.ColourID.Trim() + "' AND Year=" + sYear;
+
+                                    //}
+                                    //else
+                                    //{
+                                    //    sSQL = "UPDATE tblaccemp_stockcard SET SOQty=SOQty+" + sOqty + " WHERE CompanyID='" + cmpId + "' AND BusinessID='" + saleHead.CustID + "' AND EmployeeID='" + saleHead.EmployeeID + "' AND StyleID='" + line.StyleID.Trim() + "' AND ColourID='" + line.ColourID.Trim() + "' AND Year=" + sYear;
+                                    //}
+                                }
+                                List<string> qryLst = new List<string>();
+                                qryLst.Add(sSQL);
+                                // qryLst.Add(sSQLTotIsu);
+                                foreach (var sql in qryLst)
+                                {
+                                    if (sql != "")
+                                    {
+                                        if (ExecuteQuery(conn, sql) > 0)
                                         {
                                             result.result = true;
-                                            //AddtologStockCard(SQL)
                                         }
-                                        else
+                                    }
+                                }
+                                if (Convert.ToBoolean(POINTSREQ))
+                                {
+                                    if (_pointsByUcode.Exists(s => s.UcodeID.ToLower().Trim() == saleHead.UCodeId.ToLower().Trim()))
+                                    {
+                                        string existQry = "";
+                                        existQry = existQry + "SELECT `CompanyID`,`BusinessID`,`EmployeeID`,`StyleID`,`ColourID`,`Year`,IF(ISNULL(`SOpoints`),0,`SOpoints`) SOpoints, IF(ISNULL(`Pickpoints`), 0,`Pickpoints`) Pickpoints,IF(ISNULL( `Invpoints`), 0,`Invpoints`) `Invpoints`,`FirstIssueDate`, `StartIssueDate`,`LastIssueDate` FROM `tblaccemp_pointscard` WHERE `CompanyID`='" + cmpId + "' AND `BusinessID`='" + busId + "' AND `EmployeeID`='" + line.EmployeeId + "' AND `StyleID`='" + line.StyleID.Trim() + "' AND `ColourID`='" + line.ColourID.Trim() + "' AND `Year`=" + sYear;
+                                        MySqlCommand cmd21 = new MySqlCommand(existQry, conn);
+                                        MySqlDataAdapter da21 = new MySqlDataAdapter(cmd21);
+                                        DataTable dt21 = new DataTable();
+                                        da21.Fill(dt21);
+                                        if (dt21.Rows.Count > 0)
                                         {
-                                            result.result = false;
+                                            string sSql1 = "";
+                                            int sumRtn = 0;
+                                            if (empResetMnths > 0)
+                                            {
+                                                var pointsCard = dt21.AsEnumerable().Select(s => new tblaccemp_pointscard { FirstIssueDate = DateTime.Parse(s.ItemArray[9].ToString()) }).First();
+                                                var date1 = DateTime.Now;
+                                                var date2 = pointsCard.FirstIssueDate.Value;
+                                                int months = (date1.Year - date2.Year) * 12 + date1.Month - date2.Month;
+                                                if (DateTime.Now >= pointsCard.FirstIssueDate.Value.AddMonths(empResetMnths))
+                                                {
+                                                    ResetPointscard(pointsCard);
+                                                }
+                                            }
+                                            if (line.Isedit)
+                                            {
+                                                var empSoQtyRtn = dt21.AsEnumerable().Select(s => Convert.ToInt32(s.ItemArray[6].ToString())).ToList();
+                                                int totPointsStyRtn = saleHead.SalesOrderLine.Where(x => x.StyleID == line.StyleID.Trim() && x.LineNo == line.LineNo && x.IsDleted == false).Sum(x => x.TotalPoints);
+                                                var cardQty = empSoQtyRtn.Sum();
+                                                var newSoqty = line.SoqtyForempSOPoints > totPointsStyRtn ? cardQty + (line.SoqtyForempSOPoints - totPointsStyRtn) : cardQty - (totPointsStyRtn - line.SoqtyForempSOPoints);
+                                                //soqty = Convert.ToInt32(line.SoqtyForempSOPoints) - Convert.ToInt32(totPointsStyRtn);
+                                                //sum = Convert.ToInt32(empSoQtyRtn.Sum(s => s)) + soqty;
+                                                sum = newSoqty;
+                                                sSql1 = sSql1 + "UPDATE `tblaccemp_pointscard` SET `SOPoints`=" + sum + " WHERE `CompanyID`='" + cmpId + "' AND `BusinessID`='" + busId + "' AND `EmployeeID`='" + line.EmployeeId + "' AND `StyleID`='" + line.StyleID.Trim() + "' AND `ColourID`='" + line.ColourID.Trim() + "' AND `Year`=" + sYear;
+                                            }
+                                            else
+                                            {
+                                                //commeneted by sasi(11 - 01 - 2021)
+                                                //if (line.InvFlag == "so")
+                                                //{
+                                                int rtnPts = line.TotalPoints;
+                                                int cardPts = Convert.ToInt32(dt21.Rows[0]["SOPoints"].ToString());
+                                                int newCardPts = cardPts - rtnPts;
+                                                sSql1 = sSql1 + "UPDATE `tblaccemp_pointscard` SET `SOPoints`=" + newCardPts + " WHERE `CompanyID`='" + cmpId + "' AND `BusinessID`='" + busId + "' AND `EmployeeID`='" + line.EmployeeId + "' AND `StyleID`='" + line.StyleID.Trim() + "' AND `ColourID`='" + line.ColourID.Trim() + "' AND `Year`=" + sYear;
+                                                //}
+                                                //else if (line.InvFlag == "pick")
+                                                //{
+                                                //    int rtnPts = line.TotalPoints;
+                                                //    int cardPts = Convert.ToInt32(dt21.Rows[0]["PickPoints"].ToString());
+                                                //    int newCardPts = cardPts - rtnPts;
+                                                //    sSql1 = sSql1 + "UPDATE `tblaccemp_pointscard` SET `PickPoints`=" + newCardPts + " WHERE `CompanyID`='" + cmpId + "' AND `BusinessID`='" + busId + "' AND `EmployeeID`='" + line.EmployeeId + "' AND `StyleID`='" + line.StyleID.Trim() + "' AND `ColourID`='" + line.ColourID.Trim() + "' AND `Year`=" + sYear;
+                                                //}
+                                                //else if (line.InvFlag == "inv")
+                                                //{
+                                                //    int rtnPts = line.TotalPoints;
+                                                //    int cardPts = Convert.ToInt32(dt21.Rows[0]["InvPoints"].ToString());
+                                                //    int newCardPts = cardPts - rtnPts;
+                                                //    sSql1 = sSql1 + "UPDATE `tblaccemp_pointscard` SET `InvPoints`=" + newCardPts + " WHERE `CompanyID`='" + cmpId + "' AND `BusinessID`='" + busId + "' AND `EmployeeID`='" + line.EmployeeId + "' AND `StyleID`='" + line.StyleID.Trim() + "' AND `ColourID`='" + line.ColourID.Trim() + "' AND `Year`=" + sYear;
+                                                //}
+                                                //int totPointsStyRtn = saleHead.SalesOrderLine.Where(x => x.StyleID == line.StyleID.Trim() && x.IsDleted == false).Sum(x => x.TotalPoints);
+                                                //int soPts = Convert.ToInt32(dt21.Rows[0]["SOPoints"].ToString());
+                                                //if (soPts != totPointsStyRtn)
+                                                //{
+                                                //    sumRtn = Convert.ToInt32(dt21.Rows[0]["SOPoints"].ToString()) + (line.TotalPoints);
+                                                //    sSql1 = sSql1 + "UPDATE `tblaccemp_pointscard` SET `SOPoints`=" + sumRtn + " WHERE `CompanyID`='" + cmpId + "' AND `BusinessID`='" + busId + "' AND `EmployeeID`='" + line.EmployeeId + "' AND `StyleID`='" + line.StyleID.Trim() + "' AND `ColourID`='" + line.ColourID.Trim() + "' AND `Year`=" + sYear;
+                                                //}
+                                                //else
+                                                //{
+                                                //    sSql1 = sSql1 + "UPDATE `tblaccemp_pointscard` SET `SOPoints`=SOPoints+" + soPts + " WHERE `CompanyID`='" + cmpId + "' AND `BusinessID`='" + busId + "' AND `EmployeeID`='" + line.EmployeeId + "' AND `StyleID`='" + line.StyleID.Trim() + "' AND `ColourID`='" + line.ColourID.Trim() + "' AND `Year`=" + sYear;
+                                                //}
+                                            }
+
+                                            if (ExecuteQuery(conn, sSql1) > 0)
+                                            {
+                                                result.result = true;
+                                                //AddtologStockCard(SQL)
+                                            }
+                                            else
+                                            {
+                                                result.result = false;
+                                            }
                                         }
                                     }
                                 }
@@ -7018,7 +7050,7 @@ namespace Maximus.Data.Models
 
             try
             {
-                conn.Open();
+
                 MySqlCommand cmd = new MySqlCommand(updQry, conn);
                 if (cmd.ExecuteNonQuery() > 0)
                 {
@@ -7036,7 +7068,7 @@ namespace Maximus.Data.Models
             }
             finally
             {
-                conn.Close();
+
             }
 
         }
@@ -7050,7 +7082,7 @@ namespace Maximus.Data.Models
             MySqlConnection conn = new MySqlConnection(ConnectionString);
             try
             {
-                conn.Open();
+
                 MySqlCommand cmd = new MySqlCommand(updQry, conn);
                 if (cmd.ExecuteNonQuery() > 0)
                 {
@@ -7066,7 +7098,7 @@ namespace Maximus.Data.Models
             }
             finally
             {
-                conn.Close();
+
             }
         }
 
@@ -7495,7 +7527,7 @@ namespace Maximus.Data.Models
         #region ExecuteQuery
         public int ExecuteQuery(MySqlConnection conn, string sSqry)
         {
-            int result = 0;
+            int result = -1;
 
             try
             {
@@ -8224,9 +8256,11 @@ namespace Maximus.Data.Models
 
         public List<OrderDisplayModel> GetAllOrders(string OrderType, string busId, string userid, List<string> usrs, string role, bool boopts, string ordPerm, bool isEmergencyOrder, bool booIsConfirm = false, string RequirePermissionUSR = "")
         {
+            // var matUcodes = _ucodeReason.Exists(s => s.BusinessID == busId && s.UcodeId.ToLower().Contains("maternity")) ? _ucodeReason.GetAll(s => s.BusinessID == busId && s.UcodeId.ToLower().Contains("maternity")).Select(s => s.UcodeId).ToList() : new List<string>();
+            var ucodeLst = _pointsByUcode.GetAll(s => s.BusinessID == busId).Select(s => s.UcodeID).ToList();
             List<OrderDisplayModel> ShowOrdersRslt = new List<OrderDisplayModel>();
             MySqlConnection conn = new MySqlConnection(ConnectionString);
-
+            var lstRtncredited = _tblRtnCredites.GetAll(s => s.BusinessId == busId && s.CompanyId == cmpId).Select(s => Convert.ToInt64(s.OrderNo)).ToList();
             conn.Open();
             try
             {
@@ -8277,7 +8311,7 @@ namespace Maximus.Data.Models
                             }).ToList();
                             if (ShowOrdersRslt.Any(s => s.RtnOrdNo > 0 || s.NominalCode == ""))
                             {
-                                ShowOrdersRslt.Where(s => s.RtnOrdNo > 0 || s.NominalCode == "").ToList().ForEach(s => s.OrderType = "Emergency reorder (" + s.UCODEID + ")");
+                                ShowOrdersRslt.Where(s => s.RtnOrdNo > 0 || s.NominalCode == "").ToList().ForEach(s => s.OrderType = "Emergency Exchange order (" + s.UCODEID + ")");
                             }
 
                         }
@@ -8309,6 +8343,7 @@ namespace Maximus.Data.Models
                                     DeliveryDay = booIsConfirm ? s.ItemArray[26].ToString() != "" ? s.ItemArray[26].ToString() : "" : "",
                                     DeliveryWeek = booIsConfirm ? s.ItemArray[25].ToString() != "" ? Convert.ToInt32(s.ItemArray[25].ToString()) : 0 : 0,
                                     RtnOrdNo = s["RtnOrder"].ToString() != "" ? Convert.ToInt32(s["RtnOrder"].ToString()) : 0,
+                                    UCODEID = s["ucodeid"].ToString()
                                 }).ToList();
                             }
                             else
@@ -8336,13 +8371,13 @@ namespace Maximus.Data.Models
                                     TotalPoints = s.ItemArray[24].ToString() != "" ? Convert.ToInt32(s.ItemArray[23].ToString()) : 0,
                                     PointsSpent = s.ItemArray[24].ToString() != "" ? Convert.ToInt32(s.ItemArray[24].ToString()) : 0,
                                     RtnOrdNo = s["RtnOrder"].ToString() != "" ? Convert.ToInt32(s["RtnOrder"].ToString()) : 0,
-
+                                    UCODEID = s["ucodeid"].ToString()
                                 }).ToList();
 
                             }
                             if (ShowOrdersRslt.Any(s => s.RtnOrdNo > 0 || s.NominalCode == "" && s.CustomerRef.ToLower().Contains("private") == false))
                             {
-                                ShowOrdersRslt.Where(s => s.RtnOrdNo > 0 || s.NominalCode == "").ToList().ForEach(s => s.OrderType = "ReOrder");
+                                ShowOrdersRslt.Where(s => s.RtnOrdNo > 0 || s.NominalCode == "").ToList().ForEach(s => s.OrderType = "Exchange order");
                             }
                             if (ShowOrdersRslt.Any(s => s.CustomerRef.ToLower().Contains("private")))
                             {
@@ -8371,6 +8406,11 @@ namespace Maximus.Data.Models
             finally
             {
                 conn.Close();
+            }
+            if (ShowOrdersRslt.Any(s => ucodeLst.Contains(s.UCODEID)))
+            {
+                ShowOrdersRslt.Where(s => lstRtncredited.Contains(s.OrderNo)).ToList().ForEach(s => s.RtnCredited = true);
+                ShowOrdersRslt.Where(s => ucodeLst.Contains(s.UCODEID) && s.IsConfirmed.ToLower().Trim() == "yes").ToList().ForEach(s => s.ShowRtnCredited = true);
             }
             return ShowOrdersRslt;
         }
@@ -8441,7 +8481,7 @@ namespace Maximus.Data.Models
                 strsql += ",tnet.dweek,tnet1.dday ";
             }
             //Added by sasi(30-11-20)
-            strsql += ",MAX(IF(ISNULL(d.`ReturnOrderNo`),0,d.`ReturnOrderNo`)) RtnOrder ";
+            strsql += ",MAX(IF(ISNULL(d.`ReturnOrderNo`),0,d.`ReturnOrderNo`)) RtnOrder, h.`UCodeId` ucodeid ";
             strsql += "from tblsop_salesorder_header h LEFT JOIN tblsop_salesorder_detail d ON h.`CompanyID` = d.`CompanyID` AND h.`OrderNo` = d.`OrderNo` LEFT JOIN `tblaccemp_stylepoints` t2 ON d.`StyleID` = t2.`StyleID` AND d.`CompanyID` = t2.`CompanyID` AND d.`ColourID` = t2.`ColourID` AND h.`UCodeId` = t2.`UcodeID` AND h.`CustID` = t2.`BusinessID` LEFT JOIN tblbus_business b ON h.CustID = b.BusinessID AND h.companyid = b.companyid LEFT JOIN tblsop_manpackorders m ON h.CompanyID = m.CompanyID AND h.OrderNo = m.OrderNo";
             //strsql += "FROM (tblsop_salesorder_header h  JOIN (SELECT MAX(t1.sopdetail5) sop,t1.`CompanyID`,t2.`UcodeID`,t1.orderno,SUM(t1.ordqty) tot, t2.`BusinessID`,SUM(t1.`OrdQty`*t2.`Points`) pts,MAX(IF (ISNULL(t1.`ReturnOrderNo`),0,t1.`ReturnOrderNo`)) AS RtnOrder FROM `tblsop_salesorder_detail` t1 LEFT JOIN `tblaccemp_stylepoints` t2 ON t1.`StyleID`= t2.`StyleID` AND t1.`CompanyID`= t2.`CompanyID` AND t1.`ColourID`= t2.`ColourID`  GROUP BY t1.`OrderNo`,t2.`UcodeID`)  nt1 ON h.`UCodeId`= nt1.ucodeid AND h.`CustID`= nt1.businessid AND h.`OrderNo` = nt1.orderno ) LEFT JOIN tblbus_business b ON h.CustID = b.BusinessID AND h.companyid=b.companyid ";
             //strsql += "LEFT JOIN tblsop_manpackorders m ON h.CompanyID=m.CompanyID AND h.OrderNo=m.OrderNo ";
@@ -9726,6 +9766,7 @@ namespace Maximus.Data.Models
                 }
                 else
                 {
+                    bool isemergency = _pointsByUcode.Exists(s => s.UcodeID.ToLower().Trim() == salesHead.UCodeId.ToLower().Trim()) ? false : true;
                     string sql = "";
                     sql = "select * from tblsop_salesorder_detail where orderno=" + orderno + "";
                     MySqlCommand cmd = new MySqlCommand(sql, conn);
@@ -9734,24 +9775,39 @@ namespace Maximus.Data.Models
                     da.Fill(dt);
                     if (dt.Rows.Count > 0)
                     {
-                        foreach (var lline in dt.AsEnumerable().Select(s => new SalesOrderLineViewModel { StyleID = s["StyleID"].ToString(), ColourID = s["ColourId"].ToString(), OrdQty = Convert.ToInt32(s["OrdQty"].ToString()) }).ToList())
+                        if (!isemergency)
                         {
-                            int ucodPts = _stylePoints.Exists(s => s.UcodeID == salesHead.UCodeId && s.BusinessID == salesHead.CustID && s.StyleID == lline.StyleID) ? _stylePoints.GetAll(s => s.UcodeID == salesHead.UCodeId && s.BusinessID == salesHead.CustID && s.StyleID == lline.StyleID).First().Points.Value : 0;
-                            string stckCardQry = "", ptsCardQry = "";
-                            stckCardQry = "update `tblaccemp_stockcard` set soqty=soqty-(" + lline.OrdQty + ") where styleid='" + lline.StyleID + "' and colourid='" + lline.ColourID + "' and employeeid='" + salesHead.PinNo + "'";
-                            int pointsToUpdate = ucodPts * Convert.ToInt32(lline.OrdQty);
-                            ptsCardQry = "update `tblaccemp_pointscard` set sopoints=sopoints-(" + pointsToUpdate + ") where styleid='" + lline.StyleID + "' and colourid='" + lline.ColourID + "' and employeeid='" + salesHead.PinNo + "'";
-                            if (ExecuteQuery(conn, ptsCardQry) > 0)
+                            foreach (var lline in dt.AsEnumerable().Select(s => new SalesOrderLineViewModel { StyleID = s["StyleID"].ToString(), ColourID = s["ColourId"].ToString(), OrdQty = Convert.ToInt32(s["OrdQty"].ToString()) }).ToList())
                             {
-                                result = true;
+                                int ucodPts = _stylePoints.Exists(s => s.UcodeID == salesHead.UCodeId && s.BusinessID == salesHead.CustID && s.StyleID == lline.StyleID) ? _stylePoints.GetAll(s => s.UcodeID == salesHead.UCodeId && s.BusinessID == salesHead.CustID && s.StyleID == lline.StyleID).First().Points.Value : 0;
+                                string stckCardQry = "", ptsCardQry = "";
+                                stckCardQry = "update `tblaccemp_stockcard` set soqty=soqty-(" + lline.OrdQty + ") where styleid='" + lline.StyleID + "' and colourid='" + lline.ColourID + "' and employeeid='" + salesHead.PinNo + "'";
+                                int pointsToUpdate = ucodPts * Convert.ToInt32(lline.OrdQty);
+                                ptsCardQry = "update `tblaccemp_pointscard` set sopoints=sopoints-(" + pointsToUpdate + ") where styleid='" + lline.StyleID + "' and colourid='" + lline.ColourID + "' and employeeid='" + salesHead.PinNo + "'";
+                                if (ExecuteQuery(conn, ptsCardQry) > 0)
+                                {
+                                    result = true;
+                                }
+                                if (ExecuteQuery(conn, stckCardQry) > 0)
+                                {
+                                    result = true;
+                                }
+                                else
+                                {
+                                    result = false;
+                                }
                             }
-                            if (ExecuteQuery(conn, stckCardQry) > 0)
+                        }
+                        else
+                        {
+                            foreach (var lline in dt.AsEnumerable().Select(s => new SalesOrderLineViewModel { StyleID = s["StyleID"].ToString(), ColourID = s["ColourId"].ToString(), OrdQty = Convert.ToInt32(s["OrdQty"].ToString()) }).ToList())
                             {
-                                result = true;
-                            }
-                            else
-                            {
-                                result = false;
+                                string stckCardQry = "", ptsCardQry = "";
+                                stckCardQry = "update `tblaccemp_stockcard` set soqty=soqty-(" + lline.OrdQty + ") where styleid='" + lline.StyleID + "' and colourid='" + lline.ColourID + "' and employeeid='" + salesHead.PinNo + "'";
+                                if (ExecuteQuery(conn, stckCardQry) > 0)
+                                {
+                                    result = true;
+                                }
                             }
                         }
                     }
@@ -9810,6 +9866,7 @@ namespace Maximus.Data.Models
             }
             else
             {
+                bool isemergency = _pointsByUcode.Exists(s => s.UcodeID.ToLower().Trim() == salesHead.UCodeId.ToLower().Trim()) ? false : true;
                 string sql = "select * from tblsop_salesorder_detail where orderno=" + orderNOs + "";
                 MySqlCommand cmd = new MySqlCommand(sql, conn);
                 MySqlDataAdapter da = new MySqlDataAdapter(cmd);
@@ -9817,24 +9874,48 @@ namespace Maximus.Data.Models
                 da.Fill(dt);
                 if (dt.Rows.Count > 0)
                 {
-                    foreach (var lline in dt.AsEnumerable().Select(s => new SalesOrderLineViewModel { StyleID = s["StyleID"].ToString(), ColourID = s["ColourId"].ToString(), OrdQty = Convert.ToInt32(s["OrdQty"].ToString()) }).ToList())
+                    if (!isemergency)
                     {
-                        int ucodPts = _stylePoints.Exists(s => s.UcodeID == salesHead.UCodeId && s.BusinessID == salesHead.CustID && s.StyleID == lline.StyleID) ? _stylePoints.GetAll(s => s.UcodeID == salesHead.UCodeId && s.BusinessID == salesHead.CustID && s.StyleID == lline.StyleID).First().Points.Value : 0;
-                        string stckCardQry = "", ptsCardQry = "";
-                        stckCardQry = "update `tblaccemp_stockcard` set soqty=soqty+(" + lline.OrdQty + ") where styleid='" + lline.StyleID + "' and colourid='" + lline.ColourID + "' and employeeid='" + salesHead.PinNo + "'";
-                        int pointsToUpdate = ucodPts * Convert.ToInt32(lline.OrdQty);
-                        ptsCardQry = "update `tblaccemp_pointscard` set sopoints=sopoints+(" + pointsToUpdate + ") where styleid='" + lline.StyleID + "' and colourid='" + lline.ColourID + "' and employeeid='" + salesHead.PinNo + "'";
-                        if (ExecuteQuery(conn, ptsCardQry) > 0)
+                        foreach (var lline in dt.AsEnumerable().Select(s => new SalesOrderLineViewModel { StyleID = s["StyleID"].ToString(), ColourID = s["ColourId"].ToString(), OrdQty = Convert.ToInt32(s["OrdQty"].ToString()), ReturnLineNo = Convert.ToInt32(s["LineNo"].ToString()) }).ToList())
                         {
-                            result = true;
+
+                            int ucodPts = _stylePoints.Exists(s => s.UcodeID == salesHead.UCodeId && s.BusinessID == salesHead.CustID && s.StyleID == lline.StyleID) ? _stylePoints.GetAll(s => s.UcodeID == salesHead.UCodeId && s.BusinessID == salesHead.CustID && s.StyleID == lline.StyleID).First().Points.Value : 0;
+                            string stckCardQry = "", ptsCardQry = "";
+                            stckCardQry = "update `tblaccemp_stockcard` set soqty=soqty+(" + lline.OrdQty + ") where styleid='" + lline.StyleID + "' and colourid='" + lline.ColourID + "' and employeeid='" + salesHead.PinNo + "'";
+                            int pointsToUpdate = ucodPts * Convert.ToInt32(lline.OrdQty);
+                            ptsCardQry = "update `tblaccemp_pointscard` set sopoints=sopoints+(" + pointsToUpdate + ") where styleid='" + lline.StyleID + "' and colourid='" + lline.ColourID + "' and employeeid='" + salesHead.PinNo + "'";
+                            bool hasReorder = _salesDetail.Exists(s => s.ReturnOrderNo == orderNOs && s.ReturnLineNo == lline.ReturnLineNo) ? true : false;
+                            if (Convert.ToBoolean(BusinessParam("RTN_ADJ_REQ", salesHead.CustID)) || hasReorder)
+                            {
+                                if (ExecuteQuery(conn, stckCardQry) > 0)
+                                {
+                                    result = true;
+                                }
+                                if (ExecuteQuery(conn, ptsCardQry) > 0)
+                                {
+                                    result = true;
+                                }
+                                else
+                                {
+                                    result = false;
+                                }
+                            }
+                            else
+                            {
+                                result = true;
+                            }
                         }
-                        if (ExecuteQuery(conn, ptsCardQry) > 0)
+                    }
+                    else
+                    {
+                        foreach (var lline in dt.AsEnumerable().Select(s => new SalesOrderLineViewModel { StyleID = s["StyleID"].ToString(), ColourID = s["ColourId"].ToString(), OrdQty = Convert.ToInt32(s["OrdQty"].ToString()) }).ToList())
                         {
-                            result = true;
-                        }
-                        else
-                        {
-                            result = false;
+                            string stckCardQry = "";
+                            stckCardQry = "update `tblaccemp_stockcard` set soqty=soqty+(" + lline.OrdQty + ") where styleid='" + lline.StyleID + "' and colourid='" + lline.ColourID + "' and employeeid='" + salesHead.PinNo + "'";
+                            if (ExecuteQuery(conn, stckCardQry) > 0)
+                            {
+                                result = true;
+                            }
                         }
                     }
                     if (result)
@@ -10557,7 +10638,7 @@ namespace Maximus.Data.Models
                             }).ToList();
                             var matUcodes = _ucodeReason.Exists(s => s.BusinessID == busid && s.UcodeId.ToLower().Contains("maternity")) ? _ucodeReason.GetAll(s => s.BusinessID == busid && s.UcodeId.ToLower().Contains("maternity")).Select(s => s.UcodeId).ToList() : new List<string>();
                             var emergencyucode = _ucodeReason.Exists(s => s.BusinessID == busid && s.UcodeId.ToLower().Contains("matern") == false) ? _ucodeReason.GetAll(s => s.BusinessID == busid && s.UcodeId.ToLower().Contains("matern") == false).Select(s => s.UcodeId).ToList() : new List<string>();
-                            if (model.Any(s => s.RtnOrdNo > 0 || s.NominalCode == "" && s.CustomerRef.ToLower().Contains("private") == false && matUcodes.Contains(s.UCODEID) == false && emergencyucode.Contains(s.UCODEID))  )
+                            if (model.Any(s => s.RtnOrdNo > 0 || s.NominalCode == "" && s.CustomerRef.ToLower().Contains("private") == false && matUcodes.Contains(s.UCODEID) == false && emergencyucode.Contains(s.UCODEID)))
                             {
                                 model.Where(s => s.RtnOrdNo > 0 || s.NominalCode == "" && s.CustomerRef.ToLower().Contains("private") == false && matUcodes.Contains(s.UCODEID) == false && emergencyucode.Contains(s.UCODEID)).ToList().ForEach(s => s.OrderType = "Emergency order");
                             }
@@ -10565,8 +10646,8 @@ namespace Maximus.Data.Models
                             {
                                 model.Where(s => matUcodes.Contains(s.UCODEID)).ToList().ForEach(s => s.OrderType = "Maternity order");
                             }
-                           
-                            model.Where(s => s.NominalCode.ToLower() != "" || (s.NominalCode=="" && emergencyucode.Contains(s.UCODEID))==false && s.OrderType.ToLower()=="so").ToList().ForEach(s => s.OrderType = "Rollout order");
+
+                            model.Where(s => s.NominalCode.ToLower() != "" || (s.NominalCode == "" && emergencyucode.Contains(s.UCODEID)) == false && s.OrderType.ToLower() == "so").ToList().ForEach(s => s.OrderType = "Rollout order");
                             model.Where(s => s.OrderType.ToLower() == "rt").ToList().ForEach(s => s.OrderType = "Return order");
 
                         }
@@ -10619,9 +10700,9 @@ namespace Maximus.Data.Models
             strsql += " WHERE h.CompanyID='" + cmpId + "' AND h.CustID='" + busId + "' and h.pinno='" + empid + "' ";
             if (bootpts)
             {
-                var ptsUcode = _pointsByUcode.GetAll(s => s.BusinessID == busId ).Select(s => s.UcodeID).ToList();
+                var ptsUcode = _pointsByUcode.GetAll(s => s.BusinessID == busId).Select(s => s.UcodeID).ToList();
                 var list = "'" + string.Join("','", ptsUcode) + "'";
-                strsql += " and h.ucodeid in ("+ list + ")";
+                strsql += " and h.ucodeid in (" + list + ")";
             }
 
             strsql += "GROUP BY h.OrderNo, h.OrderDate, b.Name, h.DelDesc, h.DelAddress1, h.OrderGoods, h.TotalGoods, h.OnlineUserID, OnlineConfirm, OnlineProcessed, h.CompanyID, h.CustID, h.CustRef, h.OrderAnalysisCode1, h.Pinno, EmpName, OrdComments, h.OrderAnalysisCode4";
@@ -10750,6 +10831,133 @@ namespace Maximus.Data.Models
                 conn.Close();
             }
             return models;
+        }
+        #endregion
+        public bool IsMatUcodeId(string ucode, string busid)
+        {
+            var matCodes = _ucodeReason.Exists(s => s.UcodeId == "BAR MATERNITY P" | s.UcodeId == "BAR MATERNITY F" | s.UcodeId == "BAR MATERNITY") ? string.Join(",", _ucodeReason.GetAll(s => s.UcodeId == "BAR MATERNITY P" | s.UcodeId == "BAR MATERNITY F" | s.UcodeId == "BAR MATERNITY").Select(s => s.UcodeId.ToLower().Trim().ToString()).ToList()) : "";
+            return matCodes.Contains(ucode.ToLower().Trim()) && _pointsByUcode.Exists(s => s.BusinessID == busid && s.UcodeID == ucode.ToLower().Trim()) && ucode != "" ? true : false;
+        }
+
+        #region CreditreturnPoints
+        public string CreditreturnPoints(int orderno, string onlineUser)
+        {
+            var result = "";
+            string rtnDetQry = "";
+            string reordLinesStr = "";
+            int totalpoints = 0;
+            string insertQry = "";
+            List<string> reordLines = _salesDetail.Exists(s => s.ReturnOrderNo == orderno) ? _salesDetail.GetAll(s => s.ReturnOrderNo == orderno).Select(s => s.ReturnLineNo.Value.ToString()).ToList() : new List<string>();
+            reordLinesStr = string.Join(",", reordLines);
+            var salesHead = _salesHead.Exists(s => s.OrderNo == orderno) ? _salesHead.GetAll(s => s.OrderNo == orderno).First() : new tblsop_salesorder_header();
+            rtnDetQry = reordLinesStr == "" ? "Select lineno,orderno,styleid,colourid,sizeid,ordqty from tblsop_Salesorder_detail where orderno =" + orderno + " " : "Select lineno,orderno,styleid,colourid,sizeid,ordqty from tblsop_Salesorder_detail where orderno =" + orderno + " and lineno not in(" + reordLinesStr + ")";
+            if (orderno > 0 && salesHead.OnlineConfirm == 1)
+            {
+                MySqlTransaction trans;
+                MySqlConnection conn = new MySqlConnection(ConnectionString);
+                conn.Open();
+                trans = conn.BeginTransaction();
+                try
+                {
+                    //salesHead
+                    MySqlCommand headCmd = new MySqlCommand(rtnDetQry, conn);
+                    MySqlDataAdapter da = new MySqlDataAdapter(headCmd);
+                    DataTable dt = new DataTable();
+                    da.Fill(dt);
+                    if (dt.Rows.Count > 0)
+                    {
+                        foreach (var data in dt.AsEnumerable().Select(s => new SalesOrderLineViewModel { OrderNo = s["orderno"].ToString() != "" ? Convert.ToInt64(s["orderno"].ToString()) : 0, LineNo = s["lineno"].ToString() != "" ? Convert.ToInt32(s["lineno"].ToString()) : 0, StyleID = s["styleid"].ToString(), ColourID = s["colourid"].ToString(), SizeID = s["sizeid"].ToString(), OrdQty = s["ordqty"].ToString() != "" ? Convert.ToInt32(s["ordqty"].ToString()) : 0 }))
+                        {
+                            if (CreditReturns(data, conn, salesHead.PinNo) == false)
+                            {
+                                
+                                result = "";
+                                break;
+                            }
+                            else
+                            {
+                                if (data.StyleID != "")
+                                {
+                                    int stylePts = _stylePoints.Exists(s => s.StyleID.Trim().ToLower() == data.StyleID.Trim().ToLower()) ? _stylePoints.GetAll(s => s.StyleID.Trim().ToLower() == data.StyleID.Trim().ToLower()).First().Points.Value : 0;
+                                    if (stylePts > 0)
+                                    {
+                                        totalpoints = totalpoints + (Convert.ToInt32(data.OrdQty) * stylePts);
+                                    }
+                                }
+                                result = "success";
+                            }
+                        }
+                        if(totalpoints>0)
+                        {
+                            insertQry = insertQry + "insert into tblsop_return_credited(companyid,businessid,orderno,crediteddate,userid,employeeid,totalpoints) values ('"+cmpId+"','"+salesHead.CustID+"',"+orderno+",'"+DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") +"','"+ onlineUser + "','"+salesHead.PinNo+"',"+totalpoints+")";
+                            if(ExecuteQuery(conn,insertQry)>0)
+                            {
+                                result= "success";
+                            }
+                            else
+                            {
+                                result = "";
+                            }
+                        }
+                        else
+                        {
+                            result = "";
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+
+                }
+                finally
+                {
+                    if (result == "")
+                    {
+                        trans.Rollback();
+                    }
+                    else
+                    {
+                        trans.Commit();
+                    }
+
+                    conn.Close();
+                }
+            }
+            return result;
+        }
+
+        public bool CreditReturns(SalesOrderLineViewModel saleLine, MySqlConnection conn, string empID)
+        {
+            bool result = false;
+            int stylePts = 0;
+            string stkCardqry = "", ptsCardQry = "";
+            if (saleLine.OrderNo > 0 && saleLine.LineNo > 0 && saleLine.OrdQty > 0)
+            {
+                try
+                {
+                    if (saleLine.StyleID != "")
+                    {
+                        stylePts = _stylePoints.Exists(s => s.StyleID.Trim().ToLower() == saleLine.StyleID.Trim().ToLower()) ? _stylePoints.GetAll(s => s.StyleID.Trim().ToLower() == saleLine.StyleID.Trim().ToLower()).First().Points.Value : 0;
+                        if (stylePts > 0)
+                        {
+                            stkCardqry = "Update tblaccemp_stockcard set soqty=soqty-(" + saleLine.OrdQty + ") where styleid='" + saleLine.StyleID + "' and colourid='" + saleLine.ColourID + "' and employeeid='" + empID + "' and year=0";
+                            ptsCardQry = "Update tblaccemp_pointscard set sopoints=sopoints-(" + saleLine.OrdQty * stylePts + ") where styleid='" + saleLine.StyleID + "' and colourid='" + saleLine.ColourID + "' and employeeid='" + empID + "' and year=0";
+                            if (ExecuteQuery(conn, stkCardqry) >= 0)
+                            {
+                                if (ExecuteQuery(conn, ptsCardQry) >= 0)
+                                {
+                                    result = true;
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    result = false;
+                }
+            }
+            return result;
         }
         #endregion
     }

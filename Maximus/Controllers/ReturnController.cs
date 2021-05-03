@@ -254,7 +254,7 @@ namespace Maximus.Controllers
             var salesHeadLst = new List<SalesOrderHeaderViewModel>();
             var rtnHead = new SalesOrderHeaderViewModel();
             var reOrdHead = new SalesOrderHeaderViewModel();
-            var rtnType = Convert.ToBoolean(Session["ISRTNEDITING"]) ? IsMatUcodeId(ucodeid, busId) ? "MATERNITY" : _dp.CheckEmergency(busId, ucodeid) ? "EMERGENCY" : _dp.IsPrivateUcode(busId, ucodeid) ? "PRIVATE" : Session["isrtntype"] != null ? Session["isrtntype"].ToString() : "" : Session["isrtntype"] != null ? Session["isrtntype"].ToString() : "";
+            var rtnType = Convert.ToBoolean(Session["ISRTNEDITING"]) ? _dp.IsMatUcodeId(ucodeid, busId) ? "MATERNITY" : _dp.CheckEmergency(busId, ucodeid) ? "EMERGENCY" : _dp.IsPrivateUcode(busId, ucodeid) ? "PRIVATE" : Session["isrtntype"] != null ? Session["isrtntype"].ToString() : "" : Session["isrtntype"] != null ? Session["isrtntype"].ToString() : "";
             if (_salesOrderHeader.Exists(s => s.PinNo == employeeId && s.OrderType == "SO"))
             {
                 if (Convert.ToBoolean(Session["IsEmergency"].ToString()) == false && rtnType != "PRIVATE")
@@ -596,9 +596,23 @@ namespace Maximus.Controllers
                         }).First();
                     }
                 }
+                //var custref = rtnType == "PRIVATE" ? _salesOrderHeader.Exists(s => s.PinNo == employeeId && s.ReasonCode == 99 && s.CustRef.ToLower().Contains("priv") && s.OrderType.ToLower() == "so") ? _salesOrderHeader.GetAll(s => s.PinNo == employeeId && s.ReasonCode == 99 && s.CustRef.ToLower().Contains("priv") && s.OrderType.ToLower() == "so").First().CustRef : _salesOrderHeader.Exists(s => s.PinNo == employeeId) ? _salesOrderHeader.GetAll(s => s.PinNo == employeeId).First().CustRef : "" : "";
 
-
-                var custref = rtnType == "PRIVATE" ? _salesOrderHeader.Exists(s => s.PinNo == employeeId && s.ReasonCode == 99 && s.CustRef.ToLower().Contains("priv") && s.OrderType.ToLower() == "so") ? _salesOrderHeader.GetAll(s => s.PinNo == employeeId && s.ReasonCode == 99 && s.CustRef.ToLower().Contains("priv") && s.OrderType.ToLower() == "so").First().CustRef : _salesOrderHeader.Exists(s => s.PinNo == employeeId) ? _salesOrderHeader.GetAll(s => s.PinNo == employeeId).First().CustRef : "" : "";
+                var custref = "";
+                if (rtnType == "PRIVATE")
+                {
+                    if (_salesOrderHeader.Exists(s => s.PinNo == employeeId && s.ReasonCode == 99 && s.CustRef.ToLower().Contains("priv") && s.OrderType.ToLower() == "so"))
+                    {
+                        custref = _salesOrderHeader.GetAll(s => s.PinNo == employeeId && s.ReasonCode == 99 && s.CustRef.ToLower().Contains("priv") && s.OrderType.ToLower() == "so").First().CustRef;
+                    }
+                }
+                else
+                {
+                    if (_salesOrderHeader.Exists(s => s.PinNo == employeeId))
+                    {
+                        custref = _salesOrderHeader.GetAll(s => s.PinNo == employeeId).First().CustRef;
+                    }
+                }
                 var empName = _employee.Exists(s => s.EmployeeID == employeeId) ? _employee.GetAll(s => s.EmployeeID == employeeId).First().Forename + "  " + _employee.GetAll(s => s.EmployeeID == employeeId).First().Surname : "";
                 Session["rtnempid"] = employeeId;
                 Session["rtnempname"] = empName;
@@ -688,7 +702,8 @@ namespace Maximus.Controllers
                         }
                     }
                     else if (rtnType == "PRIVATE")
-                    {if (_salesOrderHeader.Exists(s => s.PinNo == employeeId && s.OrderType == "SO" && s.ReasonCode == 99 && s.CustRef.ToLower().Contains("private")))
+                    {
+                        if (_salesOrderHeader.Exists(s => s.PinNo == employeeId && s.OrderType == "SO" && s.ReasonCode == 99 && s.CustRef.ToLower().Contains("private")))
                         {
                             frshReord = _salesOrderHeader.GetAll(s => s.PinNo == employeeId && s.OrderType == "SO" && s.ReasonCode == 99 && s.CustRef.ToLower().Contains("private")).ToList().Select(ss => new SalesOrderHeaderViewModel
                             {
@@ -796,7 +811,7 @@ namespace Maximus.Controllers
             var salesHeadLst = new List<SalesOrderHeaderViewModel>();
             var rtnHead = new SalesOrderHeaderViewModel();
             var reOrdHead = new SalesOrderHeaderViewModel();
-            var rtnType = Convert.ToBoolean(Session["ISRTNEDITING"]) ? IsMatUcodeId(ucodeid, busId) ? "MATERNITY" : _dp.CheckEmergency(busId, ucodeid) ? "EMERGENCY" : _dp.IsPrivateUcode(busId, ucodeid) ? "PRIVATE" : Session["isrtntype"] != null ? Session["isrtntype"].ToString() : "" : Session["isrtntype"] != null ? Session["isrtntype"].ToString() : "";
+            var rtnType = Convert.ToBoolean(Session["ISRTNEDITING"]) ? _dp.IsMatUcodeId(ucodeid, busId) ? "MATERNITY" : _dp.CheckEmergency(busId, ucodeid) ? "EMERGENCY" : _dp.IsPrivateUcode(busId, ucodeid) ? "PRIVATE" : Session["isrtntype"] != null ? Session["isrtntype"].ToString() : "" : Session["isrtntype"] != null ? Session["isrtntype"].ToString() : "";
             if (_salesOrderHeader.Exists(s => s.PinNo == employeeId && s.OrderNo == rtnNo))
             {
 
@@ -1119,7 +1134,7 @@ namespace Maximus.Controllers
                         }
                     }
 
-                    
+
                 }
                 salesHeadLst.Add(frshReord);
             }
@@ -1217,7 +1232,7 @@ namespace Maximus.Controllers
                     if (model.Any(s => s.LineNo == items.LineNo && s.OrderNo == items.OrderNo))
                     {
                         var Val1 = model.Where(s => s.LineNo == items.LineNo && s.OrderNo == items.OrderNo).First().OrgOrdQty;
-                        var Val2 = items.IsRetEdit ?  model.Where(s => s.LineNo == items.LineNo && s.OrderNo == items.OrderNo).First().OrgRetOrdQty: model.Where(s => s.LineNo == items.LineNo && s.OrderNo == items.OrderNo).First().RtnQty;
+                        var Val2 = items.IsRetEdit ? model.Where(s => s.LineNo == items.LineNo && s.OrderNo == items.OrderNo).First().OrgRetOrdQty : model.Where(s => s.LineNo == items.LineNo && s.OrderNo == items.OrderNo).First().RtnQty;
                         // var Val3 = items.IsRetEdit ? 0 : items.OrdQty;
                         var Val3 = 0;
                         var Val4 = Val3 + Val2;
@@ -1287,7 +1302,7 @@ namespace Maximus.Controllers
             var result = new List<ReturnOrderModel>();
 
             //var model = ((List<SalesOrderHeaderViewModel>)Session["ReturnOrderHeader"]).Exists(s=>s.Returnheader)?((List<SalesOrderHeaderViewModel>)Session["ReturnOrderHeader"]).Where(s => s.Returnheader).First() :new SalesOrderHeaderViewModel();
-            var rtnType = Convert.ToBoolean(Session["ISRTNEDITING"]) ? IsMatUcodeId(ucodeid, busid) ? "MATERNITY" : _dp.CheckEmergency(busid, ucodeid) ? "EMERGENCY" : _dp.IsPrivateUcode(busid, ucodeid) ? "PRIVATE" : Session["isrtntype"] != null ? Session["isrtntype"].ToString() : "" : Session["isrtntype"] != null ? Session["isrtntype"].ToString() : "";
+            var rtnType = Convert.ToBoolean(Session["ISRTNEDITING"]) ? _dp.IsMatUcodeId(ucodeid, busid) ? "MATERNITY" : _dp.CheckEmergency(busid, ucodeid) ? "EMERGENCY" : _dp.IsPrivateUcode(busid, ucodeid) ? "PRIVATE" : Session["isrtntype"] != null ? Session["isrtntype"].ToString() : "" : Session["isrtntype"] != null ? Session["isrtntype"].ToString() : "";
             result = _returns.GetOrderToReturn(empid, Session["BuisnessId"].ToString(), Session["UserName"].ToString(), Session["OrderPermit"].ToString(), Session["Access"].ToString(), Convert.ToBoolean(Session["POINTSREQ"]), catogry, orderno, custRef, courierRef, pickingSlipNo, Convert.ToBoolean(Session["IsEmergency"].ToString()), rtnType);
             result.ForEach(s => s.Employeename = empName);
             result.ForEach(s => s.VAT = _dataConnection.GetlineVat(s.OrdQty, s.Price, _dataConnection.GetVatPercent(s.StyleId, s.SizeId)));
@@ -1324,10 +1339,10 @@ namespace Maximus.Controllers
                                 IsSelect = rtnLst.Count() > 0 ? rtnLst.Any(sa => sa.StyleId == s.StyleID && sa.SizeId == s.SizeID && sa.ColourId == s.ColourID && sa.ReturnLineNo == s.LineNo) ? rtnLst.Where(sa => sa.StyleId == s.StyleID && sa.SizeId == s.SizeID && sa.ColourId == s.ColourID && sa.ReturnLineNo == s.LineNo).Count() > 1 ? rtnLst.Where(sa => sa.StyleId == s.StyleID && sa.SizeId == s.SizeID && sa.ColourId == s.ColourID && sa.ReturnLineNo == s.LineNo).Last().IsSelect : true : false : false,
                                 IsRetEdit = rtnLst.Count() > 0 ? rtnLst.Any(sa => sa.IsRetEdit && sa.StyleId == s.StyleID && sa.ReturnLineNo == s.LineNo && sa.SizeId == s.SizeID && sa.ColourId == s.ColourID) ? true : false : false,
                                 IsDleted = rtnLst.Count() > 0 ? rtnLst.Any(sa => sa.StyleId == s.StyleID && sa.RtnOrderno == s.OrderNo && sa.SizeId == s.SizeID && sa.ColourId == s.ColourID && sa.ReturnLineNo == s.LineNo) ? rtnLst.Where(sa => sa.StyleId == s.StyleID && sa.RtnOrderno == s.OrderNo && sa.SizeId == s.SizeID && sa.ColourId == s.ColourID && sa.ReturnLineNo == s.LineNo).Count() > 1 ? rtnLst.Where(sa => sa.StyleId == s.StyleID && sa.SizeId == s.SizeID && sa.ColourId == s.ColourID && sa.RtnOrderno == s.OrderNo && sa.ReturnLineNo == s.LineNo).Last().IsDleted : rtnLst.Where(sa => sa.StyleId == s.StyleID && sa.SizeId == s.SizeID && sa.ColourId == s.ColourID && sa.RtnOrderno == s.OrderNo && sa.ReturnLineNo == s.LineNo).First().IsDleted : 0 : 0,
-                                StyleId=s.StyleID,
-                                SizeId=s.SizeID,
-                                ColourId=s.ColourID,
-                                OrdQty=Convert.ToInt32(s.OrdQty.Value)
+                                StyleId = s.StyleID,
+                                SizeId = s.SizeID,
+                                ColourId = s.ColourID,
+                                OrdQty = Convert.ToInt32(s.OrdQty.Value)
                             }).ToList());
                         }
                     }
@@ -1385,9 +1400,9 @@ namespace Maximus.Controllers
                         thisReturn.Where(s => s.OrderNo == line.OrderNo && s.StyleId == line.StyleId && s.ColourId == line.ColourId && s.SizeId == line.SizeId && s.LineNo == line.LineNo).First().Reason = line.Reason;
                         //  thisReturn.Where(s => s.OrderNo == line.OrderNo && s.StyleId == line.StyleId && s.ColourId == line.ColourId && s.SizeId == line.SizeId && s.LineNo == line.LineNo).First().RtnQty = line.RtnQty;
                         thisReturn.Where(s => s.OrderNo == line.OrderNo && s.StyleId == line.StyleId && s.ColourId == line.ColourId && s.SizeId == line.SizeId && s.LineNo == line.LineNo).First().RtnQty = thisReturn.Any(s => s.OrderNo == line.OrderNo && s.StyleId == line.StyleId && s.ColourId == line.ColourId && s.SizeId == line.SizeId && s.LineNo == line.LineNo) ? thisReturn.Where(s => s.OrderNo == line.OrderNo && s.StyleId == line.StyleId && s.ColourId == line.ColourId && s.SizeId == line.SizeId && s.LineNo == line.LineNo).Sum(s => s.RtnQty) + line.RtnQty : line.RtnQty;
-                        
-                            thisReturn.Where(s => s.OrderNo == line.OrderNo && s.StyleId == line.StyleId && s.ColourId == line.ColourId && s.SizeId == line.SizeId && s.LineNo == line.LineNo).First().OrgRetOrdQty = thisReturn.Any(s => s.OrderNo == line.OrderNo && s.StyleId == line.StyleId && s.ColourId == line.ColourId && s.SizeId == line.SizeId && s.LineNo == line.LineNo) ? thisReturn.Where(s => s.OrderNo == line.OrderNo && s.StyleId == line.StyleId && s.ColourId == line.ColourId && s.SizeId == line.SizeId && s.LineNo == line.LineNo).Sum(s => s.OrgRetOrdQty) + line.RtnQty : line.RtnQty;
-                       
+
+                        thisReturn.Where(s => s.OrderNo == line.OrderNo && s.StyleId == line.StyleId && s.ColourId == line.ColourId && s.SizeId == line.SizeId && s.LineNo == line.LineNo).First().OrgRetOrdQty = thisReturn.Any(s => s.OrderNo == line.OrderNo && s.StyleId == line.StyleId && s.ColourId == line.ColourId && s.SizeId == line.SizeId && s.LineNo == line.LineNo) ? thisReturn.Where(s => s.OrderNo == line.OrderNo && s.StyleId == line.StyleId && s.ColourId == line.ColourId && s.SizeId == line.SizeId && s.LineNo == line.LineNo).Sum(s => s.OrgRetOrdQty) + line.RtnQty : line.RtnQty;
+
                     }
                     var reason = thisReturn.Any(s => s.LineNo == line.LineNo && s.OrderNo == line.OrderNo && s.StyleId == line.StyleId && s.ColourId == line.ColourId && s.SizeId == line.SizeId) ? thisReturn.Where(s => s.LineNo == line.LineNo && s.OrderNo == line.OrderNo && s.StyleId == line.StyleId && s.ColourId == line.ColourId && s.SizeId == line.SizeId).First().Reason : "";
                     line.IsReturn = true;
@@ -1473,6 +1488,39 @@ namespace Maximus.Controllers
         }
         #endregion
 
+        #region CanAccessOrder
+        public bool CanAccessOrder(string empid, int orderno)
+        {
+            string access = Session["Access"].ToString();
+            if (access.ToLower().Trim() != "user")
+            {
+                if (_salesOrderHeader.Exists(s => s.OrderNo == orderno && s.OnlineConfirm == 0))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+
+            }
+            else if (access.ToLower().Trim() == "user")
+            {
+                if (_salesOrderHeader.Exists(s => s.PinNo == empid && s.OrderNo == orderno && s.OnlineUserID == empid && s.OnlineConfirm == 0))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+        #endregion
 
         #region ReturnReorder
         public ActionResult ReturnReorder(int ordeNo = 0)
@@ -1489,41 +1537,58 @@ namespace Maximus.Controllers
             var Rrttot = new TotalModel();
             if (ordeNo > 0)
             {
-                SetReturnOrderlines(ordeNo);
-                ViewData["carrierStyleFill"] = carrier;
-                var model = Session["rtnLines"] == null ? new List<ReturnOrderModel>() : ((List<ReturnOrderModel>)Session["rtnLines"]).Count > 0 ? ((List<ReturnOrderModel>)Session["rtnLines"]).Where(s => s.IsReturn && s.IsDleted == 0).ToList() : new List<ReturnOrderModel>();
-
-                var model1 = Session["rtnLines"] == null ? new List<ReturnOrderModel>() : ((List<ReturnOrderModel>)Session["rtnLines"]).Count > 0 ? ((List<ReturnOrderModel>)Session["rtnLines"]).Where(s => s.IsReorder && s.IsDleted==0).ToList() : new List<ReturnOrderModel>();
-                double carriage = 0.0;
-                if (Session["isrtntype"].ToString() == "PRIVATE")
+                if (CanAccessOrder(Session["UserName"].ToString(),ordeNo))
                 {
-                    Session["carrStyle"] = carrier;
-                    if (carrier.Count == 1 && model1.Any(s => s.isCarrline) == false)
+                    SetReturnOrderlines(ordeNo);
+                    ViewData["carrierStyleFill"] = carrier;
+                    var model = Session["rtnLines"] == null ? new List<ReturnOrderModel>() : ((List<ReturnOrderModel>)Session["rtnLines"]).Count > 0 ? ((List<ReturnOrderModel>)Session["rtnLines"]).Where(s => s.IsReturn && s.IsDleted == 0).ToList() : new List<ReturnOrderModel>();
+
+                    var model1 = Session["rtnLines"] == null ? new List<ReturnOrderModel>() : ((List<ReturnOrderModel>)Session["rtnLines"]).Count > 0 ? ((List<ReturnOrderModel>)Session["rtnLines"]).Where(s => s.IsReorder && s.IsDleted == 0).ToList() : new List<ReturnOrderModel>();
+                    double carriage = 0.0;
+                    if (Session["isrtntype"].ToString() == "PRIVATE")
                     {
-                        //  InsertCarriageLine(carrier[0]);
+                        Session["carrStyle"] = carrier;
+                        if (carrier.Count == 1 && model1.Any(s => s.isCarrline) == false)
+                        {
+                            //  InsertCarriageLine(carrier[0]);
+                        }
+                        carriage = model1.Any(s => s.isCarrline) ? model1.Where(s => s.isCarrline).Sum(s => s.Price) : 0.0;
+                        tot = _dataConnection.GetAlltotals(new List<SalesOrderHeaderViewModel>(), 0.0, true, model);
+                        Rrttot = _dataConnection.GetAlltotals(new List<SalesOrderHeaderViewModel>(), carriage, true, model1);
                     }
-                    carriage = model1.Any(s => s.isCarrline) ? model1.Where(s => s.isCarrline).Sum(s => s.Price) : 0.0;
-                    tot = _dataConnection.GetAlltotals(new List<SalesOrderHeaderViewModel>(), 0.0, true, model);
-                    Rrttot = _dataConnection.GetAlltotals(new List<SalesOrderHeaderViewModel>(), carriage, true, model1);
+                    else
+                    {
+                        tot = _dataConnection.GetAlltotals(new List<SalesOrderHeaderViewModel>(), carriage, true, model);
+                        Rrttot = _dataConnection.GetAlltotals(new List<SalesOrderHeaderViewModel>(), carriage, true, model1);
+                    }
+                    ViewBag.VatPercent = tot.vatSpan;
+                    ViewBag.carriage = tot.carriage;
+                    ViewBag.ordeTotal = tot.ordeTotal;
+                    ViewBag.totalVat = tot.totalVat;
+                    ViewBag.Total = tot.Total;
+                    ViewBag.GrossTotal = tot.gross;
+                    ViewBag.ReOrdVatPercent = Rrttot.vatSpan;
+                    ViewBag.ReOrdcarriage = Rrttot.carriage;
+                    ViewBag.ReOrdordeTotal = Rrttot.ordeTotal;
+                    ViewBag.ReOrdtotalVat = Rrttot.totalVat;
+                    ViewBag.ReOrdTotal = Rrttot.Total;
+                    ViewBag.ReOrdGrossTotal = Rrttot.gross;
+                    TempData["PointsDivRtn"] = GetPointsDivReturns();
                 }
                 else
                 {
-                    tot = _dataConnection.GetAlltotals(new List<SalesOrderHeaderViewModel>(), carriage, true, model);
-                    Rrttot = _dataConnection.GetAlltotals(new List<SalesOrderHeaderViewModel>(), carriage, true, model1);
+                    ViewBag.CannotAccess = "Cannot Access the order";
+                    if (_salesOrderHeader.Exists(s => s.OrderNo == ordeNo && s.OnlineConfirm == 1))
+                    {
+                        ViewBag.CannotAccess = "Cannot access this order because it is already confrimed";
+                    }
+                    else
+                    {
+                        ViewBag.CannotAccess = "Cannot access this order because it belongs to some other colleague";
+                    }
+
+                    return View("CannotAccess");
                 }
-                ViewBag.VatPercent = tot.vatSpan;
-                ViewBag.carriage = tot.carriage;
-                ViewBag.ordeTotal = tot.ordeTotal;
-                ViewBag.totalVat = tot.totalVat;
-                ViewBag.Total = tot.Total;
-                ViewBag.GrossTotal = tot.gross;
-                ViewBag.ReOrdVatPercent = Rrttot.vatSpan;
-                ViewBag.ReOrdcarriage = Rrttot.carriage;
-                ViewBag.ReOrdordeTotal = Rrttot.ordeTotal;
-                ViewBag.ReOrdtotalVat = Rrttot.totalVat;
-                ViewBag.ReOrdTotal = Rrttot.Total;
-                ViewBag.ReOrdGrossTotal = Rrttot.gross;
-                TempData["PointsDivRtn"] = GetPointsDivReturns();
             }
             else
             {
@@ -1619,13 +1684,13 @@ namespace Maximus.Controllers
                     if (model1.Any(s => s.IsReorder))
                     {
                         var selected = ((ReturnOrderModel)Session["selectedRetLine"]);
-                        if (model1.Any(s => s.IsReorder && s.LineNo == selected.LineNo &&  s.ReturnLineNo==selected.ReturnLineNo && s.StyleId==selected.StyleId && s.ColourId== selected.ColourId && s.SizeId==selected.SizeId))
+                        if (model1.Any(s => s.IsReorder && s.LineNo == selected.LineNo && s.ReturnLineNo == selected.ReturnLineNo && s.StyleId == selected.StyleId && s.ColourId == selected.ColourId && s.SizeId == selected.SizeId))
                         {
 
-                            var reOrdQty =0;
+                            var reOrdQty = 0;
                             if (Convert.ToBoolean(Session["ISRTNEDITING"]))
                             {
-                                reOrdQty = model1.Where(s => s.IsReorder  && s.ReturnLineNo == selected.ReturnLineNo && s.StyleId == selected.StyleId && s.ColourId == selected.ColourId && s.SizeId == selected.SizeId).Sum(s => s.OrdQty);
+                                reOrdQty = model1.Where(s => s.IsReorder && s.ReturnLineNo == selected.ReturnLineNo && s.StyleId == selected.StyleId && s.ColourId == selected.ColourId && s.SizeId == selected.SizeId).Sum(s => s.OrdQty);
                                 if (reOrdQty >= model.Where(s => s.LineNo == selected.LineNo && s.ReturnLineNo == selected.ReturnLineNo && s.StyleId == selected.StyleId && s.ColourId == selected.ColourId && s.SizeId == selected.SizeId).Sum(s => s.OrdQty))
                                 {
                                     model.Where(s => s.LineNo == selected.LineNo && s.ReturnLineNo == selected.ReturnLineNo && s.StyleId == selected.StyleId && s.ColourId == selected.ColourId && s.SizeId == selected.SizeId).ToList().ForEach(s => s.HideReorderBtn = true);
@@ -1659,7 +1724,7 @@ namespace Maximus.Controllers
             Session["SelectedEmp"] = model.First().Emp;
             Session["SelectedUcode"] = model.First().Ucode;
             Session["selectedUcodes"] = model.First().Ucode;
-            Session["selectedRetLine"] = ((List<ReturnOrderModel>)Session["rtnLines"]).Where(s => s.OrderNo == orderNO && s.LineNo == LineNo && s.IsDleted==0).First();
+            Session["selectedRetLine"] = ((List<ReturnOrderModel>)Session["rtnLines"]).Where(s => s.OrderNo == orderNO && s.LineNo == LineNo && s.IsDleted == 0).First();
             var ucodStylesLst = _dp.UcodeStyles(model.First().Ucode, Session["BuisnessId"].ToString());
             string ucode = model.First().Ucode;
             string emp = model.First().Emp;
@@ -1697,7 +1762,7 @@ namespace Maximus.Controllers
                 Freetext = x.FreeText,
                 OriginalStyleid = x.StyleID
             }).ToList();
-            if ((Convert.ToBoolean(Session["isemergency"]) | IsMatUcodeId(model.First().Ucode, busId)) && Session["isrtntype"].ToString() != "PRIVATE")
+            if ((Convert.ToBoolean(Session["isemergency"]) | _dp.IsMatUcodeId(model.First().Ucode, busId)) && Session["isrtntype"].ToString() != "PRIVATE")
             {
                 return RedirectToAction("GetCard", "Home", new { StyleID = style, Orgstyle = model1.First().OriginalStyleid });
             }
@@ -1718,14 +1783,15 @@ namespace Maximus.Controllers
             {
                 if (((List<ReturnOrderModel>)Session["rtnLines"]).Count() > 0)
                 {
-                    var reason = _returnReasonCodes.Exists(s => s.Description.ToLower().Contains("supplier error") || s.Description.ToLower().Contains("quality issue/fault")) ? _returnReasonCodes.GetAll(s => s.Description.ToLower().Contains("supplier error") || s.Description.ToLower().Contains("quality issue/fault")).Select(s => s.ReasonCode).ToList() : new List<long>();
+                    var reasonCodes = _returnReasonCodes.Exists(s => s.Description.ToLower().Contains("supplier error") || s.Description.ToLower().Contains("quality issue/fault")) ? _returnReasonCodes.GetAll(s => s.Description.ToLower().Contains("supplier error") || s.Description.ToLower().Contains("quality issue/fault")).Select(s => s.ReasonCode).ToList() : new List<long>();
+                    var reason = _returnReasonCodes.Exists(s => s.Description.ToLower().Contains("supplier error") || s.Description.ToLower().Contains("quality issue/fault")) ? _returnReasonCodes.GetAll(s => s.Description.ToLower().Contains("supplier error") || s.Description.ToLower().Contains("quality issue/fault")).Select(s => s.Description.ToLower().Trim()).ToList() : new List<string>();
                     var sss = ((List<ReturnOrderModel>)Session["rtnLines"]);
                     var lineNo = ((ReturnOrderModel)Session["selectedRetLine"]).ReturnLineNo;
                     if (((List<ReturnOrderModel>)Session["rtnLines"]).Any(s => s.StyleId == style && s.SizeId == size && s.IsReturn && s.IsDleted == 0))
                     {
                         if (((List<ReturnOrderModel>)Session["rtnLines"]).Where(s => s.StyleId == style && s.SizeId == size && s.IsReturn && s.IsDleted == 0).First().ReturnLineNo == lineNo)
                         {
-                            if (reason.Contains(((List<ReturnOrderModel>)Session["rtnLines"]).Where(s => s.StyleId == style && s.SizeId == size && s.IsReturn && s.IsDleted == 0).First().ReasonCode) == false)
+                            if (reasonCodes.Contains(((List<ReturnOrderModel>)Session["rtnLines"]).Where(s => s.StyleId == style && s.SizeId == size && s.IsReturn && s.IsDleted == 0).First().ReasonCode) == false && reason.Contains(((List<ReturnOrderModel>)Session["rtnLines"]).Where(s => s.StyleId == style && s.SizeId == size && s.IsReturn && s.IsDleted == 0).First().Reason.ToLower().Trim()) == false)
                             {
                                 return true;
                             }
@@ -1810,6 +1876,7 @@ namespace Maximus.Controllers
 
             try
             {
+                ((ReturnOrderModel)Session["selectedRetLine"]).HasReorder = true;
                 returnOrderLines.ReOrderLineNo = reLineNo;
                 returnOrderLines.Employeename = empName;
                 returnOrderLines.OrderNo = ((ReturnOrderModel)Session["selectedRetLine"]).OrderNo;
@@ -1876,7 +1943,7 @@ namespace Maximus.Controllers
                 }
                 else
                 {
-                    if ((Convert.ToBoolean(Session["IsEmergency"].ToString()) || IsMatUcodeId(Session["SelectedUcode"].ToString(), Session["BuisnessId"].ToString())) && checkforemergencyqty(style, size, Convert.ToInt32(qty)))
+                    if ((Convert.ToBoolean(Session["IsEmergency"].ToString()) || _dp.IsMatUcodeId(Session["SelectedUcode"].ToString(), Session["BuisnessId"].ToString())) && checkforemergencyqty(style, size, Convert.ToInt32(qty)))
                     {
                         result = "qty validation";
                     }
@@ -1922,6 +1989,7 @@ namespace Maximus.Controllers
                     if (Convert.ToBoolean(Session["POINTSREQ"]))
                     {
                         int availPts = 0;
+                        int availPts1 = 0;
                         var emp = (((List<ReturnOrderModel>)Session["rtnLines"])).First().Emp;
                         var ucode = (((List<ReturnOrderModel>)Session["rtnLines"])).First().Ucode;
                         var ucodStylesLst = _dp.UcodeStyles(ucode, Session["BuisnessId"].ToString());
@@ -1933,20 +2001,59 @@ namespace Maximus.Controllers
                         int reOrdPtsEd = isReordEdt ? (((List<ReturnOrderModel>)Session["rtnLines"])).Where(s => s.IsReorder && s.IsDleted == 0 && s.ReOrderLineNo != lineno).Sum(s => s.TotalPoints) : (((List<ReturnOrderModel>)Session["rtnLines"])).Where(s => s.IsReorder && s.IsDleted == 0 && s.ReOrderno == 0).Sum(s => s.TotalPoints);
                         int reOrdPts = isReordEdt ? (((List<ReturnOrderModel>)Session["rtnLines"])).Where(s => s.IsReorder && s.IsDleted == 0 && s.ReOrderLineNo != lineno).Sum(s => s.TotalPoints) : (((List<ReturnOrderModel>)Session["rtnLines"])).Where(s => s.IsReorder && s.IsDleted == 0 && s.ReOrderno != 0).Sum(s => s.TotalPoints);
                         int thisTotPts = Convert.ToInt32(qty) * thisPts;
+                        var selected = Session["selectedRetLine"] != null ? (ReturnOrderModel)Session["selectedRetLine"] : new ReturnOrderModel();
+                        int reOrds = 0;
+                        //Commented on 26-04-21 (added btnststus based on the quantity)
+                        //if (Convert.ToBoolean(Session["ISRTNEDITING"]))
+                        //{
+                        //    int thisRTnPts = (((List<ReturnOrderModel>)Session["rtnLines"])).Any(s => s.IsReturn && s.IsDleted == 0 && s.IsRetEdit == false) ? (((List<ReturnOrderModel>)Session["rtnLines"])).Where(s => s.IsReturn && s.IsDleted == 0 && s.IsRetEdit == false).Sum(s => s.TotalPoints) : 0;
+                        //    availPts = totalPts - ((cardPts + reOrdPtsEd) - thisRTnPts);
+                        //}
+                        //else
+                        //{
+                        //    availPts = totalPts - ((cardPts + reOrdPtsEd + reOrdPts) - rtnPts);
+                        //}
+
+                        //var ss = (((List<ReturnOrderModel>)Session["rtnLines"])).Where(s => s.IsReturn && s.IsDleted == 0).ToList();
+                        //if (availPts >= thisTotPts)
+                        //{
+                        //    result = "enabled";
+                        //}
+                        int thisRTnPts = 0;
                         if (Convert.ToBoolean(Session["ISRTNEDITING"]))
                         {
-                            int thisRTnPts = (((List<ReturnOrderModel>)Session["rtnLines"])).Any(s => s.IsReturn && s.IsDleted == 0 && s.IsRetEdit == false) ? (((List<ReturnOrderModel>)Session["rtnLines"])).Where(s => s.IsReturn && s.IsDleted == 0 && s.IsRetEdit == false).Sum(s => s.TotalPoints) : 0;
-                            availPts = totalPts - ((cardPts + reOrdPtsEd) - thisRTnPts);
+                            reOrds = selected.LineNo > 0 ? (((List<ReturnOrderModel>)Session["rtnLines"])).Any(s => s.IsReorder && s.StyleId == style && s.ReturnLineNo == selected.ReturnLineNo && s.IsDleted == 0) ? (((List<ReturnOrderModel>)Session["rtnLines"])).Where(s => s.IsReorder && s.StyleId == style && s.ReturnLineNo == selected.ReturnLineNo && s.IsDleted == 0).Sum(s => s.OrdQty) : 0 : 0;
+                            thisRTnPts = (((List<ReturnOrderModel>)Session["rtnLines"])).Any(s => s.IsReturn && s.IsDleted == 0 && s.HasReorder == false) ? (((List<ReturnOrderModel>)Session["rtnLines"])).Where(s => s.IsReturn && s.IsDleted == 0 && s.HasReorder == false).Sum(s => s.TotalPoints) : 0;
+                            availPts = selected.LineNo > 0 ? (((List<ReturnOrderModel>)Session["rtnLines"])).Any(s => s.IsReturn && s.StyleId != selected.StyleId && s.ReturnLineNo != selected.ReturnLineNo && s.HasReorder == false && s.IsDleted == 0) ? (((List<ReturnOrderModel>)Session["rtnLines"])).Where(s => s.IsReturn && s.StyleId != selected.StyleId && s.ReturnLineNo != selected.ReturnLineNo && s.HasReorder == false && s.IsDleted == 0).Sum(s => s.TotalPoints) : 0 : 0;
+                            //availPts1 = totalPts - ((cardPts + reOrdPtsEd) - thisRTnPts);
+                            availPts1 = totalPts - ((cardPts + reOrdPts) - rtnPts);
                         }
                         else
                         {
-                            availPts = totalPts - ((cardPts + reOrdPtsEd + reOrdPts) - rtnPts);
+                            reOrds = selected.LineNo > 0 ? (((List<ReturnOrderModel>)Session["rtnLines"])).Any(s => s.IsReorder && s.StyleId == style && s.LineNo == selected.LineNo && s.ReturnLineNo == selected.ReturnLineNo && s.IsDleted == 0) ? (((List<ReturnOrderModel>)Session["rtnLines"])).Where(s => s.IsReorder && s.StyleId == style && s.LineNo == selected.LineNo && s.ReturnLineNo == selected.ReturnLineNo && s.IsDleted == 0).Sum(s => s.OrdQty) : 0 : 0;
+                            availPts = selected.LineNo > 0 ? (((List<ReturnOrderModel>)Session["rtnLines"])).Any(s => s.IsReturn && s.StyleId != selected.StyleId && s.LineNo != selected.LineNo && s.ReturnLineNo != selected.ReturnLineNo && s.HasReorder == false && s.IsDleted == 0) ? (((List<ReturnOrderModel>)Session["rtnLines"])).Where(s => s.IsReturn && s.StyleId != selected.StyleId && s.LineNo != selected.LineNo && s.ReturnLineNo != selected.ReturnLineNo && s.HasReorder == false && s.IsDleted == 0).Sum(s => s.TotalPoints) : 0 : 0;
+                            availPts1 = totalPts - ((cardPts + reOrdPtsEd + reOrdPts) - rtnPts);
                         }
 
-                        var ss = (((List<ReturnOrderModel>)Session["rtnLines"])).Where(s => s.IsReturn && s.IsDleted == 0).ToList();
-                        if (availPts >= thisTotPts)
+                        if (Convert.ToBoolean(Session["ISRTNEDITING"]))
                         {
-                            result = "enabled";
+                            if ((Convert.ToInt32(qty) + reOrds) <= selected.OrdQty)
+                            {
+                                if ((availPts1 - availPts) >= thisTotPts)
+                                {
+                                    result = "enabled";
+                                }
+                            }
+                        }
+                        else
+                        {
+                            if ((Convert.ToInt32(qty) + reOrds) <= selected.RtnQty)
+                            {
+                                if ((availPts1 - availPts) >= thisTotPts)
+                                {
+                                    result = "enabled";
+                                }
+                            }
                         }
                     }
                 }
@@ -1957,17 +2064,17 @@ namespace Maximus.Controllers
                     int reOrds = 0;
                     if (Convert.ToBoolean(Session["ISRTNEDITING"]))
                     {
-                        reOrds = selected.LineNo > 0 ? (((List<ReturnOrderModel>)Session["rtnLines"])).Any(s => s.IsReorder && s.StyleId == style  && s.ReturnLineNo == selected.ReturnLineNo) ? (((List<ReturnOrderModel>)Session["rtnLines"])).Where(s => s.IsReorder && s.StyleId == style  && s.ReturnLineNo == selected.ReturnLineNo).Sum(s => s.OrdQty) : 0 : 0;
+                        reOrds = selected.LineNo > 0 ? (((List<ReturnOrderModel>)Session["rtnLines"])).Any(s => s.IsReorder && s.StyleId == style && s.ReturnLineNo == selected.ReturnLineNo) ? (((List<ReturnOrderModel>)Session["rtnLines"])).Where(s => s.IsReorder && s.StyleId == style && s.ReturnLineNo == selected.ReturnLineNo).Sum(s => s.OrdQty) : 0 : 0;
                     }
                     else
                     {
-                        reOrds= selected.LineNo > 0 ? (((List<ReturnOrderModel>)Session["rtnLines"])).Any(s => s.IsReorder && s.StyleId == style && s.LineNo == selected.LineNo && s.ReturnLineNo == selected.ReturnLineNo) ? (((List<ReturnOrderModel>)Session["rtnLines"])).Where(s => s.IsReorder && s.StyleId == style && s.LineNo == selected.LineNo && s.ReturnLineNo == selected.ReturnLineNo).Sum(s => s.OrdQty) : 0 : 0;
+                        reOrds = selected.LineNo > 0 ? (((List<ReturnOrderModel>)Session["rtnLines"])).Any(s => s.IsReorder && s.StyleId == style && s.LineNo == selected.LineNo && s.ReturnLineNo == selected.ReturnLineNo) ? (((List<ReturnOrderModel>)Session["rtnLines"])).Where(s => s.IsReorder && s.StyleId == style && s.LineNo == selected.LineNo && s.ReturnLineNo == selected.ReturnLineNo).Sum(s => s.OrdQty) : 0 : 0;
                     }
                     if (Convert.ToBoolean(Session["ISRTNEDITING"]))
                     {
                         if ((Convert.ToInt32(qty) + reOrds) <= selected.OrdQty)
                         {
-                              result = "enabled";
+                            result = "enabled";
                         }
                     }
                     else
@@ -1990,8 +2097,8 @@ namespace Maximus.Controllers
         {
             var model = (((List<ReturnOrderModel>)Session["rtnLines"]));
             var frstRetModel = model.Any(s => s.ReturnLineNo == line.ReturnLineNo) ? model.Where(s => s.ReturnLineNo == line.ReturnLineNo).First() : new ReturnOrderModel();
-          
-                
+
+
             if (frstRetModel.OrderNo > 0)
             {
                 if (Convert.ToBoolean(Session["ISRTNEDITING"]) && frstRetModel.IsRetEdit)
@@ -2011,7 +2118,7 @@ namespace Maximus.Controllers
                         model.Where(s => s.ReturnLineNo == frstRetModel.ReturnLineNo && s.IsReorder).ToList().ForEach(sa => sa.IsSelect = false);
                     }
                 }
-              else  if (Convert.ToBoolean(Session["ISRTNEDITING"]) && frstRetModel.IsRetEdit==false)
+                else if (Convert.ToBoolean(Session["ISRTNEDITING"]) && frstRetModel.IsRetEdit == false)
                 {
                     var frstReordModel = model.Any(s => s.ReturnLineNo == frstRetModel.ReturnLineNo && s.OrderNo == frstRetModel.OrderNo && s.LineNo == frstRetModel.LineNo && s.IsReorder) ? model.Where(s => s.ReturnLineNo == frstRetModel.ReturnLineNo && s.OrderNo == frstRetModel.OrderNo && s.LineNo == frstRetModel.LineNo && s.IsReorder).ToList() : new List<ReturnOrderModel>();
                     var thisReturn = (List<ReturnOrderModel>)Session["returnModellst"];
@@ -2025,7 +2132,7 @@ namespace Maximus.Controllers
                         model.Remove(mod);
                     }
                     model.Remove(frstRetModel);
-                  
+
                 }
                 else
                 {
@@ -2036,7 +2143,7 @@ namespace Maximus.Controllers
                     thisReturn.Where(s => s.StyleId == frstRetModel.StyleId && s.ColourId == frstRetModel.ColourId && s.SizeId == frstRetModel.SizeId && s.LineNo == frstRetModel.LineNo && s.OrderNo == frstRetModel.OrderNo).First().IsSelect = false;
                     thisReturn.Where(s => s.StyleId == frstRetModel.StyleId && s.ColourId == frstRetModel.ColourId && s.SizeId == frstRetModel.SizeId && s.LineNo == frstRetModel.LineNo && s.OrderNo == frstRetModel.OrderNo).First().RtnQty = 0;
                     thisReturn.Where(s => s.StyleId == frstRetModel.StyleId && s.ColourId == frstRetModel.ColourId && s.SizeId == frstRetModel.SizeId && s.LineNo == frstRetModel.LineNo && s.OrderNo == frstRetModel.OrderNo).First().IsSelect = false;
-                  
+
                     foreach (var mod in frstReordModel)
                     {
                         model.Remove(mod);
@@ -2044,7 +2151,7 @@ namespace Maximus.Controllers
                     model.Remove(frstRetModel);
                 }
             }
-           // ResequenceReturnreorders();
+            // ResequenceReturnreorders();
             Session["rtnLines"] = model;
             return PartialView("_ReturnReorderGridviewPartial", model.Where(s => s.IsReturn && s.IsDleted == 0).ToList());
         }
@@ -2065,16 +2172,17 @@ namespace Maximus.Controllers
                 model.Where(s => s.ReturnLineNo == line.ReturnLineNo).First().Total = _dataConnection.GetlineTotals(Convert.ToDouble(line.OrdQty), Convert.ToDouble(model.Where(s => s.ReturnLineNo == line.ReturnLineNo).First().Price), _dataConnection.GetVatPercent(model.Where(s => s.ReturnLineNo == line.ReturnLineNo).First().StyleId, model.Where(s => s.ReturnLineNo == line.ReturnLineNo).First().SizeId));
                 thisReturn.Where(s => s.StyleId == frstRetModel.StyleId && s.ColourId == frstRetModel.ColourId && s.SizeId == frstRetModel.SizeId && s.LineNo == frstRetModel.LineNo && s.OrderNo == frstRetModel.OrderNo).First().OrgRetOrdQty = line.OrdQty;
                 thisReturn.Where(s => s.StyleId == frstRetModel.StyleId && s.ColourId == frstRetModel.ColourId && s.SizeId == frstRetModel.SizeId && s.LineNo == frstRetModel.LineNo && s.OrderNo == frstRetModel.OrderNo).First().RtnQty = line.OrdQty;
-                //if( Convert.ToBoolean(Session["IsEmergency"].ToString()) ||  IsMatUcodeId(model.First().Ucode, Session["BuisnessId"].ToString()))
-                // {
-                //     var frstRetModel = model.Any(s => s.ReturnLineNo == line.ReturnLineNo) ? model.Where(s => s.ReturnLineNo == line.ReturnLineNo).First() : new ReturnOrderModel();
-                //     if (model.Any(s => s.ReturnLineNo == frstRetModel.ReturnLineNo && s.IsReorder))
-                //     {
-                //         model.Where(s => s.ReturnLineNo == frstRetModel.ReturnLineNo && s.IsReorder).ToList().ForEach(s=>s.OrdQty = line.OrdQty);
-                //         model.Where(s => s.ReturnLineNo == frstRetModel.ReturnLineNo && s.IsReorder).ToList().ForEach(s => s.TotalPoints =line.OrdQty*s.Points );
-                //     }
-
-                // }
+               if(Convert.ToBoolean(Session["POINTSREQ"].ToString()) && Session["isrtntype"].ToString().ToLower() != "maternity")
+                {
+                    if (model.Exists(s => s.ReturnLineNo == line.ReturnLineNo && s.IsReorder))
+                    {
+                        model.Where(s => s.ReturnLineNo == line.ReturnLineNo && s.IsReorder).First().OrdQty = line.OrdQty;
+                        model.Where(s => s.ReturnLineNo == line.ReturnLineNo && s.IsReorder).First().RtnQty = line.OrdQty;
+                        model.Where(s => s.ReturnLineNo == line.ReturnLineNo && s.IsReorder).First().OrgRetOrdQty = line.OrdQty;
+                        model.Where(s => s.ReturnLineNo == line.ReturnLineNo && s.IsReorder).First().IssueQty1 = line.OrdQty;
+                        model.Where(s => s.ReturnLineNo == line.ReturnLineNo && s.IsReorder).First().TotalPoints = line.OrdQty * model.Where(s => s.ReturnLineNo == line.ReturnLineNo).First().Points;
+                    }
+                }
             }
             return PartialView("_ReturnReorderGridviewPartial", model.Where(s => s.IsReturn && s.IsDleted == 0).ToList());
         }
@@ -2102,7 +2210,13 @@ namespace Maximus.Controllers
         {
             var model = (((List<ReturnOrderModel>)Session["rtnLines"]));
             var frstReOrdModel = model.Any(s => s.ReOrderLineNo == line.ReOrderLineNo) ? model.Where(s => s.ReOrderLineNo == line.ReOrderLineNo).First() : new ReturnOrderModel();
-            if (Session["isrtntype"].ToString() == "PRIVATE")
+            //commented by sasi(28-4-21)
+            //if (Session["isrtntype"].ToString() == "PRIVATE")
+            //{
+            //    ViewData["EditResult"] = true;
+            //}
+            //added by sasi(28-4-21)
+            if (Session["isrtntype"].ToString() == "PRIVATE" || Convert.ToBoolean(Session["POINTSREQ"].ToString()))
             {
                 ViewData["EditResult"] = true;
             }
@@ -2114,6 +2228,7 @@ namespace Maximus.Controllers
                     if (model.Where(s => s.ReOrderLineNo == line.ReOrderLineNo).First().IsCnf == false)
                     {
                         model.Where(s => s.ReturnLineNo == frstReOrdModel.ReturnLineNo).First().HideReorderBtn = false;
+                        model.Where(s => s.ReturnLineNo == frstReOrdModel.ReturnLineNo).First().HasReorder = false;
                         model.Where(s => s.ReOrderLineNo == line.ReOrderLineNo).First().IsSelect = false;
                         model.Where(s => s.ReOrderLineNo == line.ReOrderLineNo).First().IsDleted = 1;
                     }
@@ -2128,10 +2243,11 @@ namespace Maximus.Controllers
                 if (frstReOrdModel.StyleId != "")
                 {
                     model.Where(s => s.ReturnLineNo == frstReOrdModel.ReturnLineNo).First().HideReorderBtn = false;
+                    model.Where(s => s.ReturnLineNo == frstReOrdModel.ReturnLineNo).First().HasReorder = false;
                     model.Remove(frstReOrdModel);
                 }
             }
-          //  ResequenceReturnreorders();
+            //  ResequenceReturnreorders();
             return PartialView("_ReorderGridviewPartial", model.Where(s => s.IsReorder && s.IsDleted == 0).ToList());
         }
         public void ResequenceReturnreorders()
@@ -2151,7 +2267,7 @@ namespace Maximus.Controllers
                     {
                         if (model.Any(s => s.ReturnLineNo == line.ReturnLineNo && s.IsReorder && s.IsDleted == 0))
                         {
-                            model.Where(s => s.ReturnLineNo == line.ReturnLineNo && s.IsReorder && s.IsDleted == 0).ToList().ForEach(s=>s.ReturnLineNo=  rtnLine);
+                            model.Where(s => s.ReturnLineNo == line.ReturnLineNo && s.IsReorder && s.IsDleted == 0).ToList().ForEach(s => s.ReturnLineNo = rtnLine);
                         }
                         model.Where(s => s.ReturnLineNo == line.ReturnLineNo && s.IsDleted == 0).First().ReturnLineNo = rtnLine;
                     }
@@ -2194,7 +2310,8 @@ namespace Maximus.Controllers
                             try
                             {
                                 salesHead.Where(s => s.EmployeeID == empId && s.Reorderheader && s.IsEditing == false).First().SalesOrderLine = salesReOrdnLines.Where(s => s.OrderNo == 0 && s.Isedit == false).ToList();
-                            }catch(Exception e)
+                            }
+                            catch (Exception e)
                             {
 
                             }
@@ -2204,7 +2321,7 @@ namespace Maximus.Controllers
                             salesHead.Where(s => s.EmployeeID == empId && s.Reorderheader && s.IsEditing).First().SalesOrderLine = salesReOrdnLines.Where(s => s.OrderNo > 0 && s.Isedit).ToList();
                             salesHead.Where(s => s.EmployeeID == empId && s.Reorderheader && s.IsEditing).First().OrderNo = salesReOrdnLines.Any(s => s.OrderNo > 0 && s.Isedit) ? salesReOrdnLines.Where(s => s.OrderNo > 0 && s.Isedit).First().OrderNo : 0;
                         }
-                      
+
                     }
                 }
                 else
@@ -2257,7 +2374,7 @@ namespace Maximus.Controllers
                 }
                 int empResetMnths = Session["EmployeeRenew"] != null ? Convert.ToInt32(Session["EmployeeRenew"].ToString()) : 0;
                 bool isPrivateRtn = Session["isrtntype"].ToString() == "PRIVATE" ? true : false;
-                result = _returns.AcceptReturns(Session["Access"].ToString().ToLower(), ConnectionString, salesHead, cmpId, Convert.ToDouble(Session["CARRPERCENT"]), Session["CARRPRICE_RTN"].ToString(), Convert.ToBoolean(Session["DELADDR_USER_CREATE"]), Session["OverrideEnt"].ToString(), Session["CARRPRICE_XCHG"].ToString(), RTN_Collection_Style, Session["PriceList"].ToString(), Session["FITALLOC"].ToString(), Session["DIMALLOC"].ToString(), "", WAREHOUSE_RTN, Session["pnlCarriageReason"].ToString(), Session["selectedcar"].ToString(), IsManpack, empResetMnths, Browser, HTTP_X_FORWARDED_FOR, REMOTE_ADDR, isrollout, Session["UserName"].ToString(), false, Session["POINTSREQ"].ToString(), Session["ONLCUSREFLBL"].ToString(), cmpLogo, custLogo, adminMail, mailUsername, mailPassword, mailPort, mailServer, ueMailEMail, permissionPrice, Convert.ToInt32(Session["Collection"]), true);
+                result = _returns.AcceptReturns(Session["Access"].ToString().ToLower(), ConnectionString, salesHead, cmpId, Convert.ToDouble(Session["CARRPERCENT"]), Session["CARRPRICE_RTN"].ToString(), Convert.ToBoolean(Session["DELADDR_USER_CREATE"]), Session["OverrideEnt"].ToString(), Session["CARRPRICE_XCHG"].ToString(), RTN_Collection_Style, Session["PriceList"].ToString(), Session["FITALLOC"].ToString(), Session["DIMALLOC"].ToString(), "", WAREHOUSE_RTN, Session["pnlCarriageReason"].ToString(), Session["selectedcar"].ToString(), IsManpack, empResetMnths, Browser, HTTP_X_FORWARDED_FOR, REMOTE_ADDR, isrollout, Session["UserName"].ToString(), false, Session["POINTSREQ"].ToString(), Session["ONLCUSREFLBL"].ToString(), cmpLogo, custLogo, adminMail, mailUsername, mailPassword, mailPort, mailServer, ueMailEMail, permissionPrice, Convert.ToInt32(Session["Collection"]), isPrivateRtn);
                 if (result.type == "CarrierPrompt")
                 {
                     Session["pnlCarriageReason"] = "show";
@@ -2447,6 +2564,7 @@ namespace Maximus.Controllers
         {
             var result = returns.Select(returnOrderLines => new SalesOrderLineViewModel
             {
+                HasReorder = returnOrderLines.HasReorder,
                 EmployeeId = returnOrderLines.Emp,
                 Isedit = returnOrderLines.IsRetEdit,
                 isCarrline = returnOrderLines.isCarrline,
@@ -2454,8 +2572,8 @@ namespace Maximus.Controllers
                 IsDleted = returnOrderLines.IsDleted == 1 ? true : false,
                 OriginalOrderNo = returnOrderLines.OrderNo,
                 OriginalLineNo = isReturn ? returnOrderLines.LineNo : 0,
-                SoqtyForempSO = isReturn ? returnOrderLines.OrgRetOrdQtyDel : returnOrderLines.OrdQty,
-                SoqtyForempSOPoints = isReturn ? (returnOrderLines.OrgRetOrdQtyDel * returnOrderLines.Points) : (returnOrderLines.OrdQty * returnOrderLines.Points),
+                SoqtyForempSO =   returnOrderLines.SoqtyForempSO ,
+                SoqtyForempSOPoints =  (returnOrderLines.SoqtyForempSOPoints) ,
                 ColourID = returnOrderLines.ColourId,
                 LineNo = isReturn ? returnOrderLines.ReturnLineNo : returnOrderLines.ReOrderLineNo,
                 ReturnLineNo = isReturn ? 0 : returnOrderLines.ReturnLineNo,
@@ -2576,7 +2694,7 @@ namespace Maximus.Controllers
                         Total = s.TotalGoods.Value,
                         EmpName = _employee.GetAll(sa => sa.EmployeeID == s.PinNo).First().Forename + " " + _employee.GetAll(sa => sa.EmployeeID == s.PinNo).First().Surname,
                     }).First();
-                    var test = _salesOrderLines.Exists(s => s.ReturnOrderNo == orderNo)?_salesOrderLines.GetAll(s => s.ReturnOrderNo == orderNo).First():new tblsop_salesorder_detail();
+                    var test = _salesOrderLines.Exists(s => s.ReturnOrderNo == orderNo) ? _salesOrderLines.GetAll(s => s.ReturnOrderNo == orderNo).First() : new tblsop_salesorder_detail();
                     Session["SelectedUcode"] = rntO.Ucode; var permissionLst = _dataConnection.PermissionSettings(Session["BuisnessId"].ToString(), Session["UserName"].ToString(), "chkMapEmp", Session["Access"].ToString());
 
                     if (((List<SalesOrderHeaderViewModel>)Session["ReturnOrderHeader"]).Count() == 0)
@@ -2584,7 +2702,7 @@ namespace Maximus.Controllers
                         if (_dp.CheckEmergency(rntO.CustId, rntO.Ucode) && rntO.CustRef.ToLower().Contains("private") == false)
                         {
 
-                            if (IsMatUcodeId(rntO.Ucode, rntO.CustId))
+                            if (_dp.IsMatUcodeId(rntO.Ucode, rntO.CustId))
                             {
                                 Session["isrtntype"] = ReturnTypes.MATERNITY.ToString();
                                 Session["Price"] = permissionLst.Any(x => x.ControlId.Trim() == "Price") ? permissionLst.Where(x => x.ControlId.Trim() == "Price").First().Permission.ToLower() : "hide";
@@ -2613,8 +2731,8 @@ namespace Maximus.Controllers
                             Session["IsEmergency"] = false;
                             Session["POINTSREQ"] = _dp.BusinessParam("POINTSREQ", rntO.CustId);
                         }
-                      //SetSalesOrderHeader(rntO.Emp, rntO.CustId, rntO.Ucode);
-                        SetEditSalesOrderHeader(orderNo,Convert.ToInt32( test.OrderNo), rntO.Emp, rntO.CustId, rntO.Ucode);
+                        //SetSalesOrderHeader(rntO.Emp, rntO.CustId, rntO.Ucode);
+                        SetEditSalesOrderHeader(orderNo, Convert.ToInt32(test.OrderNo), rntO.Emp, rntO.CustId, rntO.Ucode);
                     }
                     Session["CustRef"] = rntO.CustRef;
                     Session["rtnempname"] = rntO.EmpName;
@@ -2650,9 +2768,11 @@ namespace Maximus.Controllers
                             OrgRetOrdQty = Convert.ToInt32(s.OrdQty),
                             OrgRetOrdQtyDel = Convert.ToInt32(s.OrdQty),
                             VatPercent = _dataConnection.GetVatPercent(s.StyleID, s.SizeID),
-                     Total = _dataConnection.GetlineTotals(Convert.ToDouble(s.OrdQty), Convert.ToDouble(s.Price), _dataConnection.GetVatPercent(s.StyleID, s.SizeID)),
+                            Total = _dataConnection.GetlineTotals(Convert.ToDouble(s.OrdQty), Convert.ToDouble(s.Price), _dataConnection.GetVatPercent(s.StyleID, s.SizeID)),
                             VAT = _dataConnection.GetlineVat(Convert.ToInt32(s.OrdQty), Convert.ToDouble(s.Price), _dataConnection.GetVatPercent(s.StyleID, s.SizeID)),
                             OrdQty = Convert.ToInt32(s.OrdQty),
+                            SoqtyForempSO = Convert.ToInt32(s.OrdQty),
+                            SoqtyForempSOPoints = Session["isrtntype"].ToString() == "PRIVATE" ? 0 : Convert.ToBoolean(Session["IsEmergency"].ToString()) ? 0 : Convert.ToInt32(s.OrdQty.Value) * _pointStyle.GetAll(sa => sa.UcodeID == rntO.Ucode && sa.StyleID == s.StyleID).First().Points.Value,
                             OrgOrdQty = _salesOrderLines.Exists(sa => sa.OrderNo == s.OriginalOrderNo && sa.LineNo == s.OriginalLineNo) ? Convert.ToInt32(_salesOrderLines.GetAll(sa => sa.OrderNo == s.OriginalOrderNo && sa.LineNo == s.OriginalLineNo).First().OrdQty) : 0,
                             OtherReturnQty = otherOrders.Count > 0 ? _salesOrderLines.Exists(sa => otherOrders.Contains(sa.OrderNo) && sa.StyleID == s.StyleID && sa.ColourID == s.ColourID) ? Convert.ToInt32(_salesOrderLines.GetAll(sa => otherOrders.Contains(sa.OrderNo) && sa.StyleID == s.StyleID && sa.ColourID == s.ColourID).Sum(sa => sa.OrdQty).Value) : 0 : 0,
                             Points = Session["isrtntype"].ToString() == "PRIVATE" ? 0 : Convert.ToBoolean(Session["IsEmergency"].ToString()) ? 0 : _pointStyle.GetAll(sa => sa.UcodeID == rntO.Ucode && sa.StyleID == s.StyleID).First().Points.Value,
@@ -2706,6 +2826,8 @@ namespace Maximus.Controllers
                                 StyleImage = _fskStyle.GetAll(sa => sa.StyleID == s.StyleID).First().StyleImage,
                                 SizeId = s.SizeID,
                                 TotalPoints = Session["isrtntype"].ToString() == "PRIVATE" ? 0 : Convert.ToBoolean(Session["IsEmergency"].ToString()) ? 0 : Convert.ToInt32(s.OrdQty.Value) * _pointStyle.GetAll(sa => sa.UcodeID == rntO.Ucode && sa.StyleID == s.StyleID).First().Points.Value,
+                                SoqtyForempSO = Convert.ToInt32(s.OrdQty),
+                                SoqtyForempSOPoints = Session["isrtntype"].ToString() == "PRIVATE" ? 0 : Convert.ToBoolean(Session["IsEmergency"].ToString()) ? 0 : Convert.ToInt32(s.OrdQty.Value) * _pointStyle.GetAll(sa => sa.UcodeID == rntO.Ucode && sa.StyleID == s.StyleID).First().Points.Value,
                                 VatPercent = _dataConnection.GetVatPercent(s.StyleID, s.SizeID),
                                 Total = _dataConnection.GetlineTotals(Convert.ToDouble(s.OrdQty), Convert.ToDouble(s.Price), _dataConnection.GetVatPercent(s.StyleID, s.SizeID)),
                                 VAT = _dataConnection.GetlineVat(Convert.ToInt32(s.OrdQty), Convert.ToDouble(s.Price), _dataConnection.GetVatPercent(s.StyleID, s.SizeID)),
@@ -2718,23 +2840,25 @@ namespace Maximus.Controllers
                             {
                                 var reason = _returnReasonCodes.Exists(s => s.Description.ToLower().Contains("supplier error") || s.Description.ToLower().Contains("quality issue/fault")) ? _returnReasonCodes.GetAll(s => s.Description.ToLower().Contains("supplier error") || s.Description.ToLower().Contains("quality issue/fault")).Select(s => s.ReasonCode).ToList() : new List<long>();
                                 var lst = rtnLines.Where(s => s.IsReorder).ToList();
-                               // rtnLines.Where(s=>s.IsReturn && reason.Contains(s.ReasonCode)).ToList().ForEach(s=>s.HideReorderBtn=false)
+                                // rtnLines.Where(s=>s.IsReturn && reason.Contains(s.ReasonCode)).ToList().ForEach(s=>s.HideReorderBtn=false)
                                 foreach (var line in lst)
                                 {
                                     int reordQty = 0;
                                     int rtnQty = 0;
-                                    rtnQty= rtnLines.Where(s => s.ReturnLineNo == line.ReturnLineNo && s.IsReturn).Sum(s => s.OrdQty);
+                                    rtnQty = rtnLines.Where(s => s.ReturnLineNo == line.ReturnLineNo && s.IsReturn).Sum(s => s.OrdQty);
                                     reordQty = lst.Where(s => s.ReturnLineNo == line.ReturnLineNo).Sum(s => s.OrdQty);
                                     if (rtnQty == reordQty)
                                     {
                                         rtnLines.Where(s => s.ReturnLineNo == line.ReturnLineNo).ToList().ForEach(s => s.HideReorderBtn = true);
                                     }
-                                    
+
                                 }
                             }
                         }
                         var cnfLines = rtnLines.Where(s => s.IsReorder).Any(s => s.IsCnf) ? rtnLines.Where(s => s.IsReorder && s.IsCnf).Select(s => s.ReturnLineNo).ToList() : new List<int>();
+                        var reordLines = rtnLines.Exists(s => s.IsReorder) ? rtnLines.Where(s => s.IsReorder).Select(s => s.ReturnLineNo).ToList() : new List<int>();
                         rtnLines.Where(s => cnfLines.Contains(s.ReturnLineNo) && s.IsReturn).ToList().ForEach(s => s.HasCnfReorders = true);
+                        rtnLines.Where(s => reordLines.Contains(s.ReturnLineNo)).ToList().ForEach(s => s.HasReorder = true);
                         var model = getreturnordermodel(rntO.Emp, new List<string>(), 0, "", "", 0, rntO.EmpName, rntO.Ucode, rntO.CustId);
                         foreach (var lines in rtnLines.Where(s => s.IsReturn))
                         {
@@ -2748,11 +2872,7 @@ namespace Maximus.Controllers
                 }
         }
 
-        public bool IsMatUcodeId(string ucode, string busid)
-        {
-            var matCodes = _ucodeReason.Exists(s => s.UcodeId == "BAR MATERNITY P" | s.UcodeId == "BAR MATERNITY F" | s.UcodeId == "BAR MATERNITY") ? string.Join(",", _ucodeReason.GetAll(s => s.UcodeId == "BAR MATERNITY P" | s.UcodeId == "BAR MATERNITY F" | s.UcodeId == "BAR MATERNITY").Select(s => s.UcodeId.ToLower().Trim().ToString()).ToList()) : "";
-            return matCodes.Contains(ucode.ToLower().Trim()) && _pointsByUcode.Exists(s => s.BusinessID == busid && s.UcodeID == ucode.ToLower().Trim()) && ucode != "" ? true : false;
-        }
+       
         #endregion
 
         public string GetReOrderProductsDesc(string Style)
@@ -2808,8 +2928,10 @@ namespace Maximus.Controllers
                     int thisRTnPts = (((List<ReturnOrderModel>)Session["rtnLines"])).Any(s => s.IsReturn && s.IsDleted == 0 && s.IsRetEdit == false) ? (((List<ReturnOrderModel>)Session["rtnLines"])).Where(s => s.IsReturn && s.IsDleted == 0 && s.IsRetEdit == false).Sum(s => s.TotalPoints) : 0;
                     int incartReordPoints = (((List<ReturnOrderModel>)Session["rtnLines"])).Any(s => s.IsReorder && s.IsDleted == 0) ? (((List<ReturnOrderModel>)Session["rtnLines"])).Where(s => s.IsReorder && s.IsDleted == 0).Sum(s => s.TotalPoints) : 0;
                     int incartRtnPoints = (((List<ReturnOrderModel>)Session["rtnLines"])).Any(s => s.IsReturn && s.IsDleted == 0) ? (((List<ReturnOrderModel>)Session["rtnLines"])).Where(s => s.IsReturn && s.IsDleted == 0).Sum(s => s.TotalPoints) : 0;
-
-                    availPts = totalPts - ((cardPts + reOrdPtsED) - thisRTnPts);
+                    //added by sasi(28-04-21)
+                    availPts = totalPts - (newUsed + reOrdPtsED);
+                    //commented  by sasi(28-04-21)
+                    // availPts = totalPts - ((cardPts + reOrdPtsED) - thisRTnPts);
                 }
                 else
                 {
@@ -2835,6 +2957,67 @@ namespace Maximus.Controllers
                 ((List<SalesOrderHeaderViewModel>)Session["ReturnOrderHeader"]).ForEach(s => s.DelCity = tbxDELCity);
                 ((List<SalesOrderHeaderViewModel>)Session["ReturnOrderHeader"]).ForEach(s => s.DelCountry = tbxDELCountry);
                 result = "saved";
+            }
+            return result;
+        }
+        public string GetReorderStatus()
+        {
+            string result = "";
+            if (Session["isrtntype"].ToString().ToLower().Trim() != "private" && Session["isrtntype"].ToString().ToLower().Trim() != "emergency")
+            {
+                int count = 0;
+                var rtnLines = ((List<ReturnOrderModel>)Session["rtnLines"]);
+                if (rtnLines.Any(s => s.IsDleted == 0))
+                {
+                    var reorderLine = rtnLines.Exists(s => s.IsReorder) ? rtnLines.Where(s => s.IsReorder && s.IsDleted == 0).Select(s => s.ReturnLineNo).ToList() : new List<int>();
+                    if (reorderLine.Count > 0)
+                    {
+                        result = "Are you sure?-You have not placed an exchange order for the following return order line/s,\n\n";
+                        var noReord = rtnLines.Where(s => s.IsReturn && reorderLine.Contains(s.ReturnLineNo) == false && s.IsDleted == 0).ToList();
+                        foreach (var data in noReord)
+                        {
+                            count = count + 1;
+                            result = result + "Lineno: " + data.ReturnLineNo + "; Product : " + data.Description + " ; Size :" + data.SizeId + "\n";
+                        }
+                        result = result + "You will lose the associated points for these if you do not select the garment you wish to exchange for.\n\nAre you sure you do not want to place an exchange order for these garments?  Click ok to proceed and lose you’re points or click cancel to create an exchange order.";
+                        result = count > 0 ? result : "";
+                    }
+                    else
+                    {
+                        result = "Are you sure? - You’re about to lose your points…if you’re ok with this click ok, if not, please choose alternative garments for your exchange order. \n\n Click ok to proceed and lose your points or click cancel to create an exchange order.";
+                    }
+                }
+            }
+            return result;
+        }
+        public string CanEditReturn(int orderNo)
+        {
+            string result = "";
+            if (orderNo>0)
+            {
+                if (Convert.ToBoolean(Session["POINTSREQ"]))
+                {
+                    if (_salesOrderHeader.Exists(s => s.OrderNo == orderNo))
+                    {
+                        result= _salesOrderLines.Exists(s => s.ReturnOrderNo == orderNo) ? "true" : "";
+                    }
+                    
+                }
+                else
+                {
+                    result = "true";
+                }
+            }
+            return result;
+
+        }
+
+        public string CreditreturnPoints(int orderno)
+        {
+            string result = "";
+            if(orderno>0)
+            {
+                result = _returns.CreditreturnPoints(orderno, Session["UserName"].ToString());
             }
             return result;
         }

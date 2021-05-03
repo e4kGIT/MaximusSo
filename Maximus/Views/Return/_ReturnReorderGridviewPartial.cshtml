@@ -46,9 +46,9 @@
         settings.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Right;
         settings.SettingsAdaptivity.AdaptiveDetailColumnCount = 1;
         settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = false;
-      
-            settings.ClientSideEvents.EndCallback = "RefreshReorderGrid";
-    
+
+        settings.ClientSideEvents.EndCallback = "RefreshReorderGrid";
+
         settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
         settings.CommandButtonInitialize = (s, e) =>
         {
@@ -62,7 +62,7 @@
                     e.Visible = false;
                 }
             }
-            if(e.ButtonType== ColumnCommandButtonType.Delete)
+            if (e.ButtonType == ColumnCommandButtonType.Delete)
             {
                 var value = Convert.ToBoolean(gridView.GetRowValues(e.VisibleIndex, "HasCnfReorders"));
                 if (value)
@@ -245,7 +245,7 @@
         settings.Columns.Add(col =>
         {
             col.FieldName = "Reason";
-            col.Width =300;
+            col.Width = 300;
             col.SetEditItemTemplateContent(c =>
             {
                 GridViewEditItemTemplateContainer templateContainer = c as GridViewEditItemTemplateContainer;
@@ -351,19 +351,21 @@
                 string StyleId = DataBinder.Eval(temp.DataItem, "StyleId").ToString();
                 int OrderNo = Convert.ToInt32(DataBinder.Eval(temp.DataItem, "OrderNo").ToString());
                 int LineNo = Convert.ToInt32(DataBinder.Eval(temp.DataItem, "LineNo").ToString());
-                string ColourId= DataBinder.Eval(temp.DataItem, "ColourId").ToString();
+                string ColourId = DataBinder.Eval(temp.DataItem, "ColourId").ToString();
                 string description = DataBinder.Eval(temp.DataItem, "Description").ToString();
                 string Size = DataBinder.Eval(temp.DataItem, "SizeId").ToString();
                 var OredrQty = (int)DataBinder.Eval(temp.DataItem, "OrgOrdQty");
-                bool Iscarr =(bool) DataBinder.Eval(temp.DataItem, "Iscarr");
+                var OredrQty1 = (int)DataBinder.Eval(temp.DataItem, "RtnQty");
+                bool Iscarr = (bool)DataBinder.Eval(temp.DataItem, "Iscarr");
                 bool hasCnfReord = (bool)DataBinder.Eval(temp.DataItem, "HasCnfReorders");
                 //int reasoncode = Convert.ToInt32(DataBinder.Eval(temp.DataItem, "ReasonCode").ToString());
                 var modelReas = DataBinder.Eval(temp.DataItem, "Reason").ToString();
                 bool HideReorderBtn = (bool)DataBinder.Eval(temp.DataItem, "HideReorderBtn");
-
+                bool HasReorder = (bool)DataBinder.Eval(temp.DataItem, "HasReorder");
+                bool IsRetEdit = (bool)DataBinder.Eval(temp.DataItem, "IsRetEdit");
                 if (Session["isrtntype"].ToString() == "PRIVATE")
                 {
-                    if((modelReas.ToLower().Trim()== "exchange - supplier error" || modelReas.ToLower().Trim() == "exchange - quality issue/fault")&& HideReorderBtn==false)
+                    if ((modelReas.ToLower().Trim() == "exchange - supplier error" || modelReas.ToLower().Trim() == "exchange - quality issue/fault") && HideReorderBtn == false)
                     {
                         if (Convert.ToBoolean(Session["ONL_REORDER_REQ"]))
                         {
@@ -374,8 +376,8 @@
 
                                     Html.DevExpress().Button(s =>
                                     {
-                                        s.Name = "btnReorder_" + OrderNo + "_" + LineNo + "_" + StyleId + "_" + ColourId + "_" + OredrQty + "_" + Size;
-                                        s.Text = "Re Order";
+                                        s.Name = "btnReorder_" + OrderNo + "_" + LineNo + "_" + StyleId + "_" + ColourId + "_" + OredrQty1 + "_" + Size;
+                                        s.Text = "Exchange";
                                         s.ClientSideEvents.Click = "GetReOrdProductsPRIVATEORDER";
                                         s.UseSubmitBehavior = false;
                                     }).GetHtml();
@@ -392,14 +394,56 @@
                         {
                             if (hasCnfReord == false)
                             {
-
-                                Html.DevExpress().Button(s =>
+                                if ((Convert.ToBoolean(Session["POINTSREQ"]) && Session["isrtntype"].ToString().ToLower() != "maternity"))
                                 {
-                                    s.Name = "btnReorder_" + OrderNo + "_" + LineNo + "_" + StyleId + "_" + ColourId + "_" + OredrQty + "_" + Size;
-                                    s.Text = "Re Order";
-                                    s.ClientSideEvents.Click = "GetReOrdProducts";
-                                    s.UseSubmitBehavior = false;
-                                }).GetHtml();
+                                    if (HasReorder == false)
+                                    {
+                                        if (((bool)Session["ISRTNEDITING"]) && IsRetEdit)
+                                        {
+                                            Html.DevExpress().Button(s =>
+                                            {
+                                                s.Name = "btnReorder_" + OrderNo + "_" + LineNo + "_" + StyleId + "_" + ColourId + "_" + OredrQty1 + "_" + Size;
+                                                s.Text = "No Exchange Placed";
+                                                s.ClientSideEvents.Click = "GetReOrdProducts";
+                                                s.UseSubmitBehavior = false;
+                                                s.Enabled = false;
+                                            }).GetHtml();
+                                        }
+                                        else
+                                        {
+                                            Html.DevExpress().Button(s =>
+                                            {
+                                                s.Name = "btnReorder_" + OrderNo + "_" + LineNo + "_" + StyleId + "_" + ColourId + "_" + OredrQty1 + "_" + Size;
+                                                s.Text = "Exchange";
+                                                s.ClientSideEvents.Click = "GetReOrdProducts";
+                                                s.UseSubmitBehavior = false;
+                                            }).GetHtml();
+                                        }
+
+                                    }
+                                    else
+                                    {
+                                        Html.DevExpress().Button(s =>
+                                        {
+                                            s.Name = "btnReorder_" + OrderNo + "_" + LineNo + "_" + StyleId + "_" + ColourId + "_" + OredrQty1 + "_" + Size;
+                                            s.Text = "Exchange Placed";
+                                            s.ClientSideEvents.Click = "GetReOrdProducts";
+                                            s.UseSubmitBehavior = false;
+                                            s.Enabled = false;
+                                        }).GetHtml();
+                                    }
+
+                                }
+                                else
+                                {
+                                    Html.DevExpress().Button(s =>
+                                    {
+                                        s.Name = "btnReorder_" + OrderNo + "_" + LineNo + "_" + StyleId + "_" + ColourId + "_" + OredrQty1 + "_" + Size;
+                                        s.Text = "Exchange";
+                                        s.ClientSideEvents.Click = "GetReOrdProducts";
+                                        s.UseSubmitBehavior = false;
+                                    }).GetHtml();
+                                }
                             }
                         }
                     }

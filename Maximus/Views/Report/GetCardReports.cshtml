@@ -1,3 +1,22 @@
 ﻿
+    @{
+        if(  Session["cardmenu"].ToString().ToLower()=="stock")
+        {
+           <h3> Colleague stock card</h3>
+        }
+        else
+        {
+            <h3> Colleague points card</h3>
+        }
+    }
+ 
+<br />
+<br />
 
 @Html.Action("CardReportGridViewPartial")
+
+
+
+
+ 
+           

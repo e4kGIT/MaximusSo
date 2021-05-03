@@ -364,7 +364,7 @@ namespace Maximus.Controllers
                         }
                     }
                 }
-                lines.ReOrderNo = _salesLine.Exists(s => s.ReturnOrderNo == ordno) ? Convert.ToInt32(_salesLine.GetAll(s => s.ReturnOrderNo == ordno).First().OrderNo) : 0;
+                lines.ReOrderNo = _salesLine.Exists(s => s.ReturnOrderNo == ordno && s.ReturnLineNo==lines.linno) ? Convert.ToInt32(_salesLine.GetAll(s => s.ReturnOrderNo == ordno && s.ReturnLineNo == lines.linno).First().OrderNo) : 0;
                 lines.Points = _stylePoints.Exists(s => s.StyleID == lines.StyleID) ? _stylePoints.GetAll(s => s.StyleID == lines.StyleID).First().Points.Value : 0;
             }
             return PartialView("_OrderDetailGridView1Partial", model);

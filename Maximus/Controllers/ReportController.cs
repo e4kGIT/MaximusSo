@@ -89,8 +89,7 @@ namespace Maximus.Controllers
                     return PartialView("_RolloutGridViewPartial");
                 }
             }
-
-        }
+                    }
 
         public ActionResult exporter()
         {

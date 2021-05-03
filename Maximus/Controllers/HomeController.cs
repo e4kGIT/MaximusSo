@@ -1971,8 +1971,20 @@ namespace Maximus.Controllers
                         //{
                         //    availPts = totalPts - ((cardPts + reOrdPts) - rtnPts);
                         //}
-                        result = "<table class=\"table\"><tr><td>Total points: " + totalPts + "</td></tr><tr><td>Used points: " + cardPts + "</td></tr><tr><td>Return points: " + rtnPts + "</td></tr><tr><td>Reordered points: " + reOrdPts + "</td></tr><tr><td>Available points: " + availPts + "</td></tr></table>";
+
+                        /////Added (26-04-21) to control reorder based on qty
+                        var model1 = ((List<ReturnOrderModel>)Session["rtnLines"]);
+                        var selected = Session["selectedRetLine"] != null ? (ReturnOrderModel)Session["selectedRetLine"] : new ReturnOrderModel();
+                        var reOrdQty = Convert.ToBoolean(Session["ISRTNEDITING"]) ? model1.Where(s => s.IsReorder && s.ReturnLineNo == selected.ReturnLineNo && s.StyleId == StyleId && s.ColourId == ColorId   && s.IsDleted == 0).Sum(s => s.OrdQty) : model1.Where(s => s.IsReorder && s.LineNo == selected.LineNo && s.ReturnLineNo == selected.ReturnLineNo && s.StyleId == StyleId && s.ColourId == ColorId  && s.IsDleted == 0).Sum(s => s.OrdQty);
+                        //////
+                         
+                        /////commented (26-04-21)
+                        //result = "<table class=\"table\"><tr><td>Total points: " + totalPts + "</td></tr><tr><td>Used points: " + cardPts + "</td></tr><tr><td>Return points: " + rtnPts + "</td></tr><tr><td>Reordered points: " + reOrdPts + "</td></tr><tr><td>Available points: " + availPts + "</td></tr></table>";
+
+                        result = Convert.ToBoolean(Session["ISRTNEDITING"]) ? selected.LineNo > 0 ? "<table class=\"table\"><tr><td>Total points: " + totalPts + "</td></tr><tr><td>Used points: " + cardPts + "</td></tr><tr><td>Return points: " + selected.TotalPoints + "</td></tr><tr><td>Reordered points: " + reOrdPts + "</td></tr><tr><td>Available points: " + selected.TotalPoints + "</td></tr><tr><td>Return qty: " + selected.OrdQty + "</td></tr><tr><td>Cart qty: " + reOrdQty + "</td></tr></table>" : "" : selected.LineNo > 0 ? "<table class=\"table\"><tr><td>Total points: " + totalPts + "</td></tr><tr><td>Used points: " + cardPts + "</td></tr><tr><td>Return points: " + selected.TotalPoints + "</td></tr><tr><td>Reordered points: " + reOrdPts + "</td></tr><tr><td>Available points: " + selected.TotalPoints + "</td></tr><tr><td>Return qty: " + selected.RtnQty + "</td></tr><tr><td>Cart qty: " + reOrdQty + "</td></tr></table>" : "";
                         em.Result = result;
+                        //Setting this is private to true even it wasn't true because to show the error of qty exceeded refer ctrl+F on Myscript for .isPrivate :)
+                        em.isPrivate = true;
                         em.minMandatoryPts = minMandatoryPts;
                         return Json(em);
                     }
@@ -2060,7 +2072,7 @@ namespace Maximus.Controllers
             {
                 var model1 = ((List<ReturnOrderModel>)Session["rtnLines"]);
                 var selected = Session["selectedRetLine"] != null ? (ReturnOrderModel)Session["selectedRetLine"] : new ReturnOrderModel();
-                var reOrdQty = Convert.ToBoolean(Session["ISRTNEDITING"]) ? model1.Where(s => s.IsReorder && s.ReturnLineNo == selected.ReturnLineNo && s.StyleId == selected.StyleId && s.ColourId == selected.ColourId && s.SizeId == selected.SizeId && s.IsDleted==0).Sum(s => s.OrdQty) : model1.Where(s => s.IsReorder && s.LineNo == selected.LineNo && s.ReturnLineNo == selected.ReturnLineNo && s.StyleId == selected.StyleId && s.ColourId == selected.ColourId && s.SizeId == selected.SizeId && s.IsDleted == 0).Sum(s => s.OrdQty);
+                var reOrdQty = Convert.ToBoolean(Session["ISRTNEDITING"]) ? model1.Where(s => s.IsReorder && s.ReturnLineNo == selected.ReturnLineNo && s.StyleId == StyleId && s.ColourId == ColorId   && s.IsDleted == 0).Sum(s => s.OrdQty) : model1.Where(s => s.IsReorder && s.LineNo == selected.LineNo && s.ReturnLineNo == selected.ReturnLineNo && s.StyleId == StyleId && s.ColourId == ColorId   && s.IsDleted == 0).Sum(s => s.OrdQty);
                 em.isPrivate = true;
                 em.Result = Convert.ToBoolean(Session["ISRTNEDITING"]) ? selected.LineNo > 0 ? "<table class=\"table\"><tr><td>Return qty: " + selected.OrdQty + "</td></tr><tr><td>Cart qty: " + reOrdQty + "</td></tr></table>" : "" :   selected.LineNo>0? "<table class=\"table\"><tr><td>Return qty: " + selected.RtnQty + "</td></tr><tr><td>Cart qty: " + reOrdQty + "</td></tr></table>" : "" ;
                 return Json(em);

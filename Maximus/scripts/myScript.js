@@ -730,18 +730,32 @@ function getEntitlementDemandSwatch(style, orgStyl, error) {
                             if (response.Result.indexOf('points') > -1) {
                                 if (response.availPts > 0) {
                                     if (response.minMandatoryPts > 0) {
-                                        errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";
+                                        if (response.isPrivate) {
+                                            errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed reorder quantity or points exceeds the return quantity or points</span></div>";
+                                        } else {
+                                            errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";
+                                        }
                                     }
                                     else {
-                                        errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.  Cannot proceed.</span></div>";
+                                        if (response.isPrivate) {
+                                            errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed reorder quantity or points exceeds the return quantity or points</span></div>";
+                                        }
+                                        else {
+                                            errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.  Cannot proceed.</span></div>";
+                                        }
                                     }
                                 }
                                 else {
-                                    errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded. Cannot proceed.</span></div>";
+                                    if (response.isPrivate) {
+                                        errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed reorder quantity or points exceeds the return quantity or points</span></div>";
+                                    }
+                                    else {
+                                        errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded. Cannot proceed.</span></div>";
+                                    }
                                 }
                             }
                             else if (response.isPrivate) {
-                                errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed reorder quantity exceeds the return quantity</span></div>";
+                                errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed reorder quantity  the return quantity</span></div>";
                             }
                             else {
                                 errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed entitlement exceeded</span></div>";
@@ -769,14 +783,28 @@ function getEntitlementDemandSwatch(style, orgStyl, error) {
                         if (response.Result.indexOf('points') > -1) {
                             if (response.availPts > 0) {
                                 if (response.minMandatoryPts > 0) {
-                                    errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";
+                                    if (response.isPrivate) {
+                                        errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed reorder quantity or points exceeds the return quantity or points</span></div>";
+                                    } else {
+                                        errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Minimum other mandatory points left to order " + response.minMandatoryPts + ".</span></div>";
+                                    }
+                                }
+                                else {
+                                    if (response.isPrivate) {
+                                        errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed reorder quantity or points exceeds the return quantity or points</span></div>";
+                                    }
+                                    else {
+                                        errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded.  Cannot proceed.</span></div>";
+                                    }
+                                }
+                            }
+                            else {
+                                if (response.isPrivate) {
+                                    errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed reorder quantity or points exceeds the return quantity or points</span></div>";
                                 }
                                 else {
                                     errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded. Cannot proceed.</span></div>";
                                 }
-                            }
-                            else {
-                                errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Entitlement points exceeded. Cannot proceed.</span></div>";
                             }
                         } else if (response.isPrivate) {
                             errorMsg = "<div id='ErrorMessage'><span style=\"color:red\">Cannot proceed reorder quantity exceeds the return quantity</span></div>";
@@ -4273,39 +4301,55 @@ function DeleteOrder(orderNo, empId, isEmergency, reason) {
     if (orderNo > 0 && empId != "" && empId != null) {
         if (confirm("Are you sure you want to delete this order?")) {
             // var model = { 'Ordeno': orderNo, 'EmployeeId': empId, 'isEmergency': isEmergency };
-            var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
-            loadPopup.Show();
             $.ajax({
                 type: "post",
-                url: "/Basket/DeleteOrder/",
-                data: { 'orderNo': orderNo, 'empId': empId, 'isEmergency': isEmergency, 'reason': reason },
+                url: "/Basket/IsReorderDel/",
+                data: { 'OrderNo': orderNo },
                 success: function (response) {
-                    if (response == "Success") {
-                        loadPopup.Hide();
-                        alert("Order deleted successfully");
-                        window.location.reload();
-                    }
-                    else if (response == "prompt") {
+                    if (response != "" && response != null)
+                    {
+                        var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
+                        loadPopup.Show();
                         $.ajax({
                             type: "post",
-                            url: "/Basket/DeleteOrderPrompt/",
-                            data: { 'orderNo': orderNo },
+                            url: "/Basket/DeleteOrder/",
+                            data: { 'orderNo': orderNo, 'empId': empId, 'isEmergency': isEmergency, 'reason': reason },
                             success: function (response) {
-                                var popup = ASPxClientControl.GetControlCollection().GetByName("EmerOrderDeletePopup");
-                                var docValue = document.getElementById("deletereason");
-                                docValue.innerHTML = response;
-                                loadPopup.Hide();
-                                popup.Show();
-                                MVCxClientUtils.FinalizeCallback();
+                                if (response == "Success") {
+                                    loadPopup.Hide();
+                                    alert("Order deleted successfully");
+                                    window.location.reload();
+                                }
+                                else if (response == "prompt") {
+                                    $.ajax({
+                                        type: "post",
+                                        url: "/Basket/DeleteOrderPrompt/",
+                                        data: { 'orderNo': orderNo },
+                                        success: function (response) {
+                                            var popup = ASPxClientControl.GetControlCollection().GetByName("EmerOrderDeletePopup");
+                                            var docValue = document.getElementById("deletereason");
+                                            docValue.innerHTML = response;
+                                            loadPopup.Hide();
+                                            popup.Show();
+                                            MVCxClientUtils.FinalizeCallback();
+                                        }
+                                    }
+                                        );
+                                }
+                                else {
+                                    loadPopup.Hide();
+                                }
                             }
-                        }
-                            );
+                        });
                     }
-                    else {
-                        loadPopup.Hide();
+                    else
+                    {
+                      alert("This Exchange order has a related Return order. You cannot delete this Exchange ,please delete the Related return order.") 
                     }
+
                 }
             });
+          
         }
     }
 }
@@ -7914,6 +7958,7 @@ function Expand(s, e) {
 }
 
 function OrderEdit(orderNo, empId) {
+
     $.ajax({
         url: "/OrderDisplay/SetEmployee/",
         type: "post",
@@ -8776,7 +8821,7 @@ function GetReOrdProductsPRIVATEORDER(s, e) {
                             var Retundiv = document.getElementById("ReOrderPop");
                             Retundiv.innerHTML = "";
                             Retundiv.innerHTML = response;
-                            reorderPop.SetHeaderText("Reorder for Orderno: <b>" + styleNameArr[1] + "</b> &nbsp; &nbsp; &nbsp; Product: <b>" + StyleResp + "</b>&nbsp; &nbsp; &nbsp; Colour: <b>" + styleNameArr[4] + "</b>&nbsp; &nbsp; &nbsp; Size: <b>" + styleNameArr[6] + "</b>&nbsp; &nbsp; &nbsp; Qty: <b>" + styleNameArr[5] + "</b>");
+                            reorderPop.SetHeaderText("Exchange for Orderno: <b>" + styleNameArr[1] + "</b> &nbsp; &nbsp; &nbsp; Product: <b>" + StyleResp + "</b>&nbsp; &nbsp; &nbsp; Colour: <b>" + styleNameArr[4] + "</b>&nbsp; &nbsp; &nbsp; Size: <b>" + styleNameArr[6] + "</b>&nbsp; &nbsp; &nbsp; Qty: <b>" + styleNameArr[5] + "</b>");
                             loadPopup.Hide();
                             reorderPop.Show();
                             MVCxClientUtils.FinalizeCallback();
@@ -9129,138 +9174,181 @@ function Refreshpointsdiv() {
     });
 }
 
+//function GetReorderStatus() {
+//    $.ajax({
+//        type: "post",
+//        url: "/Return/GetReorderStatus/",
+//        success: function (response1) {
+//            if (response1 != "") {
+//                if (confirm(response1)) {
+//                    return true;
+//                }
+//                else {
+//                    return false;
+//                }
+//            }
+//            else {
+//                return true;
+//            }
+//        }
+//    });
+//}
 function GetAllReturnHeader(s, e) {
     var acceptBtn = ASPxClientControl.GetControlCollection().GetByName(s.name);
     var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
+    var ststus = false;
     acceptBtn.SetEnabled(false);
     loadPopup.Show();
     $.ajax({
-        type: "POST",
-        url: "/Return/AcceptReturn/",
-        success: function (response) {
-            if (response.results != null) {
-                if (response.type = "success" && response.results.length > 0) {
-                    var message = "";
-                    for (var k = 0; k < response.results.length; k++) {
-                        if (response.results[k].IsReturn) {
-                            if (response.results[k].isedit) {
-                                message = message + "Your uniform return order has been successfully updated,order reference:" + response.results[k].OrderNo + " (" + response.results[k].EmployeeId + ")." + response.results[k].OrderConfirmation + ". \n\n\n";
-                            }
-                            else {
-                                message = message + "Your uniform return order has been successfully placed,order reference:" + response.results[k].OrderNo + " (" + response.results[k].EmployeeId + ")." + response.results[k].OrderConfirmation + ". \n\n\n";
-                            }
+        type: "post",
+        url: "/Return/GetReorderStatus/",
+        success: function (response1) {
+            if (response1 != "") {
+                if (confirm(response1)) {
+                    ststus = true;
+                }
+                else {
+                    ststus = false;
+                }
+            }
+            else {
+                ststus = true;
+            }
+            if (ststus) {
+                $.ajax({
+                    type: "POST",
+                    url: "/Return/AcceptReturn/",
+                    success: function (response) {
+                        if (response.results != null) {
+                            if (response.type = "success" && response.results.length > 0) {
+                                var message = "";
+                                for (var k = 0; k < response.results.length; k++) {
+                                    if (response.results[k].IsReturn) {
+                                        if (response.results[k].isedit) {
+                                            message = message + "Your uniform return order has been successfully updated,order reference:" + response.results[k].OrderNo + " (" + response.results[k].EmployeeId + ")." + response.results[k].OrderConfirmation + ". \n\n\n";
+                                        }
+                                        else {
+                                            message = message + "Your uniform return order has been successfully placed,order reference:" + response.results[k].OrderNo + " (" + response.results[k].EmployeeId + ")." + response.results[k].OrderConfirmation + ". \n\n\n";
+                                        }
 
-                        }
-                        else {
-                            if (response.results[k].isedit) {
-                                message = message + "Your uniform order has been successfully updated,order reference:" + response.results[k].OrderNo + " (" + response.results[k].EmployeeId + ")." + response.results[k].OrderConfirmation + ". \n\n";
-                            }
-                            else {
-                                message = message + "Your uniform order has been successfully placed,order reference:" + response.results[k].OrderNo + " (" + response.results[k].EmployeeId + ")." + response.results[k].OrderConfirmation + ". \n\n";
-                            }
+                                    }
+                                    else {
+                                        if (response.results[k].isedit) {
+                                            message = message + "Your uniform order has been successfully updated,order reference:" + response.results[k].OrderNo + " (" + response.results[k].EmployeeId + ")." + response.results[k].OrderConfirmation + ". \n\n";
+                                        }
+                                        else {
+                                            message = message + "Your uniform order has been successfully placed,order reference:" + response.results[k].OrderNo + " (" + response.results[k].EmployeeId + ")." + response.results[k].OrderConfirmation + ". \n\n";
+                                        }
 
 
-                        }
-                    }
+                                    }
+                                }
 
 
-                    message = message + "\n\n\n Would you like to print order confirmation? \n\n click Ok to print , click Cancel to not print";
-                    if (confirm(message)) {
-                        for (var i = 0; i < response.results.length; i++) {
+                                message = message + "\n\n\n Would you like to print order confirmation? \n\n click Ok to print , click Cancel to not print";
+                                if (confirm(message)) {
+                                    for (var i = 0; i < response.results.length; i++) {
 
-                            if ((response.results[i].OrderConfirmationPop != "" && response.results[i].OrderConfirmationPop != null && response.results[i].OrderConfirmationPop != undefined)) {
-                                if (response.results[i].IsReturn) {
+                                        if ((response.results[i].OrderConfirmationPop != "" && response.results[i].OrderConfirmationPop != null && response.results[i].OrderConfirmationPop != undefined)) {
+                                            if (response.results[i].IsReturn) {
 
-                                    var rtnOrderConfirmation = ASPxClientControl.GetControlCollection().GetByName("rtnOrderConfirmation");
-                                    loadPopup.Hide()
-                                    var ordConfim = document.getElementById("rtnOrdeConfirm");
-                                    ordConfim.innerHTML = "";
-                                    ordConfim.innerHTML = response.results[i].OrderConfirmationPop;
-                                    rtnOrderConfirmation.Show();
+                                                var rtnOrderConfirmation = ASPxClientControl.GetControlCollection().GetByName("rtnOrderConfirmation");
+                                                loadPopup.Hide()
+                                                var ordConfim = document.getElementById("rtnOrdeConfirm");
+                                                ordConfim.innerHTML = "";
+                                                ordConfim.innerHTML = response.results[i].OrderConfirmationPop;
+                                                rtnOrderConfirmation.Show();
+                                            }
+                                            else {
+                                                var orderConfirmationPopup = ASPxClientControl.GetControlCollection().GetByName("orderConfirmation");
+                                                loadPopup.Hide()
+                                                var ordConfim = document.getElementById("ordeConfirm");
+                                                ordConfim.innerHTML = "";
+                                                ordConfim.innerHTML = response.results[i].OrderConfirmationPop;
+                                                orderConfirmationPopup.Show();
+                                            }
+                                        }
+                                    }
                                 }
                                 else {
-                                    var orderConfirmationPopup = ASPxClientControl.GetControlCollection().GetByName("orderConfirmation");
-                                    loadPopup.Hide()
-                                    var ordConfim = document.getElementById("ordeConfirm");
-                                    ordConfim.innerHTML = "";
-                                    ordConfim.innerHTML = response.results[i].OrderConfirmationPop;
-                                    orderConfirmationPopup.Show();
+                                    window.location = "/Employee/ChangeOrdertype?orderType=return";
+                                }
+
+                                // window.location = "/Employee/ChangeOrdertype?orderType=return";
+                                // acceptBtn.SetEnabled(true);
+                                //loadPopup.Hide();
+                            }
+                            else if (response.type == "CarrierPrompt") {
+
+                            }
+                            else if (response.type == "CollectPrompt") {
+                                var ReturnCollection = ASPxClientControl.GetControlCollection().GetByName("ReturnCollection");
+                                if (ReturnCollection != null) {
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "/Return/GetCollectionPop/",
+                                        success: function (response) {
+                                            if (response != null) {
+                                                var doc = document.getElementById("ReturnCollectionPop");
+                                                doc.innerHTML = "";
+                                                doc.innerHTML = response;
+                                                ReturnCollection.Show();
+                                                MVCxClientUtils.FinalizeCallback();
+                                            }
+                                        }
+                                    });
+                                    //ReturnCollectionPop
                                 }
                             }
+
                         }
-                    }
-                    else {
-                        window.location = "/Employee/ChangeOrdertype?orderType=return";
-                    }
+                        else if (response.type == "CarrierPrompt") {
+                            alert("Please select a carrier style");
+                            window.location.reload();
+                        }
+                        else if (response.type == "noelements") {
+                            alert("Please select  atleast one line to proceed");
+                            acceptBtn.SetEnabled(true);
+                            loadPopup.Hide();
+                        }
+                        else if (response.type == "CollectPrompt") {
+                            acceptBtn.SetEnabled(true);
+                            loadPopup.Hide();
+                            var ReturnCollection = ASPxClientControl.GetControlCollection().GetByName("ReturnCollection");
+                            if (ReturnCollection != null) {
+                                $.ajax({
+                                    type: "POST",
+                                    url: "/Return/GetCollectionPop/",
+                                    success: function (response) {
+                                        if (response != null) {
+                                            var doc = document.getElementById("ReturnCollectionPop");
+                                            doc.innerHTML = "";
+                                            doc.innerHTML = response;
+                                            ReturnCollection.Show();
+                                            loadPopup.Hide();
+                                            MVCxClientUtils.FinalizeCallback();
+                                        }
+                                    }
+                                });
+                                //ReturnCollectionPop
 
-                    // window.location = "/Employee/ChangeOrdertype?orderType=return";
-                    // acceptBtn.SetEnabled(true);
-                    //loadPopup.Hide();
-                }
-                else if (response.type == "CarrierPrompt") {
-
-                }
-                else if (response.type == "CollectPrompt") {
-                    var ReturnCollection = ASPxClientControl.GetControlCollection().GetByName("ReturnCollection");
-                    if (ReturnCollection != null) {
-                        $.ajax({
-                            type: "POST",
-                            url: "/Return/GetCollectionPop/",
-                            success: function (response) {
-                                if (response != null) {
-                                    var doc = document.getElementById("ReturnCollectionPop");
-                                    doc.innerHTML = "";
-                                    doc.innerHTML = response;
-                                    ReturnCollection.Show();
-                                    MVCxClientUtils.FinalizeCallback();
-                                }
-                            }
-                        });
-                        //ReturnCollectionPop
-
-                    }
-                }
-
-            }
-            else if (response.type == "CarrierPrompt") {
-                alert("Please select a carrier style");
-                window.location.reload();
-            }
-            else if (response.type == "noelements") {
-                alert("Please select  atleast one line to proceed");
-                acceptBtn.SetEnabled(true);
-            }
-            else if (response.type == "CollectPrompt") {
-                acceptBtn.SetEnabled(true);
-                loadPopup.Hide();
-                var ReturnCollection = ASPxClientControl.GetControlCollection().GetByName("ReturnCollection");
-                if (ReturnCollection != null) {
-                    $.ajax({
-                        type: "POST",
-                        url: "/Return/GetCollectionPop/",
-                        success: function (response) {
-                            if (response != null) {
-                                var doc = document.getElementById("ReturnCollectionPop");
-                                doc.innerHTML = "";
-                                doc.innerHTML = response;
-                                ReturnCollection.Show();
-                                loadPopup.Hide();
-                                MVCxClientUtils.FinalizeCallback();
                             }
                         }
-                    });
-                    //ReturnCollectionPop
-
-                }
+                        else {
+                            acceptBtn.SetEnabled(true);
+                            loadPopup.Hide();
+                        }
+                    },
+                    error: function (response) {
+                        acceptBtn.SetEnabled(true);
+                        loadPopup.Hide();
+                    }
+                });
             }
             else {
                 acceptBtn.SetEnabled(true);
                 loadPopup.Hide();
             }
-        },
-        error: function (response) {
-            acceptBtn.SetEnabled(true);
-            loadPopup.Hide();
         }
     });
 }
@@ -9622,19 +9710,31 @@ function ItsCallBack(s, e) {
 
 function OrderEditRT(orderNo, empId) {
     $.ajax({
-        url: "/OrderDisplay/SetEmployee/",
+        url: "/Return/CanEditReturn/",
         type: "post",
-        data: { 'empId': empId },
-        success: function (resp) {
-            if (resp.toLowerCase().indexOf("emp") > -1 == false) {
-                window.location = "/Return/ReturnReorderEdit?ordeNo=" + orderNo;
+        data: { 'orderNo': orderNo },
+        success: function (response) {
+            if (response!="") {
+                $.ajax({
+                    url: "/OrderDisplay/SetEmployee/",
+                    type: "post",
+                    data: { 'empId': empId },
+                    success: function (resp) {
+                        if (resp.toLowerCase().indexOf("emp") > -1 == false) {
+                            window.location = "/Return/ReturnReorderEdit?ordeNo=" + orderNo;
+                        }
+                        else {
+                            alert(resp);
+                        }
+                    }
+                });
             }
-            else {
-                alert(resp);
+            else
+            {
+                alert("You are not allowed to edit a Return order which does not have an Exchange order. Please delete the Return order and create a new Return order");
             }
         }
     });
-
 }
 function ChangeVatStatus(s, e) {
     var vatCTRl = ASPxClientControl.GetControlCollection().GetByName(s.name);
@@ -10044,11 +10144,9 @@ function GetAllOrderRPT(empId) {
             type: "Post",
             data: { 'empId': empId },
             success: function (resp) {
-                if(resp!=null && resp!="")
-                {
+                if (resp != null && resp != "") {
                     var pop = ASPxClientControl.GetControlCollection().GetByName("SHOWORDERSRPT");
-                    if(pop!=null)
-                    {
+                    if (pop != null) {
                         var docelement = document.getElementById("showordsrpt");
                         docelement.innerHTML = "";
                         docelement.innerHTML = resp;
@@ -10061,9 +10159,8 @@ function GetAllOrderRPT(empId) {
     }
 }
 
-function GetOrdDetailsByStyle(style,empId)
-{
-    if (empId != "" && style!="") {
+function GetOrdDetailsByStyle(style, empId) {
+    if (empId != "" && style != "") {
         $.ajax({
             url: "/Report/StyleDetailGridViewPartial/",
             type: "Post",
@@ -10085,7 +10182,47 @@ function GetOrdDetailsByStyle(style,empId)
     }
 }
 
-function ExportCardgrid()
-{
+function ExportCardgrid() {
     window.open('/Report/CardExporter/', '_blank');
+}
+
+function UploadComplete(s, e) {
+
+    $.ajax({
+        url: "/ImportExport/StartImport/",
+        type: "Post",
+        success: function (response) {
+            if (response != null) {
+                window.location.reload();
+            }
+        }
+
+    });
+
+}
+
+function CreditReturnPoints(orderno)
+{
+    if(orderno!="" && orderno!=null)
+    {
+        if(parseInt(orderno)>0)
+        {
+            if (confirm("Do want to credit points to this order?")) {
+                $.ajax({
+                    url: "/Return/CreditreturnPoints/",
+                    type: "Post",
+                    data: { 'orderno': orderno },
+                    success: function (response) {
+                        if (response != "" && response != null) {
+                            alert("Successfully credited points to this order");
+                            window.location.reload();
+                        }
+                        else {
+                            alert("Something went wrong.Please try again later.")
+                        }
+                    }
+                });
+            }
+        }
+    }
 }

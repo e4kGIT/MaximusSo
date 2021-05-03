@@ -308,6 +308,7 @@ namespace Maximus.Data.models
         public virtual DbSet<tblonline_ucode_operations> tblonline_ucode_operations { get; set; }
         public virtual DbSet<tblaccemp_ucode_alternates> tblaccemp_ucode_alternates { get; set; }
         public virtual DbSet<ucodeby_freetextview> ucodeby_freetextview { get; set; }
+        public virtual DbSet<tblsop_return_credited> tblsop_return_credited { get; set; }
     
         public virtual int bk_CreateCube_OrderDetail()
         {

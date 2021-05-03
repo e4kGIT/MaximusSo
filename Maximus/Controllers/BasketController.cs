@@ -527,7 +527,7 @@ namespace Maximus.Controllers
                         }
                         slsHead.IsEditing = true;
                         var SalesOrderLine = new List<SalesOrderLineViewModel>();
-                      
+                        Session["CustRef"] = slsHead.CustRef;
                         if (_ucodeOperationsTbl.Exists(s=>s.BusinessID==busId && s.UcodeId==slsHead.UCodeId && s.FreeStkChk==true))
                         {
                             var data= _salesOrderLines.GetAll(x => x.OrderNo == OrderNo).Select(x => new SalesOrderLineViewModel
@@ -3034,6 +3034,22 @@ namespace Maximus.Controllers
                 updMailModel.OrderNo = saleHead.OrderNo;
             }
             Session["updateEmailTemplate"] = updMailModel;
+        }
+        #endregion
+
+        #region IsReorderDel
+        public string IsReorderDel(int OrderNo)
+        {
+            string result = "";
+            if(OrderNo>0)
+            {
+                var sbyt = Convert.ToSByte(false);
+                if(_salesOrderHeader.Exists(s=>s.OrderNo== OrderNo && s.OnlineConfirm== sbyt))
+                {
+                    result = _salesOrderLines.Exists(s=>s.ReturnOrderNo>0 && s.OrderNo== OrderNo) ?"":"true";
+                }
+            }
+            return result;
         }
         #endregion
     }

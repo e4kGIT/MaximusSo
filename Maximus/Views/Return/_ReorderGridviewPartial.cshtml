@@ -48,7 +48,7 @@
 
 
         settings.ClientSideEvents.EndCallback = "CalculateTotals";
-        if (Session["isrtntype"].ToString() == "PRIVATE")
+        if (Session["isrtntype"].ToString() == "PRIVATE" || Convert.ToBoolean(Session["POINTSREQ"].ToString()))
         {
             settings.ClientSideEvents.EndCallback = "CalculateTotals1";
         }
@@ -61,29 +61,36 @@
         {
             if (ViewData["EditResult"] != null)
             {
-                e.Properties["cpIsReloadReqired"] =(bool)ViewData["EditResult"];
+                e.Properties["cpIsReloadReqired"] = (bool)ViewData["EditResult"];
             }
         };
         settings.CommandButtonInitialize = (s, e) =>
         {
             MVCxGridView gridView = (MVCxGridView)s;
             var value = Convert.ToBoolean(gridView.GetRowValues(e.VisibleIndex, "IsCnf"));
-
-            if (e.ButtonType == ColumnCommandButtonType.Edit )
+            var IsRetEdit = Convert.ToBoolean(gridView.GetRowValues(e.VisibleIndex, "IsRetEdit"));
+            if (e.ButtonType == ColumnCommandButtonType.Edit)
             {
+                //added on (26-04-21)
+                e.Visible = false;
 
-                if (value || Convert.ToBoolean(Session["IsEmergency"].ToString())|| retursn.IsMatUcodeId(Session["SelectedUcode"].ToString(), Session["BuisnessId"].ToString()))
-                {
-                    e.Visible = false;
-                }
-                else  if(Session["isrtntype"].ToString() == "PRIVATE")
-                {
-                    e.Visible = false;
-                }
+                //commented on (26-04-21)
+                //if (value || Convert.ToBoolean(Session["IsEmergency"].ToString())|| retursn.IsMatUcodeId(Session["SelectedUcode"].ToString(), Session["BuisnessId"].ToString()))
+                //{
+                //    e.Visible = false;
+                //}
+                //else  if(Session["isrtntype"].ToString() == "PRIVATE")
+                //{
+                //    e.Visible = false;
+                //}
             }
             if (e.ButtonType == ColumnCommandButtonType.Delete)
             {
-                if (value)
+                var ss = Convert.ToBoolean(Session["POINTSREQ"]);
+                var ss1 = Session["isrtntype"].ToString().ToLower();
+                var sss = (bool)Session["ISRTNEDITING"];
+                var ssss = IsRetEdit;
+                if (value || (Convert.ToBoolean(Session["POINTSREQ"]) && Session["isrtntype"].ToString().ToLower() != "maternity" && ((bool)Session["ISRTNEDITING"]) && IsRetEdit))
                 {
                     e.Visible = false;
                 }
@@ -101,7 +108,7 @@
 
                     Html.DevExpress().Label(lblsettings =>
                     {
-                        lblsettings.Name = "ReOrderno";
+                        lblsettings.Name = "Exchange orderno";
 
                     }).Bind(templateContainer.Text).Render();
 
@@ -231,7 +238,7 @@
         {
             settings.Columns.Add(col =>
             {
-                col.FieldName = "SOPDetail4"; col.Caption="Emergency reason"; col.SetEditItemTemplateContent(c =>
+                col.FieldName = "SOPDetail4"; col.Caption = "Emergency reason"; col.SetEditItemTemplateContent(c =>
                 {
                     GridViewEditItemTemplateContainer templateContainer = c as GridViewEditItemTemplateContainer;
 

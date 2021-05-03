@@ -476,6 +476,7 @@
     <Compile Include="models\RepositoryModels\TblFskStyle.cs" />
     <Compile Include="models\RepositoryModels\tblManPackOrders.cs" />
     <Compile Include="models\RepositoryModels\tblManpackReturns.cs" />
+    <Compile Include="models\RepositoryModels\TblReturnsCredited.cs" />
     <Compile Include="models\RepositoryModels\tblRoles.cs" />
     <Compile Include="models\RepositoryModels\tblSalesLines.cs" />
     <Compile Include="models\RepositoryModels\tblSalesOrderHeader.cs" />
@@ -986,6 +987,9 @@
       <DependentUpon>DataContext.tt</DependentUpon>
     </Compile>
     <Compile Include="models\tblsop_reasons.cs">
+      <DependentUpon>DataContext.tt</DependentUpon>
+    </Compile>
+    <Compile Include="models\tblsop_return_credited.cs">
       <DependentUpon>DataContext.tt</DependentUpon>
     </Compile>
     <Compile Include="models\tblsop_return_reasoncodes.cs">

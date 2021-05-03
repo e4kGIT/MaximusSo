@@ -48,6 +48,7 @@
         settings.SettingsCommandButton.EditButton.Image.IconID = IconID.EditEdit16x16;
         settings.SettingsCommandButton.EditButton.RenderMode = GridCommandButtonRenderMode.Image;
         settings.ClientSideEvents.BeginCallback = "ItsCallBack";
+ 
         settings.HtmlRowPrepared = (s, e) =>
         {
             if (e.GetValue("IsConfirmed") != null)
@@ -62,7 +63,7 @@
             {
                 e.Row.BackColor = System.Drawing.Color.BurlyWood;
                 // e.Row.ForeColor = System.Drawing.Color.whi;
-                e.Row.ToolTip = "This is a Reorder line";
+                e.Row.ToolTip = "This is a Exchange line";
             }
         };
         settings.CommandButtonInitialize = (s, e) =>
@@ -149,13 +150,19 @@
                     }
                     else
                     {
-                        if (ordType.ToLower().Contains("emer"))
+                        if (ordType.ToLower().Contains("emer") && ordType.ToLower().Contains("exchan")==false)
                         {
                             htmlString = "<span class='Highlighter' onclick=\"OrderEdit(" + ordeNos + ",'" + empId + "');\"><b>" + ordeNos + "</b></span>";
                         }
                         else
                         {
-                            if (totPts > 0)
+                            //commented by sasi (24-04-21)
+                            //if (totPts > 0)
+                            //{
+                            //    htmlString = "<span class='Highlighter' onclick=\"OrderEdit(" + ordeNos + ",'" + empId + "');\"><b>" + ordeNos + "</b></span>";
+                            //} 
+                            //added by sasi (24-04-21)
+                            if (totPts > 0 && ordType.ToLower().Contains("exchan")==false)
                             {
                                 htmlString = "<span class='Highlighter' onclick=\"OrderEdit(" + ordeNos + ",'" + empId + "');\"><b>" + ordeNos + "</b></span>";
                             }
@@ -164,6 +171,10 @@
                                 if (ordType.ToLower().Contains("private"))
                                 {
                                     htmlString = "<span class='Highlighter' title='This is a private order'><b>" + ordeNos + "</b></span>";
+                                }
+                                else if (ordType.ToLower().Contains("exchan"))
+                                {
+                                    htmlString = "<span class='Highlighter' title='This is a exchange order'><b>" + ordeNos + "</b></span>";
                                 }
                                 else
                                 {
@@ -386,7 +397,7 @@
             });
 
         }) ;
-       // settings.Columns.Add("CourrierRef").Width = 70; ;
+        // settings.Columns.Add("CourrierRef").Width = 70; ;
         settings.Columns.Add(set =>
         {
             set.FieldName = "CourrierRef";
@@ -411,6 +422,29 @@
             });
 
         });
+        if ((Session["OT"].ToString().ToLower().Trim() == "rt") && Convert.ToBoolean(Session["EmergencyTicked"])==false && Session["ShowRtnCredBtn"].ToString().ToLower()=="show")
+        {
+            settings.Columns.Add(set =>
+            {
+                set.FieldName = "";
+                set.Caption = "";
+                set.Width = 100;
+                set.SetDataItemTemplateContent(x =>
+                {
+                    string ordeNos = DataBinder.Eval(x.DataItem, "OrderNo").ToString();
+                    bool RtnCredited=Convert.ToBoolean(DataBinder.Eval(x.DataItem, "RtnCredited"));
+                    bool ShowRtnCredited = Convert.ToBoolean(DataBinder.Eval(x.DataItem, "ShowRtnCredited"));
+                    string isConfirmed = DataBinder.Eval(x.DataItem, "isConfirmed").ToString();
+                    if (RtnCredited==false && ShowRtnCredited && isConfirmed.ToUpper().Trim()=="YES")
+                    {
+                        var htmlString = "";
+                        htmlString = "<button class=\"btn btn-primary\" onclick=\"CreditReturnPoints(" + ordeNos + ")\" style=\"background-color:#009885;color:white\">Credit points</button>";
+                        ViewContext.Writer.Write(htmlString);
+                    }
+                });
+
+            });
+        }
         //settings.Columns.Add("CourrierRef").Width = 70; ;
 
 
@@ -423,3 +457,4 @@
 @grid.Bind(Model).GetHtml()
 
 
+@*//RtnCredited*@

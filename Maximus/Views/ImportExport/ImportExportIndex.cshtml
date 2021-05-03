@@ -1,23 +1,39 @@
-﻿
-@*@Html.DevExpress().PageControl(settings =>
-{
-    settings.Name = "PageControl";
-    settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
-
-    settings.TabPages.Add("Users").SetContent(() =>
+﻿@*@Html.DevExpress().PageControl(settings =>
     {
+        settings.Name = "PageControl";
+        settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
 
-        Html.RenderAction("UserGridViewPartial");
-    });
-    //settings.TabPages.Add("Address").SetContent(() =>
-    //{
-    //    @Html.RenderAction("AddressGridViewPartial");
-    //});
-    //settings.TabPages.Add("Employee").SetContent(() =>
-    //{
-    //    Html.RenderAction("EmployeeGrdiviewPartial");
-    //});
-}).GetHtml()*@
+        settings.TabPages.Add("Users").SetContent(() =>
+        {
+
+            Html.RenderAction("UserGridViewPartial");
+        });
+        //settings.TabPages.Add("Address").SetContent(() =>
+        //{
+        //    @Html.RenderAction("AddressGridViewPartial");
+        //});
+        //settings.TabPages.Add("Employee").SetContent(() =>
+        //{
+
+
+        //    Html.RenderAction("EmployeeGrdiviewPartial");
+        //});
+    }).GetHtml()*@
+@using (Html.BeginForm("UploadControlUpload", "ImportExport", FormMethod.Post, new { @id = "DocForm" }))
+{
+    @Html.DevExpress().UploadControl(settings =>
+{
+    settings.BrowseButton.Text = "Import from Excel";
+    settings.Name = "UploadControl";
+    settings.CallbackRouteValues = new { Controller = "ImportExport", Action = "UploadControlUpload" };
+    settings.ShowUploadButton = false;
+   // settings.ShowProgressPanel = true;
+    settings.AutoStartUpload = true;
+    settings.ShowTextBox = false;
+    settings.ClientSideEvents.FilesUploadComplete = "UploadComplete";
+    settings.ValidationSettings.Assign(Maximus.Controllers.ImportExportControllerUploadControlSettings.UploadValidationSettings);
+}).GetHtml()
+}
 
 @{Html.RenderAction("UserGridViewPartial");
 }

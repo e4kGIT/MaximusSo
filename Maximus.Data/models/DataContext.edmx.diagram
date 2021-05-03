@@ -286,6 +286,7 @@
         <EntityTypeShape EntityType="e4kmaximusdbModel.tblonline_ucode_operations" Width="1.5" PointX="43.375" PointY="50.75" />
         <EntityTypeShape EntityType="e4kmaximusdbModel.tblaccemp_ucode_alternates" Width="1.5" PointX="11.375" PointY="51.75" />
         <EntityTypeShape EntityType="e4kmaximusdbModel.ucodeby_freetextview" Width="1.5" PointX="49.375" PointY="41.75" />
+        <EntityTypeShape EntityType="e4kmaximusdbModel.tblsop_return_credited" Width="1.5" PointX="51.375" PointY="35.75" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
