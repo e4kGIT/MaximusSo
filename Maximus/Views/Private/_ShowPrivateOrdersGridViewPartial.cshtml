@@ -64,7 +64,7 @@
                 var rtnNo = DataBinder.Eval(s.DataItem, "retnorderno").ToString() != "" ? Convert.ToInt32(DataBinder.Eval(s.DataItem, "retnorderno").ToString()) : 0;
                 if(rtnNo>0)
                 {
-                    ViewContext.Writer.Write("Private reorder");
+                    ViewContext.Writer.Write("Private Exchange");
                 }
                 else
                 {
@@ -107,7 +107,12 @@
                 content = content + "<button type='button' style='background-color:#009885;color:white' onclick='PrintPrivate("+ ono + ")' class='btn btn-default'>Print</button>";
                 ViewContext.Writer.Write(content);
             });
+            sol.SetHeaderTemplateContent(x =>
+            {
 
+                string content = "<center><img src=\"/Content/Images/xls.png\" title='Export' onclick=\"SaveEmpGrid('ShowPrivate','xls')\" width=\"40\" alt='Export'></center>";
+                ViewContext.Writer.Write(content);
+            });
         });
         settings.Columns.Add(sol =>
         {

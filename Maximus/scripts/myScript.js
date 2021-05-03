@@ -8417,6 +8417,10 @@ function SaveEmpGrid(chart) {
     else if (chart == "ShowRolloutReport") {
         window.open('/Report/exporter/', '_blank');
     }
+    else if(chart=="ShowPrivate")
+    {
+        window.open('/Private/exporter/', '_blank');
+    }
 }
 
 

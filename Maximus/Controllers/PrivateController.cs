@@ -1967,7 +1967,34 @@ namespace Maximus.Controllers
                     orders.retnorderno= _salesOrderLines.GetAll(s => s.OrderNo == orders.orderno).First().ReturnOrderNo.Value;
                 }
             }
+            Session["PrivateExportModel"] = model;
             return PartialView("_ShowPrivateOrdersGridViewPartial", model);
+        }
+        public ActionResult exporter()
+        {
+            var sett = CreateExportGridViewSettings();
+            return GridViewExtension.ExportToXls(sett, ((List<PrivateOrderResultModel>)Session["PrivateExportModel"]));
+        }
+        public GridViewSettings CreateExportGridViewSettings()
+        {
+            GridViewSettings settings = new GridViewSettings();
+            settings.Name = "ShowPrivateOrderGridView";
+            settings.KeyFieldName = "OrderNo";
+            settings.Columns.Add("orderno").Caption = "Order No";
+            settings.Columns.Add("employeeid").Caption = "Employee id";
+            settings.Columns.Add("employeename").Caption = "Employee name";
+            settings.Columns.Add("orderdate").Caption = "Date";
+            settings.Columns.Add("totalgoods").Caption = "Goods Total";
+            settings.Columns.Add("vat").Caption = "VAT";
+            settings.Columns.Add("ordergoods").Caption = "Grand Total";
+            settings.Columns.Add("deliveryto").Caption = "Del Address";
+            settings.Columns.Add("txnid").Caption = "Transaction Id";
+            settings.Columns.Add("txnip").Caption = "IP Address";
+             
+            settings.Columns.Add("paymentdate").Caption = "Payment Date";
+            
+            settings.Columns.Add("responsestatus").Caption = "Payment Status";
+            return settings;
         }
     }
 }

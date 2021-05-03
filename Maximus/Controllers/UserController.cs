@@ -110,8 +110,7 @@ namespace Maximus.Controllers
                             Session["Access"] = data.First().AccessID;
                             Session["Email"] = data.First().Email_ID;
                             Session["IsEmergency"] = false;
-                            
-                           
+                            Session["PrivateExportModel"] = new List<PrivateOrderResultModel>();
                             busId = data.First().BusinessID;
                             Session["BuisnessId"] = data.First().BusinessID;
                             Session["Buisness"] = _dataConnection.GetAllBusBusinness().Where(x => x.BusinessID.ToLower().Trim() == busId.ToLower().Trim()).First().Name;
