@@ -1964,7 +1964,7 @@ namespace Maximus.Controllers
             {
                 if (_salesOrderLines.Exists(s => s.OrderNo == orders.orderno && s.ReturnOrderNo > 0))
                 {
-                    orders.retnorderno= _salesOrderLines.GetAll(s => s.OrderNo == orders.orderno).First().ReturnOrderNo.Value;
+                    orders.retnorderno = _salesOrderLines.GetAll(s => s.OrderNo == orders.orderno).First().ReturnOrderNo.Value;
                 }
             }
             Session["PrivateExportModel"] = model;
@@ -1990,11 +1990,26 @@ namespace Maximus.Controllers
             settings.Columns.Add("deliveryto").Caption = "Del Address";
             settings.Columns.Add("txnid").Caption = "Transaction Id";
             settings.Columns.Add("txnip").Caption = "IP Address";
-             
             settings.Columns.Add("paymentdate").Caption = "Payment Date";
-            
             settings.Columns.Add("responsestatus").Caption = "Payment Status";
             return settings;
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 

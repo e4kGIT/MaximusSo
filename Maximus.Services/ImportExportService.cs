@@ -32,10 +32,10 @@ namespace Maximus.Services
         public List<ImpExpUsers> GetAllUsers(string busId)
         {
             List<ImpExpUsers> usrLst = new List<ImpExpUsers>();
-             
+
             try
             {
-                usrLst= _dp.GetUserLst(busId);
+                usrLst = _dp.GetUserLst(busId);
             }
             catch (Exception e)
             {
@@ -46,6 +46,24 @@ namespace Maximus.Services
 
             }
             return usrLst;
+        }
+
+        public List<AddressImportModel> GetAllAddress(string busid)
+        {
+            List<AddressImportModel> AddLSt = new List<AddressImportModel>();
+
+            AddLSt = _dp.GetAddressLst(busid);
+
+            return AddLSt;
+        }
+
+        public List<EmployeeImportModel> GetAllEmployee(string busid)
+        {
+            List<EmployeeImportModel> empLst = new List<EmployeeImportModel>();
+
+           // empLst = _dp.getem(busid);
+
+            return empLst;
         }
     }
 }

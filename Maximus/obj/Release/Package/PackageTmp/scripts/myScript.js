@@ -9203,6 +9203,7 @@ function GetAllReturnHeader(s, e) {
     var ststus = false;
     acceptBtn.SetEnabled(false);
     loadPopup.Show();
+    alert("Make sure you have completed all your exchanges, this process can only be done once.");
     $.ajax({
         type: "post",
         url: "/Return/GetReorderStatus/",
@@ -9219,6 +9220,7 @@ function GetAllReturnHeader(s, e) {
                 ststus = true;
             }
             if (ststus) {
+               
                 $.ajax({
                     type: "POST",
                     url: "/Return/AcceptReturn/",

@@ -1062,6 +1062,7 @@
       <DependentUpon>DataContext.tt</DependentUpon>
     </Compile>
     <Compile Include="models\UpdateMailModel.cs" />
+    <Compile Include="models\UserImportModel.cs" />
     <Compile Include="models\UserModule.cs" />
     <Compile Include="models\UserViewModel.cs" />
     <Compile Include="models\view_manpack.cs">

@@ -1,5 +1,6 @@
 ﻿using DevExpress.Web.Mvc;
 using Maximus.Data.Interface.Concrete;
+using Maximus.Data.models;
 using Maximus.Data.models.RepositoryModels;
 using Maximus.Data.Models;
 using Maximus.Services;
@@ -11,6 +12,7 @@ using System.Data.OleDb;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Web.Security;
 
 namespace Maximus.Controllers
 {
@@ -247,20 +249,68 @@ namespace Maximus.Controllers
             return PartialView("_AddressGridViewPartial", model);
         }
 
-        public string StartImport()
+        public string StartImport(string updTbl = "")
         {
+
+            string result = "";
+            int count = 0;
+            List<string> failList = new List<string>();
+            List<string> mapTolSt = new List<string>();
+            string rndPwd = _dp.BusinessParam("RNDPASSWORD", Session["BuisnessId"].ToString());
+            DataTable dt = new DataTable();
             string file = Session["importfilename"] != null ? Session["importfilename"].ToString() : "";
             if (file != "")
             {
                 InMemoryModel inModel = new InMemoryModel();
-                //string path = System.Web.HttpContext.Current.Request.MapPath(@"~\uploadfiles");
-                //string foldername = "";
-                //string orgfileName = "";
-                //string filename = "";
-                //foldername = string.Format(@"{0}\{1}", path, "Import");
-                //orgfileName = string.Format(@"{0}_{1}", DateTime.Now.ToString("dd-MM-yyyy"), file);
-                //filename = string.Format(@"{0}\{1}", foldername, orgfileName);
-                var ssss = inModel.OpenExcelFile(file);
+                dt = inModel.OpenExcelFile(file);
+                if (dt.Rows.Count > 0)
+                {
+                    if (updTbl == "user")
+                    {
+                        foreach (var item in dt.AsEnumerable().Select(s => new UserImportModel { USERNAME = s["USERNAME"].ToString(), FORENAME = s["FORENAME"].ToString(), SURNAME = s["SURNAME"].ToString(), EMAILID = s["EMAILID"].ToString(), ROLE = s["ROLE"].ToString(), ACTIVE = s["ACTIVE"].ToString(), MAPTO = s["MAPTO"].ToString() }))
+                        {
+                            if (item.USERNAME != "" && item.FORENAME != "" && item.ROLE != "" && item.EMAILID != "")
+                            {
+                                MembershipUser mu = Membership.GetUser(item.USERNAME);
+                                if (mu == null)
+                                {
+                                    Membership.CreateUser(item.USERNAME, rndPwd, item.EMAILID);
+                                    mu = Membership.GetUser(item.USERNAME);
+                                }
+                                item.AspUserID = mu != null ? mu.UserName != null && mu.UserName != "" ? mu.UserName : item.USERNAME : item.USERNAME;
+                                item.Password = rndPwd;
+                                item.BusiD = Session["BuisnessId"].ToString();
+                                item.ACTIVE = item.ACTIVE == "" || item.ACTIVE.Length > 1 ? "Y" : item.ACTIVE;
+                                if (item.MAPTO != "" & item.MAPTO.Contains(":"))
+                                {
+                                    item.MAPTOlst = item.MAPTO.Split(':').ToList();
+                                }
+                                else
+                                {
+                                    mapTolSt.Add(item.USERNAME);
+                                    item.MAPTOlst = mapTolSt;
+                                }
+                                if (_dp.SaveImportedUser(item))
+                                {
+                                    count++;
+                                }
+                                else
+                                {
+                                    failList.Add(item.USERNAME);
+                                }
+                            }
+                        }
+                    }
+                    else if(updTbl=="employee")
+                    {
+
+                    }
+                    else if (updTbl=="address")
+                    {
+
+                    }
+                }
+
             }
             return "";
         }
@@ -307,7 +357,7 @@ namespace Maximus.Controllers
             DataTable dataTable = new DataTable();
             try
             {
-                string connectionString = fileName.ToLower().Contains(".xlsx")==false? string.Format("Provider=Microsoft.Jet.OLEDB.4.0; data source={0}; Extended Properties=Excel 8.0;", fileName) : string.Format("Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Extended Properties=Excel 12.0;", fileName);
+                string connectionString = fileName.ToLower().Contains(".xlsx") == false ? string.Format("Provider=Microsoft.Jet.OLEDB.4.0; data source={0}; Extended Properties=Excel 8.0;", fileName) : string.Format("Provider=Microsoft.ACE.OLEDB.12.0;Data Source={0};Extended Properties=Excel 12.0;", fileName);
                 OleDbDataAdapter adapter = new OleDbDataAdapter("SELECT * FROM [Sheet1$]", connectionString);
                 adapter.Fill(dataTable);
             }

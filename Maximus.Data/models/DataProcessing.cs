@@ -773,6 +773,8 @@ namespace Maximus.Data.Models
             return Convert.ToBoolean(BusinessParam("DELADDR_USER_CREATE", busId.Trim()));
         }
         #endregion
+
+
         #region AddressUserCreate
         public int GetUserAddress(string busId = "", string userId = "")
         {
@@ -975,7 +977,7 @@ namespace Maximus.Data.Models
 
         #region GetPrice
 
-        public decimal GetPrice(string StyleID = "", string SizeId = "", string busId = "", string priceId = "")
+        public decimal GetPrice(string StyleID = "", string SizeId = "", string busId = "", string priceId = "", bool isPrivOrder = false)
         {
             decimal result = 0;
             string sSqry = "", sSqry1 = "";
@@ -994,10 +996,21 @@ namespace Maximus.Data.Models
                     {
                         sSqry = "select price from tblfsk_style_sizes_prices where SizeID='" + SizeId.Trim() + "' and StyleID='" + StyleID.Trim() + "' and BusinessId='" + businessId + "' and PriceID=2";
                         sSqry1 = "select price from tblfsk_style_sizes_prices where SizeID='" + SizeId.Trim() + "' and StyleID='" + StyleID.Trim() + "' and BusinessId='All' and PriceID=2";
-
                     }
                     res1 = GetScalar(sSqry);
                     res2 = GetScalar(sSqry1);
+                    if (isPrivOrder)
+                    {
+                        if (res1 == "" && res2 == "")
+                        {
+                            sSqry = ""; sSqry1 = "";
+                            sSqry = "select price from tblfsk_style_sizes_prices where SizeID='" + SizeId.Trim() + "' and StyleID='" + StyleID.Trim() + "' and BusinessId='" + businessId + "' and PriceID=2";
+                            sSqry1 = "select price from tblfsk_style_sizes_prices where SizeID='" + SizeId.Trim() + "' and StyleID='" + StyleID.Trim() + "' and BusinessId='All' and PriceID=2";
+                            res1 = GetScalar(sSqry);
+                            res2 = GetScalar(sSqry1);
+                        }
+                    }
+
                 }
                 else
                 {
@@ -3284,10 +3297,10 @@ namespace Maximus.Data.Models
         }
         #endregion
         #region getPricewithvat
-        public string GetPriceWithVat(string style, string size, string busId, string priceid)
+        public string GetPriceWithVat(string style, string size, string busId, string priceid, bool isPrivOrder = false)
         {
             var vatP = GetVatPercent(style, size);
-            var price = GetPrice(style, size, busId, priceid);
+            var price = GetPrice(style, size, busId, priceid, isPrivOrder);
             var vat = (vatP * Convert.ToDouble(price)) / 100;
             return RoundVATDecimals(vat + Convert.ToDouble(price)).ToString("0.00");
         }
@@ -6309,12 +6322,12 @@ namespace Maximus.Data.Models
         }
         #endregion
         #region GetUsedPoints
-        public int GetUsedPointsMaternity(string busId,string empId, MySqlConnection conn)
+        public int GetUsedPointsMaternity(string busId, string empId, MySqlConnection conn)
         {
             string usdQry = "";
             int usedPts = 0;
-            var matucodes=_stylePoints.Exists(s=>s.BusinessID== busId && s.UcodeID.ToLower().Contains("maternit"))? "'" + string.Join("','", _stylePoints.GetAll(s => s.BusinessID == busId && s.UcodeID.ToLower().Contains("maternit")).Select(s => s.StyleID).ToList()) + "'":"";
-            usdQry = matucodes!="" ? " SELECT SUM(IF(ISNULL(SOPOINTS),0,SOPOINTS)+IF(ISNULL(PICKPOINTS),0,PICKPOINTS)+IF(ISNULL(INVPOINTS),0,INVPOINTS)) USEDPOINTS FROM `tblaccemp_pointscard` WHERE EMPLOYEEID = '" + empId + "' and styleid in (" + matucodes + ") GROUP BY EMPLOYEEID" : " SELECT SUM(IF(ISNULL(SOPOINTS),0,SOPOINTS)+IF(ISNULL(PICKPOINTS),0,PICKPOINTS)+IF(ISNULL(INVPOINTS),0,INVPOINTS)) USEDPOINTS FROM `tblaccemp_pointscard` WHERE EMPLOYEEID = '" + empId + "' GROUP BY EMPLOYEEID";
+            var matucodes = _stylePoints.Exists(s => s.BusinessID == busId && s.UcodeID.ToLower().Contains("maternit")) ? "'" + string.Join("','", _stylePoints.GetAll(s => s.BusinessID == busId && s.UcodeID.ToLower().Contains("maternit")).Select(s => s.StyleID).ToList()) + "'" : "";
+            usdQry = matucodes != "" ? " SELECT SUM(IF(ISNULL(SOPOINTS),0,SOPOINTS)+IF(ISNULL(PICKPOINTS),0,PICKPOINTS)+IF(ISNULL(INVPOINTS),0,INVPOINTS)) USEDPOINTS FROM `tblaccemp_pointscard` WHERE EMPLOYEEID = '" + empId + "' and styleid in (" + matucodes + ") GROUP BY EMPLOYEEID" : " SELECT SUM(IF(ISNULL(SOPOINTS),0,SOPOINTS)+IF(ISNULL(PICKPOINTS),0,PICKPOINTS)+IF(ISNULL(INVPOINTS),0,INVPOINTS)) USEDPOINTS FROM `tblaccemp_pointscard` WHERE EMPLOYEEID = '" + empId + "' GROUP BY EMPLOYEEID";
             try
             {
                 MySqlCommand cmd = new MySqlCommand(usdQry, conn);
@@ -6641,7 +6654,7 @@ namespace Maximus.Data.Models
                                         }
                                         if (Convert.ToBoolean(POINTSREQ))
                                         {
-                                            usedPoints =IsMatUcodeId(saleHead.UCodeId,saleHead.CustID)? line.Isedit ? GetUsedPointsMaternity(saleHead.CustID,line.EmployeeId, conn) - line.TotalPoints : GetUsedPointsMaternity(saleHead.CustID, line.EmployeeId, conn): line.Isedit ? GetUsedPoints(line.EmployeeId, conn) - line.TotalPoints : GetUsedPoints(line.EmployeeId, conn);
+                                            usedPoints = IsMatUcodeId(saleHead.UCodeId, saleHead.CustID) ? line.Isedit ? GetUsedPointsMaternity(saleHead.CustID, line.EmployeeId, conn) - line.TotalPoints : GetUsedPointsMaternity(saleHead.CustID, line.EmployeeId, conn) : line.Isedit ? GetUsedPoints(line.EmployeeId, conn) - line.TotalPoints : GetUsedPoints(line.EmployeeId, conn);
                                             if ((usedPoints + line.TotalPoints) <= ucodePoints || access.ToLower() != "user" || line.Isedit)
                                             {
                                                 if (_pointsByUcode.Exists(s => s.UcodeID.ToLower().Trim() == saleHead.UCodeId.ToLower().Trim()))
@@ -6741,7 +6754,7 @@ namespace Maximus.Data.Models
                     }
                     else
                     {
-                        if (line.HasReorder ||( CheckEmergency(saleHead.CustID, saleHead.UCodeId)==true && IsMatUcodeId(saleHead.UCodeId,saleHead.CustID)==false) || Convert.ToBoolean(BusinessParam("RTN_ADJ_REQ", saleHead.CustID)))
+                        if (line.HasReorder || (CheckEmergency(saleHead.CustID, saleHead.UCodeId) == true && IsMatUcodeId(saleHead.UCodeId, saleHead.CustID) == false) || Convert.ToBoolean(BusinessParam("RTN_ADJ_REQ", saleHead.CustID)))
                         {
                             if (booStock)
                             {
@@ -8542,7 +8555,7 @@ namespace Maximus.Data.Models
             try
             {
                 conn.Open();
-                sQry = " SELECT tu.`UserName` UserName,tu.`ForeName` ForeName,tu.`SurName` SurName,tu.`AccessID` AccessID,tu.`Active` Active, tu.`BusinessID` BusinessID,tu.`Email_ID` Email_ID,GROUP_CONCAT(onu.`EmployeeID`) mapTo FROM `tblusers` tu LEFT JOIN `tblonline_userid_employee` onU ON tu.`UserName`= onu.`OnlineUserID` AND tu.`BusinessID`= onu.`BusinessID` where tu.`BusinessID` ='" + busId + "'  GROUP BY onu.`OnlineUserID`";
+                sQry = " SELECT tu.`UserName` UserName,tu.`ForeName` ForeName,tu.`SurName` SurName,tu.`AccessID` AccessID,tu.`Active` Active, tu.`BusinessID` BusinessID,tu.`Email_ID` Email_ID,GROUP_CONCAT(onu.`EmployeeID`) mapTo FROM `tblusers` tu LEFT JOIN `tblonline_userid_employee` onU ON tu.`UserName`= onu.`OnlineUserID` AND tu.`BusinessID`= onu.`BusinessID` where tu.`BusinessID` ='" + busId + "'  GROUP BY onu.`OnlineUserID` ORDER BY TU.CREATEDATE DESC";
                 MySqlCommand cmd = new MySqlCommand(sQry, conn);
                 MySqlDataAdapter da = new MySqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
@@ -8574,6 +8587,101 @@ namespace Maximus.Data.Models
                 conn.Close();
             }
             return usrLst;
+        }
+        #endregion
+
+        #region GetEmployeeLST
+        public List<EmployeeImportModel> GetEmployeeLst(string busId)
+        {
+            string sQry = "";
+            List<EmployeeImportModel> empLst = new List<EmployeeImportModel>();
+            MySqlConnection conn = new MySqlConnection(ConnectionString);
+            try
+            {
+                conn.Open();
+                sQry = " SELECT t1.employeeid,t1.forename,t1.surname,t1.title,t1.startdate,t1.enddate,GROUP_CONCAT(t3.ucodeid) ucodeid,t2.onlineuserid mapto FROM `tblaccemp_employee` t1 JOIN  `tblonline_userid_employee` t2 ON t1.`BusinessID`= t2.`BusinessID` AND t1.`EmployeeID`= t2.`EmployeeID` JOIN `tblaccemp_ucodesemployees` t3 ON t1.`BusinessID`= t3.`BusinessID`  AND t1.`EmployeeID`= t3.`EmployeeID` where t1.businessid='"+busId+"' GROUP BY t1.`EmployeeID` ";
+                MySqlCommand cmd = new MySqlCommand(sQry, conn);
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                if (dt.Rows.Count > 0)
+                {
+                    empLst = dt.AsEnumerable().Select(s => new EmployeeImportModel
+                    {
+                        EMPLOYEEID = s["employeeid"].ToString(),
+                        FORENAME = s["forename"].ToString(),
+                        SURNAME = s["surname"].ToString(),
+                        TITLE = s["title"].ToString(),
+                        STARTDATE = s["startdate"].ToString(),
+                        ENDDATE = s["enddate"].ToString(),
+                        UCODE = s["ucodeid"].ToString(),
+                        MAPTO = s["mapto"].ToString(),
+                    }).ToList();
+                }
+                            }
+            catch (Exception e)
+            {
+                logger.Warn(e.Message);
+                logger.Warn(e.StackTrace);
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return empLst;
+        }
+
+        #endregion
+
+        #region GetAddressLst
+
+        public List<AddressImportModel> GetAddressLst(string busId)
+        {
+            string sQry = "";
+            List<AddressImportModel> addrLst = new List<AddressImportModel>();
+            MySqlConnection conn = new MySqlConnection(ConnectionString);
+            try
+            {
+                conn.Open();
+                sQry = " SELECT t1.companyid,t1.businessid,t1.address1,t1.address2,t1.address3,t1.description, t1.town,t1.city,t1.postcode,t1.`countrycode`,t4.country,t1.`contactid`,t3.`value` CONTACTVALUE,t2.`employeeid` mapto FROM `tblbus_address` T1 JOIN `tblonline_emp_address` t2 ON t1.`AddressID`= t2.`AddressId` AND t1.`BusinessID`= t2.`BusinessId` JOIN `tblbus_contact` t3 ON t1.contactid = t3.`ContactID` JOIN `tblbus_countrycodes` t4 ON t1.`CountryCode`= t4.`CountryID` where t1.businessid='"+busId+"'";
+                MySqlCommand cmd = new MySqlCommand(sQry, conn);
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                da.Fill(dt);
+                if (dt.Rows.Count > 0)
+                {
+                    addrLst = dt.AsEnumerable().Select(s => new AddressImportModel
+                    {
+                        COMPANYID = s["companyid"].ToString(),
+                        BUSINESSID = s["businessid"].ToString(),
+                        ADDRESS1 = s["address1"].ToString(),
+                        ADDRESS2 = s["address2"].ToString(),
+                        ADDRESS3 = s["address3"].ToString(),
+                        DESCRIPTION = s["description"].ToString(),
+                        TOWN = s["town"].ToString(),
+                        CITYCOUNTY = s["city"].ToString(),
+                        POSTCODE = s["postcode"].ToString(),
+                        COUNTRYID = s["countrycode"].ToString(),
+                        COUNTRY = s["country"].ToString(),
+                        CONTACTNAME = s["CONTACTVALUE"].ToString(),
+                        CONTACTID = s["contactid"].ToString(),
+                        MAPTO = s["mapto"].ToString(),
+                         
+                    }).ToList();
+                }
+
+
+            }
+            catch (Exception e)
+            {
+                logger.Warn(e.Message);
+                logger.Warn(e.StackTrace);
+            }
+            finally
+            {
+                conn.Close();
+            }
+            return addrLst;
         }
         #endregion
         public string empMethod(bool points, string role, string busId, string userID, string orderPermission)
@@ -10870,7 +10978,7 @@ namespace Maximus.Data.Models
                         {
                             if (CreditReturns(data, conn, salesHead.PinNo) == false)
                             {
-                                
+
                                 result = "";
                                 break;
                             }
@@ -10887,12 +10995,12 @@ namespace Maximus.Data.Models
                                 result = "success";
                             }
                         }
-                        if(totalpoints>0)
+                        if (totalpoints > 0)
                         {
-                            insertQry = insertQry + "insert into tblsop_return_credited(companyid,businessid,orderno,crediteddate,userid,employeeid,totalpoints) values ('"+cmpId+"','"+salesHead.CustID+"',"+orderno+",'"+DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") +"','"+ onlineUser + "','"+salesHead.PinNo+"',"+totalpoints+")";
-                            if(ExecuteQuery(conn,insertQry)>0)
+                            insertQry = insertQry + "insert into tblsop_return_credited(companyid,businessid,orderno,crediteddate,userid,employeeid,totalpoints) values ('" + cmpId + "','" + salesHead.CustID + "'," + orderno + ",'" + DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss") + "','" + onlineUser + "','" + salesHead.PinNo + "'," + totalpoints + ")";
+                            if (ExecuteQuery(conn, insertQry) > 0)
                             {
-                                result= "success";
+                                result = "success";
                             }
                             else
                             {
@@ -10956,6 +11064,113 @@ namespace Maximus.Data.Models
                 {
                     result = false;
                 }
+            }
+            return result;
+        }
+        #endregion
+        //#region ImportedDatatable
+        //public string ImportedDatatable(DataTable dt,string updTbl)
+        //{
+        //    string result = "";
+        //    int count = 0;
+        //    MySqlConnection conn = new MySqlConnection(ConnectionString);
+        //    MySqlTransaction trans;
+        //    conn.Open();
+        //    trans = conn.BeginTransaction();
+        //    try
+        //    {
+        //        if (updTbl.ToLower() == "user")
+        //        {
+        //            if (dt.Rows.Count > 0)
+        //            {
+        //                foreach (var item in dt.AsEnumerable().Select(s => new UserImportModel { USERNAME = s["USERNAME"].ToString(), FORENAME = s["FORENAME"].ToString(), SURNAME = s["SURNAME"].ToString(), EMAILID = s["EMAILID"].ToString(), ROLE = s["ROLE"].ToString(), ACTIVE = s["ACTIVE"].ToString(), MAPTO = s["MAPTO"].ToString() }))
+        //                {
+        //                    if (item.USERNAME != "" && item.FORENAME != "" && item.ROLE != "" && item.EMAILID != "" && )
+        //                    {
+
+        //                        if (SaveImportedUser(item,conn))
+        //                        {
+        //                            count++;
+        //                        }
+        //                        else
+        //                        {
+
+        //                        }
+        //                    }
+        //                }
+        //            }
+        //        }
+        //        else if (updTbl.ToLower() == "employee")
+        //        {
+
+        //        }
+        //        else if (updTbl.ToLower() == "address")
+        //        {
+
+        //        }
+        //    }
+        //    catch(Exception e)
+        //    {
+        //        trans.Rollback();
+        //    }
+        //    finally
+        //    {
+        //        if(count >0)
+        //        {
+        //            result = count+" ";
+        //            trans.Commit();
+        //        }
+        //        else
+        //        {
+        //            trans.Rollback();
+        //        }
+        //        conn.Close();
+        //    }
+        //    return result;
+        //}
+        //#endregion
+        #region SaveImportedUser
+        public bool SaveImportedUser(UserImportModel emp)
+        {
+            bool result = false;
+            string usersql = "", onlineUsrsql = "";
+
+            onlineUsrsql = "";
+            usersql = "INSERT INTO `tblusers`(`UserName`,`Password`,`ForeName`,`SurName`,`AccessID`,`Active`,`BusinessID`,`CreateDate`,`Email_ID`,`AspUserID`,`BusinessName`) values('" + emp.USERNAME + "','" + emp.Password + "','" + emp.FORENAME + "','" + emp.SURNAME + "','" + emp.ROLE + "','" + emp.ACTIVE + "','" + emp.BusiD + "','" + DateTime.Now.ToString("yyyy-MM-dd") + "','" + emp.EMAILID + "','" + emp.AspUserID + "','"+ emp.BusiD + "')";
+            MySqlConnection conn = new MySqlConnection(ConnectionString);
+            conn.Open();
+            MySqlTransaction transaction;
+            transaction = conn.BeginTransaction();
+            try
+            {
+                if (ExecuteQuery(conn, usersql) > 0)
+                {
+                    foreach (var data in emp.MAPTOlst)
+                    {
+                        onlineUsrsql = "Insert into tblonline_userid_employee values('" + cmpId + "','" + emp.BusiD + "','" + data + "','" + emp.USERNAME + "')";
+
+                        if (ExecuteQuery(conn, onlineUsrsql) > 0)
+                        {
+                            result = true;
+                        }
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                transaction.Rollback();
+            }
+            finally
+            {
+                if (result)
+                {
+                    transaction.Commit();
+                }
+                else
+                {
+                    transaction.Rollback();
+                }
+                conn.Close();
             }
             return result;
         }

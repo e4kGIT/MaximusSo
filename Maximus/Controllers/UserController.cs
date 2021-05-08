@@ -194,6 +194,7 @@ namespace Maximus.Controllers
                             Session["ONLINEDEFNOM"] = onlineDefNom;
                             Session["WAREHOUSE_RTN"] = _dataConnection.BusinessParam("WAREHOUSE_RTN", data.First().BusinessID.Trim().ToUpper());
                             Session["boolDeleteConfirm"] = false;
+                            Session["PrivatePriceid"] = _dataConnection.BusinessParam("PrivatePriceid", data.First().BusinessID.Trim().ToUpper());
                             Session["PriceList"] = _dataConnection.BusinessParam("PriceList", data.First().BusinessID.Trim().ToUpper());
                             booDefNomCode = _dataConnection.BusinessParam("DEFDELREFNOM", data.First().BusinessID.Trim().ToUpper());
                             Session["DEFDELREFNOM"] = booDefNomCode == "" ? false : booDefDelAddr.ToLower() == "true" ? true : false;
