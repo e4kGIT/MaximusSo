@@ -1,44 +1,69 @@
-﻿@*@Html.DevExpress().PageControl(settings =>
+﻿<div class="row">
+    <div class="col-md-5">
+        @using (Html.BeginForm("UploadControlUpload", "ImportExport", FormMethod.Post, new { @id = "DocForm" }))
     {
-        settings.Name = "PageControl";
-        settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+        @Html.DevExpress().UploadControl(settings =>
+   {
+       settings.BrowseButton.Text = "Import from Excel";
+       settings.Name = "UploadControl";
+       settings.CallbackRouteValues = new { Controller = "ImportExport", Action = "UploadControlUpload" };
+       settings.ShowUploadButton = false;
+       // settings.ShowProgressPanel = true;
+       settings.AutoStartUpload = true;
+       settings.ShowTextBox = false;
+       settings.ClientSideEvents.FilesUploadComplete = "UploadComplete";
+       settings.ValidationSettings.Assign(Maximus.Controllers.ImportExportControllerUploadControlSettings.UploadValidationSettings);
+   }).GetHtml()
+    }
+</div>
+<div class="col-md-6">
+    @Html.DevExpress().RadioButton(s => { s.Name = "radAMEND"; s.GroupName = "AmendNew"; s.ControlStyle.ForeColor = System.Drawing.Color.White; s.ControlStyle.CssClass = "pull-right"; s.Text = "Append / Amend"; s.Checked = true; }).GetHtml()
+@Html.DevExpress().RadioButton(s => { s.Name = "radNEW"; s.GroupName = "AmendNew"; s.ControlStyle.CssClass = "pull-right"; s.ControlStyle.ForeColor = System.Drawing.Color.White; s.Text = "New"; }).GetHtml()
+</div>
+<div class="col-md-1">
+    <center><img src="/Content/Images/xls.png" title='Export' onclick="IMPEXPExport()" width="40" alt='Export'></center> 
+</div>
 
-        settings.TabPages.Add("Users").SetContent(() =>
-        {
-
-            Html.RenderAction("UserGridViewPartial");
-        });
-        //settings.TabPages.Add("Address").SetContent(() =>
-        //{
-        //    @Html.RenderAction("AddressGridViewPartial");
-        //});
-        //settings.TabPages.Add("Employee").SetContent(() =>
-        //{
-
-
-        //    Html.RenderAction("EmployeeGrdiviewPartial");
-        //});
-    }).GetHtml()*@
-@using (Html.BeginForm("UploadControlUpload", "ImportExport", FormMethod.Post, new { @id = "DocForm" }))
+  
+       
+</div>
+<br />
+@Html.DevExpress().PageControl(settings =>
 {
-    @Html.DevExpress().UploadControl(settings =>
-{
-    settings.BrowseButton.Text = "Import from Excel";
-    settings.Name = "UploadControl";
-    settings.CallbackRouteValues = new { Controller = "ImportExport", Action = "UploadControlUpload" };
-    settings.ShowUploadButton = false;
-   // settings.ShowProgressPanel = true;
-    settings.AutoStartUpload = true;
-    settings.ShowTextBox = false;
-    settings.ClientSideEvents.FilesUploadComplete = "UploadComplete";
-    settings.ValidationSettings.Assign(Maximus.Controllers.ImportExportControllerUploadControlSettings.UploadValidationSettings);
+    settings.Name = "pcFeatures";
+    settings.ControlStyle.BackColor = System.Drawing.Color.White;
+    settings.ControlStyle.ForeColor = System.Drawing.Color.DarkCyan;
+    settings.ClientSideEvents.ActiveTabChanged = "SetCtrlSession";
+    settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+    settings.TabPages.Add("Users", "Users").SetContent(() =>
+    {
+        Html.RenderAction("UserGridViewPartial");
+    });
+    settings.TabPages.Add("Address", "Address").SetContent(() =>
+    {
+        Html.RenderAction("AddressGridViewPartial");
+    });
+    settings.TabPages.Add("Employee", "Employee").SetContent(() =>
+    {
+        Html.RenderAction("EmployeeGrdiviewPartial");
+    });
+
 }).GetHtml()
-}
-
-@{Html.RenderAction("UserGridViewPartial");
-}
+@*@{Html.RenderAction("UserGridViewPartial");
+    }*@
 
 
 
 
 
+
+ 
+<br />
+<br />
+
+@Html.DevExpress().Button(s =>
+{
+    s.Name = "btnRemoveAll_" + Session["selectedctrl"].ToString();
+    s.Text = "Remove selected record(s)";
+    s.ClientSideEvents.Click = "Remove";
+}).GetHtml() 

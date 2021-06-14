@@ -121,11 +121,14 @@ namespace Maximus.Data.Models
         public readonly UcodeReasons _ucodeReason;
         public readonly TblAlternateTable _tblAlternates;
         public readonly TblReturnsCredited _tblRtnCredites;
+        public readonly TblAutono _tblAutono;
+        public readonly tblCntRef _cntRef;
         public DataProcessing(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
             UcodeOperationsTbl ucodeOperationsTbl = new UcodeOperationsTbl(_unitOfWork);
             PickingSlipHeader pickHeader = new PickingSlipHeader(_unitOfWork);
+            TblAutono tblAutono = new TblAutono(_unitOfWork);
             UcodeReasons ucodeReason = new UcodeReasons(_unitOfWork);
             UcodeByFreeTextView ucodeByFreeText = new UcodeByFreeTextView(_unitOfWork);
             Warehouses wareHouses = new Warehouses(_unitOfWork);
@@ -179,13 +182,16 @@ namespace Maximus.Data.Models
             SalesDetail salesDetail = new SalesDetail(_unitOfWork);
             Company company = new Company(_unitOfWork);
             TblAlternateTable tblAlternates = new TblAlternateTable(_unitOfWork);
+            tblCntRef cntRef = new tblCntRef(_unitOfWork);
             _salesDetail = salesDetail;
+            _cntRef = cntRef;
             _company = company;
             _styleByTemplateView = styleByTemplateView;
             _user = user;
             _tblAlternates = tblAlternates;
             _reason = reason;
             _salesHead = salesHead;
+            _tblAutono = tblAutono;
             _stylePoints = stylePoints;
             _tblRtnCredites = tblRtnCredites;
             _busAccount = busAccount;
@@ -1062,6 +1068,29 @@ namespace Maximus.Data.Models
             finally
             {
                 conn.Close();
+            }
+            return result;
+        }
+        #endregion
+        #region getScalar
+        public string GetScalarTrans(string sSqry, MySqlConnection conn)
+        {
+            var result = "";
+            try
+            {
+                MySqlCommand cmd = new MySqlCommand(sSqry, conn);
+                var data = cmd.ExecuteScalar();
+                result = data.ToString();
+                return result;
+            }
+            catch (Exception e)
+            {
+                logger.Warn(e.Message);
+                logger.Warn(e.StackTrace);
+            }
+            finally
+            {
+
             }
             return result;
         }
@@ -5560,6 +5589,7 @@ namespace Maximus.Data.Models
                     {
                         salesHead.NomCode3 = _employeeRollout.Exists(s => s.EmployeeID == salesHead.EmployeeID && s.BusinessID == salesHead.CustID) ? _employeeRollout.GetAll(s => s.EmployeeID == salesHead.EmployeeID && s.BusinessID == salesHead.CustID).First().RolloutName : "";
                     }
+                    Removeapostrophes(salesHead);
                     sSqry = "Update  tblsop_salesorder_header set CompanyID='" + cmpId + "',WarehouseId='" + salesHead.WarehouseID + "', CustID='" + busId + "',InvDesc='" + salesHead.InvDesc + "',InvAddress1='" + salesHead.InvAddress1 + "',InvAddress2='" + salesHead.InvAddress2 + "',InvAddress3='" + salesHead.InvAddress3 + "',InvCity='" + salesHead.InvCity + "',InvTown='" + salesHead.InvTown + "',InvPostCode='" + salesHead.InvPostCode + "',InvCountry='" + salesHead.InvCountry + "', DelDesc='" + salesHead.DelDesc + "',DelAddress1='" + salesHead.DelAddress1 + "',DelAddress2='" + salesHead.DelAddress2 + "',DelAddress3='" + salesHead.DelTown + "',DelCity='" + salesHead.DelCity + "',DelTown='" + salesHead.DelTown + "',DelPostCode='" + salesHead.DelPostCode + "',DelCountry='" + salesHead.DelCountry + "', CustRef='" + salesHead.CustRef + "',Carrier='" + salesHead.Carrier + "',CarrierCharge='" + salesHead.CarrierCharge + "',Comments='" + salesHead.Comments + "',CommentsExternal='" + salesHead.CommentsExternal + "',Totalgoods=" + GetAlltotals(salLst, salesHead.CarrierCharge.Value).Total + ",ordergoods=" + GetAlltotals(salLst, salesHead.CarrierCharge.Value).gross + ",Currency_Exchange_Rate=" + salesHead.Currency_Exchange_Rate + ",UserId='" + UserIDXref + "',PinNo='" + salesHead.EmployeeID + "',UCodeId='" + salesHead.UCodeId + "',Currency_Exchange_Code='" + salesHead.Currency_Exchange_Code + "',TimeOfEntry='" + DateTime.Now.ToString("hh:mm:ss") + "',RepID=" + salesHead.RepID + ",ReasonCode=" + salesHead.ReasonCode + ",OnlineUserID='" + salesHead.OnlineUserID + "', OrderAnalysisCode1='" + salesHead.NomCode + "', OrderAnalysisCode2='" + salesHead.NomCode1 + "', OrderAnalysisCode3='" + salesHead.NomCode2 + "', OrderAnalysisCode4='" + salesHead.NomCode3 + "', OrderAnalysisCode5='" + salesHead.NomCode4 + "', AllowPartShipment=" + partShipment + ", OrderType='" + salesHead.OrderType + "',`ContractRef`='" + salesHead.ContractRef + "',`EmailID`='" + salesHead.EmailID + "',`ContactName`='" + cntName + "' where OrderNo=" + salesHead.OrderNo;
 
                     execVal = ExecuteQuery(conn, sSqry);
@@ -5759,6 +5789,7 @@ namespace Maximus.Data.Models
                     {
                         salesHead.NomCode3 = _employeeRollout.Exists(s => s.EmployeeID == salesHead.EmployeeID && s.BusinessID == salesHead.CustID) ? _employeeRollout.GetAll(s => s.EmployeeID == salesHead.EmployeeID && s.BusinessID == salesHead.CustID).First().RolloutName : "";
                     }
+                    Removeapostrophes(salesHead);
                     sSqry = "INSERT INTO tblsop_salesorder_header(CompanyID,WarehouseId,OrderNo,CustID,OrderDate,InvDesc,InvAddress1,InvAddress2,InvAddress3,InvCity,InvTown,InvPostCode,InvCountry, DelDesc,DelAddress1,DelAddress2,DelAddress3,DelCity,DelTown,DelPostCode,DelCountry, CustRef,Carrier,CarrierCharge,Comments,CommentsExternal,Totalgoods,ordergoods,Currency_Exchange_Rate,UserId,PinNo,UCodeId,Currency_Exchange_Code,TimeOfEntry,RepID,ReasonCode,OnlineUserID, OrderAnalysisCode1, OrderAnalysisCode2, OrderAnalysisCode3, OrderAnalysisCode4, OrderAnalysisCode5, AllowPartShipment, OrderType,`ContractRef`,`EmailID`,`ContactName`)  VALUES('" + cmpId + "','" + salesHead.WarehouseID + "'," + salesNo + ",'" + busId + "','" + salesHead.OrderDate + "','" + salesHead.InvDesc + "','" + salesHead.InvAddress1 + "','" + salesHead.InvAddress2 + "','" + salesHead.InvAddress3 + "','" + salesHead.InvCity + "','" + salesHead.InvTown + "','" + salesHead.InvPostCode + "','" + salesHead.InvCountry + "','" + salesHead.DelDesc + "','" + salesHead.DelAddress1 + "','" + salesHead.DelAddress2 + "','" + salesHead.DelAddress3 + "','" + salesHead.DelCity + "','" + salesHead.DelTown + "','" + salesHead.DelPostCode + "','" + salesHead.DelCountry + "','" + salesHead.CustRef + "','" + salesHead.Carrier + "'," + salesHead.CarrierCharge + ",'" + salesHead.Comments + "','" + salesHead.CommentsExternal + "'," + GetAlltotals(salLst, salesHead.CarrierCharge.Value).Total + "," + GetAlltotals(salLst, salesHead.CarrierCharge.Value).gross + "," + salesHead.Currency_Exchange_Rate + ",'" + UserIDXref + "','" + salesHead.EmployeeID + "','" + salesHead.UCodeId + "','" + salesHead.Currency_Exchange_Code + "','" + DateTime.Now.ToString("hh:mm:ss") + "'," + salesHead.RepID + "," + salesHead.ReasonCode + ",'" + usrId + "','" + salesHead.NomCode + "','" + salesHead.NomCode1 +
                    "','" + salesHead.NomCode2 + "','" + salesHead.NomCode3 + "','" + salesHead.NomCode4 + "'," + partShipment + ",'" + salesHead.OrderType + "', '" + salesHead.ContractRef + "', '" + salesHead.EmailID + "','" + cntName + "')";
                     execVal = ExecuteQuery(conn, sSqry);
@@ -5843,6 +5874,34 @@ namespace Maximus.Data.Models
         }
         #endregion
 
+        #region removeapostrophes
+
+        public void Removeapostrophes(SalesOrderHeaderViewModel vm)
+        {
+            vm.CommentsExternal = vm.CommentsExternal != null ? vm.CommentsExternal.Replace("'", " ") : vm.CommentsExternal;
+            vm.Comments = vm.Comments != null ? vm.Comments.Replace("'", " ") : vm.Comments;
+            vm.EmployeeName = vm.EmployeeName != null ? vm.EmployeeName.Replace("'", " ") : vm.EmployeeName;
+            vm.OrderAnalysisCode4 = vm.OrderAnalysisCode4 != null ? vm.OrderAnalysisCode4.Replace("'", " ") : vm.OrderAnalysisCode4;
+            vm.DelAddress1 = vm.DelAddress1 != null ? vm.DelAddress1.Replace("'", " ") : vm.DelAddress1;
+            vm.DelAddress2 = vm.DelAddress2 != null ? vm.DelAddress2.Replace("'", " ") : vm.DelAddress2;
+            vm.DelAddress3 = vm.DelAddress3 != null ? vm.DelAddress3.Replace("'", " ") : vm.DelAddress3;
+            vm.DelCity = vm.DelCity != null ? vm.DelCity.Replace("'", " ") : vm.DelCity;
+            vm.DelCountry = vm.DelCountry != null ? vm.DelCountry.Replace("'", " ") : vm.DelCountry;
+            vm.DelDesc = vm.DelDesc != null ? vm.DelDesc.Replace("'", " ") : vm.DelDesc;
+            vm.DelPostCode = vm.DelPostCode != null ? vm.DelPostCode.Replace("'", " ") : vm.DelPostCode;
+            vm.DelTown = vm.DelTown != null ? vm.DelTown.Replace("'", " ") : vm.DelTown;
+            vm.InvDesc = vm.InvDesc != null ? vm.InvDesc.Replace("'", " ") : vm.InvDesc;
+            vm.InvAddress1 = vm.InvAddress1 != null ? vm.InvAddress1.Replace("'", " ") : vm.InvAddress1;
+            vm.InvAddress2 = vm.InvAddress2 != null ? vm.InvAddress2.Replace("'", " ") : vm.InvAddress2;
+            vm.InvAddress3 = vm.InvAddress3 != null ? vm.InvAddress3.Replace("'", " ") : vm.InvAddress3;
+            vm.InvCity = vm.InvCity != null ? vm.InvCity.Replace("'", " ") : vm.InvCity;
+            vm.InvCountry = vm.InvCountry != null ? vm.InvCountry.Replace("'", " ") : vm.InvCountry;
+            vm.InvTown = vm.InvTown != null ? vm.InvTown.Replace("'", " ") : vm.InvTown;
+            vm.ContactName = vm.ContactName != null ? vm.ContactName.Replace("'", " ") : vm.ContactName;
+        }
+
+        #endregion
+
 
         #region SaveSalesOrder
         public SaveResultModel SaveReturnOrder(string access, MySqlConnection conn, SalesOrderHeaderViewModel salesHead, int empResetMnths, string Browser, string HTTP_X_FORWARDED_FOR, string REMOTE_ADDR, bool IsRollOutOrder, long salesNo = 0, string busId = "", string usrId = "", bool editFlag = false, string POINTSREQ = "", bool isPrivate = false)
@@ -5881,6 +5940,7 @@ namespace Maximus.Data.Models
                     string budgetString = "";
                     var partShipment = Convert.ToBoolean(BusinessParam("Partshipment", busId)) == true ? -1 : 0;
                     var cntName = salesHead.ContactName == "" | salesHead.ContactName == null ? "" : salesHead.ContactName + " mobile:" + salesHead.Mobile;
+                    Removeapostrophes(salesHead);
                     if (salesHead.IsEditing)
                     {
                         sSqry = "Update  tblsop_salesorder_header set CompanyID='" + cmpId + "',WarehouseId='" + salesHead.WarehouseID + "', CustID='" + busId + "',InvDesc='" + salesHead.InvDesc + "',InvAddress1='" + salesHead.InvAddress1 + "',InvAddress2='" + salesHead.InvAddress2 + "',InvAddress3='" + salesHead.InvAddress3 + "',InvCity='" + salesHead.InvCity + "',InvTown='" + salesHead.InvTown + "',InvPostCode='" + salesHead.InvPostCode + "',InvCountry='" + salesHead.InvCountry + "', DelDesc='" + salesHead.DelDesc + "',DelAddress1='" + salesHead.DelAddress1 + "',DelAddress2='" + salesHead.DelAddress2 + "',DelAddress3='" + salesHead.DelTown + "',DelCity='" + salesHead.DelCity + "',DelTown='" + salesHead.DelTown + "',DelPostCode='" + salesHead.DelPostCode + "',DelCountry='" + salesHead.DelCountry + "', CustRef='" + salesHead.CustRef + "',Carrier='" + salesHead.Carrier + "',CarrierCharge='" + salesHead.CarrierCharge + "',Comments='" + salesHead.Comments + "',CommentsExternal='" + salesHead.CommentsExternal + "',Totalgoods=" + GetAlltotals(salLst, salesHead.CarrierCharge.Value).Total + ",ordergoods=" + GetAlltotals(salLst, salesHead.CarrierCharge.Value).gross + ",Currency_Exchange_Rate=" + salesHead.Currency_Exchange_Rate + ",UserId='" + UserIDXref + "',PinNo='" + salesHead.EmployeeID + "',UCodeId='" + salesHead.UCodeId + "',Currency_Exchange_Code='" + salesHead.Currency_Exchange_Code + "',TimeOfEntry='" + DateTime.Now.ToString("hh:mm:ss") + "',RepID=" + salesHead.RepID + ",ReasonCode=" + salesHead.ReasonCode + ",OnlineUserID='" + usrId + "', OrderAnalysisCode1='" + salesHead.NomCode + "', OrderAnalysisCode2='" + salesHead.NomCode1 + "', OrderAnalysisCode3='" + salesHead.NomCode2 + "', OrderAnalysisCode4='" + salesHead.NomCode3 + "', OrderAnalysisCode5='" + salesHead.NomCode4 + "', AllowPartShipment=" + partShipment + ", OrderType='" + salesHead.OrderType + "',`ContractRef`='" + salesHead.ContractRef + "',`EmailID`='" + salesHead.EmailID + "',`ContactName`='" + cntName + "' where OrderNo=" + salesHead.OrderNo;
@@ -7671,7 +7731,7 @@ namespace Maximus.Data.Models
             string Confirmmess = System.IO.File.ReadAllText(appPath + "\\ConfirmPrivateorder.html");
             var ConfirmTemplate = new StringBuilder(Confirmmess);
             ConfirmTemplate.Replace("%orderno%", ordNo.ToString());
-            ConfirmTemplate.Replace("%onlineusername%", ordNo.ToString());
+            ConfirmTemplate.Replace("%onlineusername%", onlineUsr.ToString());
             ConfirmTemplate.Replace("%orderdate%", Date);
             ConfirmTemplate.Replace("%empname%", empName);
             ConfirmTemplate.Replace("%transactionid%", txnId);
@@ -7930,6 +7990,7 @@ namespace Maximus.Data.Models
         #region fillmailTemplate
         public string FillmailTemplate(string detailTemp, SalesOrderHeaderViewModel saleshead, long manPack, string emailLine, string pricePermission, string carrierCharges, string ONLCUSREFLBL, long orderNo, bool isedit = false, UpdateMailModel updModel = null)
         {
+            Removeapostrophes(saleshead);
             string Barcode = "";
             string stlLine = "", returnString = "";
             string strsql = "SELECT count(t1.ProjectCode) as cntproject  FROM tblsop_customerorder_template_costcentre t1 WHERE t1.Businessid='{0}'  ORDER BY t1.ProjectCode ASC";
@@ -8555,7 +8616,7 @@ namespace Maximus.Data.Models
             try
             {
                 conn.Open();
-                sQry = " SELECT tu.`UserName` UserName,tu.`ForeName` ForeName,tu.`SurName` SurName,tu.`AccessID` AccessID,tu.`Active` Active, tu.`BusinessID` BusinessID,tu.`Email_ID` Email_ID,GROUP_CONCAT(onu.`EmployeeID`) mapTo FROM `tblusers` tu LEFT JOIN `tblonline_userid_employee` onU ON tu.`UserName`= onu.`OnlineUserID` AND tu.`BusinessID`= onu.`BusinessID` where tu.`BusinessID` ='" + busId + "'  GROUP BY onu.`OnlineUserID` ORDER BY TU.CREATEDATE DESC";
+                sQry = "SELECT  tu.`UserName` UserName, tu.`ForeName` ForeName, tu.`SurName` SurName, tu.`AccessID` AccessID, tu.`Active` Active, tu.`BusinessID` BusinessID, tu.`Email_ID` Email_ID, onu.`ONLINEUSERID` mapTo FROM `tblusers` tu LEFT JOIN (SELECT COMPANYID, BUSINESSID, GROUP_CONCAT(allowuser SEPARATOR ';')  ONLINEUSERID, userid  FROM `tblpermission_users_allow`   GROUP BY userid) onu ON tu.`UserName` = onu.`userid`  AND tu.`BusinessID` = onu.`BusinessID` WHERE tu.`BusinessID` = '" + busId + "' ORDER BY TU.CREATEDATE DESC ";
                 MySqlCommand cmd = new MySqlCommand(sQry, conn);
                 MySqlDataAdapter da = new MySqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
@@ -8566,6 +8627,7 @@ namespace Maximus.Data.Models
                     {
                         AccessRole = s.ItemArray[3].ToString(),
                         Active = s.ItemArray[4].ToString() == "Y" ? true : false,
+                        Active1 = s.ItemArray[4].ToString(),
                         Email = s.ItemArray[6].ToString(),
                         ForeName = s.ItemArray[1].ToString(),
                         MapTo = s.ItemArray[7].ToString(),
@@ -8574,8 +8636,6 @@ namespace Maximus.Data.Models
                         UserName = s.ItemArray[0].ToString(),
                     }).ToList();
                 }
-
-
             }
             catch (Exception e)
             {
@@ -8599,7 +8659,7 @@ namespace Maximus.Data.Models
             try
             {
                 conn.Open();
-                sQry = " SELECT t1.employeeid,t1.forename,t1.surname,t1.title,t1.startdate,t1.enddate,GROUP_CONCAT(t3.ucodeid) ucodeid,t2.onlineuserid mapto FROM `tblaccemp_employee` t1 JOIN  `tblonline_userid_employee` t2 ON t1.`BusinessID`= t2.`BusinessID` AND t1.`EmployeeID`= t2.`EmployeeID` JOIN `tblaccemp_ucodesemployees` t3 ON t1.`BusinessID`= t3.`BusinessID`  AND t1.`EmployeeID`= t3.`EmployeeID` where t1.businessid='"+busId+"' GROUP BY t1.`EmployeeID` ";
+                sQry = " SELECT t1.employeeid,t1.forename,t1.surname,t1.title,t1.startdate,t1.enddate,GROUP_CONCAT(DISTINCT  t3.ucodeid SEPARATOR ';') ucodeid,T5.`Description` MAPTOADDR,GROUP_CONCAT(DISTINCT   t2.onlineuserid SEPARATOR ';')  mapto FROM `tblaccemp_employee` t1 JOIN  `tblonline_userid_employee` t2 ON t1.`BusinessID`= t2.`BusinessID` AND t1.`EmployeeID`= t2.`EmployeeID` JOIN `tblaccemp_ucodesemployees` t3 ON t1.`BusinessID`= t3.`BusinessID`  AND t1.`EmployeeID`= t3.`EmployeeID`  JOIN `tblonline_emp_address` t4 ON t1.`EmployeeID`= t4.`Employeeid` AND t1.`BusinessID`= t4.`BusinessId` JOIN `tblbus_address` t5 ON t4.`AddressId`= t5.`AddressID` AND t5.`BusinessID`= t4.`BusinessId` where t1.businessid='" + busId + "' AND t1.`EmployeeClosed`=0 GROUP BY t1.`EmployeeID` ";
                 MySqlCommand cmd = new MySqlCommand(sQry, conn);
                 MySqlDataAdapter da = new MySqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
@@ -8612,13 +8672,15 @@ namespace Maximus.Data.Models
                         FORENAME = s["forename"].ToString(),
                         SURNAME = s["surname"].ToString(),
                         TITLE = s["title"].ToString(),
-                        STARTDATE = s["startdate"].ToString(),
-                        ENDDATE = s["enddate"].ToString(),
+                        STARTDATE = s["startdate"].ToString() != "" ? DateTime.Parse(s["startdate"].ToString()).ToString("dd-MM-yyyy") : "",
+                        ENDDATE = s["enddate"].ToString() != "" ? DateTime.Parse(s["enddate"].ToString()).ToString("dd-MM-yyyy") : "",
                         UCODE = s["ucodeid"].ToString(),
                         MAPTO = s["mapto"].ToString(),
+                       
+                        MAPTOADDR = s["MAPTOADDR"].ToString(),
                     }).ToList();
                 }
-                            }
+            }
             catch (Exception e)
             {
                 logger.Warn(e.Message);
@@ -8642,8 +8704,9 @@ namespace Maximus.Data.Models
             MySqlConnection conn = new MySqlConnection(ConnectionString);
             try
             {
+
                 conn.Open();
-                sQry = " SELECT t1.companyid,t1.businessid,t1.address1,t1.address2,t1.address3,t1.description, t1.town,t1.city,t1.postcode,t1.`countrycode`,t4.country,t1.`contactid`,t3.`value` CONTACTVALUE,t2.`employeeid` mapto FROM `tblbus_address` T1 JOIN `tblonline_emp_address` t2 ON t1.`AddressID`= t2.`AddressId` AND t1.`BusinessID`= t2.`BusinessId` JOIN `tblbus_contact` t3 ON t1.contactid = t3.`ContactID` JOIN `tblbus_countrycodes` t4 ON t1.`CountryCode`= t4.`CountryID` where t1.businessid='"+busId+"'";
+                sQry = "SELECT  t1.companyid,t1.`addressid`, t1.businessid, t1.address1, t1.address2, t1.address3, t1.description,  t1.town, t1.city, t1.postcode, t1.`countrycode`, t4.country, t1.`contactid`, GROUP_CONCAT(DISTINCT t13.value1 SEPARATOR ';') phone, GROUP_CONCAT(DISTINCT t14.value1 SEPARATOR ';') email, GROUP_CONCAT(DISTINCT t15.value1 SEPARATOR ';') cntname,GROUP_CONCAT(DISTINCT t17.value1 SEPARATOR ';') cc, GROUP_CONCAT(DISTINCT t2.`OnlineUserId` SEPARATOR ';') mapto FROM `tblbus_address` T1 LEFT JOIN `tblonline_emp_address` t2 ON t1.`AddressID` = t2.`AddressId`  AND t1.`BusinessID` = t2.`BusinessId`  JOIN `tblbus_contact` t3 ON t1.`ContactID`= t3.`ContactID`  LEFT JOIN (SELECT contactid, contacttype_id, GROUP_CONCAT(VALUE SEPARATOR ';')VALUE1 FROM `tblbus_contact` WHERE contacttype_id = 1  GROUP BY contactid, contacttype_id) t13 ON t3.`ContactID` = t13.`ContactID` LEFT JOIN (SELECT contactid, contacttype_id, GROUP_CONCAT(VALUE SEPARATOR ';')VALUE1 FROM `tblbus_contact` WHERE contacttype_id = 3 GROUP BY contactid, contacttype_id) t14 ON t3.`ContactID`= t14.`ContactID`  LEFT JOIN (SELECT contactid, contacttype_id, GROUP_CONCAT(VALUE SEPARATOR ';')VALUE1 FROM `tblbus_contact` WHERE contacttype_id = 6 GROUP BY contactid, contacttype_id) t15 ON t3.`ContactID`= t15.`ContactID`   LEFT JOIN  (SELECT contactid, contacttype_id, GROUP_CONCAT(VALUE SEPARATOR ';') VALUE1  FROM `tblbus_contact`  WHERE contacttype_id = 7 GROUP BY contactid, contacttype_id) t17 ON t3.`ContactID` = t17.`ContactID` JOIN `tblbus_countrycodes` t4 ON t1.`CountryCode` = t4.`CountryID`  WHERE t1.businessid = '" + busId + "' GROUP BY t1.companyid,  t1.businessid, t1.address1,  t1.address2, t1.address3, t1.description, t1.`contactid`";
                 MySqlCommand cmd = new MySqlCommand(sQry, conn);
                 MySqlDataAdapter da = new MySqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
@@ -8653,6 +8716,7 @@ namespace Maximus.Data.Models
                     addrLst = dt.AsEnumerable().Select(s => new AddressImportModel
                     {
                         COMPANYID = s["companyid"].ToString(),
+                        ADDRESSID = s["addressid"].ToString() != "" ? Convert.ToInt32(s["addressid"].ToString()) : 0,
                         BUSINESSID = s["businessid"].ToString(),
                         ADDRESS1 = s["address1"].ToString(),
                         ADDRESS2 = s["address2"].ToString(),
@@ -8663,10 +8727,12 @@ namespace Maximus.Data.Models
                         POSTCODE = s["postcode"].ToString(),
                         COUNTRYID = s["countrycode"].ToString(),
                         COUNTRY = s["country"].ToString(),
-                        CONTACTNAME = s["CONTACTVALUE"].ToString(),
-                        CONTACTID = s["contactid"].ToString(),
+                        CONTACTNAME = s["cntname"].ToString(),
+                        TELEPHONE = s["phone"].ToString(),
+                        EMAIL = s["email"].ToString(),
+                        CONTACTID = s["contactid"].ToString() == "" ? 0 : Convert.ToInt64(s["contactid"].ToString()),
                         MAPTO = s["mapto"].ToString(),
-                         
+                        COSTCENTER = s["cc"].ToString(),
                     }).ToList();
                 }
 
@@ -10311,6 +10377,7 @@ namespace Maximus.Data.Models
         #region SaveSalesOrder
         public bool SavePrivateOrder(SalesOrderHeaderViewModel salesHead, string Browser, string HTTP_X_FORWARDED_FOR, string REMOTE_ADDR, long salesNo = 0, string busId = "", string usrId = "", bool editFlag = false)
         {
+            Removeapostrophes(salesHead);
             bool result = false;
             int execVal = 0;
             string sSqry = "";
@@ -11068,114 +11135,478 @@ namespace Maximus.Data.Models
             return result;
         }
         #endregion
-        //#region ImportedDatatable
-        //public string ImportedDatatable(DataTable dt,string updTbl)
-        //{
-        //    string result = "";
-        //    int count = 0;
-        //    MySqlConnection conn = new MySqlConnection(ConnectionString);
-        //    MySqlTransaction trans;
-        //    conn.Open();
-        //    trans = conn.BeginTransaction();
-        //    try
-        //    {
-        //        if (updTbl.ToLower() == "user")
-        //        {
-        //            if (dt.Rows.Count > 0)
-        //            {
-        //                foreach (var item in dt.AsEnumerable().Select(s => new UserImportModel { USERNAME = s["USERNAME"].ToString(), FORENAME = s["FORENAME"].ToString(), SURNAME = s["SURNAME"].ToString(), EMAILID = s["EMAILID"].ToString(), ROLE = s["ROLE"].ToString(), ACTIVE = s["ACTIVE"].ToString(), MAPTO = s["MAPTO"].ToString() }))
-        //                {
-        //                    if (item.USERNAME != "" && item.FORENAME != "" && item.ROLE != "" && item.EMAILID != "" && )
-        //                    {
 
-        //                        if (SaveImportedUser(item,conn))
-        //                        {
-        //                            count++;
-        //                        }
-        //                        else
-        //                        {
-
-        //                        }
-        //                    }
-        //                }
-        //            }
-        //        }
-        //        else if (updTbl.ToLower() == "employee")
-        //        {
-
-        //        }
-        //        else if (updTbl.ToLower() == "address")
-        //        {
-
-        //        }
-        //    }
-        //    catch(Exception e)
-        //    {
-        //        trans.Rollback();
-        //    }
-        //    finally
-        //    {
-        //        if(count >0)
-        //        {
-        //            result = count+" ";
-        //            trans.Commit();
-        //        }
-        //        else
-        //        {
-        //            trans.Rollback();
-        //        }
-        //        conn.Close();
-        //    }
-        //    return result;
-        //}
-        //#endregion
-        #region SaveImportedUser
-        public bool SaveImportedUser(UserImportModel emp)
+        #region getdatatble with trans 
+        //create on (18-05-21)
+        public DataTable GetDataTableTrans(string sql, MySqlConnection conn)
         {
-            bool result = false;
-            string usersql = "", onlineUsrsql = "";
-
-            onlineUsrsql = "";
-            usersql = "INSERT INTO `tblusers`(`UserName`,`Password`,`ForeName`,`SurName`,`AccessID`,`Active`,`BusinessID`,`CreateDate`,`Email_ID`,`AspUserID`,`BusinessName`) values('" + emp.USERNAME + "','" + emp.Password + "','" + emp.FORENAME + "','" + emp.SURNAME + "','" + emp.ROLE + "','" + emp.ACTIVE + "','" + emp.BusiD + "','" + DateTime.Now.ToString("yyyy-MM-dd") + "','" + emp.EMAILID + "','" + emp.AspUserID + "','"+ emp.BusiD + "')";
-            MySqlConnection conn = new MySqlConnection(ConnectionString);
-            conn.Open();
-            MySqlTransaction transaction;
-            transaction = conn.BeginTransaction();
+            DataTable dt = new DataTable();
             try
             {
-                if (ExecuteQuery(conn, usersql) > 0)
+                MySqlCommand cmd = new MySqlCommand(sql, conn);
+                MySqlDataAdapter da = new MySqlDataAdapter(cmd);
+                da.Fill(dt);
+            }
+            catch (Exception e)
+            {
+
+            }
+            return dt;
+        }
+
+        #endregion
+
+
+        #region ExecutePassList
+        public bool ExecutePassList(List<string> passLst, string busId, string type, MySqlConnection conn)
+        {
+            var result = false;
+            if (passLst.Count > 0 && type != "")
+            {
+                string sql = "";
+                string dynamic = type.ToLower().Trim().Contains("adr") ? string.Join(",", passLst) : "'" + string.Join("','", passLst) + "'";
+                bool rslt = false;
+
+                if (type.ToLower().Trim().Contains("usr"))
+                {
+
+                    sql = "UPDATE tblUsers SET Active='N'  WHERE UserName NOT IN (" + dynamic + ") AND BusinessID='" + busId + "' AND AccessID<>'Admin'";
+                    result = ExecuteQuery(conn, sql) >= 0 ? true : false;
+                }
+                else if (type.ToLower().Trim().Contains("emp"))
+                {
+                    sql = "UPDATE tblaccemp_employee SET EmployeeClosed=1 WHERE EmployeeID NOT IN (" + dynamic + ") AND BusinessID='" + busId + "'";
+                    var userCreate = Convert.ToBoolean(BusinessParam("IGNORE_USER_CREATE", busId));
+                    result = ExecuteQuery(conn, sql) >= 0 ? true : false;
+                    if (!userCreate && result)
+                    {
+                        sql = "";
+                        sql = "UPDATE tblUsers SET Active='N' WHERE UserName NOT IN (" + dynamic + ") AND BusinessID='" + busId + "' AND AccessID='User'";
+                        result = ExecuteQuery(conn, sql) >= 0 ? true : false;
+                    }
+                }
+                else if (type.ToLower().Trim().Contains("adr"))
+                {
+                    sql = "DELETE FROM `tblbus_contact`   WHERE `ContactType_ID` IN (1,3,6,7) AND ContactID IN (SELECT ContactID FROM tblbus_address WHERE CompanyID='" + cmpId + "' AND BusinessID='" + busId + "' AND AddressID NOT IN (" + dynamic + "))";
+                    result = ExecuteQuery(conn, sql) >= 0 ? true : false;
+                    if (result)
+                    {
+                        sql = "";
+                        sql = "DELETE FROM tblbus_address WHERE CompanyID='" + cmpId + "' AND BusinessID='" + busId + "' AND AddressTypeID=3 AND AddressID NOT IN (" + dynamic + ")";
+                        result = ExecuteQuery(conn, sql) >= 0 ? true : false;
+                    }
+                }
+            }
+            return result;
+        }
+        #endregion
+        #region SaveImportedUser
+        public bool SaveImportedUser(UserImportModel emp, MySqlConnection conn)
+        {
+            bool result = false;
+            string usersql = "", pmsnUsrsql = "", pmsnUsrDel = "";
+
+            pmsnUsrsql = "";
+            usersql = "INSERT INTO `tblusers`(`UserName`,`Password`,`ForeName`,`SurName`,`AccessID`,`Active`,`BusinessID`,`CreateDate`,`Email_ID`,`AspUserID`,`BusinessName`) values('" + emp.USERNAME + "','" + emp.Password + "','" + emp.FORENAME + "','" + emp.SURNAME + "','" + emp.ROLE + "','" + emp.ACTIVE + "','" + emp.BusiD + "','" + DateTime.Now.ToString("yyyy-MM-dd") + "','" + emp.EMAILID + "','" + emp.AspUserID + "','" + emp.BusiD + "')ON DUPLICATE KEY UPDATE ForeName='" + emp.FORENAME + "', SurName='" + emp.SURNAME + "', AccessID='" + emp.ROLE + "', Active='" + emp.ACTIVE + "',Email_ID='"+emp.EMAILID+"' ";
+
+            if (ExecuteQuery(conn, usersql) > 0)
+            {
+                pmsnUsrDel = "DELETE FROM `tblpermission_users_allow` WHERE BusinessID='" + emp.BusiD + "' AND `AllowUser`='" + emp.USERNAME + "'";
+                if (ExecuteQuery(conn, pmsnUsrDel) >= 0)
                 {
                     foreach (var data in emp.MAPTOlst)
                     {
-                        onlineUsrsql = "Insert into tblonline_userid_employee values('" + cmpId + "','" + emp.BusiD + "','" + data + "','" + emp.USERNAME + "')";
-
-                        if (ExecuteQuery(conn, onlineUsrsql) > 0)
+                        pmsnUsrsql = "INSERT INTO tblpermission_users_allow(CompanyID,BusinessID,UserID,AllowUser) VALUES ('" + cmpId + "','" + emp.BusiD + "','" + emp.USERNAME + "','" + data + "')  ON DUPLICATE KEY UPDATE UserID='" + emp.USERNAME + "', AllowUser='" + data + "'";
+                        if (ExecuteQuery(conn, pmsnUsrsql) > 0)
                         {
                             result = true;
                         }
                     }
                 }
             }
-            catch (Exception e)
+
+            return result;
+        }
+        #endregion
+
+        #region enableDept
+        public bool enableDept(string busid)
+        {
+            bool result = false;
+            result = _departments.GetAll(s => s.BusinessID == busid).Count() > 0 ? true : false;
+            return result;
+        }
+        #endregion
+
+        #region
+        public int GetAutono(string fieldName, string TblName, MySqlConnection conn)
+        {
+            string sql = "select autonumber from tblgen_autonumbers where fieldname ='" + fieldName + "' and tablename='" + TblName + "'";
+            var result = GetScalarTrans(sql, conn);
+            return result != "" ? Convert.ToInt32(result) : 0;
+        }
+        #endregion
+
+
+        #region   SaveImportedAddress
+        public SaveResultModel SaveImportedAddress(AddressImportModel address, MySqlConnection conn)
+        {
+            SaveResultModel rtnResult = new SaveResultModel();
+            string addressIns = "";
+            bool result = false;
+            string usersql = "", onlineUsrsql = "";
+            List<long> addrID = new List<long>();
+            onlineUsrsql = "";
+            string cntQry = "", telphoneQry = "", emailQry = "", cntNam = "", cc = "", cntExt = "";
+            address.ADDRESSID = address.ADDRESSID > 0 ? address.ADDRESSID : GetAutono("AddressID", "tblbus_address_online", conn);
+            address.CONTACTID = address.CONTACTID > 0 ? address.CONTACTID : GetAutono("ContactID", "tblbus_contact_online", conn);
+            DataTable dt = new DataTable();
+            addressIns = "INSERT INTO tblbus_address(CompanyID,BusinessID,AddressID,Description,Address1,Address2,Address3,Town,City,PostCode,CountryCode,AddressTypeID,ContactID) VALUES ('" + cmpId + "','" + address.BUSINESSID + "'," + address.ADDRESSID + ",'" + address.DESCRIPTION + "','" + address.ADDRESS1 + "', '" + address.ADDRESS2 + "','" + address.ADDRESS3 + "','" + address.TOWN + "','" + address.CITYCOUNTY + "','" + address.POSTCODE + "',0,3," + address.CONTACTID + ") ON DUPLICATE KEY UPDATE Description='" + address.DESCRIPTION + "', Address1='" + address.ADDRESS1 + "', Address2='" + address.ADDRESS2 + "',  Address3='" + address.ADDRESS3 + "', Town='" + address.TOWN + "', City='" + address.CITYCOUNTY + "', PostCode='" + address.POSTCODE + "', ContactID=" + address.CONTACTID;
+            result = ExecuteQuery(conn, addressIns) >= 0 ? true : false;
+            if (result)
             {
-                transaction.Rollback();
-            }
-            finally
-            {
-                if (result)
+                cntExt = "";
+                //cntExt = ""SELECT* FROM tblBus_Contact WHERE ContactID = '" & ContactID & "' AND ContactType_ID = 1 AND `Value`= '" & ph.Trim & "'"";
+                if (address.TELEPHONElst != null)
                 {
-                    transaction.Commit();
+                    foreach (var data in address.TELEPHONElst)
+                    {
+                        if (data != "" && data != null)
+                        {
+                            var Cntdata = _cntRef.Exists(s => s.Name.ToLower().Contains("tele")) ? _cntRef.GetAll(s => s.Name.ToLower().Contains("tele")).First().ContactType_ID : 1;
+
+                            cntExt = "SELECT* FROM tblBus_Contact WHERE ContactID = '" + address.CONTACTID + "' AND ContactType_ID = " + Cntdata + " AND `Value`= '" + data + "'";
+                            dt = GetDataTableTrans(cntExt, conn);
+                            if (dt.Rows.Count == 0)
+                            {
+                                telphoneQry = "INSERT INTO tblBus_Contact (ContactID, ContactType_ID, Value)  VALUES (" + address.CONTACTID + "," + Cntdata + " ,'" + data + "')  ON DUPLICATE KEY UPDATE Value='" + data + "'";
+                                result = ExecuteQuery(conn, telphoneQry) > 0 ? true : false;
+                                if (result == false)
+                                {
+                                    break;
+                                }
+                            }
+                            else
+                            {
+                                var cnt = GetDataTableTrans(cntExt, conn).AsEnumerable().Select(s => new AddressImportModel { CONTACTID = s["ID"].ToString() != "" ? Convert.ToInt32(s["ContactID"].ToString()) : 0 }).First();
+                                telphoneQry = "UPDATE tblBus_Contact SET ContactID =" + address.CONTACTID + ", ContactType_ID=" + Cntdata + " , Value ='" + data + "'  WHERE ID=" + cnt.CONTACTID;
+                                result = ExecuteQuery(conn, telphoneQry) >= 0 ? true : false;
+                                if (result == false)
+                                {
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                if (result && address.EMAILlst != null)
+                {
+                    foreach (var data in address.EMAILlst)
+                    {
+                        if (data != "" && data != null)
+                        {
+                            var Cntdata = _cntRef.Exists(s => s.Name.ToLower().Contains("emai")) ? _cntRef.GetAll(s => s.Name.ToLower().Contains("emai")).First().ContactType_ID : 3;
+                            cntExt = "SELECT* FROM tblBus_Contact WHERE ContactID = '" + address.CONTACTID + "' AND ContactType_ID = " + Cntdata + " AND `Value`= '" + data + "'";
+                            dt = GetDataTableTrans(cntExt, conn);
+                            if (dt.Rows.Count == 0)
+                            {
+                                emailQry = "INSERT INTO tblBus_Contact (ContactID, ContactType_ID, Value)  VALUES (" + address.CONTACTID + ", " + Cntdata + " ,'" + data + "')  ON DUPLICATE KEY UPDATE Value='" + data + "'";
+                                result = ExecuteQuery(conn, emailQry) > 0 ? true : false;
+                                if (result == false)
+                                {
+                                    break;
+                                }
+                            }
+                            else
+                            {
+                                var cnt = dt.AsEnumerable().Select(s => new AddressImportModel { CONTACTID = s["ID"].ToString() != "" ? Convert.ToInt32(s["ContactID"].ToString()) : 0 }).First();
+                                emailQry = "UPDATE tblBus_Contact SET ContactID =" + address.CONTACTID + ", ContactType_ID=" + Cntdata + " , Value ='" + data + "'  WHERE ID=" + cnt.CONTACTID;
+                                result = ExecuteQuery(conn, emailQry) >= 0 ? true : false;
+                                if (result == false)
+                                {
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                if (result && address.CONTACTNAMElst != null)
+                {
+                    foreach (var data in address.CONTACTNAMElst)
+                    {
+                        if (data != "" && data != null)
+                        {
+                            var Cntdata = _cntRef.Exists(s => s.Name.ToLower().Contains("contactname")) ? _cntRef.GetAll(s => s.Name.ToLower().Contains("contactname")).First().ContactType_ID : 6;
+                            cntExt = "SELECT* FROM tblBus_Contact WHERE ContactID = '" + address.CONTACTID + "' AND ContactType_ID = " + Cntdata + " AND `Value`= '" + data + "'";
+                            dt = GetDataTableTrans(cntExt, conn);
+                            if (dt.Rows.Count == 0)
+                            {
+                                cntNam = "INSERT INTO tblBus_Contact (ContactID, ContactType_ID, Value)  VALUES (" + address.CONTACTID + "," + Cntdata + " ,'" + data + "')  ON DUPLICATE KEY UPDATE Value='" + data + "'";
+                                result = ExecuteQuery(conn, cntNam) > 0 ? true : false;
+                                if (result == false)
+                                {
+                                    break;
+                                }
+                            }
+                            else
+                            {
+                                var cnt = dt.AsEnumerable().Select(s => new AddressImportModel { CONTACTID = s["ID"].ToString() != "" ? Convert.ToInt32(s["ContactID"].ToString()) : 0 }).First();
+                                cntNam = "UPDATE tblBus_Contact SET ContactID =" + address.CONTACTID + ", ContactType_ID=" + Cntdata + " , Value ='" + data + "'  WHERE ID=" + cnt.CONTACTID;
+                                result = ExecuteQuery(conn, cntNam) >= 0 ? true : false;
+                                if (result == false)
+                                {
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                }
+                if (result && address.COSTCENTERlst != null)
+                {
+                    foreach (var data in address.COSTCENTERlst)
+                    {
+                        if (data != "" && data != null)
+                        {
+                            var Cntdata = _cntRef.Exists(s => s.Name.ToLower().Contains("order reference")) ? _cntRef.GetAll(s => s.Name.ToLower().Contains("order reference")).First().ContactType_ID : 6;
+                            cntExt = "SELECT* FROM tblBus_Contact WHERE ContactID = '" + address.CONTACTID + "' AND ContactType_ID =" + Cntdata + "  AND `Value`= '" + data + "'";
+                            dt = GetDataTableTrans(cntExt, conn);
+                            if (dt.Rows.Count == 0)
+                            {
+                                cc = "INSERT INTO tblBus_Contact (ContactID, ContactType_ID, Value)  VALUES (" + address.CONTACTID + "," + Cntdata + " ,'" + data + "')  ON DUPLICATE KEY UPDATE Value='" + data + "'";
+                                result = ExecuteQuery(conn, cc) > 0 ? true : false;
+                                if (result == false)
+                                {
+                                    break;
+                                }
+                            }
+                            else
+                            {
+                                var cnt = dt.AsEnumerable().Select(s => new AddressImportModel { CONTACTID = s["ID"].ToString() != "" ? Convert.ToInt32(s["ContactID"].ToString()) : 0 }).First();
+                                cc = "UPDATE tblBus_Contact SET ContactID =" + address.CONTACTID + ", ContactType_ID=" + Cntdata + " , Value ='" + data + "'  WHERE ID=" + cnt.CONTACTID;
+                                result = ExecuteQuery(conn, cc) >= 0 ? true : false;
+                                if (result == false)
+                                {
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                if (result && address.MAPTOlst != null)
+                {
+                    foreach (var data in address.MAPTOlst)
+                    {
+                        if (data != "" && data != null)
+                        {
+                            string sql = "INSERT INTO tblonline_emp_address(CompanyID,BusinessID,OnlineUserID,EmployeeID,AddressID)  VALUES ('" + cmpId + "','" + address.BUSINESSID + "','" + data.Trim() + "',''," + address.ADDRESSID + ")  ON DUPLICATE KEY UPDATE AddressID=" + address.ADDRESSID + ", BusinessID='" + address.BUSINESSID + "'";
+                            result = ExecuteQuery(conn, sql) >= 0 ? true : false;
+                            if (result == false)
+                            {
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (result && address.ADDRESSID > 0 && address.CONTACTID > 0)
+                {
+                    string addrQru, contQry = "";
+                    long addIDupd = address.ADDRESSID + 1;
+                    long cntIDupd = address.CONTACTID + 1;
+                    addrQru = "update tblgen_autonumbers set autonumber=" + addIDupd + " where fieldname ='AddressID' and tablename='tblbus_address_online'";
+                    contQry = "update tblgen_autonumbers set autonumber=" + cntIDupd + " where fieldname ='ContactID' and tablename='tblbus_contact_online'";
+                    if (ExecuteQuery(conn, addrQru) >= 0)
+                    {
+                        result = ExecuteQuery(conn, contQry) >= 0 ? true : false;
+                    }
+                    else
+                    {
+                        result = false;
+                    }
+                }
+            }
+            if (result)
+            {
+                rtnResult.result = result;
+                rtnResult.addrId = address.ADDRESSID;
+            }
+            return rtnResult;
+        }
+
+        #endregion
+
+        #region SaveImportedEmployee
+        public bool SaveImportedEmployee(EmployeeImportModel emp, MySqlConnection conn, bool userCreate, string rndPwd, bool isnew = false)
+        {
+            bool result = false;
+            string usrCreateQry = "";
+            string employeeInsert = "", EmpDel = "", onlineUsrIns = "", ucodeQry = "", addrQry = "";
+
+            if (enableDept(emp.BusId))
+            {
+                emp.DEPARTMENTID = emp.DEPARTMENT == "" ? _departments.Exists(s => s.Department.ToLower().Trim() == "default") ? _departments.GetAll(s => s.Department.ToLower().Trim() == "default").First().DepartmentID : 0 : 0;
+            }
+
+            if (isnew)
+            {
+                EmpDel = "UPDATE tblaccemp_employee SET EmployeeClosed=1 WHERE  CompanyID='" + cmpId + "' AND BusinessID='" + emp.BusId + "' AND `EmployeeID`='" + emp.EMPLOYEEID + "'";
+                result = ExecuteQuery(conn, EmpDel) >= 0 ? true : false;
+            }
+            else
+            {
+                employeeInsert = "INSERT INTO tblaccemp_employee(CompanyID,EmployeeID,BusinessID,Title,Forename,Surname,StartDate,EndDate,DepartmentID,RoleID,GroupID,EmployeeClosed)  VALUES ('" + cmpId + "','" + emp.EMPLOYEEID + "','" + emp.BusId + "','" + emp.TITLE + "','" + emp.FORENAME + "','" + emp.SURNAME + "','" + DateTime.Parse(emp.STARTDATE).ToString("yyyy-MM-dd") + "','" + DateTime.Parse(emp.ENDDATE).ToString("yyyy-MM-dd") + "'," + emp.DEPARTMENTID + "," + emp.ROLEID + ",1,0) ON DUPLICATE KEY UPDATE Title='" + emp.TITLE + "', Forename='" + emp.FORENAME + "', Surname='" + emp.SURNAME + "',DepartmentID=" + emp.DEPARTMENTID + ", roleid=" + emp.ROLEID + ", StartDate='" + DateTime.Parse(emp.STARTDATE).ToString("yyyy-MM-dd") + "', EndDate='" + DateTime.Parse(emp.ENDDATE).ToString("yyyy-MM-dd") + "', EmployeeClosed=0";
+                result = ExecuteQuery(conn, employeeInsert) > 0 ? true : false;
+            }
+            if (emp.UCODE != "" && emp.UCODE != null && result)
+            {
+                if (emp.UCODEIDlst.Count() > 0)
+                {
+                    foreach (var ucode in emp.UCODEIDlst)
+                    {
+                        if (ucode != "" && ucode != null)
+                        {
+                            ucodeQry = "";
+                            ucodeQry = "INSERT INTO tblaccemp_ucodesemployees(CompanyID,BusinessID,EmployeeID,UCodeID)  VALUES ('" + cmpId + "','" + emp.BusId + "','" + emp.EMPLOYEEID + "','" + ucode.Trim() + "') ON DUPLICATE KEY UPDATE UCodeID='" + ucode.Trim() + "'";
+                            result = ExecuteQuery(conn, ucodeQry) > 0 ? true : false;
+                            if (!result)
+                            {
+                                break;
+                            }
+                        }
+                    }
                 }
                 else
                 {
-                    transaction.Rollback();
+                    ucodeQry = "INSERT INTO tblaccemp_ucodesemployees(CompanyID,BusinessID,EmployeeID,UCodeID)  VALUES ('" + cmpId + "','" + emp.BusId + "','" + emp.EMPLOYEEID + "','" + emp.UCODE.Trim() + "') ON DUPLICATE KEY UPDATE UCodeID='" + emp.UCODE.Trim() + "'";
+                    result = ExecuteQuery(conn, ucodeQry) > 0 ? true : false;
                 }
-                conn.Close();
+
+            }
+            if (userCreate && result)
+            {
+                usrCreateQry = "INSERT INTO tblUsers(UserName,Password,ForeName,SurName,ContactNo,AccessID,Active,BusinessID,CreateDate,Email_ID,ASPUserID,BusinessName)  VALUES('" + emp.EMPLOYEEID + "','" + rndPwd + "','" + emp.FORENAME + "','" + emp.SURNAME + "','','User','Y','" + emp.BusId + "',Now(),'','" + emp.Aspuserid + "','" + emp.BusId + "') ON DUPLICATE KEY UPDATE UserName='" + emp.EMPLOYEEID + "',ForeName='" + emp.FORENAME + "',SurName='" + emp.SURNAME + "',ASPUserID='" + emp.Aspuserid + "',BusinessID='" + emp.BusId + "',BusinessName='" + emp.BusId + "' ";
+                if (ExecuteQuery(conn, usrCreateQry) > 0)
+                {
+                    result = true;
+                    if (emp.MAPTOlst.Count() > 0)
+                    {
+                        foreach (var ucode in emp.MAPTOlst)
+                        {
+                            if (ucode != "" && ucode != null)
+                            {
+                                onlineUsrIns = "";
+                                onlineUsrIns = "INSERT INTO tblonline_userid_employee(CompanyID,BusinessID,OnlineUserID,EmployeeID)  VALUES ('" + cmpId + "','" + emp.BusId + "','" + ucode + "','" + emp.EMPLOYEEID + "') ON DUPLICATE KEY UPDATE EmployeeID='" + emp.EMPLOYEEID + "'";
+                                result = ExecuteQuery(conn, onlineUsrIns) > 0 ? true : false;
+                                if (!result)
+                                {
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        onlineUsrIns = "INSERT INTO tblonline_userid_employee(CompanyID,BusinessID,OnlineUserID,EmployeeID)  VALUES ('" + cmpId + "','" + emp.BusId + "','" + emp.MAPTO + "','" + emp.EMPLOYEEID + "') ON DUPLICATE KEY UPDATE EmployeeID='" + emp.EMPLOYEEID + "'";
+                        result = ExecuteQuery(conn, onlineUsrIns) > 0 ? true : false;
+                    }
+
+                }
+            }
+            if (result)
+            {
+
+                if (emp.MAPTOADDRLst.Count() > 0)
+                {
+                    foreach (var address in emp.MAPTOADDRLst)
+                    {
+                        if (address != "" && address != null)
+                        {
+                            onlineUsrIns = "";
+                            int adrId = _busAddress.Exists(s => s.Description.ToLower().Trim() == address.ToLower().Trim()) ? _busAddress.GetAll(s => s.Description.ToLower().Trim() == address.ToLower().Trim()).First().AddressID : 0;
+                            if (adrId > 0)
+                            {
+                                addrQry = "INSERT INTO tblonline_emp_address(CompanyID,BusinessID,OnlineUserID,EmployeeID,AddressID)  VALUES ('" + cmpId + "','" + emp.BusId + "','','" + emp.EMPLOYEEID + "'," + adrId + ")  ON DUPLICATE KEY UPDATE AddressID=" + adrId;
+                                result = ExecuteQuery(conn, addrQry) > 0 ? true : false;
+                                if (!result)
+                                {
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    if (emp.MAPTOADDR != "" && emp.MAPTOADDR != null)
+                    {
+                        int adrId = _busAddress.Exists(s => s.Description.ToLower().Trim() == emp.MAPTOADDR.ToLower().Trim()) ? _busAddress.GetAll(s => s.Description.ToLower().Trim() == emp.MAPTOADDR.ToLower().Trim()).First().AddressID : 0;
+                        if (adrId > 0)
+                        {
+                            addrQry = "INSERT INTO tblonline_emp_address(CompanyID,BusinessID,OnlineUserID,EmployeeID,AddressID)  VALUES ('" + cmpId + "','" + emp.BusId + "','','" + emp.EMPLOYEEID + "','" + adrId + "')  ON DUPLICATE KEY UPDATE AddressID=" + adrId;
+                            result = ExecuteQuery(conn, addrQry) > 0 ? true : false;
+                        }
+                    }
+                }
+
+            }
+
+
+            return result;
+        }
+        #endregion
+
+        #region DeleteFromPermUser
+        public bool DeleteFromPermUser(string buId, MySqlConnection conn)
+        {
+            bool result = false;
+            string qry = "";
+            try
+            {
+                qry = "DELETE FROM `tblpermission_users_allow` WHERE BusinessID='" + buId + "'";
+                result = ExecuteQuery(conn, qry) >= 0 ? true : false;
+            }
+            catch (Exception e)
+            {
+
             }
             return result;
         }
         #endregion
+        //#region RemoveUser
+
+        //public bool RemoveUser(string arr)
+        //{
+        //    bool result = false;
+        //    string sql = "";
+        //    MySqlConnection conn = new MySqlConnection(ConnectionString);
+        //    MySqlTransaction trans;
+        //    conn.Open();
+        //    trans = conn.BeginTransaction();
+        //    try
+        //    {
+        //        foreach (var data in arr)
+        //        {
+        //            sql = "update tblusers set Active='N' where username='++' and forename=''";
+        //        }
+        //    }
+        //    catch(Exception e)
+        //    {
+
+        //    }
+        //    finally
+        //    {
+
+        //    }
+        //}
+        //#endregion
+
     }
+
+    //"SELECT distinct t1.orderno, DATE_FORMAT(t1.OrderDate, '%D/%M/%Y') as OrderDate, if(min(x.OrdCompleted) = 1, 'Yes', 'No') as ordercompleted, t1.custref, t1.pinno as EmpID, concat(t2.forename, t2.surname) as EmpName, if(min(x.OrdCompleted) = 1, DATEDIFF(max(t1.finaliseddeliverydate),t1.OrderDate)+1, 'TBC') as DayToDeliver, if(min(x.OrdCompleted) = 1,DATE_FORMAT(max(t1.finaliseddeliverydate), '%d/%m/%y'),'') as LastDespatched FROM tblcube_orderdetail t1  left join (select distinct companyid,businessid,employeeid,forename,surname,department,departmentid,styleid,colourid from tblcube_employee_card where businessid='{0}') t2 on (t1.companyid=t2.companyid) and (t1.pinno=t2.employeeid) and (t1.styleid=t2.styleid) and (t1.colourid=t2.colourid)  left join (SELECT companyid,orderno,solineno,if(max(ordqty) = SUM(pickqty),1,0) as OrdCompleted FROM tblcube_orderdetail  WHERE custid='{0}' and orderdate between '" & StDate & "' and '" & EdDate & "' and (Not socancelled And Not pscancelled And delnoteflag And delprinted)  GROUP BY companyid,orderno,solineno) x ON t1.companyid=x.companyid AND t1.orderno=x.orderno  WHERE t1.custid='{0}' AND t1.orderdate between '" & StDate & "' and '" & EdDate & "' and (Not socancelled And Not pscancelled And delnoteflag And delprinted) "
+          
+    //        Dim ddDepart As TextBox = DirectCast(FindControlRecursive(Page, "txtDepartment"), TextBox)
+    //        If ddDepart.Text<> "" Then
     public class ColorsOb
     {
         public string Colours { get; set; }

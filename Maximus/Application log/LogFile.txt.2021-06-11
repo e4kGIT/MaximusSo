@@ -1,0 +1,114 @@
+2021-06-11 11:17:06,286 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-06-11 11:17:06,317 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.IsSuperUser(String cmpId, String custId, String _user) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 852
+2021-06-11 11:17:06,504 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-06-11 11:17:06,504 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1060
+2021-06-11 11:17:07,031 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-06-11 11:17:07,032 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1060
+2021-06-11 11:27:00,999 WARN Maximus.Data.Models.DataProcessing - Fill: SelectCommand.Connection property has not been initialized.
+2021-06-11 11:27:01,001 WARN Maximus.Data.Models.DataProcessing -    at System.Data.Common.DbDataAdapter.GetConnection3(DbDataAdapter adapter, IDbCommand command, String method)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at Maximus.Data.Models.DataProcessing.qryResult(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 5253
+2021-06-11 11:27:01,038 WARN Maximus.Data.Models.DataProcessing - Fill: SelectCommand.Connection property has not been initialized.
+2021-06-11 11:27:01,038 WARN Maximus.Data.Models.DataProcessing -    at System.Data.Common.DbDataAdapter.GetConnection3(DbDataAdapter adapter, IDbCommand command, String method)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at Maximus.Data.Models.DataProcessing.qryResult(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 5253
+2021-06-11 11:27:32,978 WARN Maximus.Data.Models.DataProcessing - You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'S BANK','61 BOW STREET',' ','LISBURN','Northern Ireland','BT28 1DR','UK','BT281B' at line 1
+2021-06-11 11:27:32,979 WARN Maximus.Data.Models.DataProcessing -    at MySql.Data.MySqlClient.MySqlStream.ReadPacket()
+   at MySql.Data.MySqlClient.NativeDriver.GetResult(Int32& affectedRow, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.GetResult(Int32 statementId, Int32& affectedRows, Int64& insertedId)
+   at MySql.Data.MySqlClient.Driver.NextResult(Int32 statementId, Boolean force)
+   at MySql.Data.MySqlClient.MySqlDataReader.NextResult()
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteReader(CommandBehavior behavior)
+   at MySql.Data.MySqlClient.MySqlCommand.ExecuteNonQuery()
+   at Maximus.Data.Models.DataProcessing.ExecuteQuery(MySqlConnection conn, String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 7578
+2021-06-11 11:41:27,094 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-06-11 11:41:27,107 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.IsSuperUser(String cmpId, String custId, String _user) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 852
+2021-06-11 11:41:27,245 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-06-11 11:41:27,245 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1060
+2021-06-11 11:41:27,567 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-06-11 11:41:27,567 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1060
+2021-06-11 11:44:31,555 WARN Maximus.Data.Models.DataProcessing - Fill: SelectCommand.Connection property has not been initialized.
+2021-06-11 11:44:31,557 WARN Maximus.Data.Models.DataProcessing -    at System.Data.Common.DbDataAdapter.GetConnection3(DbDataAdapter adapter, IDbCommand command, String method)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at Maximus.Data.Models.DataProcessing.qryResult(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 5253
+2021-06-11 12:16:46,996 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-06-11 12:16:47,009 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.IsSuperUser(String cmpId, String custId, String _user) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 852
+2021-06-11 12:16:47,153 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-06-11 12:16:47,153 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1060
+2021-06-11 12:16:47,529 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-06-11 12:16:47,529 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1060
+2021-06-11 12:20:56,806 WARN Maximus.Data.Models.DataProcessing - Fill: SelectCommand.Connection property has not been initialized.
+2021-06-11 12:20:56,808 WARN Maximus.Data.Models.DataProcessing -    at System.Data.Common.DbDataAdapter.GetConnection3(DbDataAdapter adapter, IDbCommand command, String method)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at Maximus.Data.Models.DataProcessing.qryResult(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 5253
+2021-06-11 12:20:56,857 WARN Maximus.Data.Models.DataProcessing - Fill: SelectCommand.Connection property has not been initialized.
+2021-06-11 12:20:56,857 WARN Maximus.Data.Models.DataProcessing -    at System.Data.Common.DbDataAdapter.GetConnection3(DbDataAdapter adapter, IDbCommand command, String method)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at Maximus.Data.Models.DataProcessing.qryResult(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 5253
+2021-06-11 12:20:56,895 WARN Maximus.Data.Models.DataProcessing - Fill: SelectCommand.Connection property has not been initialized.
+2021-06-11 12:20:56,896 WARN Maximus.Data.Models.DataProcessing -    at System.Data.Common.DbDataAdapter.GetConnection3(DbDataAdapter adapter, IDbCommand command, String method)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at Maximus.Data.Models.DataProcessing.qryResult(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 5253
+2021-06-11 12:20:56,938 WARN Maximus.Data.Models.DataProcessing - Fill: SelectCommand.Connection property has not been initialized.
+2021-06-11 12:20:56,939 WARN Maximus.Data.Models.DataProcessing -    at System.Data.Common.DbDataAdapter.GetConnection3(DbDataAdapter adapter, IDbCommand command, String method)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at Maximus.Data.Models.DataProcessing.qryResult(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 5253
+2021-06-11 12:20:56,983 WARN Maximus.Data.Models.DataProcessing - Fill: SelectCommand.Connection property has not been initialized.
+2021-06-11 12:20:56,983 WARN Maximus.Data.Models.DataProcessing -    at System.Data.Common.DbDataAdapter.GetConnection3(DbDataAdapter adapter, IDbCommand command, String method)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at Maximus.Data.Models.DataProcessing.qryResult(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 5253
+2021-06-11 12:20:57,319 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-06-11 12:20:57,320 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.Removeapostrophes(SalesOrderHeaderViewModel vm) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 5881
+   at Maximus.Data.Models.DataProcessing.SaveSalesOrder(String access, SalesOrderHeaderViewModel salesHead, Int32 empResetMnths, String Browser, String HTTP_X_FORWARDED_FOR, String REMOTE_ADDR, Boolean IsRollOutOrder, Int64 salesNo, String busId, String usrId, Boolean editFlag, String POINTSREQ, Boolean FreeStckCheck) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 5792
+2021-06-11 12:22:01,149 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-06-11 12:22:01,149 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.IsSuperUser(String cmpId, String custId, String _user) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 852
+2021-06-11 12:22:01,262 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-06-11 12:22:01,262 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1060
+2021-06-11 12:22:01,478 WARN Maximus.Data.Models.DataProcessing - Object reference not set to an instance of an object.
+2021-06-11 12:22:01,478 WARN Maximus.Data.Models.DataProcessing -    at Maximus.Data.Models.DataProcessing.GetScalar(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 1060
+2021-06-11 12:24:51,775 WARN Maximus.Data.Models.DataProcessing - Fill: SelectCommand.Connection property has not been initialized.
+2021-06-11 12:24:51,775 WARN Maximus.Data.Models.DataProcessing -    at System.Data.Common.DbDataAdapter.GetConnection3(DbDataAdapter adapter, IDbCommand command, String method)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at Maximus.Data.Models.DataProcessing.qryResult(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 5253
+2021-06-11 12:24:51,817 WARN Maximus.Data.Models.DataProcessing - Fill: SelectCommand.Connection property has not been initialized.
+2021-06-11 12:24:51,817 WARN Maximus.Data.Models.DataProcessing -    at System.Data.Common.DbDataAdapter.GetConnection3(DbDataAdapter adapter, IDbCommand command, String method)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at Maximus.Data.Models.DataProcessing.qryResult(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 5253
+2021-06-11 12:24:51,857 WARN Maximus.Data.Models.DataProcessing - Fill: SelectCommand.Connection property has not been initialized.
+2021-06-11 12:24:51,857 WARN Maximus.Data.Models.DataProcessing -    at System.Data.Common.DbDataAdapter.GetConnection3(DbDataAdapter adapter, IDbCommand command, String method)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at Maximus.Data.Models.DataProcessing.qryResult(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 5253
+2021-06-11 12:24:51,918 WARN Maximus.Data.Models.DataProcessing - Fill: SelectCommand.Connection property has not been initialized.
+2021-06-11 12:24:51,918 WARN Maximus.Data.Models.DataProcessing -    at System.Data.Common.DbDataAdapter.GetConnection3(DbDataAdapter adapter, IDbCommand command, String method)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at Maximus.Data.Models.DataProcessing.qryResult(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 5253
+2021-06-11 12:24:51,963 WARN Maximus.Data.Models.DataProcessing - Fill: SelectCommand.Connection property has not been initialized.
+2021-06-11 12:24:51,963 WARN Maximus.Data.Models.DataProcessing -    at System.Data.Common.DbDataAdapter.GetConnection3(DbDataAdapter adapter, IDbCommand command, String method)
+   at System.Data.Common.DbDataAdapter.FillInternal(DataSet dataset, DataTable[] datatables, Int32 startRecord, Int32 maxRecords, String srcTable, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable[] dataTables, Int32 startRecord, Int32 maxRecords, IDbCommand command, CommandBehavior behavior)
+   at System.Data.Common.DbDataAdapter.Fill(DataTable dataTable)
+   at Maximus.Data.Models.DataProcessing.qryResult(String sSqry) in G:\Sasidharan\Maximus\Maximus.Data\models\DataProcessing.cs:line 5253

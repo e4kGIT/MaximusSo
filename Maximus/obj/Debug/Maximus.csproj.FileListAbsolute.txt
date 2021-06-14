@@ -1420,7 +1420,6 @@ G:\Sasidharan\Maximus\Maximus\bin\de\DevExpress.Xpo.v16.1.resources.dll
 G:\Sasidharan\Maximus\Maximus\bin\es\DevExpress.Xpo.v16.1.resources.dll
 G:\Sasidharan\Maximus\Maximus\bin\ja\DevExpress.Xpo.v16.1.resources.dll
 G:\Sasidharan\Maximus\Maximus\bin\ru\DevExpress.Xpo.v16.1.resources.dll
-G:\Sasidharan\Maximus\Maximus\obj\Debug\Maximus.csprojResolveAssemblyReference.cache
 G:\Sasidharan\Maximus\Maximus\obj\Debug\Maximus.dll
 G:\Sasidharan\Maximus\Maximus\obj\Debug\Maximus.pdb
 H:\sasidharan\Maximus\Maximus\bin\ApplicationInsights.config
@@ -1657,3 +1656,9 @@ H:\sasidharan\Maximus\Maximus\bin\ru\DevExpress.Xpo.v16.1.resources.dll
 H:\sasidharan\Maximus\Maximus\obj\Debug\Maximus.csprojResolveAssemblyReference.cache
 H:\sasidharan\Maximus\Maximus\obj\Debug\Maximus.dll
 H:\sasidharan\Maximus\Maximus\obj\Debug\Maximus.pdb
+G:\Sasidharan\Maximus\Maximus\bin\EntityFramework.6.0.0.0.Fakes.fakesconfig
+G:\Sasidharan\Maximus\Maximus\bin\Microsoft.QualityTools.Testing.Fakes.dll
+G:\Sasidharan\Maximus\Maximus\obj\Debug\Maximus.csprojFakesResolveAssemblyReference.cache
+G:\Sasidharan\Maximus\Maximus\bin\EntityFramework.6.0.0.0.Fakes.dll
+G:\Sasidharan\Maximus\Maximus\bin\EntityFramework.6.0.0.0.Fakes.xml
+G:\Sasidharan\Maximus\Maximus\obj\Debug\Maximus.csprojResolveAssemblyReference.cache

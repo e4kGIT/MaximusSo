@@ -216,7 +216,9 @@ namespace Maximus.Services
             ConfirmOrderTemplate = ConfirmOrderTemplate.Replace("%orderno%", orderNO.ToString());
             ConfirmOrderTemplate = ConfirmOrderTemplate.Replace("%orderdate%", DateTime.Now.ToString("dd-MM-yyyy"));
             ConfirmOrderTemplate = ConfirmOrderTemplate.Replace("%cmplogo%", cmpLogo);
-            ConfirmOrderTemplate = ConfirmOrderTemplate.Replace("%total%", total.ToString());
+            //commented by 09-02-21
+            //ConfirmOrderTemplate = ConfirmOrderTemplate.Replace("%total%", total.ToString());
+            ConfirmOrderTemplate = ConfirmOrderTemplate.Replace("%total%", "");
             ConfirmOrderTemplate = ConfirmOrderTemplate.Replace("%adminname%", adminname);
             ConfirmOrderTemplate = ConfirmOrderTemplate.Replace("%onlineusername%", onlineuserName);
             ConfirmOrderTemplate = ConfirmOrderTemplate.Replace("%companyname%", cmpId);

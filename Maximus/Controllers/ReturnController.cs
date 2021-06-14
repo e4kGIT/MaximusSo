@@ -13,6 +13,7 @@ using Unity;
 
 namespace Maximus.Controllers
 {
+    [Authorize]
     public class ReturnController : Controller
     {
         #region declarations

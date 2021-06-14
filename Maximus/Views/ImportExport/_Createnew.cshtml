@@ -1,0 +1,852 @@
+﻿<div class="row" ;">
+
+    @{
+        if (Session["selectedctrl"].ToString().ToLower().Trim().Contains("user"))
+        {
+             
+            <br />
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-3">@Html.DevExpress().Label(s => { s.Name = "lblUserName"; s.Text = "Username"; }).GetHtml()</div>
+                <div class="col-md-7">
+                    @Html.DevExpress().TextBox(s =>
+               {
+                   s.Name = "tbxUserName"; s.ControlStyle.CssClass = "widt"; s.Properties.ValidationSettings.RequiredField.IsRequired = true;
+                   s.Properties.ValidationSettings.RequiredField.ErrorText = "Please enter a valid username";
+                   s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.Text;
+                   s.Properties.ValidationSettings.ErrorTextPosition = ErrorTextPosition.Right;
+                   if (Convert.ToBoolean(TempData["edit"]))
+                   {
+                       s.Text = ((Maximus.Data.models.ImpExpUsers)ViewData["ImpExpEditModel"]).UserName;
+                       s.ReadOnly = true;
+                   }
+               }).GetHtml()
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-3">@Html.DevExpress().Label(s => { s.Name = "lblForeName"; s.Text = "Forename"; }).GetHtml()</div>
+                <div class="col-md-7">
+                    @Html.DevExpress().TextBox(s =>
+               {
+                   s.Name = "tbxForeName"; s.ControlStyle.CssClass = "widt"; s.Properties.ValidationSettings.RequiredField.IsRequired = true; s.Properties.ValidationSettings.RequiredField.ErrorText = "Please enter a valid forename";
+                   s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.Text;
+                   s.Properties.ValidationSettings.ErrorTextPosition = ErrorTextPosition.Right;
+                   if (Convert.ToBoolean(TempData["edit"]))
+                   {
+                       s.Text = ((Maximus.Data.models.ImpExpUsers)ViewData["ImpExpEditModel"]).ForeName;
+                   }
+               }).GetHtml()
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-3">@Html.DevExpress().Label(s => { s.Name = "lblSurName"; s.Text = "Surname"; }).GetHtml()</div>
+                <div class="col-md-7">
+                    @Html.DevExpress().TextBox(s =>
+                                 {
+                                     s.Name = "tbxSurName"; s.ControlStyle.CssClass = "widt"; if (Convert.ToBoolean(TempData["edit"]))
+                                     {
+                                         s.Text = ((Maximus.Data.models.ImpExpUsers)ViewData["ImpExpEditModel"]).SurName;
+                                     }
+                                 }).GetHtml()
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-3">@Html.DevExpress().Label(s => { s.Name = "lblEmail"; s.Text = "Email"; }).GetHtml()</div>
+                <div class="col-md-7">
+                    @Html.DevExpress().TextBox(s =>
+               {
+                   s.Name = "tbxEmail"; s.ControlStyle.CssClass = "widt"; s.Properties.ValidationSettings.RequiredField.IsRequired = true; s.Properties.ValidationSettings.RegularExpression.ValidationExpression = @"\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*";
+                   s.Properties.ValidationSettings.RequiredField.ErrorText = "Please enter a valid email";
+                   s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.Text;
+                   s.Properties.ValidationSettings.ErrorTextPosition = ErrorTextPosition.Right;
+                   s.Properties.ValidationSettings.ErrorText = "Please enter a valid email";
+                   if (Convert.ToBoolean(TempData["edit"]))
+                   {
+                       s.Text = ((Maximus.Data.models.ImpExpUsers)ViewData["ImpExpEditModel"]).Email;
+                   }
+               }).GetHtml()
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-3">@Html.DevExpress().Label(s => { s.Name = "lblAccessRole"; s.Text = "Access Role"; }).GetHtml()</div>
+                <div class="col-md-7">
+                    @Html.DevExpress().ComboBox(s =>
+               {
+                   s.Name = "tbxAccessRole"; s.ControlStyle.CssClass = "widt";
+                   s.Properties.ValidationSettings.RequiredField.IsRequired = true;
+                   s.Properties.ValidationSettings.RequiredField.ErrorText = "Please enter a valid role";
+                   s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.Text;
+                   s.Properties.ValidationSettings.ErrorTextPosition = ErrorTextPosition.Right;
+                   if (Convert.ToBoolean(TempData["edit"]))
+                   {
+                       if (((List<string>)ViewBag.Access).Contains(((Maximus.Data.models.ImpExpUsers)ViewData["ImpExpEditModel"]).AccessRole))
+                       {
+                           s.SelectedIndex = ((List<string>)ViewBag.Access).IndexOf(((Maximus.Data.models.ImpExpUsers)ViewData["ImpExpEditModel"]).AccessRole);
+                       }
+                   }
+               }).BindList(ViewBag.Access).GetHtml()
+                </div>
+            </div>
+            //ViewBag.Access
+            <br />
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-3">@Html.DevExpress().Label(s => { s.Name = "lblMapTo"; s.Text = "Allow user"; }).GetHtml()</div>
+                <div class="col-md-7">
+                    @Html.DevExpress().DropDownEdit(text =>
+               {
+                   text.Name = "checkComboEdit";
+                   text.ControlStyle.CssClass = "widt";
+
+                   text.ReadOnly = true;
+
+                   text.Properties.DropDownWindowStyle.BackColor = System.Drawing.Color.FromArgb(0xEDEDED);
+                   // text.ControlStyle.CssClass = "pull-left";
+                   if (Session["Access"].ToString().Trim().ToLower() != "user")
+                   {
+                       text.SetDropDownWindowTemplateContent(c =>
+                       {
+
+                           Html.DevExpress().ListBox(listBoxSettings =>
+                           {
+                               listBoxSettings.Name = "checkComboEdit_" + 1;
+                               listBoxSettings.ControlStyle.Border.BorderWidth = 0;
+                               listBoxSettings.ControlStyle.BorderBottom.BorderWidth = 1;
+                               listBoxSettings.ControlStyle.BorderBottom.BorderColor = System.Drawing.Color.FromArgb(0xDCDCDC);
+                               listBoxSettings.Height = System.Web.UI.WebControls.Unit.Pixel(200);
+                               listBoxSettings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+                               listBoxSettings.Properties.SelectionMode = ListEditSelectionMode.Multiple;
+                               listBoxSettings.Properties.SelectionMode = ListEditSelectionMode.CheckColumn;
+                               listBoxSettings.Properties.ClientSideEvents.SelectedIndexChanged = "updateTextEdit";
+                               listBoxSettings.Properties.ClientSideEvents.Init = "updateTextEdit";
+                               if (Convert.ToBoolean(TempData["edit"]))
+                               {
+                                   if (((List<string>)ViewBag.userlst).Contains(((Maximus.Data.models.ImpExpUsers)ViewData["ImpExpEditModel"]).MapTo))
+                                   {
+                                       listBoxSettings.PreRender = (sender, e) =>
+                                       {
+                                           MVCxListBox cbl = (MVCxListBox)sender;
+                                           foreach (ListEditItem item in cbl.Items)
+                                           {
+                                               if (ViewBag.userlst != null)
+                                               {
+                                                   if (((Maximus.Data.models.ImpExpUsers)ViewData["ImpExpEditModel"]).MapTo.Contains(item.Text.Trim()))
+                                                   {
+                                                       item.Selected = true;
+                                                   }
+                                               }
+                                           }
+                                       };
+                                       //s.SelectedIndex = ((List<string>)ViewBag.Access).IndexOf(((Maximus.Data.models.ImpExpUsers)ViewData["ImpExpEditModel"]).AccessRole);
+                                   }
+                               }
+                           }).BindList(ViewBag.userlst).Render();
+                           ViewContext.Writer.Write("<div style=\"margin: 6px; overflow hidden;\">");
+
+                           Html.DevExpress().Button(buttonSettings =>
+                           {
+                               buttonSettings.Name = "checkComboEdit_2";
+                               buttonSettings.Text = "Close";
+                               buttonSettings.Style.Add("float", "right");
+                               buttonSettings.ClientSideEvents.Click = "HideCmbEdit";
+                               buttonSettings.Height = 26;
+                           }).Render();
+
+                       });
+                   }
+               }).GetHtml()
+                </div>
+            </div>
+            <br />
+            <br />
+            @*<br />
+                <div class="row">
+                    <div class="col-md-2"></div>
+                    <div class="col-md-3">@Html.DevExpress().Label(s => { s.Name = "lblRolloutName"; s.Text = "Rollout Name"; }).GetHtml()</div>
+                    <div class="col-md-7">@Html.DevExpress().ComboBox(s => { s.Name = "tbxRolloutName"; s.ControlStyle.CssClass = "widt"; }).BindList(ViewBag.RolloutName).GetHtml()</div>
+                </div>*@
+            <br />
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-3"></div>
+                <div class="col-md-3">
+                    @Html.DevExpress().CheckBox(s =>
+               {
+                   s.Name = "cbxActive"; s.Text = "Is Active"; if (Convert.ToBoolean(TempData["edit"]))
+                   {
+                       s.Checked = ((Maximus.Data.models.ImpExpUsers)ViewData["ImpExpEditModel"]).Active;
+                   }
+                   else
+                   {
+                       s.Checked = false;
+                   }
+               }).GetHtml()
+                </div>
+                <div class="col-md-7"></div>
+            </div>
+            <br /><hr />
+
+            <div class="row">
+                <center>
+
+                    <div class="col-md-3"></div>
+                    @{
+                        if (!Convert.ToBoolean(TempData["edit"]))
+                        {
+                            <div class="col-md-3">@Html.DevExpress().Button(s => { s.Name = "btnimpexpSaveuser"; s.Text = "Save"; s.ClientSideEvents.Click = "IMPEXPSave"; }).GetHtml()</div>
+                        }
+                        else
+                        {
+                            <div class="col-md-3">@Html.DevExpress().Button(s => { s.Name = "btnimpexpSaveuserUPD"; s.Text = "Update"; s.ClientSideEvents.Click = "IMPEXPSave"; }).GetHtml()</div>
+                        }
+                    }
+                    <div class="col-md-3">
+                        @Html.DevExpress().Button(s => { s.Name = "btnimpexpCancel"; s.Text = "Cancel"; s.ClientSideEvents.Click = "IMPEXPcancel"; }).GetHtml()
+                    </div>
+                    <div class="col-md-3"></div>
+                </center>
+            </div>
+                        }
+                        else if (Session["selectedctrl"].ToString().ToLower().Trim().Contains("emp"))
+                        {
+
+                          
+                            <hr />
+                            <br />
+                            <div class="row">
+                                <div class="col-md-2"></div>
+                                <div class="col-md-3">@Html.DevExpress().Label(s => { s.Name = "lblEMPLOYEEID"; s.Text = "Employeeid"; }).GetHtml()</div>
+                                <div class="col-md-7">
+                                    @Html.DevExpress().TextBox(s =>
+                                   {
+                                       s.Name = "tbxEmployeeId"; s.ControlStyle.CssClass = "widt"; s.Properties.ValidationSettings.RequiredField.IsRequired = true;
+                                       s.Properties.ValidationSettings.RequiredField.ErrorText = "Please enter a valid employeeid";
+                                       s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.Text;
+                                       s.Properties.ValidationSettings.ErrorTextPosition = ErrorTextPosition.Right;
+                                       if (Convert.ToBoolean(TempData["edit"]))
+                                       {
+                                           s.Text = ((Maximus.Data.models.EmployeeImportModel)ViewData["ImpExpEditModel"]).EMPLOYEEID;
+                                           s.ReadOnly = true;
+                                       }
+                                   }).GetHtml()
+                                </div>
+                            </div>
+                            <br />
+
+                            <div class="row">
+                                <div class="col-md-2"></div>
+                                <div class="col-md-3">@Html.DevExpress().Label(s => { s.Name = "lblDEPARTMENT"; s.Text = "Department"; }).GetHtml()</div>
+                                <div class="col-md-7">
+                                    @Html.DevExpress().TextBox(s =>
+                               {
+                               s.Name = "tbxDEPARTMENT"; s.ControlStyle.CssClass = "widt";
+                               s.ReadOnly = true;@*s.Properties.ValidationSettings.RequiredField.IsRequired = true;
+                                        s.Properties.ValidationSettings.RequiredField.ErrorText = "Please enter a valid Role";
+                                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.Text;
+                                        s.Properties.ValidationSettings.ErrorTextPosition = ErrorTextPosition.Right;*@
+                               }).GetHtml()
+                                </div>
+                            </div><br />
+                             <div class="row">
+                                <div class="col-md-2"></div>
+                                <div class="col-md-3">@Html.DevExpress().Label(s => { s.Name = "lblTITLE"; s.Text = "Title"; }).GetHtml()</div>
+                                <div class="col-md-7">
+                                    @Html.DevExpress().ComboBox(s =>
+                               {
+                               s.Name = "tbxTitle";
+                               s.ControlStyle.CssClass = "widt"; @*s.Properties.ValidationSettings.RequiredField.IsRequired = true;
+                                        s.Properties.ValidationSettings.RequiredField.ErrorText = "Please enter a valid Role";
+                                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.Text;
+                                        s.Properties.ValidationSettings.ErrorTextPosition = ErrorTextPosition.Right;*@
+                                   if (Convert.ToBoolean(TempData["edit"]))
+                                   {
+                                       if (((List<string>)ViewBag.titleLst).Contains(((Maximus.Data.models.EmployeeImportModel)ViewData["ImpExpEditModel"]).TITLE))
+                                       {
+                                           s.SelectedIndex = ((List<string>)ViewBag.titleLst).IndexOf(((Maximus.Data.models.EmployeeImportModel)ViewData["ImpExpEditModel"]).TITLE);
+                                       }
+                                   }
+                               }).BindList(ViewBag.titleLst).GetHtml()
+                                </div>
+                            </div>
+
+                            <br />
+                            <div class="row">
+                                <div class="col-md-2"></div>
+                                <div class="col-md-3">@Html.DevExpress().Label(s => { s.Name = "lblFORENAME"; s.Text = "Forename"; }).GetHtml()</div>
+                                <div class="col-md-7">
+                                    @Html.DevExpress().TextBox(s =>
+                                   {
+                                       s.Name = "tbxFORENAME"; s.ControlStyle.CssClass = "widt"; s.Properties.ValidationSettings.RequiredField.IsRequired = true;
+                                       s.Properties.ValidationSettings.RequiredField.ErrorText = "Please enter a valid forename";
+                                       s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.Text;
+                                       s.Properties.ValidationSettings.ErrorTextPosition = ErrorTextPosition.Right;
+                                       if (Convert.ToBoolean(TempData["edit"]))
+                                       {
+                                           s.Text = (((Maximus.Data.models.EmployeeImportModel)ViewData["ImpExpEditModel"]).FORENAME);
+                                       }
+                                   }).GetHtml()
+                                </div>
+                            </div>
+                                <br />
+                                <div class="row">
+                                    <div class="col-md-2"></div>
+                                    <div class="col-md-3">@Html.DevExpress().Label(s => { s.Name = "lblSURNAME"; s.Text = "Surname"; }).GetHtml()</div>
+                                    <div class="col-md-7">
+                                        @Html.DevExpress().TextBox(s =>
+                                   {
+                                   s.Name = "tbxSURNAME"; s.ControlStyle.CssClass = "widt";
+                                   if (Convert.ToBoolean(TempData["edit"]))
+                                   {
+                                       s.Text = (((Maximus.Data.models.EmployeeImportModel)ViewData["ImpExpEditModel"]).SURNAME);
+                                   }@*s.Properties.ValidationSettings.RequiredField.IsRequired = true;
+                                            s.Properties.ValidationSettings.RequiredField.ErrorText = "Please enter a valid Role";
+                                            s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.Text;
+                                            s.Properties.ValidationSettings.ErrorTextPosition = ErrorTextPosition.Right;*@
+                                   }).GetHtml()
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="row">
+                                    <div class="col-md-2"></div>
+                                    <div class="col-md-3">@Html.DevExpress().Label(s => { s.Name = "lblSTARTDATE"; s.Text = "Start date"; }).GetHtml()</div>
+                                    <div class="col-md-7">
+                                        @Html.DevExpress().DateEdit(s =>
+                                   {
+                                       s.Name = "tbxSTARTDATE"; s.ControlStyle.CssClass = "widt";
+                                       s.Date = DateTime.Now;
+                                       s.Properties.UseMaskBehavior = true;
+                                       s.Properties.EditFormat = EditFormat.Custom;
+                                       s.Properties.EditFormatString = "dd-MM-yyyy";
+                                       if (Convert.ToBoolean(TempData["edit"]))
+                                       {
+                                           s.Date = DateTime.Parse(((Maximus.Data.models.EmployeeImportModel)ViewData["ImpExpEditModel"]).STARTDATE);
+                                       }
+
+                                   }).GetHtml()
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="row">
+                                    <div class="col-md-2"></div>
+                                    <div class="col-md-3">@Html.DevExpress().Label(s => { s.Name = "lblENDDATE"; s.Text = "End date"; }).GetHtml()</div>
+                                    <div class="col-md-7">
+                                        @Html.DevExpress().DateEdit(s =>
+                                   {
+                                       s.Name = "tbxENDDATE"; s.ControlStyle.CssClass = "widt";
+                                       s.Date = DateTime.Now.AddYears(1);
+                                       s.Properties.UseMaskBehavior = true;
+                                       s.Properties.EditFormat = EditFormat.Custom;
+
+                                       s.Properties.EditFormatString = "dd-MM-yyyy";
+                                       if (Convert.ToBoolean(TempData["edit"]))
+                                       {
+                                           s.Date = DateTime.Parse(((Maximus.Data.models.EmployeeImportModel)ViewData["ImpExpEditModel"]).ENDDATE);
+                                       }
+
+                                       //  s.Properties = "dd-MM-yyyy";
+                                   }).GetHtml()
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="row">
+                                    <div class="col-md-2"></div>
+                                    <div class="col-md-3">@Html.DevExpress().Label(s => { s.Name = "lblUcode"; s.Text = "Ucodes"; }).GetHtml()</div>
+                                    <div class="col-md-7">
+                                        @Html.DevExpress().DropDownEdit(text =>
+                                   {
+                                       text.Name = "ucodeComboEdit";
+                                       text.ControlStyle.CssClass = "widt";
+
+                                       text.ReadOnly = true;
+                                       if (Convert.ToBoolean(TempData["edit"]))
+                                       {
+                                           text.Text = ((Maximus.Data.models.EmployeeImportModel)ViewData["ImpExpEditModel"]).UCODE;
+                                       }
+                                       text.Properties.DropDownWindowStyle.BackColor = System.Drawing.Color.FromArgb(0xEDEDED);
+                                       // text.ControlStyle.CssClass = "pull-left";
+                                       if (Session["Access"].ToString().Trim().ToLower() != "user")
+                                       {
+                                           text.SetDropDownWindowTemplateContent(c =>
+                                           {
+
+                                               Html.DevExpress().ListBox(listBoxSettings =>
+                                               {
+                                                   listBoxSettings.Name = "ucodeComboEdit_" + 1;
+                                                   listBoxSettings.ControlStyle.Border.BorderWidth = 0;
+                                                   listBoxSettings.ControlStyle.BorderBottom.BorderWidth = 1;
+                                                   listBoxSettings.ControlStyle.BorderBottom.BorderColor = System.Drawing.Color.FromArgb(0xDCDCDC);
+                                                   listBoxSettings.Height = System.Web.UI.WebControls.Unit.Pixel(200);
+                                                   listBoxSettings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+                                                   listBoxSettings.Properties.SelectionMode = ListEditSelectionMode.Multiple;
+                                                   listBoxSettings.Properties.CallbackPageSize = 100;
+                                                   //listBoxSettings.Properties.EnableSelectAll = true;
+                                                   //listBoxSettings.Properties.FilteringSettings.ShowSearchUI = true;
+                                                   listBoxSettings.Properties.SelectionMode = ListEditSelectionMode.CheckColumn;
+                                                   listBoxSettings.Properties.ClientSideEvents.SelectedIndexChanged = "updateTextEdit";
+                                                   listBoxSettings.Properties.ClientSideEvents.Init = "updateTextEdit";
+                                                   if (Convert.ToBoolean(TempData["edit"]))
+                                                   {
+                                                       //if (((List<string>)ViewBag.UcodeLst).Contains(((Maximus.Data.models.EmployeeImportModel)ViewData["ImpExpEditModel"]).UCODE))
+                                                       //{
+                                                       listBoxSettings.PreRender = (sender, e) =>
+                                                       {
+                                                           MVCxListBox cbl = (MVCxListBox)sender;
+                                                           foreach (ListEditItem item in cbl.Items)
+                                                           {
+                                                               if (ViewBag.UcodeLst != null)
+                                                               {
+                                                                   if (((Maximus.Data.models.EmployeeImportModel)ViewData["ImpExpEditModel"]).UCODE.Contains(item.Text.Trim()))
+                                                                   {
+                                                                       item.Selected = true;
+                                                                   }
+                                                               }
+                                                           }
+                                                       };
+
+                                                       //}
+                                                   }
+
+                                               }).BindList(ViewBag.UcodeLst).Render();
+                                              // ViewContext.Writer.Write("<div style=\"margin: 6px; overflow hidden;\">");
+
+                                               Html.DevExpress().Button(buttonSettings =>
+                                               {
+                                                   buttonSettings.Name = "ucodeComboEdit_2";
+                                                   buttonSettings.Text = "Close";
+                                                   buttonSettings.Style.Add("float", "right");
+                                                   buttonSettings.ClientSideEvents.Click = "HideCmbEdit";
+                                                   buttonSettings.Height = 26;
+                                               }).Render();
+
+                                           });
+                                       }
+                                   }).GetHtml()
+                                    </div>
+                                </div>
+                                
+                                         
+                           
+                                <br />
+                                <div class="row">
+                                    <div class="col-md-2"></div>
+                                    <div class="col-md-3">@Html.DevExpress().Label(s => { s.Name = "lblMapto"; s.Text = "Mapto"; }).GetHtml()</div>
+                                    <div class="col-md-7">
+                                        @Html.DevExpress().DropDownEdit(text =>
+                                   {
+                                   text.Name = "maptoComboEdit";
+                                   text.ControlStyle.CssClass = "widt";
+
+                                   text.ReadOnly = true;
+
+                                   text.Properties.DropDownWindowStyle.BackColor = System.Drawing.Color.FromArgb(0xEDEDED);
+                                   // text.ControlStyle.CssClass = "pull-left";
+                                   if (Session["Access"].ToString().Trim().ToLower() != "user")
+                                   {
+                                       text.SetDropDownWindowTemplateContent(c =>
+                                       {
+
+                                           Html.DevExpress().ListBox(listBoxSettings =>
+                                           {
+                                               listBoxSettings.Name = "maptoComboEdit_" + 1;
+                                               listBoxSettings.ControlStyle.Border.BorderWidth = 0;
+                                               listBoxSettings.ControlStyle.BorderBottom.BorderWidth = 1;
+                                               listBoxSettings.ControlStyle.BorderBottom.BorderColor = System.Drawing.Color.FromArgb(0xDCDCDC);
+                                               listBoxSettings.Height = System.Web.UI.WebControls.Unit.Pixel(200);
+                                               listBoxSettings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+                                               listBoxSettings.Properties.SelectionMode = ListEditSelectionMode.Multiple;
+                                               //listBoxSettings.Properties.FilteringSettings.CustomEditorID
+                                               listBoxSettings.Properties.CallbackPageSize = 1000;
+                                               listBoxSettings.Properties.SelectionMode = ListEditSelectionMode.CheckColumn;
+                                               listBoxSettings.Properties.ClientSideEvents.SelectedIndexChanged = "updateTextEdit";
+                                               listBoxSettings.Properties.ClientSideEvents.Init = "updateTextEdit";
+                                               if (Convert.ToBoolean(TempData["edit"]))
+                                               {
+                                                   //if (((List<string>)ViewBag.userlst).Contains(((Maximus.Data.models.EmployeeImportModel)ViewData["ImpExpEditModel"]).MAPTO))
+                                                   //{
+                                                   listBoxSettings.PreRender = (sender, e) =>
+                                                   {
+                                                       MVCxListBox cbl = (MVCxListBox)sender;
+                                                       foreach (ListEditItem item in cbl.Items)
+                                                       {
+                                                           if (ViewBag.userlst != null)
+                                                           {
+                                                               if (((Maximus.Data.models.EmployeeImportModel)ViewData["ImpExpEditModel"]).MAPTO1.Contains(item.Text.Trim()))
+                                                               {
+                                                                   item.Selected = true;
+                                                               }
+                                                           }
+                                                       }
+                                                   };
+
+                                               //}
+                                           }
+
+                                               }).BindList(ViewBag.userlst).Render();
+
+
+                                       Html.DevExpress().Button(buttonSettings =>
+                                       {
+                                           buttonSettings.Name = "maptoComboEdit_2";
+                                           buttonSettings.Text = "Close";
+                                           buttonSettings.Style.Add("float", "right");
+                                           buttonSettings.ClientSideEvents.Click = "HideCmbEdit";
+                                           buttonSettings.Height = 26;
+                                       }).Render();
+
+                                   });
+                                            }
+                                        }).GetHtml()
+                                    </div>
+
+                                </div>
+                             
+                                <br />
+                                <div class="row">
+                                    <div class="col-md-2"></div>
+                                    <div class="col-md-3">@Html.DevExpress().Label(s => { s.Name = "lblMaptoAddr"; s.Text = "Mapto address"; }).GetHtml()</div>
+                                    <div class="col-md-7">
+
+                                        @Html.DevExpress().ComboBox(s =>
+                                   {
+                                       s.Name = "maptoAddrComboEditEmp1"; s.ControlStyle.CssClass = "widt";
+                                       if (Convert.ToBoolean(TempData["edit"]))
+                                       {
+                                           if (((List<string>)ViewBag.addrLst).Contains(((Maximus.Data.models.EmployeeImportModel)ViewData["ImpExpEditModel"]).MAPTOADDR))
+                                           {
+                                               s.SelectedIndex = ((List<string>)ViewBag.addrLst).IndexOf(((Maximus.Data.models.EmployeeImportModel)ViewData["ImpExpEditModel"]).MAPTOADDR);
+                                           }
+                                       }
+                                   }).BindList(ViewBag.addrLst).GetHtml()
+
+                                    </div>
+
+                                </div>
+                                <br />
+                                <br /><br /><hr />
+                                <div class="row">
+                                    <center>
+
+                                        <div class="col-md-3"></div>
+                                        @{
+                                            if (!Convert.ToBoolean(TempData["edit"]))
+                                            {
+                                                <div class="col-md-3">@Html.DevExpress().Button(s => { s.Name = "btnimpexpSaveemployee"; s.Text = "Save"; s.ClientSideEvents.Click = "IMPEXPSave"; }).GetHtml()</div>
+                                            }
+                                            else
+                                            {
+                                                <div class="col-md-3">@Html.DevExpress().Button(s => { s.Name = "btnimpexpSaveemployeeUPD"; s.Text = "Update"; s.ClientSideEvents.Click = "IMPEXPSave"; }).GetHtml()</div>
+                                            }
+                                        }
+                                        <div class="col-md-3">
+                                            @Html.DevExpress().Button(s => { s.Name = "btnimpexpCancel"; s.Text = "Cancel"; s.ClientSideEvents.Click = "IMPEXPcancel"; }).GetHtml()
+                                        </div>
+                                        <div class="col-md-3"></div>
+                                    </center>
+                                </div>
+                                            }
+                                            else if (Session["selectedctrl"].ToString().ToLower().Trim().Contains("addr"))
+                                            {
+                                               
+                                                <br />
+                                                <div class="row">
+                                                    <div class="col-md-2"></div>
+                                                    <div class="col-md-3">@Html.DevExpress().Label(s => { s.Name = "lblDESCRIPTION"; s.Text = "Description"; }).GetHtml()</div>
+                                                    <div class="col-md-7">
+                                                        @if (Convert.ToBoolean(TempData["edit"]))
+                                                        {
+                                                            @Html.Hidden("addrId", ((Maximus.Data.models.AddressImportModel)ViewData["ImpExpEditModel"]).ADDRESSID, new { id = "addrId" })
+
+                                                        }
+                                                        @Html.DevExpress().TextBox(s =>
+                                               {
+                                                   s.Name = "tbxDESCRIPTION"; s.ControlStyle.CssClass = "widt"; s.Properties.ValidationSettings.RequiredField.IsRequired = true;
+                                                   s.Properties.ValidationSettings.RequiredField.ErrorText = "Please enter a valid description";
+                                                   s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.Text;
+                                                   s.Properties.ValidationSettings.ErrorTextPosition = ErrorTextPosition.Right;
+                                                   if (Convert.ToBoolean(TempData["edit"]))
+                                                   {
+                                                       s.Text = ((Maximus.Data.models.AddressImportModel)ViewData["ImpExpEditModel"]).DESCRIPTION;
+                                                       s.ReadOnly = true;
+                                                   }
+                                               }).GetHtml()
+                                                    </div>
+                                                </div>
+                                                <br />
+                                                <div class="row">
+                                                    <div class="col-md-2"></div>
+                                                    <div class="col-md-3">@Html.DevExpress().Label(s => { s.Name = "lblADDRESS1"; s.Text = "Address1"; }).GetHtml()</div>
+                                                    <div class="col-md-7">
+                                                        @Html.DevExpress().TextBox(s =>
+                                                                     {
+                                                                         s.Name = "tbxADDRESS1"; s.ControlStyle.CssClass = "widt"; s.Properties.ValidationSettings.RequiredField.IsRequired = true;
+                                                                         s.Properties.ValidationSettings.RequiredField.ErrorText = "Please enter a valid address1";
+                                                                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.Text;
+                                                                         s.Properties.ValidationSettings.ErrorTextPosition = ErrorTextPosition.Right;
+                                                                         if (Convert.ToBoolean(TempData["edit"]))
+                                                                         {
+                                                                             s.Text = ((Maximus.Data.models.AddressImportModel)ViewData["ImpExpEditModel"]).ADDRESS1;
+                                                                         }
+                                                                     }).GetHtml()
+                                                    </div>
+                                                </div>
+                                                <br />
+                                                <div class="row">
+                                                    <div class="col-md-2"></div>
+                                                    <div class="col-md-3">@Html.DevExpress().Label(s => { s.Name = "lblADDRESS2"; s.Text = "Address2"; }).GetHtml()</div>
+                                                    <div class="col-md-7">
+                                                        @Html.DevExpress().TextBox(s =>
+                                                                     {
+                                                                         s.Name = "tbxADDRESS2"; s.ControlStyle.CssClass = "widt"; if (Convert.ToBoolean(TempData["edit"]))
+                                                                         {
+                                                                             s.Text = ((Maximus.Data.models.AddressImportModel)ViewData["ImpExpEditModel"]).ADDRESS2;
+                                                                         }
+                                                                     }).GetHtml()
+                                                    </div>
+                                                </div>
+                                                <br />
+                                                <div class="row">
+                                                    <div class="col-md-2"></div>
+                                                    <div class="col-md-3">@Html.DevExpress().Label(s => { s.Name = "lblADDRESS3"; s.Text = "Address3"; }).GetHtml()</div>
+                                                    <div class="col-md-7">
+                                                        @Html.DevExpress().TextBox(s =>
+                                                                     {
+                                                                         s.Name = "tbxADDRESS3"; s.ControlStyle.CssClass = "widt"; if (Convert.ToBoolean(TempData["edit"]))
+                                                                         {
+                                                                             s.Text = ((Maximus.Data.models.AddressImportModel)ViewData["ImpExpEditModel"]).ADDRESS3;
+                                                                         }
+                                                                     }).GetHtml()
+                                                    </div>
+                                                </div>
+                                                <br />
+                                                <div class="row">
+                                                    <div class="col-md-2"></div>
+                                                    <div class="col-md-3">@Html.DevExpress().Label(s => { s.Name = "lblTOWN"; s.Text = "Town"; }).GetHtml()</div>
+                                                    <div class="col-md-7">
+                                                        @Html.DevExpress().TextBox(s =>
+                                                                     {
+                                                                         s.Name = "tbxTOWN"; s.ControlStyle.CssClass = "widt"; if (Convert.ToBoolean(TempData["edit"]))
+                                                                         {
+                                                                             s.Text = ((Maximus.Data.models.AddressImportModel)ViewData["ImpExpEditModel"]).TOWN;
+                                                                         }
+                                                                     }).GetHtml()
+                                                    </div>
+                                                </div>
+                                                <br />
+                                                <div class="row">
+                                                    <div class="col-md-2"></div>
+                                                    <div class="col-md-3">@Html.DevExpress().Label(s => { s.Name = "lblCITYCOUNTY"; s.Text = "City/County"; }).GetHtml()</div>
+                                                    <div class="col-md-7">
+                                                        @Html.DevExpress().TextBox(s =>
+                                                                     {
+                                                                         s.Name = "tbxCITYCOUNTY"; s.ControlStyle.CssClass = "widt"; if (Convert.ToBoolean(TempData["edit"]))
+                                                                         {
+                                                                             s.Text = ((Maximus.Data.models.AddressImportModel)ViewData["ImpExpEditModel"]).CITYCOUNTY;
+                                                                         }
+                                                                     }).GetHtml()
+                                                    </div>
+                                                </div>
+                                                <br />
+                                                <div class="row">
+                                                    <div class="col-md-2"></div>
+                                                    <div class="col-md-3">@Html.DevExpress().Label(s => { s.Name = "lblPOSTCODE"; s.Text = "Postcode"; }).GetHtml()</div>
+                                                    <div class="col-md-7">
+                                                        @Html.DevExpress().TextBox(s =>
+                                                   {
+                                                       s.Name = "tbxPOSTCODE"; s.ControlStyle.CssClass = "widt"; s.Properties.ValidationSettings.RequiredField.IsRequired = true;
+                                                       s.Properties.ValidationSettings.RequiredField.ErrorText = "Please enter a valid postcode";
+                                                       s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.Text;
+                                                       s.Properties.ValidationSettings.ErrorTextPosition = ErrorTextPosition.Right;
+                                                       if (Convert.ToBoolean(TempData["edit"]))
+                                                       {
+                                                           s.Text = ((Maximus.Data.models.AddressImportModel)ViewData["ImpExpEditModel"]).POSTCODE;
+                                                       }
+                                                   }).GetHtml()
+                                                    </div>
+                                                </div>
+                                                <br /> 
+                                                <div class="row">
+                                                    <div class="col-md-2"></div>
+                                                    <div class="col-md-3">@Html.DevExpress().Label(s => { s.Name = "lblCountry"; s.Text = "Country"; }).GetHtml()</div>
+                                                    <div class="col-md-7">
+                                                        @Html.DevExpress().ComboBox(s =>
+                                                   {
+                                                       s.Name = "tbxCountry"; s.ControlStyle.CssClass = "widt"; s.Properties.ValidationSettings.RequiredField.IsRequired = true;
+                                                       s.Properties.ValidationSettings.RequiredField.ErrorText = "Please enter a valid country";
+                                                       s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.Text;
+                                                       s.Properties.ValidationSettings.ErrorTextPosition = ErrorTextPosition.Right;
+                                                       if (Convert.ToBoolean(TempData["edit"]))
+
+                                                       {
+                                                           if (((List<string>)ViewBag.countryLst).Contains(((Maximus.Data.models.AddressImportModel)ViewData["ImpExpEditModel"]).COUNTRY))
+                                                           {
+                                                               s.SelectedIndex = ((List<string>)ViewBag.countryLst).IndexOf(((Maximus.Data.models.AddressImportModel)ViewData["ImpExpEditModel"]).COUNTRY);
+                                                           }
+                                                       }
+                                                   }).BindList(ViewBag.countryLst).GetHtml()
+                                                    </div>
+                                                </div>
+                                                <br />
+                                                <div class="row">
+                                                    <div class="col-md-2"></div>
+                                                    <div class="col-md-3">@Html.DevExpress().Label(s => { s.Name = "lblCONTACTNAME"; s.Text = "Contact name"; }).GetHtml()</div>
+                                                    <div class="col-md-7">
+                                                        @Html.DevExpress().TextBox(s =>
+                                                                     {
+                                                                         s.Name = "tbxCONTACTNAME"; s.ControlStyle.CssClass = "widt"; if (Convert.ToBoolean(TempData["edit"]))
+                                                                         {
+                                                                             s.Text = ((Maximus.Data.models.AddressImportModel)ViewData["ImpExpEditModel"]).CONTACTNAME;
+                                                                         }
+                                                                     }).GetHtml()
+                                                    </div>
+                                                </div>
+                                                <br />
+                                                <div class="row">
+                                                    <div class="col-md-2"></div>
+                                                    <div class="col-md-3">@Html.DevExpress().Label(s => { s.Name = "lblTelephone"; s.Text = "Telephone"; }).GetHtml()</div>
+                                                    <div class="col-md-7">
+                                                        @Html.DevExpress().TextBox(s =>
+                                                   {
+                                                       s.Name = "tbxPhone"; s.ControlStyle.CssClass = "widt";
+                                                       if (Convert.ToBoolean(TempData["edit"]))
+                                                       {
+                                                           s.Text = ((Maximus.Data.models.AddressImportModel)ViewData["ImpExpEditModel"]).TELEPHONE;
+                                                       }
+                                                   }).GetHtml()
+                                                    </div>
+                                                </div>
+                                                <br />                                            <br />
+                                                <div class="row">
+                                                    <div class="col-md-2"></div>
+                                                    <div class="col-md-3">@Html.DevExpress().Label(s => { s.Name = "lblEMAIL"; s.Text = "Email"; }).GetHtml()</div>
+                                                    <div class="col-md-7">
+                                                        @Html.DevExpress().TextBox(s =>
+                                                   {
+                                                       s.Name = "tbxEMAIL"; s.ControlStyle.CssClass = "widt";
+                                                       s.Properties.ValidationSettings.RegularExpression.ValidationExpression = @"\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*";
+                                                       if (Convert.ToBoolean(TempData["edit"]))
+                                                       {
+                                                           s.Text = ((Maximus.Data.models.AddressImportModel)ViewData["ImpExpEditModel"]).EMAIL;
+                                                       }
+                                                   }).GetHtml()
+                                                    </div>
+                                                </div>    <br />
+                                                <div class="row">
+                                                    <div class="col-md-2"></div>
+                                                    <div class="col-md-3">@Html.DevExpress().Label(s => { s.Name = "lblCC"; s.Text = "Cost center"; }).GetHtml()</div>
+                                                    <div class="col-md-7">
+                                                        @Html.DevExpress().TextBox(s =>
+                                                   {
+                                                       s.Name = "tbxCC"; s.ControlStyle.CssClass = "widt";
+                                                       if (Convert.ToBoolean(TempData["edit"]))
+                                                       {
+                                                           s.Text = ((Maximus.Data.models.AddressImportModel)ViewData["ImpExpEditModel"]).COSTCENTER;
+                                                       }
+                                                   }).GetHtml()
+                                                    </div>
+                                                </div>
+                                                <br />
+                                                <div class="row">
+                                                    <div class="col-md-2"></div>
+                                                    <div class="col-md-3">@Html.DevExpress().Label(s => { s.Name = "lblMapto"; s.Text = "Mapto "; }).GetHtml()</div>
+                                                    <div class="col-md-7">
+                                                        @Html.DevExpress().DropDownEdit(text =>
+                                                   {
+                                                       text.Name = "maptoComboEditAddr";
+                                                       text.ControlStyle.CssClass = "widt";
+
+                                                       text.ReadOnly = true;
+
+                                                       text.Properties.DropDownWindowStyle.BackColor = System.Drawing.Color.FromArgb(0xEDEDED);
+                                                       // text.ControlStyle.CssClass = "pull-left";
+                                                       if (Session["Access"].ToString().Trim().ToLower() != "user")
+                                                       {
+                                                           text.SetDropDownWindowTemplateContent(c =>
+                                                           {
+
+                                                               Html.DevExpress().ListBox(listBoxSettings =>
+                                                               {
+                                                                   listBoxSettings.Name = "maptoComboEditAddr_" + 1;
+                                                                   listBoxSettings.ControlStyle.Border.BorderWidth = 0;
+                                                                   listBoxSettings.ControlStyle.BorderBottom.BorderWidth = 1;
+                                                                   listBoxSettings.ControlStyle.BorderBottom.BorderColor = System.Drawing.Color.FromArgb(0xDCDCDC);
+                                                                   listBoxSettings.Height = System.Web.UI.WebControls.Unit.Pixel(200);
+                                                                   listBoxSettings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+                                                                   listBoxSettings.Properties.SelectionMode = ListEditSelectionMode.Multiple;
+                                                                   listBoxSettings.Properties.CallbackPageSize = 100;
+                                                                   listBoxSettings.Properties.CallbackPageSize = 100;
+                                                                   listBoxSettings.Properties.SelectionMode = ListEditSelectionMode.CheckColumn;
+                                                                   listBoxSettings.Properties.ClientSideEvents.SelectedIndexChanged = "updateTextEdit";
+                                                                   listBoxSettings.Properties.ClientSideEvents.Init = "updateTextEdit";
+                                                                   if (Convert.ToBoolean(TempData["edit"]))
+                                                                   {
+                                                                       if (((List<string>)ViewBag.userlst).Contains(((Maximus.Data.models.AddressImportModel)ViewData["ImpExpEditModel"]).MAPTO))
+                                                                       {
+                                                                           listBoxSettings.PreRender = (sender, e) =>
+                                                                           {
+                                                                               MVCxListBox cbl = (MVCxListBox)sender;
+                                                                               foreach (ListEditItem item in cbl.Items)
+                                                                               {
+                                                                                   if (ViewBag.userlst != null)
+                                                                                   {
+                                                                                       if (((Maximus.Data.models.EmployeeImportModel)ViewData["ImpExpEditModel"]).MAPTO.Contains(item.Text.Trim()))
+                                                                                       {
+                                                                                           item.Selected = true;
+                                                                                       }
+                                                                                   }
+                                                                               }
+                                                                           };
+
+                                                                       }
+                                                                   }
+
+                                                               }).BindList(ViewBag.userlst).Render();
+                                                               ViewContext.Writer.Write("<div style=\"margin: 6px; overflow hidden;\">");
+
+                                                               Html.DevExpress().Button(buttonSettings =>
+                                                               {
+                                                                   buttonSettings.Name = "maptoComboEditAddr_2";
+                                                                   buttonSettings.Text = "Close";
+                                                                   buttonSettings.Style.Add("float", "right");
+                                                                   buttonSettings.ClientSideEvents.Click = "HideCmbEdit";
+                                                                   buttonSettings.Height = 26;
+                                                               }).Render();
+
+                                                           });
+                                                       }
+                                                   }).GetHtml()
+                                                    </div>
+
+                                                </div>
+                                                <br /><br /><hr />
+                                                <div class="row">
+                                                    <center>
+
+                                                        <div class="col-md-3"></div>
+                                                        @{
+                                                            if (!Convert.ToBoolean(TempData["edit"]))
+                                                            {
+                                                                <div class="col-md-3">@Html.DevExpress().Button(s => { s.Name = "btnimpexpSaveaddr"; s.Text = "Save"; s.ClientSideEvents.Click = "IMPEXPSave"; }).GetHtml()</div>
+                                                            }
+                                                            else
+                                                            {
+                                                                <div class="col-md-3">@Html.DevExpress().Button(s => { s.Name = "btnimpexpSaveaddrUPD"; s.Text = "Update"; s.ClientSideEvents.Click = "IMPEXPSave"; }).GetHtml()</div>
+                                                            }
+                                                        }
+                                                        <div class="col-md-3">
+                                                            @Html.DevExpress().Button(s => { s.Name = "btnimpexpCancel"; s.Text = "Cancel"; s.ClientSideEvents.Click = "IMPEXPcancel"; }).GetHtml()
+                                                        </div>
+                                                        <div class="col-md-3"></div>
+                                                    </center>
+                                                </div>
+                                                            }
+    }
+
+</div>

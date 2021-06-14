@@ -2032,7 +2032,7 @@ function addTocartDemandSwatch(s, e) {
                                                                     });
                                                                 }
                                                             },
-                                                            error: function () {
+                                                            error: function (RESP) {
                                                                 loadPopup.Hide();
                                                                 alert("Try again!");
                                                             }
@@ -2103,7 +2103,7 @@ function addTocartDemandSwatch(s, e) {
                                                                 });
                                                             }
                                                         },
-                                                        error: function () {
+                                                        error: function (RESP) {
                                                             loadPopup.Hide();
                                                             alert("Try again!");
                                                         }
@@ -2167,7 +2167,7 @@ function addTocartDemandSwatch(s, e) {
                                                 });
                                             }
                                         },
-                                        error: function () {
+                                        error: function (RESP) {
                                             loadPopup.Hide();
                                             alert("Try again!");
                                         }
@@ -2182,7 +2182,7 @@ function addTocartDemandSwatch(s, e) {
 
                             }
                         },
-                        error: function () {
+                        error: function (RESP) {
                             loadPopup.Hide();
                             alert("Try again!");
                         }
@@ -2258,7 +2258,7 @@ function addTocartDemandSwatch(s, e) {
                                                                     });
                                                                 }
                                                             },
-                                                            error: function () {
+                                                            error: function (RESP) {
                                                                 loadPopup.Hide();
                                                                 alert("Try again!");
                                                             }
@@ -2327,7 +2327,7 @@ function addTocartDemandSwatch(s, e) {
                                                                 });
                                                             }
                                                         },
-                                                        error: function () {
+                                                        error: function (RESP) {
                                                             loadPopup.Hide();
                                                             alert("Try again!");
                                                         }
@@ -2388,7 +2388,7 @@ function addTocartDemandSwatch(s, e) {
                                                 });
                                             }
                                         },
-                                        error: function () {
+                                        error: function (RESP) {
                                             loadPopup.Hide();
                                             alert("Try again!");
                                         }
@@ -2403,7 +2403,7 @@ function addTocartDemandSwatch(s, e) {
 
                             }
                         },
-                        error: function () {
+                        error: function (RESP) {
                             loadPopup.Hide();
                             alert("Try again!");
                         }
@@ -2505,7 +2505,7 @@ function addTocartDemandSwatch(s, e) {
                                                                     });
                                                                 }
                                                             },
-                                                            error: function () {
+                                                            error: function (RESP) {
                                                                 loadPopup.Hide();
                                                                 alert("Try again!");
                                                             }
@@ -2578,7 +2578,7 @@ function addTocartDemandSwatch(s, e) {
                                                                 });
                                                             }
                                                         },
-                                                        error: function () {
+                                                        error: function (RESP) {
                                                             loadPopup.Hide();
                                                             alert("Try again!");
                                                         }
@@ -2644,7 +2644,7 @@ function addTocartDemandSwatch(s, e) {
                                                 });
                                             }
                                         },
-                                        error: function () {
+                                        error: function (RESP) {
                                             loadPopup.Hide();
                                             alert("Try again!");
                                         }
@@ -2659,7 +2659,7 @@ function addTocartDemandSwatch(s, e) {
 
                             }
                         },
-                        error: function () {
+                        error: function (RESP) {
                             loadPopup.Hide();
                             alert("Try again!");
                         }
@@ -4306,8 +4306,7 @@ function DeleteOrder(orderNo, empId, isEmergency, reason) {
                 url: "/Basket/IsReorderDel/",
                 data: { 'OrderNo': orderNo },
                 success: function (response) {
-                    if (response != "" && response != null)
-                    {
+                    if (response != "" && response != null) {
                         var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
                         loadPopup.Show();
                         $.ajax({
@@ -4342,14 +4341,13 @@ function DeleteOrder(orderNo, empId, isEmergency, reason) {
                             }
                         });
                     }
-                    else
-                    {
-                      alert("This Exchange order has a related Return order. You cannot delete this Exchange ,please delete the Related return order.") 
+                    else {
+                        alert("This Exchange order has a related Return order. You cannot delete this Exchange ,please delete the Related return order.")
                     }
 
                 }
             });
-          
+
         }
     }
 }
@@ -6048,15 +6046,17 @@ function EditEmployee(empId) {
 }
 
 function updateTextEdit(s, e) {
+    var cmbName = s.name.indexOf('_') > -1 ? s.name.split('_')[0] : "";
     var thisChk = ASPxClientControl.GetControlCollection().GetByName(s.name);
     var selectedItems = thisChk.GetSelectedItems();
     var split = s.name.split('_');
-    var thisCmb = ASPxClientControl.GetControlCollection().GetByName("checkComboEdit");
+    var thisCmb = ASPxClientControl.GetControlCollection().GetByName(cmbName);
     thisCmb.SetText(getSelectedItemsText(selectedItems));
 }
 
 function HideCmbEdit(s, e) {
-    var thisCmb = ASPxClientControl.GetControlCollection().GetByName("checkComboEdit");
+    var cmbName = s.name.indexOf('_') > -1 ? s.name.split('_')[0] : "";
+    var thisCmb = ASPxClientControl.GetControlCollection().GetByName(cmbName);
     // thisCmb.SetText(getSelectedItemsText(selectedItems));
     thisCmb.HideDropDown();
 }
@@ -7464,7 +7464,7 @@ function addToCartBulkOrder1(s, e) {
                     //alert("Try again!");
                 }
             },
-            failure: function (response) {
+            error: function (response) {
 
             }
         });
@@ -7619,7 +7619,7 @@ function addTocartTemplateBulkOrder1(s, e) {
                     //alert("Try again!");
                 }
             },
-            failure: function (response) {
+            error: function (response) {
 
             }
         });
@@ -7790,7 +7790,7 @@ function addToCartDemandBulkOrder1(s, e) {
                     //alert("Try again!");
                 }
             },
-            failure: function (response) {
+            error: function (response) {
 
             }
         });
@@ -7827,7 +7827,7 @@ function GetSelectedOrder() {
                 window.location = "/Employee/Index?BusinessID=" + resp;
             }
         },
-        failure: function (resp) {
+        error: function (resp) {
 
         }
     });
@@ -7855,7 +7855,7 @@ function SetValue111(ucode, type) {
                     window.location = resp;
                 }
             },
-            failure: function (resp) {
+            error: function (resp) {
 
             }
         });
@@ -7870,7 +7870,7 @@ function SetValue111(ucode, type) {
                     window.location = resp;
                 }
             },
-            failure: function (resp) {
+            error: function (resp) {
 
             }
         });
@@ -8261,6 +8261,8 @@ function ShowDetailOrder(s, e) {
     }
 }
 
+
+
 function checkEmpEmail() {
     $.ajax({
         type: "POST",
@@ -8417,8 +8419,7 @@ function SaveEmpGrid(chart) {
     else if (chart == "ShowRolloutReport") {
         window.open('/Report/exporter/', '_blank');
     }
-    else if(chart=="ShowPrivate")
-    {
+    else if (chart == "ShowPrivate") {
         window.open('/Private/exporter/', '_blank');
     }
 }
@@ -9220,7 +9221,7 @@ function GetAllReturnHeader(s, e) {
                 ststus = true;
             }
             if (ststus) {
-               
+
                 $.ajax({
                     type: "POST",
                     url: "/Return/AcceptReturn/",
@@ -9720,7 +9721,7 @@ function OrderEditRT(orderNo, empId) {
         type: "post",
         data: { 'orderNo': orderNo },
         success: function (response) {
-            if (response!="") {
+            if (response != "") {
                 $.ajax({
                     url: "/OrderDisplay/SetEmployee/",
                     type: "post",
@@ -9735,8 +9736,7 @@ function OrderEditRT(orderNo, empId) {
                     }
                 });
             }
-            else
-            {
+            else {
                 alert("You are not allowed to edit a Return order which does not have an Exchange order. Please delete the Return order and create a new Return order");
             }
         }
@@ -10191,28 +10191,78 @@ function GetOrdDetailsByStyle(style, empId) {
 function ExportCardgrid() {
     window.open('/Report/CardExporter/', '_blank');
 }
-
+ 
 function UploadComplete(s, e) {
-
+    alert("Please note: \n This may take a while to complete please be patient.");
+    var alrt = "";
+    var FailTabPop = ASPxClientControl.GetControlCollection().GetByName("FailList");
+    var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
+    var IsnewCtrl = ASPxClientControl.GetControlCollection().GetByName("radNEW");
+    var isNew = IsnewCtrl != null ? IsnewCtrl.GetValue() : false;
+    loadPopup.Show();
     $.ajax({
         url: "/ImportExport/StartImport/",
         type: "Post",
+        data: { 'isNew': isNew },
         success: function (response) {
             if (response != null) {
+              
+                if (response.failcount > 0 || response.faillisttbl == "" || response.passcount>0) {
+                    alrt = response.passcount>0? alrt +"Total successfully imported record(s) " + response.passcount+"\n":alrt;
+                    alrt = response.failcount > 0?alrt +"\n Total record(s) fail to import " + response.failcount + "\n\n Please click OK to see all the failed record(s)":alrt;
+                }
+                if (response.result) {
+                    if (alrt != "" && FailTabPop != null && response.failcount > 0 && response.faillisttbl != "") {
+                        if (confirm(alrt)) {
+                            var failtable = document.getElementById("FailLst");
+                            failtable.innerHTML = response.faillisttbl;
+                            loadPopup.Hide();
+                            MVCxClientUtils.FinalizeCallback();
+                            FailTabPop.Show();
+                        }
+                    }
+                    else
+                    {
+                        alert(alrt);
+                    }
+                    loadPopup.Hide();
+                }
+                else if (response.failcount > 0 || response.faillisttbl != "") {
+                    if (alrt != "") {
+                        if (confirm(alrt)) {
+                            var failtable = document.getElementById("FailLst");
+                            failtable.innerHTML = response.faillisttbl;
+                            loadPopup.Hide();
+                            MVCxClientUtils.FinalizeCallback();
+                            FailTabPop.Show();
+                        }
+                    }
+                    else if (response.alertstring!="")
+                    {
+                        alert(response.alertstring);
+                    }
+                }
+                else {
+                    window.location.reload();
+                }
+            }
+            else {
+                loadPopup.Hide();
                 window.location.reload();
             }
+            loadPopup.Hide();
+        },
+        error: function (reponse) {
+            alert("Something went wrong please try again later");
+            loadPopup.Hide();
         }
-
     });
 
 }
 
-function CreditReturnPoints(orderno)
-{
-    if(orderno!="" && orderno!=null)
-    {
-        if(parseInt(orderno)>0)
-        {
+function CreditReturnPoints(orderno) {
+    if (orderno != "" && orderno != null) {
+        if (parseInt(orderno) > 0) {
             if (confirm("Do want to credit points to this order?")) {
                 $.ajax({
                     url: "/Return/CreditreturnPoints/",
@@ -10231,4 +10281,327 @@ function CreditReturnPoints(orderno)
             }
         }
     }
+}
+
+function SetCtrlSession(s, e) {
+    var tab = s.GetActiveTab();
+    if (tab.name != "") {
+        $.ajax({
+            type: "POST",
+            url: "/ImportExport/SetCtrlSession/",
+            data: { 'tabName': tab.name }
+        });
+    }
+}
+
+
+function IMPEXPExport() {
+    window.open('/ImportExport/exporter/', '_blank');
+}
+
+
+function EditImpExpGridview(Type, key) {
+    var key;
+    if (Type.toLowerCase().indexOf('user') > -1) {
+        alert(key);
+    }
+    else if (Type.toLowerCase().indexOf('emp') > -1) {
+        alert(key);
+    }
+    else if (Type.toLowerCase().indexOf('addr') > -1) {
+        alert(key);
+    }
+}
+
+
+function CreateIMPEXPfn(Type, key) {
+    var popup = ASPxClientControl.GetControlCollection().GetByName("CreateIMPEXP");
+    var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
+    var data1;
+    var header = '';
+    if (Type != null && Type != "") {
+        if (Type.toLowerCase().indexOf('user') > -1) {
+            //(string userId="",string empId="")
+            data1 = { 'userId': key };
+            header =    key!=''?"Edit User":"Create User";
+        }
+        else if (Type.toLowerCase().indexOf('emp') > -1) {
+            data1 = { 'empId': key };
+            header = key != '' ? "Edit Employee" : "Create Employee";
+        }
+        else if (Type.toLowerCase().indexOf('addr') > -1) {
+            data1 = { 'addrId': key };
+            header = key != '' ? "Edit Address" : "Create Address";
+        }
+    }
+
+    loadPopup.Show();
+    if (popup != null) {
+        $.ajax({
+            url: "/ImportExport/CreateIMPEXP/",
+            type: "post",
+            data: data1,
+            success: function (succe) {
+                if (succe != "" && succe != null) {
+                    var doc = document.getElementById("CreateIMPEXPDiv");
+                    if (doc != null) {
+                        doc.innerHTML = succe;
+                        MVCxClientUtils.FinalizeCallback();
+                        loadPopup.Hide();
+                        popup.SetHeaderText(header);
+                        popup.Show();
+                        MVCxClientUtils.FinalizeCallback();
+                    }
+                    else {
+                        loadPopup.Hide();
+                    }
+                }
+            },
+            error: function (resp) {
+                loadPopup.Hide();
+            }
+        });
+    }
+}
+
+function IMPEXPcancel() {
+    var popup = ASPxClientControl.GetControlCollection().GetByName("CreateIMPEXP");
+    popup.Hide();
+}
+
+function IMPEXPSave(s, e) {
+    var popup = ASPxClientControl.GetControlCollection().GetByName("CreateIMPEXP");
+    var date = new Date().toISOString();
+    var usrGrid = ASPxClientControl.GetControlCollection().GetByName("UserGridView");
+    var EmployeeGrdiview = ASPxClientControl.GetControlCollection().GetByName("EmployeeGrdiview");
+    var AddressGrdiview = ASPxClientControl.GetControlCollection().GetByName("AddressGridView");
+    //usermoduloe
+    var usrNameCtrl = ASPxClientControl.GetControlCollection().GetByName("tbxUserName");
+    var forNameCtrl = ASPxClientControl.GetControlCollection().GetByName("tbxForeName");
+    var surNameCtrl = ASPxClientControl.GetControlCollection().GetByName("tbxSurName");
+    var emailCtrl = ASPxClientControl.GetControlCollection().GetByName("tbxEmail");
+    var roleCtrl = ASPxClientControl.GetControlCollection().GetByName("tbxAccessRole");
+    var maptoCtrl = ASPxClientControl.GetControlCollection().GetByName("checkComboEdit");
+    var rollOutCtrl = ASPxClientControl.GetControlCollection().GetByName("tbxRolloutName");
+    var ActiveCtrl = ASPxClientControl.GetControlCollection().GetByName("cbxActive");
+    //employeemodule
+    var empIdCtrl = ASPxClientControl.GetControlCollection().GetByName("tbxEmployeeId");
+    var titleCtrl = ASPxClientControl.GetControlCollection().GetByName("tbxTitle");
+    var forEmpNameCtrl = ASPxClientControl.GetControlCollection().GetByName("tbxFORENAME");
+    var surEmpNameCtrl = ASPxClientControl.GetControlCollection().GetByName("tbxSURNAME");
+    var empdeptCtrl = ASPxClientControl.GetControlCollection().GetByName("tbxDEPARTMENT");
+    var stDateCtrl = ASPxClientControl.GetControlCollection().GetByName("tbxSTARTDATE");
+    var endDateCtrl = ASPxClientControl.GetControlCollection().GetByName("tbxENDDATE");
+    var ucdCtrl = ASPxClientControl.GetControlCollection().GetByName("ucodeComboEdit");
+    var mapToEmpCtrl = ASPxClientControl.GetControlCollection().GetByName("maptoComboEdit");
+    var maptoAddrEmpCtrl = ASPxClientControl.GetControlCollection().GetByName("maptoAddrComboEditEmp1");
+    //userval
+    var Active = ActiveCtrl != null ? ActiveCtrl.GetValue() != null ? ActiveCtrl.GetValue() : false : false;
+    var usrName = usrNameCtrl != null ? usrNameCtrl.GetValue() != null ? usrNameCtrl.GetValue() : "" : "";
+    var forName = forNameCtrl != null ? forNameCtrl.GetValue() != null ? forNameCtrl.GetValue() : "" : "";
+    var surName = surNameCtrl != null ? surNameCtrl.GetValue() != null ? surNameCtrl.GetValue() : "" : "";
+    var email = emailCtrl != null ? emailCtrl.GetValue() != null ? emailCtrl.GetValue() : "" : "";
+    var role = roleCtrl != null ? roleCtrl.GetValue() != null ? roleCtrl.GetValue() : "" : "";
+    var mapto = maptoCtrl != null ? maptoCtrl.GetValue() != null ? maptoCtrl.GetValue() : "" : "";
+    var rollOut = rollOutCtrl != null ? rollOutCtrl.GetValue() != null ? rollOutCtrl.GetValue() : "" : "";
+    var maptoAddrEmp  = maptoAddrEmpCtrl != null ? maptoAddrEmpCtrl.GetValue() != null ? maptoAddrEmpCtrl.GetValue() : "" : "";
+    //empval
+    var empId = empIdCtrl != null ? empIdCtrl.GetValue() != null ? empIdCtrl.GetValue() : "" : "";
+    var title = titleCtrl != null ? titleCtrl.GetValue() != null ? titleCtrl.GetValue() : "" : "";
+    var forEmpName = forEmpNameCtrl != null ? forEmpNameCtrl.GetValue() != null ? forEmpNameCtrl.GetValue() : "" : "";
+    var surEmpName = surEmpNameCtrl != null ? surEmpNameCtrl.GetValue() != null ? surEmpNameCtrl.GetValue() : "" : "";
+    var empdept = empdeptCtrl != null ? empdeptCtrl.GetValue() != null ? empdeptCtrl.GetValue() : "" : "";
+    var stDate = stDateCtrl != null ? stDateCtrl.GetValue() != null ? stDateCtrl.GetValue() : "" : "";
+    var endDate = endDateCtrl != null ? endDateCtrl.GetValue() != null ? endDateCtrl.GetValue() : "" : "";
+    var ucd = ucdCtrl != null ? ucdCtrl.GetValue() != null ? ucdCtrl.GetValue() : "" : "";
+    var mapToEmp = mapToEmpCtrl != null ? mapToEmpCtrl.GetValue() != null ? mapToEmpCtrl.GetValue() : "" : "";
+    //addr
+    var addrIdCtrl = document.getElementById("addrId");
+    var descCtrl = ASPxClientControl.GetControlCollection().GetByName("tbxDESCRIPTION");
+    var add1Ctrl = ASPxClientControl.GetControlCollection().GetByName("tbxADDRESS1");
+    var add2Ctrl = ASPxClientControl.GetControlCollection().GetByName("tbxADDRESS2");
+    var add3Ctrl = ASPxClientControl.GetControlCollection().GetByName("tbxADDRESS3");
+    var townCtrl = ASPxClientControl.GetControlCollection().GetByName("tbxTOWN");
+    var cityCtyCtrl = ASPxClientControl.GetControlCollection().GetByName("tbxCITYCOUNTY");
+    var pstCCtrl = ASPxClientControl.GetControlCollection().GetByName("tbxPOSTCODE");
+    var cntNameCtrl = ASPxClientControl.GetControlCollection().GetByName("tbxCONTACTNAME");
+    var addrEmailCtrl = ASPxClientControl.GetControlCollection().GetByName("tbxEMAIL");
+    var CountryCtrl = ASPxClientControl.GetControlCollection().GetByName("tbxCountry");
+    var tbxPhoneCtrl = ASPxClientControl.GetControlCollection().GetByName("tbxPhone");
+    var tbxMaptoAddrCtrl = ASPxClientControl.GetControlCollection().GetByName("maptoComboEditAddr");
+    var costctrCtrl = ASPxClientControl.GetControlCollection().GetByName("tbxCC");
+    //addrval
+    var desc = descCtrl != null ? descCtrl.GetValue() != null ? descCtrl.GetValue() : "" : "";
+    var add1 = add1Ctrl != null ? add1Ctrl.GetValue() != null ? add1Ctrl.GetValue() : "" : "";
+    var add2 = add2Ctrl != null ? add2Ctrl.GetValue() != null ? add2Ctrl.GetValue() : "" : "";
+    var add3 = add3Ctrl != null ? add3Ctrl.GetValue() != null ? add3Ctrl.GetValue() : "" : "";
+    var town = townCtrl != null ? townCtrl.GetValue() != null ? townCtrl.GetValue() : "" : "";
+    var cityCty = cityCtyCtrl != null ? cityCtyCtrl.GetValue() != null ? cityCtyCtrl.GetValue() : "" : "";
+    var pstC = pstCCtrl != null ? pstCCtrl.GetValue() != null ? pstCCtrl.GetValue() : "" : "";
+    var cntName = cntNameCtrl != null ? cntNameCtrl.GetValue() != null ? cntNameCtrl.GetValue() : "" : "";
+    var addrEmail = addrEmailCtrl != null ? addrEmailCtrl.GetValue() != null ? addrEmailCtrl.GetValue() : "" : "";
+    var country = CountryCtrl != null ? CountryCtrl.GetValue() != null ? CountryCtrl.GetValue() : "" : "";
+    var tbxPhone = tbxPhoneCtrl != null ? tbxPhoneCtrl.GetValue() != null ? tbxPhoneCtrl.GetValue() : "" : "";
+    var addrId = addrIdCtrl != null ? addrIdCtrl.value : 0;
+    var tbxMaptoAddr = tbxMaptoAddrCtrl != null ? tbxMaptoAddrCtrl.GetValue() != null ? tbxMaptoAddrCtrl.GetValue() : "" : "";
+    var costctrVal = costctrCtrl != null ?  costctrCtrl.GetValue() != null ?costctrCtrl.GetValue() : "" : "";
+    if (s.name.toLowerCase().indexOf('user') > -1) {
+        if (usrName != "" && forName != "" && email != "" && role != "") {
+            var res1 = validateEmail(email);
+            var res2 = usrName.length <= 20;
+            if (res1 && res2) {
+                $.ajax({
+                    url: "/ImportExport/UserInser/",
+                    type: "Post",
+                    data: { 'username': usrName, 'surname': surName, 'forename': forName, 'email': email, 'role': role, 'mapto': mapto, 'rollOut': rollOut, 'active': Active },
+                    success: function (resp) {
+                        if (resp) {
+                            if (s.name.toLowerCase().indexOf('upd') > -1) { alert("User updated successfully") } else { alert("User created successfully") };
+                            popup.Hide();
+                            usrGrid.PerformCallback();
+                        } else {
+                            alert("Something went wrong please try again");
+                        }
+                    },
+                    error: function (resp) {
+                        popup.Hide();
+                    }
+                });
+            }
+            else {
+                if (!res1) {
+                    alert("Please enter a valid email");
+                }
+                else if (!res2) {
+                    alert("The username should not be more than 20 characters");
+                }
+            }
+        }
+    }
+    else if (s.name.toLowerCase().indexOf('emp') > -1) {
+        if (empId != "" && forEmpName != "") {
+            if (empId.length <= 10) {
+                $.ajax({
+                    url: "/ImportExport/EmployeeInsert/",
+                    type: "Post",
+                    data: { 'empId': empId, 'title': title, 'forEmpName': forEmpName, 'surEmpName': surEmpName, 'empdept': empdept, 'stDate': stDate == null || stDate == undefined ? stDate.date.toJSON() : date, 'endDate': endDate == null || endDate == undefined ? endDate.date.toJSON() : date, 'ucd': ucd, 'mapToEmp': mapToEmp ,'maptoAddrEmp':maptoAddrEmp},
+                    success: function (resp) {
+                        if (resp) {
+                            if (s.name.toLowerCase().indexOf('upd') > -1) { alert("Employee updated successfully") } else { alert("Employee created successfully") };
+                            popup.Hide();
+                            EmployeeGrdiview.PerformCallback();
+                        }
+                        else {
+                            alert("Something went wrong please try again");
+                        }
+                    },
+                    error: function (resp) {
+                        alert("Something went wrong please try again");
+                        popup.Hide();
+                    }
+                });
+            }
+            else {
+                alert("Employeeid should not be longer than 10 characters");
+            }
+        }
+    }
+    else if (s.name.toLowerCase().indexOf('addr') > -1) {
+        var res1 = tbxPhone != "" ? tbxPhone.indexOf(';') > -1 ? validateMultiple("ph", tbxPhone) : ValidatePhone(tbxPhone) : true;
+        var res2 = addrEmail1 = "" ? addrEmail1.indexOf(';') > -1 ? validateMultiple("", addrEmail1) : validateEmail(addrEmail1) : true;
+        if (res1 && res2) {
+            if (desc != "" && add1 != "" && pstC != "" && country != "")
+                $.ajax({
+                    url: "/ImportExport/AddressInser/",
+                    type: "Post",
+                    data: { 'desc': desc, 'add1': add1, 'add2': add2, 'add3': add3, 'town': town, 'cityCty': cityCty, 'pstC': pstC, 'addrEmail': addrEmail, 'cntName': cntName, 'country': country, 'tbxPhone': tbxPhone, 'addrId': addrId,'tbxMaptoAddr':tbxMaptoAddr ,'costctrVal':costctrVal },
+                    success: function (resp) {
+                        if (resp) {
+                            if (s.name.toLowerCase().indexOf('upd') > -1) { alert("Address updated successfully") } else { alert("Address created successfully") };
+                            popup.Hide();
+                            AddressGrdiview.PerformCallback();
+                        }
+                        else {
+                            alert("Something went wrong please try again");
+                        }
+                    },
+                    error: function (resp) {
+                        alert("Something went wrong please try again");
+                        popup.Hide();
+                    }
+                });
+
+        } else {
+            if (res1 == false) {
+                alert("please enter a valid phone number");
+            }
+            else if (res2 = false) {
+                alert("please enter a valid email");
+            }
+        }
+    }
+   
+}
+
+function validateMultiple(data, type) {
+    var result = false;
+    var data1 = data.split(';');
+    for (var k = 0; k < data1.length; k++) {
+        if (type == "ph") {
+            result = ValidatePhone(data[i]);
+        }
+        else {
+            result = validateEmail(data[i]);
+        }
+
+    }
+    return result;
+}
+function Remove(s, e) {
+    if (s.name.indexOf('user') >= -1) {
+        var userGrid = ASPxClientControl.GetControlCollection().GetByName("UserGridView");
+        userGrid.GetSelectedFieldValues('UserName;ForeName;', GetSelectedImpExp);
+    }
+    else if (s.name.indexOf('emp') >= -1) {
+        var empGrid = ASPxClientControl.GetControlCollection().GetByName("EmployeeGrdiview");
+        empGrid.GetSelectedFieldValues('EMPLOYEEID;FORENAME', GetSelectedImpExp);
+    }
+    else if (s.name.indexOf('addr') >= -1) {
+        var addrid = ASPxClientControl.GetControlCollection().GetByName("AddressGridView");
+        empGrid.GetSelectedFieldValues('DESCRIPTION;POSTCODE', GetSelectedImpExp);
+    }
+}
+function GetSelectedImpExp(selectedValues) {
+    var user = [];
+    var loadPopup = ASPxClientControl.GetControlCollection().GetByName("ForgotPassLoadingPanel1");
+    loadPopup.Show();
+    if (selectedValues != null && selectedValues != "") {
+        for (var i = 0; i < selectedValues.length; i++) {
+            var obj = { 'USERNAME': selectedValues[i][0], 'FORENAME': selectedValues[i][1] };
+            user.push(obj);
+        }
+        $.ajax({
+            type: "post",
+            url: "/ImportExport/RemoveSelected/",
+            data: { 'selectedValues': user },
+            success: function (resposne) {
+                if (resposne) {
+                    alert("The selected records removed successfully");
+                    window.location.reload();
+                }
+                else {
+                    alert("Something went wrong please try again");
+                }
+            },
+            error:function(resposne)
+            {
+
+                alert("Something went wrong please try again");
+            }
+        });
+    }
+}
+function refersh()
+{
+    window.location.reload();
 }

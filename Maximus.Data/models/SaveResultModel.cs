@@ -10,5 +10,6 @@ namespace Maximus.Data.models
     {
         public bool result { get; set; }
         public string  errorstring { get; set; }
+        public  long  addrId { get; set; }
     }
 }

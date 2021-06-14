@@ -8,38 +8,66 @@
         settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "ImportExport", Action = "AddressGridViewPartialDelete" };
         settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
         settings.SettingsBehavior.ConfirmDelete = true;
-
+        settings.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
         settings.CommandColumn.Visible = true;
-        settings.CommandColumn.ShowNewButton = true;
-        settings.CommandColumn.ShowDeleteButton = true;
-        settings.CommandColumn.ShowEditButton = true;
+        settings.CommandColumn.ShowNewButton = false;
+        settings.CommandColumn.ShowDeleteButton = false;
+        settings.CommandColumn.ShowEditButton = false;
+        settings.CommandColumn.ShowSelectCheckbox = true;
+        settings.CommandColumn.SelectAllCheckboxMode = GridViewSelectAllCheckBoxMode.AllPages;
+        settings.SettingsCommandButton.EditButton.Image.IconID = IconID.EditEdit16x16;
+        settings.SettingsCommandButton.EditButton.RenderMode = GridCommandButtonRenderMode.Image;
+        settings.SettingsCommandButton.NewButton.Image.IconID = IconID.ActionsNew16x16;
+        settings.SettingsCommandButton.NewButton.RenderMode = GridCommandButtonRenderMode.Image;
 
-        settings.KeyFieldName = "Description";
+        settings.SettingsCommandButton.DeleteButton.Image.IconID = IconID.EditDelete16x16;
+        settings.SettingsCommandButton.DeleteButton.RenderMode = GridCommandButtonRenderMode.Image;
+
+        settings.SettingsCommandButton.CancelButton.Image.IconID = IconID.ActionsCancel16x16;
+        settings.SettingsCommandButton.CancelButton.RenderMode = GridCommandButtonRenderMode.Image;
+
+        settings.SettingsCommandButton.UpdateButton.Image.IconID = IconID.OtherUpdatetable16x16gray;
+        settings.SettingsCommandButton.UpdateButton.RenderMode = GridCommandButtonRenderMode.Image;
+        settings.KeyFieldName = "ADDRESSID";
 
         settings.SettingsPager.Visible = true;
         settings.Settings.ShowGroupPanel = false;
         settings.Settings.ShowFilterRow = true;
-        settings.SettingsBehavior.AllowSelectByRowClick = true;
+        settings.SettingsBehavior.AllowSelectByRowClick = false;
 
         settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.Off;
         settings.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Right;
         settings.SettingsAdaptivity.AdaptiveDetailColumnCount = 1;
         settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = false;
         settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
-
-        settings.Columns.Add("Description");
-        settings.Columns.Add("Address1");
-        settings.Columns.Add("Address2");
-        settings.Columns.Add("Address3");
-        settings.Columns.Add("Town");
-        settings.Columns.Add("CityCounty");
-        settings.Columns.Add("Country");
-        settings.Columns.Add("PostCode");
-        settings.Columns.Add("ContactName");
-        settings.Columns.Add("Telephone");
-        settings.Columns.Add("Email");
-        settings.Columns.Add("CostCenter");
-        settings.Columns.Add("MapTo");
+        settings.Columns.Add(s =>
+        {
+            s.SetDataItemTemplateContent(btn =>
+            {
+                var ADDRESSID = (DataBinder.Eval(btn.DataItem, "ADDRESSID")).ToString();
+                string crtBtn = string.Format("<center><span style=\"cursor:pointer;color:darkcyan\" title=\"Edit\" class=\"glyphicon glyphicon-edit\" onclick=\"CreateIMPEXPfn('addr','{0}')\"></span></center>", ADDRESSID);
+                ViewContext.Writer.Write(crtBtn);
+            });
+            s.SetHeaderTemplateContent(btn =>
+            {
+                string crtBtn = string.Format("<center><span style=\"cursor:pointer;color:darkcyan\" title=\"Create\" class=\"glyphicon glyphicon-plus\" onclick=\"CreateIMPEXPfn('addr','')\"></span></center>");
+                ViewContext.Writer.Write(crtBtn);
+            });
+        });
+        // settings.Columns.Add("DESCRIPTION");
+        settings.Columns.Add("DESCRIPTION").Caption="Description";
+        settings.Columns.Add("ADDRESS1").Caption = "Address1";
+        settings.Columns.Add("ADDRESS2").Caption = "Address2";
+        settings.Columns.Add("ADDRESS3").Caption = "Address3";
+        settings.Columns.Add("TOWN").Caption = "Town";
+        settings.Columns.Add("CITYCOUNTY").Caption = "City/County";
+        settings.Columns.Add("COUNTRY").Caption = "Country";
+        settings.Columns.Add("POSTCODE").Caption = "Postcode";
+        settings.Columns.Add("CONTACTNAME").Caption = "Contactname";
+        settings.Columns.Add("TELEPHONE").Caption = "Telephone";
+        settings.Columns.Add("EMAIL").Caption = "Email";
+        settings.Columns.Add("COSTCENTER").Caption = "Cost center";
+        settings.Columns.Add("MAPTO").Caption = "Map to";
     });
     if (ViewData["EditError"] != null){
         grid.SetEditErrorText((string)ViewData["EditError"]);

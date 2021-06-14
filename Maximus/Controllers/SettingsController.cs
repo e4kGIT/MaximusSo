@@ -9,7 +9,7 @@ using System.Web;
 using System.Web.Mvc;
 namespace Maximus.Controllers
 {
-
+    [Authorize]
     public class SettingsController : Controller
     {
        

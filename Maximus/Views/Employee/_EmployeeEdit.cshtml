@@ -297,7 +297,7 @@
                                        Html.DevExpress().ListBox(listBoxSettings =>
                                        {
 
-                                           listBoxSettings.Name = "checkListBoxEmpEdit_";
+                                           listBoxSettings.Name = "checkComboEdit_"+1;
                                            listBoxSettings.ControlStyle.Border.BorderWidth = 0;
                                            listBoxSettings.ControlStyle.BorderBottom.BorderWidth = 1;
                                            listBoxSettings.ControlStyle.BorderBottom.BorderColor = System.Drawing.Color.FromArgb(0xDCDCDC);
@@ -331,7 +331,7 @@
 
                                        Html.DevExpress().Button(buttonSettings =>
                                        {
-                                           buttonSettings.Name = "buttonClose_";
+                                           buttonSettings.Name = "checkComboEdit_2";
                                            buttonSettings.Text = "Close";
                                            buttonSettings.Style.Add("float", "right");
                                            buttonSettings.ClientSideEvents.Click = "HideCmbEdit";

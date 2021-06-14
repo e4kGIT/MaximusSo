@@ -14,6 +14,7 @@ namespace Maximus.Data.models
         public string Email { get; set; }
         public string AccessRole { get; set; }
         public bool Active { get; set; }
+        public string Active1 { get; set; }
         public string MapTo { get; set; }
         public string RolloutName { get; set; }
        

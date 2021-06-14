@@ -1,44 +1,79 @@
 @{
-	var grid = Html.DevExpress().GridView(settings => {
+    var grid = Html.DevExpress().GridView(settings => {
         settings.Name = "EmployeeGrdiview";
         settings.CallbackRouteValues = new { Controller = "ImportExport", Action = "EmployeeGrdiviewPartial" };
 
-				settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "ImportExport", Action = "EmployeeGrdiviewPartialAddNew" };
+        settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "ImportExport", Action = "EmployeeGrdiviewPartialAddNew" };
         settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "ImportExport", Action = "EmployeeGrdiviewPartialUpdate" };
         settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "ImportExport", Action = "EmployeeGrdiviewPartialDelete" };
         settings.SettingsEditing.Mode = GridViewEditingMode.Inline;
         settings.SettingsBehavior.ConfirmDelete = true;
 
-		settings.CommandColumn.Visible = true;
-        settings.CommandColumn.ShowNewButton = true;
-        settings.CommandColumn.ShowDeleteButton = true;
-        settings.CommandColumn.ShowEditButton = true;
+        settings.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.ShowNewButton = false;
+        settings.CommandColumn.ShowDeleteButton = false;
+        settings.CommandColumn.ShowEditButton = false;
+        settings.CommandColumn.ShowSelectCheckbox = true;
+        settings.CommandColumn.SelectAllCheckboxMode = GridViewSelectAllCheckBoxMode.AllPages;
+        settings.SettingsCommandButton.EditButton.Image.IconID = IconID.EditEdit16x16;
+        settings.SettingsCommandButton.EditButton.RenderMode = GridCommandButtonRenderMode.Image;
+        settings.SettingsCommandButton.NewButton.Image.IconID = IconID.ActionsNew16x16;
+        settings.SettingsCommandButton.NewButton.RenderMode = GridCommandButtonRenderMode.Image;
 
-		settings.KeyFieldName = "EmployeeId";
 
-		settings.SettingsPager.Visible = true;
-		settings.Settings.ShowGroupPanel = false;
-		settings.Settings.ShowFilterRow = true;
-		settings.SettingsBehavior.AllowSelectByRowClick = true;
+        settings.SettingsCommandButton.DeleteButton.Image.IconID = IconID.EditDelete16x16;
+        settings.SettingsCommandButton.DeleteButton.RenderMode = GridCommandButtonRenderMode.Image;
 
-		settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.Off;
-		settings.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Right;
-		settings.SettingsAdaptivity.AdaptiveDetailColumnCount = 1;
-		settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = false;
-		settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
+        settings.SettingsCommandButton.CancelButton.Image.IconID = IconID.ActionsCancel16x16;
+        settings.SettingsCommandButton.CancelButton.RenderMode = GridCommandButtonRenderMode.Image;
 
-				settings.Columns.Add("EmployeeId");
-				settings.Columns.Add("Title");
-				settings.Columns.Add("Forename");
-				settings.Columns.Add("SurName");
-				settings.Columns.Add("Department");
-				settings.Columns.Add("StartDate");
-				settings.Columns.Add("EndDate");
-				settings.Columns.Add("Ucode");
-				settings.Columns.Add("MapTo");
-			});
-		if (ViewData["EditError"] != null){
+        settings.SettingsCommandButton.UpdateButton.Image.IconID = IconID.OtherUpdatetable16x16gray;
+        settings.SettingsCommandButton.UpdateButton.RenderMode = GridCommandButtonRenderMode.Image;
+        settings.KeyFieldName = "EMPLOYEEID";
+
+
+        settings.SettingsPager.Visible = true;
+        settings.Settings.ShowGroupPanel = false;
+        settings.Settings.ShowFilterRow = true;
+        settings.SettingsBehavior.AllowSelectByRowClick = false;
+
+        settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.Off;
+        settings.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Right;
+        settings.SettingsAdaptivity.AdaptiveDetailColumnCount = 1;
+        settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = false;
+        settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
+        settings.Columns.Add(s =>
+        {
+            s.SetDataItemTemplateContent(btn =>
+            {
+                var empid = (DataBinder.Eval(btn.DataItem, "EMPLOYEEID")).ToString();
+                string crtBtn = string.Format("<center><span style=\"cursor:pointer;color:darkcyan\" title=\"Edit\" class=\"glyphicon glyphicon-edit\" onclick=\"CreateIMPEXPfn('emp','{0}')\"></span></center>", empid);
+                ViewContext.Writer.Write(crtBtn);
+            });
+            s.SetHeaderTemplateContent(btn =>
+            {
+                string crtBtn = string.Format("<center><span style=\"cursor:pointer;color:darkcyan\" title=\"Create\" class=\"glyphicon glyphicon-plus\" onclick=\"CreateIMPEXPfn('emp','')\"></span></center>");
+                ViewContext.Writer.Write(crtBtn);
+            });
+        });
+        settings.Columns.Add("EMPLOYEEID").Caption="Employeeid";
+        settings.Columns.Add("TITLE").Caption = "Title";
+        settings.Columns.Add("FORENAME").Caption = "Forename"; ;
+        settings.Columns.Add("SURNAME").Caption = "Surname"; ;
+        settings.Columns.Add("DEPARTMENT").Caption = "Department"; ;
+        settings.Columns.Add("STARTDATE").Caption = "Startdate"; ;
+        settings.Columns.Add("ENDDATE").Caption = "Enddate"; ;
+        settings.Columns.Add("UCODE").Caption = "Ucodes"; ;
+        settings.Columns.Add("MAPTO").Caption = "Map to";  
+        settings.Columns.Add("MAPTOADDR").Caption = "Map to address";  
+    });
+    if (ViewData["EditError"] != null){
         grid.SetEditErrorText((string)ViewData["EditError"]);
     }
 }
 @grid.Bind(Model).GetHtml()
+
+
+@*WHS R BIRKENHEAD*@
+ 

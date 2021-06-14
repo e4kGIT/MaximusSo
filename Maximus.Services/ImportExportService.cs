@@ -9,6 +9,7 @@ using Maximus.Data.models.RepositoryModels;
 using Maximus.Data.InterFace;
 using Maximus.Data.Interface.Concrete;
 using Maximus.Data.Models;
+using MySql.Data.MySqlClient;
 
 namespace Maximus.Services
 {
@@ -61,9 +62,111 @@ namespace Maximus.Services
         {
             List<EmployeeImportModel> empLst = new List<EmployeeImportModel>();
 
-           // empLst = _dp.getem(busid);
+            empLst = _dp.GetEmployeeLst(busid);
 
             return empLst;
         }
+
+        //public bool SaveImportedUser(UserImportModel usr, string cnStr)
+        //{
+        //    var result = false;
+        //    MySqlConnection conn = new MySqlConnection(cnStr);
+        //    MySqlTransaction trans;
+        //    conn.Open();
+        //    trans = conn.BeginTransaction();
+        //    try
+        //    {
+        //        if(_dp.SaveImportedUser(usr))
+        //        {
+
+        //        }
+        //    }
+        //    catch(Exception e)
+        //    {
+        //        trans.Rollback();
+        //    }
+        //    finally
+        //    {
+        //        if(result)
+        //        {
+        //            trans.Commit();
+
+        //        }
+        //        else
+        //        {
+        //            trans.Rollback();
+        //        }
+        //        conn.Close();
+        //    }
+        //    return result;
+        //}
+
+        //public bool SaveImportedEmployee(EmployeeImportModel emp, bool UsrCreate, string rndpwd, string cnStr)
+        //{
+        //    var result = false;
+        //    MySqlConnection conn = new MySqlConnection(cnStr);
+        //    MySqlTransaction trans;
+        //    conn.Open();
+        //    trans = conn.BeginTransaction();
+        //    try
+        //    {
+        //        if (_dp.SaveImportedEmployee(emp,UsrCreate,rndpwd))
+        //        {
+
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        trans.Rollback();
+        //    }
+        //    finally
+        //    {
+        //        if (result)
+        //        {
+        //            trans.Commit();
+
+        //        }
+        //        else
+        //        {
+        //            trans.Rollback();
+        //        }
+        //        conn.Close();
+        //    }
+        //    return result;
+        //}
+
+        //public bool SaveImportedAddress(AddressImportModel address, string cnStr)
+        //{
+        //    var result = false;
+        //    MySqlConnection conn = new MySqlConnection(cnStr);
+        //    MySqlTransaction trans;
+        //    conn.Open();
+        //    trans = conn.BeginTransaction();
+        //    try
+        //    {
+        //        if (_dp.SaveImportedAddress(address))
+        //        {
+
+        //        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        trans.Rollback();
+        //    }
+        //    finally
+        //    {
+        //        if (result)
+        //        {
+        //            trans.Commit();
+
+        //        }
+        //        else
+        //        {
+        //            trans.Rollback();
+        //        }
+        //        conn.Close();
+        //    }
+        //    return result;
+        //}
     }
 }

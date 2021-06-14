@@ -12,5 +12,6 @@ namespace Maximus.Services.Interface
         List<ImpExpUsers> GetAllUsers(string busId);
         List<AddressImportModel> GetAllAddress(string busid);
         List<EmployeeImportModel> GetAllEmployee(string busid);
+        
     }
 }

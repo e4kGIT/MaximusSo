@@ -371,13 +371,13 @@ namespace Maximus.Controllers
                 var IsHiddenUcode = _ucodeOperationsTbl.Exists(s => s.UcodeId == ucode && s.FreeStkChk && s.IsEmergency) ? _ucodeOperationsTbl.GetAll(s => s.UcodeId == ucode && s.FreeStkChk && s.IsEmergency).First().HasAltStyles : false;
                 if (IsHiddenUcode && Convert.ToBoolean(Session["IsEmergency"]) && Convert.ToBoolean(Session["REQSTKLEVEL"]))
                 {
-                    lst1= _ucodeByFreeText.GetAll(x => x.UCodeID == salesHead.UCodeId && x.IsHidden==0).Select(x => new UcodeModel { StyleId = x.StyleID, FreeText = x.FreeText }).ToList();
+                    lst1 = _ucodeByFreeText.GetAll(x => x.UCodeID == salesHead.UCodeId && x.IsHidden == 0).Select(x => new UcodeModel { StyleId = x.StyleID, FreeText = x.FreeText }).ToList();
                 }
                 else
                 {
-                    lst1= _ucodeByFreeText.GetAll(x => x.UCodeID == salesHead.UCodeId).Select(x => new UcodeModel { StyleId = x.StyleID, FreeText = x.FreeText }).ToList();
+                    lst1 = _ucodeByFreeText.GetAll(x => x.UCodeID == salesHead.UCodeId).Select(x => new UcodeModel { StyleId = x.StyleID, FreeText = x.FreeText }).ToList();
                 }
-               
+
                 Session["UcodeDesc"] = ucodeHtml.ToString();
                 Session["Pointsmodel"] = _home.GetPointsModel(ucode, busId);
                 Session["SelectedEmp"] = salesHead.EmployeeID;
@@ -466,7 +466,7 @@ namespace Maximus.Controllers
             }
             catch (Exception e)
             {
-                logger .Warn(e.Message);logger.Warn(e.StackTrace);; logger.Warn(e.StackTrace);
+                logger.Warn(e.Message); logger.Warn(e.StackTrace); ; logger.Warn(e.StackTrace);
                 return null;
             }
 
@@ -724,7 +724,7 @@ namespace Maximus.Controllers
                 }
                 catch (Exception e)
                 {
-                    logger .Warn(e.Message);logger.Warn(e.StackTrace); logger.Warn("inner exception:"+e.InnerException);  
+                    logger.Warn(e.Message); logger.Warn(e.StackTrace); logger.Warn("inner exception:" + e.InnerException);
                 }
             }
             return PartialView("_CardViewPartial", model.Distinct());
@@ -744,7 +744,7 @@ namespace Maximus.Controllers
             }
             catch (Exception e)
             {
-                logger .Warn(e.Message);logger.Warn(e.StackTrace);;
+                logger.Warn(e.Message); logger.Warn(e.StackTrace); ;
             }
             return null;
         }
@@ -819,7 +819,7 @@ namespace Maximus.Controllers
                     }
                     catch (Exception e)
                     {
-                        logger .Warn(e.Message);logger.Warn(e.StackTrace);;
+                        logger.Warn(e.Message); logger.Warn(e.StackTrace); ;
                     }
                     result.PriceList = priceLst;
                 }
@@ -989,7 +989,7 @@ namespace Maximus.Controllers
                 }
                 catch (Exception e)
                 {
-                    logger .Warn(e.Message);logger.Warn(e.StackTrace);;
+                    logger.Warn(e.Message); logger.Warn(e.StackTrace); ;
                 }
                 foreach (var data1 in result)
                 {
@@ -1041,9 +1041,9 @@ namespace Maximus.Controllers
                     data1.HasPreviousSize = new PreviousQty();
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                logger .Warn(e.Message);logger.Warn(e.StackTrace);;
+                logger.Warn(e.Message); logger.Warn(e.StackTrace); ;
             }
             return PartialView("_StyleByCardPop", model);
 
@@ -1064,7 +1064,7 @@ namespace Maximus.Controllers
         #endregion
 
         #region  getCard
-        public ActionResult GetCard(string StyleID, string Orgstyle, string caption = "",string Privatesize="",string PrivateColour="",int PrivateOrdQty=1)
+        public ActionResult GetCard(string StyleID, string Orgstyle, string caption = "", string Privatesize = "", string PrivateColour = "", int PrivateOrdQty = 1)
         {
             //StyleID = "TSB LJ1/L";
             Session["CatagoryCaption"] = caption;
@@ -1244,7 +1244,7 @@ namespace Maximus.Controllers
                     }
                 }
             }
-            else if(Session["isrtntype"].ToString()=="PRIVATE")
+            else if (Session["isrtntype"].ToString() == "PRIVATE")
             {
                 try
                 {
@@ -1259,7 +1259,7 @@ namespace Maximus.Controllers
                             Assembly = _customAssembly.Exists(d => d.ParentStyleID == x.StyleID) ? _customAssembly.Exists(d => d.ParentStyleID == x.StyleID && d.isChargeable == false) ? 1 : 0 : 0,
                             OriginalStyleid = x.StyleID,
                         }).FirstOrDefault();
-                       
+
                     }
                     model.Add(svm);
                     foreach (var data1 in model)
@@ -1275,7 +1275,7 @@ namespace Maximus.Controllers
                 {
                     logger.Warn(e.Message); logger.Warn(e.StackTrace); ;
                 }
-               
+
             }
             return PartialView("_StyleByCardPop", model);
         }
@@ -1419,7 +1419,7 @@ namespace Maximus.Controllers
                 }
                 catch (Exception e)
                 {
-                    logger .Warn(e.Message);logger.Warn(e.StackTrace);;
+                    logger.Warn(e.Message); logger.Warn(e.StackTrace); ;
                 }
             }
             if (salesOrderLines.Count > 0)
@@ -1429,9 +1429,10 @@ namespace Maximus.Controllers
                     try
                     {
                         lineNo = salesOrderLines.Where(x => x.EmployeeId == Session["SelectedEmp"].ToString()).OrderByDescending(x => x.LineNo).FirstOrDefault().LineNo + 1;
-                    }catch(Exception E)
+                    }
+                    catch (Exception E)
                     {
-                        logger .Warn(E.Message);logger.Warn(E.StackTrace);;
+                        logger.Warn(E.Message); logger.Warn(E.StackTrace); ;
                     }
                 }
                 else if ((bool)Session["IsBulkOrder1"] == true)
@@ -1555,7 +1556,7 @@ namespace Maximus.Controllers
                         }
                         catch (Exception e)
                         {
-                            logger .Warn(e.Message);logger.Warn(e.StackTrace);;
+                            logger.Warn(e.Message); logger.Warn(e.StackTrace); ;
                             var EmployeeId = Session["SelectedEmp"].ToString();
                             var EmployeeName = Session["EmpName"].ToString();
                         }
@@ -1659,7 +1660,7 @@ namespace Maximus.Controllers
                         }
                         catch (Exception e)
                         {
-                            logger .Warn(e.Message);logger.Warn(e.StackTrace);;
+                            logger.Warn(e.Message); logger.Warn(e.StackTrace); ;
                         }
                     }
                     Session["SalesOrderHeader"] = salesOrderHeader;
@@ -1715,7 +1716,7 @@ namespace Maximus.Controllers
                     }
                     catch (Exception e)
                     {
-                        logger .Warn(e.Message);logger.Warn(e.StackTrace);;
+                        logger.Warn(e.Message); logger.Warn(e.StackTrace); ;
                     }
                 }
                 if (salesOrderLines.Count > 0)
@@ -1736,7 +1737,7 @@ namespace Maximus.Controllers
                     }
                     catch (Exception e)
                     {
-                        logger .Warn(e.Message);logger.Warn(e.StackTrace);;
+                        logger.Warn(e.Message); logger.Warn(e.StackTrace); ;
                         var EmployeeId = Session["SelectedEmp"].ToString();
                         var EmployeeName = Session["EmpName"].ToString();
                     }
@@ -1865,7 +1866,7 @@ namespace Maximus.Controllers
         #endregion
 
         #region GetFreeStockValue
-        public int GetFreeStockValue(string StyleId, string ColorId, string size,bool isAlternateStyle=false)
+        public int GetFreeStockValue(string StyleId, string ColorId, string size, bool isAlternateStyle = false)
         {
             int value = 0;
             var emp = System.Web.HttpContext.Current.Session["SelectedEmp"].ToString();
@@ -1878,7 +1879,7 @@ namespace Maximus.Controllers
                 cartValue = salesOrderLines.Any(s => s.StyleID == StyleId && s.ColourID == ColorId && s.SizeID == size && s.IsDleted == false) ? salesOrderLines.Where(s => s.StyleID == StyleId && s.ColourID == ColorId && s.SizeID == size && s.IsDleted == false).Sum(s => s.OrdQty) : 0;
             }
             int freestock = _dp.GetFreeStock(StyleId, ColorId, size, System.Web.HttpContext.Current.Session["WareHouseID"].ToString(), salesOrderLines, Convert.ToBoolean(System.Web.HttpContext.Current.Session["ISEDITING"]), false);
-            value = isAlternateStyle==false? freestock - Convert.ToInt32(cartValue):freestock;
+            value = isAlternateStyle == false ? freestock - Convert.ToInt32(cartValue) : freestock;
             value = value > 0 ? value : 0;
             return value;
         }
@@ -1975,9 +1976,9 @@ namespace Maximus.Controllers
                         /////Added (26-04-21) to control reorder based on qty
                         var model1 = ((List<ReturnOrderModel>)Session["rtnLines"]);
                         var selected = Session["selectedRetLine"] != null ? (ReturnOrderModel)Session["selectedRetLine"] : new ReturnOrderModel();
-                        var reOrdQty = Convert.ToBoolean(Session["ISRTNEDITING"]) ? model1.Where(s => s.IsReorder && s.ReturnLineNo == selected.ReturnLineNo && s.StyleId == StyleId && s.ColourId == ColorId   && s.IsDleted == 0).Sum(s => s.OrdQty) : model1.Where(s => s.IsReorder && s.LineNo == selected.LineNo && s.ReturnLineNo == selected.ReturnLineNo && s.StyleId == StyleId && s.ColourId == ColorId  && s.IsDleted == 0).Sum(s => s.OrdQty);
+                        var reOrdQty = Convert.ToBoolean(Session["ISRTNEDITING"]) ? model1.Where(s => s.IsReorder && s.ReturnLineNo == selected.ReturnLineNo && s.StyleId == StyleId && s.ColourId == ColorId && s.IsDleted == 0).Sum(s => s.OrdQty) : model1.Where(s => s.IsReorder && s.LineNo == selected.LineNo && s.ReturnLineNo == selected.ReturnLineNo && s.StyleId == StyleId && s.ColourId == ColorId && s.IsDleted == 0).Sum(s => s.OrdQty);
                         //////
-                         
+
                         /////commented (26-04-21)
                         //result = "<table class=\"table\"><tr><td>Total points: " + totalPts + "</td></tr><tr><td>Used points: " + cardPts + "</td></tr><tr><td>Return points: " + rtnPts + "</td></tr><tr><td>Reordered points: " + reOrdPts + "</td></tr><tr><td>Available points: " + availPts + "</td></tr></table>";
 
@@ -2068,13 +2069,13 @@ namespace Maximus.Controllers
                     return Json(em);
                 }
             }
-            else if(Session["isrtntype"].ToString() == "PRIVATE")
+            else if (Session["isrtntype"].ToString() == "PRIVATE")
             {
                 var model1 = ((List<ReturnOrderModel>)Session["rtnLines"]);
                 var selected = Session["selectedRetLine"] != null ? (ReturnOrderModel)Session["selectedRetLine"] : new ReturnOrderModel();
-                var reOrdQty = Convert.ToBoolean(Session["ISRTNEDITING"]) ? model1.Where(s => s.IsReorder && s.ReturnLineNo == selected.ReturnLineNo && s.StyleId == StyleId && s.ColourId == ColorId   && s.IsDleted == 0).Sum(s => s.OrdQty) : model1.Where(s => s.IsReorder && s.LineNo == selected.LineNo && s.ReturnLineNo == selected.ReturnLineNo && s.StyleId == StyleId && s.ColourId == ColorId   && s.IsDleted == 0).Sum(s => s.OrdQty);
+                var reOrdQty = Convert.ToBoolean(Session["ISRTNEDITING"]) ? model1.Where(s => s.IsReorder && s.ReturnLineNo == selected.ReturnLineNo && s.StyleId == StyleId && s.ColourId == ColorId && s.IsDleted == 0).Sum(s => s.OrdQty) : model1.Where(s => s.IsReorder && s.LineNo == selected.LineNo && s.ReturnLineNo == selected.ReturnLineNo && s.StyleId == StyleId && s.ColourId == ColorId && s.IsDleted == 0).Sum(s => s.OrdQty);
                 em.isPrivate = true;
-                em.Result = Convert.ToBoolean(Session["ISRTNEDITING"]) ? selected.LineNo > 0 ? "<table class=\"table\"><tr><td>Return qty: " + selected.OrdQty + "</td></tr><tr><td>Cart qty: " + reOrdQty + "</td></tr></table>" : "" :   selected.LineNo>0? "<table class=\"table\"><tr><td>Return qty: " + selected.RtnQty + "</td></tr><tr><td>Cart qty: " + reOrdQty + "</td></tr></table>" : "" ;
+                em.Result = Convert.ToBoolean(Session["ISRTNEDITING"]) ? selected.LineNo > 0 ? "<table class=\"table\"><tr><td>Return qty: " + selected.OrdQty + "</td></tr><tr><td>Cart qty: " + reOrdQty + "</td></tr></table>" : "" : selected.LineNo > 0 ? "<table class=\"table\"><tr><td>Return qty: " + selected.RtnQty + "</td></tr><tr><td>Cart qty: " + reOrdQty + "</td></tr></table>" : "";
                 return Json(em);
             }
             else if (Convert.ToBoolean(Session["IsEmergency"]) && Convert.ToBoolean(Session["REQSTKLEVEL"]))
@@ -2239,7 +2240,7 @@ namespace Maximus.Controllers
                             }
                             catch (Exception e)
                             {
-                                logger .Warn(e.Message);logger.Warn(e.StackTrace);;
+                                logger.Warn(e.Message); logger.Warn(e.StackTrace); ;
                             }
 
                         }
@@ -2734,7 +2735,7 @@ namespace Maximus.Controllers
                 }
                 catch (Exception e)
                 {
-                    logger .Warn(e.Message);logger.Warn(e.StackTrace);;
+                    logger.Warn(e.Message); logger.Warn(e.StackTrace); ;
 
                 }
             }
@@ -2769,7 +2770,7 @@ namespace Maximus.Controllers
                 }
                 catch (Exception e)
                 {
-                    logger .Warn(e.Message);logger.Warn(e.StackTrace);;
+                    logger.Warn(e.Message); logger.Warn(e.StackTrace); ;
                 }
             }
             return result;
@@ -2857,7 +2858,7 @@ namespace Maximus.Controllers
                         string retunCnt = "";
                         var thisHeader1 = salesHeader.Where(x => x.EmployeeID == empId && x.UCodeId == ucode).First();
                         var model = thisHeader1.SalesOrderLine;
-                         
+
                         var newResult = model.GroupBy(s => new { s.StyleID, s.ColourID, s.SizeID, s.IsDleted, s.IsAlternateStyle }).
                             Select(sa => new SalesOrderLineViewModel
                             {
@@ -3085,7 +3086,7 @@ namespace Maximus.Controllers
                                         }
                                         catch (Exception e)
                                         {
-                                            logger .Warn(e.Message);logger.Warn(e.StackTrace);;
+                                            logger.Warn(e.Message); logger.Warn(e.StackTrace); ;
                                         }
 
                                     }
@@ -3112,9 +3113,24 @@ namespace Maximus.Controllers
                                             }
                                             else
                                             {
-                                                if (Content.Contains(str.CatCaption) == false)
+                                                if (adjStyl.Contains(str.OrgStyle.Trim()))
                                                 {
-                                                    Content = Content + "The mandatory quantity not ordered for catagory " + str.CatCaption + " \n";
+                                                    int totQty = thisHeader1.SalesOrderLine.Any(s => adjmapStyl.Contains(s.StyleID) && s.IsDleted == false) ? Convert.ToInt32(thisHeader1.SalesOrderLine.Where(s => adjmapStyl.Contains(s.StyleID) && s.IsDleted == false).Sum(s => s.OrdQty)) : 0;
+                                                    if((totQty>=str.MinPoints)==false)
+                                                    {
+                                                        if (Content.Contains(str.CatCaption) == false)
+                                                        {
+                                                            Content = Content + "The mandatory quantity not ordered for catagory " + str.CatCaption + " \n";
+                                                        }
+                                                    }
+
+                                                }
+                                                else
+                                                {
+                                                    if (Content.Contains(str.CatCaption) == false)
+                                                    {
+                                                        Content = Content + "The mandatory quantity not ordered for catagory " + str.CatCaption + " \n";
+                                                    }
                                                 }
                                             }
                                         }
@@ -3378,7 +3394,7 @@ namespace Maximus.Controllers
             }
             catch (Exception e)
             {
-                logger .Warn(e.Message);logger.Warn(e.StackTrace);;
+                logger.Warn(e.Message); logger.Warn(e.StackTrace); ;
             }
 
             if (((List<SalesOrderHeaderViewModel>)Session["SalesOrderHeaderLoc"]).First().SalesOrderLine.Where(s => s.IsDleted == false).Count() > 0)
@@ -3589,19 +3605,19 @@ namespace Maximus.Controllers
         #region GetRedirectionUrl
         public string GetRedirectionUrl()
         {
-            if (Convert.ToBoolean(Session["POINTSREQ"]) && Convert.ToBoolean(Session["IsEmergency"]) == false && Convert.ToBoolean(Session["Maternity"])==false)
+            if (Convert.ToBoolean(Session["POINTSREQ"]) && Convert.ToBoolean(Session["IsEmergency"]) == false && Convert.ToBoolean(Session["Maternity"]) == false)
             {
                 return "/Employee/ChangeOrderType?orderType=manpack";
             }
-            else if(Convert.ToBoolean(Session["IsEmergency"]))
+            else if (Convert.ToBoolean(Session["IsEmergency"]))
             {
                 return "/Employee/ChangeOrderType?orderType=emergency";
             }
-            else if(Convert.ToBoolean(Session["returnorder"]))
+            else if (Convert.ToBoolean(Session["returnorder"]))
             {
                 return "/Employee/ChangeOrderType?orderType=return";
             }
-            else if(Convert.ToBoolean(Session["Maternity"]))
+            else if (Convert.ToBoolean(Session["Maternity"]))
             {
                 return "/Employee/ChangeOrderType?orderType=maternity";
             }

@@ -334,7 +334,9 @@
     </Compile>
     <Compile Include="models\ImpExpAddress.cs" />
     <Compile Include="models\ImpExpEmployee.cs" />
+    <Compile Include="models\ImpExptModel.cs" />
     <Compile Include="models\ImpExpUsers.cs" />
+    <Compile Include="models\ImportExportResult.cs" />
     <Compile Include="models\LastOrderMOdel.cs" />
     <Compile Include="models\MenuLayoutModel.cs" />
     <Compile Include="models\my_aspnet_applications.cs">
@@ -471,6 +473,8 @@
     <Compile Include="models\RepositoryModels\Style_Colour.cs" />
     <Compile Include="models\RepositoryModels\Style_Sizes.cs" />
     <Compile Include="models\RepositoryModels\TblAlternateTable.cs" />
+    <Compile Include="models\RepositoryModels\TblAutono.cs" />
+    <Compile Include="models\RepositoryModels\tblCntRef.cs" />
     <Compile Include="models\RepositoryModels\tblCourierinformation.cs" />
     <Compile Include="models\RepositoryModels\tblCourrierRef.cs" />
     <Compile Include="models\RepositoryModels\TblFskStyle.cs" />

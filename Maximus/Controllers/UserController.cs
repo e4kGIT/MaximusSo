@@ -132,9 +132,9 @@ namespace Maximus.Controllers
                                     }
                                 }
                             }
-
+                            Session["ImpExptModel"] = new ImpExptModel();
                             //Session["AddressUserCreate"] = _dataConnection.BusinessParam("DELADDR_USER_CREATE",busId);
-                            Session["CustRef"] = "";
+                            Session["CustRef"] = ""; 
                             Session["returnModellst"] = new List<ReturnOrderModel>();
                             Session["UseMatrix"] = _dataConnection.CompanyParam("UseMatrix", cmpId);
                             Session["CC_PREFIXLETTERS"] = _dataConnection.BusinessParam("CC_PREFIXLETTERS", busId);
@@ -143,6 +143,7 @@ namespace Maximus.Controllers
                             Session["POINTSLNEREQ"] = _dataConnection.BusinessParam("POINTSLNEREQ", busId);
                             Session["BudgetReq"] = _dataConnection.CompanyParam("BUDGETREQ", cmpId);
                             Session["Collection"] = 0;
+                           // Session["ShowAREAREGION_IEADR"] = _dataConnection.BusinessParam("ShowAREAREGION_IEADR", data.First().BusinessID.ToUpper().Trim());
                             Session["MANPACK"] = _dataConnection.BusinessParam("MANPACK", data.First().BusinessID.ToUpper().Trim());
                             Session["CARRREQAMT"] = _dataConnection.BusinessParam("CARRREQAMT", data.First().BusinessID.ToUpper().Trim());
                             Session["CARRPRICE"] = _dataConnection.BusinessParam("CARRPRICE", data.First().BusinessID.ToUpper().Trim());
@@ -205,6 +206,7 @@ namespace Maximus.Controllers
                             booBudgetEmail = _dataConnection.BusinessParam("REQBUDGETEMAIL", data.First().BusinessID.Trim().ToUpper());
                             Session["REQBUDGETEMAIL"] = booBudgetEmail == "" ? false : booDefDelAddr.ToLower() == "true" ? true : false;
                             booPointsReq = _dataConnection.BusinessParam("POINTSREQ", data.First().BusinessID.Trim().ToUpper());
+                            Session["IGNORE_USER_CREATE"] = _dataConnection.BusinessParam("IGNORE_USER_CREATE", data.First().BusinessID.Trim().ToUpper());
                             Session["ISEDITING"] = false;
                             Session["ISRTNEDITING"] = false;
                             booCusRefMan = _dataConnection.BusinessParam("CusRefMan", data.First().BusinessID.Trim().ToUpper());

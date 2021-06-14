@@ -340,10 +340,19 @@ namespace Maximus.Controllers
                             {
                                 Session["Templates"] = new List<string>();
                             }
-                            if (Convert.ToBoolean(Session["IsEmergency"]) != true && IsEmergencyUcde(((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes))
+                            if (Convert.ToBoolean(Session["IsEmergency"]) != true && IsEmergencyUcde(((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes) )
+                            {
+                                return RedirectToAction("Welcome", new { BusinessID = BusinessID });
+                            } 
+                            else if(_dp.BusinessParam("PRIVATEUCODE",BusinessID).ToLower().Trim()== ((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes.ToLower().Trim())
                             {
                                 return RedirectToAction("Welcome", new { BusinessID = BusinessID });
                             }
+                            
+                            //else if(_dp.GETP)
+                            //{
+
+                            //}
 
                             return RedirectToAction("Index", "Home");
                         }
@@ -386,7 +395,7 @@ namespace Maximus.Controllers
                         }
                         if (Convert.ToBoolean(Session["IsEmergency"]) != true && IsEmergencyUcde(((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes))
                         {
-                            return RedirectToAction("Welcome", new { BusinessID = BusinessID });
+                            //return RedirectToAction("Welcome", new { BusinessID = BusinessID });
                         }
 
                         return RedirectToAction("Index", "Private");
@@ -404,7 +413,7 @@ namespace Maximus.Controllers
                             Session["Templates"] = new List<string>();
 
                         }
-                        if (Convert.ToBoolean(Session["IsEmergency"]) != true && IsEmergencyUcde(((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes))
+                        if (Convert.ToBoolean(Session["IsEmergency"]) != true && IsEmergencyUcde(((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes) && _dp.IsMatUcodeId(((List<EmployeeViewModel>)Session["EmployeeViewModel"]).First().EmpUcodes, BusinessID) == false)
                         {
                             return RedirectToAction("Welcome", new { BusinessID = BusinessID });
                         }
@@ -490,7 +499,7 @@ namespace Maximus.Controllers
                         normUcode.Add(ucode);
                     }
                 }
-                else
+                else if(IsEmergencyUcde(ucode)&& _dp.BusinessParam("PRIVATEUCODE", BusinessID).ToLower().Trim() != ucode.ToLower().Trim())
                 {
                     emergencyUcode.Add(ucode);
                 }

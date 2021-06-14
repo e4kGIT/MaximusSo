@@ -60,6 +60,9 @@
       <HintPath>..\packages\EntityFramework.6.4.0\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="EntityFramework.6.0.0.0.Fakes">
+      <HintPath>FakesAssemblies\EntityFramework.6.0.0.0.Fakes.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
       <Private>True</Private>
@@ -120,6 +123,9 @@
     <Reference Include="Microsoft.Owin.Security.Cookies, Version=4.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.Owin.Security.Cookies.4.0.1\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.QualityTools.Testing.Fakes, Version=12.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
     </Reference>
     <Reference Include="MySql.Data, Version=8.0.18.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -303,6 +309,7 @@
     <Content Include="scripts\ai.0.22.9-build00167.min.js" />
     <Content Include="scripts\bootstrap.js" />
     <Content Include="scripts\bootstrap.min.js" />
+    <Fakes Include="Fakes\EntityFramework.fakes" />
     <None Include="Properties\PublishProfiles\MaximusTestPublish.pubxml" />
     <None Include="scripts\jquery-1.12.4.intellisense.js" />
     <Content Include="scripts\jquery-1.12.4.js" />
@@ -318,6 +325,7 @@
     <Content Include="scripts\jquery.unobtrusive-ajax.min.js" />
     <Content Include="scripts\modernizr-2.6.2.js" />
     <Content Include="scripts\myScript.js" />
+    <Content Include="scripts\table2excel.js" />
     <Content Include="StyleImages\360images\10.png" />
     <Content Include="StyleImages\360images\11.png" />
     <Content Include="StyleImages\360images\12.png" />
@@ -1125,6 +1133,8 @@
     <Content Include="Views\Report\_ShowOrderGridViewRPTPartial.cshtml" />
     <Content Include="Views\Report\_OrderDetailGridView1Partial.cshtml" />
     <Content Include="Views\Report\_StyleDetailGridViewPartial.cshtml" />
+    <Content Include="Views\ImportExport\_Createnew.cshtml" />
+    <Content Include="Views\ImportExport\View.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

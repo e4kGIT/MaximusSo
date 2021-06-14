@@ -22,6 +22,7 @@
     <script src="~/scripts/jquery.unobtrusive-ajax.min.js"></script>
     <script src="~/Scripts/modernizr-2.6.2.js"></script>
     <script src="~/scripts/myScript.js"></script>
+    <script src="~/scripts/table2excel.js"></script>
     @Html.DevExpress().GetStyleSheets(
         new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
         new StyleSheet { ExtensionSuite = ExtensionSuite.Editors }, new StyleSheet { ExtensionType = ExtensionType.DateEdit },
@@ -39,13 +40,17 @@
     )
 
     @*<link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">*@
-    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
-    <script src="~/scripts/bootstrap.min.js"></script>
+    <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.1.0/js/bootstrap.min.js"></script>
     @* <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>*@
     @*<script src="~/scripts/myScript.js"></script>*@
     <style type="text/css">
         body {
             font: 16px Arial;
+        }
+
+        .widt {
+           width:300px !important;
         }
 
         .col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 {
@@ -412,6 +417,11 @@
             height: 0px;
         }
 
+        .trHead{
+          background-color:darkcyan;
+          color:white ;
+        }
+
         .divpadder {
             padding: 10px;
         }
@@ -771,15 +781,18 @@
                     type: "POST",
                     url: "/Private/GetcartStatus",
                     success: function (response) {
-                       
+
                         if (response == "") {
                             var url = "/Private/ShowBasketPrivate";
                             window.location = url;
                         }
-                        else 
-                        {
+                        else {
                             alert("No items in cart");
                         }
+                    },
+                    error: function (response) {
+                        loadPopup.Hide();
+                        myFunction("No items in the cart!");
                     }
                 }
                 );
@@ -870,6 +883,11 @@
                             myFunction("No items in the cart!");
                         }
                     },
+                    error: function () {
+                        loadPopup.Hide();
+                        myFunction("No items in the cart!");
+                    }
+
                 });
             }
         }
@@ -2647,6 +2665,30 @@
 }).GetHtml()
     @Html.DevExpress().PopupControl(sett =>
 {
+    sett.Width = System.Web.UI.WebControls.Unit.Pixel(1000);
+    sett.Height = System.Web.UI.WebControls.Unit.Pixel(610);
+    sett.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+    sett.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+
+    sett.ControlStyle.BackColor =  System.Drawing.Color.Gainsboro;
+    sett.Name = "CreateIMPEXP";
+    sett.AllowResize = true;
+    sett.ShowHeader = true;
+    sett.ShowOnPageLoad = false;
+    sett.AllowDragging = true;
+    sett.CloseAction = CloseAction.OuterMouseClick;
+    sett.CloseOnEscape = false;
+    sett.PopupAnimationType = AnimationType.Auto;
+    sett.Modal = true;
+    sett.HeaderText = "";
+    sett.ScrollBars = System.Web.UI.WebControls.ScrollBars.Vertical;
+    sett.SetContent(() =>
+    {
+        ViewContext.Writer.Write("<div><div   id='CreateIMPEXPDiv'  ></div></div>");
+    });
+}).GetHtml()
+    @Html.DevExpress().PopupControl(sett =>
+{
     sett.Width = System.Web.UI.WebControls.Unit.Pixel(600);
     sett.Height = System.Web.UI.WebControls.Unit.Percentage(500);
     sett.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
@@ -2665,6 +2707,30 @@
     sett.SetContent(() =>
     {
         ViewContext.Writer.Write("<div><div class='row'><div class='col-md-1'></div><div class='col-md-10'><div id='ChangePwdDiv'></div></div><div class='col-md-1'></div></div></div>");
+    });
+}).GetHtml()
+    @Html.DevExpress().PopupControl(sett =>
+{
+    sett.Width = System.Web.UI.WebControls.Unit.Pixel(1000);
+    sett.Height = System.Web.UI.WebControls.Unit.Pixel(610);
+    sett.PopupVerticalAlign = PopupVerticalAlign.WindowCenter;
+    sett.PopupHorizontalAlign = PopupHorizontalAlign.WindowCenter;
+    sett.Name = "FailList";
+    sett.AllowResize = true;
+    sett.ShowHeader = true;
+    sett.ShowOnPageLoad = false;
+    sett.AllowDragging = true;
+    sett.CloseAction = CloseAction.OuterMouseClick;
+    sett.CloseOnEscape = false;
+    sett.PopupAnimationType = AnimationType.Auto;
+    sett.ScrollBars = System.Web.UI.WebControls.ScrollBars.Vertical;
+    sett.ClientSideEvents.Closing = "refersh";
+    sett.Modal = true;
+    sett.HeaderText = "Failed record(s)";
+    //sett.ControlStyle.BackColor = System.Drawing.ColorTranslator.FromHtml("#5e6d82"); ;
+    sett.SetContent(() =>
+    {
+        ViewContext.Writer.Write("<center><div style='background-color:gainsboro' id='FailLst'></div></center><br/><br/><button class='btn btn-primary trHead'  onclick='ExportFaillist()'>Export</button>");
     });
 }).GetHtml()
     <div id="wrapper">
@@ -2946,6 +3012,17 @@
             <div class="page-content">
                 <div class="container-fluid">
                     @RenderBody()
+                    <div id="myElem" style="display:none">
+                        <center>
+                                <h3>
+                                    Please note! 
+                                </h3>
+                            <br />
+
+                            <br />
+                            <p><b>This may few moments.Please be patient.</b></p>
+                        </center>
+                    </div>
                 </div>
             </div>
         </div>
@@ -2955,13 +3032,22 @@
         <script src="~/scripts/3deye.min.js"></script>
         <div id="demo"></div>
     </div>
-
+    
+    <script src="~/scripts/table2excel.js"></script>
+    <script type="text/javascript">
+        function ExportFaillist() {
+            $("#failListtable").table2excel({
+                filename: "Table.xls"
+            });
+        }
+    </script>
     <script type="text/javascript">
         $(function () {
 
             openNav();
 
         });
+      
         //$(document).ready(function () {
         //    $("#wrapper").toggleClass("active");
 

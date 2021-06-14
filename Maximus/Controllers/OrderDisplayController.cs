@@ -14,6 +14,7 @@ using Maximus.Data.Models;
 
 namespace Maximus.Controllers
 {
+    [Authorize]
     public class OrderDisplayController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
